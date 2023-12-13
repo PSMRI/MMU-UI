@@ -31,6 +31,7 @@ import { MdDialog, MdDialogRef } from '@angular/material';
 import { DataSyncLoginComponent } from '../app-modules/core/components/data-sync-login/data-sync-login.component';
 import { MasterDownloadComponent } from '../app-modules/data-sync/master-download/master-download.component';
 import * as CryptoJS from 'crypto-js';
+import * as bcrypt from 'bcrypt';
 
 @Component({
   selector: 'app-login-cmp',
@@ -81,11 +82,15 @@ export class LoginComponent implements OnInit {
   } 
 
   login() {
-   let encryptPassword = this.encrypt(this.Key_IV, this.password)
-
-    if(this.userName !=undefined && this.userName !=null && this.password !=undefined && this.password !=null)
-    {
-    this.authService.login(this.userName.trim(), encryptPassword, false)
+    if (this.userName && this.password) {
+      const saltRounds = 12; 
+      bcrypt.hash(this.password, saltRounds, (err, hash) => {
+        if (err) {
+          
+          console.error('Error hashing password:', err);
+          this.confirmationService.alert('Error logging in. Please try again later.', 'error');
+        } else {
+    this.authService.login(this.userName.trim(), hash, false)
       .subscribe(res => {
         if (res.statusCode == 200) {
           if (res.data.previlegeObj && res.data.previlegeObj[0]) {
@@ -100,7 +105,7 @@ export class LoginComponent implements OnInit {
           if(confirmResponse) {
             this.authService.userlogoutPreviousSession(this.userName).subscribe((userlogoutPreviousSession) => {
               if (userlogoutPreviousSession.statusCode === 200) {
-            this.authService.login(this.userName, encryptPassword, true).subscribe((userLoggedIn) => {
+            this.authService.login(this.userName, hash, true).subscribe((userLoggedIn) => {
               if (userLoggedIn.statusCode === 200) {
               if (userLoggedIn.data.previlegeObj && userLoggedIn.data.previlegeObj[0] && userLoggedIn.data.previlegeObj != null && userLoggedIn.data.previlegeObj != undefined) {
                 localStorage.setItem('loginDataResponse', JSON.stringify(userLoggedIn.data));
@@ -121,22 +126,22 @@ export class LoginComponent implements OnInit {
           }
         });
       }
-        else {
+    });
+  }
+      else {
           sessionStorage.clear();
           this.router.navigate(["/login"]);
-          // this.confirmationService.alert(res.errorMessage, 'error');
         }
-      });
       }
       else {
         this.confirmationService.alert(res.errorMessage, 'error');
       }
-    }
-    }, err => {
-      this.confirmationService.alert(err, 'error');
     });
-  }
 }
+});
+}
+}
+
 
 
 get keySize() {
@@ -186,7 +191,7 @@ encrypt(passPhrase, plainText) {
     localStorage.setItem('userName', loginDataResponse.userName);
     localStorage.setItem('username', this.userName);
     localStorage.setItem('fullName', loginDataResponse.fullName);
-    // this.saveServiceID(loginDataResponse);
+    
     const services = [];
     loginDataResponse.previlegeObj.map(item => {
       if (item.roles[0].serviceRoleScreenMappings[0].providerServiceMapping.serviceID == '2') {
@@ -249,29 +254,5 @@ encrypt(passPhrase, plainText) {
         }
       })
   }
-
-  //  saveServiceID(obj) {
-  //   // console.log(obj,'objhere')
-  //   const privilegeObject = obj.previlegeObj;
-  //   const mmuObject = privilegeObject.filter(item => item.serviceName == 'MMU');
-  //   const tmObject = privilegeObject.filter(item => item.serviceName == 'TM');
-  //   // console.log(mmuObject,'cdv' ,tmObject)
-  //   let mmuServiceID;
-  //   let tmServiceID;
-  //   if (mmuObject.length) { mmuServiceID = this.getServiceID(mmuObject[0].roles[0]); }
-  //   if (tmObject.length) { tmServiceID = this.getServiceID(tmObject[0].roles[0]); }
-  //   console.log(mmuServiceID, tmServiceID)
-  //   localStorage.setItem('serviceIDs', JSON.stringify({
-  //     mmuServiceID,
-  //     tmServiceID
-  //   }))
-  // }
-  // getServiceID(role) {
-  //   const serviceRoleMapping = role.serviceRoleScreenMappings[0];
-  //   if (serviceRoleMapping) {
-  //     return serviceRoleMapping.providerServiceMapping.serviceID;
-  //   }
-
-  // }
 
 }

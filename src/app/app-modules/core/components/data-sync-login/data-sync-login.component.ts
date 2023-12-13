@@ -29,6 +29,7 @@ import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from "@angular/material";
 import { HttpServiceService } from "../../services/http-service.service";
 import { SetLanguageComponent } from "app/app-modules/core/components/set-language.component";
 import * as CryptoJS from 'crypto-js';
+import * as bcrypt from 'bcrypt';
 
 @Component({
   selector: "app-data-sync-login",
@@ -130,13 +131,19 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
     return encrypted.ciphertext.toString(CryptoJS.enc.Base64);
   }
   
-  encrypt(passPhrase, plainText) {
-    let iv = CryptoJS.lib.WordArray.random(this._ivSize / 8).toString(CryptoJS.enc.Hex);
-    let salt = CryptoJS.lib.WordArray.random(this.keySize / 8).toString(CryptoJS.enc.Hex);
-    let ciphertext = this.encryptWithIvSalt(salt, iv, passPhrase, plainText);
-    return salt + iv + ciphertext;
+  //encrypt(passPhrase, plainText) {
+    //let iv = CryptoJS.lib.WordArray.random(this._ivSize / 8).toString(CryptoJS.enc.Hex);
+    //let salt = CryptoJS.lib.WordArray.random(this.keySize / 8).toString(CryptoJS.enc.Hex);
+    //let ciphertext = this.encryptWithIvSalt(salt, iv, passPhrase, plainText);
+    //return salt + iv + ciphertext;
+  //}
+
+  async encrypt(passPhrase, plainText) {
+  const saltRounds = this._iterationCount;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(plainText, salt);
+    return hash;
   }
-  
 
   // checkCurrentUser(){
   //   if(this.userName != localStorage.getItem('username')){
@@ -149,15 +156,25 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
    added a concurrent login changes
   */
   dataSyncLogin() {
-    this.showProgressBar = true;
-    let encriptPassword = this.encrypt(this.Key_IV, this.password)
+  this.showProgressBar = true;
 
-    if (this.userName && this.password) {
-      this.dataSyncService
-        .dataSyncLogin(this.userName, encriptPassword, false)
-        .subscribe(
-          (res) => {
-            if (res.statusCode === 200) {
+  if (this.userName && this.password) {
+    // Retrieve the stored hashed password (replace with your actual storage mechanism)
+    const saltRounds = 12;  // Replace with actual stored hash
+
+    bcrypt.compare(this.password, saltRounds, async (err, isMatch) => {
+      if (err) {
+        this.confirmationService.alert(err.errorMessage, "error");
+        this.showProgressBar = false;
+      } else if (isMatch) {
+        // Passwords match, proceed with login
+        let encriptPassword = await this.encrypt(this.Key_IV, this.password);
+
+        this.dataSyncService
+          .dataSyncLogin(this.userName, encriptPassword, false)
+          .subscribe(
+            (res) => {
+              if (res.statusCode === 200) {
               if (res.data && res.data != null && res.data != undefined) {
                 let mmuService = res.data.previlegeObj.filter((item) => {
                   return item.serviceName == "MMU";
@@ -297,7 +314,10 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
       );
       this.showProgressBar = false;
     }
-  }
+  });
+}
+}
+
 
   //added get datasync data on login to a new method
   getDataSyncMMU(res) {
