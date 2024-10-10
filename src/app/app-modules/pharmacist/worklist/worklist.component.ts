@@ -34,7 +34,7 @@ import { ConfirmationService } from '../../core/services/confirmation.service';
 import { PharmacistService } from '../shared/services/pharmacist.service';
 import { CameraService } from '../../core/services/camera.service';
 import { InventoryService } from '../../core/services/inventory.service';
-import moment from 'moment';
+import * as moment from 'moment';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatPaginator } from '@angular/material/paginator';

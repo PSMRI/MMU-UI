@@ -28,6 +28,7 @@ import {
   NurseService,
 } from '../../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-doctor-diagnosis-case-sheet',
@@ -93,6 +94,12 @@ export class DoctorDiagnosisCaseSheetComponent
   currentLanguageSet: any;
   covidVaccineDetails: any;
   ageValidationForVaccination = '< 12 years';
+  referDetails: any;
+  serviceList = '';
+  referralReasonList = '';
+  MMUReferDetails: any;
+  mmuServiceList: string = '';
+  isCovidVaccinationStatusVisible = false;
 
   constructor(
     private doctorService: DoctorService,
@@ -156,6 +163,32 @@ export class DoctorDiagnosisCaseSheetComponent
             this.MMUcaseRecords.LabReport = [mmuVitalsRBSValue].concat(
               this.MMUcaseRecords.LabReport
             );
+          }
+
+          if (this.mmuCaseSheetData?.doctorData) {
+            this.MMUReferDetails = this.mmuCaseSheetData.doctorData.Refer;
+            if (this.MMUReferDetails?.refrredToAdditionalServiceList) {
+              this.mmuServiceList =
+                this.MMUReferDetails.refrredToAdditionalServiceList
+                  .map((service: any) => service.serviceName)
+                  .filter((name: any) => name !== null && name !== '')
+                  .join(',');
+            }
+          }
+
+          if (this.mmuCaseSheetData?.doctorData) {
+            this.MMUReferDetails = this.mmuCaseSheetData.doctorData.Refer;
+            if (
+              this.MMUReferDetails &&
+              this.mmuCaseSheetData.doctorData.Refer
+            ) {
+              this.mmuCaseSheetData.referDetails =
+                this.mmuCaseSheetData.doctorData.Refer;
+              console.log(
+                'referDetailsForRefer',
+                JSON.stringify(this.MMUReferDetails, null, 4)
+              );
+            }
           }
         }
       });
@@ -348,6 +381,42 @@ export class DoctorDiagnosisCaseSheetComponent
               ','
             );
         }
+      }
+
+      if (
+        this.visitCategory === 'General OPD (QC)' &&
+        this.caseSheetData?.doctorData
+      ) {
+        this.referDetails = this.caseSheetData.doctorData.Refer;
+        if (this.referDetails?.refrredToAdditionalServiceList) {
+          this.serviceList = this.referDetails.refrredToAdditionalServiceList
+            .map((service: any) => service.serviceName)
+            .filter((name: any) => name !== null && name !== '')
+            .join(',');
+        }
+      }
+
+      if (this.caseSheetData?.doctorData) {
+        this.referDetails = this.caseSheetData.doctorData.Refer;
+        if (this.referDetails && this.caseSheetData.doctorData.Refer) {
+          this.caseSheetData.referDetails = this.caseSheetData.doctorData.Refer;
+          console.log(
+            'referDetailsForRefer',
+            JSON.stringify(this.referDetails, null, 4)
+          );
+        }
+      }
+      if (
+        this.caseSheetData?.doctorData?.Refer &&
+        this.referDetails?.revisitDate &&
+        !moment(this.referDetails.revisitDate, 'DD/MM/YYYY', true).isValid()
+      ) {
+        const sDate = new Date(this.referDetails.revisitDate);
+        this.referDetails.revisitDate = [
+          this.padLeft.apply(sDate.getDate()),
+          this.padLeft.apply(sDate.getMonth() + 1),
+          this.padLeft.apply(sDate.getFullYear()),
+        ].join('/');
       }
 
       this.downloadSign();

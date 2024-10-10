@@ -42,10 +42,12 @@ export class ServicePointService {
   getMMUDemographics() {
     const spID = localStorage.getItem('servicePointID');
     const spPSMID = localStorage.getItem('providerServiceID');
+    const userId = localStorage.getItem('userID');
 
     return this.http.post(environment.demographicsCurrentMasterUrl, {
       spID: spID,
       spPSMID: spPSMID,
+      userId: userId,
     });
   }
 }

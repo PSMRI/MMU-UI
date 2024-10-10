@@ -44,7 +44,9 @@
       {{ currentLanguageSet?.ExaminationData.examination }}
     </mat-checkbox>
   </div>
-  <div class="col-xs-12 col-sm-6 col-md-6 m-t-15">
+  <div
+    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
+    *ngIf="isCovidVaccinationStatusVisible">
     <mat-checkbox
       color="primary"
       class=""

@@ -39,24 +39,24 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 interface prescribe {
-  id: string;
-  drugID: string;
-  drugName: string;
-  drugStrength: string;
-  drugUnit: string;
-  quantity: string;
-  route: string;
-  formID: string;
-  formName: string;
-  qtyPrescribed: string;
-  dose: string;
-  frequency: string;
-  duration: string;
-  unit: string;
-  instructions: string;
+  id: any;
+  drugID: any;
+  drugName: any;
+  drugStrength: any;
+  drugUnit: any;
+  quantity: any;
+  route: any;
+  formID: any;
+  formName: any;
+  qtyPrescribed: any;
+  dose: any;
+  frequency: any;
+  duration: any;
+  unit: any;
+  instructions: any;
   isEDL: boolean;
-  sctCode: string;
-  sctTerm: string;
+  sctCode: any;
+  sctTerm: any;
 }
 @Component({
   selector: 'app-prescribe-tm-medicine',
@@ -75,24 +75,24 @@ export class PrescribeTmMedicineComponent implements OnInit, DoCheck {
   pageEvent!: PageEvent;
   pageLimits: any = [];
   currentPrescription: prescribe = {
-    id: '',
-    drugID: '',
-    drugName: '',
-    drugStrength: '',
-    drugUnit: '',
-    qtyPrescribed: '',
-    quantity: '',
-    formID: '',
-    formName: '',
-    route: '',
-    dose: '',
-    frequency: '',
-    duration: '',
-    unit: '',
-    instructions: '',
+    id: null,
+    drugID: null,
+    drugName: null,
+    drugStrength: null,
+    drugUnit: null,
+    qtyPrescribed: null,
+    quantity: null,
+    formID: null,
+    formName: null,
+    route: null,
+    dose: null,
+    frequency: null,
+    duration: null,
+    unit: null,
+    instructions: null,
     isEDL: false,
-    sctCode: '',
-    sctTerm: '',
+    sctCode: null,
+    sctTerm: null,
   };
   filteredDrugMaster: any = [];
   filteredDrugDoseMaster: any = [];
@@ -319,24 +319,24 @@ export class PrescribeTmMedicineComponent implements OnInit, DoCheck {
 
   clearCurrentDetails() {
     this.currentPrescription = {
-      id: '',
-      drugID: '',
-      drugName: '',
-      drugStrength: '',
-      drugUnit: '',
-      quantity: '',
-      formID: '',
-      qtyPrescribed: '',
-      formName: '',
-      route: '',
-      dose: '',
-      frequency: '',
-      duration: '',
-      unit: '',
-      instructions: '',
+      id: null,
+      drugID: null,
+      drugName: null,
+      drugStrength: null,
+      drugUnit: null,
+      quantity: null,
+      formID: null,
+      qtyPrescribed: null,
+      formName: null,
+      route: null,
+      dose: null,
+      frequency: null,
+      duration: null,
+      unit: null,
+      instructions: null,
       isEDL: false,
-      sctCode: '',
-      sctTerm: '',
+      sctCode: null,
+      sctTerm: null,
     };
     this.tempDrugName = null;
     this.prescriptionForm.form.markAsUntouched();

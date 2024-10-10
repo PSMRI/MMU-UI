@@ -151,9 +151,7 @@
   <!-- End of Current Vitals -->
 
   <!-- Covid Vaccination Details -->
-  <div
-    class="row m-t-10"
-    *ngIf="printPagePreviewSelect?.caseSheetCovidVaccinationDetails">
+  <div class="row m-t-10" *ngIf="isCovidVaccinationStatusVisible">
     <div class="col-xs-12">
       <fieldset>
         <legend>{{ currentLanguageSet?.covidVaccinationStatus }}:</legend>

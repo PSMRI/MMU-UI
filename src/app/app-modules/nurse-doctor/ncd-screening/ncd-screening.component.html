@@ -11,83 +11,89 @@
       <div class="col-xs-12">
         <div class="row m-t-10">
           <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-            <mat-select
-              multiple
-              class="select-full-width"
-              name="screeningCondition"
-              formControlName="ncdScreeningConditionList"
-              placeholder="{{
+            <mat-form-field>
+              <mat-label>{{
                 currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
                   ?.screeningCondition
-              }}">
-              <mat-option
-                *ngFor="let screeningCondition of ncdScreeningConditions"
-                [value]="screeningCondition">
-                {{ screeningCondition.screeningCondition }}
-              </mat-option>
-            </mat-select>
+              }}</mat-label>
+              <mat-select
+                multiple
+                class="select-full-width"
+                name="screeningCondition"
+                formControlName="ncdScreeningConditionList">
+                <mat-option
+                  *ngFor="let screeningCondition of ncdScreeningConditions"
+                  [value]="screeningCondition">
+                  {{ screeningCondition.screeningCondition }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-            <mat-select
-              class="select-full-width"
-              name="reasonForScreening"
-              formControlName="reasonForScreening"
-              placeholder="{{
+            <mat-form-field>
+              <mat-label>{{
                 currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
                   ?.reasonforscreening
-              }}">
-              <mat-option
-                *ngFor="let reasonForScreening of ncdScreeningReasons"
-                [value]="reasonForScreening">
-                {{ reasonForScreening.ncdScreeningReason }}
-              </mat-option>
-            </mat-select>
+              }}</mat-label>
+              <mat-select
+                class="select-full-width"
+                name="reasonForScreening"
+                formControlName="reasonForScreening">
+                <mat-option
+                  *ngFor="let reasonForScreening of ncdScreeningReasons"
+                  [value]="reasonForScreening">
+                  {{ reasonForScreening.ncdScreeningReason }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-            <mat-form-field class="input-full-width">
+            <mat-form-field>
+              <mat-label>{{
+                currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
+                  ?.screeningVisitNo
+              }}</mat-label>
               <input
                 autocomplete="off"
                 matInput
                 name="ncdScreeningVisitNo"
                 formControlName="ncdScreeningVisitNo"
-                placeholder="{{
-                  currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
-                    ?.screeningVisitNo
-                }}"
                 readonly="readonly" />
             </mat-form-field>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-            <mat-select
-              class="select-full-width"
-              multiple
-              name="screeningTestList"
-              formControlName="labTestOrders"
-              placeholder="{{
+            <mat-form-field>
+              <mat-label>{{
                 currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
                   ?.screeningTest
-              }}"
-              (change)="checkScreeningTest()">
-              <mat-option
-                *ngFor="let screeningTest of laboratoryList"
-                [value]="screeningTest">
-                {{ screeningTest.procedureName }}
-              </mat-option>
-            </mat-select>
+              }}</mat-label>
+              <mat-select
+                class="select-full-width"
+                multiple
+                name="screeningTestList"
+                formControlName="labTestOrders"
+                (change)="checkScreeningTest()">
+                <mat-option
+                  *ngFor="let screeningTest of laboratoryList"
+                  [value]="screeningTest">
+                  {{ screeningTest.procedureName }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
         </div>
 
         <div class="row m-t-10">
           <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-            <mat-form-field class="input-full-width">
+            <mat-form-field>
+              <mat-label>{{
+                currentLanguageSet?.vitalsDetails
+                  ?.AnthropometryDataANC_OPD_NCD_PNC?.height
+              }}</mat-label>
               <input
                 autocomplete="off"
                 matInput
                 defaultNull
-                placeholder="{{
-                  currentLanguageSet?.vitalsDetails
-                    ?.AnthropometryDataANC_OPD_NCD_PNC?.height
-                }}"
                 allowText="decimal"
                 allowMax="350"
                 maxlength="6"
@@ -99,15 +105,15 @@
             </mat-form-field>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-            <mat-form-field class="input-full-width">
+            <mat-form-field>
+              <mat-label>{{
+                currentLanguageSet?.vitalsDetails
+                  ?.AnthropometryDataANC_OPD_NCD_PNC?.weight
+              }}</mat-label>
               <input
                 autocomplete="off"
                 matInput
                 defaultNull
-                placeholder="{{
-                  currentLanguageSet?.vitalsDetails
-                    ?.AnthropometryDataANC_OPD_NCD_PNC?.weight
-                }}"
                 allowText="decimal"
                 allowMax="500"
                 maxlength="6"
@@ -116,25 +122,31 @@
                 (change)="checkWeight()"
                 (blur)="calculateBMI()"
                 required />
-              <button
+              <svg
+                class="fontawesomesvg"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                (click)="openIOTWeightModel()">
-                <span class="glyphicon glyphicon-scale"></span>
-              </button>
+                (click)="openIOTWeightModel()"
+                onkeydown="openIOTWeightModel()"
+                tabindex="{0}">
+                <path
+                  d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+              </svg>
             </mat-form-field>
           </div>
           <ng-template [ngIf]="age > 19">
             <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-              <mat-form-field class="input-full-width">
+              <mat-form-field>
+                <mat-label>{{
+                  currentLanguageSet?.vitalsDetails
+                    ?.AnthropometryDataANC_OPD_NCD_PNC?.BMI
+                }}</mat-label>
                 <input
                   autocomplete="off"
                   matInput
                   defaultNull
-                  placeholder="{{
-                    currentLanguageSet?.vitalsDetails
-                      ?.AnthropometryDataANC_OPD_NCD_PNC?.BMI
-                  }}"
                   allowText="decimal"
                   name="bMI"
                   [ngClass]="{ abnormal: !normalBMI }"
@@ -190,15 +202,15 @@
           </ng-template>
 
           <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-            <mat-form-field class="input-full-width">
+            <mat-form-field>
+              <mat-label>{{
+                currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
+                  ?.waistCircumference
+              }}</mat-label>
               <input
                 autocomplete="off"
                 matInput
                 defaultNull
-                placeholder="{{
-                  currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-                    ?.waistCircumference
-                }}"
                 allowText="decimal"
                 maxlength="6"
                 allowMax="350"
@@ -210,15 +222,15 @@
             </mat-form-field>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-            <mat-form-field class="input-full-width">
+            <mat-form-field>
+              <mat-label>{{
+                currentLanguageSet?.vitalsDetails
+                  ?.AnthropometryDataANC_OPD_NCD_PNC?.hipCircumference
+              }}</mat-label>
               <input
                 autocomplete="off"
                 matInput
                 defaultNull
-                placeholder="{{
-                  currentLanguageSet?.vitalsDetails
-                    ?.AnthropometryDataANC_OPD_NCD_PNC?.hipCircumference
-                }}"
                 allowText="decimal"
                 maxlength="6"
                 allowMax="300"
@@ -230,15 +242,15 @@
             </mat-form-field>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-            <mat-form-field class="input-full-width">
+            <mat-form-field>
+              <mat-label>{{
+                currentLanguageSet?.vitalsDetails
+                  ?.AnthropometryDataANC_OPD_NCD_PNC?.waisttoHipRatio
+              }}</mat-label>
               <input
                 autocomplete="off"
                 matInput
                 defaultNull
-                placeholder="{{
-                  currentLanguageSet?.vitalsDetails
-                    ?.AnthropometryDataANC_OPD_NCD_PNC?.waisttoHipRatio
-                }}"
                 [ngClass]="{ abnormal: !normalWaistHipRatio }"
                 name="waistHipRatio"
                 formControlName="waistHipRatio"
@@ -333,15 +345,15 @@
                 </h5>
               </div>
               <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-                <mat-form-field class="input-full-width">
+                <mat-form-field>
+                  <mat-label>{{
+                    currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
+                      ?.systolicBP1
+                  }}</mat-label>
                   <input
                     autocomplete="off"
                     matInput
                     defaultNull
-                    placeholder="{{
-                      currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
-                        ?.systolicBP1
-                    }}"
                     allowText="number"
                     allowMax="400"
                     name="systolicBP_1stReading"
@@ -353,24 +365,30 @@
                         diastolicBP_1stReading
                       )
                     " />
-                  <button
+                  <svg
+                    class="fontawesomesvg"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
                     matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                     matSuffix
-                    (click)="openIOTBP1Model()">
-                    <span class="glyphicon glyphicon-scale"></span>
-                  </button>
+                    (click)="openIOTBP1Model()"
+                    onkeydown="openIOTBP1Model()"
+                    tabindex="{0}">
+                    <path
+                      d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+                  </svg>
                 </mat-form-field>
               </div>
               <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-                <mat-form-field class="input-full-width">
+                <mat-form-field>
+                  <mat-label>{{
+                    currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
+                      ?.systolicBP2
+                  }}</mat-label>
                   <input
                     autocomplete="off"
                     matInput
                     defaultNull
-                    placeholder="{{
-                      currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
-                        ?.systolicBP2
-                    }}"
                     allowText="number"
                     allowMax="400"
                     name="systolicBP_2ndReading"
@@ -382,24 +400,30 @@
                         diastolicBP_2ndReading
                       )
                     " />
-                  <button
+                  <svg
+                    class="fontawesomesvg"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
                     matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                     matSuffix
-                    (click)="openIOTBP2Model()">
-                    <span class="glyphicon glyphicon-scale"></span>
-                  </button>
+                    (click)="openIOTBP2Model()"
+                    onkeydown="openIOTBP2Model()"
+                    tabindex="{0}">
+                    <path
+                      d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+                  </svg>
                 </mat-form-field>
               </div>
               <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-                <mat-form-field class="input-full-width">
+                <mat-form-field>
+                  <mat-label>{{
+                    currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
+                      ?.systolicBP3
+                  }}</mat-label>
                   <input
                     autocomplete="off"
                     matInput
                     defaultNull
-                    placeholder="{{
-                      currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
-                        ?.systolicBP3
-                    }}"
                     allowText="number"
                     allowMax="400"
                     name="systolicBP_3rdReading"
@@ -411,24 +435,30 @@
                         diastolicBP_3rdReading
                       )
                     " />
-                  <button
+                  <svg
+                    class="fontawesomesvg"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
                     matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                     matSuffix
-                    (click)="openIOTBP3Model()">
-                    <span class="glyphicon glyphicon-scale"></span>
-                  </button>
+                    (click)="openIOTBP3Model()"
+                    onkeydown="openIOTBP3Model()"
+                    tabindex="{0}">
+                    <path
+                      d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+                  </svg>
                 </mat-form-field>
               </div>
               <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-                <mat-form-field class="input-full-width">
+                <mat-form-field>
+                  <mat-label>{{
+                    currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
+                      ?.averageSystolicBP
+                  }}</mat-label>
                   <input
                     autocomplete="off"
                     matInput
                     defaultNull
-                    placeholder="{{
-                      currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
-                        ?.averageSystolicBP
-                    }}"
                     allowText="number"
                     allowMax="400"
                     name="averageSystolicBP_Reading"
@@ -448,15 +478,15 @@
                 </h5>
               </div>
               <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-                <mat-form-field class="input-full-width">
+                <mat-form-field>
+                  <mat-label>{{
+                    currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
+                      ?.diastolicBP1
+                  }}</mat-label>
                   <input
                     autocomplete="off"
                     matInput
                     defaultNull
-                    placeholder="{{
-                      currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
-                        ?.diastolicBP1
-                    }}"
                     allowText="number"
                     allowMax="240"
                     name="diastolicBP_1stReading"
@@ -468,24 +498,30 @@
                         diastolicBP_1stReading
                       )
                     " />
-                  <button
+                  <svg
+                    class="fontawesomesvg"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
                     matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                     matSuffix
-                    (click)="openIOTBP1Model()">
-                    <span class="glyphicon glyphicon-scale"></span>
-                  </button>
+                    (click)="openIOTBP1Model()"
+                    onkeydown="openIOTBP1Model()"
+                    tabindex="{0}">
+                    <path
+                      d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+                  </svg>
                 </mat-form-field>
               </div>
               <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-                <mat-form-field class="input-full-width">
+                <mat-form-field>
+                  <mat-label>{{
+                    currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
+                      ?.diastolicBP2
+                  }}</mat-label>
                   <input
                     autocomplete="off"
                     matInput
                     defaultNull
-                    placeholder="{{
-                      currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
-                        ?.diastolicBP2
-                    }}"
                     allowText="number"
                     allowMax="240"
                     name="diastolicBP_2ndReading"
@@ -497,24 +533,30 @@
                         diastolicBP_2ndReading
                       )
                     " />
-                  <button
+                  <svg
+                    class="fontawesomesvg"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
                     matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                     matSuffix
-                    (click)="openIOTBP2Model()">
-                    <span class="glyphicon glyphicon-scale"></span>
-                  </button>
+                    (click)="openIOTBP2Model()"
+                    onkeydown="openIOTBP2Model()"
+                    tabindex="{0}">
+                    <path
+                      d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+                  </svg>
                 </mat-form-field>
               </div>
               <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-                <mat-form-field class="input-full-width">
+                <mat-form-field>
+                  <mat-label>{{
+                    currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
+                      ?.diastolicBP3
+                  }}</mat-label>
                   <input
                     autocomplete="off"
                     matInput
                     defaultNull
-                    placeholder="{{
-                      currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
-                        ?.diastolicBP3
-                    }}"
                     allowText="number"
                     allowMax="240"
                     name="diastolicBP_3rdReading"
@@ -526,24 +568,30 @@
                         diastolicBP_3rdReading
                       )
                     " />
-                  <button
+                  <svg
+                    class="fontawesomesvg"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
                     matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                     matSuffix
-                    (click)="openIOTBP3Model()">
-                    <span class="glyphicon glyphicon-scale"></span>
-                  </button>
+                    (click)="openIOTBP3Model()"
+                    onkeydown="openIOTBP3Model()"
+                    tabindex="{0}">
+                    <path
+                      d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+                  </svg>
                 </mat-form-field>
               </div>
               <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-                <mat-form-field class="input-full-width">
+                <mat-form-field>
+                  <mat-label>{{
+                    currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
+                      ?.averageDiastolicBP
+                  }}</mat-label>
                   <input
                     autocomplete="off"
                     matInput
                     defaultNull
-                    placeholder="{{
-                      currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
-                        ?.averageDiastolicBP
-                    }}"
                     allowText="number"
                     allowMax="240"
                     name="averageDiastolicBP_Reading"
@@ -565,98 +613,122 @@
             </h4>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-            <mat-form-field class="input-full-width">
+            <mat-form-field>
+              <mat-label>{{
+                currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
+                  ?.fasting
+              }}</mat-label>
               <input
                 autocomplete="off"
                 matInput
                 defaultNull
-                placeholder="{{
-                  currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-                    ?.fasting
-                }}"
                 allowText="number"
                 allowMax="900"
                 name="bloodGlucose_Fasting"
                 formControlName="bloodGlucose_Fasting"
                 [ngClass]="{ abnormal: bloodGlucose_Fasting > 100 }"
                 (change)="checkBloodSugarFasting()" />
-              <button
+              <svg
+                class="fontawesomesvg"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                (click)="openIOTBGFastingModel()">
-                <span class="glyphicon glyphicon-scale"></span>
-              </button>
+                (click)="openIOTBGFastingModel()"
+                onkeydown="openIOTBGFastingModel()"
+                tabindex="{0}">
+                <path
+                  d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+              </svg>
             </mat-form-field>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-            <mat-form-field class="input-full-width">
+            <mat-form-field>
+              <mat-label>{{
+                currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
+                  ?.random
+              }}</mat-label>
               <input
                 autocomplete="off"
                 matInput
                 defaultNull
-                placeholder="{{
-                  currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-                    ?.random
-                }}"
                 allowText="number"
                 allowMax="900"
                 name="bloodGlucose_Random"
                 formControlName="bloodGlucose_Random"
                 [ngClass]="{ abnormal: bloodGlucose_Random > 140 }"
                 (change)="checkBloodSugarRandom()" />
-              <button
+              <svg
+                class="fontawesomesvg"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                (click)="openIOTBGRandomModel()">
-                <span class="glyphicon glyphicon-scale"></span>
-              </button>
+                (click)="openIOTBGRandomModel()"
+                onkeydown="openIOTBGRandomModel()"
+                tabindex="{0}">
+                <path
+                  d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+              </svg>
             </mat-form-field>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-            <mat-form-field class="input-full-width">
+            <mat-form-field>
+              <mat-label>{{
+                currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
+                  ?.postPrandial
+              }}</mat-label>
               <input
                 autocomplete="off"
                 matInput
                 defaultNull
-                placeholder="{{
-                  currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-                    ?.postPrandial
-                }}"
                 allowText="number"
                 allowMax="900"
                 name="bloodGlucose_2hr_PP"
                 formControlName="bloodGlucose_2hr_PP"
                 [ngClass]="{ abnormal: bloodGlucose_2hr_PP > 140 }"
                 (change)="checkBloodSugar2HrPostPrandial()" />
-              <button
+              <svg
+                class="fontawesomesvg"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                (click)="openIOTBGPostPrandialModel()">
-                <span class="glyphicon glyphicon-scale"></span>
-              </button>
+                (click)="openIOTBGPostPrandialModel()"
+                onkeydown="openIOTBGPostPrandialModel()"
+                tabindex="{0}">
+                <path
+                  d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+              </svg>
             </mat-form-field>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-            <mat-form-field class="input-full-width">
+            <mat-form-field>
+              <mat-label>{{
+                currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
+                  ?.notSpecified
+              }}</mat-label>
               <input
                 autocomplete="off"
                 matInput
                 defaultNull
-                placeholder="{{
-                  currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-                    ?.notSpecified
-                }}"
                 allowText="number"
                 allowMax="900"
                 name="bloodGlucose_NotSpecified"
                 formControlName="bloodGlucose_NotSpecified"
                 (change)="checkBloodSugarNotSpecified()" />
-              <button
+              <svg
+                class="fontawesomesvg"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                (click)="openIOTBGNotSpecifiedModel()">
-                <span class="glyphicon glyphicon-scale"></span>
-              </button>
+                (click)="openIOTBGNotSpecifiedModel()"
+                onkeydown="openIOTBGNotSpecifiedModel()"
+                tabindex="{0}">
+                <path
+                  d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+              </svg>
             </mat-form-field>
           </div>
         </div>
@@ -665,42 +737,46 @@
           <div
             class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
             *ngIf="checkBloodPressure">
-            <mat-select
-              class="select-full-width"
-              name="bloodPressureStatus"
-              formControlName="bloodPressureStatus"
-              placeholder="{{
+            <mat-form-field>
+              <mat-label>{{
                 currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
                   ?.bloodPressureStatus
-              }}">
-              <mat-option
-                *ngFor="let bloodPressureStatus of bloodPressureStatus"
-                [value]="bloodPressureStatus">
-                {{ bloodPressureStatus.bpAndDiabeticStatus }}
-              </mat-option>
-            </mat-select>
+              }}</mat-label>
+              <mat-select
+                class="select-full-width"
+                name="bloodPressureStatus"
+                formControlName="bloodPressureStatus">
+                <mat-option
+                  *ngFor="let bloodPressureStatus of bloodPressureStatus"
+                  [value]="bloodPressureStatus">
+                  {{ bloodPressureStatus.bpAndDiabeticStatus }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
           <div
             class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
             *ngIf="checkBloodGlucose">
-            <mat-select
-              class="select-full-width"
-              name="diabeticStatus"
-              formControlName="diabeticStatus"
-              placeholder="{{
+            <mat-form-field>
+              <mat-label>{{
                 currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
                   ?.diabeticStatus
-              }}">
-              <mat-option
-                *ngFor="let diabeticStatus of diabeticStatus"
-                [value]="diabeticStatus">
-                {{ diabeticStatus.bpAndDiabeticStatus }}
-              </mat-option>
-            </mat-select>
+              }}</mat-label>
+              <mat-select
+                class="select-full-width"
+                name="diabeticStatus"
+                formControlName="diabeticStatus">
+                <mat-option
+                  *ngFor="let diabeticStatus of diabeticStatus"
+                  [value]="diabeticStatus">
+                  {{ diabeticStatus.bpAndDiabeticStatus }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-            <mat-form-field [style.width]="'100%'">
-              <mat-label class="mat-label-text">{{
+            <mat-form-field>
+              <mat-label>{{
                 currentLanguageSet?.vitalsDetails?.vitalsNCDScreening
                   ?.nextScreeningDate
               }}</mat-label>
@@ -709,7 +785,6 @@
                 [matDatepicker]="picker"
                 formControlName="nextScreeningDate"
                 [min]="nextScreeningDate" />
-              <mat-hint>MM/DD/YYYY</mat-hint>
               <mat-datepicker-toggle
                 matSuffix
                 [for]="picker"></mat-datepicker-toggle>

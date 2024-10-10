@@ -7,6 +7,7 @@ import {
   HttpResponse,
   HttpClient,
   HttpErrorResponse,
+  HttpHeaders,
 } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
@@ -22,6 +23,10 @@ import { environment } from 'src/environments/environment';
 export class HttpInterceptorService implements HttpInterceptor {
   timerRef: any;
   currentLanguageSet: any;
+  donotShowSpinnerUrl = [
+    environment.syncDownloadProgressUrl,
+    environment.ioturl,
+  ];
   constructor(
     private spinnerService: SpinnerService,
     private router: Router,
@@ -34,16 +39,22 @@ export class HttpInterceptorService implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const key: any = sessionStorage.getItem('key');
-    let modifiedReq = null;
-    if (key !== undefined && key !== null) {
+    const serverKey = localStorage.getItem('serverKey');
+    let modifiedReq = req;
+    if (req.body instanceof FormData) {
       modifiedReq = req.clone({
-        headers: req.headers
-          .set('Authorization', key)
-          .set('Content-Type', 'application/json'),
+        // headers: req.headers
+        //   .set('Authorization', key || '')
+        //   .set('ServerAuthorization', key)
+        //   .set('Content-Type', 'application/json'),
+        headers: req.headers.set('Authorization', key || ''),
       });
     } else {
       modifiedReq = req.clone({
-        headers: req.headers.set('Authorization', ''),
+        headers: req.headers
+          .set('Authorization', key || '')
+          .set('Content-Type', 'application/json')
+          .set('ServerAuthorization', serverKey || ''),
       });
     }
     return next.handle(modifiedReq).pipe(

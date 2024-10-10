@@ -13,16 +13,16 @@
 .box {
     height: 60px;
 }
-mat-form-field  >>>
+/* mat-form-field  ::ng-deep 
 .mdc-text-field--filled, .mdc-text-field--focused {
     background-color: #f0f5f5 !important;
-}
-mat-form-field >>> .mat-mdc-text-field-wrapper {
+} */
+mat-form-field ::ng-deep  .mat-mdc-text-field-wrapper {
     height:unset !important;
 }
 .multi_row_select{
     padding: 10px 0px; 
 }
-.mat_border_style >>> .mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input :disabled {
+.mat_border_style ::ng-deep  .mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input :disabled {
     border-bottom-style: dotted !important;
 }

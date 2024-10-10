@@ -34,6 +34,7 @@ export class BeneficiaryDetailsService {
 
   HRPPositiveFlag = new BehaviorSubject(this.HRPPositive);
   HRPPositiveFlag$ = this.HRPPositiveFlag.asObservable();
+  healthID: any;
 
   constructor(private http: HttpClient) {}
 

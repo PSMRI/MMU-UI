@@ -35,13 +35,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { RegisterOtherDetailsComponent } from './register-other-details/register-other-details.component';
 import { RegisterPersonalDetailsComponent } from './register-personal-details/register-personal-details.component';
 import { ConfirmationService } from '../../core/services/confirmation.service';
-import { RegistrarService } from '../shared/services/registrar.service';
 import { RegistrationUtils } from '../shared/utility/registration-utility';
 import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard.service';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { Observable } from 'rxjs/internal/Observable';
 import { of } from 'rxjs';
+import { RegistrarService } from '../shared/services/registrar.service';
 
 @Component({
   selector: 'app-registration',
@@ -172,7 +172,7 @@ export class RegistrationComponent
    */
   loadMasterDataObservable() {
     this.masterDataSubscription =
-      this.registrarService.registrationMasterDetails$.subscribe(res => {
+      this.registrarService.registrationMasterDetails$.subscribe((res: any) => {
         if (res !== null) {
           this.masterData = Object.assign({}, res);
           this.govIDMaster = Object.assign({}, res);
@@ -189,7 +189,7 @@ export class RegistrationComponent
    */
   callBeneficiaryDataObservable(benID: any) {
     this.revisitDataSubscription =
-      this.registrarService.beneficiaryEditDetails$.subscribe(res => {
+      this.registrarService.beneficiaryEditDetails$.subscribe((res: any) => {
         if (res !== null && benID === res.beneficiaryID) {
           this.revisitData = Object.assign({}, res);
         } else {
@@ -962,6 +962,7 @@ export class RegistrationComponent
   }
 
   iEMRForm() {
+    console.log('register form', this.beneficiaryRegistrationForm);
     const personalForm = Object.assign(
       {},
       this.beneficiaryRegistrationForm.value.personalDetailsForm

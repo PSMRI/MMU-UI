@@ -22,7 +22,7 @@
 
 import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import moment from 'moment';
+import * as moment from 'moment';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { DoctorService } from '../../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';

@@ -8,7 +8,7 @@ h5 {
 
 ul {
     list-style: none;
-    padding: 0px;
+
 }
 
 ul li {
@@ -26,11 +26,11 @@ ul li div i {
 }
 
 .input-full-width {
-    width: 100%;
+    width: 65%;
 }
 
 .abnormal {
-    color: red
+    color: red !important;
 }
 
 .marker {
@@ -81,3 +81,9 @@ md-expansion-panel strong {
 .valueCheck {
     padding: 5px;
 }
+
+.fontawesomesvg {
+    width: 1em;
+    height: 1em;
+    vertical-align: -.125em;
+  }

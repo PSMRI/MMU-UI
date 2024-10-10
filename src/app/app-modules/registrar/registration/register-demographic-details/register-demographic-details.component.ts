@@ -22,7 +22,6 @@
 
 import { ConfirmationService } from './../../../core/services/confirmation.service';
 import { Component, OnInit, Input, OnDestroy, DoCheck } from '@angular/core';
-import { RegistrarService } from '../../shared/services/registrar.service';
 import {
   FormGroup,
   FormArray,
@@ -35,6 +34,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { RegisterEditLocationComponent } from '../register-edit-location/register-edit-location.component';
 import { _MatAutocompleteBase } from '@angular/material/autocomplete';
+import { RegistrarService } from '../../shared/services/registrar.service';
 
 @Component({
   selector: 'app-register-demographic-details',
@@ -248,7 +248,7 @@ export class RegisterDemographicDetailsComponent
    */
   loadMasterDataObservable() {
     this.masterDataSubscription =
-      this.registrarService.registrationMasterDetails$.subscribe(res => {
+      this.registrarService.registrationMasterDetails$.subscribe((res: any) => {
         if (res !== null) {
           this.masterData = res;
         }
@@ -290,7 +290,7 @@ export class RegisterDemographicDetailsComponent
    */
   configMasterForDemographics() {
     this.revisitDataSubscription =
-      this.registrarService.beneficiaryEditDetails$.subscribe(res => {
+      this.registrarService.beneficiaryEditDetails$.subscribe((res: any) => {
         if (res && res.beneficiaryID) {
           this.revisitData = Object.assign({}, res);
           if (this.patientRevisit) {
@@ -857,7 +857,7 @@ export class RegisterDemographicDetailsComponent
           this.onDistrictChangeOnLoad();
         } else {
           this.confirmationService.alert(
-            this.currentLanguageSet.alerts.info.IssuesInFetchingDemographics,
+            this.currentLanguageSet.alerts.info.issuesInFetchingDemographics,
             'error'
           );
         }
@@ -879,7 +879,7 @@ export class RegisterDemographicDetailsComponent
           this.onSubDistrictOnLoad();
         } else {
           this.confirmationService.alert(
-            this.currentLanguageSet.alerts.info.IssuesInFetchingDemographics,
+            this.currentLanguageSet.alerts.info.issuesInFetchingDemographics,
             'error'
           );
         }
@@ -905,7 +905,7 @@ export class RegisterDemographicDetailsComponent
           });
         } else {
           this.confirmationService.alert(
-            this.currentLanguageSet.alerts.info.IssuesInFetchingLocationDetails,
+            this.currentLanguageSet.alerts.info.issuesinfetchingLocation,
             'error'
           );
         }
@@ -924,7 +924,7 @@ export class RegisterDemographicDetailsComponent
           this.emptyVillage();
         } else {
           this.confirmationService.alert(
-            this.currentLanguageSet.alerts.info.issuesInFetchingLocationDetails,
+            this.currentLanguageSet.alerts.info.issuesinfetchingLocation,
             'error'
           );
         }
@@ -1063,7 +1063,7 @@ export class RegisterDemographicDetailsComponent
           this.emptyVillage();
         } else {
           this.confirmationService.alert(
-            this.currentLanguageSet.alerts.info.IssuesInFetchingDemographics,
+            this.currentLanguageSet.alerts.info.issuesInFetchingDemographics,
             'error'
           );
         }

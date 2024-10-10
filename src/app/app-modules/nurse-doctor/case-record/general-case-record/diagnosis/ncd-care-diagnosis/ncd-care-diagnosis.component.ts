@@ -87,7 +87,7 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
         if (masterData.ncdCareTypes)
           this.ncdCareTypes = masterData.ncdCareTypes.slice();
 
-        if (this.caseRecordMode === 'view') {
+        if (String(this.caseRecordMode) === 'view') {
           const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
           const visitID = localStorage.getItem('visitID');
           const visitCategory = localStorage.getItem('visitCategory');

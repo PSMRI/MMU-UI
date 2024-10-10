@@ -48,4 +48,4 @@ jobs:
       uses: actions/upload-artifact@v2 
       with:
         name: MMU-UI
-        path: dist/mmu-ui-next/mmu-ui-next.war
+        path: dist/mmu-ui/mmu-ui.war

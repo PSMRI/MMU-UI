@@ -729,6 +729,15 @@ export class DoctorService {
     const obstetricFormula = JSON.parse(
       JSON.stringify(patientANCForm.controls.obstetricFormulaForm.value)
     );
+
+    if (detailedANC.lmpDate) {
+      const lmpDate = new Date(detailedANC.lmpDate);
+      const adjustedDate = new Date(
+        lmpDate.getTime() - lmpDate.getTimezoneOffset() * 60000
+      );
+      detailedANC.lmpDate = adjustedDate.toISOString();
+    }
+
     const combinedANCForm = Object.assign(
       {},
       detailedANC,
@@ -1182,6 +1191,10 @@ export class DoctorService {
     return this.generalHistory;
   }
 
+  getPreviousVisitAnthropometry(benRegId: any) {
+    return this.http.post(environment.getPreviousAnthropometryUrl, benRegId);
+  }
+
   getGenericVitals(beneficiary: any): Observable<any> {
     const otherDetails = Object.assign({}, beneficiary, {
       visitCode: localStorage.getItem('visitCode'),
@@ -1570,7 +1583,7 @@ export class DoctorService {
   }
 
   updateGeneralMenstrualHistory(menstrualHistory: any, otherDetails: any) {
-    const temp = JSON.parse(JSON.stringify(menstrualHistory.value));
+    const temp = JSON.parse(JSON.stringify(menstrualHistory.getRawValue()));
     if (temp.menstrualCycleStatus) {
       temp.menstrualCycleStatusID =
         '' + temp.menstrualCycleStatus.menstrualCycleStatusID;
@@ -1594,6 +1607,12 @@ export class DoctorService {
       temp.lMPDate === 'Invalid Date'
     ) {
       delete temp['lMPDate'];
+    } else {
+      const lmpDate = new Date(temp.lMPDate);
+      const adjustedDate = new Date(
+        lmpDate.getTime() - lmpDate.getTimezoneOffset() * 60000
+      );
+      temp.lMPDate = adjustedDate.toISOString();
     }
 
     const menstrualHistoryData = Object.assign({}, temp, otherDetails);
@@ -2146,18 +2165,16 @@ export class DoctorService {
     const investigationFormValue = JSON.parse(
       JSON.stringify(investigationForm.value)
     );
-    let labTest = [];
-    if (
-      !!investigationFormValue.labTest &&
-      !!investigationFormValue.radiologyTest
-    )
-      if (investigationFormValue.radiologyTest === null) {
-        labTest = investigationFormValue.labTest;
-      } else {
+    let labTest: any[] = [];
+    if (investigationFormValue.labTest) {
+      if (investigationFormValue?.radiologyTest?.length) {
         labTest = investigationFormValue.labTest.concat(
           investigationFormValue.radiologyTest
         );
+      } else {
+        labTest = investigationFormValue.labTest;
       }
+    }
 
     const temp = labTest.filter((test: any) => {
       return !test.disabled;

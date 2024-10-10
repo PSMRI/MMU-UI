@@ -10,9 +10,9 @@ md-input-container {
   width: 60%;
 }
 
-mat-card {
+/* mat-card {
   min-height: 400px;
-}
+} */
 
 ::ng-deep.pagination {
   margin: 0;
@@ -50,38 +50,47 @@ ul li div {
 
 .first-visit-marker {
   background: #0b69b2;
+  margin-right: 5px;
 }
 
 .revisit-marker {
   background: #ff9900;
+  margin-right: 5px;
 }
 
 .marker-p-f-c {
   background: #0b69b2;
+  margin-right: 5px;
 }
 
 .marker-p-f-t {
   background: #e44e4f;
+  margin-right: 5px;
 }
 
 .marker-t-d {
   background: #eaaa26;
+  margin-right: 5px;
 }
 
 .marker-c-d {
   background: #43760f;
+  margin-right: 5px;
 }
 
 .marker-dark-green {
-  background: #00cc00
+  background: #00cc00;
+  margin-right: 5px;
 }
 
 .marker-p-f-t-c {
   background: #9933ff;
+  margin-right: 5px;
 }
 
 .marker-t-c-c {
   background: black;
+  margin-right: 5px;
 }
 
 .color-rows>td {
@@ -180,4 +189,16 @@ ul li div {
 .totalCount,
 .description {
   padding-top: 15px;
+}
+.table>thead {
+  border-bottom: 2px solid #ddd !important;
+}
+@media screen  and (min-width:360px) and (max-width:430px) {
+  .fit_to_content{
+    width: fit-content !important;
+
+  }
+.mat_blue{
+  margin-top: 2px;
+}
 }

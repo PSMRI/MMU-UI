@@ -21,7 +21,6 @@
  */
 
 import { Component, OnInit, Input, OnDestroy, DoCheck } from '@angular/core';
-import { RegistrarService } from '../../shared/services/registrar.service';
 import { RegistrationUtils } from '../../shared/utility/registration-utility';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import {
@@ -34,6 +33,7 @@ import {
 } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { RegistrarService } from '../../shared/services/registrar.service';
 
 @Component({
   selector: 'app-register-other-details',
@@ -188,7 +188,7 @@ export class RegisterOtherDetailsComponent
    */
   loadMasterDataObservable() {
     this.masterDataSubscription =
-      this.registrarService.registrationMasterDetails$.subscribe(res => {
+      this.registrarService.registrationMasterDetails$.subscribe((res: any) => {
         // console.log('res other', res)
         if (res !== null) {
           // console.log(res,'res other')
@@ -210,7 +210,7 @@ export class RegisterOtherDetailsComponent
    */
   configMasterForOthers() {
     this.revisitDataSubscription =
-      this.registrarService.beneficiaryEditDetails$.subscribe(res => {
+      this.registrarService.beneficiaryEditDetails$.subscribe((res: any) => {
         if (res && res.beneficiaryID) {
           this.revisitData = Object.assign({}, res);
           if (this.patientRevisit) {

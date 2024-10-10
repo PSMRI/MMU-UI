@@ -49,6 +49,7 @@ export class CancerDoctorDiagnosisCaseSheetComponent
   servicePointName: any;
   covidVaccineDetails: any;
   ageValidationForVaccination = '< 12 years';
+  isCovidVaccinationStatusVisible = false;
 
   constructor(
     public httpServiceService: HttpServiceService,

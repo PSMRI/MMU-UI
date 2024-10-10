@@ -26,10 +26,45 @@ import { MasterdataService, DoctorService } from '../../../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import {
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
+
 @Component({
   selector: 'app-anc-diagnosis',
   templateUrl: './anc-diagnosis.component.html',
   styleUrls: ['./anc-diagnosis.component.css'],
+  providers: [
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
+    },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: 'LL',
+        },
+        display: {
+          dateInput: 'DD/MM/YYYY', // Set the desired display format
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY',
+        },
+      },
+    },
+  ],
 })
 export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
   masterData: any;
@@ -95,7 +130,7 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
       this.masterdataService.nurseMasterData$.subscribe(masterData => {
         if (masterData) this.masterData = masterData;
 
-        if (this.caseRecordMode === 'view') {
+        if (String(this.caseRecordMode) === 'view') {
           this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
           this.visitID = localStorage.getItem('visitID');
           this.visitCategory = localStorage.getItem('visitCategory');

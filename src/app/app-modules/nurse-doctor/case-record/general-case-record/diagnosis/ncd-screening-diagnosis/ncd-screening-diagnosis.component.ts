@@ -102,7 +102,7 @@ export class NcdScreeningDiagnosisComponent
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
   ngOnChanges() {
-    if (this.caseRecordMode === 'view') {
+    if (String(this.caseRecordMode) === 'view') {
       const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
       const visitID = localStorage.getItem('visitID');
       const visitCategory = localStorage.getItem('visitCategory');

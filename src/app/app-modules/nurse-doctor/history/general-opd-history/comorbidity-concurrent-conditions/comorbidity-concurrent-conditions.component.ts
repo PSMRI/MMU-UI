@@ -180,11 +180,21 @@ export class ComorbidityConcurrentConditionsComponent
       if (temp[i].comorbidCondition) {
         const k: any = formArray.get('' + i);
         k.patchValue(temp[i]);
+        k.markAsDirty();
         k.markAsTouched();
         this.filterComorbidityConcurrentConditionsType(
           temp[i].comorbidCondition,
           i
         );
+        if (
+          k?.get('comorbidConditions')?.value !== null &&
+          k?.get('timePeriodAgo')?.value !== null &&
+          k?.get('timePeriodUnit')?.value !== null
+        ) {
+          k?.get('timePeriodAgo')?.enable();
+          k?.get('timePeriodUnit')?.enable();
+          k?.get('isForHistory')?.enable();
+        }
       }
 
       if (i + 1 < temp.length) this.addComorbidityConcurrentConditions();
@@ -253,6 +263,12 @@ export class ComorbidityConcurrentConditionsComponent
               timePeriodUnit: null,
               isForHistory: null,
             });
+            comorbidityConcurrentConditionsForm
+              ?.get('timePeriodAgo')
+              ?.disable();
+            comorbidityConcurrentConditionsForm
+              ?.get('timePeriodUnit')
+              ?.disable();
           } else {
             const removedValue = this.previousSelectedComorbidity[i];
 
@@ -317,6 +333,22 @@ export class ComorbidityConcurrentConditionsComponent
     });
 
     this.previousSelectedComorbidity[i] = comorbidityConcurrentConditions;
+    //To disable the fields
+    if (
+      comorbidityConcurrentConditions.comorbidCondition !== 'Nil' &&
+      comorbidityConcurrentConditions.comorbidCondition !== 'None'
+    ) {
+      comorbidityConcurrentConditionsForm?.get('timePeriodAgo')?.enable();
+      comorbidityConcurrentConditionsForm?.get('isForHistory')?.enable();
+      comorbidityConcurrentConditionsForm?.get('timePeriodAgo')?.reset();
+    } else {
+      comorbidityConcurrentConditionsForm?.get('timePeriodAgo')?.disable();
+      comorbidityConcurrentConditionsForm?.get('timePeriodAgo')?.reset();
+      comorbidityConcurrentConditionsForm?.get('timePeriodUnit')?.disable();
+      comorbidityConcurrentConditionsForm?.get('timePeriodUnit')?.reset();
+      comorbidityConcurrentConditionsForm?.get('isForHistory')?.disable();
+      comorbidityConcurrentConditionsForm?.get('isForHistory')?.reset();
+    }
   }
 
   removeComorbidityExecptNone() {
@@ -386,9 +418,9 @@ export class ComorbidityConcurrentConditionsComponent
     return this.fb.group({
       comorbidConditions: null,
       otherComorbidCondition: null,
-      timePeriodAgo: null,
-      timePeriodUnit: null,
-      isForHistory: null,
+      timePeriodAgo: { value: null, disabled: true },
+      timePeriodUnit: { value: null, disabled: true },
+      isForHistory: { value: null, disabled: true },
     });
   }
 
@@ -415,6 +447,14 @@ export class ComorbidityConcurrentConditionsComponent
       );
       formGroup.patchValue({ timePeriodAgo: null, timePeriodUnit: null });
     }
+    //to disable
+    if (duration && !durationUnit) {
+      formGroup?.get('timePeriodUnit')?.enable();
+      formGroup?.get('timePeriodUnit')?.reset();
+    } else if (!duration) {
+      formGroup?.get('timePeriodUnit')?.disable();
+      formGroup?.get('timePeriodUnit')?.reset();
+    }
   }
 
   sortComorbidityList(comorbidityList: any) {
@@ -425,9 +465,12 @@ export class ComorbidityConcurrentConditionsComponent
     });
   }
 
-  checkValidity(comorbidityConcurrentConditions: any) {
-    const temp = comorbidityConcurrentConditions.value;
-    if (temp.comorbidConditions && temp.timePeriodAgo && temp.timePeriodUnit) {
+  checkValidity(comorbidityConcurrentConditions: AbstractControl<any, any>) {
+    if (
+      comorbidityConcurrentConditions?.get('comorbidConditions')?.value &&
+      comorbidityConcurrentConditions?.get('timePeriodAgo')?.value &&
+      comorbidityConcurrentConditions?.get('timePeriodUnit')?.value
+    ) {
       return false;
     } else {
       return true;

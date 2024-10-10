@@ -16,11 +16,11 @@
 .input-full-width {
   width: 100%;
 }
-.input-full-width-one  >>>
+.input-full-width-one  ::ng-deep 
 .mdc-text-field--filled, .mdc-text-field--focused {
     background-color: rgba(240, 245, 245, 0.5) !important;
 }
-.input-full-width-one >>> .mat-mdc-text-field-wrapper {
+.input-full-width-one ::ng-deep  .mat-mdc-text-field-wrapper {
     height:unset !important;
 }
 
@@ -56,4 +56,10 @@ legend {
     padding-right: 0 !important;
   }
 
+}
+mat-form-field ::ng-deep .mat-label-text {
+  color: #999 !important;
+    font-weight: 600 !important;
+    letter-spacing: initial !important;
+    font-family: 'SF-UI-Display-Regular' !important;
 }

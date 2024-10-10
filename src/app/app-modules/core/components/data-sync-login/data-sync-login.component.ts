@@ -191,6 +191,7 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
                 res.errorMessage ===
                 'You are already logged in,please confirm to logout from other device and login again'
               ) {
+                this.showProgressBar = false;
                 this.confirmationService
                   .confirm('info', res.errorMessage)
                   .subscribe(confirmResponse => {

@@ -41,6 +41,7 @@ import { environment } from 'src/environments/environment';
 import { IdrsscoreService } from '../../shared/services/idrsscore.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-nurse-general-patient-vitals',
@@ -120,6 +121,7 @@ export class GeneralPatientVitalsComponent
   shortnessOfBreathChecked: any;
   enableLungAssessment: boolean = false;
   hideLungAssessment: boolean = false;
+  attendant: any;
 
   constructor(
     private dialog: MatDialog,
@@ -132,7 +134,8 @@ export class GeneralPatientVitalsComponent
     private audioRecordingService: AudioRecordingService,
     private testInVitalsService: TestInVitalsService,
     private sanitizer: DomSanitizer,
-    private languageComponent: SetLanguageComponent
+    private languageComponent: SetLanguageComponent,
+    private route: ActivatedRoute
   ) {
     this.audioRecordingService
       .recordingFailed()
@@ -229,6 +232,36 @@ export class GeneralPatientVitalsComponent
       this.updateGeneralVitals(this.patientVitalsForm);
     }
     console.log('doctorScreen', this.doctorScreen);
+
+    this.attendant = this.route.snapshot.params['attendant'];
+    if (this.attendant === 'nurse') {
+      this.getPreviousVisitAnthropometry();
+    }
+  }
+
+  previousAnthropometryDataSubscription: any;
+  getPreviousVisitAnthropometry() {
+    console.log('getPreviousVisitAnthropometry');
+    this.previousAnthropometryDataSubscription = this.doctorService
+      .getPreviousVisitAnthropometry({
+        benRegID: localStorage.getItem('beneficiaryRegID'),
+      })
+      .subscribe((anthropometryData: any) => {
+        if (
+          anthropometryData &&
+          anthropometryData.data &&
+          anthropometryData.data.response &&
+          anthropometryData.data.response !== 'Visit code is not found' &&
+          anthropometryData.data.response !== 'No data found'
+        ) {
+          const heightStr = anthropometryData.data.response.toString();
+          this.patientVitalsForm.controls['height_cm'].patchValue(
+            heightStr.endsWith('.0')
+              ? Math.round(anthropometryData.data.response)
+              : anthropometryData.data.response
+          );
+        }
+      });
   }
 
   checkNurseRequirements(medicalForm: any) {
@@ -457,6 +490,9 @@ export class GeneralPatientVitalsComponent
       this.rbsSelectedInInvestigationSubscription.unsubscribe();
     this.nurseService.rbsTestResultFromDoctorFetch = null;
     this.nurseService.isAssessmentDone = false;
+
+    if (this.previousAnthropometryDataSubscription)
+      this.previousAnthropometryDataSubscription.unsubscribe();
   }
   checkDiasableRBS() {
     if (

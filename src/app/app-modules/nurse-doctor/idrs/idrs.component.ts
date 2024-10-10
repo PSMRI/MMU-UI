@@ -732,7 +732,7 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
     }
   }
   ngOnChanges() {
-    if (this.ncdScreeningMode === 'view') {
+    if (String(this.ncdScreeningMode) === 'view') {
       this.doctorScreen = true;
       const visitID = localStorage.getItem('visitID');
       const benRegID = localStorage.getItem('beneficiaryRegID');
@@ -753,7 +753,7 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
         this.getIDRSDetailsFrmNurse(visitID, benRegID);
       }
     }
-    if (this.ncdScreeningMode === 'update') {
+    if (String(this.ncdScreeningMode) === 'update') {
       const visitCategory = localStorage.getItem('visitCategory');
       this.doctorScreen = true;
       this.updateIDRSDetails(this.idrsScreeningForm, visitCategory);
@@ -1008,7 +1008,7 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
             )
               this.getPreviousVisit();
           }
-          if (this.ncdScreeningMode === 'view') {
+          if (String(this.ncdScreeningMode) === 'view') {
             const visitID = localStorage.getItem('visitID');
             const benRegID = localStorage.getItem('beneficiaryRegID');
             if (visitID !== null && benRegID !== null) {

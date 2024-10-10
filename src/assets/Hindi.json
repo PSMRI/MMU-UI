@@ -1244,10 +1244,10 @@
         "notAuthorized": "आप इस पेज को देखने के लिए अधिकृत नहीं हैं",
         "usernamenPass": "उपयोगकर्ता  के नाम और पासवर्ड दोनों आवश्यक हैं",
         "IssuesinConnectingtoInventory": "सूची से कनेक्ट करने में रुकावट, पुनः प्रयास करे",
-        "IssuesinfetchingLocation": "Issues in fetching your location. Relogin & Try again",
+        "issuesinfetchingLocation": "Issues in fetching your location. Relogin & Try again",
         "RemoveTheChanges": "क्या आप  परिवर्तनों को दूर करने के लिए सहमत हैं?",
-        "IssuesInFetchingLocationDetails": "स्थान के विवरण को पुनर्प्राप्त में समस्या आ रही है , कृपया पुनः प्रयास करें",
-        "IssuesInFetchingDemographics,": "जनसांख्यिकी विवरण निकालने  मे त्रुटि , कृपया पुन: प्रयास करें",
+        "issuesInFetchingLocationDetails": "स्थान के विवरण को पुनर्प्राप्त में समस्या आ रही है , कृपया पुनः प्रयास करें",
+        "issuesInFetchingDemographics": "जनसांख्यिकी विवरण निकालने  मे त्रुटि , कृपया पुन: प्रयास करें",
         "PleaseInputFieldFirst": "पहले चयनित क्षेत्र में निविष्टियो को डालें",
         "continueSession": "सत्र जारी है: क्या आप सत्र जारी रखना चाहते हैं",
         "sessionGoingToExpire": "आपकी सत्र समाप्त हो रही है",
@@ -1700,7 +1700,8 @@
     "doseTwoDate": "Dose 2 Date",
     "boosterDoseDate": "Booster Dose Date",
     "covidVaccinationDetailsSaved":"Covid vaccination details saved successfully",
-    "benPreviousVisitDetails": "Beneficiary previous visit details"
+    "benPreviousVisitDetails": "Beneficiary previous visit details",
+    "startDataSync": "Start Data Sync"
 
   }
 }

@@ -103,8 +103,8 @@
         [ngClass]="{ odd: !isOdd }">
         <ng-container [formGroupName]="i">
           <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-            <mat-form-field class="input-full-width mat_label_fix">
-              <mat-label class="mat-label-text">{{
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>{{
                 current_language_set?.nurseData?.chiefComplaintsDetails
                   ?.chiefComplaints
               }}</mat-label>
@@ -133,8 +133,8 @@
             </mat-autocomplete>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box" [hidden]="true">
-            <mat-form-field class="input-full-width mat_label_fix">
-              <mat-label class="mat-label-text">{{
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>{{
                 current_language_set?.nurseData?.chiefComplaintsDetails?.SCTID
               }}</mat-label>
               <input
@@ -147,8 +147,8 @@
             </mat-form-field>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-            <mat-form-field class="input-full-width mat_label_fix">
-              <mat-label class="mat-label-text">{{
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>{{
                 current_language_set?.nurseData?.chiefComplaintsDetails
                   ?.duration
               }}</mat-label>
@@ -165,8 +165,8 @@
             </mat-form-field>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-            <mat-form-field class="mat_label_fix">
-              <mat-label class="mat-label-text">{{
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>{{
                 current_language_set?.nurseData?.chiefComplaintsDetails
                   ?.selectunitOfDuration
               }}</mat-label>
@@ -185,8 +185,8 @@
             </mat-form-field>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-            <mat-form-field class="input-full-width mat_label_fix">
-              <mat-label class="mat-label-text">{{
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>{{
                 current_language_set?.nurseData?.chiefComplaintsDetails
                   ?.description
               }}</mat-label>
@@ -231,10 +231,8 @@
 
   <div class="row m-t-20">
     <div class="col-xs-12 col-sm-6">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{
-          current_language_set?.Find?.otherSymptoms
-        }}</mat-label>
+      <mat-form-field [style.width]="'100%'">
+        <mat-label>{{ current_language_set?.Find?.otherSymptoms }}</mat-label>
         <textarea
           matInput
           defaultNull
@@ -247,8 +245,8 @@
       </mat-form-field>
     </div>
     <div class="col-xs-12 col-sm-6">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{
+      <mat-form-field [style.width]="'100%'">
+        <mat-label>{{
           current_language_set?.casesheet?.clinicalObs
         }}</mat-label>
         <textarea
@@ -264,8 +262,8 @@
     </div>
     <div class="clearfix"></div>
     <div class="col-xs-12 col-sm-6">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{
+      <mat-form-field [style.width]="'100%'">
+        <mat-label>{{
           current_language_set?.casesheet?.significantFind
         }}</mat-label>
         <textarea

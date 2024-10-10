@@ -22,11 +22,11 @@
 
 import { Component, OnInit, Inject, Input, DoCheck } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
-import { RegistrarService } from '../../shared/services/registrar.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { RegistrarService } from '../../shared/services/registrar.service';
 
 @Component({
   selector: 'app-register-edit-location',

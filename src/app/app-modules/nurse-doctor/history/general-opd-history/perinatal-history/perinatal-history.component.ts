@@ -140,6 +140,12 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
               })[0];
 
           this.perinatalHistoryForm.patchValue(this.perinatalHistoryData);
+          //enabling the fields
+          if (this.perinatalHistoryForm.controls['typeOfDelivery'].value) {
+            this.perinatalHistoryForm?.get('typeOfDelivery')?.enable();
+          } else {
+            this.perinatalHistoryForm?.get('typeOfDelivery')?.disable();
+          }
         }
       });
   }
@@ -183,6 +189,12 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
       this.selectDeliveryTypes = this.masterData.deliveryTypes;
     }
     this.perinatalHistoryForm.patchValue({ otherPlaceOfDelivery: null });
+    //enabling the fields
+    if (this.placeOfDelivery.deliveryPlace) {
+      this.perinatalHistoryForm?.get('typeOfDelivery')?.enable();
+    } else {
+      this.perinatalHistoryForm?.get('typeOfDelivery')?.disable();
+    }
   }
 
   resetOtherComplicationAtBirth() {

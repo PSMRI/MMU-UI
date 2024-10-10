@@ -50,9 +50,8 @@ export class DataSyncService {
     });
   }
 
-  syncUploadData(groupID: any) {
+  syncUploadData() {
     const req = {
-      groupID: groupID,
       user: localStorage.getItem('userName'),
       vanID: JSON.parse(localStorage.getItem('serviceLineDetails') ?? '{}')
         ?.vanID,
@@ -61,7 +60,16 @@ export class DataSyncService {
 
     return this.http.post(environment.syncDataUploadUrl, req);
   }
+  syncAllGroups() {
+    const req = {
+      user: localStorage.getItem('userName'),
+      vanID: JSON.parse(localStorage.getItem('serviceLineDetails') ?? '{}')
+        ?.vanID,
+    };
+    console.log(req, 'reqobj');
 
+    return this.http.post(environment.syncDataUploadUrl, req);
+  }
   syncDownloadData(reqObj: any) {
     return this.http.post(environment.syncDataDownloadUrl, reqObj);
   }

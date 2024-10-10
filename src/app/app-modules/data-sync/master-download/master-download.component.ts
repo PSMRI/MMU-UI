@@ -30,6 +30,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   selector: 'app-master-download',
   templateUrl: './master-download.component.html',
   styleUrls: ['./master-download.component.css'],
+  providers: [DataSyncService],
 })
 export class MasterDownloadComponent implements OnInit {
   constructor(

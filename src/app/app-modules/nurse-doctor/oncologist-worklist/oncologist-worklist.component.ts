@@ -26,7 +26,7 @@ import { BeneficiaryDetailsService } from '../../core/services/beneficiary-detai
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { DoctorService } from '../shared/services/doctor.service';
 import { CameraService } from '../../core/services/camera.service';
-import moment from 'moment';
+import * as moment from 'moment';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';

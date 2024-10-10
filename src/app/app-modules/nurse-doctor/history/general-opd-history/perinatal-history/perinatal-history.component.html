@@ -37,7 +37,7 @@
       </div>
 
       <div class="col-4 box" *ngIf="placeOfDelivery?.deliveryPlace === 'Other'">
-        <mat-form-field class="input-full-width">
+        <mat-form-field>
           <mat-label class="mat-label-text">{{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric?.others
           }}</mat-label>
@@ -52,12 +52,7 @@
         </mat-form-field>
       </div>
 
-      <div
-        class="col-4 box"
-        *ngIf="
-          perinatalHistoryForm?.value?.placeOfDelivery !== null &&
-          perinatalHistoryForm?.value?.placeOfDelivery !== ''
-        ">
+      <div class="col-4 box">
         <mat-form-field>
           <mat-label class="mat-label-text">{{
             currentLanguageSet?.pncData?.typeofDelivery
@@ -100,7 +95,7 @@
       <div
         class="col-4 box"
         *ngIf="complicationAtBirth?.complicationValue === 'Other'">
-        <mat-form-field class="input-full-width">
+        <mat-form-field>
           <mat-label class="mat-label-text">{{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric?.others
           }}</mat-label>
@@ -135,7 +130,7 @@
       </div>
 
       <div class="col-4 box">
-        <mat-form-field class="input-full-width">
+        <mat-form-field>
           <mat-label class="mat-label-text">{{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
               ?.birthWeight

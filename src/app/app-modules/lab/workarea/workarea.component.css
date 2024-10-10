@@ -231,14 +231,14 @@ md-expansion-panel {
     color: whitesmoke;
     border-radius: 10%;
 }
-.tabs_css >>> .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+.tabs_css ::ng-deep  .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
     color:unset !important;
 }
-.tabs_css >>> .mat-mdc-tab-labels {
+.tabs_css ::ng-deep  .mat-mdc-tab-labels {
     width: 25rem !important;
 }
 
-.tabs_css >>> .mat-mdc-tab {
+.tabs_css ::ng-deep  .mat-mdc-tab {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -251,7 +251,7 @@ md-expansion-panel {
     font-weight: var(--mat-tab-header-label-text-weight);
 }
 
-.tabs_css >>> .mat-tab-group.mat-primary .mat-tab-label:focus, .mat-tab-group.mat-primary .mat-tab-link:focus, .mat-tab-nav-bar.mat-primary .mat-tab-label:focus, .mat-tab-nav-bar.mat-primary .mat-tab-link:focus {
+.tabs_css ::ng-deep  .mat-tab-group.mat-primary .mat-tab-label:focus, .mat-tab-group.mat-primary .mat-tab-link:focus, .mat-tab-nav-bar.mat-primary .mat-tab-label:focus, .mat-tab-nav-bar.mat-primary .mat-tab-link:focus {
     background-color: rgba(179, 229, 252, 0.3);
 }
 
@@ -260,4 +260,8 @@ md-expansion-panel {
     margin-top: 40px;
     min-width: 108%;
 
+}
+
+.mat_form_field_width ::ng-deep .mat-mdc-text-field-wrapper {
+    width: 163% !important;
 }

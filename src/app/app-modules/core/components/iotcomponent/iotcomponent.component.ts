@@ -201,7 +201,10 @@ export class IotcomponentComponent implements OnInit, DoCheck {
           }
         },
         err => {
-          if (typeof err['_body'] !== 'object') {
+          if (
+            typeof err['_body'] !== 'object' &&
+            err['message'] !== undefined
+          ) {
             this.errorMsg = err['_body']['message'];
           } else {
             this.errorMsg = 'Bluetooth Device is not running';

@@ -232,6 +232,29 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     );
   }
 
+  onInputDuration(complaintForm: AbstractControl) {
+    if (complaintForm.value.duration) {
+      complaintForm.get('unitOfDuration')?.enable();
+    } else {
+      complaintForm.get('unitOfDuration')?.disable();
+      complaintForm.get('unitOfDuration')?.reset();
+    }
+  }
+
+  reEnterChiefComplaint(complaintForm: AbstractControl) {
+    if (complaintForm.value.chiefComplaint) {
+      complaintForm.get('duration')?.enable();
+      complaintForm.get('description')?.enable();
+    } else {
+      complaintForm.get('duration')?.disable();
+      complaintForm.get('duration')?.reset();
+      complaintForm.get('unitOfDuration')?.disable();
+      complaintForm.get('unitOfDuration')?.reset();
+      complaintForm.get('description')?.disable();
+      complaintForm.get('description')?.reset();
+    }
+  }
+
   loadConceptID(data: any, index: any) {
     const id = <FormArray>(
       this.patientChiefComplaintsForm.controls['complaints']
@@ -471,6 +494,10 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
               .toLowerCase()
               .indexOf(complaint.toLowerCase().trim()) >= 0
         );
+        if (complaint) {
+          complaintForm.get('duration')?.enable();
+          complaintForm.get('description')?.enable();
+        }
       }
     } else if (typeof complaint === 'object' && complaint) {
       if (
@@ -485,7 +512,18 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
               .toLowerCase()
               .indexOf(complaint.chiefComplaint.toLowerCase().trim()) >= 0
         );
+        if (complaint) {
+          complaintForm.get('duration')?.enable();
+          complaintForm.get('description')?.enable();
+        }
       }
+    } else {
+      complaintForm.get('duration')?.disable();
+      complaintForm.get('duration')?.reset();
+      complaintForm.get('unitOfDuration')?.disable();
+      complaintForm.get('unitOfDuration')?.reset();
+      complaintForm.get('description')?.disable();
+      complaintForm.get('description')?.reset();
     }
 
     if (this.suggestedChiefComplaintList[i].length === 0) complaintForm.reset();

@@ -11,7 +11,7 @@ h5 {
 }
 
 .abnormal {
-    color: red
+    color: red !important
 }
 
 .marker {

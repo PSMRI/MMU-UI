@@ -26,11 +26,45 @@ import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-de
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { SetLanguageComponent } from '../../../core/components/set-language.component';
 import { HttpServiceService } from '../../../core/services/http-service.service';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import {
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
 
 @Component({
   selector: 'app-nurse-anc-details',
   templateUrl: './anc-details.component.html',
   styleUrls: ['./anc-details.component.css'],
+  providers: [
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
+    },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: 'LL',
+        },
+        display: {
+          dateInput: 'DD/MM/YYYY', // Set the desired display format
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY',
+        },
+      },
+    },
+  ],
 })
 export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
   @Input()
@@ -85,11 +119,16 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
 
     checkdate.setMonth(today.getMonth() - 9);
 
-    if (lmpDate > checkdate && lmpDate < today) {
-      this.patientANCDetailsForm.patchValue({ duration: null });
-      this.calculateEDD(lmpDate);
-      this.calculateGestationalAge(lmpDate);
-      this.calculatePeriodOfPregnancy(lmpDate);
+    const lmpDateJS = lmpDate.toDate();
+
+    if (lmpDateJS > checkdate && lmpDateJS < today) {
+      this.patientANCDetailsForm.patchValue({
+        lmpDate: lmpDateJS,
+        duration: null,
+      });
+      this.calculateEDD(lmpDateJS);
+      this.calculateGestationalAge(lmpDateJS);
+      this.calculatePeriodOfPregnancy(lmpDateJS);
     } else {
       lmpDate = null;
       this.patientANCDetailsForm.patchValue({ lmpDate: lmpDate });
@@ -102,13 +141,13 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
-  calculatePeriodOfPregnancy(lmpDate: any) {
+  calculatePeriodOfPregnancy(lmpDate: Date) {
     this.patientANCDetailsForm.patchValue({ duration: null });
   }
 
-  calculateGestationalAge(lastMP: any) {
+  calculateGestationalAge(lastMP: Date) {
     let gestationalAge: any;
-    if (lastMP !== null) {
+    if (lastMP instanceof Date) {
       const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
       gestationalAge = Math.round(
         Math.abs(
@@ -130,8 +169,8 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
-  calculateEDD(lastMP: any) {
-    if (lastMP !== null) {
+  calculateEDD(lastMP: Date) {
+    if (lastMP instanceof Date) {
       const edd = new Date(lastMP);
       edd.setDate(lastMP.getDate() + 280);
       this.patientANCDetailsForm.patchValue({ expDelDt: edd });

@@ -25,19 +25,23 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-const commonIP = 'http://183.82.107.186:8080/';
+const commonIP = 'https://amritwprdev.piramalswasthya.org/';
 //const commonIP = 'http://localhost:1040/';
-const tmIP = 'http://183.82.107.186:8080/';
+const tmIP = 'https://amritwprdev.piramalswasthya.org/';
 // const mmuIP = 'http://10.208.122.38:8080/';
-const mmuIP = 'http://183.82.107.186:8080/';
+const mmuIP = 'https://amritwprdev.piramalswasthya.org/';
 //const mmuIP = 'http://localhost:8080/';
-const schedulerIP = 'http://183.82.107.186:8080/';
-const identityIP = 'http://183.82.107.186:8080/';
+const schedulerIP = 'https://amritwprdev.piramalswasthya.org/';
+const identityIP = 'https://amritwprdev.piramalswasthya.org/';
 
-const SERVER_IP = '183.82.107.186';
-// const SERVER_IP = 'amritwprdev.piramalswasthya.org';
+// const SERVER_IP = '183.82.107.186';
+
+const SERVER_IP = 'amritwprdev.piramalswasthya.org';
 const SWYMED_IP = 'swymed://14.143.13.109';
-const adminIP = 'http://183.82.107.186:8080';
+const adminIP = 'https://amritwprdev.piramalswasthya.org';
+const FHIRIP = 'https://amritwprdev.piramalswasthya.org';
+const IDENTITY_API = `${identityIP}/identity-0.0.1/`;
+
 const ADMIN_API = `${adminIP}/adminapi-v1.0`;
 // With API MAN Configuration
 // const COMMON_API_OPEN = `http://${IP}:8080/apiman-gateway/IEMR/Common/open/`;
@@ -56,10 +60,11 @@ const MMU_API = `${mmuIP}mmuapi-v1.0/`;
 //const MMU_API = `http://localhost:8080/`
 
 const TM_API = `${tmIP}tmapi-v1.0/`;
-const COMMON_API_OPEN_SYNC = `http://${SERVER_IP}:8080/commonapi-v1.0/`;
+const COMMON_API_OPEN_SYNC = `https://${SERVER_IP}/commonapi-v1.0/`;
 const SCHEDULER_API = `${schedulerIP}schedulerapi-v1.0/`;
+const FHIR_API = `${FHIRIP}/fhirapi-v1.0/`;
 
-const mmuUICasesheet = 'http://183.82.107.186:8080/';
+const mmuUICasesheet = 'https://amritwprdev.piramalswasthya.org/';
 const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
 
 export const environment = {
@@ -71,8 +76,9 @@ export const environment = {
   visualAcuityTest: `Visual Acuity Test`,
   haemoglobinTest: `Haemoglobin Test`,
   parentAPI: `${MMU_API}`,
+  abhaExtension: `@abdm`,
 
-  INVENTORY_URL: 'http://183.82.107.186:8080/inventory-ui-next/#/redirin?',
+  INVENTORY_URL: 'https://amritwprdev.piramalswasthya.org/inventory/#/redirin?',
   fallbackUrl: `/pharmacist/redirfallback`,
   redirInUrl: `/pharmacist/redirin`,
 
@@ -138,7 +144,7 @@ export const environment = {
 
   getprescribedTestDataUrl: `${MMU_API}labTechnician/get/prescribedProceduresList`,
   labSaveWork: `${MMU_API}labTechnician/save/LabTestResult`,
-  getEcgAbnormalitiesMasterUrl: `${MMU_API}/master/ecgAbnormalities`,
+  getEcgAbnormalitiesMasterUrl: `${MMU_API}master/ecgAbnormalities`,
 
   /**
    * Worklist Urls
@@ -191,7 +197,7 @@ export const environment = {
   previousReferredHistoryUrl: `${MMU_API}common/getBenPreviousReferralHistoryDetails`,
   updateNCDScreeningDetails: `${MMU_API}NCD/update/nurseData`,
   updateNCDScreeningHistoryDetailsUrl: `${MMU_API}NCD/update/historyScreen`,
-  updateNCDScreeningDoctorDetails: `${MMU_API}/NCD/update/doctorData`,
+  updateNCDScreeningDoctorDetails: `${MMU_API}NCD/update/doctorData`,
   previousVisitDataUrl: `${MMU_API}common/getBenSymptomaticQuestionnaireDetails`,
   nurseWorklistTMreferred: `${MMU_API}common/getNurseWorklistTMreferred/`,
   /**
@@ -443,4 +449,50 @@ export const environment = {
   getResultStatusURL: `${COMMON_API}lungAssessment/startAssesment`,
   getAssessmentUrl: `${COMMON_API}lungAssessment/getAssesment`,
   getAssessmentIdUrl: `${COMMON_API}lungAssessment/getAssesmentDetails`,
+
+  /* Customization APIs*/
+  getAllRegistrationData: `${COMMON_API}customization/fetchAllData`,
+
+  /** Previous Anthropometry  Urls */
+  getPreviousAnthropometryUrl: `${MMU_API}anthropometryVitals/getBenHeightDetailsFrmNurse`,
+  /*Health ID OTP Generation URL*/
+  otpGenerationUrl: `${FHIR_API}healthID/generateOTP`,
+  otpGenerationWithUIDUrl: `${FHIR_API}healthIDWithUID/generateOTP`,
+  healthIdGenerationUrl: `${FHIR_API}healthID/verifyOTPAndGenerateHealthID`,
+  healthIdGenerationWithUIDUrl: `${FHIR_API}healthIDWithUID/createHealthIDWithUID`,
+  verifyOTPUrl: `${FHIR_API}healthIDWithUID/verifyOTP`,
+  checkAndGenerateMobileOTPUrl: `${FHIR_API}healthIDWithUID/checkAndGenerateMobileOTP`,
+  verifyMobileOTPUrl: `${FHIR_API}healthIDWithUID/verifyMobileOTP`,
+  gethealthIdDetailsUrl: `${FHIR_API}healthID/getBenhealthID`,
+  mapHealthIdUrl: `${FHIR_API}healthID/mapHealthIDToBeneficiary`,
+
+  /*Health ID - care context Mapping*/
+  careContextGenerateOtpUrl: `${FHIR_API}careContext/generateOTPForCareContext`,
+  verifyOtpForMappingContextUrl: `${FHIR_API}careContext/validateOTPAndCreateCareContext`,
+
+  /*Health ID Validation URL*/
+  generateOTPForHealthIDValidation: `${FHIR_API}validate/generateOTPForHealthIDValidation`,
+  verifyOTPForHealthIDValidation: `${FHIR_API}validate/verifyOTPForHealthIDValidation`,
+
+  /* Health ID Card Generation*/
+  generateOTPForHealthIDCard: `${FHIR_API}healthIDCard/generateOTP`,
+  verifyOTPAndGenerateHealthCard: `${FHIR_API}healthIDCard/verifyOTPAndGenerateHealthCard`,
+
+  updateAmritIDInMongo: `${FHIR_API}patient/data/patient/updateAmritIdMongo`,
+
+  /*Family Tagging Urls */
+  relationShipUrl: `${TM_API}registrar/registrarMasterData`,
+  saveFamilyTaggingUrl: `${IDENTITY_API}family/addTag`,
+  editFamilyTaggingUrl: `${IDENTITY_API}family/editFamilyTagging`,
+  untagFamilyUrl: `${IDENTITY_API}family/untag`,
+  familySearchUrl: `${IDENTITY_API}family/searchFamily`,
+  createFamilyUrl: `${IDENTITY_API}family/createFamily`,
+  getFamilyMemberUrl: `${IDENTITY_API}family/getFamilyDetails`,
+
+  /*Biometric with Health ID*/
+  getdeviceRDServiceUrl: `${COMMON_API}biometric/getBiometricData/`,
+  confirmAadharBio: `${FHIR_API}healthIDWithBio/confirmWithAadhaarBio`,
+
+  generateABHAForBio: `${FHIR_API}healthIDWithBio/verifyBio`,
+  generateABHAForBioMobileOTP: `${FHIR_API}healthIDWithBio/generateMobileOTP`,
 };

@@ -190,7 +190,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
           this.chiefComplaintTemporarayList[0] =
             this.chiefComplaintMaster.slice();
 
-          if (this.caseRecordMode === 'view') {
+          if (String(this.caseRecordMode) === 'view') {
             this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
             this.visitID = localStorage.getItem('visitID');
             this.visitCategory = localStorage.getItem('visitCategory');

@@ -16,10 +16,10 @@
 .multi_row_select{
     padding: 10px 0px; 
 }
-.input-full-width  >>>
+/* .input-full-width  ::ng-deep 
 .mdc-text-field--filled, .mdc-text-field--focused {
     background-color: #f0f5f5 !important;
-}
-.input-full-width >>> .mat-mdc-text-field-wrapper {
+} */
+.input-full-width ::ng-deep  .mat-mdc-text-field-wrapper {
     height:unset !important;
 }

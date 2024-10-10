@@ -1,192 +1,210 @@
-<div class="row m-t-20" [formGroup]="respiratorySystemDataForm">
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-label class="mat-label-text">{{
-      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-        ?.respiratoryANC_OPD_PNC?.trachea
-    }}</mat-label>
-    <mat-select
-      class="select-full-width"
-      name="trachea"
-      formControlName="trachea">
-      <mat-option *ngFor="let trachea of selectTrachea" [value]="trachea.name">
-        {{ trachea.name }}
-      </mat-option>
-    </mat-select>
-  </div>
+<div class="col-12 m-t-20" [formGroup]="respiratorySystemDataForm">
+  <div class="row">
+    <div class="col-4 box">
+      <mat-form-field class="textarea-full-width">
+        <mat-label>{{
+          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+            ?.respiratoryANC_OPD_PNC?.trachea
+        }}</mat-label>
+        <mat-select
+          class="select-full-width"
+          name="trachea"
+          formControlName="trachea">
+          <mat-option
+            *ngFor="let trachea of selectTrachea"
+            [value]="trachea.name">
+            {{ trachea.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="clearfix"></div>
 
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <mat-form-field class="input-full-width" class="textarea-full-width">
-      <mat-label class="mat-label-text">{{
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <mat-form-field class="textarea-full-width">
+        <mat-label>{{
+          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+            ?.respiratoryANC_OPD_PNC?.inspection
+        }}</mat-label>
+        <textarea
+          matInput
+          allowText="textAreaValidator"
+          defaultNull
+          matTextareaAutosize
+          name="inspection"
+          formControlName="inspection"
+          maxlength="300"></textarea>
+      </mat-form-field>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="col-4 box">
+      <label class="control-label" for="respiratorySystem">{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-          ?.respiratoryANC_OPD_PNC?.inspection
-      }}</mat-label>
-      <textarea
-        matInput
-        allowText="textAreaValidator"
-        defaultNull
-        matTextareaAutosize
-        name="inspection"
-        formControlName="inspection"
-        maxlength="300"></textarea>
-    </mat-form-field>
-  </div>
+          ?.respiratoryANC_OPD_PNC?.signsDistress
+      }}</label>
+      <div class="clearfix"></div>
+      <mat-radio-group
+        style="margin-left: -9px"
+        name="signsOfRespiratoryDistress"
+        formControlName="signsOfRespiratoryDistress">
+        <mat-radio-button color="primary" value="Present">{{
+          currentLanguageSet?.common?.present
+        }}</mat-radio-button>
+        <mat-radio-button color="primary" value="Absent">{{
+          currentLanguageSet?.common?.absent
+        }}</mat-radio-button>
+      </mat-radio-group>
+    </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <label class="control-label" for="respiratorySystem">{{
-      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-        ?.respiratoryANC_OPD_PNC?.signsDistress
-    }}</label>
-    <div class="clearfix"></div>
-    <mat-radio-group
-      name="signsOfRespiratoryDistress"
-      formControlName="signsOfRespiratoryDistress">
-      <mat-radio-button color="primary" value="Present">{{
-        currentLanguageSet?.common?.present
-      }}</mat-radio-button>
-      <mat-radio-button color="primary" value="Absent">{{
-        currentLanguageSet?.common?.absent
-      }}</mat-radio-button>
-    </mat-radio-group>
-  </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <mat-form-field class="textarea-full-width">
+        <mat-label>{{
+          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+            ?.respiratoryANC_OPD_PNC?.palpation
+        }}</mat-label>
+        <textarea
+          matInput
+          allowText="textAreaValidator"
+          defaultNull
+          matTextareaAutosize
+          name="palpation"
+          formControlName="palpation"
+          maxlength="300"></textarea>
+      </mat-form-field>
+    </div>
 
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <mat-form-field class="input-full-width" class="textarea-full-width">
-      <mat-label class="mat-label-text">{{
+    <div class="col-4 box">
+      <mat-form-field class="textarea-full-width">
+        <mat-label>{{
+          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+            ?.respiratoryANC_OPD_PNC?.breathsounds
+        }}</mat-label>
+        <mat-select
+          class="select-full-width"
+          name="auscultation_BreathSounds"
+          formControlName="auscultation_BreathSounds">
+          <mat-option
+            *ngFor="let breathSound of selectBreathSounds"
+            [value]="breathSound.name">
+            {{ breathSound.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-4 box">
+      <label class="control-label" for="respiratorySystem">{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-          ?.respiratoryANC_OPD_PNC?.palpation
-      }}</mat-label>
-      <textarea
-        matInput
-        allowText="textAreaValidator"
-        defaultNull
-        matTextareaAutosize
-        name="palpation"
-        formControlName="palpation"
-        maxlength="300"></textarea>
-    </mat-form-field>
-  </div>
+          ?.respiratoryANC_OPD_PNC?.stridor
+      }}</label>
+      <div class="clearfix"></div>
+      <mat-radio-group
+        style="margin-left: -9px"
+        name="auscultation_Stridor"
+        formControlName="auscultation_Stridor">
+        <mat-radio-button color="primary" value="Present">{{
+          currentLanguageSet?.common?.present
+        }}</mat-radio-button>
+        <mat-radio-button color="primary" value="Absent">{{
+          currentLanguageSet?.common.absent
+        }}</mat-radio-button>
+      </mat-radio-group>
+    </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-label class="mat-label-text">{{
-      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-        ?.respiratoryANC_OPD_PNC?.breathsounds
-    }}</mat-label>
-    <mat-select
-      class="select-full-width"
-      name="auscultation_BreathSounds"
-      formControlName="auscultation_BreathSounds">
-      <mat-option
-        *ngFor="let breathSound of selectBreathSounds"
-        [value]="breathSound.name">
-        {{ breathSound.name }}
-      </mat-option>
-    </mat-select>
-  </div>
+    <div class="col-4 box">
+      <label class="control-label" for="respiratorySystem">{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+          ?.respiratoryANC_OPD_PNC?.crepitations
+      }}</label>
+      <div class="clearfix"></div>
+      <mat-radio-group
+        style="margin-left: -9px"
+        name="auscultation_Crepitations"
+        formControlName="auscultation_Crepitations">
+        <mat-radio-button color="primary" value="Present">{{
+          currentLanguageSet?.common?.present
+        }}</mat-radio-button>
+        <mat-radio-button color="primary" value="Absent">{{
+          currentLanguageSet?.common?.absent
+        }}</mat-radio-button>
+      </mat-radio-group>
+    </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <label class="control-label" for="respiratorySystem">{{
-      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-        ?.respiratoryANC_OPD_PNC?.stridor
-    }}</label>
-    <div class="clearfix"></div>
-    <mat-radio-group
-      name="auscultation_Stridor"
-      formControlName="auscultation_Stridor">
-      <mat-radio-button color="primary" value="Present">{{
-        currentLanguageSet?.common?.present
-      }}</mat-radio-button>
-      <mat-radio-button color="primary" value="Absent">{{
-        currentLanguageSet?.common.absent
-      }}</mat-radio-button>
-    </mat-radio-group>
-  </div>
+    <div class="col-4 box">
+      <label class="control-label" for="respiratorySystem">{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+          ?.respiratoryANC_OPD_PNC?.wheezing
+      }}</label>
+      <div class="clearfix"></div>
+      <mat-radio-group
+        style="margin-left: -9px"
+        name="auscultation_Wheezing"
+        formControlName="auscultation_Wheezing">
+        <mat-radio-button color="primary" value="Present">{{
+          currentLanguageSet?.common?.present
+        }}</mat-radio-button>
+        <mat-radio-button color="primary" value="Absent">{{
+          currentLanguageSet?.common?.absent
+        }}</mat-radio-button>
+      </mat-radio-group>
+    </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <label class="control-label" for="respiratorySystem">{{
-      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-        ?.respiratoryANC_OPD_PNC?.crepitations
-    }}</label>
-    <div class="clearfix"></div>
-    <mat-radio-group
-      name="auscultation_Crepitations"
-      formControlName="auscultation_Crepitations">
-      <mat-radio-button color="primary" value="Present">{{
-        currentLanguageSet?.common?.present
-      }}</mat-radio-button>
-      <mat-radio-button color="primary" value="Absent">{{
-        currentLanguageSet?.common?.absent
-      }}</mat-radio-button>
-    </mat-radio-group>
-  </div>
+    <div class="col-4 box">
+      <label class="control-label" for="respiratorySystem">{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+          ?.respiratoryANC_OPD_PNC?.pleuralRub
+      }}</label>
+      <div class="clearfix"></div>
+      <mat-radio-group
+        style="margin-left: -9px"
+        name="auscultation_PleuralRub"
+        formControlName="auscultation_PleuralRub">
+        <mat-radio-button color="primary" value="Present">{{
+          currentLanguageSet?.common?.present
+        }}</mat-radio-button>
+        <mat-radio-button color="primary" value="Absent">{{
+          currentLanguageSet?.common?.absent
+        }}</mat-radio-button>
+      </mat-radio-group>
+    </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <label class="control-label" for="respiratorySystem">{{
-      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-        ?.respiratoryANC_OPD_PNC?.wheezing
-    }}</label>
-    <div class="clearfix"></div>
-    <mat-radio-group
-      name="auscultation_Wheezing"
-      formControlName="auscultation_Wheezing">
-      <mat-radio-button color="primary" value="Present">{{
-        currentLanguageSet?.common?.present
-      }}</mat-radio-button>
-      <mat-radio-button color="primary" value="Absent">{{
-        currentLanguageSet?.common?.absent
-      }}</mat-radio-button>
-    </mat-radio-group>
-  </div>
+    <div class="col-4 box">
+      <label class="control-label" for="respiratorySystem">{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+          ?.respiratoryANC_OPD_PNC?.conductedSounds
+      }}</label>
+      <div class="clearfix"></div>
+      <mat-radio-group
+        style="margin-left: -9px"
+        name="auscultation_ConductedSounds"
+        formControlName="auscultation_ConductedSounds">
+        <mat-radio-button color="primary" value="Present">{{
+          currentLanguageSet?.common?.present
+        }}</mat-radio-button>
+        <mat-radio-button color="primary" value="Absent">{{
+          currentLanguageSet?.common?.absent
+        }}</mat-radio-button>
+      </mat-radio-group>
+    </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <label class="control-label" for="respiratorySystem">{{
-      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-        ?.respiratoryANC_OPD_PNC?.pleuralRub
-    }}</label>
-    <div class="clearfix"></div>
-    <mat-radio-group
-      name="auscultation_PleuralRub"
-      formControlName="auscultation_PleuralRub">
-      <mat-radio-button color="primary" value="Present">{{
-        currentLanguageSet?.common?.present
-      }}</mat-radio-button>
-      <mat-radio-button color="primary" value="Absent">{{
-        currentLanguageSet?.common?.absent
-      }}</mat-radio-button>
-    </mat-radio-group>
-  </div>
-
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <label class="control-label" for="respiratorySystem">{{
-      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-        ?.respiratoryANC_OPD_PNC?.conductedSounds
-    }}</label>
-    <div class="clearfix"></div>
-    <mat-radio-group
-      name="auscultation_ConductedSounds"
-      formControlName="auscultation_ConductedSounds">
-      <mat-radio-button color="primary" value="Present">{{
-        currentLanguageSet?.common?.present
-      }}</mat-radio-button>
-      <mat-radio-button color="primary" value="Absent">{{
-        currentLanguageSet?.common?.absent
-      }}</mat-radio-button>
-    </mat-radio-group>
-  </div>
-
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-label class="mat-label-text">{{
-      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-        ?.respiratoryANC_OPD_PNC?.percussion
-    }}</mat-label>
-    <mat-select
-      class="select-full-width"
-      name="percussion"
-      formControlName="percussion">
-      <mat-option
-        *ngFor="let percussion of selectPercussion"
-        [value]="percussion.name">
-        {{ percussion.name }}
-      </mat-option>
-    </mat-select>
+    <div class="col-4 box">
+      <mat-form-field class="textarea-full-width">
+        <mat-label>{{
+          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+            ?.respiratoryANC_OPD_PNC?.percussion
+        }}</mat-label>
+        <mat-select
+          class="select-full-width"
+          name="percussion"
+          formControlName="percussion">
+          <mat-option
+            *ngFor="let percussion of selectPercussion"
+            [value]="percussion.name">
+            {{ percussion.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
 </div>

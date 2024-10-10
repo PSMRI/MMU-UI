@@ -162,7 +162,15 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
         const k: any = formArray.get('' + i);
         k.patchValue(temp[i]);
         k.markAsTouched();
+        k.markAsDirty();
         this.filterFamilyDiseaseList(temp[i].diseaseType, i);
+        if (
+          k?.get('diseaseType')?.value !== null &&
+          k?.get('diseaseType')?.value !== 'None' &&
+          k?.get('diseaseType')?.value !== 'Nil'
+        ) {
+          k?.get('familyMembers')?.enable();
+        }
       }
 
       if (i + 1 < temp.length) this.addFamilyDisease();
@@ -232,6 +240,14 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
     });
 
     this.previousSelectedDiseaseList[i] = disease;
+    //To disable the fields
+    if (disease.diseaseType !== 'Nil' && disease.diseaseType !== 'None') {
+      familyDiseaseForm?.get('familyMembers')?.enable();
+      familyDiseaseForm?.get('familyMembers')?.reset();
+    } else {
+      familyDiseaseForm?.get('familyMembers')?.disable();
+      familyDiseaseForm?.get('familyMembers')?.reset();
+    }
   }
 
   removeFamilyDiseaseExecptNone() {
@@ -329,7 +345,7 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
       diseaseTypeID: null,
       diseaseType: null,
       otherDiseaseType: null,
-      familyMembers: null,
+      familyMembers: { value: null, disabled: true },
       snomedCode: null,
       snomedTerm: null,
     });

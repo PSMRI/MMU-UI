@@ -30,7 +30,7 @@ h5 {
 }
 
 .abnormal {
-  color: red
+  color: red !important;
 }
 
 img {
@@ -67,17 +67,17 @@ img {
   padding: 20px;
 }
 
-mat-form-field >>>.mat-mdc-text-field-wrapper {
+mat-form-field ::ng-deep .mat-mdc-text-field-wrapper {
   width: 30% !important;
 }
 table, th, td {
   border: 1px solid;
   }
 
-  tr >>>.mat-mdc-row:hover {
+  tr ::ng-deep .mat-mdc-row:hover {
     color:unset !important;
   }
-   table >>>.mdc-data-table__table {
+   table ::ng-deep .mdc-data-table__table {
     min-width: 98% !important;
     margin-left: 13px !important;
 }
