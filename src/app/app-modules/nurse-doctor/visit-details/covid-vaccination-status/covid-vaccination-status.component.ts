@@ -33,6 +33,7 @@ import {
   MasterdataService,
   DoctorService,
 } from '../../shared/services';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-covid-vaccination-status',
   templateUrl: './covid-vaccination-status.component.html',
@@ -54,6 +55,7 @@ export class CovidVaccinationStatusComponent implements OnInit, DoCheck {
     private nurseService: NurseService,
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
+    readonly sessionstorage: SessionStorageService,
     private doctorService: DoctorService
   ) {}
   @Input()
@@ -178,7 +180,7 @@ export class CovidVaccinationStatusComponent implements OnInit, DoCheck {
   }
 
   getPreviousCovidVaccinationDetails() {
-    const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
+    const beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
     this.masterdataService
       .getPreviousCovidVaccinationDetails(beneficiaryRegID)
       .subscribe(

@@ -39,6 +39,7 @@ import { Observable, of } from 'rxjs';
 import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-workarea',
@@ -96,13 +97,14 @@ export class WorkareaComponent
     private masterdataService: MasterDataService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private labService: LabService,
-    private httpServiceService: HttpServiceService
+    private httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
-    this.visitID = localStorage.getItem('visitID');
-    this.visitCode = localStorage.getItem('visitCode');
-    this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
+    this.visitID = this.sessionstorage.getItem('visitID');
+    this.visitCode = this.sessionstorage.getItem('visitCode');
+    this.beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
 
     this.getTestRequirements();
     this.stepExpand = 0;
@@ -634,10 +636,11 @@ export class WorkareaComponent
       fileName: this.file !== undefined ? this.file.name : '',
       fileExtension:
         this.file !== undefined ? '.' + this.file.name.split('.')[1] : '',
-      userID: localStorage.getItem('userID'),
+      userID: this.sessionstorage.getItem('userID'),
       fileContent: fileContent !== undefined ? fileContent.split(',')[1] : '',
-      vanID: JSON.parse(localStorage.getItem('serviceLineDetails') ?? '{}')
-        ?.vanID,
+      vanID: JSON.parse(
+        this.sessionstorage.getItem('serviceLineDetails') ?? '{}'
+      )?.vanID,
       isUploaded: false,
     };
 
@@ -855,30 +858,31 @@ export class WorkareaComponent
               ...this.technicianForm.value,
             });
             techForm['labCompleted'] = labCompleted;
-            techForm['createdBy'] = localStorage.getItem('userName');
-            techForm['doctorFlag'] = localStorage.getItem('doctorFlag');
-            techForm['nurseFlag'] = localStorage.getItem('nurseFlag');
+            techForm['createdBy'] = this.sessionstorage.getItem('userName');
+            techForm['doctorFlag'] = this.sessionstorage.getItem('doctorFlag');
+            techForm['nurseFlag'] = this.sessionstorage.getItem('nurseFlag');
             techForm['beneficiaryRegID'] =
-              localStorage.getItem('beneficiaryRegID');
-            techForm['beneficiaryID'] = localStorage.getItem('beneficiaryID');
-            techForm['benFlowID'] = localStorage.getItem('benFlowID');
-            techForm['visitID'] = localStorage.getItem('visitID');
-            techForm['visitCode'] = localStorage.getItem('visitCode');
+              this.sessionstorage.getItem('beneficiaryRegID');
+            techForm['beneficiaryID'] =
+              this.sessionstorage.getItem('beneficiaryID');
+            techForm['benFlowID'] = this.sessionstorage.getItem('benFlowID');
+            techForm['visitID'] = this.sessionstorage.getItem('visitID');
+            techForm['visitCode'] = this.sessionstorage.getItem('visitCode');
             techForm['providerServiceMapID'] =
-              localStorage.getItem('providerServiceID');
+              this.sessionstorage.getItem('providerServiceID');
 
             if (
-              localStorage.getItem('specialist_flag') === null ||
-              localStorage.getItem('specialist_flag') === 'null' ||
-              localStorage.getItem('specialist_flag') === ''
+              this.sessionstorage.getItem('specialist_flag') === null ||
+              this.sessionstorage.getItem('specialist_flag') === 'null' ||
+              this.sessionstorage.getItem('specialist_flag') === ''
             ) {
               techForm['specialist_flag'] = null;
             } else {
               techForm['specialist_flag'] =
-                localStorage.getItem('specialist_flag');
+                this.sessionstorage.getItem('specialist_flag');
             }
             const serviceLineDetails: any =
-              localStorage.getItem('serviceLineDetails');
+              this.sessionstorage.getItem('serviceLineDetails');
             const servicePointDetails = JSON.parse(serviceLineDetails);
 
             techForm['vanID'] = servicePointDetails.vanID;
@@ -923,15 +927,15 @@ export class WorkareaComponent
                   response.data.response,
                   'success'
                 );
-                localStorage.removeItem('doctorFlag');
-                localStorage.removeItem('nurseFlag');
-                localStorage.removeItem('visitID');
-                localStorage.removeItem('beneficiaryRegID');
-                localStorage.removeItem('beneficiaryID');
-                localStorage.removeItem('visitCategory');
-                localStorage.removeItem('benFlowID');
-                localStorage.removeItem('visitCode');
-                localStorage.removeItem('specialist_flag');
+                sessionStorage.removeItem('doctorFlag');
+                sessionStorage.removeItem('nurseFlag');
+                sessionStorage.removeItem('visitID');
+                sessionStorage.removeItem('beneficiaryRegID');
+                sessionStorage.removeItem('beneficiaryID');
+                sessionStorage.removeItem('visitCategory');
+                sessionStorage.removeItem('benFlowID');
+                sessionStorage.removeItem('visitCode');
+                sessionStorage.removeItem('specialist_flag');
                 this.technicianForm.reset();
                 this.router.navigate(['/lab/worklist']);
                 console.log('data input done', res);

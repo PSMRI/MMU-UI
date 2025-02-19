@@ -49,6 +49,7 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-pnc-diagnosis',
@@ -83,7 +84,7 @@ import {
 export class PncDiagnosisComponent
   implements OnInit, DoCheck, OnDestroy, OnChanges
 {
-  utils = new GeneralUtils(this.fb);
+  utils = new GeneralUtils(this.fb, this.sessionstorage);
   @Input()
   generalDiagnosisForm!: FormGroup;
 
@@ -114,7 +115,8 @@ export class PncDiagnosisComponent
     private fb: FormBuilder,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private doctorService: DoctorService,
-    private httpServiceService: HttpServiceService
+    private httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   beneficiaryAge: any;
@@ -146,9 +148,9 @@ export class PncDiagnosisComponent
 
   ngOnChanges() {
     if (String(this.caseRecordMode) === 'view') {
-      const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-      const visitID = localStorage.getItem('visitID');
-      const visitCategory = localStorage.getItem('visitCategory');
+      const beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const visitCategory = this.sessionstorage.getItem('visitCategory');
       this.getDiagnosisDetails(beneficiaryRegID, visitID, visitCategory);
     }
   }

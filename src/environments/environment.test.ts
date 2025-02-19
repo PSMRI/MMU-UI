@@ -38,6 +38,7 @@ const SERVER_IP = 'https://amritwprdev.piramalswasthya.org/';
 const SWYMED_IP = 'swymed://14.143.13.109';
 const adminIP = 'https://amritwprdev.piramalswasthya.org';
 const FHIRIP = 'https://amritwprdev.piramalswasthya.org';
+const sessionStorageEncKey = '';
 
 const ADMIN_API = `${adminIP}/adminapi-v1.0`;
 // With API MAN Configuration
@@ -61,6 +62,7 @@ const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
 export const environment = {
   production: true,
   isMMUOfflineSync: false,
+  encKey: sessionStorageEncKey,
 
   app: `MMU`,
   RBSTest: `RBS Test`,

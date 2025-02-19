@@ -39,6 +39,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { MatDialog } from '@angular/material/dialog';
 import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-patient-upload-files',
   templateUrl: './upload-files.component.html',
@@ -85,6 +86,7 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
     private labService: LabService,
     private confirmationService: ConfirmationService,
     private doctorService: DoctorService,
+    readonly sessionstorage: SessionStorageService,
     private dialog: MatDialog
   ) {}
 
@@ -180,12 +182,13 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
   }
   fileObj: any = [];
   assignFileObject(fileContent: any) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     const kmFileManager = {
       fileName: this.file !== undefined ? this.file.name : '',
       fileExtension:
         this.file !== undefined ? '.' + this.file.name.split('.')[1] : '',
-      userID: localStorage.getItem('userID'),
+      userID: this.sessionstorage.getItem('userID'),
       fileContent: fileContent !== undefined ? fileContent.split(',')[1] : '',
       vanID: JSON.parse(serviceLineDetails).vanID,
       isUploaded: false,

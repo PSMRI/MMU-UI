@@ -42,6 +42,7 @@ import { ConfirmationService } from '../../../../core/services/confirmation.serv
 import { PageEvent } from '@angular/material/paginator';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 interface prescribe {
   id: any;
   drugID: any;
@@ -69,7 +70,7 @@ interface prescribe {
   encapsulation: ViewEncapsulation.None,
 })
 export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
-  generalUtils = new GeneralUtils(this.fb);
+  generalUtils = new GeneralUtils(this.fb, this.sessionstorage);
   @ViewChild('prescriptionForm')
   prescriptionForm!: NgForm;
 
@@ -131,6 +132,7 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
     private confirmationService: ConfirmationService,
     private doctorService: DoctorService,
     private masterdataService: MasterdataService,
+    readonly sessionstorage: SessionStorageService,
     private httpServiceService: HttpServiceService
   ) {}
 
@@ -143,7 +145,7 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   ngOnInit() {
-    this.createdBy = localStorage.getItem('userName');
+    this.createdBy = this.sessionstorage.getItem('userName');
     this.setLimits();
     this.makeDurationMaster();
     this.getDoctorMasterData();
@@ -446,9 +448,10 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
           this.edlMaster = masterData.NonEdlMaster;
 
           if (String(this.caseRecordMode) === 'view') {
-            this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-            this.visitID = localStorage.getItem('visitID');
-            this.visitCategory = localStorage.getItem('visitCategory');
+            this.beneficiaryRegID =
+              this.sessionstorage.getItem('beneficiaryRegID');
+            this.visitID = this.sessionstorage.getItem('visitID');
+            this.visitCategory = this.sessionstorage.getItem('visitCategory');
             this.getPrescriptionDetails(
               this.beneficiaryRegID,
               this.visitID,

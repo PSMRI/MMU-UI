@@ -38,6 +38,7 @@ import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-worklist',
@@ -78,11 +79,12 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
     private confirmationService: ConfirmationService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private labService: LabService,
+    readonly sessionstorage: SessionStorageService,
     private httpServiceService: HttpServiceService
   ) {}
 
   ngOnInit() {
-    localStorage.setItem('currentRole', 'Lab Technician');
+    this.sessionstorage.setItem('currentRole', 'Lab Technician');
     this.loadWorklist();
     this.beneficiaryDetailsService.reset();
     this.removeBeneficiaryDataForVisit();
@@ -97,21 +99,21 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
   removeBeneficiaryDataForVisit() {
-    localStorage.removeItem('visitCode');
-    localStorage.removeItem('beneficiaryGender');
-    localStorage.removeItem('benFlowID');
-    localStorage.removeItem('visitCategory');
-    localStorage.removeItem('beneficiaryRegID');
-    localStorage.removeItem('visitID');
-    localStorage.removeItem('beneficiaryID');
-    localStorage.removeItem('doctorFlag');
-    localStorage.removeItem('nurseFlag');
-    localStorage.removeItem('pharmacist_flag');
-    localStorage.removeItem('caseSheetTMFlag');
+    sessionStorage.removeItem('visitCode');
+    sessionStorage.removeItem('beneficiaryGender');
+    sessionStorage.removeItem('benFlowID');
+    sessionStorage.removeItem('visitCategory');
+    sessionStorage.removeItem('beneficiaryRegID');
+    sessionStorage.removeItem('visitID');
+    sessionStorage.removeItem('beneficiaryID');
+    sessionStorage.removeItem('doctorFlag');
+    sessionStorage.removeItem('nurseFlag');
+    sessionStorage.removeItem('pharmacist_flag');
+    sessionStorage.removeItem('caseSheetTMFlag');
   }
 
   ngOnDestroy() {
-    localStorage.removeItem('currentRole');
+    sessionStorage.removeItem('currentRole');
   }
 
   loadWorklist() {
@@ -247,30 +249,51 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
       )
       .subscribe(result => {
         if (result) {
-          localStorage.setItem('doctorFlag', beneficiary.labObject.doctorFlag);
-          localStorage.setItem('nurseFlag', beneficiary.labObject.nurseFlag);
-          localStorage.setItem('visitID', beneficiary.benVisitID);
-          localStorage.setItem(
+          this.sessionstorage.setItem(
+            'doctorFlag',
+            beneficiary.labObject.doctorFlag
+          );
+          this.sessionstorage.setItem(
+            'nurseFlag',
+            beneficiary.labObject.nurseFlag
+          );
+          this.sessionstorage.setItem('visitID', beneficiary.benVisitID);
+          this.sessionstorage.setItem(
             'beneficiaryRegID',
             beneficiary.beneficiaryRegID
           );
-          localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
-          localStorage.setItem('visitCategory', beneficiary.VisitCategory);
-          localStorage.setItem('benFlowID', beneficiary.benFlowID);
-          localStorage.setItem('visitCode', beneficiary.labObject.visitCode);
+          this.sessionstorage.setItem(
+            'beneficiaryID',
+            beneficiary.beneficiaryID
+          );
+          this.sessionstorage.setItem(
+            'visitCategory',
+            beneficiary.VisitCategory
+          );
+          this.sessionstorage.setItem('benFlowID', beneficiary.benFlowID);
+          this.sessionstorage.setItem(
+            'visitCode',
+            beneficiary.labObject.visitCode
+          );
           if (
             beneficiary.labObject.specialist_flag &&
             beneficiary.labObject.specialist_flag >= 0
           ) {
-            localStorage.setItem(
+            this.sessionstorage.setItem(
               'specialist_flag',
               beneficiary.labObject.specialist_flag
             );
           } else {
-            const storedValue = localStorage.getItem('specialist_flag');
-            storedValue !== null ? JSON.parse(storedValue) : null;
+            if (this.sessionstorage.getItem('specialist_flag')) {
+              const storedValue =
+                this.sessionstorage.getItem('specialist_flag');
+              storedValue !== null ? JSON.parse(storedValue) : null;
+            }
           }
-          console.log(localStorage.getItem('visitCode'), 'visitCodebeforedave');
+          console.log(
+            this.sessionstorage.getItem('visitCode'),
+            'visitCodebeforedave'
+          );
           this.router.navigate(['/lab/patient/', beneficiary.beneficiaryRegID]);
         }
       });
@@ -279,7 +302,7 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
     //   //this.confirmationService.alert('Consultation Done.');
     //   this.confirmationService.confirm("Current visit case-sheet Confirmation", "Consultation Done. Want to Print Current Case-sheet ???").subscribe((res) => {
     //     if (res) {
-    //       localStorage.setItem('visitCategory', beneficiary.VisitCategory);
+    //       this.sessionstorage.setItem('visitCategory', beneficiary.VisitCategory);
     //       let visitDateTime = new Date().toISOString();
     //       window.open(environment.printCancerCase_sheet_url + '/#/common/casesheet/' + beneficiary.beneficiaryRegID + '/' + beneficiary.benVisitID + '/' + visitDateTime);
     //     }

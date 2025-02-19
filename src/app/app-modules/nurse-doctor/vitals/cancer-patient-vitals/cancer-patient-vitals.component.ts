@@ -39,6 +39,7 @@ import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { IotcomponentComponent } from 'src/app/app-modules/core/components/iotcomponent/iotcomponent.component';
 import { ActivatedRoute } from '@angular/router';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-cancer-patient-vitals',
@@ -87,6 +88,7 @@ export class CancerPatientVitalsComponent
     private doctorService: DoctorService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private languageComponent: SetLanguageComponent,
+    readonly sessionstorage: SessionStorageService,
     private route: ActivatedRoute
   ) {}
 
@@ -106,8 +108,8 @@ export class CancerPatientVitalsComponent
   ngOnChanges(changes: any) {
     this.nurseService.rbsTestResultFromDoctorFetch = null;
     if (String(this.mode) === 'view') {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.getCancerVitals(benRegID, visitID);
     }
 
@@ -125,7 +127,7 @@ export class CancerPatientVitalsComponent
   getPreviousVisitAnthropometry() {
     this.previousAnthropometryDataSubscription = this.doctorService
       .getPreviousVisitAnthropometry({
-        benRegID: localStorage.getItem('beneficiaryRegID'),
+        benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
       })
       .subscribe((anthropometryData: any) => {
         if (

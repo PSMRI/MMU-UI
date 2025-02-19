@@ -35,6 +35,7 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-anc-diagnosis',
@@ -92,7 +93,8 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
     private doctorService: DoctorService,
     private masterdataService: MasterdataService,
     public beneficiaryDetailsService: BeneficiaryDetailsService,
-    private httpServiceService: HttpServiceService
+    private httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -131,9 +133,10 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
         if (masterData) this.masterData = masterData;
 
         if (String(this.caseRecordMode) === 'view') {
-          this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-          this.visitID = localStorage.getItem('visitID');
-          this.visitCategory = localStorage.getItem('visitCategory');
+          this.beneficiaryRegID =
+            this.sessionstorage.getItem('beneficiaryRegID');
+          this.visitID = this.sessionstorage.getItem('visitID');
+          this.visitCategory = this.sessionstorage.getItem('visitCategory');
           this.getDiagnosisDetails(
             this.beneficiaryRegID,
             this.visitID,
@@ -252,8 +255,8 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
 
   HRPSubscription: any;
   fetchHPRPositive() {
-    const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-    const visitCode = localStorage.getItem('visitCode');
+    const beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
+    const visitCode = this.sessionstorage.getItem('visitCode');
     this.HRPSubscription = this.doctorService
       .getHRPDetails(beneficiaryRegID, visitCode)
       .subscribe((res: any) => {

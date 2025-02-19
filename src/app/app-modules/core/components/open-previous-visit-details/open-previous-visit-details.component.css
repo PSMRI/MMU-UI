@@ -16,14 +16,10 @@
     display: inline-block;
   }
 
-
+  .container-fluid {
+    padding: 24px !important;
+  }
   tbody, td, tfoot, th, thead, tr {
     
     color: rgba(0, 0, 0, 0.87) !important;
 }
-
-.container-fluid {
-  max-height: 400px; 
-  overflow-y: auto;  
-  overflow-x: hidden; 
- }

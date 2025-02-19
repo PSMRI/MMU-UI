@@ -40,6 +40,7 @@ import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary
 import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-comorbidity-concurrent-conditions',
@@ -73,7 +74,8 @@ export class ComorbidityConcurrentConditionsComponent
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
-    public httpServiceService: HttpServiceService
+    public httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -135,8 +137,8 @@ export class ComorbidityConcurrentConditionsComponent
           this.addComorbidityConcurrentConditions();
 
           if (String(this.mode) === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.getGeneralHistory(benRegID, visitID);
           }
         }
@@ -373,7 +375,7 @@ export class ComorbidityConcurrentConditionsComponent
   }
 
   getPreviousComorbidityHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousComorbidityHistory(benRegID, this.visitCategory)
       .subscribe(
@@ -477,7 +479,7 @@ export class ComorbidityConcurrentConditionsComponent
     }
   }
   onComorbidFilterClick() {
-    const visitCat = localStorage.getItem('visiCategoryANC');
+    const visitCat = this.sessionstorage.getItem('visiCategoryANC');
     if (visitCat === 'COVID-19 Screening') {
       this.ComorbidStatus = 'true';
     } else {

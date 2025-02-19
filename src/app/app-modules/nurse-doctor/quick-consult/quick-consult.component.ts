@@ -60,6 +60,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 interface prescribe {
   id: any;
@@ -90,7 +91,7 @@ interface prescribe {
 export class QuickConsultComponent
   implements OnInit, OnDestroy, OnChanges, DoCheck
 {
-  utils = new QuickConsultUtils(this.fb);
+  utils = new QuickConsultUtils(this.fb, this.sessionstorage);
 
   @ViewChild('prescriptionForm')
   prescriptionForm!: NgForm;
@@ -181,6 +182,7 @@ export class QuickConsultComponent
     private httpServices: HttpServiceService,
     private nurseService: NurseService,
     private dialog: MatDialog,
+    readonly sessionstorage: SessionStorageService,
     private testInVitalsService: TestInVitalsService
   ) {}
 
@@ -189,7 +191,7 @@ export class QuickConsultComponent
     this.nurseService.clearRbsSelectedInInvestigation();
     this.nurseService.clearRbsInVitals();
     this.assignSelectedLanguage();
-    this.createdBy = localStorage.getItem('userName');
+    this.createdBy = this.sessionstorage.getItem('userName');
     this.getPrescriptionForm();
     this.setLimits();
     this.makeDurationMaster();
@@ -586,9 +588,10 @@ export class QuickConsultComponent
 
           this.loadVitalsFromNurse();
           if (String(this.quickConsultMode.toLowerCase()) === 'view') {
-            const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-            const visitID = localStorage.getItem('visitID');
-            const visitCategory = localStorage.getItem('visitCategory');
+            const beneficiaryRegID =
+              this.sessionstorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const visitCategory = this.sessionstorage.getItem('visitCategory');
             this.getDiagnosisDetails(beneficiaryRegID, visitID, visitCategory);
           }
         }
@@ -716,8 +719,8 @@ export class QuickConsultComponent
   loadVitalsFromNurse() {
     this.getQuickConsultSubscription = this.doctorService
       .getGenericVitals({
-        benRegID: localStorage.getItem('beneficiaryRegID'),
-        benVisitID: localStorage.getItem('visitID'),
+        benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+        benVisitID: this.sessionstorage.getItem('visitID'),
       })
       .subscribe(res => {
         if (

@@ -49,6 +49,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { AllergenSearchComponent } from 'src/app/app-modules/core/components/allergen-search/allergen-search.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-personal-history',
@@ -111,7 +112,8 @@ export class GeneralPersonalHistoryComponent
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
     public httpServiceService: HttpServiceService,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -178,8 +180,8 @@ export class GeneralPersonalHistoryComponent
           this.changeDetectorRef.detectChanges();
 
           if (String(this.mode) === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.getGeneralHistory(benRegID, visitID);
           }
         }
@@ -773,7 +775,7 @@ export class GeneralPersonalHistoryComponent
   }
 
   getPreviousTobaccoHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousTobaccoHistory(benRegID, this.visitCategory)
       .subscribe(
@@ -805,7 +807,7 @@ export class GeneralPersonalHistoryComponent
   }
 
   getPreviousAlcoholHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousAlcoholHistory(benRegID, this.visitCategory)
       .subscribe(
@@ -839,7 +841,7 @@ export class GeneralPersonalHistoryComponent
   }
 
   getPreviousAllergyHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousAllergyHistory(benRegID, this.visitCategory)
       .subscribe(

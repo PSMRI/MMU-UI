@@ -25,6 +25,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { BeneficiaryDetailsService } from '../../services/beneficiary-details.service';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-beneficiary-details',
@@ -41,11 +42,12 @@ export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     public httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService,
     private beneficiaryDetailsService: BeneficiaryDetailsService
   ) {}
 
   ngOnInit() {
-    const benFlowID: any = localStorage.getItem('benFlowID');
+    const benFlowID: any = this.sessionstorage.getItem('benFlowID');
     this.assignSelectedLanguage();
     this.today = new Date();
     this.route.params.subscribe(param => {

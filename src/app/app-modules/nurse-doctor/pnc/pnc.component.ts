@@ -47,6 +47,7 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-pnc',
@@ -93,7 +94,8 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
-    private httpServices: HttpServiceService
+    private httpServices: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -128,8 +130,8 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
       this.mode !== null &&
       this.mode.toLowerCase() === 'view'
     ) {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
     }
 
     if (
@@ -216,11 +218,11 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
 
   updatePatientPNC(patientPNCDataForm: FormGroup) {
     const temp = {
-      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
-      benVisitID: localStorage.getItem('visitID'),
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
-      modifiedBy: localStorage.getItem('userName'),
-      visitCode: localStorage.getItem('visitCode'),
+      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+      benVisitID: this.sessionstorage.getItem('visitID'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+      modifiedBy: this.sessionstorage.getItem('userName'),
+      visitCode: this.sessionstorage.getItem('visitCode'),
     };
 
     this.doctorService.updatePNCDetails(patientPNCDataForm, temp).subscribe(
@@ -325,8 +327,8 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
           this.selectDeliveryTypes = this.masterData.deliveryTypes;
 
           if (this.mode) {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.patchDataToFields(benRegID, visitID);
           }
         }

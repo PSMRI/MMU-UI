@@ -42,6 +42,7 @@ import { IdrsscoreService } from '../../shared/services/idrsscore.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-general-patient-vitals',
@@ -134,6 +135,7 @@ export class GeneralPatientVitalsComponent
     private audioRecordingService: AudioRecordingService,
     private testInVitalsService: TestInVitalsService,
     private sanitizer: DomSanitizer,
+    readonly sessionstorage: SessionStorageService,
     private languageComponent: SetLanguageComponent,
     private route: ActivatedRoute
   ) {
@@ -204,7 +206,7 @@ export class GeneralPatientVitalsComponent
   ngOnChanges() {
     console.log('mode here', this.vitalsMode);
     console.log('mode here', this.mode);
-    const visitCategory1 = localStorage.getItem('visitCategory');
+    const visitCategory1 = this.sessionstorage.getItem('visitCategory');
     console.log('page54' + visitCategory1);
     if (
       this.visitCategory === 'ANC' ||
@@ -221,8 +223,8 @@ export class GeneralPatientVitalsComponent
     }
 
     if (String(this.mode) === 'view') {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.getAssessmentID();
       this.doctorScreen = true;
       this.getGeneralVitalsData();
@@ -244,7 +246,7 @@ export class GeneralPatientVitalsComponent
     console.log('getPreviousVisitAnthropometry');
     this.previousAnthropometryDataSubscription = this.doctorService
       .getPreviousVisitAnthropometry({
-        benRegID: localStorage.getItem('beneficiaryRegID'),
+        benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
       })
       .subscribe((anthropometryData: any) => {
         if (
@@ -322,19 +324,20 @@ export class GeneralPatientVitalsComponent
         required.push(this.currentLanguageSet.rbsTestResult);
       }
     } else {
-      if (vitalsForm.controls['systolicBP_1stReading'].errors) {
-        required.push(
-          this.currentLanguageSet.vitalsDetails.vitalsDataANC_OPD_NCD_PNC
-            .systolicBP
-        );
+      if (this.visitCategory === 'ANC') {
+        if (vitalsForm.controls['systolicBP_1stReading'].errors) {
+          required.push(
+            this.currentLanguageSet.vitalsDetails.vitalsDataANC_OPD_NCD_PNC
+              .systolicBP
+          );
+        }
+        if (vitalsForm.controls['diastolicBP_1stReading'].errors) {
+          required.push(
+            this.currentLanguageSet.vitalsDetails.vitalsDataANC_OPD_NCD_PNC
+              .diastolicBP
+          );
+        }
       }
-      if (vitalsForm.controls['diastolicBP_1stReading'].errors) {
-        required.push(
-          this.currentLanguageSet.vitalsDetails.vitalsDataANC_OPD_NCD_PNC
-            .diastolicBP
-        );
-      }
-
       if (vitalsForm.controls['height_cm'].errors) {
         required.push(
           this.currentLanguageSet.vitalsDetails.AnthropometryDataANC_OPD_NCD_PNC
@@ -425,8 +428,8 @@ export class GeneralPatientVitalsComponent
   getGeneralVitalsData() {
     this.generalVitalsDataSubscription = this.doctorService
       .getGenericVitals({
-        benRegID: localStorage.getItem('beneficiaryRegID'),
-        benVisitID: localStorage.getItem('visitID'),
+        benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+        benVisitID: this.sessionstorage.getItem('visitID'),
       })
       .subscribe(vitalsData => {
         if (vitalsData) {
@@ -729,20 +732,12 @@ export class GeneralPatientVitalsComponent
       this.patientVitalsForm.patchValue({
         systolicBP_1stReading: null,
       });
-    } else if (systolic === '' || systolic === undefined) {
-      this.patientVitalsForm.patchValue({
-        systolicBP_1stReading: null,
-      });
     }
   }
 
   checkDiastolicLower(systolic: any, diastolic: any) {
     if (systolic && diastolic && parseInt(diastolic) >= parseInt(systolic)) {
       this.confirmationService.alert(this.currentLanguageSet.alerts.info.diaBp);
-      this.patientVitalsForm.patchValue({
-        diastolicBP_1stReading: null,
-      });
-    } else if (diastolic === '' || diastolic === undefined) {
       this.patientVitalsForm.patchValue({
         diastolicBP_1stReading: null,
       });
@@ -1076,7 +1071,7 @@ export class GeneralPatientVitalsComponent
         this.IDRSWaistScore = 20;
       }
     }
-    localStorage.setItem('waistIDRSScore', this.IDRSWaistScore);
+    this.sessionstorage.setItem('waistIDRSScore', this.IDRSWaistScore);
     this.idrsscore.setIDRSScoreWaist(this.IDRSWaistScore);
     this.idrsscore.setIDRSScoreFlag();
   }
@@ -1106,8 +1101,8 @@ export class GeneralPatientVitalsComponent
   }
 
   getHRPDetails() {
-    const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-    const visitCode = localStorage.getItem('visitCode');
+    const beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
+    const visitCode = this.sessionstorage.getItem('visitCode');
     this.doctorService
       .getHRPDetails(beneficiaryRegID, visitCode)
       .subscribe((res: any) => {
@@ -1181,7 +1176,7 @@ export class GeneralPatientVitalsComponent
   }
 
   getGender() {
-    const gender = localStorage.getItem('beneficiaryGender');
+    const gender = this.sessionstorage.getItem('beneficiaryGender');
     if (gender === 'Female') this.benGenderType = 1;
     else if (gender === 'Male') this.benGenderType = 0;
     else if (gender === 'Transgender') this.benGenderType = 2;
@@ -1204,10 +1199,10 @@ export class GeneralPatientVitalsComponent
       coughsoundfile: null,
       gender: this.benGenderType,
       age: this.benAge,
-      patientId: localStorage.getItem('beneficiaryRegID'),
+      patientId: this.sessionstorage.getItem('beneficiaryRegID'),
       assessmentId: null,
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
-      createdBy: localStorage.getItem('userName'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+      createdBy: this.sessionstorage.getItem('userName'),
       symptoms: symptoms,
     };
     const file = new File([this.coughBlobFile], 'coughSound.wav');
@@ -1238,7 +1233,7 @@ export class GeneralPatientVitalsComponent
   }
 
   getAssessmentID() {
-    const benRegID = localStorage.getItem('beneficiaryRegID');
+    const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
     this.doctorService.getAssessment(benRegID).subscribe((res: any) => {
       if (res.statusCode === 200 && res.data !== null && res.data.length > 0) {
         const lastElementIndex = res.data.length - 1;

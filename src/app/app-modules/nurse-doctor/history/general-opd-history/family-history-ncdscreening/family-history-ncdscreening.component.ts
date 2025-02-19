@@ -41,6 +41,7 @@ import {
   MasterdataService,
 } from '../../../shared/services';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-family-history-ncdscreening',
@@ -85,7 +86,8 @@ export class FamilyHistoryNcdscreeningComponent
     private masterdataService: MasterdataService,
     private idrsscore: IdrsscoreService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    public httpServiceService: HttpServiceService
+    public httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -136,8 +138,8 @@ export class FamilyHistoryNcdscreeningComponent
           this.addFamilyDisease();
 
           if (String(this.mode) === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.getGeneralHistory(benRegID, visitID);
           }
         }
@@ -466,7 +468,7 @@ export class FamilyHistoryNcdscreeningComponent
   }
 
   getPreviousFamilyHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousFamilyHistory(benRegID, this.visitCategory)
       .subscribe(
@@ -581,7 +583,7 @@ export class FamilyHistoryNcdscreeningComponent
       }
 
       console.log('score', IDRSScoreForFamilyMembes);
-      localStorage.setItem(
+      this.sessionstorage.setItem(
         'IdRSScoreFamilyHistory',
         IDRSScoreForFamilyMembes.toString()
       );

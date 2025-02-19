@@ -28,6 +28,7 @@ import { HttpServiceService } from '../core/services/http-service.service';
 import { ServicePointService } from './service-point.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { RegistrarService } from '../registrar/shared/services/registrar.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-service-point',
@@ -77,7 +78,8 @@ export class ServicePointComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     private httpServiceService: HttpServiceService,
     private registrarService: RegistrarService,
-    private languageComponent: SetLanguageComponent
+    private languageComponent: SetLanguageComponent,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   servicePointForm = this.fb.group({
@@ -97,20 +99,20 @@ export class ServicePointComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.fetchLanguageResponse();
-    this.serviceProviderId = localStorage.getItem('providerServiceID');
-    this.userId = localStorage.getItem('userID');
+    this.serviceProviderId = this.sessionstorage.getItem('providerServiceID');
+    this.userId = this.sessionstorage.getItem('userID');
     this.getServicePoint();
   }
 
-  resetLocalStorage() {
-    localStorage.removeItem('sessionID');
-    localStorage.removeItem('serviceLineDetails');
-    localStorage.removeItem('vanType');
-    localStorage.removeItem('location');
-    localStorage.removeItem('servicePointID');
-    localStorage.removeItem('servicePointName');
-    sessionStorage.removeItem('facilityID');
-  }
+  // resetLocalStorage() {
+  //   sessionStorage.removeItem('sessionID');
+  //   sessionStorage.removeItem('serviceLineDetails');
+  //   sessionStorage.removeItem('vanType');
+  //   sessionStorage.removeItem('location');
+  //   sessionStorage.removeItem('servicePointID');
+  //   // sessionStorage.removeItem('servicePointName');
+  //   sessionStorage.removeItem('facilityID');
+  // }
 
   getServicePoint() {
     this.route.data.subscribe({
@@ -143,7 +145,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
 
   filterVansList() {
     if (this.servicePointForm.controls.sessionID.value)
-      localStorage.setItem(
+      this.sessionstorage.setItem(
         'sessionID',
         this.servicePointForm.controls.sessionID.value
       );
@@ -182,7 +184,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
       return this.servicePointForm.controls.vanID.value === van.vanID;
     })[0];
 
-    localStorage.setItem(
+    this.sessionstorage.setItem(
       'serviceLineDetails',
       JSON.stringify(serviceLineDetails)
     );
@@ -232,10 +234,8 @@ export class ServicePointComponent implements OnInit, DoCheck {
     });
     const index = vanDetail.indexOf('- ');
     if (index !== -1) {
-      localStorage.setItem('vanType', vanDetail.substring(index + 2));
+      this.sessionstorage.setItem('vanType', vanDetail.substring(index + 2));
     }
-
-    console.log('van', localStorage.getItem('vanType'));
   }
 
   filterServicePointVan(searchTerm: any) {
@@ -253,8 +253,6 @@ export class ServicePointComponent implements OnInit, DoCheck {
   }
 
   routeToDesignation(designation: any) {
-    console.log('designation', designation);
-
     switch (designation) {
       case 'Registrar':
         this.router.navigate(['/registrar/search']);
@@ -287,25 +285,31 @@ export class ServicePointComponent implements OnInit, DoCheck {
         item.servicePointName ===
         this.servicePointForm.controls.servicePointName.value
     );
+    let spIDs = '';
     if (temp.length > 0) {
-      localStorage.setItem('servicePointID', temp[0].servicePointID);
+      this.sessionstorage.setItem('servicePointID', temp[0].servicePointID);
+      spIDs = temp[0].servicePointID;
       this.servicePointForm.controls.servicePointID.patchValue(
         temp[0].servicePointID
       );
-      if (this.servicePointForm.controls.servicePointName.value)
-        localStorage.setItem(
+      if (this.servicePointForm.controls.servicePointName.value) {
+        this.sessionstorage.setItem(
           'servicePointName',
           this.servicePointForm.controls.servicePointName.value
         );
-      console.log('data before call', this.servicePointForm);
-
-      this.servicePointService.getMMUDemographics().subscribe((res: any) => {
-        if (res && res.statusCode === 200) {
-          this.saveDemographicsToStorage(res.data);
-        } else {
-          this.locationGathetingIssues();
-        }
-      });
+        const spID = spIDs;
+        const spPSMID = this.sessionstorage.getItem('providerServiceID');
+        const userId = this.sessionstorage.getItem('userID');
+        this.servicePointService
+          .getMMUDemographics(spID, spPSMID, userId)
+          .subscribe((res: any) => {
+            if (res && res.statusCode === 200) {
+              this.saveDemographicsToStorage(res.data);
+            } else {
+              this.locationGathetingIssues();
+            }
+          });
+      }
     } else {
       this.servicePointForm.controls.stateID.reset();
       this.servicePointForm.controls.districtID.reset();
@@ -321,7 +325,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
   saveDemographicsToStorage(data: any) {
     if (data) {
       if (data?.userDetails) {
-        localStorage.setItem('location', JSON.stringify(data));
+        this.sessionstorage.setItem('location', JSON.stringify(data));
         this.statesList = data.stateMaster;
         this.servicePointForm.controls.stateID.patchValue(
           data?.userDetails?.stateID
@@ -359,7 +363,6 @@ export class ServicePointComponent implements OnInit, DoCheck {
   }
 
   fetchDistrictsOnStateSelection(stateID: any) {
-    console.log('stateID', stateID);
     if (stateID) {
       this.statesList.forEach((item: any) => {
         if (item.stateID === stateID)
@@ -473,13 +476,13 @@ export class ServicePointComponent implements OnInit, DoCheck {
     // Convert the object into a JSON string
     const locationDataJSON = JSON.stringify(locationData);
 
-    // Store the JSON string in localStorage
-    localStorage.setItem('locationData', locationDataJSON);
+    // Store the JSON string in this.sessionstorage
+    this.sessionstorage.setItem('locationData', locationDataJSON);
     this.goToWorkList();
   }
 
   goToWorkList() {
-    this.designation = localStorage.getItem('designation');
+    this.designation = this.sessionstorage.getItem('designation');
     this.routeToDesignation(this.designation);
   }
 

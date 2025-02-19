@@ -29,6 +29,7 @@ import {
 } from '../../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import * as moment from 'moment';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-doctor-diagnosis-case-sheet',
@@ -105,26 +106,29 @@ export class DoctorDiagnosisCaseSheetComponent
     private doctorService: DoctorService,
     private nurseService: NurseService,
     public httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService,
     private masterdataService: MasterdataService
   ) {}
 
   ngOnInit() {
     this.fetchLanguageResponse();
-    this.visitCategory = localStorage.getItem('caseSheetVisitCategory');
+    this.visitCategory = this.sessionstorage.getItem('caseSheetVisitCategory');
     this.tmCaseSheet = sessionStorage.getItem('tmCaseSheet');
-    const caseSheetTMFlag = localStorage.getItem('caseSheetTMFlag');
-    const specialistFlag = localStorage.getItem('specialistFlag');
+    const caseSheetTMFlag = this.sessionstorage.getItem('caseSheetTMFlag');
+    const specialistFlag = this.sessionstorage.getItem('specialistFlag');
 
     if (
       (caseSheetTMFlag !== null && caseSheetTMFlag === 'true') ||
       (specialistFlag !== null && parseInt(specialistFlag) === 200)
     ) {
       const caseSheetRequest = {
-        VisitCategory: localStorage.getItem('caseSheetVisitCategory'),
-        benFlowID: localStorage.getItem('caseSheetBenFlowID'),
-        benVisitID: localStorage.getItem('caseSheetVisitID'),
-        beneficiaryRegID: localStorage.getItem('caseSheetBeneficiaryRegID'),
-        visitCode: localStorage.getItem('caseSheetVisitCode'),
+        VisitCategory: this.sessionstorage.getItem('caseSheetVisitCategory'),
+        benFlowID: this.sessionstorage.getItem('caseSheetBenFlowID'),
+        benVisitID: this.sessionstorage.getItem('caseSheetVisitID'),
+        beneficiaryRegID: this.sessionstorage.getItem(
+          'caseSheetBeneficiaryRegID'
+        ),
+        visitCode: this.sessionstorage.getItem('caseSheetVisitCode'),
       };
       this.getMMUCasesheetDataInTCReferred(caseSheetRequest);
       this.enableTCReferredMMUData = true;
@@ -454,8 +458,10 @@ export class DoctorDiagnosisCaseSheetComponent
   }
 
   fetchHRPPositive() {
-    const beneficiaryRegID = localStorage.getItem('caseSheetBeneficiaryRegID');
-    const visitCode = localStorage.getItem('visitCode');
+    const beneficiaryRegID = this.sessionstorage.getItem(
+      'caseSheetBeneficiaryRegID'
+    );
+    const visitCode = this.sessionstorage.getItem('visitCode');
     this.doctorService
       .getHRPDetails(beneficiaryRegID, visitCode)
       .subscribe((res: any) => {
@@ -506,7 +512,9 @@ export class DoctorDiagnosisCaseSheetComponent
   }
 
   getPreviousCovidVaccinationDetails(doseTypeList: any, vaccineTypeList: any) {
-    const beneficiaryRegID = localStorage.getItem('caseSheetBeneficiaryRegID');
+    const beneficiaryRegID = this.sessionstorage.getItem(
+      'caseSheetBeneficiaryRegID'
+    );
     this.masterdataService
       .getPreviousCovidVaccinationDetails(beneficiaryRegID)
       .subscribe(
@@ -538,7 +546,7 @@ export class DoctorDiagnosisCaseSheetComponent
   }
 
   getAssessmentID() {
-    const benRegID = localStorage.getItem('caseSheetBeneficiaryRegID');
+    const benRegID = this.sessionstorage.getItem('caseSheetBeneficiaryRegID');
     this.doctorService.getAssessment(benRegID).subscribe((res: any) => {
       if (res.statusCode === 200 && res.data !== null) {
         const lastElementIndex = res.data.length - 1;

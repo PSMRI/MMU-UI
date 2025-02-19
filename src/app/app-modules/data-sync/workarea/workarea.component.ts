@@ -35,6 +35,7 @@ import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-workarea',
@@ -56,7 +57,8 @@ export class WorkareaComponent
     private confirmationService: ConfirmationService,
     private dataSyncService: DataSyncService,
     private fb: FormBuilder,
-    private httpServiceService: HttpServiceService
+    private httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   syncTableGroupList: any = [];
@@ -65,8 +67,8 @@ export class WorkareaComponent
   ngOnInit() {
     this.assignSelectedLanguage();
     if (
-      localStorage.getItem('serverKey') !== null ||
-      localStorage.getItem('serverKey') !== undefined
+      this.sessionstorage.getItem('serverKey') !== null ||
+      this.sessionstorage.getItem('serverKey') !== undefined
     ) {
       this.getDataSYNCGroup();
     } else {
@@ -84,7 +86,7 @@ export class WorkareaComponent
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
   ngOnDestroy() {
-    localStorage.removeItem('serverKey');
+    sessionStorage.removeItem('serverKey');
   }
 
   getDataSYNCGroup() {
@@ -117,11 +119,11 @@ export class WorkareaComponent
       .subscribe(result => {
         if (result) {
           const serviceLineDetails: any =
-            localStorage.getItem('serviceLineDetails');
+            this.sessionstorage.getItem('serviceLineDetails');
           const vanID = JSON.parse(serviceLineDetails).vanID;
           const reqObj = {
             vanID: vanID,
-            providerServiceMapID: localStorage.getItem(
+            providerServiceMapID: this.sessionstorage.getItem(
               'dataSyncProviderServiceMapID'
             ),
           };
@@ -313,7 +315,8 @@ export class WorkareaComponent
     return this.generateBenIDForm.controls['benID_Range'].value;
   }
   generateBenID(benID: any) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     if (this.benID_Count > 5000) {
       this.confirmationService.alert(
@@ -342,7 +345,7 @@ export class WorkareaComponent
         if (result) {
           const vanID = {
             vanID: JSON.parse(
-              localStorage.getItem('serviceLineDetails') ?? '{}'
+              this.sessionstorage.getItem('serviceLineDetails') ?? '{}'
             )?.vanID,
           };
           this.dataSyncService

@@ -35,6 +35,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { RegisterEditLocationComponent } from '../register-edit-location/register-edit-location.component';
 import { _MatAutocompleteBase } from '@angular/material/autocomplete';
 import { RegistrarService } from '../../shared/services/registrar.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-register-demographic-details',
@@ -91,13 +92,14 @@ export class RegisterDemographicDetailsComponent
     private httpServiceService: HttpServiceService,
     private router: Router,
     private dialog: MatDialog,
+    readonly sessionstorage: SessionStorageService,
     private languageComponent: SetLanguageComponent,
     private fb: FormBuilder
   ) {}
 
   ngOnInit() {
     this.fetchLanguageResponse();
-    const locationData: any = localStorage.getItem('locationData');
+    const locationData: any = this.sessionstorage.getItem('locationData');
     this.locationData = JSON.parse(locationData);
 
     this.demographicsEditText = this.currentLanguageSet.bendetails.editLocation
@@ -333,12 +335,12 @@ export class RegisterDemographicDetailsComponent
    * Config States  for Ben Edit
    */
   configState() {
-    const location: any = localStorage.getItem('location');
+    const location: any = this.sessionstorage.getItem('location');
     this.demographicsMaster = Object.assign(
       {},
       JSON.parse(location),
-      { servicePointID: localStorage.getItem('servicePointID') },
-      { servicePointName: localStorage.getItem('servicePointName') }
+      { servicePointID: this.sessionstorage.getItem('servicePointID') },
+      { servicePointName: this.sessionstorage.getItem('servicePointName') }
     );
     if (
       this.demographicsMaster.stateMaster &&
@@ -576,11 +578,11 @@ export class RegisterDemographicDetailsComponent
    * Check and save location Data from Storage
    */
   loadLocationFromStorage() {
-    const locationData: any = localStorage.getItem('location');
+    const locationData: any = this.sessionstorage.getItem('location');
     const location = JSON.parse(locationData);
     this.demographicsMaster = Object.assign({}, location, {
-      servicePointID: localStorage.getItem('servicePointID'),
-      servicePointName: localStorage.getItem('servicePointName'),
+      servicePointID: this.sessionstorage.getItem('servicePointID'),
+      servicePointName: this.sessionstorage.getItem('servicePointName'),
     });
     this.villgeBranch = this.demographicDetailsForm.controls[
       'villages'

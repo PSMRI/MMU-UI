@@ -38,6 +38,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 interface prescribe {
   id: any;
   drugID: any;
@@ -64,7 +65,7 @@ interface prescribe {
   styleUrls: ['./prescribe-tm-medicine.component.css'],
 })
 export class PrescribeTmMedicineComponent implements OnInit, DoCheck {
-  generalUtils = new GeneralUtils(this.fb);
+  generalUtils = new GeneralUtils(this.fb, this.sessionstorage);
   @ViewChild('prescriptionForm')
   prescriptionForm!: NgForm;
 
@@ -122,13 +123,14 @@ export class PrescribeTmMedicineComponent implements OnInit, DoCheck {
     private fb: FormBuilder,
     public httpServiceService: HttpServiceService,
     private confirmationService: ConfirmationService,
+    readonly sessionstorage: SessionStorageService,
     private doctorService: DoctorService
   ) {}
 
   ngOnInit() {
     this.fetchLanguageResponse();
     this.tmPrescribedDrugs = this.input.tmPrescribedDrugs;
-    this.createdBy = localStorage.getItem('userName') as string;
+    this.createdBy = this.sessionstorage.getItem('userName') as string;
     this.drugPrescriptionForm = this.generalUtils.createDrugPrescriptionForm();
     this.setLimits();
     this.makeDurationMaster();
@@ -147,8 +149,11 @@ export class PrescribeTmMedicineComponent implements OnInit, DoCheck {
     }
   }
   getDoctorMasterData() {
-    const visitID: any = localStorage.getItem('caseSheetVisitCategoryID');
-    const serviceProviderID: any = localStorage.getItem('providerServiceID');
+    const visitID: any = this.sessionstorage.getItem(
+      'caseSheetVisitCategoryID'
+    );
+    const serviceProviderID: any =
+      this.sessionstorage.getItem('providerServiceID');
     this.masterdataService
       .getDoctorMasterDataForNurse(visitID, serviceProviderID)
       .subscribe((masterData: any) => {

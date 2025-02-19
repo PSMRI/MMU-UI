@@ -33,6 +33,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import * as moment from 'moment';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-reffered-worklist',
@@ -63,12 +64,13 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     private httpServices: HttpServiceService,
     private cameraService: CameraService,
-    private beneficiaryDetailsService: BeneficiaryDetailsService
+    private beneficiaryDetailsService: BeneficiaryDetailsService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    localStorage.setItem('currentRole', 'Doctor');
+    this.sessionstorage.setItem('currentRole', 'Doctor');
     sessionStorage.removeItem('tmCaseSheet');
     this.removeBeneficiaryDataForNurseVisit();
     this.loadWorklist();
@@ -165,7 +167,7 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
     this.pagedList = this.filteredBeneficiaryList.slice(startItem, endItem);
   }
   loadWorklist() {
-    localStorage.removeItem('disableNoOnSuccessOfYes');
+    sessionStorage.removeItem('disableNoOnSuccessOfYes');
     this.filterTerm = null;
     this.nurseService.getNurseWorklistTMreferred().subscribe(
       (res: any) => {
@@ -276,8 +278,8 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
 
   loadNursePatientDetails(beneficiary: any) {
     console.log('beneficiary', JSON.stringify(beneficiary, null, 4));
-    localStorage.setItem('visitCode', beneficiary.visitCode);
-    localStorage.setItem('visitID', beneficiary.benVisitID);
+    this.sessionstorage.setItem('visitCode', beneficiary.visitCode);
+    this.sessionstorage.setItem('visitID', beneficiary.benVisitID);
     if (beneficiary.specialist_flag === 100) {
       this.confirmationService
         .confirm(
@@ -286,18 +288,24 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
         )
         .subscribe(result => {
           if (result) {
-            localStorage.setItem('beneficiaryGender', beneficiary.genderName);
-            localStorage.setItem(
+            this.sessionstorage.setItem(
+              'beneficiaryGender',
+              beneficiary.genderName
+            );
+            this.sessionstorage.setItem(
               'beneficiaryRegID',
               beneficiary.beneficiaryRegID
             );
-            localStorage.setItem('benFlowID', beneficiary.benFlowID);
-            localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
-            localStorage.setItem(
+            this.sessionstorage.setItem('benFlowID', beneficiary.benFlowID);
+            this.sessionstorage.setItem(
+              'beneficiaryID',
+              beneficiary.beneficiaryID
+            );
+            this.sessionstorage.setItem(
               'specialist_flag',
               beneficiary.specialist_flag
             );
-            localStorage.setItem(
+            this.sessionstorage.setItem(
               'beneficiaryData',
               JSON.stringify(beneficiary)
             );
@@ -314,38 +322,42 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
   }
 
   removeBeneficiaryDataForNurseVisit() {
-    localStorage.removeItem('visitCode');
-    localStorage.removeItem('beneficiaryGender');
-    localStorage.removeItem('benFlowID');
-    localStorage.removeItem('visitCategory');
-    localStorage.removeItem('beneficiaryRegID');
-    localStorage.removeItem('visitID');
-    localStorage.removeItem('beneficiaryID');
-    localStorage.removeItem('doctorFlag');
-    localStorage.removeItem('nurseFlag');
-    localStorage.removeItem('pharmacist_flag');
-    localStorage.removeItem('specialistFlag');
-    localStorage.removeItem('visitCat');
-    localStorage.removeItem('caseSheetTMFlag');
+    sessionStorage.removeItem('visitCode');
+    sessionStorage.removeItem('beneficiaryGender');
+    sessionStorage.removeItem('benFlowID');
+    sessionStorage.removeItem('visitCategory');
+    sessionStorage.removeItem('beneficiaryRegID');
+    sessionStorage.removeItem('visitID');
+    sessionStorage.removeItem('beneficiaryID');
+    sessionStorage.removeItem('doctorFlag');
+    sessionStorage.removeItem('nurseFlag');
+    sessionStorage.removeItem('pharmacist_flag');
+    sessionStorage.removeItem('specialistFlag');
+    sessionStorage.removeItem('visitCat');
+    sessionStorage.removeItem('caseSheetTMFlag');
   }
 
   visitCategory: any;
   viewAndPrintCaseSheet(beneficiaryData: any) {
     this.setCasesheetData(beneficiaryData);
-    const specialistFlag: any = localStorage.getItem('specialistFlag');
+    const specialistFlag: any = this.sessionstorage.getItem('specialistFlag');
     let caseSheetRequest;
     if (
-      localStorage.getItem('caseSheetTMFlag') === 'true' ||
+      this.sessionstorage.getItem('caseSheetTMFlag') === 'true' ||
       parseInt(specialistFlag) === 200
     ) {
-      this.visitCategory = localStorage.getItem('caseSheetVisitCategory');
+      this.visitCategory = this.sessionstorage.getItem(
+        'caseSheetVisitCategory'
+      );
       caseSheetRequest = {
-        VisitCategory: localStorage.getItem('caseSheetVisitCategory'),
-        benFlowID: localStorage.getItem('caseSheetBenFlowID'),
-        benVisitID: localStorage.getItem('caseSheetVisitID'),
-        beneficiaryRegID: localStorage.getItem('caseSheetBeneficiaryRegID'),
-        visitCode: localStorage.getItem('caseSheetVisitCode'),
-        // "isCaseSheetdownloaded": localStorage.getItem('isCaseSheetdownloaded') === "true" ? true : false
+        VisitCategory: this.sessionstorage.getItem('caseSheetVisitCategory'),
+        benFlowID: this.sessionstorage.getItem('caseSheetBenFlowID'),
+        benVisitID: this.sessionstorage.getItem('caseSheetVisitID'),
+        beneficiaryRegID: this.sessionstorage.getItem(
+          'caseSheetBeneficiaryRegID'
+        ),
+        visitCode: this.sessionstorage.getItem('caseSheetVisitCode'),
+        // "isCaseSheetdownloaded": this.sessionstorage.getItem('isCaseSheetdownloaded') === "true" ? true : false
       };
       this.getTMReferredCasesheetData(caseSheetRequest);
     }
@@ -380,15 +392,18 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
       );
   }
   setCasesheetData(beneficiary: any) {
-    localStorage.setItem('caseSheetBenFlowID', beneficiary.benFlowID);
-    localStorage.setItem('caseSheetVisitCategory', beneficiary.VisitCategory);
-    localStorage.setItem(
+    this.sessionstorage.setItem('caseSheetBenFlowID', beneficiary.benFlowID);
+    this.sessionstorage.setItem(
+      'caseSheetVisitCategory',
+      beneficiary.VisitCategory
+    );
+    this.sessionstorage.setItem(
       'caseSheetBeneficiaryRegID',
       beneficiary.beneficiaryRegID
     );
-    localStorage.setItem('caseSheetVisitID', beneficiary.benVisitID);
-    localStorage.setItem('caseSheetVisitCode', beneficiary.visitCode);
-    localStorage.setItem('caseSheetTMFlag', 'true');
+    this.sessionstorage.setItem('caseSheetVisitID', beneficiary.benVisitID);
+    this.sessionstorage.setItem('caseSheetVisitCode', beneficiary.visitCode);
+    this.sessionstorage.setItem('caseSheetTMFlag', 'true');
   }
   routeToCaseSheet() {
     this.router.navigate(['/nurse-doctor/print/' + 'MMU' + '/' + 'current']);

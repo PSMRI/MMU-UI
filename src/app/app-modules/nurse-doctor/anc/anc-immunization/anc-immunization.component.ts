@@ -42,6 +42,7 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-anc-immunization',
@@ -96,7 +97,8 @@ export class AncImmunizationComponent
 
   constructor(
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    private httpServiceService: HttpServiceService
+    private httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -122,7 +124,8 @@ export class AncImmunizationComponent
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
   nullifyTTStatus() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     this.patientANCImmunizationForm.reset({
       vanID: JSON.parse(serviceLineDetails).vanID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,

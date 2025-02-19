@@ -394,7 +394,7 @@
             <div class="row m-t-20">
               <div class="col-sm-12 step-btn m-b-40">
                 <button
-                  *ngIf="doctorFlag === '1'"
+                  *ngIf="doctorFlag === 1"
                   mat-raised-button
                   color="primary"
                   class="mat_blue"
@@ -405,7 +405,7 @@
                 </button>
                 <button
                   *ngIf="
-                    doctorFlag !== '1' && visitCategory !== 'General OPD (QC)'
+                    doctorFlag !== 1 && visitCategory !== 'General OPD (QC)'
                   "
                   mat-raised-button
                   color="primary"
@@ -417,7 +417,7 @@
 
                 <button
                   *ngIf="
-                    doctorFlag !== '1' && visitCategory === 'General OPD (QC)'
+                    doctorFlag !== 1 && visitCategory === 'General OPD (QC)'
                   "
                   mat-raised-button
                   color="primary"

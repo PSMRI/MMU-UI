@@ -30,6 +30,7 @@ import { SetLanguageComponent } from '../set-language.component';
 import { ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
 import { DataSyncService } from '../../../data-sync/shared/service/data-sync.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-data-sync-login',
@@ -59,6 +60,7 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
     private injector: Injector,
     public httpServiceService: HttpServiceService,
     private confirmationService: ConfirmationService,
+    readonly sessionstorage: SessionStorageService,
     private fb: FormBuilder
   ) {
     this._keySize = 256;
@@ -171,11 +173,11 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
                   mmuService.length > 0
                 ) {
                   this.showProgressBar = false;
-                  localStorage.setItem('serverKey', res.data.key);
+                  this.sessionstorage.setItem('serverKey', res.data.key);
                   this.getDataSyncMMU(res);
                 } else {
                   this.showProgressBar = false;
-                  localStorage.removeItem('serverKey');
+                  sessionStorage.removeItem('serverKey');
                   this.confirmationService.alert(
                     "User doesn't have previlege to perform this activity. Please contact administrator."
                   );
@@ -217,14 +219,16 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
                                             ?.providerServiceMapping
                                             ?.serviceID !== 2
                                         ) {
-                                          localStorage.removeItem('serverKey');
+                                          sessionStorage.removeItem(
+                                            'serverKey'
+                                          );
                                           this.confirmationService.alert(
                                             "User doesn't have previlege to perform this activity. Please contact administrator."
                                           );
                                           this.showProgressBar = false;
                                         } else {
                                           this.showProgressBar = false;
-                                          localStorage.setItem(
+                                          this.sessionstorage.setItem(
                                             'serverKey',
                                             userLoggedIn.data.key
                                           );
@@ -295,7 +299,7 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
       const mmuService = res.data.previlegeObj.filter((item: any) => {
         return item.serviceName === 'MMU';
       });
-      localStorage.setItem(
+      this.sessionstorage.setItem(
         'dataSyncProviderServiceMapID',
         mmuService[0].providerServiceMapID
       );

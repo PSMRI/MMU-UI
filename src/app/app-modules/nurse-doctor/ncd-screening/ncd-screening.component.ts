@@ -53,6 +53,7 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-ncd-screening',
@@ -100,7 +101,7 @@ export class NcdScreeningComponent
   nextScreeningDate!: Date;
   age: any;
 
-  utils = new NCDScreeningUtils(this.fb);
+  utils = new NCDScreeningUtils(this.fb, this.sessionstorage);
   bloodPressureStatus: any;
   diabeticStatus: any;
   ncdScreeningConditions: any;
@@ -133,7 +134,8 @@ export class NcdScreeningComponent
     private doctorService: DoctorService,
     private nurseService: NurseService,
     private router: Router,
-    private httpServices: HttpServiceService
+    private httpServices: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   patientVisitForm!: FormGroup;
@@ -187,8 +189,8 @@ export class NcdScreeningComponent
           // this.ncdTests = data.ncdTests;
 
           if (String(this.ncdScreeningMode) === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.getNCDScreeingDetails(benRegID, visitID);
           }
         }

@@ -46,6 +46,7 @@ import { ValidationUtils } from '../../../shared/utility/validation-utility';
 import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-past-history',
@@ -84,7 +85,8 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
     private nurseService: NurseService,
     private doctorService: DoctorService,
     private masterdataService: MasterdataService,
-    public httpServiceService: HttpServiceService
+    public httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -175,8 +177,8 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
           this.changeDetectorRef.detectChanges();
 
           if (String(this.mode) === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.getGeneralHistory(benRegID, visitID);
           }
         }
@@ -596,7 +598,7 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   getPreviousPastHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousPastHistory(benRegID, this.visitCategory)
       .subscribe(

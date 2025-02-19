@@ -20,6 +20,8 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
+// import { keys } from './enckey';
+
 // The file contents for the current environment will overwrite these during build.
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
@@ -37,6 +39,7 @@ const SERVER_IP = 'https://amritwprdev.piramalswasthya.org/';
 const SWYMED_IP = 'swymed://14.143.13.109';
 const adminIP = 'https://amritwprdev.piramalswasthya.org/';
 const FHIRIP = 'https://amritwprdev.piramalswasthya.org';
+const sessionStorageEncKey = '';
 
 const ADMIN_API = `${adminIP}/adminapi-v1.0/`;
 // With API MAN Configuration
@@ -60,7 +63,7 @@ const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
 export const environment = {
   production: true,
   isMMUOfflineSync: false,
-
+  encKey: sessionStorageEncKey,
   app: `MMU`,
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,
@@ -71,7 +74,7 @@ export const environment = {
   fallbackUrl: `/pharmacist/redirfallback`,
   redirInUrl: `/pharmacist/redirin`,
 
-  TELEMEDICINE_URL: `${schedulerUI_IP}schedulerui-v1.0/#/?`,
+  TELEMEDICINE_URL: `${schedulerUI_IP}scheduler/#/?`,
   fallbackMMUUrl: `/logout-tm`,
   redirInMMUUrl: `/common/tcspecialist-worklist`,
   licenseURL: `${COMMON_API}license.html`,

@@ -32,6 +32,7 @@ import { DoctorService } from '../../../../shared/services';
 import { GeneralUtils } from '../../../../shared/utility/general-utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-general-opd-diagnosis',
   templateUrl: './general-opd-diagnosis.component.html',
@@ -43,21 +44,22 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
 
   @Input()
   caseRecordMode!: string;
-  utils = new GeneralUtils(this.fb);
+  utils = new GeneralUtils(this.fb, this.sessionstorage);
   diagnosisSubscription: any;
   current_language_set: any;
   constructor(
     private fb: FormBuilder,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
-    private httpServiceService: HttpServiceService
+    private httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnChanges() {
     if (String(this.caseRecordMode) === 'view') {
-      const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-      const visitID = localStorage.getItem('visitID');
-      const visitCategory = localStorage.getItem('visitCategory');
+      const beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const visitCategory = this.sessionstorage.getItem('visitCategory');
       this.getDiagnosisDetails(beneficiaryRegID, visitID, visitCategory);
     }
   }

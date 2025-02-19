@@ -48,6 +48,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-cancer-family-disease-history',
@@ -87,9 +88,10 @@ export class FamilyDiseaseHistoryComponent
     private nurseService: NurseService,
     private confirmationService: ConfirmationService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    private languageComponent: SetLanguageComponent
+    private languageComponent: SetLanguageComponent,
+    readonly sessionstorage: SessionStorageService
   ) {
-    this.formUtils = new CancerUtils(this.fb);
+    this.formUtils = new CancerUtils(this.fb, this.sessionstorage);
   }
 
   ngOnInit() {
@@ -168,8 +170,8 @@ export class FamilyDiseaseHistoryComponent
           };
 
           if (String(this.mode) === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.getCancerHistory(benRegID, visitID);
           }
         }
@@ -369,7 +371,7 @@ export class FamilyDiseaseHistoryComponent
   }
 
   getPreviousCancerFamilyHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService.getPreviousCancerFamilyHistory(benRegID).subscribe(
       (data: any) => {
         if (data !== null && data.data !== null) {

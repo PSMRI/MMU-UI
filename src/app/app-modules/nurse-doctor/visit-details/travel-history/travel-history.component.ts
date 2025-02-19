@@ -36,6 +36,7 @@ import {
 } from '../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-travel-history',
@@ -93,6 +94,7 @@ export class TravelHistoryComponent
     private nurseService: NurseService,
     private httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
+    readonly sessionstorage: SessionStorageService,
     private fb: FormBuilder
   ) {
     this.masterdataService.listen().subscribe((m: any) => {
@@ -115,8 +117,8 @@ export class TravelHistoryComponent
   ngOnChanges() {
     if (this.mode?.toLowerCase() === 'view') {
       this.readTravel = true;
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.getHistoryDetails(benRegID, visitID);
     }
   }
@@ -281,7 +283,7 @@ export class TravelHistoryComponent
     this.getrecommendedtext();
   }
   travelStatuschange(boolean_flag: any) {
-    localStorage.setItem('travelstat', boolean_flag);
+    this.sessionstorage.setItem('travelstat', boolean_flag);
     this.patientCovidForm.patchValue({ travelStatus: boolean_flag });
     this.disableTravelButton = false;
     this.travelSelected = true;
@@ -310,14 +312,14 @@ export class TravelHistoryComponent
     const recomFormArray = <FormArray>(
       this.patientCovidForm.controls['recommendation']
     );
-    this.allSymp = localStorage.getItem('allSymptom');
+    this.allSymp = this.sessionstorage.getItem('allSymptom');
     if (this.allSymp === 'true') {
       this.travelReqiured = 'false';
     } else {
       this.travelReqiured = 'true';
     }
-    this.answer1 = localStorage.getItem('symptom');
-    this.answer2 = localStorage.getItem('contact');
+    this.answer1 = this.sessionstorage.getItem('symptom');
+    this.answer2 = this.sessionstorage.getItem('contact');
 
     if (
       (this.question1 === 'yes' &&

@@ -49,6 +49,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { environment } from 'src/environments/environment';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-patient-chief-complaints',
   templateUrl: './chief-complaints.component.html',
@@ -91,9 +92,10 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     private nurseService: NurseService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private confirmationService: ConfirmationService,
-    private httpServices: HttpServiceService
+    private httpServices: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {
-    this.formUtility = new VisitDetailUtils(this.fb);
+    this.formUtility = new VisitDetailUtils(this.fb, this.sessionstorage);
   }
 
   ngOnInit() {
@@ -132,8 +134,8 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
             this.chiefComplaintMaster.slice();
 
           if (String(this.mode) === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.getChiefComplaints(benRegID, visitID);
           }
         }

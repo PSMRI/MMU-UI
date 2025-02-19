@@ -23,13 +23,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class ServicePointService {
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   getServicePoints(userId: string, serviceProviderId: string) {
@@ -39,10 +41,10 @@ export class ServicePointService {
     });
   }
 
-  getMMUDemographics() {
-    const spID = localStorage.getItem('servicePointID');
-    const spPSMID = localStorage.getItem('providerServiceID');
-    const userId = localStorage.getItem('userID');
+  getMMUDemographics(spID: any, spPSMID: any, userId: any) {
+    // const spID = this.sessionstorage.getItem('servicePointID');
+    // const spPSMID = this.sessionstorage.getItem('providerServiceID');
+    // const userId = this.sessionstorage.getItem('userID');
 
     return this.http.post(environment.demographicsCurrentMasterUrl, {
       spID: spID,
@@ -50,4 +52,16 @@ export class ServicePointService {
       userId: userId,
     });
   }
+  // getMMUDemographics() {
+  //   const spID = this.sessionstorage.getItem('servicePointID');
+  //   const spPSMID = this.sessionstorage.getItem('providerServiceID');
+  //   const userId = this.sessionstorage.getItem('userID');
+
+  //   const formData = new FormData();
+  //   formData.append('spID', spID);
+  //   formData.append('spPSMID', spPSMID);
+  //   formData.append('userId', userId);
+
+  //   return this.http.post(environment.demographicsCurrentMasterUrl, formData);
+  // }
 }

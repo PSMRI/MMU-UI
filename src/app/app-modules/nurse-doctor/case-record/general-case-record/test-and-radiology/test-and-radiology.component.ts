@@ -39,6 +39,7 @@ import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/co
 import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-test-and-radiology',
   templateUrl: './test-and-radiology.component.html',
@@ -63,6 +64,7 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
     private labService: LabService,
     private idrsScoreService: IdrsscoreService,
     private httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService,
     private testInVitalsService: TestInVitalsService
   ) {}
 
@@ -79,9 +81,9 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
   ngOnInit() {
     this.testInVitalsService.clearVitalsRBSValueInReports();
     this.testInVitalsService.clearVitalsRBSValueInReportsInUpdate();
-    this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-    this.visitID = localStorage.getItem('visitID');
-    this.visitCategory = localStorage.getItem('visitCategory');
+    this.beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
+    this.visitID = this.sessionstorage.getItem('visitID');
+    this.visitCategory = this.sessionstorage.getItem('visitCategory');
 
     this.testInVitalsService.vitalRBSTestResult$.subscribe(response => {
       console.log('vital subscription response: ', response);
@@ -108,9 +110,9 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
         }
       }
 
-      this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-      this.visitID = localStorage.getItem('visitID');
-      this.visitCategory = localStorage.getItem('visitCategory');
+      this.beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
+      this.visitID = this.sessionstorage.getItem('visitID');
+      this.visitCategory = this.sessionstorage.getItem('visitCategory');
       this.getTestResults(
         this.beneficiaryRegID,
         this.visitID,
@@ -313,7 +315,7 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
   visitCode: any;
   showArchivedTestResult(visitCode: any) {
     const archivedReport = {
-      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
       visitCode: visitCode.visitCode,
     };
     this.doctorService

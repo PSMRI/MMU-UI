@@ -37,6 +37,7 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 declare global {
   interface Navigator {
@@ -81,6 +82,7 @@ export class ReportsComponent implements OnInit, DoCheck {
     private masterdataService: MasterdataService,
     private confirmationService: ConfirmationService,
     private formBuilder: FormBuilder,
+    readonly sessionstorage: SessionStorageService,
     private httpServices: HttpServiceService
   ) {}
   today!: Date;
@@ -212,7 +214,7 @@ export class ReportsComponent implements OnInit, DoCheck {
     const reportRequst = {
       fromDate: this.fromDate,
       toDate: this.toDate,
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       reportID: this.report.reportID,
       vanID: this.van.vanID,
     };

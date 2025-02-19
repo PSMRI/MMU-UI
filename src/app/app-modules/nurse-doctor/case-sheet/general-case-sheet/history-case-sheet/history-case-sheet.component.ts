@@ -26,6 +26,7 @@ import * as moment from 'moment';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { DoctorService } from '../../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-history-case-sheet',
@@ -72,26 +73,29 @@ export class HistoryCaseSheetComponent implements OnInit, OnChanges, DoCheck {
   constructor(
     public datepipe: DatePipe,
     private doctorService: DoctorService,
+    readonly sessionstorage: SessionStorageService,
     public httpServiceService: HttpServiceService
   ) {}
 
   ngOnInit() {
     this.fetchLanguageResponse();
-    this.visitCategory = localStorage.getItem('caseSheetVisitCategory');
+    this.visitCategory = this.sessionstorage.getItem('caseSheetVisitCategory');
 
-    const caseSheetTMFlag = localStorage.getItem('caseSheetTMFlag');
-    const specialistFlag = localStorage.getItem('specialistFlag');
+    const caseSheetTMFlag = this.sessionstorage.getItem('caseSheetTMFlag');
+    const specialistFlag = this.sessionstorage.getItem('specialistFlag');
 
     if (
       (caseSheetTMFlag !== null && caseSheetTMFlag === 'true') ||
       (specialistFlag !== null && parseInt(specialistFlag) === 200)
     ) {
       const caseSheetRequest = {
-        VisitCategory: localStorage.getItem('caseSheetVisitCategory'),
-        benFlowID: localStorage.getItem('caseSheetBenFlowID'),
-        benVisitID: localStorage.getItem('caseSheetVisitID'),
-        beneficiaryRegID: localStorage.getItem('caseSheetBeneficiaryRegID'),
-        visitCode: localStorage.getItem('caseSheetVisitCode'),
+        VisitCategory: this.sessionstorage.getItem('caseSheetVisitCategory'),
+        benFlowID: this.sessionstorage.getItem('caseSheetBenFlowID'),
+        benVisitID: this.sessionstorage.getItem('caseSheetVisitID'),
+        beneficiaryRegID: this.sessionstorage.getItem(
+          'caseSheetBeneficiaryRegID'
+        ),
+        visitCode: this.sessionstorage.getItem('caseSheetVisitCode'),
       };
       this.getMMUCasesheetDataInTCReferred(caseSheetRequest);
       this.enableTCReferredMMUData = true;

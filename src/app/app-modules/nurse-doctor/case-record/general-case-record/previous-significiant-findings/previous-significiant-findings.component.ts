@@ -32,6 +32,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-previous-significiant-findings',
   templateUrl: './previous-significiant-findings.component.html',
@@ -49,6 +50,7 @@ export class PreviousSignificiantFindingsComponent
 
   constructor(
     private doctorService: DoctorService,
+    readonly sessionstorage: SessionStorageService,
     private httpServiceService: HttpServiceService
   ) {}
   rowsPerPage = 5;
@@ -86,7 +88,7 @@ export class PreviousSignificiantFindingsComponent
   filteredPreviousSignificiantFindingsList = [];
   previousSignificantFindingsSubs: any;
   getPreviousSignificiantFindings() {
-    const benRegID = localStorage.getItem('beneficiaryRegID');
+    const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
     this.previousSignificantFindingsSubs = this.doctorService
       .getPreviousSignificiantFindings({ beneficiaryRegID: benRegID })
       .subscribe((data: any) => {

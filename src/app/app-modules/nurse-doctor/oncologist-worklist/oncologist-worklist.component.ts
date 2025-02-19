@@ -32,6 +32,7 @@ import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-oncologist-worklist',
@@ -71,12 +72,13 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private doctorService: DoctorService,
-    private httpServices: HttpServiceService
+    private httpServices: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    localStorage.setItem('currentRole', 'Oncologist');
+    this.sessionstorage.setItem('currentRole', 'Oncologist');
     this.removeBeneficiaryDataForVisit();
     this.loadWorklist();
   }
@@ -94,17 +96,17 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
   // Ends
 
   removeBeneficiaryDataForVisit() {
-    localStorage.removeItem('visitCode');
-    localStorage.removeItem('beneficiaryGender');
-    localStorage.removeItem('benFlowID');
-    localStorage.removeItem('visitCategory');
-    localStorage.removeItem('beneficiaryRegID');
-    localStorage.removeItem('visitID');
-    localStorage.removeItem('beneficiaryID');
-    localStorage.removeItem('doctorFlag');
-    localStorage.removeItem('nurseFlag');
-    localStorage.removeItem('pharmacist_flag');
-    localStorage.removeItem('caseSheetTMFlag');
+    sessionStorage.removeItem('visitCode');
+    sessionStorage.removeItem('beneficiaryGender');
+    sessionStorage.removeItem('benFlowID');
+    sessionStorage.removeItem('visitCategory');
+    sessionStorage.removeItem('beneficiaryRegID');
+    sessionStorage.removeItem('visitID');
+    sessionStorage.removeItem('beneficiaryID');
+    sessionStorage.removeItem('doctorFlag');
+    sessionStorage.removeItem('nurseFlag');
+    sessionStorage.removeItem('pharmacist_flag');
+    sessionStorage.removeItem('caseSheetTMFlag');
   }
 
   pageChanged(event: any): void {
@@ -213,7 +215,7 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
   }
 
   loadDoctorExaminationPage(beneficiary: any) {
-    localStorage.setItem('visitCode', beneficiary.visitCode);
+    this.sessionstorage.setItem('visitCode', beneficiary.visitCode);
     if (beneficiary.visitFlowStatusFlag === 'N') {
       this.confirmationService
         .confirm(
@@ -222,20 +224,26 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
         )
         .subscribe(result => {
           if (result) {
-            localStorage.setItem('benFlowID', beneficiary.benFlowID);
-            localStorage.setItem('visitID', beneficiary.benVisitID);
-            localStorage.setItem('doctorFlag', beneficiary.doctorFlag);
-            localStorage.setItem('nurseFlag', beneficiary.nurseFlag);
-            localStorage.setItem(
+            this.sessionstorage.setItem('benFlowID', beneficiary.benFlowID);
+            this.sessionstorage.setItem('visitID', beneficiary.benVisitID);
+            this.sessionstorage.setItem('doctorFlag', beneficiary.doctorFlag);
+            this.sessionstorage.setItem('nurseFlag', beneficiary.nurseFlag);
+            this.sessionstorage.setItem(
               'pharmacist_flag',
               beneficiary.pharmacist_flag
             );
-            localStorage.setItem(
+            this.sessionstorage.setItem(
               'beneficiaryRegID',
               beneficiary.beneficiaryRegID
             );
-            localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
-            localStorage.setItem('visitCategory', beneficiary.VisitCategory);
+            this.sessionstorage.setItem(
+              'beneficiaryID',
+              beneficiary.beneficiaryID
+            );
+            this.sessionstorage.setItem(
+              'visitCategory',
+              beneficiary.VisitCategory
+            );
             this.router.navigate([
               '/common/patient',
               beneficiary.beneficiaryRegID,
@@ -247,16 +255,22 @@ export class OncologistWorklistComponent implements OnInit, DoCheck {
         .confirm('info', this.currentLanguageSet.alerts.info.consulation)
         .subscribe(res => {
           if (res) {
-            localStorage.setItem('caseSheetBenFlowID', beneficiary.benFlowID);
-            localStorage.setItem(
+            this.sessionstorage.setItem(
+              'caseSheetBenFlowID',
+              beneficiary.benFlowID
+            );
+            this.sessionstorage.setItem(
               'caseSheetVisitCategory',
               beneficiary.VisitCategory
             );
-            localStorage.setItem(
+            this.sessionstorage.setItem(
               'caseSheetBeneficiaryRegID',
               beneficiary.beneficiaryRegID
             );
-            localStorage.setItem('caseSheetVisitID', beneficiary.benVisitID);
+            this.sessionstorage.setItem(
+              'caseSheetVisitID',
+              beneficiary.benVisitID
+            );
             this.router.navigate([
               '/nurse-doctor/print/' + 'MMU' + '/' + 'current',
             ]);

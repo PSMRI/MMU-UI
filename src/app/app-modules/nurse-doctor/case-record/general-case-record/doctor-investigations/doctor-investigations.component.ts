@@ -33,6 +33,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-doctor-investigations',
@@ -88,7 +89,8 @@ export class DoctorInvestigationsComponent
     private masterdataService: MasterdataService,
     private idrsScoreService: IdrsscoreService,
     private httpServiceService: HttpServiceService,
-    private nurseService: NurseService
+    private nurseService: NurseService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -289,9 +291,10 @@ export class DoctorInvestigationsComponent
           });
 
           if (String(this.caseRecordMode) === 'view') {
-            this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-            this.visitID = localStorage.getItem('visitID');
-            this.visitCategory = localStorage.getItem('visitCategory');
+            this.beneficiaryRegID =
+              this.sessionstorage.getItem('beneficiaryRegID');
+            this.visitID = this.sessionstorage.getItem('visitID');
+            this.visitCategory = this.sessionstorage.getItem('visitCategory');
             this.getInvestigationDetails(
               this.beneficiaryRegID,
               this.visitID,

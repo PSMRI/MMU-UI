@@ -32,6 +32,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-general-perinatal-history',
   templateUrl: './perinatal-history.component.html',
@@ -57,7 +58,8 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
     private doctorService: DoctorService,
     private dialog: MatDialog,
     private confirmationService: ConfirmationService,
-    public httpServiceService: HttpServiceService
+    public httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -90,8 +92,8 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
           this.masterData = masterData;
           this.selectDeliveryTypes = this.masterData.deliveryTypes;
           if (String(this.mode) === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.getGeneralHistory(benRegID, visitID);
           }
         }
@@ -202,7 +204,7 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   getPreviousPerinatalHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     console.log('here checkig', this.visitCategory);
 
     this.nurseService

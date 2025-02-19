@@ -44,6 +44,7 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-refer',
@@ -115,12 +116,13 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
     private nurseService: NurseService,
     private dialog: MatDialog,
     private confirmationService: ConfirmationService,
+    readonly sessionstorage: SessionStorageService,
     private httpServices: HttpServiceService
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.visitCategory = localStorage.getItem('visitCategory');
+    this.visitCategory = this.sessionstorage.getItem('visitCategory');
     this.getDoctorMasterData();
     this.idrsScoreService.IDRSSuspectedFlag$.subscribe(response => {
       this.showMsg = response;
@@ -185,9 +187,10 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
           this.revisitDate = masterData.revisitDate;
 
           if (String(this.referMode) === 'view') {
-            this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-            this.visitID = localStorage.getItem('visitID');
-            this.visitCategory = localStorage.getItem('visitCategory');
+            this.beneficiaryRegID =
+              this.sessionstorage.getItem('beneficiaryRegID');
+            this.visitID = this.sessionstorage.getItem('visitID');
+            this.visitCategory = this.sessionstorage.getItem('visitCategory');
             this.getReferDetails(
               this.beneficiaryRegID,
               this.visitID,
@@ -303,7 +306,7 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   getPreviousReferralHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousReferredHistory(benRegID, this.visitCategory)
       .subscribe(

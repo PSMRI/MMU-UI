@@ -33,13 +33,14 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { GeneralUtils } from 'src/app/app-modules/nurse-doctor/shared/utility';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-ncd-care-diagnosis',
   templateUrl: './ncd-care-diagnosis.component.html',
   styleUrls: ['./ncd-care-diagnosis.component.css'],
 })
 export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
-  utils = new GeneralUtils(this.fb);
+  utils = new GeneralUtils(this.fb, this.sessionstorage);
 
   @Input()
   generalDiagnosisForm!: FormGroup;
@@ -60,7 +61,8 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
     private doctorService: DoctorService,
     private httpServiceService: HttpServiceService,
     private route: ActivatedRoute,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -88,9 +90,10 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
           this.ncdCareTypes = masterData.ncdCareTypes.slice();
 
         if (String(this.caseRecordMode) === 'view') {
-          const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-          const visitID = localStorage.getItem('visitID');
-          const visitCategory = localStorage.getItem('visitCategory');
+          const beneficiaryRegID =
+            this.sessionstorage.getItem('beneficiaryRegID');
+          const visitID = this.sessionstorage.getItem('visitID');
+          const visitCategory = this.sessionstorage.getItem('visitCategory');
           this.getDiagnosisDetails(beneficiaryRegID, visitID, visitCategory);
         }
       }

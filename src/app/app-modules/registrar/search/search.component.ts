@@ -39,6 +39,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-search',
@@ -82,6 +83,7 @@ export class SearchComponent implements OnInit, DoCheck {
     private registrarService: RegistrarService,
     private cameraService: CameraService,
     private router: Router,
+    readonly sessionstorage: SessionStorageService,
     private beneficiaryDetailsService: BeneficiaryDetailsService
   ) {}
 
@@ -249,10 +251,10 @@ export class SearchComponent implements OnInit, DoCheck {
       const action = false;
       console.log(JSON.stringify(benObject, null, 4), 'benObject');
       const vanID = JSON.parse(
-        localStorage.getItem('serviceLineDetails') ?? '{}'
+        this.sessionstorage.getItem('serviceLineDetails') ?? '{}'
       )?.vanID;
       benObject['providerServiceMapId'] =
-        localStorage.getItem('providerServiceID');
+        this.sessionstorage.getItem('providerServiceID');
       benObject['vanID'] = vanID;
 
       this.confirmationService
