@@ -50,7 +50,8 @@ const defaultEnvValues = {
   ADMIN_API_BASE: '',
   SERVER_IP: '',
   SWYMED_IP: '',
-  IOT_API_BASE: ''
+  IOT_API_BASE: '',
+  SESSION_STORAGE_ENC_KEY: ''
 };
 
 // Generate output data
