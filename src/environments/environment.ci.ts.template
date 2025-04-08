@@ -27,7 +27,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 const SERVER_IP =  '<%= SERVER_IP %>';
-const FHIR_API = '';
+const FHIR_API = '<%= FHIR_API_BASE %>';
 const SWYMED_IP = '<%= SWYMED_IP %>';
 const ADMIN_API = '<%= ADMIN_API_BASE %>';
 const COMMON_API_OPEN = '<%= COMMON_API_BASE %>';
