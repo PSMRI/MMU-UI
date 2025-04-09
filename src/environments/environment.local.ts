@@ -493,6 +493,7 @@ export const environment = {
   requestOtpForLogin: `${FHIR_API}abhaLogin/abhaLoginRequestOtp`,
   verifyOtpForLogin: `${FHIR_API}abhaLogin/verifyAbhaLogin`,
   printPngCard: `${FHIR_API}abhaCreation/printAbhaCard`,
+  printWebLoginPhrCard: `${FHIR_API}abhaCreation/printWebLoginPhrCard`,
   abhaExtension: `@sbx`,
   confirmAadharBio: `${FHIR_API}healthIDWithBio/confirmWithAadhaarBio`,
   generateABHAForBio: `${FHIR_API}healthIDWithBio/verifyBio`,
