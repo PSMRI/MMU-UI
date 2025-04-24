@@ -27,6 +27,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 const SERVER_IP =  '<%= SERVER_IP %>';
+const FHIR_API = '<%= FHIR_API_BASE %>';
 const SWYMED_IP = '<%= SWYMED_IP %>';
 const ADMIN_API = '<%= ADMIN_API_BASE %>';
 const COMMON_API_OPEN = '<%= COMMON_API_BASE %>';
@@ -440,4 +441,45 @@ export const environment = {
   requestOtpForLogin: `${FHIR_API}abhaLogin/abhaLoginRequestOtp`,
   verifyOtpForLogin: `${FHIR_API}abhaLogin/verifyAbhaLogin`,
   printPngCard: `${FHIR_API}abhaCreation/printAbhaCard`,
+  printWebLoginPhrCard: `${FHIR_API}abhaCreation/printWebLoginPhrCard`,
+
+  // Add these missing properties
+  abhaExtension: `@sbx`,
+  confirmAadharBio: `${FHIR_API}healthIDWithBio/confirmWithAadhaarBio`,
+  generateABHAForBio: `${FHIR_API}healthIDWithBio/verifyBio`,
+  generateABHAForBioMobileOTP: `${FHIR_API}healthIDWithBio/generateMobileOTP`,
+
+  // Family tagging
+  relationShipUrl: `${TM_API}registrar/registrarMasterData`,
+  saveFamilyTaggingUrl: `${IDENTITY_API}family/addTag`,
+  editFamilyTaggingUrl: `${IDENTITY_API}family/editFamilyTagging`,
+  untagFamilyUrl: `${IDENTITY_API}family/untag`,
+  familySearchUrl: `${IDENTITY_API}family/searchFamily`,
+  createFamilyUrl: `${IDENTITY_API}family/createFamily`,
+  getFamilyMemberUrl: `${IDENTITY_API}family/getFamilyDetails`,
+
+  // Health ID related
+  otpGenerationUrl: `${FHIR_API}healthID/generateOTP`,
+  otpGenerationWithUIDUrl: `${FHIR_API}healthIDWithUID/generateOTP`,
+  healthIdGenerationUrl: `${FHIR_API}healthID/verifyOTPAndGenerateHealthID`,
+  healthIdGenerationWithUIDUrl: `${FHIR_API}healthIDWithUID/createHealthIDWithUID`,
+  verifyOTPUrl: `${FHIR_API}healthIDWithUID/verifyOTP`,
+  checkAndGenerateMobileOTPUrl: `${FHIR_API}healthIDWithUID/checkAndGenerateMobileOTP`,
+  verifyMobileOTPUrl: `${FHIR_API}healthIDWithUID/verifyMobileOTP`,
+  gethealthIdDetailsUrl: `${FHIR_API}healthID/getBenhealthID`,
+  mapHealthIdUrl: `${FHIR_API}healthID/mapHealthIDToBeneficiary`,
+
+  // Health ID care context and validation
+  careContextGenerateOtpUrl: `${FHIR_API}careContext/generateOTPForCareContext`,
+  verifyOtpForMappingContextUrl: `${FHIR_API}careContext/validateOTPAndCreateCareContext`,
+  generateOTPForHealthIDValidation: `${FHIR_API}validate/generateOTPForHealthIDValidation`,
+  verifyOTPForHealthIDValidation: `${FHIR_API}validate/verifyOTPForHealthIDValidation`,
+
+  // Health ID card generation
+  generateOTPForHealthIDCard: `${FHIR_API}healthIDCard/generateOTP`,
+  verifyOTPAndGenerateHealthCard: `${FHIR_API}healthIDCard/verifyOTPAndGenerateHealthCard`,
+  updateAmritIDInMongo: `${FHIR_API}patient/data/patient/updateAmritIdMongo`,
+
+  // Customization APIs
+  getAllRegistrationData: `${COMMON_API}customization/fetchAllData`
 };
