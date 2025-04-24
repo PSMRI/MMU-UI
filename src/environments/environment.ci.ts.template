@@ -481,5 +481,7 @@ export const environment = {
   updateAmritIDInMongo: `${FHIR_API}patient/data/patient/updateAmritIdMongo`,
 
   // Customization APIs
-  getAllRegistrationData: `${COMMON_API}customization/fetchAllData`
+  getAllRegistrationData: `${COMMON_API}customization/fetchAllData`,
+
+  getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`
 };
