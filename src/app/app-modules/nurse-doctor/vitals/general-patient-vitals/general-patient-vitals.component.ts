@@ -270,6 +270,7 @@ export class GeneralPatientVitalsComponent
     const vitalsForm = this.patientVitalsForm;
     const required = [];
     if (
+      this.hideLungAssessment === true &&
       this.enableLungAssessment === true &&
       this.benAge >= 18 &&
       this.nurseService.isAssessmentDone === false
