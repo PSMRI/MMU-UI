@@ -495,4 +495,6 @@ export const environment = {
   confirmAadharBio: `${FHIR_API}healthIDWithBio/confirmWithAadhaarBio`,
   generateABHAForBio: `${FHIR_API}healthIDWithBio/verifyBio`,
   generateABHAForBioMobileOTP: `${FHIR_API}healthIDWithBio/generateMobileOTP`,
+
+  getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`,
 };

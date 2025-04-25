@@ -333,12 +333,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
         this.servicePointForm.controls.stateName.patchValue(
           data?.userDetails?.stateName
         );
-        this.servicePointForm.patchValue({
-          districtID: data?.userDetails?.districtID,
-          districtName: data?.userDetails?.districtName,
-        });
-
-        this.fetchSubDistrictsOnDistrictSelection(data);
+        this.districtList = data?.userDetails?.districtList;
       } else {
         this.confirmationService.alert(
           this.currentLanguageSet.alerts.info.issuesInFetchingLocationDetails,
@@ -385,29 +380,21 @@ export class ServicePointComponent implements OnInit, DoCheck {
     });
   }
 
-  fetchSubDistrictsOnDistrictSelection(locDetails: any) {
-    const districtID = locDetails?.userDetails?.districtID;
+  fetchSubDistrictsOnDistrictSelection(districtID: any) {
+    if (districtID) {
+      this.districtList.forEach((item: any) => {
+        if (item.districtID === districtID)
+          return this.servicePointForm.controls.districtName.setValue(
+            item.districtName
+          );
+      });
+    }
     this.registrarService
       .getSubDistrictList(districtID)
       .subscribe((res: any) => {
         if (res && res.statusCode === 200) {
           this.subDistrictList = res.data;
           this.servicePointForm.controls.districtBranchID.reset();
-
-          const blockList = locDetails?.userDetails?.blockList;
-          if (blockList && blockList.length > 0 && blockList[0]?.blockId) {
-            this.subDistrictList.forEach((blockDetails: any) => {
-              if (blockDetails.blockID === parseInt(blockList[0]?.blockId)) {
-                this.servicePointForm.controls['blockID'].setValue(
-                  blockDetails.blockID
-                );
-                this.servicePointForm.controls['blockName'].setValue(
-                  blockDetails.blockName
-                );
-              }
-            });
-            this.getVillageMaster(locDetails);
-          }
         }
       });
   }
