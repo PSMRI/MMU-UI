@@ -333,7 +333,20 @@ export class ServicePointComponent implements OnInit, DoCheck {
         this.servicePointForm.controls.stateName.patchValue(
           data?.userDetails?.stateName
         );
-        this.districtList = data?.userDetails?.districtList;
+        if (data?.userDetails?.districtList?.length > 1) {
+          this.districtList = data?.userDetails?.districtList;
+        } else {
+          this.districtList = data?.userDetails?.districtList;
+          this.servicePointForm.controls.districtID.setValue(
+            this.districtList[0].districtID
+          );
+          this.servicePointForm.controls.districtName.setValue(
+            this.districtList[0].districtName
+          );
+          this.fetchSubDistrictsOnDistrictSelection(
+            this.districtList[0].districtID
+          );
+        }
       } else {
         this.confirmationService.alert(
           this.currentLanguageSet.alerts.info.issuesInFetchingLocationDetails,
