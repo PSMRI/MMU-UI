@@ -98,9 +98,11 @@
                     {{ state.stateName }}
                   </mat-option>
                 </mat-select>
-              </mat-form-field>
+              </mat-form-field> -->
 
-              <mat-form-field [style.width]="'100%'" style="margin: -8px" [hidden]>
+              <mat-form-field
+                class="mat-form-field-width"
+                style="margin-bottom: -20px">
                 <mat-label class="mat-label-text">{{
                   currentLanguageSet?.ro?.locInfo?.districtTownCity
                 }}</mat-label>
@@ -120,7 +122,7 @@
                     {{ district.districtName }}
                   </mat-option>
                 </mat-select>
-              </mat-form-field> -->
+              </mat-form-field>
               <mat-form-field
                 class="mat-form-field-width"
                 style="margin-bottom: -20px">
