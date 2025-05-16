@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.iemr.mmu-ui</groupId>
-	<artifactId>MMU-UI</artifactId>
+	<artifactId>mmu-ui</artifactId>
 	<version>3.1.0</version>
 	<name>MMU-UI</name>
 	<description>Piramal - mmu Module ui</description>
