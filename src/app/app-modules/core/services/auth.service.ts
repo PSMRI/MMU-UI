@@ -34,13 +34,14 @@ export class AuthService {
     private http: HttpClient
   ) {}
 
-  login(userName: any, password: string, doLogout: any) {
+  login(userName: any, password: string, doLogout: any, captchaToken: any) {
     console.log('environment.loginUrl', environment.loginUrl);
     return this.http.post(environment.loginUrl, {
       userName: userName,
       password: password,
       doLogout: doLogout,
       withCredentials: true,
+      captchaToken: captchaToken,
     });
   }
   userlogoutPreviousSession(userName: any) {

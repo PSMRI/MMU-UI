@@ -59,6 +59,9 @@ const mmuUICasesheet = `${mmuUI_IP}:4202`;
 const IOT_API = 'http://localhost:8080/ezdx-hub-connect-srv';
 const sessionStorageEncKey = '';
 
+const siteKey = '';
+const captchaChallengeURL = '';
+
 export const environment = {
   production: false,
   isMMUOfflineSync: true,
@@ -500,4 +503,7 @@ export const environment = {
   generateABHAForBioMobileOTP: `${FHIR_API}healthIDWithBio/generateMobileOTP`,
 
   getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`,
+
+  siteKey: siteKey,
+  captchaChallengeURL: captchaChallengeURL,
 };

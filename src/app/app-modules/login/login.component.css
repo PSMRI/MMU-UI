@@ -135,3 +135,10 @@ input::-ms-clear {
 .mat_form_field_width ::ng-deep  .mat-mdc-text-field-wrapper {
     width: 138% !important;
 }
+
+.disabledLoginButton {
+    background-color: #ccc !important;
+    color: #666 !important;
+    cursor: not-allowed;
+    box-shadow: none !important;
+}

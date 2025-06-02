@@ -28,7 +28,7 @@ import {
   AuthService,
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { DataSyncLoginComponent } from '../core/components/data-sync-login/data-sync-login.component';
 import { MasterDownloadComponent } from '../data-sync/master-download/master-download.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
@@ -52,6 +52,8 @@ export class LoginComponent implements OnInit {
 
   @ViewChild('focus') private elementRef!: ElementRef;
 
+  captchaToken!: string;
+
   constructor(
     private router: Router,
     private dialog: MatDialog,
@@ -66,8 +68,8 @@ export class LoginComponent implements OnInit {
   }
 
   loginForm = this.fb.group({
-    userName: [''],
-    password: [''],
+    userName: ['', Validators.required],
+    password: ['', Validators.required],
   });
 
   ngOnInit() {
@@ -98,7 +100,8 @@ export class LoginComponent implements OnInit {
         .login(
           this.loginForm.controls.userName.value.trim(),
           encryptPassword,
-          false
+          false,
+          this.captchaToken
         )
         .subscribe(
           (res: any) => {
@@ -134,7 +137,8 @@ export class LoginComponent implements OnInit {
                               .login(
                                 this.loginForm.controls.userName.value,
                                 encryptPassword,
-                                true
+                                true,
+                                this.captchaToken
                               )
                               .subscribe((userLoggedIn: any) => {
                                 if (userLoggedIn.statusCode === 200) {
@@ -181,6 +185,8 @@ export class LoginComponent implements OnInit {
           }
         );
     }
+
+    this.captchaToken = '';
   }
 
   get keySize() {
@@ -308,5 +314,9 @@ export class LoginComponent implements OnInit {
           });
       }
     });
+  }
+
+  onCaptchaResolved(token: any) {
+    this.captchaToken = token;
   }
 }
