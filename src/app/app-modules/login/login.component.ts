@@ -39,6 +39,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
+  @ViewChild('captchaCmp') captchaCmp: any;
   dynamictype = 'password';
   encryptedVar: any;
   key: any;
@@ -186,7 +187,7 @@ export class LoginComponent implements OnInit {
         );
     }
 
-    this.captchaToken = '';
+    this.resetCaptcha();
   }
 
   get keySize() {
@@ -318,5 +319,12 @@ export class LoginComponent implements OnInit {
 
   onCaptchaResolved(token: any) {
     this.captchaToken = token;
+  }
+
+  resetCaptcha() {
+    if (this.captchaCmp && typeof this.captchaCmp.reset === 'function') {
+      this.captchaCmp.reset();
+      this.captchaToken = '';
+    }
   }
 }
