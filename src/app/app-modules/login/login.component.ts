@@ -32,6 +32,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { DataSyncLoginComponent } from '../core/components/data-sync-login/data-sync-login.component';
 import { MasterDownloadComponent } from '../data-sync/master-download/master-download.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { environment } from 'src/environments/environment';
+import { CaptchaComponent } from '../captcha/captcha.component';
 
 @Component({
   selector: 'app-login-cmp',
@@ -39,7 +41,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  @ViewChild('captchaCmp') captchaCmp: any;
+  @ViewChild('captchaCmp') captchaCmp: CaptchaComponent | undefined;
   dynamictype = 'password';
   encryptedVar: any;
   key: any;
@@ -54,6 +56,7 @@ export class LoginComponent implements OnInit {
   @ViewChild('focus') private elementRef!: ElementRef;
 
   captchaToken!: string;
+  enableCaptcha = environment.enableCaptcha;
 
   constructor(
     private router: Router,
@@ -102,7 +105,7 @@ export class LoginComponent implements OnInit {
           this.loginForm.controls.userName.value.trim(),
           encryptPassword,
           false,
-          this.captchaToken
+          this.enableCaptcha ? this.captchaToken : undefined
         )
         .subscribe(
           (res: any) => {
@@ -139,7 +142,9 @@ export class LoginComponent implements OnInit {
                                 this.loginForm.controls.userName.value,
                                 encryptPassword,
                                 true,
-                                this.captchaToken
+                                this.enableCaptcha
+                                  ? this.captchaToken
+                                  : undefined
                               )
                               .subscribe((userLoggedIn: any) => {
                                 if (userLoggedIn.statusCode === 200) {
@@ -322,7 +327,11 @@ export class LoginComponent implements OnInit {
   }
 
   resetCaptcha() {
-    if (this.captchaCmp && typeof this.captchaCmp.reset === 'function') {
+    if (
+      this.enableCaptcha &&
+      this.captchaCmp &&
+      typeof this.captchaCmp.reset === 'function'
+    ) {
       this.captchaCmp.reset();
       this.captchaToken = '';
     }

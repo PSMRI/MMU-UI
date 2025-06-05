@@ -62,6 +62,7 @@ const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
 
 const siteKey = '';
 const captchaChallengeURL = '';
+const enableCaptcha = false;
 
 export const environment = {
   production: true,
@@ -503,4 +504,5 @@ export const environment = {
 
   siteKey: siteKey,
   captchaChallengeURL: captchaChallengeURL,
+  enableCaptcha: enableCaptcha,
 };
