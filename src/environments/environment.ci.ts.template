@@ -43,6 +43,9 @@ const sessionStorageEncKey = '<%= SESSION_STORAGE_ENC_KEY %>';
 
 const mmuUICasesheet ='<%= MMU_UI_BASE %>';
 const IOT_API = '<%= IOT_API_BASE %>';
+const siteKey = '<%= SITE_KEY %>';
+const captchaChallengeURL = '<%= CAPTCHA_CHALLENGE_URL %>';
+const enableCaptcha = '<%= ENABLE_CAPTCHA %>';
 
 export const environment = {
   production: true,
@@ -483,5 +486,9 @@ export const environment = {
   // Customization APIs
   getAllRegistrationData: `${COMMON_API}customization/fetchAllData`,
 
-  getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`
+  getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`,
+
+  siteKey: siteKey,
+  captchaChallengeURL: captchaChallengeURL,
+  enableCaptcha: enableCaptcha
 };
