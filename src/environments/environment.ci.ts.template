@@ -45,7 +45,7 @@ const mmuUICasesheet ='<%= MMU_UI_BASE %>';
 const IOT_API = '<%= IOT_API_BASE %>';
 const siteKey = '<%= SITE_KEY %>';
 const captchaChallengeURL = '<%= CAPTCHA_CHALLENGE_URL %>';
-const enableCaptcha = '<%= ENABLE_CAPTCHA %>';
+const enableCaptcha = <%= ENABLE_CAPTCHA %>;
 
 export const environment = {
   production: true,
