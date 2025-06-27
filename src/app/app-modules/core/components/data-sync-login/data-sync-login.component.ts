@@ -292,17 +292,21 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
 
   //added get datasync data on login to a new method
   getDataSyncMMU(res: any) {
-    if (
-      this.data?.masterDowloadFirstTime ||
-      this.data?.provideAuthorizationToViewTmCS
-    ) {
-      const mmuService = res.data.previlegeObj.filter((item: any) => {
-        return item.serviceName === 'MMU';
-      });
+    const mmuService = res.data.previlegeObj.filter((item: any) => {
+      return item.serviceName === 'MMU';
+    });
+
+    if (mmuService && mmuService.length > 0) {
       this.sessionstorage.setItem(
         'dataSyncProviderServiceMapID',
         mmuService[0].providerServiceMapID
       );
+    }
+
+    if (
+      this.data?.masterDowloadFirstTime ||
+      this.data?.provideAuthorizationToViewTmCS
+    ) {
       if (this.data.provideAuthorizationToViewTmCS) {
         sessionStorage.setItem('authorizeToViewTMcasesheet', 'Authorized');
       } else {
