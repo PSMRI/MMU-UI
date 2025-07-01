@@ -90,6 +90,7 @@ export class ResetPasswordComponent {
       }
     } else {
       this.logout();
+      this.confirmationService.alert('User not found', 'error');
     }
   }
 
