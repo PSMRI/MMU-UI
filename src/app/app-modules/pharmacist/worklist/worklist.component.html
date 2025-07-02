@@ -216,7 +216,8 @@
             <strong>{{ currentLanguageSet?.noRecordsFound }}</strong>
           </div>
           <mat-paginator
-            [hidden]="dataSource.data.length >= 0"
+            [hidden]="dataSource.data.length === 0"
+            style="display: unset !important"
             [pageSizeOptions]="[5, 10, 20]"
             [pageSize]="5"
             showFirstLastButtons
