@@ -32,6 +32,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { CaseSheetComponent } from '../../case-sheet/case-sheet.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-beneficiary-platform-history',
   templateUrl: './beneficiary-platform-history.component.html',
@@ -104,7 +105,8 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     private dialog: MatDialog,
     private httpServiceService: HttpServiceService,
-    readonly sessionstorage: SessionStorageService
+    readonly sessionstorage: SessionStorageService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -163,7 +165,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   previousMMUHistoryActivePage = 1;
   rotate = true;
   filteredMMUHistory: any = [];
-  hideMMUFetch: boolean = false;
+  hideMMUFetch = false;
 
   getMMUHistory() {
     this.doctorService.getMMUHistory().subscribe((data: any) => {
@@ -249,56 +251,55 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   }
 
   getVisitDetails(serviceType: any, visit: any, print: any) {
-    this.confirmationService
-      .confirm('info', this.current_language_set.alerts.info.viewCasesheet)
-      .subscribe(res => {
-        console.log('print', print);
-        if (res) {
-          this.sessionstorage.setItem(
-            'previousCaseSheetVisitCode',
-            visit.visitCode
-          );
-          this.sessionstorage.setItem(
-            'previousCaseSheetBenFlowID',
-            visit.benFlowID
-          );
-          this.sessionstorage.setItem(
-            'previousCaseSheetVisitCategory',
-            visit.VisitCategory
-          );
-          this.sessionstorage.setItem(
-            'previousCaseSheetBeneficiaryRegID',
-            visit.beneficiaryRegID
-          );
-          this.sessionstorage.setItem(
-            'previousCaseSheetVisitID',
-            visit.benVisitID
-          );
-          if (print) {
-            const url = environment.newTaburl;
-            window.open(
-              url + '/#/nurse-doctor/print/' + serviceType + '/' + 'previous'
-            );
-          } else {
-            this.dialog.open(CaseSheetComponent, {
-              disableClose: true,
-              width: '95%',
-              panelClass: 'preview-casesheet',
-              data: {
-                previous: true,
-                serviceType: serviceType,
-              },
-            });
-          }
+    let msg = this.current_language_set.alerts.info.viewCasesheet;
+    if (print) msg = this.current_language_set.alerts.info.printCasesheet;
+    this.confirmationService.confirm('info', msg).subscribe(res => {
+      console.log('print', print);
+      if (res) {
+        this.sessionstorage.setItem(
+          'previousCaseSheetVisitCode',
+          visit.visitCode
+        );
+        this.sessionstorage.setItem(
+          'previousCaseSheetBenFlowID',
+          visit.benFlowID
+        );
+        this.sessionstorage.setItem(
+          'previousCaseSheetVisitCategory',
+          visit.VisitCategory
+        );
+        this.sessionstorage.setItem(
+          'previousCaseSheetBeneficiaryRegID',
+          visit.beneficiaryRegID
+        );
+        this.sessionstorage.setItem(
+          'previousCaseSheetVisitID',
+          visit.benVisitID
+        );
+        if (print) {
+          this.router.navigate([
+            '/nurse-doctor/print/' + 'MMU' + '/' + 'previous',
+          ]);
         } else {
-          this.confirmationService.alert(
-            this.current_language_set.alerts.info.noCasesheet
-          );
+          this.dialog.open(CaseSheetComponent, {
+            disableClose: true,
+            width: '95%',
+            panelClass: 'preview-casesheet',
+            data: {
+              previous: true,
+              serviceType: serviceType,
+            },
+          });
         }
-      });
+      } else {
+        this.confirmationService.alert(
+          this.current_language_set.alerts.info.noCasesheet
+        );
+      }
+    });
   }
 
-  hideMCTSFetch: boolean = false;
+  hideMCTSFetch = false;
   previousMCTSHistoryRowsPerPage = 5;
   previousMCTSHistoryActivePage = 1;
   filteredMCTSHistory: any = [];
@@ -357,7 +358,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
     console.log('list', this.previousMCTSHistoryPagedList);
   }
 
-  hide104Fetch: boolean = false;
+  hide104Fetch = false;
   previous104HistoryRowsPerPage = 5;
   previous104HistoryActivePage = 1;
   filtered104History: any = [];
@@ -446,7 +447,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   previousTMHistoryRowsPerPage = 5;
   previousTMHistoryActivePage = 1;
   filteredTMHistory: any = [];
-  hideTMFetch: boolean = false;
+  hideTMFetch = false;
 
   getTMHistory() {
     this.doctorService.getTMHistory().subscribe((data: any) => {
