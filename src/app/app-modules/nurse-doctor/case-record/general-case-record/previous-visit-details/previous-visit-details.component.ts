@@ -26,6 +26,7 @@ import { CameraService } from '../../../../core/services/camera.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { Router } from '@angular/router';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-previous-visit-details',
   templateUrl: './previous-visit-details.component.html',
@@ -131,6 +132,7 @@ export class PreviousVisitDetailsComponent implements OnInit, DoCheck {
     private doctorService: DoctorService,
     private cameraService: CameraService,
     private router: Router,
+    readonly sessionstorage: SessionStorageService,
     private httpServiceService: HttpServiceService
   ) {}
 
@@ -147,9 +149,9 @@ export class PreviousVisitDetailsComponent implements OnInit, DoCheck {
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
   loadGraphData() {
-    const benRegID = localStorage.getItem('beneficiaryRegID');
-    const visitID = localStorage.getItem('visitID');
-    const visitCategory = localStorage.getItem('visitCategory');
+    const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+    const visitID = this.sessionstorage.getItem('visitID');
+    const visitCategory = this.sessionstorage.getItem('visitCategory');
 
     this.doctorService
       .getCaseRecordAndReferDetails(benRegID, visitID, visitCategory)
@@ -266,13 +268,16 @@ export class PreviousVisitDetailsComponent implements OnInit, DoCheck {
     const visitDateAndTime: Date = visitDetail.createdDate;
     this.visitDateTime = new Date(visitDateAndTime).toISOString();
 
-    localStorage.setItem('caseSheetBenFlowID', '');
-    localStorage.setItem('caseSheetVisitCategory', visitDetail.visitCategory);
-    localStorage.setItem(
+    this.sessionstorage.setItem('caseSheetBenFlowID', '');
+    this.sessionstorage.setItem(
+      'caseSheetVisitCategory',
+      visitDetail.visitCategory
+    );
+    this.sessionstorage.setItem(
       'caseSheetBeneficiaryRegID',
       visitDetail.beneficiaryRegID
     );
-    localStorage.setItem('caseSheetVisitID', visitDetail.benVisitID);
+    this.sessionstorage.setItem('caseSheetVisitID', visitDetail.benVisitID);
     this.router.navigate(['/nurse-doctor/print']);
     // }
   }

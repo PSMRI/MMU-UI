@@ -34,6 +34,7 @@ import { MasterdataService, DoctorService } from '../../shared/services';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-patient-visit-details',
@@ -64,6 +65,7 @@ export class PatientVisitDetailsComponent
     private masterdataService: MasterdataService,
     private doctorService: DoctorService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
+    readonly sessionstorage: SessionStorageService,
     private languageComponent: SetLanguageComponent
   ) {}
 
@@ -74,8 +76,8 @@ export class PatientVisitDetailsComponent
 
   ngOnChanges() {
     if (String(this.mode) === 'view') {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.getVisitDetails(visitID, benRegID);
     }
   }
@@ -134,7 +136,7 @@ export class PatientVisitDetailsComponent
 
   visitDetailsSubscription: any;
   getVisitDetails(visitID: any, benRegID: any) {
-    const visitCategory = localStorage.getItem('visitCategory');
+    const visitCategory = this.sessionstorage.getItem('visitCategory');
     this.visitDetailsSubscription = this.doctorService
       .getVisitComplaintDetails(benRegID, visitID)
       .subscribe((value: any) => {
@@ -177,6 +179,8 @@ export class PatientVisitDetailsComponent
           if (visitCategory === 'COVID-19 Screening') {
             console.log('visitData', value.data);
             const visitDetails = value.data.covid19NurseVisitDetail;
+            this.doctorService.fileIDs =
+              value.data.covid19NurseVisitDetail.files;
             this.patientVisitDetailsForm.patchValue(visitDetails);
           }
         }
@@ -246,7 +250,7 @@ export class PatientVisitDetailsComponent
   }
 
   checkCategoryDependent(visitCategory: any) {
-    localStorage.setItem('visiCategoryANC', visitCategory);
+    this.sessionstorage.setItem('visiCategoryANC', visitCategory);
     if (visitCategory === 'ANC') {
       this.templatePregnancyStatus = ['Yes'];
       this.patientVisitDetailsForm.patchValue({ pregnancyStatus: 'Yes' });

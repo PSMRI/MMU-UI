@@ -8,6 +8,6 @@
   padding-top: 8px;
 }
 
-mat-form-field >>>.mat-mdc-select-trigger {
+mat-form-field ::ng-deep .mat-mdc-select-trigger {
   width: 154% !important;
 }

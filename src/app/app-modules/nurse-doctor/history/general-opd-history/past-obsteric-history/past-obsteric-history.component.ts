@@ -46,6 +46,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-past-obsteric-history',
@@ -78,9 +79,10 @@ export class PastObstericHistoryComponent
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
-    public httpServiceService: HttpServiceService
+    public httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {
-    this.formUtility = new GeneralUtils(this.fb);
+    this.formUtility = new GeneralUtils(this.fb, this.sessionstorage);
   }
 
   ngOnInit() {
@@ -167,9 +169,9 @@ export class PastObstericHistoryComponent
     ] as FormArray;
     this.clearFormArray(temp1);
 
-    if (localStorage.getItem('serviceLineDetails')) {
+    if (this.sessionstorage.getItem('serviceLineDetails')) {
       const serviceLineDetails: any =
-        localStorage.getItem('serviceLineDetails');
+        this.sessionstorage.getItem('serviceLineDetails');
       const vanID = JSON.parse(serviceLineDetails).vanID;
       const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
@@ -196,8 +198,8 @@ export class PastObstericHistoryComponent
           this.selectDeliveryTypes = this.masterData.deliveryTypes;
 
           if (String(this.mode) === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.getGeneralHistory(benRegID, visitID);
           }
         }
@@ -425,7 +427,7 @@ export class PastObstericHistoryComponent
   }
 
   getPreviousObstetricHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousObstetricHistory(benRegID, this.visitCategory)
       .subscribe(

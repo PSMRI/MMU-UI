@@ -31,6 +31,7 @@ import { BeneficiaryMctsCallHistoryComponent } from '../beneficiary-mcts-call-hi
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { CaseSheetComponent } from '../../case-sheet/case-sheet.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-beneficiary-platform-history',
   templateUrl: './beneficiary-platform-history.component.html',
@@ -102,7 +103,8 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     private dialog: MatDialog,
-    private httpServiceService: HttpServiceService
+    private httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -252,17 +254,26 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
       .subscribe(res => {
         console.log('print', print);
         if (res) {
-          localStorage.setItem('previousCaseSheetVisitCode', visit.visitCode);
-          localStorage.setItem('previousCaseSheetBenFlowID', visit.benFlowID);
-          localStorage.setItem(
+          this.sessionstorage.setItem(
+            'previousCaseSheetVisitCode',
+            visit.visitCode
+          );
+          this.sessionstorage.setItem(
+            'previousCaseSheetBenFlowID',
+            visit.benFlowID
+          );
+          this.sessionstorage.setItem(
             'previousCaseSheetVisitCategory',
             visit.VisitCategory
           );
-          localStorage.setItem(
+          this.sessionstorage.setItem(
             'previousCaseSheetBeneficiaryRegID',
             visit.beneficiaryRegID
           );
-          localStorage.setItem('previousCaseSheetVisitID', visit.benVisitID);
+          this.sessionstorage.setItem(
+            'previousCaseSheetVisitID',
+            visit.benVisitID
+          );
           if (print) {
             const url = environment.newTaburl;
             window.open(

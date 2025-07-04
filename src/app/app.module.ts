@@ -21,20 +21,21 @@ import { ServicePointComponent } from './app-modules/service-point/service-point
 import { SetSecurityQuestionsComponent } from './app-modules/set-security-questions/set-security-questions.component';
 import { SetPasswordComponent } from './app-modules/set-password/set-password.component';
 import { TmLogoutComponent } from './app-modules/tm-logout/tm-logout.component';
-import { DataSyncLoginComponent } from './app-modules/core/components/data-sync-login/data-sync-login.component';
 import { ServicePointResolve } from './app-modules/service-point/service-point-resolve.service';
 import { ServicePointService } from './app-modules/service-point/service-point.service';
 import { ResetPasswordComponent } from './app-modules/reset-password/reset-password.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WebcamModule } from 'ngx-webcam';
-import { RegistrarService } from './app-modules/registrar/shared/services/registrar.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
-import { NurseDoctorModule } from './app-modules/nurse-doctor/nurse-doctor.module';
-import { RegistrarModule } from './app-modules/registrar/registrar.module';
 import { AudioRecordingService } from './app-modules/nurse-doctor/shared/services/audio-recording.service';
 import { NgxPaginationModule } from 'ngx-pagination';
+// import { SharedModule } from './app-modules/core/shared/shared/shared.module';
+import { RegistrarService } from './app-modules/registrar/shared/services/registrar.service';
 import { DataSYNCModule } from './app-modules/data-sync/dataSync.module';
+import { SharedModule } from './app-modules/core/components/shared/shared.module';
+import { CommonModule } from '@angular/common';
+import { CaptchaComponent } from './app-modules/captcha/captcha.component';
 
 @NgModule({
   declarations: [
@@ -46,13 +47,11 @@ import { DataSYNCModule } from './app-modules/data-sync/dataSync.module';
     SetPasswordComponent,
     ResetPasswordComponent,
     TmLogoutComponent,
-    DataSyncLoginComponent,
+    CaptchaComponent,
   ],
   imports: [
+    CommonModule,
     BrowserModule,
-    NurseDoctorModule,
-    DataSYNCModule,
-    RegistrarModule,
     FormsModule,
     MatIconModule,
     ReactiveFormsModule,
@@ -66,6 +65,7 @@ import { DataSYNCModule } from './app-modules/data-sync/dataSync.module';
     MatGridListModule,
     WebcamModule,
     NgxPaginationModule,
+    SharedModule,
     CoreModule.forRoot(),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

@@ -33,6 +33,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-doctor-investigations',
@@ -88,7 +89,8 @@ export class DoctorInvestigationsComponent
     private masterdataService: MasterdataService,
     private idrsScoreService: IdrsscoreService,
     private httpServiceService: HttpServiceService,
-    private nurseService: NurseService
+    private nurseService: NurseService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -101,6 +103,7 @@ export class DoctorInvestigationsComponent
     this.idrsScoreService.clearHypertensionSelected();
     this.idrsScoreService.clearConfirmedDiabeticSelected();
     this.nurseService.clearRbsInVitals();
+    this.nurseService.clearRbsSelectedInInvestigation();
     this.diabestesSuspectedSubscription =
       this.idrsScoreService.diabetesSelectedFlag$.subscribe(
         response => (this.diabetesSelected = response)
@@ -185,7 +188,7 @@ export class DoctorInvestigationsComponent
     this.investigationSubscription = this.doctorService
       .getCaseRecordAndReferDetails(beneficiaryRegID, visitID, visitCategory)
       .subscribe((res: any) => {
-        if (res?.statusCode === 200 && res?.data?.investigation) {
+        if (res && res.statusCode === 200 && res?.data?.investigation) {
           console.log(res, 'investigations');
           this.patchInvestigationDetails(
             res.data.investigation,
@@ -287,10 +290,11 @@ export class DoctorInvestigationsComponent
             }
           });
 
-          if (this.caseRecordMode === 'view') {
-            this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-            this.visitID = localStorage.getItem('visitID');
-            this.visitCategory = localStorage.getItem('visitCategory');
+          if (String(this.caseRecordMode) === 'view') {
+            this.beneficiaryRegID =
+              this.sessionstorage.getItem('beneficiaryRegID');
+            this.visitID = this.sessionstorage.getItem('visitID');
+            this.visitCategory = this.sessionstorage.getItem('visitCategory');
             this.getInvestigationDetails(
               this.beneficiaryRegID,
               this.visitID,
@@ -315,7 +319,8 @@ export class DoctorInvestigationsComponent
     if (
       ((this.rbsTestResultCurrent !== null &&
         this.rbsTestResultCurrent !== undefined) ||
-        this.nurseService.rbsTestResultFromDoctorFetch !== null) &&
+        (this.nurseService.rbsTestResultFromDoctorFetch !== null &&
+          this.nurseService.rbsTestResultFromDoctorFetch !== undefined)) &&
       test.procedureName.toLowerCase() === environment.RBSTest.toLowerCase()
     ) {
       return true;
@@ -364,9 +369,9 @@ export class DoctorInvestigationsComponent
     this.VisualAcuityTestDone = false;
     const item = event.value;
     let oneSelected = 0;
+    this.nurseService.setRbsSelectedInInvestigation(false);
     this.rbsSelectedInInvestigation = false;
     this.hemoglobbinSelected = false;
-    this.nurseService.setRbsSelectedInInvestigation(false);
     item.forEach((element: any) => {
       if (
         element.procedureName.toLowerCase() ===

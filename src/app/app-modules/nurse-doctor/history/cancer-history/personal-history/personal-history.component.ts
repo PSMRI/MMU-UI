@@ -37,6 +37,7 @@ import { PreviousDetailsComponent } from '../../../../core/components/previous-d
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-cancer-personal-history',
@@ -56,7 +57,8 @@ export class PersonalHistoryComponent implements OnInit, OnDestroy, DoCheck {
     private httpServiceService: HttpServiceService,
     private masterdataService: MasterdataService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    private languageComponent: SetLanguageComponent
+    private languageComponent: SetLanguageComponent,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   templateNurseMasterData: any;
@@ -343,7 +345,7 @@ export class PersonalHistoryComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   getPreviousCancerPersonalHabitHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService.getPreviousCancerPersonalHabitHistory(benRegID).subscribe(
       (data: any) => {
         if (data !== null && data.data !== null) {
@@ -366,7 +368,7 @@ export class PersonalHistoryComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   getPreviousCancerPersonalDietHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService.getPreviousCancerPersonalDietHistory(benRegID).subscribe(
       (data: any) => {
         if (data !== null && data.data !== null) {

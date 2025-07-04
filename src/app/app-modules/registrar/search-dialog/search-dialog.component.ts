@@ -36,6 +36,16 @@ import { SetLanguageComponent } from '../../core/components/set-language.compone
 import { MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import {
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 interface Beneficary {
   firstName: string;
@@ -54,6 +64,31 @@ interface Beneficary {
   selector: 'app-search-dialog',
   templateUrl: './search-dialog.component.html',
   styleUrls: ['./search-dialog.component.css'],
+  providers: [
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
+    },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: 'LL',
+        },
+        display: {
+          dateInput: 'DD/MM/YYYY', // Set the desired display format
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY',
+        },
+      },
+    },
+  ],
 })
 export class SearchDialogComponent implements OnInit, DoCheck {
   // for ID Manpulation
@@ -84,7 +119,8 @@ export class SearchDialogComponent implements OnInit, DoCheck {
     private fb: FormBuilder,
     private httpServiceService: HttpServiceService,
     private registrarService: RegistrarService,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -176,10 +212,10 @@ export class SearchDialogComponent implements OnInit, DoCheck {
   onIDCardSelected() {}
 
   /**
-   * get states from localstorage and set default state
+   * get states from this.sessionstorage and set default state
    */
   getStatesData() {
-    const location: any = localStorage.getItem('location');
+    const location: any = this.sessionstorage.getItem('location');
     this.locations = JSON.parse(location);
     console.log(location, 'gotit');
     if (location) {

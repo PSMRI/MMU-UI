@@ -23,7 +23,7 @@ h5 {
 }
 
 .abnormal {
-    color: red
+    color: red !important;
 }
 
 input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {

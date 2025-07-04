@@ -21,7 +21,7 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnChanges } from '@angular/core';
-import moment from 'moment';
+import * as moment from 'moment';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 @Component({

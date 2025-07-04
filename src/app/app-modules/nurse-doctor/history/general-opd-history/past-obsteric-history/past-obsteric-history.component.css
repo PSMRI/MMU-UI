@@ -37,16 +37,5 @@ md-card {
 .mat-card-header{
     justify-content: space-between;
 }
-.mat_form_field_width >>>.mat-mdc-text-field-wrapper {
-    width: 75% !important;
-}
-.mat_form_field_width_one >>>.mat-mdc-text-field-wrapper {
-    width: 135% !important;
-}
-.mat_form_field_width_two >>>.mat-mdc-text-field-wrapper {
-    width: 116% !important;
-}
-.mat_form_field_width_thee >>>.mat-mdc-text-field-wrapper {
-    width: 86% !important;
-}
+
 

@@ -1249,7 +1249,7 @@
         "issuesinfetchingLocation": "আপোনাৰ অৱস্থান প্ৰাপ্ত কৰাত সমস্যা। পুনৰ লগইন কৰক আৰু পুনৰ চেষ্টা কৰক।",
         "RemoveTheChanges": "আপুনি পৰিবর্তনখিনি আতৰাবলৈ নিশ্চিত নে?",
         "issuesInFetchingLocationDetails": "অৱস্থানৰ বিৱৰণ প্ৰাপ্ত কৰাৰ সমস্যা, অনুগ্ৰহ কৰি পুনৰ চেষ্টা কৰক।",
-        "issuesInFetchingDemographics,": "জনগাঁথনি প্ৰাপ্ত কৰাৰ সমস্যা, অনুগ্ৰহ কৰি পুনৰ চেষ্টা কৰক।",
+        "issuesInFetchingDemographics": "জনগাঁথনি প্ৰাপ্ত কৰাৰ সমস্যা, অনুগ্ৰহ কৰি পুনৰ চেষ্টা কৰক।",
         "pleaseInputFieldFirst": "প্ৰথমে নিৰ্বাচিত ক্ষেত্ৰৰ বাবে অনুগ্ৰহ কৰি ইনপুট কৰক",
         "continueSession": "কনটিনি‍উ চেচনঃ আপোনাৰ চেচনটি কনটিনিউ কৰিব বিচাৰে নেকি?",
         "sessionGoingToExpire": "আপোনাৰ চেচনটৰি সময়ত অতিবাহিত (এক্সপাইৰি) হ'বলৈ ওলাইছে",
@@ -1699,6 +1699,7 @@
     "doseTwoDate": "Dose 2 Date",
     "boosterDoseDate": "Booster Dose Date",
     "covidVaccinationDetailsSaved":"Covid vaccination details saved successfully",
-    "benPreviousVisitDetails": "Beneficiary previous visit details"
+    "benPreviousVisitDetails": "Beneficiary previous visit details",
+    "startDataSync": "Start Data Sync"
   }
 }

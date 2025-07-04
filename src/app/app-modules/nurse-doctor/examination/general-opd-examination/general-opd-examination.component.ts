@@ -33,6 +33,7 @@ import { ConfirmationService } from '../../../core/services/confirmation.service
 import { DoctorService } from '../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-general-opd-examination',
@@ -59,6 +60,7 @@ export class GeneralOpdExaminationComponent
   constructor(
     private httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
+    readonly sessionstorage: SessionStorageService,
     private confirmationService: ConfirmationService
   ) {}
 
@@ -87,8 +89,8 @@ export class GeneralOpdExaminationComponent
   ngOnChanges() {
     this.loadFormData();
     if (String(this.mode) === 'view') {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.getAncExaminationData(benRegID, visitID);
     }
     if (String(this.mode) === 'update') {
@@ -144,20 +146,20 @@ export class GeneralOpdExaminationComponent
   updatePatientExamination(patientExaminationForm: any) {
     if (this.checkRequired(patientExaminationForm)) {
       const serviceLineDetails: any =
-        localStorage.getItem('serviceLineDetails');
+        this.sessionstorage.getItem('serviceLineDetails');
       const vanID = JSON.parse(serviceLineDetails).vanID;
       const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
       const updateDetails = {
-        beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
-        benVisitID: localStorage.getItem('visitID'),
-        providerServiceMapID: localStorage.getItem('providerServiceID'),
-        modifiedBy: localStorage.getItem('userName'),
-        beneficiaryID: localStorage.getItem('beneficiaryID'),
-        sessionID: localStorage.getItem('sessionID'),
+        beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+        benVisitID: this.sessionstorage.getItem('visitID'),
+        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+        modifiedBy: this.sessionstorage.getItem('userName'),
+        beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
+        sessionID: this.sessionstorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
         vanID: vanID,
-        benFlowID: localStorage.getItem('benFlowID'),
-        visitCode: localStorage.getItem('visitCode'),
+        benFlowID: this.sessionstorage.getItem('benFlowID'),
+        visitCode: this.sessionstorage.getItem('visitCode'),
       };
 
       this.doctorService

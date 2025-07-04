@@ -2,7 +2,7 @@
   <div
     class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     *ngIf="mode?.toLowerCase() === 'view'">
-    <mat-form-field class="input-full-width mat_form_field_width">
+    <mat-form-field class="input-full-width">
       <mat-label class="mat-label-text">{{
         currentLanguageSet?.Reports?.visitcode
       }}</mat-label>
@@ -11,7 +11,7 @@
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field class="input-full-width mat_form_field_width">
+    <mat-form-field class="input-full-width">
       <mat-label class="mat-label-text">{{
         currentLanguageSet?.nurseData?.visitDetailsForm?.reasonForVisit
       }}</mat-label>
@@ -36,7 +36,7 @@
   <div
     class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     *ngIf="patientVisitDetailsForm!.controls['visitReason']?.value">
-    <mat-form-field class="input-full-width mat_form_field_width">
+    <mat-form-field class="input-full-width">
       <mat-label class="mat-label-text">{{
         currentLanguageSet?.nurseData?.visitDetailsForm?.visitCategory
       }}</mat-label>
@@ -68,7 +68,7 @@
       patientVisitDetailsForm!.controls['visitCategory']?.value !== undefined &&
       patientVisitDetailsForm!.controls['visitCategory']?.value !== 'PNC'
     ">
-    <mat-form-field class="mat_form_field_width">
+    <mat-form-field class="input-full-width">
       <mat-label class="mat-label-text">{{
         currentLanguageSet?.nurseData?.visitDetailsForm?.pregnancyStatus
       }}</mat-label>
@@ -97,7 +97,7 @@
       patientVisitDetailsForm!.controls['pregnancyStatus']?.value === 'Yes' &&
       patientVisitDetailsForm!.controls['visitCategory']?.value !== 'PNC'
     ">
-    <mat-form-field class="input-full-width mat_form_field_width">
+    <mat-form-field class="input-full-width">
       <mat-label class="mat-label-text">{{
         currentLanguageSet?.nurseData?.visitDetailsForm?.MCTSOrRCHID
       }}</mat-label>

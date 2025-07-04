@@ -1,7 +1,7 @@
 <div class="row m-t-20" [formGroup]="gastroIntestinalSystemDataForm">
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <mat-form-field class="textarea-full-width">
-      <mat-label class="mat-label-text">{{
+      <mat-label>{{
         currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.inspection
       }}</mat-label>
       <textarea
@@ -16,47 +16,54 @@
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-label class="mat-label-text">{{
-      currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.abdomenTexture
-    }}</mat-label>
-    <mat-select
-      class="select-full-width"
-      name="palpation_AbdomenTexture"
-      formControlName="palpation_AbdomenTexture">
-      <mat-option
-        *ngFor="let texture of selectAbdomenTexture"
-        [value]="texture.name">
-        {{ texture.name }}
-      </mat-option>
-    </mat-select>
+    <mat-form-field>
+      <mat-label>{{
+        currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro
+          ?.abdomenTexture
+      }}</mat-label>
+      <mat-select
+        class="select-full-width"
+        name="palpation_AbdomenTexture"
+        formControlName="palpation_AbdomenTexture">
+        <mat-option
+          *ngFor="let texture of selectAbdomenTexture"
+          [value]="texture.name">
+          {{ texture.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-label class="mat-label-text">{{
-      currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.liver
-    }}</mat-label>
-    <mat-select
-      class="select-full-width"
-      name="palpation_Liver"
-      formControlName="palpation_Liver">
-      <mat-option *ngFor="let liver of selectLiver" [value]="liver.name">
-        {{ liver.name }}
-      </mat-option>
-    </mat-select>
+    <mat-form-field>
+      <mat-label>{{
+        currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.liver
+      }}</mat-label>
+      <mat-select
+        class="select-full-width"
+        name="palpation_Liver"
+        formControlName="palpation_Liver">
+        <mat-option *ngFor="let liver of selectLiver" [value]="liver.name">
+          {{ liver.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-label class="mat-label-text">{{
-      currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.spleen
-    }}</mat-label>
-    <mat-select
-      class="select-full-width"
-      name="palpation_Spleen"
-      formControlName="palpation_Spleen">
-      <mat-option *ngFor="let spleen of selectSpleen" [value]="spleen.name">
-        {{ spleen.name }}
-      </mat-option>
-    </mat-select>
+    <mat-form-field>
+      <mat-label>{{
+        currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.spleen
+      }}</mat-label>
+      <mat-select
+        class="select-full-width"
+        name="palpation_Spleen"
+        formControlName="palpation_Spleen">
+        <mat-option *ngFor="let spleen of selectSpleen" [value]="spleen.name">
+          {{ spleen.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
@@ -81,8 +88,8 @@
   <div
     class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
     *ngIf="palpation_Tenderness === 'Present'">
-    <mat-form-field class="input-full-width" class="textarea-full-width">
-      <mat-label class="mat-label-text">{{
+    <mat-form-field class="textarea-full-width">
+      <mat-label>{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.Gastro?.location
       }}</mat-label>
@@ -99,8 +106,8 @@
   </div>
 
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <mat-form-field class="input-full-width" class="textarea-full-width">
-      <mat-label class="mat-label-text">{{
+    <mat-form-field class="textarea-full-width">
+      <mat-label>{{
         currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.percussion
       }}</mat-label>
       <textarea
@@ -115,8 +122,8 @@
   </div>
 
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <mat-form-field class="input-full-width" class="textarea-full-width">
-      <mat-label class="mat-label-text">{{
+    <mat-form-field class="textarea-full-width">
+      <mat-label>{{
         currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.auscultation
       }}</mat-label>
       <textarea
@@ -131,8 +138,8 @@
   </div>
 
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <mat-form-field class="input-full-width" class="textarea-full-width">
-      <mat-label class="mat-label-text">{{
+    <mat-form-field class="textarea-full-width">
+      <mat-label>{{
         currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.analregion
       }}</mat-label>
       <textarea

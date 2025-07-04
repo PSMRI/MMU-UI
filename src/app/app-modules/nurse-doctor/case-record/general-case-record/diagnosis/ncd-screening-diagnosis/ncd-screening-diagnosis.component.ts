@@ -27,6 +27,7 @@ import {
   FormArray,
   AbstractControl,
 } from '@angular/forms';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
@@ -43,7 +44,7 @@ import { GeneralUtils } from 'src/app/app-modules/nurse-doctor/shared/utility';
 export class NcdScreeningDiagnosisComponent
   implements OnInit, OnChanges, DoCheck
 {
-  utils = new GeneralUtils(this.fb);
+  utils = new GeneralUtils(this.fb, this.sessionstorage);
 
   @Input()
   generalDiagnosisForm!: FormGroup;
@@ -62,7 +63,8 @@ export class NcdScreeningDiagnosisComponent
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     private httpServiceService: HttpServiceService,
-    private nurseService: NurseService
+    private nurseService: NurseService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -102,10 +104,10 @@ export class NcdScreeningDiagnosisComponent
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
   ngOnChanges() {
-    if (this.caseRecordMode === 'view') {
-      const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-      const visitID = localStorage.getItem('visitID');
-      const visitCategory = localStorage.getItem('visitCategory');
+    if (String(this.caseRecordMode) === 'view') {
+      const beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const visitCategory = this.sessionstorage.getItem('visitCategory');
       this.getDiagnosisDetails(beneficiaryRegID, visitID, visitCategory);
     }
   }

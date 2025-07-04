@@ -50,6 +50,7 @@ mat-card {
 .box {
   height: 55px !important;
   margin-bottom: 16px;
+  padding: unset;
 }
 
 .prefix-icon {
@@ -61,9 +62,6 @@ mat-card {
   width: 100%;
 }
 
-.full-width {
-  width: 100%;
-}
 
 .m-t-20 {
   margin-top: 20px;

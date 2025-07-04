@@ -76,13 +76,24 @@ ul li div {
 
 .first-visit-marker {
   background: #0b69b2;
+  margin-right: 5px;
 }
 
 .revisit-marker {
   background: #ff9900;
+  margin-right: 5px;
 }
 
 .totalCount,
 .description {
   padding-top: 15px;
+}
+@media screen  and (min-width:360px) and (max-width:430px) {
+  .fit_to_content{
+    width: fit-content !important;
+
+  }
+  .mat_blue{
+    margin-top: 2px;
+  }
 }

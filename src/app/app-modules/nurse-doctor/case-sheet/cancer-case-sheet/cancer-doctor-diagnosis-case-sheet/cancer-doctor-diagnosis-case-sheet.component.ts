@@ -24,6 +24,7 @@ import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MasterdataService } from '../../../shared/services';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-cancer-doctor-diagnosis-case-sheet',
@@ -49,9 +50,11 @@ export class CancerDoctorDiagnosisCaseSheetComponent
   servicePointName: any;
   covidVaccineDetails: any;
   ageValidationForVaccination = '< 12 years';
+  isCovidVaccinationStatusVisible = false;
 
   constructor(
     public httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService,
     private masterdataService: MasterdataService
   ) {}
 
@@ -60,8 +63,8 @@ export class CancerDoctorDiagnosisCaseSheetComponent
     const t = new Date();
     this.date = t.getDate() + '/' + (t.getMonth() + 1) + '/' + t.getFullYear();
 
-    const caseSheetTMFlag = localStorage.getItem('caseSheetTMFlag');
-    const specialistFlag = localStorage.getItem('specialistFlag');
+    const caseSheetTMFlag = this.sessionstorage.getItem('caseSheetTMFlag');
+    const specialistFlag = this.sessionstorage.getItem('specialistFlag');
 
     if (
       (caseSheetTMFlag !== null && caseSheetTMFlag === 'true') ||
@@ -167,7 +170,9 @@ export class CancerDoctorDiagnosisCaseSheetComponent
   }
 
   getPreviousCovidVaccinationDetails(doseTypeList: any, vaccineTypeList: any) {
-    const beneficiaryRegID = localStorage.getItem('caseSheetBeneficiaryRegID');
+    const beneficiaryRegID = this.sessionstorage.getItem(
+      'caseSheetBeneficiaryRegID'
+    );
     this.masterdataService
       .getPreviousCovidVaccinationDetails(beneficiaryRegID)
       .subscribe(

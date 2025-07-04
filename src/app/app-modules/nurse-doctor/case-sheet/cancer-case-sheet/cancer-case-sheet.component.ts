@@ -29,6 +29,7 @@ import { PrintPageSelectComponent } from '../../print-page-select/print-page-sel
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-cancer-case-sheet',
@@ -60,6 +61,7 @@ export class CancerCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
     private location: Location,
     private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
+    readonly sessionstorage: SessionStorageService,
     private httpServiceService: HttpServiceService
   ) {}
 
@@ -69,18 +71,20 @@ export class CancerCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
     let caseSheetRequest;
     if (dataStore === 'current') {
       caseSheetRequest = {
-        VisitCategory: localStorage.getItem('caseSheetVisitCategory'),
-        benFlowID: localStorage.getItem('caseSheetBenFlowID'),
-        benVisitID: localStorage.getItem('caseSheetVisitID'),
-        beneficiaryRegID: localStorage.getItem('caseSheetBeneficiaryRegID'),
-        visitCode: localStorage.getItem('visitCode'),
+        VisitCategory: this.sessionstorage.getItem('caseSheetVisitCategory'),
+        benFlowID: this.sessionstorage.getItem('caseSheetBenFlowID'),
+        benVisitID: this.sessionstorage.getItem('caseSheetVisitID'),
+        beneficiaryRegID: this.sessionstorage.getItem(
+          'caseSheetBeneficiaryRegID'
+        ),
+        visitCode: this.sessionstorage.getItem('visitCode'),
       };
       this.getCaseSheetDataVisit = {
-        benVisitID: localStorage.getItem('caseSheetVisitID'),
-        benRegID: localStorage.getItem('caseSheetBeneficiaryRegID'),
-        benFlowID: localStorage.getItem('caseSheetBenFlowID'),
+        benVisitID: this.sessionstorage.getItem('caseSheetVisitID'),
+        benRegID: this.sessionstorage.getItem('caseSheetBeneficiaryRegID'),
+        benFlowID: this.sessionstorage.getItem('caseSheetBenFlowID'),
       };
-      this.visitCategory = localStorage.getItem(
+      this.visitCategory = this.sessionstorage.getItem(
         'caseSheetVisitCategory'
       ) as string;
       this.getCurrentRole();
@@ -89,19 +93,23 @@ export class CancerCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
     if (dataStore === 'previous') {
       this.hideBack = true;
       caseSheetRequest = {
-        VisitCategory: localStorage.getItem('previousCaseSheetVisitCategory'),
-        benFlowID: localStorage.getItem('previousCaseSheetBenFlowID'),
-        beneficiaryRegID: localStorage.getItem(
+        VisitCategory: this.sessionstorage.getItem(
+          'previousCaseSheetVisitCategory'
+        ),
+        benFlowID: this.sessionstorage.getItem('previousCaseSheetBenFlowID'),
+        beneficiaryRegID: this.sessionstorage.getItem(
           'previousCaseSheetBeneficiaryRegID'
         ),
-        visitCode: localStorage.getItem('previousCaseSheetVisitCode'),
+        visitCode: this.sessionstorage.getItem('previousCaseSheetVisitCode'),
       };
       this.getCaseSheetDataVisit = {
-        benVisitID: localStorage.getItem('previousCaseSheetVisitID'),
-        benRegID: localStorage.getItem('previousCaseSheetBeneficiaryRegID'),
-        benFlowID: localStorage.getItem('previousCaseSheetBenFlowID'),
+        benVisitID: this.sessionstorage.getItem('previousCaseSheetVisitID'),
+        benRegID: this.sessionstorage.getItem(
+          'previousCaseSheetBeneficiaryRegID'
+        ),
+        benFlowID: this.sessionstorage.getItem('previousCaseSheetBenFlowID'),
       };
-      this.visitCategory = localStorage.getItem(
+      this.visitCategory = this.sessionstorage.getItem(
         'previousCaseSheetVisitCategory'
       ) as string;
       this.getCurrentRole();
@@ -120,7 +128,7 @@ export class CancerCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
 
   oncologistRemarks: any;
   getCurrentRole() {
-    const currentRole = localStorage.getItem('currentRole');
+    const currentRole = this.sessionstorage.getItem('currentRole');
     if (currentRole && currentRole === 'Oncologist') {
       this.oncologistRemarks = true;
     }

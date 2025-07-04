@@ -11,3 +11,7 @@
   .padding-text{
       margin-top:1px ;
   }
+
+  .mat_form_field_width ::ng-deep  .mat-mdc-text-field-wrapper {
+    width: 100% !important;
+}

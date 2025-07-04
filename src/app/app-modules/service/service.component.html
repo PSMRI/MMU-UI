@@ -8,20 +8,15 @@
           class="row m-t-20"
           style="text-align: center"
           *ngFor="let service of servicesList">
-          <mat-label class="mat-label-text">Welcome</mat-label>
           <mat-label class="mat-label-text" class="nameList"
-            >&nbsp;{{ this.fullName }}</mat-label
+            >Welcome&nbsp;&nbsp;{{ this.fullName }}</mat-label
           >
           <div class="note">Click on service to proceed</div>
           <!-- eslint-disable-next-line  @angular-eslint/template/click-events-have-key-events -->
-          <div
-            class="circle"
-            style="margin-top: 30px; margin-left: 100px"
-            tabindex="{0}"
-            (click)="selectService(service)">
+          <div class="circle" tabindex="{0}" (click)="selectService(service)">
             <div class="list-unstyled text-center f-s-20 p-r-15 line-height-65">
               <img
-                style="margin-top: 20px"
+                style="margin-top: -8px"
                 [src]="'assets/images/' + service.serviceName + '.png'"
                 alt="{{ service.serviceName }}" />&nbsp;&nbsp;&nbsp;{{
                 service.serviceName

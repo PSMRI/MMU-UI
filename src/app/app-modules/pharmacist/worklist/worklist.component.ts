@@ -34,11 +34,12 @@ import { ConfirmationService } from '../../core/services/confirmation.service';
 import { PharmacistService } from '../shared/services/pharmacist.service';
 import { CameraService } from '../../core/services/camera.service';
 import { InventoryService } from '../../core/services/inventory.service';
-import moment from 'moment';
+import * as moment from 'moment';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-worklist',
@@ -78,33 +79,34 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private pharmacistService: PharmacistService,
     private cameraService: CameraService,
-    private inventoryService: InventoryService
+    private inventoryService: InventoryService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
     this.fetchLanguageResponse();
-    localStorage.setItem('currentRole', 'Pharmacist');
+    this.sessionstorage.setItem('currentRole', 'Pharmacist');
     this.removeBeneficiaryDataForVisit();
     this.loadPharmaWorklist();
     this.beneficiaryDetailsService.reset();
   }
 
   removeBeneficiaryDataForVisit() {
-    localStorage.removeItem('visitCode');
-    localStorage.removeItem('beneficiaryGender');
-    localStorage.removeItem('benFlowID');
-    localStorage.removeItem('visitCategory');
-    localStorage.removeItem('beneficiaryRegID');
-    localStorage.removeItem('visitID');
-    localStorage.removeItem('beneficiaryID');
-    localStorage.removeItem('doctorFlag');
-    localStorage.removeItem('nurseFlag');
-    localStorage.removeItem('pharmacist_flag');
-    localStorage.removeItem('caseSheetTMFlag');
+    sessionStorage.removeItem('visitCode');
+    sessionStorage.removeItem('beneficiaryGender');
+    sessionStorage.removeItem('benFlowID');
+    sessionStorage.removeItem('visitCategory');
+    sessionStorage.removeItem('beneficiaryRegID');
+    sessionStorage.removeItem('visitID');
+    sessionStorage.removeItem('beneficiaryID');
+    sessionStorage.removeItem('doctorFlag');
+    sessionStorage.removeItem('nurseFlag');
+    sessionStorage.removeItem('pharmacist_flag');
+    sessionStorage.removeItem('caseSheetTMFlag');
   }
 
   ngOnDestroy() {
-    localStorage.removeItem('currentRole');
+    sessionStorage.removeItem('currentRole');
   }
 
   loadPharmaWorklist() {

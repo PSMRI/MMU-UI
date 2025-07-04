@@ -6,7 +6,7 @@
       {{ currentLanguageSet?.supportedFileFormats }} )</label
     >
     <br />
-    <section>
+    <section style="margin-top: 30px">
       <button
         class="mat_blue"
         [disabled]="disableFileSelection"
@@ -23,6 +23,7 @@
           (change)="uploadFile($event)" />
       </span>
       <button
+        *ngIf="!disableFileSelection"
         class="mat_blue pull-right"
         mat-raised-button
         (click)="checkForDuplicateUpload()">
@@ -37,20 +38,17 @@
       </button>
       <div style="margin: 20px 0px 0px 0px">
         <mat-chip-listbox *ngIf="fileObj.length > 0">
-          <mat-chip-option
+          <mat-chip
             *ngFor="let file of fileObj"
             [ngClass]="{ chipEdit: file.isUploaded }"
             >{{ file.fileName }}
-            <button
-              class="mat_icon_white_green"
+            <mat-icon
               matChipRemove
               *ngIf="!file.isUploaded"
-              (click)="remove(file)">
-              <mat-icon style="margin-top: 100px; margin-left: -40px"
-                >cancel</mat-icon
-              >
-            </button>
-          </mat-chip-option>
+              (click)="remove(file)"
+              >cancel</mat-icon
+            >
+          </mat-chip>
         </mat-chip-listbox>
       </div>
     </section>

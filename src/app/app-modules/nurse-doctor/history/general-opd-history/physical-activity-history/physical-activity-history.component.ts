@@ -36,6 +36,7 @@ import {
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-physical-activity-history',
   templateUrl: './physical-activity-history.component.html',
@@ -66,7 +67,8 @@ export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
     private masterdataService: MasterdataService,
     private nurseService: NurseService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    public httpServiceService: HttpServiceService
+    public httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -94,9 +96,9 @@ export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
           console.log('masterData', this.masterData);
 
           if (String(this.mode) === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
-            const visitCategory = localStorage.getItem('visitCategory');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
+            const visitCategory = this.sessionstorage.getItem('visitCategory');
             if (
               visitID !== null &&
               benRegID !== null &&
@@ -168,7 +170,7 @@ export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
   }
 
   getPreviousPhysicalActivityHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousPhysicalActivityHistory(benRegID, this.visitType)
       .subscribe(

@@ -20,7 +20,10 @@
         <li *ngIf="status" class="nav-item alignWord menu-font">
           <span>{{ currentLanguageSet?.common?.SelectLanguage }}: </span>
         </li>
-        <li *ngIf="status" class="nav-item alignDropDown">
+        <li
+          *ngIf="status"
+          class="nav-item alignDropDown"
+          style="margin-right: 8px">
           <select
             style="font-size: 13px"
             class="menu-font drop-arrow border-radius-20 height-30 width120px pull-right"
@@ -37,6 +40,7 @@
 
         <li
           *ngIf="isAuthenticated"
+          style="margin-right: 8px"
           class="nav-item cursorPointer"
           matTooltip="{{ currentLanguageSet?.common?.connectBluetooth }}"
           [ngClass]="{ connected: isConnected }">
@@ -58,7 +62,7 @@
 
         <li
           class="nav-item"
-          style="margin-top: 6px"
+          style="margin-top: 6px; margin-right: 8px"
           *ngIf="userName"
           matTooltip="{{ currentLanguageSet?.user }}">
           <a>
@@ -66,14 +70,16 @@
             <span style="color: #d9d9d9">
               {{ currentLanguageSet?.user }}
               <span style="color: #d9d9d9">:</span>
-              <span style="color: #ffffff">{{ userName | titlecase }}</span>
+              <span style="color: #ffffff; margin-left: 5px">{{
+                userName | titlecase
+              }}</span>
             </span>
           </a>
         </li>
         <li
           *ngIf="servicePoint"
           class="nav-item servicePoint cursorPointer"
-          style="margin-top: 6px"
+          style="margin-top: 6px; margin-right: 5px"
           [routerLink]="'/servicePoint'"
           matTooltip="{{ currentLanguageSet?.servicePoint }}">
           <a>
@@ -81,14 +87,16 @@
             <span style="color: #d9d9d9"
               >{{ currentLanguageSet?.servicePoint }}
               <span style="color: #d9d9d9">:</span>
-              <span style="color: #ffffff">{{ servicePoint | titlecase }}</span>
+              <span style="color: #ffffff; margin-left: 5px">{{
+                servicePoint | titlecase
+              }}</span>
             </span>
           </a>
         </li>
         <li
           class="nav-item cursorPointer"
           *ngIf="isAuthenticated"
-          style="margin-top: 6px">
+          style="margin-top: 6px; margin-right: 5px">
           <mat-icon
             alt="Help"
             [matMenuTriggerFor]="menu"
@@ -117,7 +125,7 @@
       <ul
         class="nav navbar-nav ml-auto"
         *ngFor="let item of filteredNavigation; let isLast = last">
-        <li class="nav-item" *ngIf="item.role === 'Registrar'">
+        <!-- <li class="nav-item" *ngIf="item.role === 'Registrar'">
           <button class="nav-btn" mat-button [matMenuTriggerFor]="items">
             {{ item.label }}
             <span class="caret"></span>
@@ -136,8 +144,8 @@
               {{ value.label }}
             </button>
           </mat-menu>
-        </li>
-        <li class="nav-item" *ngIf="item.role !== 'Registrar'">
+        </li> -->
+        <li class="nav-item">
           <button
             class="nav-btn"
             mat-button

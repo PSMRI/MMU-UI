@@ -21,9 +21,13 @@
  */
 
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 export class VisitDetailUtils {
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    readonly sessionstorage: SessionStorageService
+  ) {}
 
   createPatientVisitForm(diasableFlag: boolean = false) {
     return this.fb.group({
@@ -43,7 +47,8 @@ export class VisitDetailUtils {
   }
 
   createPatientAdherenceForm(disableFlag: boolean = false) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     return this.fb.group({
       beneficiaryRegID: null,
       benVisitID: null,
@@ -60,7 +65,8 @@ export class VisitDetailUtils {
   }
 
   createPatientInvestigationsForm(disableFlag: boolean = false) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     return this.fb.group({
       beneficiaryRegID: null,
       benVisitID: null,
@@ -80,8 +86,9 @@ export class VisitDetailUtils {
     });
   }
 
-  createPatientChiefComplaintsForm(disableFlag: boolean = false): FormGroup {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+  createPatientChiefComplaintsForm(disableFlag = false): FormGroup {
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     return this.fb.group({
       beneficiaryRegID: null,
       benVisitID: null,
@@ -89,9 +96,9 @@ export class VisitDetailUtils {
       conceptID: null,
       chiefComplaint: { value: null, disabled: disableFlag },
       chiefComplaintID: { value: null, disabled: disableFlag },
-      duration: { value: null, disabled: disableFlag },
-      unitOfDuration: { value: null, disabled: disableFlag },
-      description: { value: null, disabled: disableFlag },
+      duration: { value: null, disabled: true },
+      unitOfDuration: { value: null, disabled: true },
+      description: { value: null, disabled: true },
       createdBy: null,
       vanID: JSON.parse(serviceLineDetails).vanID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
@@ -99,7 +106,8 @@ export class VisitDetailUtils {
   }
 
   createPatientVisitDetails(disableFlag: boolean = false) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     return this.fb.group({
       beneficiaryRegID: null,
       providerServiceMapID: null,
@@ -124,7 +132,8 @@ export class VisitDetailUtils {
   }
 
   createPatientCovidForm(disableFlag: boolean = false) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     return this.fb.group({
       beneficiaryRegID: null,
       benVisitID: null,

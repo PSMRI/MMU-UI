@@ -20,7 +20,13 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, OnDestroy, DoCheck } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  DoCheck,
+  ViewChild,
+} from '@angular/core';
 import { ViewTestReportComponent } from './view-test-report/view-test-report.component';
 import { DoctorService } from '../../../shared/services';
 import { MatDialog } from '@angular/material/dialog';
@@ -31,6 +37,9 @@ import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { TestInVitalsService } from '../../../shared/services/test-in-vitals.service';
 import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 import { LabService } from 'src/app/app-modules/lab/shared/services';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-test-and-radiology',
   templateUrl: './test-and-radiology.component.html',
@@ -38,6 +47,16 @@ import { LabService } from 'src/app/app-modules/lab/shared/services';
 })
 export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
   current_language_set: any;
+  displayedColumns: any = [
+    'date',
+    'testName',
+    'componentName',
+    'result',
+    'measurementUnit',
+    'remarks',
+  ];
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+  filteredLabResults = new MatTableDataSource<any>();
 
   constructor(
     private doctorService: DoctorService,
@@ -45,6 +64,7 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
     private labService: LabService,
     private idrsScoreService: IdrsscoreService,
     private httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService,
     private testInVitalsService: TestInVitalsService
   ) {}
 
@@ -61,9 +81,9 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
   ngOnInit() {
     this.testInVitalsService.clearVitalsRBSValueInReports();
     this.testInVitalsService.clearVitalsRBSValueInReportsInUpdate();
-    this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-    this.visitID = localStorage.getItem('visitID');
-    this.visitCategory = localStorage.getItem('visitCategory');
+    this.beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
+    this.visitID = this.sessionstorage.getItem('visitID');
+    this.visitCategory = this.sessionstorage.getItem('visitCategory');
 
     this.testInVitalsService.vitalRBSTestResult$.subscribe(response => {
       console.log('vital subscription response: ', response);
@@ -89,6 +109,10 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
           };
         }
       }
+
+      this.beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
+      this.visitID = this.sessionstorage.getItem('visitID');
+      this.visitCategory = this.sessionstorage.getItem('visitCategory');
       this.getTestResults(
         this.beneficiaryRegID,
         this.visitID,
@@ -144,7 +168,8 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
           this.labResults.splice(index, 1);
       });
       this.labResults = [vitalsRBSResponse].concat(this.labResults);
-      this.filteredLabResults = this.labResults;
+      this.filteredLabResults.data = this.labResults;
+      this.filteredLabResults.paginator = this.paginator;
 
       this.currentLabPageChanged({
         page: this.currentLabActivePage,
@@ -159,7 +184,8 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
           this.labResults.splice(index, 1);
       });
 
-      this.filteredLabResults = this.labResults;
+      this.filteredLabResults.data = this.labResults;
+      this.filteredLabResults.paginator = this.paginator;
 
       this.currentLabPageChanged({
         page: this.currentLabActivePage,
@@ -182,11 +208,12 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
           this.labResults = res.data.LabReport.filter((lab: any) => {
             return lab.procedureType === 'Laboratory';
           });
-          this.filteredLabResults = this.labResults;
+          this.filteredLabResults.data = this.labResults;
+          this.filteredLabResults.paginator = this.paginator;
 
           //coded added to check whether strips are available for RBS Test
           if (visitCategory === 'NCD screening') {
-            this.filteredLabResults.forEach((element: any) => {
+            this.filteredLabResults.data.forEach((element: any) => {
               if (element.procedureName === environment.RBSTest) {
                 return element.componentList.forEach((element1: any) => {
                   if (element1.stripsNotAvailable === true) {
@@ -201,7 +228,8 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
             this.labResults = [this.vitalsRBSResp].concat(this.labResults);
           }
 
-          this.filteredLabResults = this.labResults;
+          this.filteredLabResults.data = this.labResults;
+          this.filteredLabResults.paginator = this.paginator;
 
           this.radiologyResults = res.data.LabReport.filter(
             (radiology: any) => {
@@ -217,16 +245,18 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
       });
   }
 
-  filteredLabResults: any = [];
+  // filteredLabResults: any = [];
   filterProcedures(searchTerm?: string) {
     if (!searchTerm) {
-      this.filteredLabResults = this.labResults;
+      this.filteredLabResults.data = this.labResults;
+      this.filteredLabResults.paginator = this.paginator;
     } else {
-      this.filteredLabResults = [];
+      this.filteredLabResults.data = [];
+      this.filteredLabResults.paginator = this.paginator;
       this.labResults.forEach((item: any) => {
         const value: string = '' + item.procedureName;
         if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-          this.filteredLabResults.push(item);
+          this.filteredLabResults.data.push(item);
         }
       });
     }
@@ -242,7 +272,7 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
     console.log('called', event);
     const startItem = (event.page - 1) * event.itemsPerPage;
     const endItem = event.page * event.itemsPerPage;
-    this.currentLabPagedList = this.filteredLabResults.slice(
+    this.currentLabPagedList = this.filteredLabResults.data.slice(
       startItem,
       endItem
     );
@@ -285,7 +315,7 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
   visitCode: any;
   showArchivedTestResult(visitCode: any) {
     const archivedReport = {
-      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
       visitCode: visitCode.visitCode,
     };
     this.doctorService

@@ -42,13 +42,48 @@ import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
-import { Observable, mergeMap, of } from 'rxjs';
+import { mergeMap, of } from 'rxjs';
 import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import {
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-ncd-screening',
   templateUrl: './ncd-screening.component.html',
   styleUrls: ['./ncd-screening.component.css'],
+  providers: [
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
+    },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: 'LL',
+        },
+        display: {
+          dateInput: 'DD/MM/YYYY', // Set the desired display format
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY',
+        },
+      },
+    },
+  ],
 })
 export class NcdScreeningComponent
   implements OnInit, OnChanges, DoCheck, OnDestroy
@@ -66,7 +101,7 @@ export class NcdScreeningComponent
   nextScreeningDate!: Date;
   age: any;
 
-  utils = new NCDScreeningUtils(this.fb);
+  utils = new NCDScreeningUtils(this.fb, this.sessionstorage);
   bloodPressureStatus: any;
   diabeticStatus: any;
   ncdScreeningConditions: any;
@@ -99,7 +134,8 @@ export class NcdScreeningComponent
     private doctorService: DoctorService,
     private nurseService: NurseService,
     private router: Router,
-    private httpServices: HttpServiceService
+    private httpServices: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   patientVisitForm!: FormGroup;
@@ -127,7 +163,7 @@ export class NcdScreeningComponent
   }
   // Ends
   ngOnChanges() {
-    if (this.ncdScreeningMode === 'update') {
+    if (String(this.ncdScreeningMode) === 'update') {
       this.updateNCDScreeningDetails();
     }
   }
@@ -152,9 +188,9 @@ export class NcdScreeningComponent
           );
           // this.ncdTests = data.ncdTests;
 
-          if (this.ncdScreeningMode === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+          if (String(this.ncdScreeningMode) === 'view') {
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.getNCDScreeingDetails(benRegID, visitID);
           }
         }
@@ -205,7 +241,7 @@ export class NcdScreeningComponent
         .subscribe((res: any) => {
           if (res && res.statusCode === 200 && res.data) {
             this.ncdScreeningVisitCount = res.data.ncdScreeningVisitCount;
-            if (this.ncdScreeningMode !== 'view')
+            if (String(this.ncdScreeningMode) !== 'view')
               this.NCDScreeningForm.patchValue({
                 ncdScreeningVisitNo: this.ncdScreeningVisitCount,
               });

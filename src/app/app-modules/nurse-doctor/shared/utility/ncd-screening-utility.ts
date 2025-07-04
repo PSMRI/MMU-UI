@@ -21,12 +21,17 @@
  */
 
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 export class NCDScreeningUtils {
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    readonly sessionstorage: SessionStorageService
+  ) {}
 
   createNCDScreeningForm() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     return this.fb.group({
       ncdScreeningConditionList: null,
       reasonForScreening: null,
@@ -61,7 +66,8 @@ export class NCDScreeningUtils {
     });
   }
   createIDRSForm() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     return this.fb.group({
       beneficiaryRegID: null,
       providerServiceMapID: null,

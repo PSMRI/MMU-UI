@@ -25,6 +25,7 @@ import { Router } from '@angular/router';
 import { SetLanguageComponent } from '../core/components/set-language.component';
 import { ConfirmationService } from '../core/services';
 import { HttpServiceService } from '../core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-service',
@@ -42,23 +43,25 @@ export class ServiceComponent implements OnInit, DoCheck {
     private httpServiceService: HttpServiceService,
     private languageComponent: SetLanguageComponent,
     private router: Router,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
     this.fetchLanguageResponse();
-    const services: any = localStorage.getItem('services');
+    const services: any = this.sessionstorage.getItem('services');
     this.servicesList = JSON.parse(services);
-    this.fullName = localStorage.getItem('fullName');
+    this.fullName = this.sessionstorage.getItem('fullName');
   }
 
   loginDataResponse: any;
   selectService(service: any) {
-    localStorage.setItem('providerServiceID', service.providerServiceID);
-    localStorage.setItem('serviceName', service.serviceName);
-    localStorage.setItem('serviceID', service.serviceID);
+    this.sessionstorage.setItem('providerServiceID', service.providerServiceID);
+    this.sessionstorage.setItem('serviceName', service.serviceName);
+    this.sessionstorage.setItem('serviceID', service.serviceID);
     sessionStorage.setItem('apimanClientKey', service.apimanClientKey);
-    const loginDataResponse: any = localStorage.getItem('loginDataResponse');
+    const loginDataResponse: any =
+      this.sessionstorage.getItem('loginDataResponse');
     this.loginDataResponse = JSON.parse(loginDataResponse);
     this.checkRoleAndDesingnationMappedForservice(
       this.loginDataResponse,
@@ -100,7 +103,7 @@ export class ServiceComponent implements OnInit, DoCheck {
           });
         });
         if (this.roleArray && this.roleArray.length > 0) {
-          localStorage.setItem('role', JSON.stringify(this.roleArray));
+          this.sessionstorage.setItem('role', JSON.stringify(this.roleArray));
           this.checkMappedDesignation(this.loginDataResponse);
         } else {
           this.confirmationService.alert(
@@ -148,7 +151,7 @@ export class ServiceComponent implements OnInit, DoCheck {
 
   checkDesignationWithRole() {
     if (this.roleArray.includes(this.designation)) {
-      localStorage.setItem('designation', this.designation);
+      this.sessionstorage.setItem('designation', this.designation);
       this.routeToDesignation(this.designation);
     } else {
       this.confirmationService.alert(

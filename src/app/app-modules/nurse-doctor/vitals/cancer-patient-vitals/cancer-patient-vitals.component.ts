@@ -38,6 +38,8 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { IotcomponentComponent } from 'src/app/app-modules/core/components/iotcomponent/iotcomponent.component';
+import { ActivatedRoute } from '@angular/router';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-cancer-patient-vitals',
@@ -58,7 +60,7 @@ export class CancerPatientVitalsComponent
 
   female = false;
   benAge: number = 0;
-  BMI: any;
+  BMI: any = null;
   male = false;
   startWeightTest = environment.startWeighturl;
   startTempTest = environment.startTempurl;
@@ -75,6 +77,8 @@ export class CancerPatientVitalsComponent
   rbsSelectedInInvestigation: boolean = false;
   startRBSTest = environment.startRBSurl;
   rbsPopup: boolean = false;
+  attendant: any;
+
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
@@ -83,7 +87,9 @@ export class CancerPatientVitalsComponent
     private nurseService: NurseService,
     private doctorService: DoctorService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    private languageComponent: SetLanguageComponent
+    private languageComponent: SetLanguageComponent,
+    readonly sessionstorage: SessionStorageService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -102,15 +108,45 @@ export class CancerPatientVitalsComponent
   ngOnChanges(changes: any) {
     this.nurseService.rbsTestResultFromDoctorFetch = null;
     if (String(this.mode) === 'view') {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.getCancerVitals(benRegID, visitID);
     }
 
     if (String(this.mode) === 'update') {
       this.updateCancerVitals();
     }
+
+    this.attendant = this.route.snapshot.params['attendant'];
+    if (this.attendant === 'nurse') {
+      this.getPreviousVisitAnthropometry();
+    }
   }
+
+  previousAnthropometryDataSubscription: any;
+  getPreviousVisitAnthropometry() {
+    this.previousAnthropometryDataSubscription = this.doctorService
+      .getPreviousVisitAnthropometry({
+        benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+      })
+      .subscribe((anthropometryData: any) => {
+        if (
+          anthropometryData &&
+          anthropometryData.data &&
+          anthropometryData.data.response &&
+          anthropometryData.data.response !== 'Visit code is not found' &&
+          anthropometryData.data.response !== 'No data found'
+        ) {
+          const heightStr = anthropometryData.data.response.toString();
+          this.patientVitalsForm.controls['height_cm'].patchValue(
+            heightStr.endsWith('.0')
+              ? Math.round(anthropometryData.data.response)
+              : anthropometryData.data.response
+          );
+        }
+      });
+  }
+
   checkDiasableRBS() {
     if (
       this.rbsSelectedInInvestigation === true ||
@@ -179,6 +215,9 @@ export class CancerPatientVitalsComponent
     if (this.rbsSelectedInInvestigationSubscription)
       this.rbsSelectedInInvestigationSubscription.unsubscribe();
     this.nurseService.rbsTestResultFromDoctorFetch = null;
+
+    if (this.previousAnthropometryDataSubscription)
+      this.previousAnthropometryDataSubscription.unsubscribe();
   }
 
   beneficiaryDetailSubscription: any;
@@ -203,9 +242,8 @@ export class CancerPatientVitalsComponent
           }
           if (
             beneficiary !== undefined &&
-            beneficiary.genderName !== undefined &&
+            beneficiary !== null &&
             beneficiary.genderName !== null &&
-            beneficiary.genderName &&
             beneficiary.genderName.toLowerCase() === 'male'
           ) {
             this.male = true;
@@ -491,7 +529,7 @@ export class CancerPatientVitalsComponent
     if (
       this.female &&
       this.pregnancyStatus !== null &&
-      this.pregnancyStatus.toLowerCase() !== 'yes'
+      this.pregnancyStatus?.toLowerCase() !== 'yes'
     )
       this.normalWaist = patientWaist < 80 ? true : false;
     else if (!this.female) this.normalWaist = patientWaist < 90 ? true : false;

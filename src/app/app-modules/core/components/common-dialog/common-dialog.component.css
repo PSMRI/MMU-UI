@@ -54,7 +54,7 @@
 .list-group-item {
     background-color: unset !important;
     border: unset !important;
-    padding: 5px 15px !important;
+    padding: 5px 15px 5px 0px !important;
 }
 
 .alert {

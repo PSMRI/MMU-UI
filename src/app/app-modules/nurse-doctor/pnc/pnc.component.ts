@@ -28,7 +28,7 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import {
@@ -38,11 +38,46 @@ import {
 } from '../shared/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import {
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-pnc',
   templateUrl: './pnc.component.html',
   styleUrls: ['./pnc.component.css'],
+  providers: [
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
+    },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: 'LL',
+        },
+        display: {
+          dateInput: 'DD/MM/YYYY', // Set the desired display format
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY',
+        },
+      },
+    },
+  ],
 })
 export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
   @Input()
@@ -59,7 +94,8 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
-    private httpServices: HttpServiceService
+    private httpServices: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -94,8 +130,8 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
       this.mode !== null &&
       this.mode.toLowerCase() === 'view'
     ) {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
     }
 
     if (
@@ -182,11 +218,11 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
 
   updatePatientPNC(patientPNCDataForm: FormGroup) {
     const temp = {
-      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
-      benVisitID: localStorage.getItem('visitID'),
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
-      modifiedBy: localStorage.getItem('userName'),
-      visitCode: localStorage.getItem('visitCode'),
+      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+      benVisitID: this.sessionstorage.getItem('visitID'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+      modifiedBy: this.sessionstorage.getItem('userName'),
+      visitCode: this.sessionstorage.getItem('visitCode'),
     };
 
     this.doctorService.updatePNCDetails(patientPNCDataForm, temp).subscribe(
@@ -291,8 +327,8 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
           this.selectDeliveryTypes = this.masterData.deliveryTypes;
 
           if (this.mode) {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.patchDataToFields(benRegID, visitID);
           }
         }

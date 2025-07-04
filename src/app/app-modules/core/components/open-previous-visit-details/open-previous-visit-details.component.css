@@ -4,18 +4,25 @@
   
   .title {
     margin: 0px 0px 10px;
-    padding: 5px 6px 5px;
-    color: white;
+    padding: 15px 6px 5px;
+    color: black;
     font-size: 18px;
     line-height: 32px;
     font-weight: 400;
-    background: #0277bd !important;
+    background: rgba(37, 55, 70, 0.2) !important;
   }
   
   .title h4 {
     display: inline-block;
   }
 
-  .container-fluid {
-    padding: 24px !important;
-  }
+  tbody, td, tfoot, th, thead, tr {
+    
+    color: rgba(0, 0, 0, 0.87) !important;
+}
+
+.container-fluid {
+  max-height: 400px; 
+  overflow-y: auto;  
+  overflow-x: hidden; 
+ }

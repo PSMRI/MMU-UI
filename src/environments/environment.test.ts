@@ -25,18 +25,21 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-const commonIP = 'http://10.208.122.38:8080/';
-const tmIP = 'http://10.208.122.38:8080/';
-const mmuIP = 'http://10.208.122.38:8080/';
-const schedulerIP = 'http://10.208.122.38:8080/';
-const mmuUI_IP = 'http://10.208.122.38:8080/';
-const schedulerUI_IP = 'http://10.208.122.38:8080/';
-const inventoryUI_IP = 'http://10.208.122.38:8080/';
-const identityIP = 'http://10.208.122.38:8080/';
+const commonIP = 'https://amritwprdev.piramalswasthya.org/';
+const tmIP = 'https://amritwprdev.piramalswasthya.org/';
+const mmuIP = 'https://amritwprdev.piramalswasthya.org/';
+const schedulerIP = 'https://amritwprdev.piramalswasthya.org/';
+const mmuUI_IP = 'https://amritwprdev.piramalswasthya.org/';
+const schedulerUI_IP = 'https://amritwprdev.piramalswasthya.org/';
+const inventoryUI_IP = 'https://amritwprdev.piramalswasthya.org/';
+const identityIP = 'https://amritwprdev.piramalswasthya.org/';
 
-const SERVER_IP = 'http://10.208.122.38:8080/';
+const SERVER_IP = 'https://amritwprdev.piramalswasthya.org/';
 const SWYMED_IP = 'swymed://14.143.13.109';
-const adminIP = 'http://10.208.122.38:8080';
+const adminIP = 'https://amritwprdev.piramalswasthya.org';
+const FHIRIP = 'https://amritwprdev.piramalswasthya.org';
+const sessionStorageEncKey = '';
+
 const ADMIN_API = `${adminIP}/adminapi-v1.0`;
 // With API MAN Configuration
 // const COMMON_API_OPEN = `http://${IP}:8080/apiman-gateway/IEMR/Common/open/`;
@@ -50,6 +53,8 @@ const MMU_API = `${mmuIP}mmuapi-v1.0/`;
 const TM_API = `${tmIP}tmapi-v1.0/`;
 const COMMON_API_OPEN_SYNC = `${SERVER_IP}commonapi-v1.0/`;
 const SCHEDULER_API = `${schedulerIP}schedulerapi-v1.0/`;
+const FHIR_API = `${FHIRIP}/fhirapi-v1.0/`;
+const IDENTITY_API = `${identityIP}identity-0.0.1/`;
 
 const mmuUICasesheet = `${mmuUI_IP}mmuui-v1.0`;
 const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
@@ -57,6 +62,7 @@ const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
 export const environment = {
   production: true,
   isMMUOfflineSync: false,
+  encKey: sessionStorageEncKey,
 
   app: `MMU`,
   RBSTest: `RBS Test`,
@@ -64,7 +70,7 @@ export const environment = {
   haemoglobinTest: `Haemoglobin Test`,
   parentAPI: `${MMU_API}`,
 
-  INVENTORY_URL: `${inventoryUI_IP}/inventory-ui-v1.0/#/redirin?`,
+  INVENTORY_URL: `${inventoryUI_IP}/inventory/#/redirin?`,
   fallbackUrl: `/pharmacist/redirfallback`,
   redirInUrl: `/pharmacist/redirin`,
 
@@ -119,7 +125,7 @@ export const environment = {
   visitDetailMasterDataUrl: `${MMU_API}master/get/visitReasonAndCategories`,
   nurseMasterDataUrl: `${MMU_API}master/nurse/masterData/`,
   doctorMasterDataUrl: `${MMU_API}master/doctor/masterData/`,
-  snomedCTRecordURL: `${MMU_API}/snomed/getSnomedCTRecord`,
+  snomedCTRecordURL: `${MMU_API}snomed/getSnomedCTRecord`,
   diagnosisSnomedCTRecordUrl: `${MMU_API}snomed/getSnomedCTRecordList`,
   getDistrictTalukUrl: `${MMU_API}location/get/DistrictTalukMaster/`,
   snomedCTRecordListURL1: `${COMMON_API}snomed/getSnomedCTRecordList`,
@@ -130,7 +136,7 @@ export const environment = {
   getNCDScreeningIDRSDetails: `${MMU_API}NCD/getBenIdrsDetailsFrmNurse`,
   getprescribedTestDataUrl: `${MMU_API}labTechnician/get/prescribedProceduresList`,
   labSaveWork: `${MMU_API}labTechnician/save/LabTestResult`,
-  getEcgAbnormalitiesMasterUrl: `${MMU_API}/master/ecgAbnormalities`,
+  getEcgAbnormalitiesMasterUrl: `${MMU_API}master/ecgAbnormalities`,
 
   /**
    * Worklist Urls
@@ -176,12 +182,12 @@ export const environment = {
   getNCDScreeningVisitDetails: `${MMU_API}NCD/getBenVisitDetailsFrmNurseNCDScreening`,
   getNCDScreeningDetails: `${MMU_API}NCD/get/nurseData`,
   updateNCDScreeningDetails: `${MMU_API}NCD/update/nurseData`,
-  saveDoctorNCDScreeningDetails: `${MMU_API}/NCD/save/doctorData`,
+  saveDoctorNCDScreeningDetails: `${MMU_API}NCD/save/doctorData`,
   getNCDScreeningHistoryDetails: `${MMU_API}NCD/getBenHistoryDetails`,
   getNCDSceeriningVitalDetails: `${MMU_API}NCD/getBenVitalDetailsFrmNurse`,
 
   updateNCDScreeningHistoryDetailsUrl: `${MMU_API}NCD/update/historyScreen`,
-  updateNCDScreeningDoctorDetails: `${MMU_API}/NCD/update/doctorData`,
+  updateNCDScreeningDoctorDetails: `${MMU_API}NCD/update/doctorData`,
   updateNCDVitalsDetailsUrl: `${MMU_API}NCD/update/vitalScreen`,
   updateNCDScreeningIDRSDetailsUrl: `${MMU_API}NCD/update/idrsScreen`,
 
@@ -240,8 +246,8 @@ export const environment = {
   saveNurseGeneralOPDDetails: `${MMU_API}generalOPD/save/nurseData`,
 
   updateGeneralOPDHistoryDetailsUrl: `${MMU_API}generalOPD/update/historyScreen`,
-  updateGeneralOPDVitalsDetailsUrl: `${MMU_API}/generalOPD/update/vitalScreen`,
-  updateGeneralOPDExaminationDetailsUrl: `${MMU_API}/generalOPD/update/examinationScreen`,
+  updateGeneralOPDVitalsDetailsUrl: `${MMU_API}generalOPD/update/vitalScreen`,
+  updateGeneralOPDExaminationDetailsUrl: `${MMU_API}generalOPD/update/examinationScreen`,
 
   saveDoctorGeneralOPDDetails: `${MMU_API}generalOPD/save/doctorData`,
 
@@ -361,7 +367,7 @@ export const environment = {
   syncDataDownloadUrl: `${MMU_API}dataSyncActivity/startMasterDownload`,
   syncDownloadProgressUrl: `${MMU_API}dataSyncActivity/checkMastersDownloadProgress`,
   getNcdScreeningVisitCountUrl: `${MMU_API}NCD/getNcdScreeningVisitCount/`,
-  getNCDScreeningDoctorDetails: `${MMU_API}/NCD/getBenCaseRecordFromDoctorNCDScreening`,
+  getNCDScreeningDoctorDetails: `${MMU_API}NCD/getBenCaseRecordFromDoctorNCDScreening`,
   getVanDetailsForMasterDownloadUrl: `${MMU_API}dataSyncActivity/getVanDetailsForMasterDownload`,
 
   getMasterSpecializationUrl: `${SCHEDULER_API}/specialist/masterspecialization`,
@@ -402,7 +408,7 @@ export const environment = {
   startRBSurl: '/api/v1/wbpoct_tests/blood_glucose',
 
   // Check availability of benIDs
-  getBenIDs: `${identityIP}identity-0.0.1/id/checkAvailablBenIDLocalServer`,
+  getBenIDs: `${IDENTITY_API}id/checkAvailablBenIDLocalServer`,
   generateBenID: `${MMU_API}dataSyncActivity/callCentralAPIToGenerateBenIDAndimportToLocal`,
 
   // Inventory Data Sync Download
@@ -437,4 +443,63 @@ export const environment = {
   getResultStatusURL: `${COMMON_API}lungAssessment/startAssesment`,
   getAssessmentUrl: `${COMMON_API}lungAssessment/getAssesment`,
   getAssessmentIdUrl: `${COMMON_API}lungAssessment/getAssesmentDetails`,
+
+  /* Customization APIs*/
+  getAllRegistrationData: `${COMMON_API}customization/fetchAllData`,
+
+  /** Previous Anthropometry  Urls */
+  getPreviousAnthropometryUrl: `${MMU_API}anthropometryVitals/getBenHeightDetailsFrmNurse`,
+  /*Health ID OTP Generation URL*/
+  otpGenerationUrl: `${FHIR_API}healthID/generateOTP`,
+  otpGenerationWithUIDUrl: `${FHIR_API}healthIDWithUID/generateOTP`,
+  healthIdGenerationUrl: `${FHIR_API}healthID/verifyOTPAndGenerateHealthID`,
+  healthIdGenerationWithUIDUrl: `${FHIR_API}healthIDWithUID/createHealthIDWithUID`,
+  verifyOTPUrl: `${FHIR_API}healthIDWithUID/verifyOTP`,
+  checkAndGenerateMobileOTPUrl: `${FHIR_API}healthIDWithUID/checkAndGenerateMobileOTP`,
+  verifyMobileOTPUrl: `${FHIR_API}healthIDWithUID/verifyMobileOTP`,
+  gethealthIdDetailsUrl: `${FHIR_API}healthID/getBenhealthID`,
+  mapHealthIdUrl: `${FHIR_API}healthID/mapHealthIDToBeneficiary`,
+
+  /*Health ID - care context Mapping*/
+  careContextGenerateOtpUrl: `${FHIR_API}careContext/generateOTPForCareContext`,
+  verifyOtpForMappingContextUrl: `${FHIR_API}careContext/validateOTPAndCreateCareContext`,
+
+  /*Health ID Validation URL*/
+  generateOTPForHealthIDValidation: `${FHIR_API}validate/generateOTPForHealthIDValidation`,
+  verifyOTPForHealthIDValidation: `${FHIR_API}validate/verifyOTPForHealthIDValidation`,
+
+  /* Health ID Card Generation*/
+  generateOTPForHealthIDCard: `${FHIR_API}healthIDCard/generateOTP`,
+  verifyOTPAndGenerateHealthCard: `${FHIR_API}healthIDCard/verifyOTPAndGenerateHealthCard`,
+  updateAmritIDInMongo: `${FHIR_API}patient/data/patient/updateAmritIdMongo`,
+
+  /*Family Tagging Urls */
+  relationShipUrl: `${TM_API}registrar/registrarMasterData`,
+  saveFamilyTaggingUrl: `${IDENTITY_API}family/addTag`,
+  editFamilyTaggingUrl: `${IDENTITY_API}family/editFamilyTagging`,
+  untagFamilyUrl: `${IDENTITY_API}family/untag`,
+  familySearchUrl: `${IDENTITY_API}family/searchFamily`,
+  createFamilyUrl: `${IDENTITY_API}family/createFamily`,
+  getFamilyMemberUrl: `${IDENTITY_API}family/getFamilyDetails`,
+
+  /* ABDM Mapped Facility */
+  getAbdmMappedFacility: `${COMMON_API}facility/getWorklocationMappedAbdmFacility/`,
+  saveAbdmFacilityIdForVisit: `${FHIR_API}facility/saveAbdmFacilityId`,
+
+  /* Abha V3 APIs */
+  requestOtpForAbhaEnroll: `${FHIR_API}abhaCreation/requestOtpForAbhaEnrollment`,
+  abhaEnrollmentByAadhaar: `${FHIR_API}abhaCreation/abhaEnrollmentByAadhaar`,
+  verifyMobileForAbhaAuth: `${FHIR_API}abhaCreation/verifyAuthByMobile`,
+  requestOtpForLogin: `${FHIR_API}abhaLogin/abhaLoginRequestOtp`,
+  verifyOtpForLogin: `${FHIR_API}abhaLogin/verifyAbhaLogin`,
+  printPngCard: `${FHIR_API}abhaCreation/printAbhaCard`,
+  printWebLoginPhrCard: `${FHIR_API}abhaCreation/printWebLoginPhrCard`,
+
+  // ABHA properties
+  abhaExtension: '@sbx', // or '@abdm' based on your environment
+  confirmAadharBio: `${FHIR_API}healthIDWithBio/confirmWithAadhaarBio`,
+  generateABHAForBio: `${FHIR_API}healthIDWithBio/verifyBio`,
+  generateABHAForBioMobileOTP: `${FHIR_API}healthIDWithBio/generateMobileOTP`,
+
+  getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`,
 };

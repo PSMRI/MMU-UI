@@ -22,11 +22,15 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class DataSyncService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    readonly sessionstorage: SessionStorageService
+  ) {}
 
   getDataSYNCGroup() {
     return this.http.get(environment.getDataSYNCGroupUrl);
@@ -50,18 +54,28 @@ export class DataSyncService {
     });
   }
 
-  syncUploadData(groupID: any) {
+  syncUploadData() {
     const req = {
-      groupID: groupID,
-      user: localStorage.getItem('userName'),
-      vanID: JSON.parse(localStorage.getItem('serviceLineDetails') ?? '{}')
-        ?.vanID,
+      user: this.sessionstorage.getItem('userName'),
+      vanID: JSON.parse(
+        this.sessionstorage.getItem('serviceLineDetails') ?? '{}'
+      )?.vanID,
     };
     console.log(req, 'reqobj');
 
     return this.http.post(environment.syncDataUploadUrl, req);
   }
+  syncAllGroups() {
+    const req = {
+      user: this.sessionstorage.getItem('userName'),
+      vanID: JSON.parse(
+        this.sessionstorage.getItem('serviceLineDetails') ?? '{}'
+      )?.vanID,
+    };
+    console.log(req, 'reqobj');
 
+    return this.http.post(environment.syncDataUploadUrl, req);
+  }
   syncDownloadData(reqObj: any) {
     return this.http.post(environment.syncDataDownloadUrl, reqObj);
   }

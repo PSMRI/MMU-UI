@@ -33,12 +33,13 @@ import { BeneficiaryDetailsService } from '../../core/services/beneficiary-detai
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { DoctorService, MasterdataService } from '../shared/services';
 import { CameraService } from '../../core/services/camera.service';
-import moment from 'moment';
+import * as moment from 'moment';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-doctor-worklist',
   templateUrl: './doctor-worklist.component.html',
@@ -78,11 +79,12 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
     private confirmationService: ConfirmationService,
     private httpServiceService: HttpServiceService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
+    readonly sessionstorage: SessionStorageService,
     private doctorService: DoctorService
   ) {}
 
   ngOnInit() {
-    localStorage.setItem('currentRole', 'Doctor');
+    this.sessionstorage.setItem('currentRole', 'Doctor');
     this.fetchLanguageResponse();
     this.removeBeneficiaryDataForDoctorVisit();
     this.loadWorklist();
@@ -91,21 +93,21 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   ngOnDestroy() {
-    localStorage.removeItem('currentRole');
+    sessionStorage.removeItem('currentRole');
   }
 
   removeBeneficiaryDataForDoctorVisit() {
-    localStorage.removeItem('visitCode');
-    localStorage.removeItem('beneficiaryGender');
-    localStorage.removeItem('benFlowID');
-    localStorage.removeItem('visitCategory');
-    localStorage.removeItem('beneficiaryRegID');
-    localStorage.removeItem('visitID');
-    localStorage.removeItem('beneficiaryID');
-    localStorage.removeItem('doctorFlag');
-    localStorage.removeItem('nurseFlag');
-    localStorage.removeItem('pharmacist_flag');
-    localStorage.removeItem('caseSheetTMFlag');
+    sessionStorage.removeItem('visitCode');
+    sessionStorage.removeItem('beneficiaryGender');
+    sessionStorage.removeItem('benFlowID');
+    sessionStorage.removeItem('visitCategory');
+    sessionStorage.removeItem('beneficiaryRegID');
+    sessionStorage.removeItem('visitID');
+    sessionStorage.removeItem('beneficiaryID');
+    sessionStorage.removeItem('doctorFlag');
+    sessionStorage.removeItem('nurseFlag');
+    sessionStorage.removeItem('pharmacist_flag');
+    sessionStorage.removeItem('caseSheetTMFlag');
   }
 
   pageChanged(event: any): void {
@@ -223,7 +225,7 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
   loadDoctorExaminationPage(beneficiary: any) {
     console.log('beneficiary', JSON.stringify(beneficiary, null, 4));
 
-    localStorage.setItem('visitCode', beneficiary.visitCode);
+    this.sessionstorage.setItem('visitCode', beneficiary.visitCode);
     if (beneficiary.statusCode === 1) {
       this.routeToWorkArea(beneficiary);
     } else if (beneficiary.statusCode === 2) {
@@ -246,13 +248,16 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   routeToCaseSheet(beneficiary: any) {
-    localStorage.setItem('caseSheetBenFlowID', beneficiary.benFlowID);
-    localStorage.setItem('caseSheetVisitCategory', beneficiary.VisitCategory);
-    localStorage.setItem(
+    this.sessionstorage.setItem('caseSheetBenFlowID', beneficiary.benFlowID);
+    this.sessionstorage.setItem(
+      'caseSheetVisitCategory',
+      beneficiary.VisitCategory
+    );
+    this.sessionstorage.setItem(
       'caseSheetBeneficiaryRegID',
       beneficiary.beneficiaryRegID
     );
-    localStorage.setItem('caseSheetVisitID', beneficiary.benVisitID);
+    this.sessionstorage.setItem('caseSheetVisitID', beneficiary.benVisitID);
     this.router.navigate(['/nurse-doctor/print/' + 'MMU' + '/' + 'current']);
   }
 
@@ -279,15 +284,18 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   setDataForWorkArea(beneficiary: any) {
-    localStorage.setItem('beneficiaryGender', beneficiary.genderName);
-    localStorage.setItem('benFlowID', beneficiary.benFlowID);
-    localStorage.setItem('visitCategory', beneficiary.VisitCategory);
-    localStorage.setItem('beneficiaryRegID', beneficiary.beneficiaryRegID);
-    localStorage.setItem('visitID', beneficiary.benVisitID);
-    localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
-    localStorage.setItem('doctorFlag', beneficiary.doctorFlag);
-    localStorage.setItem('nurseFlag', beneficiary.nurseFlag);
-    localStorage.setItem('pharmacist_flag', beneficiary.pharmacist_flag);
+    this.sessionstorage.setItem('beneficiaryGender', beneficiary.genderName);
+    this.sessionstorage.setItem('benFlowID', beneficiary.benFlowID);
+    this.sessionstorage.setItem('visitCategory', beneficiary.VisitCategory);
+    this.sessionstorage.setItem(
+      'beneficiaryRegID',
+      beneficiary.beneficiaryRegID
+    );
+    this.sessionstorage.setItem('visitID', beneficiary.benVisitID);
+    this.sessionstorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
+    this.sessionstorage.setItem('doctorFlag', beneficiary.doctorFlag);
+    this.sessionstorage.setItem('nurseFlag', beneficiary.nurseFlag);
+    this.sessionstorage.setItem('pharmacist_flag', beneficiary.pharmacist_flag);
 
     return true;
   }

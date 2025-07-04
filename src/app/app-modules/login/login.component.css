@@ -104,18 +104,25 @@ mat-card-title {
 }
 
 .full-width-login {
-    width: 100%;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    width: 93%;
+    /* margin-top: 10px;
+    margin-bottom: 10px; */
+    margin: 10px 0px 10px 16.5px;
     font-size: 20px;
     color: white;
     border: none;
     height: 35px;
 }
-
-.justify-content-between {
-    justify-content: space-between;
+a{
+    text-decoration: unset;
 }
+a:hover {
+    text-decoration: underline;
+  }
+
+/* .justify-content-between {
+    justify-content: space-between;
+} */
 
 .input:-webkit-autofill, input:-webkit-autofill:focus, input:-webkit-autofill:hover {
     box-shadow: 0 0 0 20px white inset !important;
@@ -124,4 +131,26 @@ mat-card-title {
 input::-ms-reveal,
 input::-ms-clear {
     display: none;
+}
+.mat_form_field_width ::ng-deep  .mat-mdc-text-field-wrapper {
+    width: 138% !important;
+}
+
+/* .sr-only is a visually hidden class but useful for screen readers */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+    white-space: nowrap;
+}  
+.disabledLoginButton {
+    background-color: #ccc !important;
+    color: #666 !important;
+    cursor: not-allowed;
+    box-shadow: none !important;
 }

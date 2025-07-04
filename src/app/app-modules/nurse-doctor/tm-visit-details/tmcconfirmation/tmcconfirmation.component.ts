@@ -38,6 +38,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { DataSyncLoginComponent } from 'src/app/app-modules/core/components/data-sync-login/data-sync-login.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-tmcconfirmation',
@@ -89,12 +90,13 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
     private doctorService: DoctorService,
     private dialog: MatDialog,
     private idrsScoreService: IdrsscoreService,
+    readonly sessionstorage: SessionStorageService,
     private httpServices: HttpServiceService
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    //this.visitCategory = localStorage.getItem("visiCategoryANC");
+    //this.visitCategory = this.sessionstorage.getItem("visiCategoryANC");
     this.visitCategory =
       this.patientVisitDetailsForm.controls['visitCategory'].value;
     this.getVisitReasonAndCategory();
@@ -122,7 +124,7 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
       this.prescribedDrugDataFromCaseSheet =
         this.doctorService.prescribedDrugData;
     }
-    if (localStorage.getItem('disableNoOnSuccessOfYes') === 'true') {
+    if (this.sessionstorage.getItem('disableNoOnSuccessOfYes') === 'true') {
       this.disableNoOnSuccessOfYes = true;
     } else {
       this.disableNoOnSuccessOfYes = false;
@@ -146,9 +148,9 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
     // sessionStorage.removeItem("tmCaseSheet");
   }
   getReferDetails() {
-    this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-    this.visitID = localStorage.getItem('visitID');
-    //this.visitCategory = localStorage.getItem('visitCategory');
+    this.beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
+    this.visitID = this.sessionstorage.getItem('visitID');
+    //this.visitCategory = this.sessionstorage.getItem('visitCategory');
     this.referSubscription = this.doctorService
       .getCaseRecordAndReferDetails(
         this.beneficiaryRegID,
@@ -178,7 +180,7 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
   }
   checkDiabetes() {
     const obj = {
-      benRegID: localStorage.getItem('beneficiaryRegID'),
+      benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
     };
     this.nurseService.getPreviousVisitData(obj).subscribe((res: any) => {
       if (res.statusCode === 200 && res.data !== null) {
@@ -227,7 +229,7 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
         return category.visitCategory === visitCategory;
       });
       if (temp.length > 0) {
-        localStorage.setItem(
+        this.sessionstorage.setItem(
           'caseSheetVisitCategoryID',
           temp[0].visitCategoryID
         );
@@ -238,7 +240,7 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
   }
   getDoctorMasterData(visitCategory: string) {
     const visitID = this.getVisitCategoryID(this.visitCategory);
-    const serviceProviderID = localStorage.getItem('providerServiceID');
+    const serviceProviderID = this.sessionstorage.getItem('providerServiceID');
     if (visitID) {
       this.masterdataService
         .getDoctorMasterDataForNurse(visitID, serviceProviderID)
@@ -264,22 +266,28 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
     // this.openDialog();
   }
   onceAuthorizeViewTMCS() {
-    const beneficiaryDataDetail: any = localStorage.getItem('beneficiaryData');
+    const beneficiaryDataDetail: any =
+      this.sessionstorage.getItem('beneficiaryData');
     this.beneficiaryData = JSON.parse(beneficiaryDataDetail);
     this.setCasesheetData(this.beneficiaryData);
     let caseSheetRequest;
-    const specialistFlagValue: any = localStorage.getItem('specialistFlag');
+    const specialistFlagValue: any =
+      this.sessionstorage.getItem('specialistFlag');
     if (
-      localStorage.getItem('caseSheetTMFlag') === 'true' ||
+      this.sessionstorage.getItem('caseSheetTMFlag') === 'true' ||
       parseInt(specialistFlagValue) === 200
     ) {
-      this.visitCategory = localStorage.getItem('caseSheetVisitCategory');
+      this.visitCategory = this.sessionstorage.getItem(
+        'caseSheetVisitCategory'
+      );
       caseSheetRequest = {
-        VisitCategory: localStorage.getItem('caseSheetVisitCategory'),
-        benFlowID: localStorage.getItem('caseSheetBenFlowID'),
-        benVisitID: localStorage.getItem('caseSheetVisitID'),
-        beneficiaryRegID: localStorage.getItem('caseSheetBeneficiaryRegID'),
-        visitCode: localStorage.getItem('caseSheetVisitCode'),
+        VisitCategory: this.sessionstorage.getItem('caseSheetVisitCategory'),
+        benFlowID: this.sessionstorage.getItem('caseSheetBenFlowID'),
+        benVisitID: this.sessionstorage.getItem('caseSheetVisitID'),
+        beneficiaryRegID: this.sessionstorage.getItem(
+          'caseSheetBeneficiaryRegID'
+        ),
+        visitCode: this.sessionstorage.getItem('caseSheetVisitCode'),
       };
       this.getTMReferredCasesheetData(caseSheetRequest);
     }
@@ -292,9 +300,9 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
         (res: any) => {
           if (res && res.statusCode === 200 && res.data) {
             this.idrsScoreService.setTMCSubmit(false);
-            localStorage.setItem('disableNoOnSuccessOfYes', 'true');
+            this.sessionstorage.setItem('disableNoOnSuccessOfYes', 'true');
             sessionStorage.setItem('tmCaseSheet', 'true');
-            this.disableNoOnSuccessOfYes = localStorage.getItem(
+            this.disableNoOnSuccessOfYes = this.sessionstorage.getItem(
               'disableNoOnSuccessOfYes'
             );
             //checking hypertension in confirmed diseases
@@ -361,15 +369,18 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
   setCasesheetData(beneficiary: any) {
-    localStorage.setItem('caseSheetBenFlowID', beneficiary.benFlowID);
-    localStorage.setItem('caseSheetVisitCategory', beneficiary.VisitCategory);
-    localStorage.setItem(
+    this.sessionstorage.setItem('caseSheetBenFlowID', beneficiary.benFlowID);
+    this.sessionstorage.setItem(
+      'caseSheetVisitCategory',
+      beneficiary.VisitCategory
+    );
+    this.sessionstorage.setItem(
       'caseSheetBeneficiaryRegID',
       beneficiary.beneficiaryRegID
     );
-    localStorage.setItem('caseSheetVisitID', beneficiary.benVisitID);
-    localStorage.setItem('caseSheetVisitCode', beneficiary.visitCode);
-    localStorage.setItem('caseSheetTMFlag', 'true');
+    this.sessionstorage.setItem('caseSheetVisitID', beneficiary.benVisitID);
+    this.sessionstorage.setItem('caseSheetVisitCode', beneficiary.visitCode);
+    this.sessionstorage.setItem('caseSheetTMFlag', 'true');
   }
   routeToCaseSheet() {
     this.router.navigate(['/nurse-doctor/print/' + 'MMU' + '/' + 'current']);

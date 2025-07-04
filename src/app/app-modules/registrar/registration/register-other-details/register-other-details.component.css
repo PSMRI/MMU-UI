@@ -12,3 +12,6 @@
     float: left;
     font-size: 12px;
 }
+/* .mat_form_field_width ::ng-deep  .mat-mdc-text-field-wrapper {
+    width: 90% !important;
+} */

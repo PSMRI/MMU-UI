@@ -51,7 +51,8 @@ export class ReferComponent implements OnInit {
         this.visitCategory === 'NCD care' ||
         this.visitCategory === 'PNC' ||
         this.visitCategory === 'COVID-19 Screening' ||
-        this.visitCategory === 'NCD screening'
+        this.visitCategory === 'NCD screening' ||
+        this.visitCategory === 'General OPD (QC)'
           ? true
           : false;
       this.showCancer =
