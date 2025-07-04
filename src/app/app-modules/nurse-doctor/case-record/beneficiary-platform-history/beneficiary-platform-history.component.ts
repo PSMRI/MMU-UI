@@ -291,10 +291,6 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
             },
           });
         }
-      } else {
-        this.confirmationService.alert(
-          this.current_language_set.alerts.info.noCasesheet
-        );
       }
     });
   }
