@@ -240,6 +240,7 @@ button, input, optgroup, select, textarea {
   padding: 0;
   left: 20px;
   bottom: 50px;
+  margin-right: 10px;
   z-index: 3;
 }
 .mat_icon_blue{
