@@ -37,7 +37,7 @@ const TM_API = '<%= TM_API_BASE %>';
 const COMMON_API_OPEN_SYNC = '<%= COMMON_API_OPEN_SYNC %>';
 const SCHEDULER_API =  '<%= SCHEDULER_API_BASE %>';
 const SCHEDULER_UI =  '<%= SCHEDULER_UI_BASE %>';
-const INVENTORY_UI =  '<%= INVENTORY_UI_BASE %>';
+const INVENTORY_UI =  '<%= INVENTORY_UI %>';
 const IDENTITY_API =  '<%= IDENTITY_API_BASE %>';
 const sessionStorageEncKey = '<%= SESSION_STORAGE_ENC_KEY %>';
 
@@ -58,7 +58,7 @@ export const environment = {
   haemoglobinTest: `Haemoglobin Test`,
   parentAPI: `${MMU_API}`,
 
-  INVENTORY_URL: `${INVENTORY_UI}inventory/#/redirin?`,
+  INVENTORY_URL: `${INVENTORY_UI}#/redirin?`,
   fallbackUrl: `/pharmacist/redirfallback`,
   redirInUrl: `/pharmacist/redirin`,
 
