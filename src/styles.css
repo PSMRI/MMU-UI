@@ -240,6 +240,7 @@ button, input, optgroup, select, textarea {
   padding: 0;
   left: 20px;
   bottom: 50px;
+  margin-right: 10px;
   z-index: 3;
 }
 .mat_icon_blue{
@@ -864,6 +865,11 @@ input.mat-input-element {
   background-image: linear-gradient(to right, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.42) 33%, transparent 0%) !important;
   */
 }
+
+.input-full-width {
+    width: 100%;
+}
+
 @media only screen and (min-width:768px) and (max-width:1023px) {
 	.box{
 		height: auto !important;
