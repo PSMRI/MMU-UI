@@ -3,20 +3,21 @@
     <div
       class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
       *ngIf="enableTTStatus_1_2 || enableTTStatus_1_2_b">
-      <mat-label class="mat-label-text">{{
-        current_language_set?.ancData?.ancImmune?.tt1Status
-      }}</mat-label>
-      <mat-select
-        class="input-full-width"
-        name="tT_1Status"
-        formControlName="tT_1Status"
-        (selectionChange)="checkTT_1Status(tT_1Status)">
-        <mat-option
-          *ngFor="let immunizationStatus_1 of selectImmunizationStatus"
-          [value]="immunizationStatus_1">
-          {{ immunizationStatus_1 }}
-        </mat-option>
-      </mat-select>
+      <mat-form-field class="input-full-width">
+        <mat-label class="mat-label-text">{{
+          current_language_set?.ancData?.ancImmune?.tt1Status
+        }}</mat-label>
+        <mat-select
+          name="tT_1Status"
+          formControlName="tT_1Status"
+          (selectionChange)="checkTT_1Status(tT_1Status)">
+          <mat-option
+            *ngFor="let immunizationStatus_1 of selectImmunizationStatus"
+            [value]="immunizationStatus_1">
+            {{ immunizationStatus_1 }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
     <div
       class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
@@ -34,7 +35,6 @@
           [max]="today"
           [matDatepicker]="dateReceivedForTT_1Picker"
           (dateChange)="checkTT_1Date(dateReceivedForTT_1)" />
-        <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle
           matSuffix
           [for]="dateReceivedForTT_1Picker"></mat-datepicker-toggle>
@@ -49,6 +49,7 @@
       }}</label>
       <div class="clearfix"></div>
       <mat-radio-group
+        style="margin-left: -9px"
         name="facilityNameOfTT_1"
         formControlName="facilityNameOfTT_1">
         <mat-radio-button
@@ -78,20 +79,21 @@
         (enableTTStatus_1_2 && tT_1Status !== null) ||
         (enableTTStatus_1_2_b && tT_1Status !== null)
       ">
-      <mat-label class="mat-label-text">{{
-        current_language_set?.ancData?.ancImmune?.tt2Status
-      }}</mat-label>
-      <mat-select
-        class="input-full-width"
-        name="tT_2Status"
-        formControlName="tT_2Status"
-        (selectionChange)="checkTT_2Status(tT_2Status)">
-        <mat-option
-          *ngFor="let immunizationStatus_2 of selectImmunizationStatus"
-          [value]="immunizationStatus_2">
-          {{ immunizationStatus_2 }}
-        </mat-option>
-      </mat-select>
+      <mat-form-field class="input-full-width">
+        <mat-label class="mat-label-text">{{
+          current_language_set?.ancData?.ancImmune?.tt2Status
+        }}</mat-label>
+        <mat-select
+          name="tT_2Status"
+          formControlName="tT_2Status"
+          (selectionChange)="checkTT_2Status(tT_2Status)">
+          <mat-option
+            *ngFor="let immunizationStatus_2 of selectImmunizationStatus"
+            [value]="immunizationStatus_2">
+            {{ immunizationStatus_2 }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
     <div
       class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
@@ -99,8 +101,8 @@
         (tT_2Status === 'Received' && enableTTStatus_1_2) ||
         (tT_2Status === 'Received' && enableTTStatus_1_2_b)
       ">
-      <mat-form-field class="fieldAlignment fontStyle">
-        <mat-label class="mat-label-text" class="fontStyle">{{
+      <mat-form-field class="fieldAlignment fontStyle input-full-width">
+        <mat-label class="mat-label-text">{{
           current_language_set?.ancData?.ancImmune?.dateReceived
         }}</mat-label>
         <input
@@ -112,7 +114,6 @@
           [max]="today"
           [matDatepicker]="dateReceivedForTT_2Picker"
           (dateChange)="checkTT_2Date(dateReceivedForTT_2)" />
-        <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle
           matSuffix
           [for]="dateReceivedForTT_2Picker"></mat-datepicker-toggle>
@@ -130,6 +131,7 @@
       }}</label>
       <div class="clearfix"></div>
       <mat-radio-group
+        style="margin-left: -9px"
         name="facilityNameOfTT_2"
         formControlName="facilityNameOfTT_2">
         <mat-radio-button
@@ -159,20 +161,21 @@
         (enableTTStatus_1_2_b && tT_1Status !== null && tT_2Status !== null) ||
         (enableTTStatus_1_2 && tT_1Status === 'NA' && tT_2Status !== null)
       ">
-      <mat-label class="mat-label-text">{{
-        current_language_set?.ancData?.ancImmune?.ttBoosterStatus
-      }}</mat-label>
-      <mat-select
-        class="input-full-width"
-        name="tT_3Status"
-        formControlName="tT_3Status"
-        (selectionChange)="checkTT_3Status(tT_3Status)">
-        <mat-option
-          *ngFor="let immunizationStatus_3 of selectImmunizationStatus"
-          [value]="immunizationStatus_3">
-          {{ immunizationStatus_3 }}
-        </mat-option>
-      </mat-select>
+      <mat-form-field class="input-full-width">
+        <mat-label class="mat-label-text">{{
+          current_language_set?.ancData?.ancImmune?.ttBoosterStatus
+        }}</mat-label>
+        <mat-select
+          name="tT_3Status"
+          formControlName="tT_3Status"
+          (selectionChange)="checkTT_3Status(tT_3Status)">
+          <mat-option
+            *ngFor="let immunizationStatus_3 of selectImmunizationStatus"
+            [value]="immunizationStatus_3">
+            {{ immunizationStatus_3 }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
     <div
       class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
@@ -195,7 +198,6 @@
           [min]="tT_3Date"
           [max]="today"
           [matDatepicker]="dateReceivedForTT_3Picker" />
-        <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle
           matSuffix
           [for]="dateReceivedForTT_3Picker"></mat-datepicker-toggle>
@@ -216,6 +218,7 @@
       }}</label>
       <div class="clearfix"></div>
       <mat-radio-group
+        style="margin-left: -9px"
         name="facilityNameOfTT_3"
         formControlName="facilityNameOfTT_3">
         <mat-radio-button

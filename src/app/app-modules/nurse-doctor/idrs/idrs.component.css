@@ -48,3 +48,25 @@ height: 50px !important;
   clear: both;
   display: table;
 }
+.table>thead>tr>th {
+  vertical-align: bottom !important;
+  border-bottom: 2px solid #ddd !important;
+}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+  padding: 3px !important;
+  line-height: 1.42857143 !important;
+  vertical-align: baseline !important;
+  border-top: 1px solid #ddd !important;
+}
+.table>caption+thead>tr:first-child>td, .table>caption+thead>tr:first-child>th, .table>colgroup+thead>tr:first-child>td, .table>colgroup+thead>tr:first-child>th, .table>thead:first-child>tr:first-child>td, .table>thead:first-child>tr:first-child>th {
+  border-top: 0 !important;
+}
+.table>:not(caption)>*>* {
+  padding:unset !important;
+  border-bottom-width: inherit !important;
+  
+}
+h4 {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}

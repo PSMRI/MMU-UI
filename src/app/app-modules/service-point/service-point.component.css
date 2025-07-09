@@ -1,5 +1,6 @@
 .radio-btn {
   margin-left: 8px;
+  font-weight: 700;
 }
 
 .align-Field {
@@ -13,7 +14,7 @@
 }
 
 .matCardService {
-  width: 500px;
+  width: 550px;
   margin-left: 10px;
   margin-right: 10px;
   border-radius: 5px;
@@ -38,5 +39,29 @@
 mat-card-actions {
   display: block;
   float: right;
+}
+.mat_form_field_width ::ng-deep .mat-mdc-text-field-wrapper {
+  padding-right: unset !important;
+}
+.mat-form-field-width{
+  width:185%;
+}
+
+@media screen  and (min-width:768px) and (max-width:1024px) {
+    
+}
+@media screen  and (min-width:360px) and (max-width:430px) {
+  
+  .matCardService {
+    width: 354px !important;
+    
+}
+.radio-btn {
+  margin-left: unset !important;
+  font-weight: unset !important;
+}
+.mat-form-field-width{
+  width:180%;
+}
 }
 

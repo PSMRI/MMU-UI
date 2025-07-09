@@ -28,31 +28,31 @@ h5 {
     border-bottom: 1px solid lightgray;
 }
 
-.input-full-width>>>.mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mat-mdc-form-field-infix {
+.input-full-width::ng-deep .mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mat-mdc-form-field-infix {
     padding-top: 16px;
     padding-bottom: 16px;
-    background-color: #f0f5f5 !important;
+    /* background-color: #f0f5f5 !important; */
     margin-left: unset;
 }
 
-.input_style>>>.mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mat-mdc-form-field-infix {
+.input_style::ng-deep .mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mat-mdc-form-field-infix {
     padding-top: 16px;
     padding-bottom: 16px;
-    background-color: #f0f5f5 !important;
+    /* background-color: #f0f5f5 !important; */
     margin-left: unset;
 }
 
-.input_style>>>.mdc-text-field {
+.input_style::ng-deep .mdc-text-field {
     padding: unset !important;
 }
 
-.input-full-width>>>.mdc-text-field {
+.input-full-width::ng-deep .mdc-text-field {
     padding: unset !important;
 }
 
-.input-full-width>>>.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::before {
+/* .input-full-width::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::before {
     border-bottom-style: dotted !important;
-}
+} */
 
 .btn-warn {
     background-color: red;
@@ -72,11 +72,15 @@ h5 {
     width: 40px;
     height: 40px;
 }
-.input-full-width >>> .mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input {
+/* .input-full-width ::ng-deep  .mat-mdc-form-field:not(.mat-form-field-no-animations) .mdc-text-field__input {
     border-bottom-style: unset !important;
-}
+} */
 
-.input-full-width>>>.mat-mdc-text-field-wrapper:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix {
+/* .input-full-width::ng-deep .mat-mdc-text-field-wrapper:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix {
 
     background-color: #f0f5f5 !important;
-}
+} */
+table, td, th {
+    border: 1px solid #ddd;
+    border-bottom: 2px solid #ddd ;
+  }

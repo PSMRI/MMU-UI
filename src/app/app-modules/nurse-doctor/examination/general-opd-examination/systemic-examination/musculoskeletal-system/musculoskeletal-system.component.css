@@ -1,5 +1,7 @@
 h5{
-    font-weight: bold;
+    font-weight: 700;
+    font-size: 15px !important
+    
 }
 
 .mat-expansion-panel-header{

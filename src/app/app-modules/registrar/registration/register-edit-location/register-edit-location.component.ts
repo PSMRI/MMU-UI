@@ -22,11 +22,12 @@
 
 import { Component, OnInit, Inject, Input, DoCheck } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
-import { RegistrarService } from '../../shared/services/registrar.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { RegistrarService } from '../../shared/services/registrar.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-register-edit-location',
@@ -51,6 +52,7 @@ export class RegisterEditLocationComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     private httpServiceService: HttpServiceService,
     private fb: FormBuilder,
+    readonly sessionstorage: SessionStorageService,
     private languageComponent: SetLanguageComponent
   ) {}
 
@@ -72,12 +74,12 @@ export class RegisterEditLocationComponent implements OnInit, DoCheck {
     //this.statesList = this.input.dataList.data;
   }
   configState() {
-    const location: any = localStorage.getItem('location');
+    const location: any = this.sessionstorage.getItem('location');
     this.demographicsMaster = Object.assign(
       {},
       JSON.parse(location),
-      { servicePointID: localStorage.getItem('servicePointID') },
-      { servicePointName: localStorage.getItem('servicePointName') }
+      { servicePointID: this.sessionstorage.getItem('servicePointID') },
+      { servicePointName: this.sessionstorage.getItem('servicePointName') }
     );
   }
   loadState() {

@@ -1,11 +1,11 @@
-.tabs_css >>> .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+.tabs_css ::ng-deep  .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
     color:unset !important;
 }
-.tabs_css >>> .mat-mdc-tab-labels {
+.tabs_css ::ng-deep  .mat-mdc-tab-labels {
     width: 25rem !important;
 }
 
-.tabs_css >>> .mat-mdc-tab {
+.tabs_css ::ng-deep  .mat-mdc-tab {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -18,6 +18,6 @@
     font-weight: var(--mat-tab-header-label-text-weight);
 }
 
-.tabs_css >>> .mat-tab-group.mat-primary .mat-tab-label:focus, .mat-tab-group.mat-primary .mat-tab-link:focus, .mat-tab-nav-bar.mat-primary .mat-tab-label:focus, .mat-tab-nav-bar.mat-primary .mat-tab-link:focus {
+.tabs_css ::ng-deep  .mat-tab-group.mat-primary .mat-tab-label:focus, .mat-tab-group.mat-primary .mat-tab-link:focus, .mat-tab-nav-bar.mat-primary .mat-tab-label:focus, .mat-tab-nav-bar.mat-primary .mat-tab-link:focus {
     background-color: rgba(179, 229, 252, 0.3);
 }

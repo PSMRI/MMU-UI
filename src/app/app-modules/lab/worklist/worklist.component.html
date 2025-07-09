@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="row m-t-10">
-    <div class="col-xs-8 col-sm-6 col-md-4">
+    <div class="col-xs-8 col-sm-6 col-md-4 fit_to_content">
       <div class="sw">
         <input
           type="search"
@@ -15,7 +15,7 @@
         </button>
       </div>
     </div>
-    <div class="col-xs-4 col-sm-6 col-md-8">
+    <div class="col-xs-4 col-sm-6 col-md-8 fit_to_content">
       <button
         mat-raised-button
         id="caseSheetButton"
@@ -38,9 +38,10 @@
   <div class="row m-t-10 m-b-40">
     <div class="col-sm-12">
       <mat-card>
-        <section class="table-responsive">
+        <section class="">
           <table
             mat-table
+            class="table table-striped"
             [dataSource]="dataSource"
             aria-describedby="beneficiaryData">
             <ng-container matColumnDef="sno">
@@ -214,7 +215,7 @@
             <strong>{{ current_language_set?.noRecordsFound }}</strong>
           </div>
           <mat-paginator
-            [hidden]="dataSource.data.length >= 0"
+            [hidden]="dataSource.data.length === 0"
             [pageSizeOptions]="[5, 10, 20]"
             [pageSize]="5"
             showFirstLastButtons

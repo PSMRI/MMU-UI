@@ -11,8 +11,8 @@
 <div class="container-fluid">
   <div class="row no-gutters">
     <div class="col-xs-12 col-sm-4">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{ placeHolderSearch }}</mat-label>
+      <mat-form-field>
+        <mat-label>{{ placeHolderSearch }}</mat-label>
         <input
           autocomplete="off"
           #inputSearch="ngModel"
@@ -97,7 +97,7 @@
       <strong>{{ current_language_set?.noRecordsFound }}</strong>
     </div>
     <mat-paginator
-      [hidden]="diagnosis.data.length > 0"
+      [hidden]="diagnosis.data.length === 0"
       [pageSizeOptions]="[5, 10, 20]"
       [pageSize]="5"
       showFirstLastButtons>

@@ -25,9 +25,9 @@ h5{
 .mat-form-field {
     line-height: unset;
 }
-.mat_form_field_width >>>text-field-wrapper .mat-mdc-form-field-input-control {
-    height: 20px !important;
-}
-.mat_form_field_width >>>.mat-mdc-text-field-wrapper {
-    width: 50% !important;
+
+@media screen  and (min-width:768px) and (max-width:1024px) {
+    .radio-button{
+        margin-right : 0px !important;
+    }  
 }

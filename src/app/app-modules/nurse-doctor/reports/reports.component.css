@@ -30,9 +30,6 @@
   background-color: rgba(0, 0, 0, 0.12);
   color: rgba(0, 0, 0, 0.38);
 }
-.mat_form_field_color >>>.mdc-text-field--filled, .mdc-text-field--focused {
+/* .mat_form_field_color ::ng-deep .mdc-text-field--filled, .mdc-text-field--focused {
   background-color: #f2f2f0 !important;
-}
-.mat_form_field_width >>>.mat-mdc-text-field-wrapper {
-  width: 135% !important;
-}
+} */

@@ -31,6 +31,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { PrintPageSelectComponent } from '../../print-page-select/print-page-select.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-case-sheet',
@@ -66,6 +67,7 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
     private doctorService: DoctorService,
     private route: ActivatedRoute,
     private nurseService: NurseService,
+    readonly sessionstorage: SessionStorageService,
     private confirmationService: ConfirmationService
   ) {}
 
@@ -73,8 +75,8 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
     this.fetchLanguageResponse();
     this.dataStore = this.route.snapshot.params['printablePage'] || 'previous';
     let caseSheetRequest;
-    const caseSheetTMFlag: any = localStorage.getItem('caseSheetTMFlag');
-    const specialistFlag = localStorage.getItem('specialistFlag');
+    const caseSheetTMFlag: any = this.sessionstorage.getItem('caseSheetTMFlag');
+    const specialistFlag = this.sessionstorage.getItem('specialistFlag');
 
     if (
       (caseSheetTMFlag !== null && caseSheetTMFlag === true) ||
@@ -83,41 +85,51 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
       if (caseSheetTMFlag === true) {
         this.enablePrescriptionButton = true;
       }
-      this.visitCategory = localStorage.getItem('caseSheetVisitCategory');
+      this.visitCategory = this.sessionstorage.getItem(
+        'caseSheetVisitCategory'
+      );
 
       caseSheetRequest = {
-        VisitCategory: localStorage.getItem('caseSheetVisitCategory'),
-        benFlowID: localStorage.getItem('caseSheetBenFlowID'),
-        benVisitID: localStorage.getItem('caseSheetVisitID'),
-        beneficiaryRegID: localStorage.getItem('caseSheetBeneficiaryRegID'),
-        visitCode: localStorage.getItem('caseSheetVisitCode'),
+        VisitCategory: this.sessionstorage.getItem('caseSheetVisitCategory'),
+        benFlowID: this.sessionstorage.getItem('caseSheetBenFlowID'),
+        benVisitID: this.sessionstorage.getItem('caseSheetVisitID'),
+        beneficiaryRegID: this.sessionstorage.getItem(
+          'caseSheetBeneficiaryRegID'
+        ),
+        visitCode: this.sessionstorage.getItem('caseSheetVisitCode'),
       };
       this.getTMReferredCasesheetData(caseSheetRequest);
     } else {
       if (this.dataStore === 'current') {
-        this.visitCategory = localStorage.getItem('caseSheetVisitCategory');
+        this.visitCategory = this.sessionstorage.getItem(
+          'caseSheetVisitCategory'
+        );
         caseSheetRequest = {
-          VisitCategory: localStorage.getItem('caseSheetVisitCategory'),
-          benFlowID: localStorage.getItem('caseSheetBenFlowID'),
-          benVisitID: localStorage.getItem('caseSheetVisitID'),
-          beneficiaryRegID: localStorage.getItem('caseSheetBeneficiaryRegID'),
-          visitCode: localStorage.getItem('visitCode'),
+          VisitCategory: this.sessionstorage.getItem('caseSheetVisitCategory'),
+          benFlowID: this.sessionstorage.getItem('caseSheetBenFlowID'),
+          benVisitID: this.sessionstorage.getItem('caseSheetVisitID'),
+          beneficiaryRegID: this.sessionstorage.getItem(
+            'caseSheetBeneficiaryRegID'
+          ),
+          visitCode: this.sessionstorage.getItem('visitCode'),
         };
         this.getCasesheetData(caseSheetRequest);
       }
       if (this.dataStore === 'previous') {
         this.hideBack = true;
 
-        this.visitCategory = localStorage.getItem(
+        this.visitCategory = this.sessionstorage.getItem(
           'previousCaseSheetVisitCategory'
         );
         caseSheetRequest = {
-          VisitCategory: localStorage.getItem('previousCaseSheetVisitCategory'),
-          benFlowID: localStorage.getItem('previousCaseSheetBenFlowID'),
-          beneficiaryRegID: localStorage.getItem(
+          VisitCategory: this.sessionstorage.getItem(
+            'previousCaseSheetVisitCategory'
+          ),
+          benFlowID: this.sessionstorage.getItem('previousCaseSheetBenFlowID'),
+          beneficiaryRegID: this.sessionstorage.getItem(
             'previousCaseSheetBeneficiaryRegID'
           ),
-          visitCode: localStorage.getItem('previousCaseSheetVisitCode'),
+          visitCode: this.sessionstorage.getItem('previousCaseSheetVisitCode'),
         };
         this.getCasesheetData(caseSheetRequest);
       }

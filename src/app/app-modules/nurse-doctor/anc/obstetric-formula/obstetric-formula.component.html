@@ -123,13 +123,12 @@
         (input)="checkLivingChildren(livebirths_L)" />
     </mat-form-field>
   </div>
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box" style="margin: 15px">
-    <mat-form-field>
+  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+    <mat-form-field class="input-full-width">
       <mat-label class="mat-label-text">{{
         current_language_set?.ancData?.obstetricDeatils?.bloodGroupType
       }}</mat-label>
       <mat-select
-        class="input-full-width"
         name="bloodGroup"
         formControlName="bloodGroup"
         [disabled]="disableBloodGroup">

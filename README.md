@@ -31,9 +31,8 @@ This microservice is developed using Java and the Spring Boot framework, with My
 Ensure that the following prerequisites are met before building the MMU service:
 
 * JDK 17
-* Maven
-* NPM/YARN
-* Spring Boot v2
+* Maven 
+* Nodejs v18.10.0
 * MySQL
 
 ### Installation
@@ -66,3 +65,39 @@ It creates a `environment.ci.ts` file with all environment variables used in the
 All the features of the MMU service are exposed as REST endpoints. Please refer to the Swagger API specification for detailed information on how to utilize each feature.
 
 The MMU module offers comprehensive management capabilities for your application.
+
+### Initializing Submodule `Common-UI`
+
+To initialize the `Common-UI` submodule, follow these steps:
+
+1. Clone the `mmu-ui` project:
+   ```bash
+   git clone https://github.com/PSMRI/MMU-UI
+
+2. Navigate to the project directory and pull the latest changes from the develop branch
+   cd mmu-ui
+   git checkout develop
+   git pull origin develop
+
+3. Open the integrated terminal for the common-ui submodule and initialize it
+
+   cd Common-UI
+   git init
+   git remote add origin https://github.com/PSMRI/Common-UI
+   git submodule update --init --recursive
+
+4. Check the available branches and switch to the develop branch
+
+   git branch
+   git checkout develop
+   git pull origin develop
+
+## Filing Issues
+
+If you encounter any issues, bugs, or have feature requests, please file them in the [main AMRIT repository](https://github.com/PSMRI/AMRIT/issues). Centralizing all feedback helps us streamline improvements and address concerns efficiently.  
+
+## Join Our Community
+
+We’d love to have you join our community discussions and get real-time support!  
+Join our [Discord server](https://discord.gg/FVQWsf5ENS) to connect with contributors, ask questions, and stay updated.  
+

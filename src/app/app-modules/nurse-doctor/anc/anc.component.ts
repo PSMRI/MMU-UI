@@ -34,6 +34,7 @@ import { ConfirmationService } from '../../core/services/confirmation.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { BeneficiaryDetailsService } from '../../core/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-nurse-anc',
   templateUrl: './anc.component.html',
@@ -56,7 +57,8 @@ export class AncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     public beneficiaryDetailsService: BeneficiaryDetailsService,
-    private httpServiceService: HttpServiceService
+    private httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -89,8 +91,8 @@ export class AncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
       this.mode !== null &&
       this.mode.toLowerCase() === 'view'
     ) {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.patchDataToFields(benRegID, visitID);
     }
 
@@ -110,21 +112,22 @@ export class AncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
 
   updateANCDetailsSubs: any;
   updatePatientANC(patientANCDataForm: any) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
     const temp = {
-      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
-      benVisitID: localStorage.getItem('visitID'),
-      beneficiaryID: localStorage.getItem('beneficiaryID'),
-      sessionID: localStorage.getItem('sessionID'),
-      modifiedBy: localStorage.getItem('userName'),
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+      benVisitID: this.sessionstorage.getItem('visitID'),
+      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
+      sessionID: this.sessionstorage.getItem('sessionID'),
+      modifiedBy: this.sessionstorage.getItem('userName'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      benFlowID: localStorage.getItem('benFlowID'),
-      visitCode: localStorage.getItem('visitCode'),
+      benFlowID: this.sessionstorage.getItem('benFlowID'),
+      visitCode: this.sessionstorage.getItem('visitCode'),
     };
 
     this.updateANCDetailsSubs = this.doctorService
@@ -200,8 +203,8 @@ export class AncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
       );
   }
   getHRPDetails() {
-    const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-    const visitCode = localStorage.getItem('visitCode');
+    const beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
+    const visitCode = this.sessionstorage.getItem('visitCode');
     this.doctorService
       .getHRPDetails(beneficiaryRegID, visitCode)
       .subscribe((res: any) => {

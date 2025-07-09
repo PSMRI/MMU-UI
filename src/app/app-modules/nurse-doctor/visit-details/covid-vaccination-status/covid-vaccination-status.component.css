@@ -14,3 +14,6 @@
     border-radius: 3px;
     margin-bottom: 10px;
 }
+.mat_form_field_width ::ng-deep .mat-mdc-text-field-wrapper {
+    width: 185% !important;
+}

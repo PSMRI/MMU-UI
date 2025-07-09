@@ -22,6 +22,6 @@ h5{
     height: 60px;
 }
 
-.mat_form_field_width >>>.mat-mdc-text-field-wrapper {
+/* .mat_form_field_width ::ng-deep .mat-mdc-text-field-wrapper {
     width: 95%;
-}
+} */

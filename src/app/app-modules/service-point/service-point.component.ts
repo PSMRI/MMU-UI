@@ -22,12 +22,13 @@
 
 import { Component, DoCheck, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { RegistrarService } from 'src/app/app-modules/registrar/shared/services/registrar.service';
 import { SetLanguageComponent } from '../core/components/set-language.component';
 import { ConfirmationService } from '../core/services';
 import { HttpServiceService } from '../core/services/http-service.service';
 import { ServicePointService } from './service-point.service';
 import { FormBuilder, Validators } from '@angular/forms';
+import { RegistrarService } from '../registrar/shared/services/registrar.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-service-point',
@@ -67,6 +68,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
   subDistrictList: any = [];
   demographicsMaster: any;
   villageList: any = [];
+  userLocationDetails: any;
 
   constructor(
     private router: Router,
@@ -76,7 +78,8 @@ export class ServicePointComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     private httpServiceService: HttpServiceService,
     private registrarService: RegistrarService,
-    private languageComponent: SetLanguageComponent
+    private languageComponent: SetLanguageComponent,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   servicePointForm = this.fb.group({
@@ -96,20 +99,20 @@ export class ServicePointComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.fetchLanguageResponse();
-    this.serviceProviderId = localStorage.getItem('providerServiceID');
-    this.userId = localStorage.getItem('userID');
+    this.serviceProviderId = this.sessionstorage.getItem('providerServiceID');
+    this.userId = this.sessionstorage.getItem('userID');
     this.getServicePoint();
   }
 
-  resetLocalStorage() {
-    localStorage.removeItem('sessionID');
-    localStorage.removeItem('serviceLineDetails');
-    localStorage.removeItem('vanType');
-    localStorage.removeItem('location');
-    localStorage.removeItem('servicePointID');
-    localStorage.removeItem('servicePointName');
-    sessionStorage.removeItem('facilityID');
-  }
+  // resetLocalStorage() {
+  //   sessionStorage.removeItem('sessionID');
+  //   sessionStorage.removeItem('serviceLineDetails');
+  //   sessionStorage.removeItem('vanType');
+  //   sessionStorage.removeItem('location');
+  //   sessionStorage.removeItem('servicePointID');
+  //   // sessionStorage.removeItem('servicePointName');
+  //   sessionStorage.removeItem('facilityID');
+  // }
 
   getServicePoint() {
     this.route.data.subscribe({
@@ -142,7 +145,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
 
   filterVansList() {
     if (this.servicePointForm.controls.sessionID.value)
-      localStorage.setItem(
+      this.sessionstorage.setItem(
         'sessionID',
         this.servicePointForm.controls.sessionID.value
       );
@@ -181,7 +184,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
       return this.servicePointForm.controls.vanID.value === van.vanID;
     })[0];
 
-    localStorage.setItem(
+    this.sessionstorage.setItem(
       'serviceLineDetails',
       JSON.stringify(serviceLineDetails)
     );
@@ -231,10 +234,8 @@ export class ServicePointComponent implements OnInit, DoCheck {
     });
     const index = vanDetail.indexOf('- ');
     if (index !== -1) {
-      localStorage.setItem('vanType', vanDetail.substring(index + 2));
+      this.sessionstorage.setItem('vanType', vanDetail.substring(index + 2));
     }
-
-    console.log('van', localStorage.getItem('vanType'));
   }
 
   filterServicePointVan(searchTerm: any) {
@@ -252,11 +253,9 @@ export class ServicePointComponent implements OnInit, DoCheck {
   }
 
   routeToDesignation(designation: any) {
-    console.log('designation', designation);
-
     switch (designation) {
       case 'Registrar':
-        this.router.navigate(['/registrar/registration']);
+        this.router.navigate(['/registrar/search']);
         break;
       case 'Nurse':
         this.router.navigate(['/nurse-doctor/nurse-worklist']);
@@ -286,24 +285,31 @@ export class ServicePointComponent implements OnInit, DoCheck {
         item.servicePointName ===
         this.servicePointForm.controls.servicePointName.value
     );
+    let spIDs = '';
     if (temp.length > 0) {
-      localStorage.setItem('servicePointID', temp[0].servicePointID);
+      this.sessionstorage.setItem('servicePointID', temp[0].servicePointID);
+      spIDs = temp[0].servicePointID;
       this.servicePointForm.controls.servicePointID.patchValue(
         temp[0].servicePointID
       );
-      if (this.servicePointForm.controls.servicePointName.value)
-        localStorage.setItem(
+      if (this.servicePointForm.controls.servicePointName.value) {
+        this.sessionstorage.setItem(
           'servicePointName',
           this.servicePointForm.controls.servicePointName.value
         );
-
-      this.servicePointService.getMMUDemographics().subscribe((res: any) => {
-        if (res && res.statusCode === 200) {
-          this.saveDemographicsToStorage(res.data);
-        } else {
-          this.locationGathetingIssues();
-        }
-      });
+        const spID = spIDs;
+        const spPSMID = this.sessionstorage.getItem('providerServiceID');
+        const userId = this.sessionstorage.getItem('userID');
+        this.servicePointService
+          .getMMUDemographics(spID, spPSMID, userId)
+          .subscribe((res: any) => {
+            if (res && res.statusCode === 200) {
+              this.saveDemographicsToStorage(res.data);
+            } else {
+              this.locationGathetingIssues();
+            }
+          });
+      }
     } else {
       this.servicePointForm.controls.stateID.reset();
       this.servicePointForm.controls.districtID.reset();
@@ -318,28 +324,53 @@ export class ServicePointComponent implements OnInit, DoCheck {
 
   saveDemographicsToStorage(data: any) {
     if (data) {
-      if (data.stateMaster && data.stateMaster.length >= 1) {
-        localStorage.setItem('location', JSON.stringify(data));
+      if (data?.userDetails) {
+        this.sessionstorage.setItem('location', JSON.stringify(data));
         this.statesList = data.stateMaster;
         this.servicePointForm.controls.stateID.patchValue(
-          data.otherLoc.stateID
+          data?.userDetails?.stateID
         );
-        this.fetchDistrictsOnStateSelection(
-          this.servicePointForm.controls.stateID.value
+        this.servicePointForm.controls.stateName.patchValue(
+          data?.userDetails?.stateName
         );
-        this.servicePointForm.controls.districtID.reset();
-        this.servicePointForm.controls.blockID.reset();
-        this.servicePointForm.controls.districtBranchID.reset();
+        if (data?.userDetails?.districtList?.length > 1) {
+          this.districtList = data?.userDetails?.districtList;
+        } else {
+          this.districtList = data?.userDetails?.districtList;
+          this.servicePointForm.controls.districtID.setValue(
+            this.districtList[0].districtID
+          );
+          this.servicePointForm.controls.districtName.setValue(
+            this.districtList[0].districtName
+          );
+          this.fetchSubDistrictsOnDistrictSelection(
+            this.districtList[0].districtID
+          );
+        }
       } else {
-        this.locationGathetingIssues();
+        this.confirmationService.alert(
+          this.currentLanguageSet.alerts.info.issuesInFetchingLocationDetails,
+          'error'
+        );
       }
     } else {
       this.locationGathetingIssues();
     }
   }
+  fetchDistricts(stateID: any) {
+    this.registrarService.getDistrictList(stateID).subscribe((res: any) => {
+      if (res && res.statusCode === 200) {
+        this.districtList = res.data;
+      } else {
+        this.confirmationService.alert(
+          this.currentLanguageSet.alerts.info.issuesInFetchingDemographics,
+          'error'
+        );
+      }
+    });
+  }
 
   fetchDistrictsOnStateSelection(stateID: any) {
-    console.log('stateID', stateID);
     if (stateID) {
       this.statesList.forEach((item: any) => {
         if (item.stateID === stateID)
@@ -355,7 +386,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
         this.servicePointForm.controls.districtBranchID.reset();
       } else {
         this.confirmationService.alert(
-          this.currentLanguageSet.alerts.info.IssuesInFetchingDemographics,
+          this.currentLanguageSet.alerts.info.issuesInFetchingDemographics,
           'error'
         );
       }
@@ -377,13 +408,23 @@ export class ServicePointComponent implements OnInit, DoCheck {
         if (res && res.statusCode === 200) {
           this.subDistrictList = res.data;
           this.servicePointForm.controls.districtBranchID.reset();
-        } else {
-          this.confirmationService.alert(
-            this.currentLanguageSet.alerts.info.IssuesInFetchingDemographics,
-            'error'
-          );
         }
       });
+  }
+
+  getVillageMaster(locDetails: any) {
+    const blockID = locDetails?.userDetails?.blockList[0]?.blockId;
+    this.registrarService.getVillageList(blockID).subscribe((res: any) => {
+      if (res && res.statusCode === 200) {
+        this.villageList = res.data;
+        this.servicePointForm.controls.districtBranchID.reset();
+      } else {
+        this.confirmationService.alert(
+          this.currentLanguageSet.alerts.info.issuesinfetchingLocation,
+          'error'
+        );
+      }
+    });
   }
 
   onSubDistrictChange(blockID: any) {
@@ -401,7 +442,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
         this.servicePointForm.controls.districtBranchID.reset();
       } else {
         this.confirmationService.alert(
-          this.currentLanguageSet.alerts.info.IssuesInFetchingLocationDetails,
+          this.currentLanguageSet.alerts.info.issuesinfetchingLocation,
           'error'
         );
       }
@@ -422,6 +463,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
   saveLocationDataToStorage() {
     const locationData = {
       stateID: this.servicePointForm.controls.stateID.value,
+      stateName: this.servicePointForm.controls.stateName.value,
       // stateName : this.stateName,
       districtID: this.servicePointForm.controls.districtID.value,
       districtName: this.servicePointForm.controls.districtName.value,
@@ -434,13 +476,13 @@ export class ServicePointComponent implements OnInit, DoCheck {
     // Convert the object into a JSON string
     const locationDataJSON = JSON.stringify(locationData);
 
-    // Store the JSON string in localStorage
-    localStorage.setItem('locationData', locationDataJSON);
+    // Store the JSON string in this.sessionstorage
+    this.sessionstorage.setItem('locationData', locationDataJSON);
     this.goToWorkList();
   }
 
   goToWorkList() {
-    this.designation = localStorage.getItem('designation');
+    this.designation = this.sessionstorage.getItem('designation');
     this.routeToDesignation(this.designation);
   }
 

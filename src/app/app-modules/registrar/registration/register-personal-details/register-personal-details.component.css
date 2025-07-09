@@ -66,3 +66,9 @@
   ::ng-deep.bs-datepicker.bs-datepicker-container {
     padding: 0 !important;
   }
+  .mat_form_field_width ::ng-deep  .mat-mdc-text-field-wrapper {
+    width: 100% !important;
+}
+.mat_form_field_width_one ::ng-deep  .mat-mdc-text-field-wrapper {
+  width: 107% !important;
+}

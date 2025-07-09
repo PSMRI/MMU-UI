@@ -53,13 +53,9 @@
 <div *ngIf="remarks">
   <h3 class="title info">{{ message | titlecase }}</h3>
   <div class="message">
-    <mat-form-field [style.width]="'120%'">
-      <input
-        autocomplete="off"
-        matInput
-        placeholder="Enter Remarks"
-        name="Remarks"
-        #remarksRef />
+    <mat-form-field>
+      <mat-label>Enter Remarks</mat-label>
+      <input autocomplete="off" matInput name="Remarks" #remarksRef />
     </mat-form-field>
   </div>
   <div class="action">
@@ -80,7 +76,7 @@
 <div *ngIf="editRemarks">
   <h3 class="title info">{{ message | titlecase }}</h3>
   <div class="message">
-    <mat-form-field [style.width]="'100%'">
+    <mat-form-field>
       <textarea
         matInput
         allowText="textAreaValidator"

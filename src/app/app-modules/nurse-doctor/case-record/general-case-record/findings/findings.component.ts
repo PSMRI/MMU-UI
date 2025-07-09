@@ -51,6 +51,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { environment } from 'src/environments/environment';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-findings',
   templateUrl: './findings.component.html',
@@ -96,9 +97,10 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     private nurseService: NurseService,
+    readonly sessionstorage: SessionStorageService,
     private httpServiceService: HttpServiceService
   ) {
-    this.formUtils = new GeneralUtils(this.fb);
+    this.formUtils = new GeneralUtils(this.fb, this.sessionstorage);
   }
 
   ngOnInit() {
@@ -190,10 +192,11 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
           this.chiefComplaintTemporarayList[0] =
             this.chiefComplaintMaster.slice();
 
-          if (this.caseRecordMode === 'view') {
-            this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-            this.visitID = localStorage.getItem('visitID');
-            this.visitCategory = localStorage.getItem('visitCategory');
+          if (String(this.caseRecordMode) === 'view') {
+            this.beneficiaryRegID =
+              this.sessionstorage.getItem('beneficiaryRegID');
+            this.visitID = this.sessionstorage.getItem('visitID');
+            this.visitCategory = this.sessionstorage.getItem('visitCategory');
             this.getFindingDetails(
               this.beneficiaryRegID,
               this.visitID,

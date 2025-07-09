@@ -21,12 +21,17 @@
  */
 
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 export class QuickConsultUtils {
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    readonly sessionstorage: SessionStorageService
+  ) {}
 
   initMedicine(): FormGroup {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     return this.fb.group({
       specialInstruction: null,
       drug: null,
@@ -42,7 +47,8 @@ export class QuickConsultUtils {
   }
 
   initChiefComplaint() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     return this.fb.group({
       chiefComplaint: [null],
       conceptID: [null],
@@ -59,7 +65,8 @@ export class QuickConsultUtils {
   }
 
   initMedicineWithData(prescription: any, id?: null): FormGroup {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     let unit;
     if (prescription.drugUnit) {
       unit = `${prescription.drugStrength}${prescription.drugUnit}`;
@@ -90,7 +97,8 @@ export class QuickConsultUtils {
   }
 
   createQuickConsultForm() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     return this.fb.group({
       beneficiaryName: { value: null, disabled: true },
       age: { value: null, disabled: true },

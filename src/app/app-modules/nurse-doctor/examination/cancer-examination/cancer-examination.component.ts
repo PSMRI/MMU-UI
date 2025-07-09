@@ -36,6 +36,7 @@ import {
 } from '../../../core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-cancer-examination',
   templateUrl: './cancer-examination.component.html',
@@ -64,6 +65,7 @@ export class CancerExaminationComponent
     private httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
+    readonly sessionstorage: SessionStorageService,
     private beneficiaryDetailsService: BeneficiaryDetailsService
   ) {}
 
@@ -123,20 +125,21 @@ export class CancerExaminationComponent
 
   updateExaminationSubs: any;
   upadteCancerExaminationDetails() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const updateDetails = {
-      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
-      benVisitID: localStorage.getItem('visitID'),
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
-      modifiedBy: localStorage.getItem('userName'),
-      beneficiaryID: localStorage.getItem('beneficiaryID'),
-      sessionID: localStorage.getItem('sessionID'),
+      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+      benVisitID: this.sessionstorage.getItem('visitID'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+      modifiedBy: this.sessionstorage.getItem('userName'),
+      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
+      sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      benFlowID: localStorage.getItem('benFlowID'),
-      visitCode: localStorage.getItem('visitCode'),
+      benFlowID: this.sessionstorage.getItem('benFlowID'),
+      visitCode: this.sessionstorage.getItem('visitCode'),
     };
 
     const imageCoordinates = this.getImageCoordinates(this.cancerForm);
@@ -171,8 +174,9 @@ export class CancerExaminationComponent
 
   fetchExaminationDetailsSubs: any;
   fetchCancerExaminationDetails() {
-    const beneficiaryRegID: any = localStorage.getItem('beneficiaryRegID');
-    const benVisitID: any = localStorage.getItem('visitID');
+    const beneficiaryRegID: any =
+      this.sessionstorage.getItem('beneficiaryRegID');
+    const benVisitID: any = this.sessionstorage.getItem('visitID');
 
     this.fetchExaminationDetailsSubs = this.doctorService
       .getCancerExaminationDetails(beneficiaryRegID, benVisitID)

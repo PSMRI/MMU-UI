@@ -8,16 +8,16 @@
         }}
       </div>
       <div class="col-6 box">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.common?.select
-        }}</mat-label>
-        <mat-select
-          name="appearanceOfCervix"
-          formControlName="appearanceOfCervix">
-          <mat-option value="Negative"> Negative </mat-option>
-          <mat-option value="Positive"> Positive </mat-option>
-          <mat-option value="Suspect"> Suspect </mat-option>
-        </mat-select>
+        <mat-form-field>
+          <mat-label>{{ currentLanguageSet?.common?.select }}</mat-label>
+          <mat-select
+            name="appearanceOfCervix"
+            formControlName="appearanceOfCervix">
+            <mat-option value="Negative"> Negative </mat-option>
+            <mat-option value="Positive"> Positive </mat-option>
+            <mat-option value="Suspect"> Suspect </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
     <div class="col-12 row">
@@ -28,17 +28,17 @@
         }}
       </div>
       <div class="col-6 box">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.common?.select
-        }}</mat-label>
-        <mat-select
-          multiple
-          name="typeOfLesionList"
-          formControlName="typeOfLesionList">
-          <mat-option value="Proliferative"> Proliferative </mat-option>
-          <mat-option value="Ulcerative"> Ulcerative </mat-option>
-          <mat-option value="Infiltrative"> Infiltrative </mat-option>
-        </mat-select>
+        <mat-form-field>
+          <mat-label>{{ currentLanguageSet?.common?.select }}</mat-label>
+          <mat-select
+            multiple
+            name="typeOfLesionList"
+            formControlName="typeOfLesionList">
+            <mat-option value="Proliferative"> Proliferative </mat-option>
+            <mat-option value="Ulcerative"> Ulcerative </mat-option>
+            <mat-option value="Infiltrative"> Infiltrative </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
     <div class="col-12 row">
@@ -159,8 +159,8 @@
       <div
         class="col-6 box"
         *ngIf="sufferedFromRTIOrSTI && sufferedFromRTIOrSTI.value">
-        <mat-form-field class="input-full-width">
-          <mat-label class="mat-label-text">{{
+        <mat-form-field>
+          <mat-label>{{
             currentLanguageSet?.ExaminationData?.cancerScreeningExamination
               ?.gynecological?.specify
           }}</mat-label>
@@ -187,7 +187,7 @@
         id="files"
         multiple
         (change)="selectedFiles($event)"
-        disabled />
+         />
     </div>
 
     <div class="clearfix"></div>
@@ -235,7 +235,7 @@
 
   <div class="col-xs-12">
     <mat-form-field class="form-textarea">
-      <mat-label class="mat-label-text">{{
+      <mat-label>{{
         currentLanguageSet?.ExaminationData?.cancerScreeningExamination
           ?.abdominal?.observation
       }}</mat-label>

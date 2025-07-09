@@ -68,7 +68,7 @@
             <mat-card-header>
               <mat-card-title>
                 <h4 *ngIf="!d.flag || d.confirmed">
-                  <strong>{{ d.disease }}</strong>
+                  <strong style="font-weight: unset">{{ d.disease }}</strong>
                 </h4>
                 <h4 *ngIf="!d.confirmed && d.flag">
                   <strong
@@ -78,7 +78,7 @@
               </mat-card-title>
             </mat-card-header>
             <mat-card-content>
-              <div class="table-responsive">
+              <div class="" style="margin: 15px; overflow-y: hidden">
                 <table class="table" aria-describedby="questions">
                   <thead>
                     <tr>

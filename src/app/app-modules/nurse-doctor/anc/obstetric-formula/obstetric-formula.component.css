@@ -2,8 +2,12 @@
   height: 60px;
 }
 
-.input-full-width {
+/* .input-full-width {
   width: 100%;
+} */
+
+.mat-form-field {
+  line-height: unset;
 }
 
 .mat-form-field {

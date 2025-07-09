@@ -12,8 +12,8 @@
 
       <div class="row m-t-10">
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>{{
               currentLanguageSet?.vitalsDetails
                 ?.AnthropometryDataANC_OPD_NCD_PNC?.height
             }}</mat-label>
@@ -26,6 +26,7 @@
               name="height_cm"
               formControlName="height_cm"
               (change)="checkHeight(height_cm)"
+              [ngClass]="{ height_cm: height_cm < 10 || height_cm > 200 }"
               appDefaultNull
               maxlength="6"
               allowMax="350"
@@ -34,8 +35,8 @@
           </mat-form-field>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>{{
               currentLanguageSet?.vitalsDetails
                 ?.AnthropometryDataANC_OPD_NCD_PNC?.weight
             }}</mat-label>
@@ -49,23 +50,31 @@
               name="weight_Kg"
               id="weight_Kg"
               formControlName="weight_Kg"
+              [ngClass]="{ weight_Kg: weight_Kg < 25 || weight_Kg > 150 }"
               maxlength="6"
               allowMax="500"
               required />
-            <button
+            <svg
+              class="fontawesomesvg"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTWeightModel()">
-              <span class="glyphicon glyphicon-scale"></span>
-            </button>
+              (click)="openIOTWeightModel()"
+              onkeydown="openIOTWeightModel()"
+              tabindex="{0}">
+              <!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
+              <path
+                d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+            </svg>
           </mat-form-field>
         </div>
 
         <div
           class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
           *ngIf="totalMonths > 60">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>{{
               currentLanguageSet?.vitalsDetails
                 ?.AnthropometryDataANC_OPD_NCD_PNC?.BMI
             }}</mat-label>
@@ -205,14 +214,15 @@
             </span>
           </div>
         </ng-template>
-        <div class="clearfix"></div>
+        <!-- <div class="clearfix"></div> -->
 
-        <div *ngIf="hideForANCAndQC" style="display: contents">
-          <div
-            class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
-            style="margin-left: 10px">
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
+        <div
+          *ngIf="hideForANCAndQC"
+          class="row"
+          style="margin-left: 0px; padding: unset !important">
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>{{
                 currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
                   ?.waistCircumference
               }}</mat-label>
@@ -240,8 +250,8 @@
           <div
             class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
             *ngIf="visitCategory !== 'NCD screening'">
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>{{
                 currentLanguageSet?.vitalsDetails
                   ?.AnthropometryDataANC_OPD_NCD_PNC?.hipCircumference
               }}</mat-label>
@@ -263,8 +273,8 @@
           <div
             class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
             *ngIf="visitCategory !== 'NCD screening'">
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>{{
                 currentLanguageSet?.vitalsDetails
                   ?.AnthropometryDataANC_OPD_NCD_PNC?.waisttoHipRatio
               }}</mat-label>
@@ -281,7 +291,7 @@
             </mat-form-field>
           </div>
 
-          <div *ngIf="visitCategory !== 'NCD screening'">
+          <div *ngIf="visitCategory !== 'NCD screening'" class="row">
             <div
               class="marker"
               *ngIf="
@@ -356,13 +366,13 @@
             </div>
           </div>
 
-          <div class="clearfix"></div>
+          <!-- <div class="clearfix"></div> -->
           <div
             class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
             style="margin-left: 10px"
             *ngIf="benAge <= 2 && visitCategory !== 'NCD screening'">
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>{{
                 currentLanguageSet?.vitalsDetails
                   ?.AnthropometryDataANC_OPD_NCD_PNC?.headCircumference
               }}</mat-label>
@@ -387,8 +397,8 @@
           <div
             class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
             *ngIf="benAge <= 6 && visitCategory !== 'NCD screening'">
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>{{
                 currentLanguageSet?.vitalsDetails
                   ?.AnthropometryDataANC_OPD_NCD_PNC?.midUpperArmCircumference
               }}</mat-label>
@@ -465,8 +475,8 @@
 
       <div class="row m-t-20">
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>{{
               currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
                 ?.temperature
             }}</mat-label>
@@ -483,18 +493,24 @@
               maxlength="6"
               allowMax="150"
               [required]="ncdTemperature" />
-            <button
+            <svg
+              class="fontawesomesvg"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTTempModel()">
-              <span class="glyphicon glyphicon-scale"></span>
-            </button>
+              (click)="openIOTTempModel()"
+              onkeydown="openIOTTempModel()"
+              tabindex="{0}">
+              <path
+                d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+            </svg>
           </mat-form-field>
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>{{
               currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
                 ?.pulseRate
             }}</mat-label>
@@ -514,19 +530,23 @@
                 visitCategory !== 'General OPD' &&
                 visitCategory !== 'NCD screening'
               " />
-            <button
+            <svg
+              class="fontawesomesvg"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTPulseRateModel()">
-              <span class="glyphicon glyphicon-scale"></span>
-            </button>
+              (click)="openIOTPulseRateModel()"
+              onkeydown="openIOTPulseRateModel()"
+              tabindex="{0}">
+              <path
+                d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+            </svg>
           </mat-form-field>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.sPOTwoWithUnit
-            }}</mat-label>
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>{{ currentLanguageSet?.sPOTwoWithUnit }}</mat-label>
             <input
               autocomplete="off"
               matInput
@@ -538,18 +558,24 @@
               formControlName="sPO2"
               [ngClass]="{ abnormal: sPO2 < 1 || sPO2 > 100 }"
               (change)="checkSpo2()" />
-            <button
+            <svg
+              class="fontawesomesvg"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTSPO2Model()">
-              <span class="glyphicon glyphicon-scale"></span>
-            </button>
+              (click)="openIOTSPO2Model()"
+              onkeydown="openIOTSPO2Model()"
+              tabindex="{0}">
+              <path
+                d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+            </svg>
           </mat-form-field>
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>{{
               currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
                 ?.systolicBP
             }}</mat-label>
@@ -574,19 +600,30 @@
                   diastolicBP_1stReading
                 )
               "
-              [required]="benAge > 30" />
-            <button
+              [required]="
+                (benAge >= 30 &&
+                  (visitCategory === 'NCD screening' ||
+                    visitCategory === 'General OPD')) ||
+                benAge > 30
+              " />
+            <svg
+              class="fontawesomesvg"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTBPModel()">
-              <span class="glyphicon glyphicon-scale"></span>
-            </button>
+              (click)="openIOTBPModel()"
+              onkeydown="openIOTBPModel()"
+              tabindex="{0}">
+              <path
+                d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+            </svg>
           </mat-form-field>
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>{{
               currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
                 ?.diastolicBP
             }}</mat-label>
@@ -611,21 +648,32 @@
                   diastolicBP_1stReading
                 )
               "
-              [required]="benAge > 30" />
-            <button
+              [required]="
+                (benAge >= 30 &&
+                  (visitCategory === 'NCD screening' ||
+                    visitCategory === 'General OPD')) ||
+                benAge > 30
+              " />
+            <svg
+              class="fontawesomesvg"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTBPModel()">
-              <span class="glyphicon glyphicon-scale"></span>
-            </button>
+              (click)="openIOTBPModel()"
+              onkeydown="openIOTBPModel()"
+              tabindex="{0}">
+              <path
+                d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+            </svg>
           </mat-form-field>
         </div>
 
         <div
           class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
           *ngIf="visitCategory !== 'NCD screening'">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>{{
               currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
                 ?.respiratoryRate
             }}</mat-label>
@@ -655,8 +703,8 @@
           }}</strong>
           <div class="row col-xs-12 col-sm-12 m-t-10">
             <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
-              <mat-form-field class="input-full-width">
-                <mat-label class="mat-label-text">{{
+              <mat-form-field [style.width]="'100%'">
+                <mat-label>{{
                   currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
                     ?.fasting
                 }}</mat-label>
@@ -675,18 +723,24 @@
                       bloodGlucose_Fasting < 50 || bloodGlucose_Fasting > 700
                   }"
                   (change)="checkBloodSugarFasting(bloodGlucose_Fasting)" />
-                <button
+                <svg
+                  class="fontawesomesvg"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
                   matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                   matSuffix
-                  (click)="openIOTBGFastingModel()">
-                  <span class="glyphicon glyphicon-scale"></span>
-                </button>
+                  (click)="openIOTBGFastingModel()"
+                  onkeydown="openIOTBGFastingModel()"
+                  tabindex="{0}">
+                  <path
+                    d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+                </svg>
               </mat-form-field>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
-              <mat-form-field class="input-full-width">
-                <mat-label class="mat-label-text">{{
+              <mat-form-field [style.width]="'100%'">
+                <mat-label>{{
                   currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
                     ?.random
                 }}</mat-label>
@@ -702,18 +756,24 @@
                   formControlName="bloodGlucose_Random"
                   [ngClass]="{ abnormal: bloodGlucose_Random < 140 }"
                   (change)="checkBloodSugarRandom(bloodGlucose_Random)" />
-                <button
+                <svg
+                  class="fontawesomesvg"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
                   matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                   matSuffix
-                  (click)="openIOTBGRandomModel()">
-                  <span class="glyphicon glyphicon-scale"></span>
-                </button>
+                  (click)="openIOTBGRandomModel()"
+                  onkeydown="openIOTBGRandomModel()"
+                  tabindex="{0}">
+                  <path
+                    d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+                </svg>
               </mat-form-field>
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
-              <mat-form-field class="input-full-width">
-                <mat-label class="mat-label-text">{{
+              <mat-form-field [style.width]="'100%'">
+                <mat-label>{{
                   currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
                     ?.postPrandial
                 }}</mat-label>
@@ -731,12 +791,18 @@
                   (change)="
                     checkBloodSugar2HrPostPrandial(bloodGlucose_2hr_PP)
                   " />
-                <button
+                <svg
+                  class="fontawesomesvg"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
                   matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                   matSuffix
-                  (click)="openIOTBGPostPrandialModel()">
-                  <span class="glyphicon glyphicon-scale"></span>
-                </button>
+                  (click)="openIOTBGPostPrandialModel()"
+                  onkeydown="openIOTBGPostPrandialModel()"
+                  tabindex="{0}">
+                  <path
+                    d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+                </svg>
               </mat-form-field>
             </div>
           </div>
@@ -756,10 +822,8 @@
             </mat-checkbox>
           </div>
           <div class="col-xs-10 col-sm-10">
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.rbsTestResult
-              }}</mat-label>
+            <mat-form-field [style.width]="'100%'">
+              <mat-label>{{ currentLanguageSet?.rbsTestResult }}</mat-label>
               <input
                 autocomplete="off"
                 matInput
@@ -776,21 +840,24 @@
                 [ngClass]="{
                   abnormal: rbsTestResult < 0 || rbsTestResult > 1000
                 }" />
-              <button
+              <svg
+                class="fontawesomesvg"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                [disabled]="checkDiasableRBS()"
-                (click)="openIOTRBSModel()">
-                <span class="glyphicon glyphicon-scale"></span>
-              </button>
+                (click)="openIOTRBSModel()"
+                onkeydown="openIOTRBSModel()"
+                tabindex="{0}">
+                <path
+                  d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+              </svg>
             </mat-form-field>
           </div>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.rbsTestRemarks
-            }}</mat-label>
+          <mat-form-field [style.width]="'100%'">
+            <mat-label>{{ currentLanguageSet?.rbsTestRemarks }}</mat-label>
             <input
               autocomplete="off"
               allowText="textAreaValidator"
@@ -818,8 +885,8 @@
           <div class="row col-xs-12">
             <button
               mat-raised-button
-              class="mat_blue font-regular"
-              style="text-align: center; width: 10%; margin-left: 20px"
+              class="mat_green font-regular"
+              style="text-align: center; width: 12%; margin-left: 20px"
               *ngIf="!isRecording && !blobUrl"
               (click)="startRecording()"
               [disabled]="disabledLungAssesment">
@@ -835,7 +902,8 @@
             <button
               mat-raised-button
               color="warn"
-              class="font-regular"
+              style="width: 12%; margin-left: 20px"
+              class="font-regular mat_red"
               *ngIf="isRecording && !blobUrl"
               (click)="stopRecording()">
               Stop Recording
@@ -845,7 +913,7 @@
               <button
                 mat-raised-button
                 color="warn"
-                class="font-regular"
+                class="font-regular mat_red"
                 *ngIf="!isRecording && blobUrl"
                 (click)="clearRecordedData()">
                 Clear Recording
@@ -854,7 +922,7 @@
               <button
                 mat-raised-button
                 color="primary"
-                class="font-regular"
+                class="font-regular mat_blue"
                 style="margin-left: 10px"
                 *ngIf="!isRecording && blobUrl"
                 (click)="startAssessment()">

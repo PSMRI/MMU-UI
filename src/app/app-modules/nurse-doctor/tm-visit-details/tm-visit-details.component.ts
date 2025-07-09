@@ -26,6 +26,7 @@ import { Router } from '@angular/router';
 import { DoctorService, MasterdataService } from '../shared/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-tm-visit-details',
@@ -51,21 +52,22 @@ export class TmVisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
     private masterdataService: MasterdataService,
     private doctorService: DoctorService,
     private router: Router,
+    readonly sessionstorage: SessionStorageService,
     private httpServices: HttpServiceService
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.visitCategory = localStorage.getItem('visitCategory');
+    this.visitCategory = this.sessionstorage.getItem('visitCategory');
     this.getVisitDetails();
     this.getPregnancyStatus();
-    const selectTMC: any = localStorage.getItem('selectTMC');
+    const selectTMC: any = this.sessionstorage.getItem('selectTMC');
 
     if (selectTMC === true) {
       this.patientVisitForm.controls['tmcConfirmationForm'].patchValue({
         tmcConfirmed: true,
       });
-      localStorage.removeItem('selectTMC');
+      sessionStorage.removeItem('selectTMC');
     }
     this.patientVisitDetailsForm = this.patientVisitForm.get(
       'patientVisitDetailsForm'
@@ -89,10 +91,10 @@ export class TmVisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
   ngOnDestroy() {
     const currentURL = this.router.url;
     if (currentURL === '/nurse-doctor/print/MMU/current') {
-      localStorage.setItem('selectTMC', 'true');
+      this.sessionstorage.setItem('selectTMC', 'true');
     } else {
-      localStorage.removeItem('specialist_flag');
-      localStorage.removeItem('beneficiaryData');
+      sessionStorage.removeItem('specialist_flag');
+      sessionStorage.removeItem('beneficiaryData');
       if (this.visitDetailsPregSubscription)
         this.visitDetailsPregSubscription.unsubscribe();
       this.doctorService.prescribedDrugData = null;
@@ -100,7 +102,8 @@ export class TmVisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   getVisitDetails() {
-    const beneficiaryDataDetails: any = localStorage.getItem('beneficiaryData');
+    const beneficiaryDataDetails: any =
+      this.sessionstorage.getItem('beneficiaryData');
     this.beneficiaryData = JSON.parse(beneficiaryDataDetails);
     if (this.beneficiaryData) {
       const visitDetails = this.beneficiaryData;
@@ -113,8 +116,8 @@ export class TmVisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   getPregnancyStatus() {
-    const visitID: any = localStorage.getItem('visitID');
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const visitID: any = this.sessionstorage.getItem('visitID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.visitDetailsPregSubscription = this.doctorService
       .getPregVisitComplaintDetails(
         benRegID,
@@ -135,7 +138,7 @@ export class TmVisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
 
   conditionCheck() {
     if (!this.mode) this.hideAllTab();
-    localStorage.setItem('visiCategoryANC', this.visitCategory);
+    this.sessionstorage.setItem('visiCategoryANC', this.visitCategory);
     if (this.visitCategory === 'NCD screening') {
       // condtion check
     } else {

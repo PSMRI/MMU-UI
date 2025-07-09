@@ -10,7 +10,7 @@
       "></app-patient-visit-details>
   </mat-expansion-panel>
 
-  <mat-expansion-panel *ngIf="visitCategory">
+  <mat-expansion-panel *ngIf="isCovidVaccinationStatusVisible">
     <mat-expansion-panel-header>
       <h5>{{ current_language_set?.covidVaccinationStatus }}</h5>
     </mat-expansion-panel-header>

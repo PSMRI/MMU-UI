@@ -8,7 +8,7 @@ h5 {
 }
 
 .abnormal {
-    color: red
+    color: red !important;
 }
 
 .cdk-overlay-container .cdk-overlay-pane .mat-autocomplete-panel {

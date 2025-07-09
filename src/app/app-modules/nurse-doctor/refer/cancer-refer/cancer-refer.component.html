@@ -3,103 +3,108 @@
     <h5>{{ currentLanguageSet?.Referdetails?.refer }}</h5>
   </mat-expansion-panel-header>
 
-  <div class="row m-t-20">
-    <div class="col-xs-6 tcell">
-      <span class="align-middle">
-        {{ currentLanguageSet?.Referdetails?.higherhealthcarecenter }}</span
-      >
-    </div>
-    <div class="col-xs-6 tcell">
-      <mat-form-field>
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.Referdetails?.referredtoinstitute
-        }}</mat-label>
-        <mat-select
-          style="width: 220px"
-          (ngModelChange)="higherhealthcarecenter($event)"
-          name="referredToInstituteID"
-          formControlName="referredToInstituteID">
-          <mat-option
-            *ngFor="let center of higherHealthcareCenter"
-            [value]="center.institutionID"
-            >{{ center.institutionName }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="col-xs-6 tcell">
-      <span class="align-middle">{{
-        currentLanguageSet?.Referdetails?.additionalservices
-      }}</span>
-    </div>
-    <div class="col-xs-6 tcell">
-      <mat-form-field>
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.Referdetails?.additionalservices
-        }}</mat-label>
-        <mat-select
-          style="width: 220px"
-          (ngModelChange)="additionalservices($event)"
-          multiple="true"
-          name="refrredToAdditionalServiceList"
-          formControlName="refrredToAdditionalServiceList">
-          <mat-option
-            *ngFor="let service of additionalServices"
-            [value]="service.serviceName"
-            [disabled]="canDisable(service)">
-            {{ service.serviceName }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div *ngIf="selectValue > 0; else elseBlock" class="col-xs-6 tcell">
-      <span class="align-middle">
-        {{ currentLanguageSet?.Referdetails?.referralReason }}*</span
-      >
-    </div>
-    <ng-template #elseBlock>
-      <div class="col-xs-6 tcell">
-        <span class="align-middle">{{
-          currentLanguageSet?.Referdetails?.referralReason
-        }}</span>
+  <div class="">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell">
+        <mat-label>
+          {{
+            currentLanguageSet?.Referdetails?.higherhealthcarecenter
+          }}</mat-label
+        >
       </div>
-    </ng-template>
-    <div *ngIf="selectValue > 0; else elseBlockText" class="col-xs-6">
-      <mat-form-field class="referreason" [style.width]="'100%'">
-        <textarea
-          matInput
-          allowText="textAreaValidator"
-          matTextareaAutosize
-          required="true"
-          formControlName="referralReason"
-          name="Remarks"
-          maxLength="300"></textarea>
-      </mat-form-field>
-    </div>
-
-    <ng-template #elseBlockText>
-      <div class="col-xs-6">
-        <mat-form-field class="referreason" [style.width]="'100%'">
-          <textarea
-            matInput
-            allowText="textAreaValidator"
-            matTextareaAutosize
-            formControlName="referralReason"
-            name="Remarks"
-            maxLength="300"></textarea>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell">
+        <mat-form-field [style.width]="'50%'">
+          <mat-label>{{
+            currentLanguageSet?.Referdetails?.referredtoinstitute
+          }}</mat-label>
+          <mat-select
+            (ngModelChange)="higherhealthcarecenter($event)"
+            name="referredToInstituteID"
+            formControlName="referredToInstituteID">
+            <mat-option
+              *ngFor="let center of higherHealthcareCenter"
+              [value]="center.institutionID"
+              >{{ center.institutionName }}</mat-option
+            >
+          </mat-select>
         </mat-form-field>
       </div>
-    </ng-template>
-    <!--Revisit Date Added-->
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment">
-        {{ currentLanguageSet?.Referdetails?.revisitDate }}
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell">
+        <mat-label class="align-middle">{{
+          currentLanguageSet?.Referdetails?.additionalservices
+        }}</mat-label>
       </div>
-      <div
-        class="col-xs-6 col-sm-6 col-md-6 col-lg-6"
-        style="padding-left: 0px; width: 280px">
-        <mat-form-field [style.width]="'100%'">
-          <mat-label class="mat-label-text">{{
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell">
+        <mat-form-field [style.width]="'50%'">
+          <mat-label>{{
+            currentLanguageSet?.Referdetails?.additionalservices
+          }}</mat-label>
+          <mat-select
+            (ngModelChange)="additionalservices($event)"
+            multiple="true"
+            name="refrredToAdditionalServiceList"
+            formControlName="refrredToAdditionalServiceList">
+            <mat-option
+              *ngFor="let service of additionalServices"
+              [value]="service.serviceName"
+              [disabled]="canDisable(service)">
+              {{ service.serviceName }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell" *ngIf="selectValue > 0; else elseBlock">
+          <mat-label class="align-middle">
+            {{ currentLanguageSet?.Referdetails?.referralReason }}*</mat-label>
+        </div>
+        <ng-template #elseBlock>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell">
+          {{ currentLanguageSet?.Referdetails?.referralReason }}
+        </div>
+      </ng-template>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell" *ngIf="selectValue > 0; else elseBlockText">
+          <mat-form-field [style.width]="'50%'">
+            <textarea
+              matInput
+              allowText="textAreaValidator"
+              matTextareaAutosize
+              required="true"
+              formControlName="referralReason"
+              name="Remarks"
+              maxLength="300"></textarea>
+          </mat-form-field>
+          
+        </div>
+        <ng-template  #elseBlockText>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+          <mat-form-field style="width: 50%">
+            <textarea
+              matInput
+              allowText="textAreaValidator"
+              matTextareaAutosize
+              formControlName="referralReason"
+              name="Remarks"
+              maxLength="300"></textarea>
+          </mat-form-field>
+        </div>
+      </ng-template>
+    </div>
+
+
+    <!--Revisit Date Added-->
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <mat-label>{{
+          currentLanguageSet?.Referdetails?.revisitDate
+        }}</mat-label>
+      </div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <mat-form-field [style.width]="'50%'">
+          <mat-label>{{
             currentLanguageSet?.Referdetails?.revisitDate
           }}</mat-label>
           <input
@@ -108,8 +113,7 @@
             [matDatepicker]="picker"
             formControlName="revisitDate"
             [min]="tomorrow"
-            (change)="checkdate(revisitDate)" />
-          <mat-hint>MM/DD/YYYY</mat-hint>
+            (dateChange)="checkdate($event.value)" />
           <mat-datepicker-toggle
             matSuffix
             [for]="picker"></mat-datepicker-toggle>

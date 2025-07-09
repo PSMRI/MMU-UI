@@ -8,9 +8,7 @@
   <mat-dialog-content>
     <div *ngIf="callDetails?.length > 0" class="m-t-20">
       <mat-form-field id="filterbox" class="pull-right">
-        <mat-label class="mat-label-text">{{
-          current_language_set?.common?.question
-        }}</mat-label>
+        <mat-label>{{ current_language_set?.common?.question }}</mat-label>
         <input
           autocomplete="off"
           matInput

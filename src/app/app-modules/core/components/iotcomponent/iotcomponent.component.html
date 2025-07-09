@@ -1,12 +1,12 @@
 <div class="col-12 title" [ngClass]="{ warn: errorMsg !== undefined }">
   <h4>{{ current_language_set?.common?.bluetoothDevice }}</h4>
-  <button
+  <mat-icon
+    class="md-24 pull-right mat_icon_iot"
     matTooltip="{{ current_language_set?.stopTest }}"
-    class="pull-right mat_icon_white"
     (click)="stop()"
-    mat-icon-button>
-    <mat-icon class="md-24">close</mat-icon>
-  </button>
+    mat-icon-button
+    >close</mat-icon
+  >
 </div>
 <div class="container-fluid">
   <mat-dialog-content>

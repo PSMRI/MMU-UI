@@ -30,7 +30,7 @@ h5 {
 }
 
 .abnormal {
-  color: red
+  color: red !important;
 }
 
 img {
@@ -49,4 +49,19 @@ img {
 
 .norecord {
   text-align: center;
+}
+td{
+  height: 37px !important;
+  border: 1px solid #ddd !important;
+  padding: 8px !important;
+}
+/* .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+  padding: 8px !important;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+} */
+.table>:not(caption)>*>* {
+  padding:unset !important;
+ 
 }

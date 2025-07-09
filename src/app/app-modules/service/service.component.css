@@ -8,9 +8,11 @@
   cursor: pointer;
   color: white;
   border-radius: 15px;
+  margin-top: 30px;
+   margin-left: 100px;
 }
 .line-height-65 {
-  line-height: 65px !important;
+  line-height: 100px !important;
 }
 
 .f-s-48 {
@@ -81,4 +83,29 @@ mat-label {
   font-weight: 600;
   font-size: 22px;
   color: #4d4d33;
+}
+@media screen  and (min-width:360px) and (max-width:430px) {
+  .mat-mdc-card {
+    overflow: unset !important;
+}
+.matCardService {
+  width: 350px !important;
+ 
+}
+.circle {
+  
+  margin-top: 30px !important;
+  margin-left: 38px !important;
+}
+}
+
+@media screen  and (min-width:768px) and (max-width:1024px) {
+  .mat-mdc-card {
+    overflow: unset !important ;
+} 
+.circle {
+  
+  margin-left: 110px !important;
+}
+
 }

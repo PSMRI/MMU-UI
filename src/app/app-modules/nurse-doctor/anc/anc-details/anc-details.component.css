@@ -17,15 +17,6 @@
 .mat-form-field {
   line-height: unset;
 }
-mat-datepicker-toggle >>>.mat-mdc-form-field-icon-suffix, [dir=rtl] .mat-mdc-form-field-icon-prefix {
+mat-datepicker-toggle ::ng-deep .mat-mdc-form-field-icon-suffix, [dir=rtl] .mat-mdc-form-field-icon-prefix {
     padding: 0px 0 0 34px;
-}
-.mat_form_field_width >>>.mat-mdc-text-field-wrapper {
-  width: 145% !important;
-}
-.mat_form_field_width_one>>>.mat-mdc-text-field-wrapper {
-  width: 94% !important;
-}
-.mat_form_field_width_two>>>.mat-mdc-text-field-wrapper {
-  width: 120% !important;
 }

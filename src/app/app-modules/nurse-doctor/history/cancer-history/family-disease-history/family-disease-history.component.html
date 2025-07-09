@@ -28,8 +28,8 @@
       [ngClass]="{ odd: !isOdd }">
       <div [formGroupName]="i" class="col-12 row">
         <div class="col-3 box">
-          <mat-form-field>
-            <mat-label class="mat-label-text">{{
+          <mat-form-field class="input-full-width">
+            <mat-label>{{
               currentLanguageSet?.historyData?.cancerScreeningHistory
                 ?.familyMedical?.diseaseType
             }}</mat-label>
@@ -56,7 +56,7 @@
             'Any other Cancer'
           ">
           <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
+            <mat-label>{{
               currentLanguageSet?.historyData?.cancerScreeningHistory
                 ?.familyMedical?.otherCancerDetails
             }}</mat-label>
@@ -73,22 +73,21 @@
 
         <div class="col-3 box" [hidden]="true">
           <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
+            <mat-label>{{
               currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
                 ?.sctCode
             }}</mat-label>
             <input
               maxlength="100"
               matInput
-              [style.width]="'100%'"
               formControlName="snomedCode"
               readonly />
           </mat-form-field>
         </div>
 
         <div class="col-3 box">
-          <mat-form-field>
-            <mat-label class="mat-label-text">{{
+          <mat-form-field class="input-full-width">
+            <mat-label>{{
               currentLanguageSet?.historyData?.cancerScreeningHistory
                 ?.familyMedical?.familyMembers
             }}</mat-label>

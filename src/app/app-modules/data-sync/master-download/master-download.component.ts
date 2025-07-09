@@ -25,11 +25,13 @@ import { Router } from '@angular/router';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { DataSyncService } from './../shared/service/data-sync.service';
 import { MatDialogRef } from '@angular/material/dialog';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-master-download',
   templateUrl: './master-download.component.html',
   styleUrls: ['./master-download.component.css'],
+  providers: [DataSyncService],
 })
 export class MasterDownloadComponent implements OnInit {
   constructor(
@@ -37,7 +39,8 @@ export class MasterDownloadComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     public dialogRef: MatDialogRef<MasterDownloadComponent>,
     private confirmationService: ConfirmationService,
-    private dataSyncService: DataSyncService
+    private dataSyncService: DataSyncService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -83,7 +86,7 @@ export class MasterDownloadComponent implements OnInit {
         if (result) {
           const reqObj = {
             vanID: this.vanID,
-            providerServiceMapID: localStorage.getItem(
+            providerServiceMapID: this.sessionstorage.getItem(
               'dataSyncProviderServiceMapID'
             ),
           };

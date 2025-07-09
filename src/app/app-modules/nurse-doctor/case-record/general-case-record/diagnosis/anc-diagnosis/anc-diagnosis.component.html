@@ -15,9 +15,7 @@
     <div class="row">
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
         <mat-form-field class="input-full-width">
-          <mat-label class="mat-label-text">{{
-            current_language_set?.casesheet?.gravida
-          }}</mat-label>
+          <mat-label>{{ current_language_set?.casesheet?.gravida }}</mat-label>
           <input
             autocomplete="off"
             matInput
@@ -32,7 +30,7 @@
 
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
         <mat-form-field class="input-full-width">
-          <mat-label class="mat-label-text">{{
+          <mat-label>{{
             current_language_set?.casesheet?.periodPreg
           }}</mat-label>
           <input
@@ -47,8 +45,8 @@
         </mat-form-field>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-        <mat-form-field>
-          <mat-label class="mat-label-text">{{
+        <mat-form-field class="input-full-width">
+          <mat-label>{{
             current_language_set?.casesheet?.complications
           }}</mat-label>
           <mat-select
@@ -84,7 +82,7 @@
         class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
         *ngIf="showOtherPregnancyComplication">
         <mat-form-field class="input-full-width">
-          <mat-label class="mat-label-text">{{
+          <mat-label>{{
             current_language_set?.common?.otherComplication
           }}</mat-label>
           <input
@@ -104,7 +102,7 @@
     <div class="row">
       <div class="col-xs-6 m-t-20">
         <mat-form-field class="input-full-width">
-          <mat-label class="mat-label-text">{{
+          <mat-label>{{
             current_language_set?.casesheet?.highStatus
           }}</mat-label>
           <textarea
@@ -120,7 +118,7 @@
 
       <div class="col-xs-6 m-t-20">
         <mat-form-field class="input-full-width">
-          <mat-label class="mat-label-text">{{
+          <mat-label>{{
             current_language_set?.casesheet?.highCondition
           }}</mat-label>
           <textarea
@@ -167,7 +165,7 @@
     <div class="row" *ngIf="generalDiagnosisForm.value.isMaternalDeath">
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
         <mat-form-field class="input-full-width">
-          <mat-label class="mat-label-text">{{
+          <mat-label>{{
             current_language_set?.casesheet?.placeOfDeath
           }}</mat-label>
           <input
@@ -182,8 +180,8 @@
       </div>
 
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-        <mat-form-field [style.width]="'100%'">
-          <mat-label class="mat-label-text">{{
+        <mat-form-field class="input-full-width">
+          <mat-label>{{
             current_language_set?.casesheet?.dateOfDeath
           }}</mat-label>
           <input
@@ -192,7 +190,6 @@
             [matDatepicker]="picker"
             formControlName="dateOfDeath"
             [min]="minimumDeathDate" />
-          <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle
             matSuffix
             [for]="picker"></mat-datepicker-toggle>
@@ -202,7 +199,7 @@
 
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
         <mat-form-field class="input-full-width">
-          <mat-label class="mat-label-text">{{
+          <mat-label>{{
             current_language_set?.casesheet?.causeOfDeath
           }}</mat-label>
           <input

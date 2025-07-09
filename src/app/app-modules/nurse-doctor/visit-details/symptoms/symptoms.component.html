@@ -1,12 +1,11 @@
 <div class="row m-t-20" [formGroup]="patientCovidForm">
   <div class="col-xs-12 col-sm-8 col-md-6 col-lg-5 box" *ngIf="!sympFlag">
     <mat-form-field>
-      <mat-label class="mat-label-text">{{
+      <mat-label>{{
         currentLanguageSet?.ExaminationData?.cancerScreeningExamination
           ?.symptoms?.symptoms
       }}</mat-label>
       <mat-select
-        [style.width]="'100%'"
         multiple
         (selectionChange)="symptomSelected()"
         id="symptom"
@@ -21,8 +20,8 @@
   </div>
 
   <div class="col-xs-12 col-sm-8 col-md-6 col-lg-5 box" *ngIf="sympFlag">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
+    <mat-form-field>
+      <mat-label>{{
         currentLanguageSet?.ExaminationData?.cancerScreeningExamination
           ?.symptoms?.symptoms
       }}</mat-label>

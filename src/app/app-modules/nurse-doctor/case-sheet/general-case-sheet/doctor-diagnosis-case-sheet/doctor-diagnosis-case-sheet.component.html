@@ -267,9 +267,7 @@
   <!-- End of Current Vitals -->
 
   <!-- Covid Vaccination Details -->
-  <div
-    class="row m-t-10"
-    *ngIf="printPagePreviewSelect?.caseSheetCovidVaccinationDetails">
+  <div class="row m-t-10" *ngIf="isCovidVaccinationStatusVisible">
     <div class="col-xs-12">
       <fieldset>
         <legend>{{ currentLanguageSet?.covidVaccinationStatus }}:</legend>
@@ -1261,8 +1259,51 @@
         </tbody>
       </table>
     </div>
+
+    <!-- End of Prescription -->
+
+    <!-- Revisit & Refer for QC-->
+    <div
+      class="row col-xs-12 m-t-50"
+      *ngIf="visitCategory === 'General OPD (QC)'">
+      <h2 class="text-center">{{ currentLanguageSet?.revisitRefer }}</h2>
+      <hr />
+      <div class="col-xs-12">
+        <table
+          class="table table-no-border casesheet-table"
+          aria-describedby="Revisit&Refertbl">
+          <tbody>
+            <tr>
+              <th id="referredToInstituteName">
+                {{ currentLanguageSet?.Referdetails?.higherhealthcarecenter }}:
+              </th>
+              <td>{{ referDetails?.referredToInstituteName }}</td>
+            </tr>
+            <tr>
+              <th id="serviceList">
+                {{ currentLanguageSet?.Referdetails?.additionalservices }}:
+              </th>
+              <td>{{ serviceList }}</td>
+            </tr>
+            <tr>
+              <th id="referralReason">
+                {{ currentLanguageSet?.Referdetails?.referralReason }}:
+              </th>
+              <td>{{ referDetails?.referralReason }}</td>
+            </tr>
+            <tr>
+              <th id="revisitDate">
+                {{ currentLanguageSet?.Referdetails?.revisitDate }}:
+              </th>
+              <td>{{ referDetails?.revisitDate }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!--Revisit & Refer for QC ends-->
   </div>
-  <!-- End of Prescription -->
 
   <!--MMU-WDF-Prescription -->
   <div class="row m-t-10" *ngIf="enableTCReferredMMUData === true">
@@ -1342,8 +1383,60 @@
         </tbody>
       </table>
     </div>
+
+    <!-- End of MMU-WDF-Prescription -->
+
+    <!--MMU-WDF-Revisit&Refer-->
+    <div
+      class="row col-xs-12 m-t-50"
+      *ngIf="
+        enableTCReferredMMUData === true && visitCategory === 'General OPD (QC)'
+      ">
+      <h2 class="text-center" style="margin-left: 50px">
+        {{ currentLanguageSet?.mmuRevisitRefer }}
+      </h2>
+      <hr />
+      <div class="col-xs-12">
+        <table
+          class="table table-no-border casesheet-table"
+          aria-describedby="wdfRevisit">
+          <tbody>
+            <tr>
+              <th id="mmuReferredtoinstitute">
+                {{ currentLanguageSet?.Referdetails?.referredtoinstitute }}:
+              </th>
+              <td>{{ MMUReferDetails?.referredToInstituteName }}</td>
+            </tr>
+            <tr>
+              <th id="mmuadditionalservices">
+                {{ currentLanguageSet?.Referdetails?.additionalservices }}:
+              </th>
+              <td>{{ mmuServiceList }}</td>
+            </tr>
+            <tr>
+              <th id="mmuReferralReason">
+                {{ currentLanguageSet?.Referdetails?.referralReason }}:
+              </th>
+              <td>{{ MMUReferDetails?.referralReason }}</td>
+            </tr>
+            <tr>
+              <th id="mmurevisitDate">
+                {{ currentLanguageSet?.Referdetails?.revisitDate }}:
+              </th>
+              <td>
+                {{
+                  mmuCaseSheetData?.referDetails?.revisitDate
+                    | date: 'dd/MM/yyyy'
+                }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!--END MMU-WDF-Revisit&Refer-->
   </div>
-  <!-- End of MMU-WDF-Prescription -->
 
   <!-- Doctor's Sign -->
   <div class="row m-t-50" *ngIf="enableTCReferredMMUData === true">

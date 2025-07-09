@@ -40,6 +40,7 @@ import {
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-patient-investigations',
@@ -66,6 +67,7 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
     private masterdataService: MasterdataService,
     private doctorService: DoctorService,
     private httpServices: HttpServiceService,
+    readonly sessionstorage: SessionStorageService,
     private nurseService: NurseService
   ) {}
 
@@ -98,8 +100,8 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
           });
 
           if (String(this.mode) === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.getInvestigation(benRegID, visitID);
           }
         }

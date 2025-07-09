@@ -39,6 +39,7 @@ import { GeneralUtils } from '../../nurse-doctor/shared/utility/general-utility'
 import { SetLanguageComponent } from '../components/set-language.component';
 import { HttpServiceService } from '../services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Directive({
   selector: '[appOpenModal]',
@@ -59,12 +60,13 @@ export class OpenModalDirective implements OnInit, DoCheck {
     if (this.el.nativeElement.nodeName !== 'INPUT') this.openDialog();
   }
 
-  utils = new GeneralUtils(this.fb);
+  utils = new GeneralUtils(this.fb, this.sessionstorage);
 
   constructor(
     private fb: FormBuilder,
     private el: ElementRef,
     private dialog: MatDialog,
+    readonly sessionstorage: SessionStorageService,
     private httpServiceService: HttpServiceService
   ) {}
 

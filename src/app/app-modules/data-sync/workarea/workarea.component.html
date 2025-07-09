@@ -1,11 +1,29 @@
 <div class="container-fluid">
   <div class="row m-t-10 m-b-30">
     <div class="col-xs-12">
-      <mat-tab-group color="warn" backgroundColor="primary">
+      <mat-tab-group class="tabs_css">
         <mat-tab label="Data Upload" [disabled]="showProgressBar">
-          <mat-card class="col-sm-12">
-            <section class="table-responsive">
-              <table aria-describedby="synctable" class="table table-striped">
+          <mat-drawer-container class="example-container m-t-10">
+            <div
+              class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+              style="text-align: center; padding: 20px">
+              <button
+                *ngIf="displaySyncBool"
+                mat-raised-button
+                color="primary"
+                class="mat_blue"
+                (click)="syncGroups()"
+                color="primary">
+                {{ current_language_set?.startDataSync }}
+              </button>
+            </div>
+            <section
+              class="table-responsive"
+              style="padding-bottom: 20px !important; border: unset">
+              <table
+                aria-describedby="synctable"
+                class="table table-striped"
+                *ngIf="showTable">
                 <thead>
                   <tr>
                     <th id="empty">&nbsp;</th>
@@ -20,40 +38,52 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <ng-template
-                    [ngIf]="
-                      syncTableGroupList && syncTableGroupList.length === 0
+                  <ng-container
+                    *ngIf="
+                      syncTableGroupList && syncTableGroupList.length === 0;
+                      else groupList
                     ">
                     <tr *ngFor="let row of blankTable">
                       <td>&nbsp;</td>
                       <td>&nbsp;</td>
                       <td>&nbsp;</td>
                     </tr>
+                  </ng-container>
+                  <ng-template #groupList>
+                    <tr
+                      *ngFor="let syncTableGroup of syncTableGroupList"
+                      class="table-hover">
+                      <td>
+                        <div
+                          [ngClass]="{
+                            visitStatus: true,
+                            'p-f-c': syncTableGroup.status === 'pending',
+                            'c-d': syncTableGroup.status === 'success',
+                            't-d': syncTableGroup.status === 'failed'
+                          }"></div>
+                      </td>
+                      <td>
+                        {{ syncTableGroup?.syncTableGroupName }}
+                      </td>
+                      <td>
+                        <span
+                          class="material-icons"
+                          *ngIf="syncTableGroup.status === 'pending'"
+                          >hourglass_empty</span
+                        >
+                        <span
+                          class="material-icons"
+                          *ngIf="syncTableGroup.status === 'success'"
+                          >check_circle</span
+                        >
+                        <span
+                          class="material-icons"
+                          *ngIf="syncTableGroup.status === 'failed'"
+                          >error</span
+                        >
+                      </td>
+                    </tr>
                   </ng-template>
-                  <tr
-                    *ngFor="let syncTableGroup of syncTableGroupList"
-                    class="table-hover">
-                    <td
-                      (click)="checkSelectedGroup(syncTableGroup)"
-                      [ngClass]="{
-                        visitStatus: true,
-                        'p-f-c': syncTableGroup.processed === 'N',
-                        't-d': syncTableGroup.processed === 'P',
-                        'c-d': syncTableGroup.processed === 'D'
-                      }"></td>
-                    <td (click)="checkSelectedGroup(syncTableGroup)">
-                      {{ syncTableGroup?.syncTableGroupName }}
-                    </td>
-                    <td>
-                      <!-- eslint-disable-next-line  @angular-eslint/template/click-events-have-key-events -->
-                      <span
-                        class="material-icons"
-                        tabindex="{0}"
-                        (click)="checkSelectedGroup(syncTableGroup)">
-                        {{ current_language_set?.coreComponents?.cached }}
-                      </span>
-                    </td>
-                  </tr>
                 </tbody>
                 <tfoot>
                   <tr>
@@ -84,7 +114,7 @@
                 </tfoot>
               </table>
             </section>
-          </mat-card>
+          </mat-drawer-container>
         </mat-tab>
         <mat-tab label="Data Download">
           <mat-drawer-container class="example-container m-t-10" autosize>
@@ -93,7 +123,7 @@
                 type="button"
                 mat-raised-button
                 color="primary"
-                class="btn-green m-b-20"
+                class="btn-green mat_blue"
                 (click)="syncDownloadData()"
                 [disabled]="showProgressBar">
                 {{ current_language_set?.coreComponents?.download }}
@@ -143,56 +173,75 @@
           </mat-drawer-container>
         </mat-tab>
         <mat-tab label="Generate BeneficiaryID">
-          <section [formGroup]="generateBenIDForm" style="margin-top: 10px">
-            <div class="col-md-6">
-              <mat-card style="min-height: 240px">
-                <h4 style="text-align: center">Check BenID Availability</h4>
-                <div class="col-md-12 div-align">
-                  <button
-                    mat-raised-button
-                    color="primary"
-                    (click)="checkBenIDAvailability()">
-                    Check BenID
-                  </button>
-                </div>
-                <div class="col-md-12 div-align" *ngIf="benID_Count">
-                  <span>Available BeneficiaryID Count: {{ benID_Count }}</span>
-                </div>
-              </mat-card>
-            </div>
-            <div class="col-md-6">
-              <mat-card style="min-height: 240px">
-                <h4 style="text-align: center">Generate BenID</h4>
-                <mat-label class="mat-label-text">BenID Range</mat-label>
-                <mat-select
-                  class="input-full-width"
-                  [disabled]="!benID_Count"
-                  name="benID_Range"
-                  formControlName="benID_Range"
-                  style="margin: 20px 0px 10px 30px"
-                  required>
-                  <mat-option value="1000">1000</mat-option>
-                  <mat-option value="2000">2000</mat-option>
-                  <mat-option value="3000">3000</mat-option>
-                  <mat-option value="4000">4000</mat-option>
-                  <mat-option value="5000">5000</mat-option>
-                </mat-select>
-                <button
-                  mat-raised-button
-                  color="primary"
-                  [disabled]="!generateBenIDForm.valid"
-                  class="pull-right"
-                  style="margin: 30px 80px 10px 10px"
-                  (click)="
-                    generateBenID(
-                      generateBenIDForm.controls['benID_Range'].value
-                    )
-                  ">
-                  Generate BenID
-                </button>
-              </mat-card>
-            </div>
-          </section>
+          <div class="col-12" style="width: 99%; padding-left: 12px">
+            <section
+              [formGroup]="generateBenIDForm"
+              style="margin-top: 10px"
+              class="row">
+              <div class="col-6">
+                <mat-card style="min-height: 240px">
+                  <h4 style="text-align: center">Check BenID Availability</h4>
+                  <div class="col-md-12 div-align">
+                    <button
+                      mat-raised-button
+                      color="primary"
+                      class="mat_blue"
+                      (click)="checkBenIDAvailability()">
+                      Check BenID
+                    </button>
+                  </div>
+                  <div class="col-md-12 div-align" *ngIf="benID_Count">
+                    <span
+                      >Available BeneficiaryID Count: {{ benID_Count }}</span
+                    >
+                  </div>
+                </mat-card>
+              </div>
+              <div class="col-6">
+                <mat-card style="min-height: 240px">
+                  <h4 style="text-align: center">Generate BenID</h4>
+                  <div
+                    class="col-12 row container-fluid"
+                    style="margin-top: 20px; padding-left: 60px">
+                    <div class="col-6">
+                      <mat-form-field style="width: 100%">
+                        <mat-label class="mat-label-text"
+                          >BenID Range</mat-label
+                        >
+                        <mat-select
+                          class=""
+                          [disabled]="!benID_Count"
+                          name="benID_Range"
+                          formControlName="benID_Range"
+                          required>
+                          <mat-option value="1000">1000</mat-option>
+                          <mat-option value="2000">2000</mat-option>
+                          <mat-option value="3000">3000</mat-option>
+                          <mat-option value="4000">4000</mat-option>
+                          <mat-option value="5000">5000</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-6">
+                      <button
+                        mat-raised-button
+                        color="primary"
+                        style="float: left; margin-top: 10px; margin-left: 45px"
+                        [disabled]="!generateBenIDForm.valid"
+                        class="pull-right mat_blue"
+                        (click)="
+                          generateBenID(
+                            generateBenIDForm.controls['benID_Range'].value
+                          )
+                        ">
+                        Generate BenID
+                      </button>
+                    </div>
+                  </div>
+                </mat-card>
+              </div>
+            </section>
+          </div>
         </mat-tab>
         <mat-tab label="Inventory Data Download">
           <mat-drawer-container class="example-container m-t-10" autosize>
@@ -201,7 +250,7 @@
                 type="button"
                 mat-raised-button
                 color="primary"
-                class="btn-green m-b-20"
+                class="btn-green m-b-20 mat_blue"
                 (click)="inventorySyncDataDownload()"
                 [disabled]="showProgressBar">
                 Download

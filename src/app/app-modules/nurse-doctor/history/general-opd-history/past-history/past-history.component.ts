@@ -46,6 +46,7 @@ import { ValidationUtils } from '../../../shared/utility/validation-utility';
 import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-past-history',
@@ -84,7 +85,8 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
     private nurseService: NurseService,
     private doctorService: DoctorService,
     private masterdataService: MasterdataService,
-    public httpServiceService: HttpServiceService
+    public httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -175,8 +177,8 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
           this.changeDetectorRef.detectChanges();
 
           if (String(this.mode) === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.getGeneralHistory(benRegID, visitID);
           }
         }
@@ -217,12 +219,54 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
       if (temp[i].illnessType) {
         const k: any = formArray.get('' + i);
         k.patchValue(temp[i]);
+        k.markAsDirty();
         k.markAsTouched();
-        this.filterPastIllnessType(temp[i].illnessType, i);
+        if (
+          k?.get('timePeriodAgo')?.value !== null &&
+          k?.get('timePeriodUnit')?.value !== null
+        ) {
+          k?.get('timePeriodAgo')?.enable();
+          k?.get('timePeriodUnit')?.enable();
+        }
+        this.filterPastIllnessTypeInDoctor(temp[i].illnessType, i);
       }
 
       if (i + 1 < temp.length) this.addPastIllness();
     }
+  }
+
+  filterPastIllnessTypeInDoctor(
+    illness: any,
+    i: any,
+    pastIllnessForm?: FormGroup
+  ) {
+    const previousValue = this.previousSelectedIllnessTypeList[i];
+
+    if (pastIllnessForm && illness.illnessType !== 'Other')
+      pastIllnessForm.patchValue({ otherIllnessType: null });
+
+    if (illness.illnessType === 'None') {
+      this.removeAllIllnessExceptNone();
+    } else {
+      if (previousValue) {
+        this.pastIllnessSelectList.map((item: any, t: any) => {
+          if (t !== i && previousValue.illnessType !== 'Other') {
+            item.push(previousValue);
+            this.sortIllnessList(item);
+          }
+        });
+      }
+
+      this.pastIllnessSelectList.map((item: any, t: any) => {
+        const index = item.indexOf(illness);
+        if (index !== -1 && t !== i && illness.illnessType !== 'Other') {
+          item = item.splice(index, 1);
+        }
+      });
+
+      this.previousSelectedIllnessTypeList[i] = illness;
+    }
+    console.log('IllnessMaster', this.pastIllnessSelectList);
   }
 
   handlePastHistorySurgeryData() {
@@ -242,7 +286,15 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
       if (temp[i].surgeryType) {
         const k: any = formArray.get('' + i);
         k.patchValue(temp[i]);
+        k.markAsDirty();
         k.markAsTouched();
+        if (
+          k?.get('timePeriodAgo')?.value !== null &&
+          k?.get('timePeriodUnit')?.value !== null
+        ) {
+          k?.get('timePeriodAgo')?.enable();
+          k?.get('timePeriodUnit')?.enable();
+        }
         this.filterPastSurgeryType(temp[i].surgeryType, i);
       }
 
@@ -292,6 +344,9 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
           if (pastIllnessList.length === 1 && !!pastIllnessForm) {
             pastIllnessForm.reset();
             this.pastHistoryForm.markAsDirty();
+            // to disable the fields when no past illness
+            pastIllnessForm?.get('timePeriodAgo')?.disable();
+            pastIllnessForm?.get('timePeriodUnit')?.disable();
           } else {
             const removedValue = this.previousSelectedIllnessTypeList[i];
             if (removedValue) {
@@ -371,6 +426,15 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
       });
 
       this.previousSelectedIllnessTypeList[i] = illness;
+      if (illness.illnessType !== 'Nil') {
+        pastIllnessForm?.get('timePeriodAgo')?.enable();
+        pastIllnessForm?.get('timePeriodAgo')?.reset();
+      } else {
+        pastIllnessForm?.get('timePeriodAgo')?.disable();
+        pastIllnessForm?.get('timePeriodAgo')?.reset();
+        pastIllnessForm?.get('timePeriodUnit')?.disable();
+        pastIllnessForm?.get('timePeriodUnit')?.reset();
+      }
     }
   }
 
@@ -416,6 +480,10 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
           this.pastHistoryForm.markAsDirty();
           if (pastSurgeryList.length === 1 && !!pastSurgeryForm) {
             pastSurgeryForm.reset();
+            // to disable the fields when no past illness
+            pastSurgeryForm?.get('timePeriodAgo')?.disable();
+            pastSurgeryForm?.get('timePeriodUnit')?.disable();
+            pastSurgeryForm.markAsUntouched();
           } else {
             const removedValue = this.previousSelectedSurgeryTypeList[i];
             if (removedValue) {
@@ -465,11 +533,10 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   filterPastSurgeryType(
-    event: any,
+    surgery: any,
     i: any,
     pastSurgeryForm?: AbstractControl<any, any>
   ) {
-    const surgery: any = event.value;
     const previousValue = this.previousSelectedSurgeryTypeList[i];
 
     if (pastSurgeryForm && surgery.surgeryType !== 'Other')
@@ -497,6 +564,16 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
       });
 
       this.previousSelectedSurgeryTypeList[i] = surgery;
+      //To disable the fields
+      if (surgery.surgeryType !== 'Nil') {
+        pastSurgeryForm?.get('timePeriodAgo')?.enable();
+        pastSurgeryForm?.get('timePeriodAgo')?.reset();
+      } else {
+        pastSurgeryForm?.get('timePeriodAgo')?.disable();
+        pastSurgeryForm?.get('timePeriodAgo')?.reset();
+        pastSurgeryForm?.get('timePeriodUnit')?.disable();
+        pastSurgeryForm?.get('timePeriodUnit')?.reset();
+      }
     }
   }
 
@@ -505,8 +582,8 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
       illnessTypeID: null,
       illnessType: null,
       otherIllnessType: null,
-      timePeriodAgo: null,
-      timePeriodUnit: null,
+      timePeriodAgo: { value: null, disabled: true },
+      timePeriodUnit: { value: null, disabled: true },
     });
   }
 
@@ -515,13 +592,13 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
       surgeryID: null,
       surgeryType: null,
       otherSurgeryType: null,
-      timePeriodAgo: null,
-      timePeriodUnit: null,
+      timePeriodAgo: { value: null, disabled: true },
+      timePeriodUnit: { value: null, disabled: true },
     });
   }
 
   getPreviousPastHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousPastHistory(benRegID, this.visitCategory)
       .subscribe(
@@ -584,6 +661,13 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
       );
       formGroup.patchValue({ timePeriodAgo: null, timePeriodUnit: null });
     }
+    if (duration && !durationUnit) {
+      formGroup?.get('timePeriodUnit')?.enable();
+      formGroup?.get('timePeriodUnit')?.reset();
+    } else if (!duration) {
+      formGroup?.get('timePeriodUnit')?.disable();
+      formGroup?.get('timePeriodUnit')?.reset();
+    }
   }
 
   sortIllnessList(illnessList: any) {
@@ -616,13 +700,12 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
     });
   }
 
-  checkSurgeryValidity(surgeryForm: any) {
-    const temp = surgeryForm.value;
+  checkSurgeryValidity(surgeryForm: AbstractControl<any, any>) {
     if (
-      temp.surgeryType &&
-      (temp.surgeryType !== 'None' || temp.surgeryType !== 'Nil') &&
-      temp.timePeriodAgo &&
-      temp.timePeriodUnit
+      surgeryForm?.get('surgeryType') &&
+      surgeryForm?.get('surgeryType')?.value !== 'None' &&
+      surgeryForm?.get('timePeriodAgo')?.value &&
+      surgeryForm?.get('timePeriodUnit')?.value
     ) {
       return false;
     } else {

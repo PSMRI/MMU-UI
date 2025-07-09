@@ -22,8 +22,8 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import moment from 'moment';
-import RecordRTC from 'recordrtc';
+import * as moment from 'moment';
+import * as RecordRTC from 'recordrtc';
 import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 

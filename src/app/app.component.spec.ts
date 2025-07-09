@@ -16,10 +16,10 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'MMU-UI-NEXT'`, () => {
+  it(`should have as title 'MMU-UI'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('MMU-UI-NEXT');
+    expect(app.title).toEqual('MMU-UI');
   });
 
   it('should render title', () => {
@@ -27,7 +27,7 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.content span')?.textContent).toContain(
-      'MMU-UI-NEXT app is running!'
+      'MMU-UI app is running!'
     );
   });
 });

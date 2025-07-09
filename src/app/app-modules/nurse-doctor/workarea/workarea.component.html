@@ -353,47 +353,6 @@
             </div>
           </mat-step>
 
-          <mat-step *ngIf="showRefer" label="Refer">
-            <ng-template matStepLabel>{{
-              currentLanguageSet?.Referdetails?.revisitAndRefer
-            }}</ng-template>
-            <app-refer
-              [referMode]="referMode"
-              [visitCategory]="visitCategory"
-              [patientReferForm]="patientReferForm"></app-refer>
-            <div class="row m-t-20">
-              <div class="col-sm-12 step-btn m-b-40">
-                <button
-                  *ngIf="doctorFlag === '1'"
-                  mat-raised-button
-                  color="primary"
-                  class="mat_blue"
-                  [disabled]="disableSubmitButton"
-                  (click)="submitDoctorDiagnosisForm()"
-                  type="submit">
-                  {{ currentLanguageSet?.common?.submit }}
-                </button>
-                <button
-                  *ngIf="doctorFlag !== '1'"
-                  mat-raised-button
-                  color="primary"
-                  class="mat_blue"
-                  (click)="updateDoctorDiagnosisForm()"
-                  type="submit">
-                  {{ doctorUpdateAndTCSubmit }}
-                </button>
-                <button
-                  mat-raised-button
-                  color="primary"
-                  class="mat_blue"
-                  matStepperPrevious
-                  type="button">
-                  {{ currentLanguageSet?.common?.back }}
-                </button>
-              </div>
-            </div>
-          </mat-step>
-
           <mat-step *ngIf="showQuickConsult">
             <ng-template matStepLabel
               >{{
@@ -409,25 +368,65 @@
 
             <div class="row m-t-20">
               <div class="col-sm-12 step-btn m-b-40">
+                <button class="mat_blue" type="button" matStepperNext>
+                  {{ currentLanguageSet?.common?.next }}
+                </button>
                 <button
-                  *ngIf="doctorFlag === '1'"
+                  mat-raised-button
+                  color="primary"
+                  class="mat_blue"
+                  matStepperPrevious
+                  type="button">
+                  {{ currentLanguageSet?.common?.back }}
+                </button>
+              </div>
+            </div>
+          </mat-step>
+
+          <mat-step *ngIf="showRefer" label="Refer">
+            <ng-template matStepLabel>{{
+              currentLanguageSet?.Referdetails?.revisitAndRefer
+            }}</ng-template>
+            <app-refer
+              [referMode]="referMode"
+              [visitCategory]="visitCategory"
+              [patientReferForm]="patientReferForm"></app-refer>
+            <div class="row m-t-20">
+              <div class="col-sm-12 step-btn m-b-40">
+                <button
+                  *ngIf="doctorFlag === 1"
                   mat-raised-button
                   color="primary"
                   class="mat_blue"
                   [disabled]="disableSubmitButton"
                   (click)="submitDoctorDiagnosisForm()"
-                  type="button">
+                  type="submit">
                   {{ currentLanguageSet?.common?.submit }}
                 </button>
                 <button
-                  *ngIf="doctorFlag !== '1'"
+                  *ngIf="
+                    doctorFlag !== 1 && visitCategory !== 'General OPD (QC)'
+                  "
+                  mat-raised-button
+                  color="primary"
+                  class="mat_blue"
+                  (click)="updateDoctorDiagnosisForm()"
+                  type="submit">
+                  {{ doctorUpdateAndTCSubmit }}
+                </button>
+
+                <button
+                  *ngIf="
+                    doctorFlag !== 1 && visitCategory === 'General OPD (QC)'
+                  "
                   mat-raised-button
                   color="primary"
                   class="mat_blue"
                   (click)="updateQuickConsultDiagnosisForm()"
-                  type="button">
+                  type="submit">
                   {{ doctorUpdateAndTCSubmit }}
                 </button>
+
                 <button
                   mat-raised-button
                   color="primary"

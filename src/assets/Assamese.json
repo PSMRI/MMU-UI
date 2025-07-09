@@ -1249,7 +1249,7 @@
         "issuesinfetchingLocation": "আপোনাৰ অৱস্থান প্ৰাপ্ত কৰাত সমস্যা। পুনৰ লগইন কৰক আৰু পুনৰ চেষ্টা কৰক।",
         "RemoveTheChanges": "আপুনি পৰিবর্তনখিনি আতৰাবলৈ নিশ্চিত নে?",
         "issuesInFetchingLocationDetails": "অৱস্থানৰ বিৱৰণ প্ৰাপ্ত কৰাৰ সমস্যা, অনুগ্ৰহ কৰি পুনৰ চেষ্টা কৰক।",
-        "issuesInFetchingDemographics,": "জনগাঁথনি প্ৰাপ্ত কৰাৰ সমস্যা, অনুগ্ৰহ কৰি পুনৰ চেষ্টা কৰক।",
+        "issuesInFetchingDemographics": "জনগাঁথনি প্ৰাপ্ত কৰাৰ সমস্যা, অনুগ্ৰহ কৰি পুনৰ চেষ্টা কৰক।",
         "pleaseInputFieldFirst": "প্ৰথমে নিৰ্বাচিত ক্ষেত্ৰৰ বাবে অনুগ্ৰহ কৰি ইনপুট কৰক",
         "continueSession": "কনটিনি‍উ চেচনঃ আপোনাৰ চেচনটি কনটিনিউ কৰিব বিচাৰে নেকি?",
         "sessionGoingToExpire": "আপোনাৰ চেচনটৰি সময়ত অতিবাহিত (এক্সপাইৰি) হ'বলৈ ওলাইছে",
@@ -1269,7 +1269,8 @@
         "enterDetailsToSave": "চেভ(সংৰক্ষণ) কৰিবলৈ সবিশেষ ভৰাওঁক",
         "invalidValue": "অবৈধ মান ( 9 ৰ সমান বা সৰু হোৱা উচিত)",
         "valueRange": "মান ৫ ত কৈ ডাঙৰ হব নোৱাৰে",
-        "viewCasesheet": "কেছ শ্বীট চোৱাটো নিশ্চিত কৰক",
+        "viewCasesheet": "কেছ শ্বীট চোৱাটো নিশ্চিত কৰক?",
+        "printCasesheet": "কেছ শ্বীট মুদ্রণ কৰিবলৈ নিশ্চিত কৰক?",
         "noCasesheet": "এন চি ডিৰ স্ক্রীনিংৰ বাবে কোনো কেছ শ্বীট নাই",
         "highRiskStatus": "অতিশয় বিপদৰ স্থিতি",
         "maxDiagnosis": "আটাইতকৈ বেছি ৩০ টা ডায়েগ্নছিছ যোগ কৰিব পাৰি",
@@ -1699,6 +1700,13 @@
     "doseTwoDate": "Dose 2 Date",
     "boosterDoseDate": "Booster Dose Date",
     "covidVaccinationDetailsSaved":"Covid vaccination details saved successfully",
-    "benPreviousVisitDetails": "Beneficiary previous visit details"
+    "benPreviousVisitDetails": "Beneficiary previous visit details",
+    "startDataSync": "Start Data Sync",
+    "abha":"ABHA",
+    "abhaNumber":"ABHA Number",
+    "abhaDetails":"ABHA Details",
+    "abhaAddress":"ABHA Address",
+    "abhaMode":"ABHA Mode",
+    "abhaDetailsNotAvailable":"ABHA details not available"
   }
 }

@@ -22,6 +22,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -71,7 +72,10 @@ export class MasterdataService {
 
   getCalibrationStrips = environment.getCalibrationStrips;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    readonly sessionstorage: SessionStorageService
+  ) {}
 
   /**
    * Visit details master data api call
@@ -88,7 +92,7 @@ export class MasterdataService {
    * Nurse master data api call
    */
   getNurseMasterData(visitID: string, providerServiceID: any) {
-    const gender = localStorage.getItem('beneficiaryGender');
+    const gender = this.sessionstorage.getItem('beneficiaryGender');
     return (
       this.http
         .get(
@@ -111,7 +115,8 @@ export class MasterdataService {
    */
   getDoctorMasterData(visitID: string, providerServiceID: any) {
     let facilityID = 0;
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     if (
       JSON.parse(serviceLineDetails).facilityID !== undefined &&
       JSON.parse(serviceLineDetails).facilityID !== null
@@ -125,7 +130,7 @@ export class MasterdataService {
     ) {
       vanID = JSON.parse(serviceLineDetails).vanID;
     }
-    const gender = localStorage.getItem('beneficiaryGender');
+    const gender = this.sessionstorage.getItem('beneficiaryGender');
     console.log('facility', facilityID);
 
     return this.http
@@ -150,7 +155,8 @@ export class MasterdataService {
 
   getDoctorMasterDataForNurse(visitID: string, providerServiceID: any) {
     let facilityID = 0;
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     if (
       JSON.parse(serviceLineDetails).facilityID !== undefined &&
       JSON.parse(serviceLineDetails).facilityID !== null
@@ -164,7 +170,7 @@ export class MasterdataService {
     ) {
       vanID = JSON.parse(serviceLineDetails).vanID;
     }
-    const gender = localStorage.getItem('beneficiaryGender');
+    const gender = this.sessionstorage.getItem('beneficiaryGender');
     console.log('facility', facilityID);
 
     return this.http.get(
@@ -185,11 +191,11 @@ export class MasterdataService {
     return this.http.post(this.snoMedDataURL, { term: term });
   }
   getReportsMaster() {
-    const serviceID = localStorage.getItem('serviceID');
+    const serviceID = this.sessionstorage.getItem('serviceID');
     return this.http.get(environment.getReportsMasterUrl + serviceID);
   }
   getVanMaster() {
-    const providerServiceID = localStorage.getItem('providerServiceID');
+    const providerServiceID = this.sessionstorage.getItem('providerServiceID');
     return this.http.get(environment.getVanMasterUrl + providerServiceID);
   }
 

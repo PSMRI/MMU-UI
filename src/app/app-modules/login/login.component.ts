@@ -28,9 +28,12 @@ import {
   AuthService,
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { DataSyncLoginComponent } from '../core/components/data-sync-login/data-sync-login.component';
 import { MasterDownloadComponent } from '../data-sync/master-download/master-download.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { environment } from 'src/environments/environment';
+import { CaptchaComponent } from '../captcha/captcha.component';
 
 @Component({
   selector: 'app-login-cmp',
@@ -38,6 +41,7 @@ import { MasterDownloadComponent } from '../data-sync/master-download/master-dow
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
+  @ViewChild('captchaCmp') captchaCmp: CaptchaComponent | undefined;
   dynamictype = 'password';
   encryptedVar: any;
   key: any;
@@ -51,12 +55,16 @@ export class LoginComponent implements OnInit {
 
   @ViewChild('focus') private elementRef!: ElementRef;
 
+  captchaToken!: string;
+  enableCaptcha = environment.enableCaptcha;
+
   constructor(
     private router: Router,
     private dialog: MatDialog,
     private authService: AuthService,
     private confirmationService: ConfirmationService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    readonly sessionstorage: SessionStorageService
   ) {
     this._keySize = 256;
     this._ivSize = 128;
@@ -64,8 +72,8 @@ export class LoginComponent implements OnInit {
   }
 
   loginForm = this.fb.group({
-    userName: [''],
-    password: [''],
+    userName: ['', Validators.required],
+    password: ['', Validators.required],
   });
 
   ngOnInit() {
@@ -96,13 +104,14 @@ export class LoginComponent implements OnInit {
         .login(
           this.loginForm.controls.userName.value.trim(),
           encryptPassword,
-          false
+          false,
+          this.enableCaptcha ? this.captchaToken : undefined
         )
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200) {
               if (res?.data?.previlegeObj[0]) {
-                localStorage.setItem(
+                this.sessionstorage.setItem(
                   'loginDataResponse',
                   JSON.stringify(res.data)
                 );
@@ -132,12 +141,15 @@ export class LoginComponent implements OnInit {
                               .login(
                                 this.loginForm.controls.userName.value,
                                 encryptPassword,
-                                true
+                                true,
+                                this.enableCaptcha
+                                  ? this.captchaToken
+                                  : undefined
                               )
                               .subscribe((userLoggedIn: any) => {
                                 if (userLoggedIn.statusCode === 200) {
                                   if (userLoggedIn?.data?.previlegeObj[0]) {
-                                    localStorage.setItem(
+                                    this.sessionstorage.setItem(
                                       'loginDataResponse',
                                       JSON.stringify(userLoggedIn.data)
                                     );
@@ -145,12 +157,14 @@ export class LoginComponent implements OnInit {
                                       userLoggedIn.data
                                     );
                                   } else {
+                                    this.resetCaptcha();
                                     this.confirmationService.alert(
                                       'Seems you are logged in from somewhere else, Logout from there & try back in.',
                                       'error'
                                     );
                                   }
                                 } else {
+                                  this.resetCaptcha();
                                   this.confirmationService.alert(
                                     userLoggedIn.errorMessage,
                                     'error'
@@ -158,6 +172,7 @@ export class LoginComponent implements OnInit {
                                 }
                               });
                           } else {
+                            this.resetCaptcha();
                             this.confirmationService.alert(
                               userlogoutPreviousSession.errorMessage,
                               'error'
@@ -165,16 +180,19 @@ export class LoginComponent implements OnInit {
                           }
                         });
                     } else {
+                      this.resetCaptcha();
                       sessionStorage.clear();
                       this.router.navigate(['/login']);
                     }
                   });
               } else {
+                this.resetCaptcha();
                 this.confirmationService.alert(res.errorMessage, 'error');
               }
             }
           },
           err => {
+            this.resetCaptcha();
             this.confirmationService.alert(err, 'error');
           }
         );
@@ -231,10 +249,10 @@ export class LoginComponent implements OnInit {
       'isAuthenticated',
       loginDataResponse.isAuthenticated
     );
-    localStorage.setItem('userID', loginDataResponse.userID);
-    localStorage.setItem('userName', loginDataResponse.userName);
-    localStorage.setItem('username', userName);
-    localStorage.setItem('fullName', loginDataResponse.fullName);
+    this.sessionstorage.setItem('userID', loginDataResponse.userID);
+    this.sessionstorage.setItem('userName', loginDataResponse.userName);
+    this.sessionstorage.setItem('username', userName);
+    this.sessionstorage.setItem('fullName', loginDataResponse.fullName);
     const services: any = [];
     loginDataResponse.previlegeObj.map((item: any) => {
       if (
@@ -248,12 +266,15 @@ export class LoginComponent implements OnInit {
           serviceID:
             item.roles[0].serviceRoleScreenMappings[0].providerServiceMapping
               .serviceID,
+          serviceProviderID:
+            item.roles[0].serviceRoleScreenMappings[0].providerServiceMapping
+              .serviceProviderID,
         };
         services.push(service);
       }
     });
     if (services.length > 0) {
-      localStorage.setItem('services', JSON.stringify(services));
+      this.sessionstorage.setItem('services', JSON.stringify(services));
       if (loginDataResponse.Status.toLowerCase() === 'new') {
         this.router.navigate(['/set-security-questions']);
       } else {
@@ -299,9 +320,24 @@ export class LoginComponent implements OnInit {
           .afterClosed()
           .subscribe(() => {
             sessionStorage.clear();
-            localStorage.clear();
+            // this.sessionstorage.clear();
           });
       }
     });
+  }
+
+  onCaptchaResolved(token: any) {
+    this.captchaToken = token;
+  }
+
+  resetCaptcha() {
+    if (
+      this.enableCaptcha &&
+      this.captchaCmp &&
+      typeof this.captchaCmp.reset === 'function'
+    ) {
+      this.captchaCmp.reset();
+      this.captchaToken = '';
+    }
   }
 }

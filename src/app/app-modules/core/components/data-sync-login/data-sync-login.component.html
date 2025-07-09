@@ -29,51 +29,65 @@
         (ngSubmit)="loginForm.valid && dataSyncLogin()">
         <div class="container-fluid">
           <div class="row no-gutters">
-            <div class="col-xs-11 col-md-11 col-sm-11 box">
-              <mat-form-field class="full-width">
+            <div class="col-xs-11 col-md-11 col-sm-11 box row">
+              <div
+                class="col-2"
+                style="margin-top: 18px; padding-right: unset; width: 14%">
                 <mat-icon matPrefix>account_box</mat-icon>
-                <mat-label class="mat-label-text">Enter User Name</mat-label>
-                <input
-                  matInput
-                  allowText="usernameValidator"
-                  type="text"
-                  id="userID"
-                  formControlName="userName"
-                  name="userName"
-                  #focus />
-              </mat-form-field>
+              </div>
+              <div class="col-10" style="padding: unset">
+                <mat-form-field [style.width]="'115%'">
+                  <mat-label>Enter User Name</mat-label>
+                  <input
+                    matInput
+                    allowText="usernameValidator"
+                    type="text"
+                    id="userID"
+                    formControlName="userName"
+                    name="userName"
+                    #focus />
+                </mat-form-field>
+              </div>
             </div>
           </div>
           <div class="row no-gutters">
-            <div class="col-xs-11 col-md-11 col-sm-11 box">
-              <mat-form-field class="full-width">
+            <div class="col-xs-11 col-md-11 col-sm-11 box row">
+              <div
+                class="col-2"
+                style="margin-top: 18px; padding-right: unset; width: 14%">
                 <mat-icon matPrefix>lock</mat-icon>
-                <mat-label class="mat-label-text">Enter Password</mat-label>
-                <input
-                  matInput
-                  [type]="dynamictype"
-                  autocomplete="off"
-                  id="password"
-                  formControlName="password"
-                  name="password" />
-                <mat-icon
-                  matSuffix
-                  class="material-icons cursorPointer"
-                  matTooltip="{{
-                    current_language_set?.common?.showPassword
-                      ? current_language_set?.common?.showPassword
-                      : 'Show Password'
-                  }}"
-                  (mousedown)="showPWD()"
-                  (mouseup)="hidePWD()"
-                  style="color: gray"
-                  >visibility</mat-icon
-                >
-              </mat-form-field>
+              </div>
+              <div class="col-10" style="padding: unset">
+                <mat-form-field [style.width]="'115%'">
+                  <mat-label>Enter Password</mat-label>
+                  <input
+                    matInput
+                    [type]="dynamictype"
+                    autocomplete="off"
+                    id="password"
+                    formControlName="password"
+                    name="password" />
+                  <mat-icon
+                    matSuffix
+                    class="material-icons cursorPointer"
+                    matTooltip="{{
+                      current_language_set?.common?.showPassword
+                        ? current_language_set?.common?.showPassword
+                        : 'Show Password'
+                    }}"
+                    (mousedown)="showPWD()"
+                    (mouseup)="hidePWD()"
+                    style="color: gray"
+                    >visibility</mat-icon
+                  >
+                </mat-form-field>
+              </div>
             </div>
           </div>
           <div class="row">
-            <div class="col-xs-12 col-md-12 col-sm-12 box">
+            <div
+              class="col-xs-12 col-md-12 col-sm-12"
+              style="height: 55px !important; padding: unset">
               <button
                 mat-raised-button
                 color="primary"
