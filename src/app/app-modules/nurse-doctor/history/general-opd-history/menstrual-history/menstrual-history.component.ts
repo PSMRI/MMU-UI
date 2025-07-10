@@ -89,6 +89,8 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
   today: any;
   minimumLMPDate: any;
   currentLanguageSet: any;
+  isNoneSelected = false;
+  isOtherSelected = false;
 
   constructor(
     private dialog: MatDialog,
@@ -215,6 +217,8 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
           temp.lMPDate = new Date(temp.lMPDate);
 
           this.menstrualHistoryForm.patchValue(temp);
+
+          this.resetOtherMenstrualProblems();
         }
       });
   }
@@ -294,5 +298,16 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
         lMPDate: null,
       });
     }
+  }
+
+  resetOtherMenstrualProblems() {
+    const selectedList =
+      this.menstrualHistoryForm.value.menstrualProblemList || [];
+    this.isNoneSelected = selectedList.some(
+      (item: any) => item.problemName === 'None'
+    );
+    this.isOtherSelected = selectedList.some(
+      (item: any) => item.problemName !== 'None'
+    );
   }
 }
