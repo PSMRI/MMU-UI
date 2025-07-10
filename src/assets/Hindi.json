@@ -1702,7 +1702,13 @@
     "boosterDoseDate": "Booster Dose Date",
     "covidVaccinationDetailsSaved":"Covid vaccination details saved successfully",
     "benPreviousVisitDetails": "Beneficiary previous visit details",
-    "startDataSync": "Start Data Sync"
+    "startDataSync": "Start Data Sync",
+    "abha":"ABHA",
+    "abhaNumber":"ABHA Number",
+    "abhaDetails":"ABHA Details",
+    "abhaAddress":"ABHA Address",
+    "abhaMode":"ABHA Mode",
+    "abhaDetailsNotAvailable":"ABHA details not available"
 
   }
 }
