@@ -41,10 +41,11 @@ export class InventoryService {
     visit: any,
     flowID: any,
     language: any,
-    regID: any
+    regID: any,
+    facilityID: any
   ) {
     const authKey = this.getAuthKey();
-    const facility = this.getFacilityID();
+    const facility = facilityID || this.getFacilityID();
     const protocol = this.getProtocol();
     const host = this.getHost();
     const vanID = this.getVanID();
@@ -53,6 +54,8 @@ export class InventoryService {
     const parentAPI = this.getParentAPI();
 
     if (authKey && protocol && host && facility) {
+      console.log('Facility ID: ', facility);
+
       // uncomment later
       this.inventoryUrl = `${environment.INVENTORY_URL}protocol=${protocol}&host=${host}&user=${authKey}&app=${environment.app}&fallback=${environment.fallbackUrl}&back=${environment.redirInUrl}&facility=${facility}&ben=${benID}&visit=${visit}&flow=${flowID}&reg=${regID}&vanID=${vanID}&ppID=${ppID}&serviceName=${serviceName}&parentAPI=${parentAPI}&currentLanguage=${language}`;
       console.log(this.inventoryUrl);
