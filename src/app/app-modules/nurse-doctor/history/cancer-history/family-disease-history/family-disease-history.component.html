@@ -28,7 +28,7 @@
       [ngClass]="{ odd: !isOdd }">
       <div [formGroupName]="i" class="col-12 row">
         <div class="col-3 box">
-          <mat-form-field>
+          <mat-form-field class="input-full-width">
             <mat-label>{{
               currentLanguageSet?.historyData?.cancerScreeningHistory
                 ?.familyMedical?.diseaseType
@@ -55,7 +55,7 @@
             disease.value?.cancerDiseaseType?.cancerDiseaseType ===
             'Any other Cancer'
           ">
-          <mat-form-field>
+          <mat-form-field class="input-full-width">
             <mat-label>{{
               currentLanguageSet?.historyData?.cancerScreeningHistory
                 ?.familyMedical?.otherCancerDetails
@@ -72,7 +72,7 @@
         </div>
 
         <div class="col-3 box" [hidden]="true">
-          <mat-form-field>
+          <mat-form-field class="input-full-width">
             <mat-label>{{
               currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
                 ?.sctCode
@@ -86,7 +86,7 @@
         </div>
 
         <div class="col-3 box">
-          <mat-form-field>
+          <mat-form-field class="input-full-width">
             <mat-label>{{
               currentLanguageSet?.historyData?.cancerScreeningHistory
                 ?.familyMedical?.familyMembers

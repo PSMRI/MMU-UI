@@ -53,6 +53,10 @@ const defaultEnvValues = {
   IOT_API_BASE: '',
   SESSION_STORAGE_ENC_KEY: '',
   FHIR_API_BASE: '',
+  SITE_KEY:'',
+  CAPTCHA_CHALLENGE_URL:'',
+  ENABLE_CAPTCHA: false,
+
 };
 
 // Generate output data

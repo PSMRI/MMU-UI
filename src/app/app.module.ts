@@ -35,6 +35,7 @@ import { RegistrarService } from './app-modules/registrar/shared/services/regist
 import { DataSYNCModule } from './app-modules/data-sync/dataSync.module';
 import { SharedModule } from './app-modules/core/components/shared/shared.module';
 import { CommonModule } from '@angular/common';
+import { CaptchaComponent } from './app-modules/captcha/captcha.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { CommonModule } from '@angular/common';
     SetPasswordComponent,
     ResetPasswordComponent,
     TmLogoutComponent,
+    CaptchaComponent,
   ],
   imports: [
     CommonModule,

@@ -60,6 +60,10 @@ const IDENTITY_API = `${identityIP}identity-0.0.1/`;
 const mmuUICasesheet = `${mmuUI_IP}mmuui-v1.0`;
 const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
 
+const siteKey = '';
+const captchaChallengeURL = '';
+const enableCaptcha = false;
+
 export const environment = {
   production: true,
   isMMUOfflineSync: false,
@@ -70,7 +74,7 @@ export const environment = {
   haemoglobinTest: `Haemoglobin Test`,
   parentAPI: `${MMU_API}`,
 
-  INVENTORY_URL: `${inventoryUI_IP}inventory/#/redirin?`,
+  INVENTORY_URL: `${inventoryUI_IP}#/redirin?`,
   fallbackUrl: `/pharmacist/redirfallback`,
   redirInUrl: `/pharmacist/redirin`,
 
@@ -497,4 +501,8 @@ export const environment = {
   generateABHAForBioMobileOTP: `${FHIR_API}healthIDWithBio/generateMobileOTP`,
 
   getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`,
+
+  siteKey: siteKey,
+  captchaChallengeURL: captchaChallengeURL,
+  enableCaptcha: enableCaptcha,
 };
