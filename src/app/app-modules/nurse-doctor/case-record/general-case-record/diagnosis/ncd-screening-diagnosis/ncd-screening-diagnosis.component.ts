@@ -33,6 +33,7 @@ import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import {
   DoctorService,
+  MasterdataService,
   NurseService,
 } from 'src/app/app-modules/nurse-doctor/shared/services';
 import { GeneralUtils } from 'src/app/app-modules/nurse-doctor/shared/utility';
@@ -58,13 +59,16 @@ export class NcdScreeningDiagnosisComponent
   doctorDiagnosis: any;
   current_language_set: any;
   enableProvisionalDiag!: boolean;
+  suggestedDiagnosisList: any = [];
+
   constructor(
     private fb: FormBuilder,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     private httpServiceService: HttpServiceService,
     private nurseService: NurseService,
-    readonly sessionstorage: SessionStorageService
+    readonly sessionstorage: SessionStorageService,
+    private masterdataService: MasterdataService
   ) {}
 
   ngOnInit() {
@@ -200,5 +204,36 @@ export class NcdScreeningDiagnosisComponent
     } else {
       return true;
     }
+  }
+
+  onDiagnosisInputKeyup(value: string, index: number) {
+    if (value.length >= 3) {
+      this.masterdataService
+        .searchDiagnosisBasedOnPageNo(value, index)
+        .subscribe((results: any) => {
+          this.suggestedDiagnosisList[index] = results?.data?.sctMaster;
+        });
+    } else {
+      this.suggestedDiagnosisList[index] = [];
+    }
+  }
+
+  displayDiagnosis(diagnosis: any): string {
+    return diagnosis?.term || '';
+  }
+
+  onDiagnosisSelected(selected: any, index: number) {
+    // this.patientQuickConsultForm.get(['provisionalDiagnosisList', index])?.setValue(selected);
+    const diagnosisFormArray = this.generalDiagnosisForm.get(
+      'provisionalDiagnosisList'
+    ) as FormArray;
+    const diagnosisFormGroup = diagnosisFormArray.at(index) as FormGroup;
+
+    // Set the nested and top-level fields
+    diagnosisFormGroup.patchValue({
+      viewProvisionalDiagnosisProvided: selected,
+      conceptID: selected?.conceptID || null,
+      term: selected?.term || null,
+    });
   }
 }
