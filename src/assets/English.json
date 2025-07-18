@@ -247,6 +247,7 @@
       "resultMammogram": "Results of Mammogram",
       "otherComplication": "Other Complication of Current Pregnancy",
       "add": "add",
+      "remove":"remove",
       "confirmDiagnosis": "Confirmatory Diagnosis",
       "labTest": "Test Report",
       "annotatedimagereport": "Annotated Image Report",
