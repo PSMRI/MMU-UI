@@ -156,13 +156,7 @@
       </mat-form-field>
     </div>
 
-    <div
-      class="col-md-3 box"
-      *ngIf="
-        currentPrescription.formID &&
-        currentPrescription.formID !== 1 &&
-        currentPrescription.formID !== 2
-      ">
+    <div class="col-md-3 box">
       <mat-form-field [style.width]="'100%'">
         <mat-label>{{
           current_language_set?.Prescription?.quantity
