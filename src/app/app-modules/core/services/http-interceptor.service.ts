@@ -68,10 +68,30 @@ export class HttpInterceptorService implements HttpInterceptor {
           return event.body;
         }
       }),
+
       catchError((error: HttpErrorResponse) => {
         console.error(error);
         this.spinnerService.setLoading(false);
-        return throwError(error.error);
+        let message = '';
+        if (error.status === 401) {
+          if (error.error) {
+            if (typeof error.error === 'string') {
+              message = error.error;
+            } else if (error.error.message) {
+              message = error.error.message;
+            }
+          }
+
+          if (!message) {
+            message = 'Invalid token. Please login again.';
+          }
+
+          this.confirmationService.alert(message, 'error');
+          sessionStorage.clear();
+          setTimeout(() => this.router.navigate(['/login']), 0);
+        }
+
+        return throwError(error);
       })
     );
   }
