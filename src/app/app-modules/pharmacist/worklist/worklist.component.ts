@@ -238,8 +238,7 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
             sessionStorage.getItem('setLanguage') !== undefined
               ? sessionStorage.getItem('setLanguage')
               : 'English',
-            beneficiary.beneficiaryRegID,
-            sessionStorage.getItem('facilityID')
+            beneficiary.beneficiaryRegID
           );
         }
       });

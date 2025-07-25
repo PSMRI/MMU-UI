@@ -41,11 +41,10 @@ export class InventoryService {
     visit: any,
     flowID: any,
     language: any,
-    regID: any,
-    facilityID: any
+    regID: any
   ) {
     const authKey = this.getAuthKey();
-    const facility = facilityID || this.getFacilityID();
+    const facility = this.getFacilityID();
     const protocol = this.getProtocol();
     const host = this.getHost();
     const vanID = this.getVanID();
