@@ -270,10 +270,8 @@
                           complicationAbortion?.complicationValue === 'Nil') &&
                           complicationOptionConstraints[i]
                             ?.disableNonePostComplication) ||
-                          ((complicationAbortion?.complicationValue !==
-                            'None' ||
-                            complicationAbortion?.complicationValue !==
-                              'Nil') &&
+                          (complicationAbortion?.complicationValue !== 'None' &&
+                            complicationAbortion?.complicationValue !== 'Nil' &&
                             !complicationOptionConstraints[i]
                               .disableNonePostComplication))
                       "
@@ -419,10 +417,10 @@
                             complication?.deliveryComplicationType === 'Nil') &&
                             complicationOptionConstraints[i]
                               ?.disableNoneDeliveryComplication) ||
-                            ((complication?.deliveryComplicationType !==
-                              'None' ||
+                            (complication?.deliveryComplicationType !==
+                              'None' &&
                               complication?.deliveryComplicationType !==
-                                'Nil') &&
+                                'Nil' &&
                               !complicationOptionConstraints[i]
                                 .disableNoneDeliveryComplication))
                         ">
@@ -483,10 +481,10 @@
                           complication?.postpartumComplicationType === 'Nil') &&
                           complicationOptionConstraints[i]
                             ?.disableNonePostpartumComplication) ||
-                          ((complication?.postpartumComplicationType !==
-                            'None' ||
+                          (complication?.postpartumComplicationType !==
+                            'None' &&
                             complication?.postpartumComplicationType !==
-                              'Nil') &&
+                              'Nil' &&
                             !complicationOptionConstraints[i]
                               .disableNonePostpartumComplication))
                       ">
