@@ -21,7 +21,7 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import {
   MasterdataService,
@@ -100,10 +100,10 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
   referralReason: any;
   selectValue: any;
   selectValueService: any;
-  healthCareReferred: boolean = false;
+  healthCareReferred = false;
   showMsg: any = 0;
   tmcSuggested: any = 0;
-  instituteFlag: boolean = false;
+  instituteFlag = false;
   hypertensionSelected: any = 0;
   confirmedDiabeticValue: any;
   currentLanguageSet: any;
@@ -144,6 +144,7 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
     checkdate.setMonth(this.today.getMonth() + 3);
     this.maxSchedulerDate = checkdate;
     this.tomorrow = d;
+    this.referForm.get('referralReason')?.disable();
   }
   /*
    * JA354063 - Multilingual Changes added on 13/10/21
@@ -294,6 +295,7 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
       this.selectValueService = selected.length;
       console.log(this.selectValueService);
     }
+    this.toggleReferralReasonValidator();
   }
 
   public higherhealthcarecenter(selected: any): void {
@@ -301,8 +303,22 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
       this.selectValue = 1;
       this.healthCareReferred = true;
     } // should display the selected option.
-
+    this.toggleReferralReasonValidator();
     console.log(this.selectValue);
+  }
+
+  private toggleReferralReasonValidator(): void {
+    const control = this.referForm.get('referralReason');
+
+    if (this.selectValue > 0 || this.selectValueService > 0) {
+      control?.enable();
+      control?.setValidators([Validators.required]);
+    } else {
+      control?.disable();
+      control?.clearValidators();
+    }
+
+    control?.updateValueAndValidity();
   }
 
   getPreviousReferralHistory() {
