@@ -110,12 +110,17 @@
           multiple
           class="select-full-width"
           name="problemName"
-          formControlName="menstrualProblemList">
+          formControlName="menstrualProblemList"
+          (selectionChange)="resetOtherMenstrualProblems()">
           <mat-option
             *ngFor="let problem of masterData?.menstrualProblem"
             [value]="problem"
-            >{{ problem.problemName }}</mat-option
-          >
+            [disabled]="
+              (isNoneSelected && problem.problemName !== 'None') ||
+              (isOtherSelected && problem.problemName === 'None')
+            ">
+            {{ problem.problemName }}
+          </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
