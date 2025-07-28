@@ -189,7 +189,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
       JSON.stringify(serviceLineDetails)
     );
     if (serviceLineDetails.facilityID) {
-      sessionStorage.setItem('facilityID', serviceLineDetails.facilityID);
+      this.sessionstorage.setItem('facilityID', serviceLineDetails.facilityID);
     }
     this.servicePointForm.controls.servicePointID.reset();
     this.servicePointForm.controls.servicePointName.reset();
