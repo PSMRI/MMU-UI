@@ -30,7 +30,7 @@ import { environment } from 'src/environments/environment';
 @Injectable()
 export class DoctorService {
   fileIDs: any; // To store fileIDs
-  enableCovidVaccinationButton: boolean = false;
+  enableCovidVaccinationButton = false;
   prescribedDrugData: any;
   covidVaccineAgeGroup: any;
 
@@ -999,11 +999,61 @@ export class DoctorService {
       covidCareVisitDetails
     );
   }
+
+  /**
+   * Visit Details Form for All Components after Visit ID is Generated
+   */
+  postGenericVisitDetailForm(
+    patientVisitForm: any,
+    benVisitID: any,
+    visitCategory: any
+  ): Observable<any> {
+    if (visitCategory === 'NCD screening') {
+      const visitDeatilsData: any = {
+        visitDetails: this.postPatientVisitDetails(
+          patientVisitForm.controls.patientVisitDetailsForm.value,
+          patientVisitForm.controls.patientFileUploadDetailsForm.value
+        ),
+      };
+      return visitDeatilsData;
+    }
+    return new Observable(observer => {
+      observer.complete();
+    });
+  }
+
+  postPatientVisitDetails(visitForm: any, files: any) {
+    const fileList: string[] = [];
+
+    // Extract from previous file objects
+    if (this.fileIDs && this.fileIDs.length > 0) {
+      this.fileIDs.forEach((file: { filePath: string }) => {
+        if (file.filePath) {
+          fileList.push(file.filePath);
+        }
+      });
+    }
+    // Add new file IDs
+    if (files && files?.fileIDs.length > 0) {
+      fileList.push(...files.fileIDs);
+    }
+    const patientVisitDetails = {
+      ...visitForm,
+      fileIDs: fileList,
+      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+      createdBy: this.sessionstorage.getItem('userName'),
+    };
+
+    return patientVisitDetails;
+  }
+
   postDoctorNCDScreeningDetails(
     patientMedicalForm: any,
     otherDetails: any,
     tcRequest: any
   ) {
+    const visitCategory = this.sessionstorage.getItem('visitCategory');
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
@@ -1023,6 +1073,11 @@ export class DoctorService {
     const referForm = patientMedicalForm.controls['patientReferForm'];
 
     const NCDScreeningDetails = {
+      visitDetails: this.postGenericVisitDetailForm(
+        patientMedicalForm.controls.patientVisitForm,
+        null,
+        visitCategory
+      ),
       findings: this.postGeneralCaseRecordFindings(findingForm, otherDetails),
       diagnosis: this.postNCDscreeningCaseRecordDiagnosis(
         diagnosisForm,
