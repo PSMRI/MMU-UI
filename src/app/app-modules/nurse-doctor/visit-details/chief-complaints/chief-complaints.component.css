@@ -84,3 +84,8 @@ table, td, th {
     border: 1px solid #ddd;
     border-bottom: 2px solid #ddd ;
   }
+
+.action-btn{
+    width: unset !important;
+    padding: 0.45rem;
+}
