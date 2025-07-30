@@ -53,6 +53,8 @@ export class InventoryService {
     const parentAPI = this.getParentAPI();
 
     if (authKey && protocol && host && facility) {
+      console.log('Facility ID: ', facility);
+
       // uncomment later
       this.inventoryUrl = `${environment.INVENTORY_URL}protocol=${protocol}&host=${host}&user=${authKey}&app=${environment.app}&fallback=${environment.fallbackUrl}&back=${environment.redirInUrl}&facility=${facility}&ben=${benID}&visit=${visit}&flow=${flowID}&reg=${regID}&vanID=${vanID}&ppID=${ppID}&serviceName=${serviceName}&parentAPI=${parentAPI}&currentLanguage=${language}`;
       console.log(this.inventoryUrl);
@@ -74,8 +76,8 @@ export class InventoryService {
   }
 
   getFacilityID() {
-    if (sessionStorage.getItem('facilityID')) {
-      return sessionStorage.getItem('facilityID');
+    if (this.sessionstorage.getItem('facilityID')) {
+      return this.sessionstorage.getItem('facilityID');
     } else {
       return undefined;
     }
