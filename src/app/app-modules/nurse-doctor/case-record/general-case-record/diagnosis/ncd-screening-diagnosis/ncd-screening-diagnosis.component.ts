@@ -93,15 +93,12 @@ export class NcdScreeningDiagnosisComponent
     this.assignSelectedLanguage();
   }
 
-  getProvisionalDiagnosisList(): AbstractControl[] | null {
-    const provisionalDiagnosisListControl = this.generalDiagnosisForm.get(
-      'provisionalDiagnosisList'
+  get provisionalDiagnosisControls(): AbstractControl[] {
+    return (
+      (this.generalDiagnosisForm.get('provisionalDiagnosisList') as FormArray)
+        ?.controls || []
     );
-    return provisionalDiagnosisListControl instanceof FormArray
-      ? provisionalDiagnosisListControl.controls
-      : null;
   }
-
   assignSelectedLanguage() {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
@@ -144,13 +141,12 @@ export class NcdScreeningDiagnosisComponent
           conceptID: i.conceptID,
           term: i.term,
           provisionalDiagnosis: i.term,
+          viewProvisionalDiagnosisProvided: i.term,
         });
         (<FormGroup>generalArray.at(j)).controls[
           'provisionalDiagnosis'
         ].disable();
-        if (generalArray.length < previousArray.length) {
-          this.addDiagnosis();
-        }
+        this.addDiagnosis();
         j++;
       });
     }
