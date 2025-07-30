@@ -206,6 +206,42 @@ export class CancerExaminationComponent
     return image;
   }
 
+  getMergedLymphNodeValues(apiNodes: any[]): any[] {
+    const serviceLineDetailsParsed = JSON.parse(
+      this.sessionstorage.getItem('serviceLineDetails')
+    );
+    const lymphNodesArray = (<FormArray>(
+      (<FormGroup>this.cancerForm.controls['signsForm']).controls['lymphNodes']
+    )).controls;
+
+    return lymphNodesArray.map(baseNode => {
+      const matches = apiNodes.filter(
+        apiNode =>
+          apiNode.lymphNodeName.trim().toLowerCase() ===
+          baseNode.value.lymphNodeName.trim().toLowerCase()
+      );
+
+      const valid = matches.find(
+        node =>
+          node.size_Left !== null ||
+          node.size_Right !== null ||
+          node.mobility_Left !== null ||
+          node.mobility_Right !== null
+      );
+
+      return {
+        lymphNodeName: baseNode.value.lymphNodeName,
+        size_Left: valid?.size_Left ?? null,
+        mobility_Left: valid?.mobility_Left ?? null,
+        size_Right: valid?.size_Right ?? null,
+        mobility_Right: valid?.mobility_Right ?? null,
+        vanID: valid?.vanID ?? serviceLineDetailsParsed.vanID,
+        parkingPlaceID:
+          valid?.parkingPlaceID ?? serviceLineDetailsParsed.parkingPlaceID,
+      };
+    });
+  }
+
   patchExaminationDetails(examinationDetails: any) {
     if (examinationDetails.signsAndSymptoms) {
       const signFormDetails = Object.assign(
@@ -218,10 +254,15 @@ export class CancerExaminationComponent
           'lymphNodes'
         ]
       )).controls;
+      console.log(' signFormDetails.lymphNodes.slice()');
 
-      const lymphNodes = signFormDetails.lymphNodes.slice();
+      // const lymphNodes = signFormDetails.lymphNodes.slice();
+      const lymphNodes = this.getMergedLymphNodeValues(
+        examinationDetails.BenCancerLymphNodeDetails
+      );
       delete signFormDetails.lymphNodes;
       this.cancerForm.controls['signsForm'].patchValue(signFormDetails);
+      console.log('lymphNodes from res', lymphNodes);
 
       lymphNodes.forEach((element: any) => {
         const temp = lymphNodesFormArray.filter((lymphForm: any) => {
