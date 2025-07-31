@@ -346,15 +346,20 @@ export class CancerUtils {
       vanID: JSON.parse(serviceLineDetails).vanID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       lymphNodes: this.fb.array(
-        this.lymphNodesArray.map(item => ({
-          ...item,
-          vanID: JSON.parse(serviceLineDetails).vanID,
-          parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
-        }))
+        this.lymphNodesArray.map(item =>
+          this.fb.group({
+            lymphNodeName: [item.lymphNodeName],
+            size_Left: [item.size_Left],
+            mobility_Left: [item.mobility_Left],
+            size_Right: [item.size_Right],
+            mobility_Right: [item.mobility_Right],
+            vanID: [JSON.parse(serviceLineDetails).vanID],
+            parkingPlaceID: [JSON.parse(serviceLineDetails).parkingPlaceID],
+          })
+        )
       ),
     });
   }
-
   createCancerReferForm() {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');

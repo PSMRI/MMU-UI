@@ -92,13 +92,11 @@ export class PncDiagnosisComponent
   caseRecordMode!: string;
   current_language_set: any;
 
-  getProvisionalDiagnosisList(): AbstractControl[] | null {
-    const provisionalDiagnosisListControl = this.generalDiagnosisForm.get(
-      'provisionalDiagnosisList'
+  get provisionalDiagnosisControls(): AbstractControl[] {
+    return (
+      (this.generalDiagnosisForm.get('provisionalDiagnosisList') as FormArray)
+        ?.controls || []
     );
-    return provisionalDiagnosisListControl instanceof FormArray
-      ? provisionalDiagnosisListControl.controls
-      : null;
   }
 
   getConfirmatoryDiagnosisList(): AbstractControl[] | null {
@@ -259,8 +257,7 @@ export class PncDiagnosisComponent
       (<FormGroup>provisionalDiagnosisList.at(i)).controls[
         'provisionalDiagnosis'
       ].disable();
-      if (provisionalDiagnosisList.length < provisionalDiagnosisDataList.length)
-        this.addProvisionalDiagnosis();
+      this.addProvisionalDiagnosis();
     }
   }
 
