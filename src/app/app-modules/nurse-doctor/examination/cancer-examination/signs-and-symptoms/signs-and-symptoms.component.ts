@@ -78,6 +78,7 @@ export class SignsAndSymptomsComponent implements OnInit, DoCheck, OnDestroy {
   ngOnInit() {
     this.getBeneficiaryDetails();
     this.fetchLanguageResponse();
+    this.checkLymph(this.lymphNode_Enlarged);
   }
 
   ngOnDestroy() {
@@ -85,7 +86,6 @@ export class SignsAndSymptomsComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   getLymphNodes(): AbstractControl[] | null {
-    console.log('getLymnNodes', this.signsForm);
     const lymphNodesControl = this.signsForm.get('lymphNodes');
     return lymphNodesControl instanceof FormArray
       ? lymphNodesControl.controls
