@@ -2930,28 +2930,11 @@ export class DoctorService {
   }
 
   postPatientVisitDetails(visitForm: any, files: any) {
-    const fileList: string[] = [];
-
-    // Extract from previous file objects
-    if (this.fileIDs && this.fileIDs.length > 0) {
-      this.fileIDs.forEach((file: { filePath: string }) => {
-        if (file.filePath) {
-          fileList.push(file.filePath);
-        }
-      });
-    }
-    // Add new file IDs
-    if (files && files?.fileIDs.length > 0) {
-      fileList.push(...files.fileIDs);
-    }
-    const patientVisitDetails = {
-      ...visitForm,
-      fileIDs: fileList,
+    const patientVisitDetails = Object.assign({}, visitForm, files, {
       beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       createdBy: this.sessionstorage.getItem('userName'),
-    };
-
+    });
     return patientVisitDetails;
   }
 }

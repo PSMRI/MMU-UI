@@ -144,9 +144,11 @@ export class NcdScreeningDiagnosisComponent
           viewProvisionalDiagnosisProvided: i.term,
         });
         (<FormGroup>generalArray.at(j)).controls[
-          'provisionalDiagnosis'
+          'viewProvisionalDiagnosisProvided'
         ].disable();
-        this.addDiagnosis();
+        if (generalArray.length < previousArray.length) {
+          this.addDiagnosis();
+        }
         j++;
       });
     }
@@ -215,7 +217,7 @@ export class NcdScreeningDiagnosisComponent
   }
 
   displayDiagnosis(diagnosis: any): string {
-    return diagnosis?.term || '';
+    return typeof diagnosis === 'string' ? diagnosis : diagnosis?.term || '';
   }
 
   onDiagnosisSelected(selected: any, index: number) {
