@@ -644,7 +644,7 @@ export class GeneralUtils {
       conceptID: [null, Validators.required],
       term: [null, Validators.required],
       provisionalDiagnosis: [null],
-      viewProvisionalDiagnosisProvided: [''],
+      viewProvisionalDiagnosisProvided: [null],
     });
   }
   initConfirmatoryDiagnosisList() {
