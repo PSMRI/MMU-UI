@@ -30,6 +30,7 @@ import { environment } from 'src/environments/environment';
 @Injectable()
 export class DoctorService {
   fileIDs: any; // To store fileIDs
+  gynecologicalFiles: any; // To store gynecological examination files
   enableCovidVaccinationButton = false;
   prescribedDrugData: any;
   covidVaccineAgeGroup: any;
