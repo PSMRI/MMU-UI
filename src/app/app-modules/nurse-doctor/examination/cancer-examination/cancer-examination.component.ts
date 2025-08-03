@@ -63,7 +63,7 @@ export class CancerExaminationComponent
 
   constructor(
     private httpServiceService: HttpServiceService,
-    private doctorService: DoctorService,
+    public doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     readonly sessionstorage: SessionStorageService,
     private beneficiaryDetailsService: BeneficiaryDetailsService
@@ -346,6 +346,8 @@ export class CancerExaminationComponent
     }
 
     if (examinationDetails.gynecologicalExamination) {
+      this.doctorService.gynecologicalFiles =
+        examinationDetails.gynecologicalExamination.files;
       const image = this.filterAnnotatedImageList(
         examinationDetails.imageCoordinates,
         4

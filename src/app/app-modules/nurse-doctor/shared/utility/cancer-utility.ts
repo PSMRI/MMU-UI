@@ -232,7 +232,7 @@ export class CancerUtils {
       sufferedFromRTIOrSTI: null,
       rTIOrSTIDetail: null,
       image: null,
-      filePath: null,
+      fileIDs: null,
       experiencedPostCoitalBleeding: null,
       observation: null,
       vanID: JSON.parse(serviceLineDetails).vanID,
