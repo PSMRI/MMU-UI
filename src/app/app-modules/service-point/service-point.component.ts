@@ -29,6 +29,7 @@ import { ServicePointService } from './service-point.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { RegistrarService } from '../registrar/shared/services/registrar.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-service-point',
@@ -79,7 +80,8 @@ export class ServicePointComponent implements OnInit, DoCheck {
     private httpServiceService: HttpServiceService,
     private registrarService: RegistrarService,
     private languageComponent: SetLanguageComponent,
-    readonly sessionstorage: SessionStorageService
+    readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService
   ) {}
 
   servicePointForm = this.fb.group({
@@ -504,4 +506,8 @@ export class ServicePointComponent implements OnInit, DoCheck {
     this.currentLanguageSet = this.languageComponent.currentLanguageObject;
   }
   //--End--
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(fieldName, 'Service Point');
+  }
 }
