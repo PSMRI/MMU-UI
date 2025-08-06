@@ -10,7 +10,9 @@
       <button
         class="mat_blue"
         [disabled]="disableFileSelection"
-        (click)="triggerLog($event)">
+        (click)="
+          triggerLog($event); trackFieldInteraction('Select File Button')
+        ">
         {{ currentLanguageSet?.nurseData?.visitDetailsForm?.selectFile }}
       </button>
       <span class="span-style">
@@ -20,20 +22,25 @@
           id="fileUpload"
           #filelist
           style="display: inline-block"
-          (change)="uploadFile($event)" />
+          (change)="uploadFile($event); trackFieldInteraction('File Input')" />
       </span>
       <button
         *ngIf="!disableFileSelection"
         class="mat_blue pull-right"
         mat-raised-button
-        (click)="checkForDuplicateUpload()">
+        (click)="
+          checkForDuplicateUpload();
+          trackFieldInteraction('Upload Files Button')
+        ">
         {{ currentLanguageSet?.nurseData?.visitDetailsForm?.uploadFiles }}
       </button>
       <button
         style="margin-left: 10px"
         *ngIf="disableFileSelection || enableForNCDScreening"
         class="mat_blue"
-        (click)="viewNurseSelectedFiles()">
+        (click)="
+          viewNurseSelectedFiles(); trackFieldInteraction('View Files Button')
+        ">
         {{ currentLanguageSet?.nurseData?.visitDetailsForm?.viewFiles }}
       </button>
       <div style="margin: 20px 0px 0px 0px">
@@ -45,7 +52,9 @@
             <mat-icon
               matChipRemove
               *ngIf="!file.isUploaded"
-              (click)="remove(file)"
+              (click)="
+                remove(file); trackFieldInteraction('Remove File Button')
+              "
               >cancel</mat-icon
             >
           </mat-chip>

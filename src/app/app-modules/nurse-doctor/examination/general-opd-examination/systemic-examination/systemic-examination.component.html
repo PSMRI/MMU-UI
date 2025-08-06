@@ -1,6 +1,9 @@
 <div class="p-t-10">
   <mat-accordion>
-    <mat-expansion-panel *ngIf="displayGeneral">
+    <mat-expansion-panel 
+      *ngIf="displayGeneral"
+      (opened)="trackFieldInteraction('Gastro Intestinal System Panel')"
+      (closed)="trackFieldInteraction('Gastro Intestinal System Panel')">
       <mat-expansion-panel-header>
         <h5>
           {{
@@ -15,7 +18,9 @@
         "></app-nurse-gastro-intestinal-system>
     </mat-expansion-panel>
 
-    <mat-expansion-panel>
+    <mat-expansion-panel
+      (opened)="trackFieldInteraction('Cardio Vascular System Panel')"
+      (closed)="trackFieldInteraction('Cardio Vascular System Panel')">
       <mat-expansion-panel-header>
         <h5>
           {{
@@ -31,7 +36,9 @@
         "></app-nurse-cardio-vascular-system>
     </mat-expansion-panel>
 
-    <mat-expansion-panel>
+    <mat-expansion-panel
+      (opened)="trackFieldInteraction('Respiratory System Panel')"
+      (closed)="trackFieldInteraction('Respiratory System Panel')">
       <mat-expansion-panel-header>
         <h5>
           {{
@@ -47,7 +54,9 @@
         "></app-nurse-respiratory-system>
     </mat-expansion-panel>
 
-    <mat-expansion-panel>
+    <mat-expansion-panel
+      (opened)="trackFieldInteraction('Central Nervous System Panel')"
+      (closed)="trackFieldInteraction('Central Nervous System Panel')">
       <mat-expansion-panel-header>
         <h5>
           {{
@@ -63,7 +72,9 @@
         "></app-nurse-central-nervous-system>
     </mat-expansion-panel>
 
-    <mat-expansion-panel>
+    <mat-expansion-panel
+      (opened)="trackFieldInteraction('Musculoskeletal System Panel')"
+      (closed)="trackFieldInteraction('Musculoskeletal System Panel')">
       <mat-expansion-panel-header>
         <h5>
           {{
@@ -78,7 +89,9 @@
         "></app-nurse-musculoskeletal-system>
     </mat-expansion-panel>
 
-    <mat-expansion-panel>
+    <mat-expansion-panel
+      (opened)="trackFieldInteraction('Genito Urinary System Panel')"
+      (closed)="trackFieldInteraction('Genito Urinary System Panel')">
       <mat-expansion-panel-header>
         <h5>
           {{
@@ -94,7 +107,10 @@
         "></app-nurse-genito-urinary-system>
     </mat-expansion-panel>
 
-    <mat-expansion-panel *ngIf="displayANC">
+    <mat-expansion-panel 
+      *ngIf="displayANC"
+      (opened)="trackFieldInteraction('Obstetric Examination Panel')"
+      (closed)="trackFieldInteraction('Obstetric Examination Panel')">
       <mat-expansion-panel-header>
         <h5>
           {{

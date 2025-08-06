@@ -116,6 +116,7 @@
                 formControlName="chiefComplaint"
                 #complaintType
                 (keyup)="suggestChiefComplaintList(complaint, i)"
+                (focus)="trackFieldInteraction('Chief Complaint')"
                 [matAutocomplete]="auto" />
             </mat-form-field>
 
@@ -123,7 +124,7 @@
               #auto="matAutocomplete"
               [displayWith]="displayChiefComplaint"
               (optionSelected)="
-                filterComplaints($event, i); getSCTid($event, i)
+                filterComplaints($event, i); getSCTid($event, i); trackFieldInteraction('Chief Complaint Selection')
               ">
               <mat-option
                 *ngFor="let compl of suggestedChiefComplaintList[i]"
@@ -161,7 +162,8 @@
                 name="duration"
                 formControlName="duration"
                 [disabled]="!complaint.value.chiefComplaint"
-                (change)="validateDuration(complaint)" />
+                (change)="validateDuration(complaint)"
+                (focus)="trackFieldInteraction('Duration')" />
             </mat-form-field>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
@@ -175,7 +177,7 @@
                 name="unitOfDuration"
                 formControlName="unitOfDuration"
                 [disabled]="!complaint.value.duration"
-                (change)="validateDuration(complaint)">
+                (selectionChange)="validateDuration(complaint); trackFieldInteraction('Unit Of Duration')">
                 <mat-option value="Hours">Hour(s)</mat-option>
                 <mat-option value="Days">Day(s)</mat-option>
                 <mat-option value="Weeks">Week(s)</mat-option>
@@ -197,7 +199,8 @@
                 matTextareaAutosize
                 name="description"
                 [disabled]="!complaint.value.chiefComplaint"
-                formControlName="description"></textarea>
+                formControlName="description"
+                (focus)="trackFieldInteraction('Description')"></textarea>
             </mat-form-field>
           </div>
           <div
@@ -207,7 +210,7 @@
               mat-mini-fab
               [id]="'removeBtn' + i"
               *ngIf="i !== 0 || (i === 0 && complaint.touched)"
-              (click)="removeCheifComplaint(i, complaint)"
+              (click)="removeCheifComplaint(i, complaint); trackFieldInteraction('Remove Complaint Button')"
               color="warn"
               style="margin-right: 3px"
               class="mat_warn_circle">
@@ -218,7 +221,7 @@
               [id]="'addBtn' + i"
               *ngIf="isLast"
               [disabled]="checkComplaintFormValidity(complaint)"
-              (click)="addCheifComplaint()"
+              (click)="addCheifComplaint(); trackFieldInteraction('Add Complaint Button')"
               color="primary"
               class="mat_blue_circle">
               <span class="material-icons">add</span>
@@ -240,7 +243,8 @@
           matTextareaAutosize
           maxlength="300"
           name="otherSymptoms"
-          formControlName="otherSymptoms">
+          formControlName="otherSymptoms"
+          (focus)="trackFieldInteraction('Other Symptoms')">
         </textarea>
       </mat-form-field>
     </div>
@@ -256,7 +260,8 @@
           matTextareaAutosize
           maxlength="300"
           name="clinicalObservation"
-          formControlName="clinicalObservation">
+          formControlName="clinicalObservation"
+          (focus)="trackFieldInteraction('Clinical Observation')">
         </textarea>
       </mat-form-field>
     </div>
@@ -273,7 +278,8 @@
           matTextareaAutosize
           maxlength="300"
           name="significantFindings"
-          formControlName="significantFindings">
+          formControlName="significantFindings"
+          (focus)="trackFieldInteraction('Significant Findings')">
         </textarea>
       </mat-form-field>
     </div>
@@ -282,6 +288,7 @@
         class="control-label"
         checked="checked"
         formControlName="isForHistory"
+        (change)="trackFieldInteraction('Show Findings On Next Visit Checkbox')"
         >{{
           current_language_set?.Find?.showThisFindingsOnNextVisit
         }}</mat-checkbox

@@ -52,6 +52,8 @@ import { environment } from 'src/environments/environment';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
+
 @Component({
   selector: 'app-findings',
   templateUrl: './findings.component.html',
@@ -79,7 +81,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
   beneficiary: any;
   complaintList: any = [];
   current_language_set: any;
-  enableProvisionalDiag: boolean = false;
+  enableProvisionalDiag = false;
   displayedColumns: any = [
     'chiefComplaintsDetails',
     'duration',
@@ -98,7 +100,8 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     private confirmationService: ConfirmationService,
     private nurseService: NurseService,
     readonly sessionstorage: SessionStorageService,
-    private httpServiceService: HttpServiceService
+    private httpServiceService: HttpServiceService,
+    private trackingService: AmritTrackingService
   ) {
     this.formUtils = new GeneralUtils(this.fb, this.sessionstorage);
   }
@@ -464,5 +467,9 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     } else {
       return true;
     }
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(fieldName, 'Findings');
   }
 }
