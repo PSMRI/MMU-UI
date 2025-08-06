@@ -12,10 +12,10 @@
               let i = index;
               let isLast = last
             "
-            class="m-t-20">
+            class="row m-t-20">
             <ng-container [formGroupName]="i">
-              <div class="col-xs-12 col-sm-9 box">
-                <mat-form-field>
+              <div class="col-xs-12 col-sm-9 col-md-10 col-lg-10 box">
+                <mat-form-field class="input-full-width">
                   <input
                     matInput
                     appOpenModal
@@ -41,7 +41,7 @@
                   >
                 </mat-form-field>
               </div>
-              <div class="col-xs-12 col-sm-3 box pull-right">
+              <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2 box pull-right m-t-10">
                 <button
                   mat-mini-fab
                   type="button"
@@ -83,10 +83,10 @@
               let i = index;
               let isLast = last
             "
-            class="m-t-20">
+            class="row m-t-20">
             <ng-container [formGroupName]="i">
-              <div class="col-xs-12 col-sm-9 box">
-                <mat-form-field>
+              <div class="col-xs-12 col-sm-9 col-md-10 col-lg-10 box">
+                <mat-form-field class="input-full-width">
                   <input
                     matInput
                     appConfirmatoryDiagnosis
@@ -114,7 +114,7 @@
                   >
                 </mat-form-field>
               </div>
-              <div class="col-xs-12 col-sm-3 box pull-right">
+              <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2 box pull-right m-t-10">
                 <button
                   mat-mini-fab
                   type="button"
@@ -179,7 +179,7 @@
 
     <div class="row" *ngIf="isMaternalDeath">
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-        <mat-form-field>
+        <mat-form-field class="input-full-width">
           <mat-label>{{
             current_language_set?.casesheet?.placeOfDeath
           }}</mat-label>
@@ -196,7 +196,7 @@
       </div>
 
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-        <mat-form-field>
+        <mat-form-field class="input-full-width">
           <mat-label>{{
             current_language_set?.casesheet?.causeOfDeath
           }}</mat-label>
@@ -213,7 +213,7 @@
       </div>
 
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-        <mat-form-field>
+        <mat-form-field class="input-full-width">
           <mat-label>{{
             current_language_set?.casesheet?.dateOfDeath
           }}</mat-label>

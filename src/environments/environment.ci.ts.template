@@ -37,7 +37,7 @@ const TM_API = '<%= TM_API_BASE %>';
 const COMMON_API_OPEN_SYNC = '<%= COMMON_API_OPEN_SYNC %>';
 const SCHEDULER_API =  '<%= SCHEDULER_API_BASE %>';
 const SCHEDULER_UI =  '<%= SCHEDULER_UI_BASE %>';
-const INVENTORY_UI =  '<%= INVENTORY_UI_BASE %>';
+const INVENTORY_UI =  '<%= INVENTORY_UI %>';
 const IDENTITY_API =  '<%= IDENTITY_API_BASE %>';
 const sessionStorageEncKey = '<%= SESSION_STORAGE_ENC_KEY %>';
 
@@ -58,7 +58,7 @@ export const environment = {
   haemoglobinTest: `Haemoglobin Test`,
   parentAPI: `${MMU_API}`,
 
-  INVENTORY_URL: `${INVENTORY_UI}/#/redirin?`,
+  INVENTORY_URL: `${INVENTORY_UI}#/redirin?`,
   fallbackUrl: `/pharmacist/redirfallback`,
   redirInUrl: `/pharmacist/redirin`,
 
@@ -113,7 +113,7 @@ export const environment = {
   visitDetailMasterDataUrl: `${MMU_API}master/get/visitReasonAndCategories`,
   nurseMasterDataUrl: `${MMU_API}master/nurse/masterData/`,
   doctorMasterDataUrl: `${MMU_API}master/doctor/masterData/`,
-  snomedCTRecordURL: `${MMU_API}/snomed/getSnomedCTRecord`,
+  snomedCTRecordURL: `${MMU_API}snomed/getSnomedCTRecord`,
   diagnosisSnomedCTRecordUrl: `${MMU_API}snomed/getSnomedCTRecordList`,
   getDistrictTalukUrl: `${MMU_API}location/get/DistrictTalukMaster/`,
   diagnosisSnomedCTRecordUrl1: `${COMMON_API}snomed/getSnomedCTRecordList`,

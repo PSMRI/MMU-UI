@@ -1279,6 +1279,7 @@
         "invalidValue": "Invalid value. Should be less or equal to Nine(9)",
         "valueRange": "value can not be greater than 5",
         "viewCasesheet": "Confirm to view casesheet?",
+        "printCasesheet": "Confirm to print casesheet?",
         "noCasesheet": "No casesheet available for NCD screening",
         "highRiskStatus": "highRiskStatus",
         "maxDiagnosis": "Maximum 30 diagnosis can be added",
@@ -1712,7 +1713,13 @@
     "noRecordsFound": "No Records Found",
     "startDataSync": "Start Data Sync",
     "consentFormText": "To provide you with better service, we would,request your personal information. The information that you will providewill be kept confidential and will only be used for research and analysis.",
-    "beneficaryConsent":"Beneficiary Consent"
+    "beneficaryConsent":"Beneficiary Consent",
+    "abha":"ABHA",
+    "abhaNumber":"ABHA Number",
+    "abhaDetails":"ABHA Details",
+    "abhaAddress":"ABHA Address",
+    "abhaMode":"ABHA Mode",
+    "abhaDetailsNotAvailable":"ABHA details not available"
   }
   
 }

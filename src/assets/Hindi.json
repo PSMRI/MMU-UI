@@ -1266,7 +1266,8 @@
         "uploadSelectedFile": "कृपया सभी चयनित फ़ाइलों को अपलोड करें",
         "invalidValue": "अमान्य प्रविष्टि। नौ (9) के बराबर या कम होना चाहिए",
         "valueRange": "मान 5 से अधिक बड़ा नहीं हो सकता",
-        "viewCasesheet": "केस शीट देखने के लिए पुष्टि करें",
+        "viewCasesheet": "केस शीट देखने के लिए पुष्टि करें?",
+        "printCasesheet": "केस शीट मुद्रित करने के लिए पुष्टि करें?",
         "noCasesheet": "कोई केस शीट एन.सी.डी. स्क्रीनिंग के लिए उपलब्ध नहीं है",
         "highRiskStatus": "उच्च जोखिम स्थिति",
         "maxDiagnosis": "Maximum 30 diagnosis can be added",
@@ -1701,7 +1702,13 @@
     "boosterDoseDate": "Booster Dose Date",
     "covidVaccinationDetailsSaved":"Covid vaccination details saved successfully",
     "benPreviousVisitDetails": "Beneficiary previous visit details",
-    "startDataSync": "Start Data Sync"
+    "startDataSync": "Start Data Sync",
+    "abha":"ABHA",
+    "abhaNumber":"ABHA Number",
+    "abhaDetails":"ABHA Details",
+    "abhaAddress":"ABHA Address",
+    "abhaMode":"ABHA Mode",
+    "abhaDetailsNotAvailable":"ABHA details not available"
 
   }
 }
