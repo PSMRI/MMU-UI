@@ -56,7 +56,7 @@ const TM_API = `${tmIP}tmapi-v1.0/`;
 const COMMON_API_OPEN_SYNC = `${SERVER_IP}commonapi-v1.0/`;
 const SCHEDULER_API = `${schedulerIP}schedulerapi-v1.0/`;
 const FHIR_API = `${FHIRIP}/fhirapi-v1.0/`;
-const IDENTITY_API = `${identityIP}identity-0.0.1/`;
+const IDENTITY_API = `${identityIP}`;
 
 const mmuUICasesheet = `${mmuUI_IP}mmuui-v1.0`;
 const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';

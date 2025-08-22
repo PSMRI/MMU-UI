@@ -398,7 +398,7 @@ export const environment = {
   startBloodGlucoseurl: '/api/v1/wbpoct_tests/blood_glucose',
   startRBSurl: '/api/v1/wbpoct_tests/blood_glucose',
   // Check availability of benIDs
-  getBenIDs: `${IDENTITY_API}identity-0.0.1/id/checkAvailablBenIDLocalServer`,
+  getBenIDs: `${IDENTITY_API}id/checkAvailablBenIDLocalServer`,
   generateBenID: `${MMU_API}dataSyncActivity/callCentralAPIToGenerateBenIDAndimportToLocal`,
 
   // Inventory Data Sync Download
