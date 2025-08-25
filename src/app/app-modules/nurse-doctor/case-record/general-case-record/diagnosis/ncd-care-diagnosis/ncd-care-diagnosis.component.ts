@@ -50,11 +50,13 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
 
   ncdCareConditions: any;
   ncdCareTypes: any;
-  isNcdScreeningConditionOther: boolean = false;
+  isNcdScreeningConditionOther = false;
   temp: any = [];
   current_language_set: any;
   attendantType: any;
-  enableNCDCondition: boolean = false;
+  enableNCDCondition = false;
+  suggestedDiagnosisList: any = [];
+
   constructor(
     private fb: FormBuilder,
     private masterdataService: MasterdataService,
@@ -100,13 +102,11 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
     });
   }
 
-  getProvisionalDiagnosisList(): AbstractControl[] | null {
-    const provisionalDiagnosisListControl = this.generalDiagnosisForm.get(
-      'provisionalDiagnosisList'
+  get provisionalDiagnosisControls(): AbstractControl[] {
+    return (
+      (this.generalDiagnosisForm.get('provisionalDiagnosisList') as FormArray)
+        ?.controls || []
     );
-    return provisionalDiagnosisListControl instanceof FormArray
-      ? provisionalDiagnosisListControl.controls
-      : null;
   }
 
   diagnosisSubscription: any;
@@ -114,35 +114,60 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
     this.diagnosisSubscription = this.doctorService
       .getCaseRecordAndReferDetails(beneficiaryRegID, visitID, visitCategory)
       .subscribe((res: any) => {
-        if (res?.statusCode === 200 && res?.data?.diagnosis) {
+        if (res && res.statusCode === 200 && res.data && res.data.diagnosis) {
           this.patchDiagnosisDetails(res.data.diagnosis);
+          if (res.data.diagnosis.provisionalDiagnosisList) {
+            this.patchProvisionalDiagnosisDetails(
+              res.data.diagnosis.provisionalDiagnosisList
+            );
+          }
         }
       });
   }
 
   patchDiagnosisDetails(diagnosis: any) {
+    if (
+      diagnosis !== undefined &&
+      diagnosis.ncdScreeningConditionArray !== undefined &&
+      diagnosis.ncdScreeningConditionArray !== null
+    ) {
+      this.temp = diagnosis.ncdScreeningConditionArray;
+    }
+    if (
+      diagnosis !== undefined &&
+      diagnosis.ncdScreeningConditionOther !== undefined &&
+      diagnosis.ncdScreeningConditionOther !== null
+    ) {
+      this.isNcdScreeningConditionOther = true;
+    }
+    const ncdCareType = this.ncdCareTypes.filter((item: any) => {
+      return item.ncdCareType === diagnosis.ncdCareType;
+    });
+    if (ncdCareType.length > 0) diagnosis.ncdCareType = ncdCareType[0];
+
     this.generalDiagnosisForm.patchValue(diagnosis);
-    const generalArray = this.generalDiagnosisForm.controls[
+  }
+
+  patchProvisionalDiagnosisDetails(provisionalDiagnosis: any) {
+    const savedDiagnosisData = provisionalDiagnosis;
+    const diagnosisArrayList = this.generalDiagnosisForm.controls[
       'provisionalDiagnosisList'
     ] as FormArray;
-
-    const previousArray = diagnosis.provisionalDiagnosisList;
-    let j = 0;
-    if (previousArray !== undefined && previousArray.length > 0) {
-      previousArray.forEach((i: any) => {
-        generalArray.at(j).patchValue({
-          conceptID: i.conceptID,
-          term: i.term,
-          provisionalDiagnosis: i.term,
+    if (
+      provisionalDiagnosis[0].term !== '' &&
+      provisionalDiagnosis[0].conceptID !== ''
+    ) {
+      for (let i = 0; i < savedDiagnosisData.length; i++) {
+        diagnosisArrayList.at(i).patchValue({
+          viewProvisionalDiagnosisProvided: savedDiagnosisData[i].term,
+          term: savedDiagnosisData[i].term,
+          conceptID: savedDiagnosisData[i].conceptID,
         });
-        (<FormGroup>generalArray.at(j)).controls[
-          'provisionalDiagnosis'
+        (<FormGroup>diagnosisArrayList.at(i)).controls[
+          'viewProvisionalDiagnosisProvided'
         ].disable();
-        if (generalArray.length < previousArray.length) {
-          this.addDiagnosis();
-        }
-        j++;
-      });
+        this.addDiagnosis();
+      }
     }
   }
 
@@ -217,5 +242,36 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
     this.generalDiagnosisForm.controls['ncdScreeningConditionArray'].patchValue(
       value
     );
+  }
+
+  onDiagnosisInputKeyup(value: string, index: number) {
+    if (value.length >= 3) {
+      this.masterdataService
+        .searchDiagnosisBasedOnPageNo(value, index)
+        .subscribe((results: any) => {
+          this.suggestedDiagnosisList[index] = results?.data?.sctMaster;
+        });
+    } else {
+      this.suggestedDiagnosisList[index] = [];
+    }
+  }
+
+  displayDiagnosis(diagnosis: any): string {
+    return typeof diagnosis === 'string' ? diagnosis : diagnosis?.term || '';
+  }
+
+  onDiagnosisSelected(selected: any, index: number) {
+    // this.patientQuickConsultForm.get(['provisionalDiagnosisList', index])?.setValue(selected);
+    const diagnosisFormArray = this.generalDiagnosisForm.get(
+      'provisionalDiagnosisList'
+    ) as FormArray;
+    const diagnosisFormGroup = diagnosisFormArray.at(index) as FormGroup;
+
+    // Set the nested and top-level fields
+    diagnosisFormGroup.patchValue({
+      viewProvisionalDiagnosisProvided: selected,
+      conceptID: selected?.conceptID || null,
+      term: selected?.term || null,
+    });
   }
 }

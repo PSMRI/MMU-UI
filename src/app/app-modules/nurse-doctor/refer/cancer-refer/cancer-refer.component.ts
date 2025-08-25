@@ -21,7 +21,7 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { MasterdataService, DoctorService } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
@@ -100,6 +100,7 @@ export class CancerReferComponent implements OnInit, DoCheck, OnDestroy {
     checkdate.setMonth(this.today.getMonth() + 3);
     this.maxSchedulerDate = checkdate;
     this.tomorrow = d;
+    this.referForm.get('referralReason')?.disable();
   }
   /*
    * JA354063 - Multilingual Changes added on 13/10/21
@@ -233,13 +234,30 @@ export class CancerReferComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   public additionalservices(selected: any): void {
-    if (selected !== undefined && selected !== null)
+    if (selected !== undefined && selected !== null) {
       this.selectValue = selected.length;
+    }
+    this.toggleReferralReasonValidator();
     // should display the selected option.
   }
 
   public higherhealthcarecenter(selected: any): void {
     this.selectValue = selected;
+    this.toggleReferralReasonValidator();
     // should display the selected option.
+  }
+
+  private toggleReferralReasonValidator(): void {
+    const control = this.referForm.get('referralReason');
+
+    if (this.selectValue > 0) {
+      control?.enable();
+      control?.setValidators([Validators.required]);
+    } else {
+      control?.disable();
+      control?.clearValidators();
+    }
+
+    control?.updateValueAndValidity();
   }
 }

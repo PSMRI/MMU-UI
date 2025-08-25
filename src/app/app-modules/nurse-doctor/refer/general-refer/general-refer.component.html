@@ -90,44 +90,16 @@
       </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">
-      <div
-        class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment"
-        *ngIf="selectValue > 0 || selectValueService > 0; else elseBlock">
-        {{ currentLanguageSet?.Referdetails?.referralReason }}*
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment">
+        {{ currentLanguageSet?.Referdetails?.referralReason }}
+        <span *ngIf="referForm.get('referralReason')?.enabled">*</span>
       </div>
-
-      <ng-template #elseBlock>
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment">
-          {{ currentLanguageSet?.Referdetails?.referralReason }}
-        </div>
-      </ng-template>
-      <div
-        class="col-xs-6 col-sm-6 col-md-6 col-lg-6"
-        *ngIf="selectValue > 0 || selectValueService > 0; else elseBlockText">
-        <mat-form-field>
-          <textarea
-            matInput
-            allowText="textAreaValidator"
-            matTextareaAutosize
-            required="true"
-            formControlName="referralReason"
-            name="Remarks"
-            maxLength="300"></textarea>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <mat-form-field style="width: 50%">
+          <textarea matInput formControlName="referralReason" name="Remarks" maxLength="300" matTextareaAutosize>
+      </textarea>
         </mat-form-field>
       </div>
-      <ng-template #elseBlockText>
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-          <mat-form-field style="width: 50%">
-            <textarea
-              matInput
-              allowText="textAreaValidator"
-              matTextareaAutosize
-              formControlName="referralReason"
-              name="Remarks"
-              maxLength="300"></textarea>
-          </mat-form-field>
-        </div>
-      </ng-template>
     </div>
     <!--Revisit Date Added-->
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">

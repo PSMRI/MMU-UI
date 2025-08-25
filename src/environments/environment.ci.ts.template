@@ -124,7 +124,7 @@ export const environment = {
 
   getprescribedTestDataUrl: `${MMU_API}labTechnician/get/prescribedProceduresList`,
   labSaveWork: `${MMU_API}labTechnician/save/LabTestResult`,
-  getEcgAbnormalitiesMasterUrl: `${MMU_API}/master/ecgAbnormalities`,
+  getEcgAbnormalitiesMasterUrl: `${MMU_API}master/ecgAbnormalities`,
 
   /**
    * Worklist Urls
@@ -177,7 +177,7 @@ export const environment = {
   previousReferredHistoryUrl: `${MMU_API}common/getBenPreviousReferralHistoryDetails`,
   updateNCDScreeningDetails: `${MMU_API}NCD/update/nurseData`,
   updateNCDScreeningHistoryDetailsUrl: `${MMU_API}NCD/update/historyScreen`,
-  updateNCDScreeningDoctorDetails: `${MMU_API}/NCD/update/doctorData`,
+  updateNCDScreeningDoctorDetails: `${MMU_API}NCD/update/doctorData`,
   previousVisitDataUrl: `${MMU_API}common/getBenSymptomaticQuestionnaireDetails`,
   nurseWorklistTMreferred: `${MMU_API}common/getNurseWorklistTMreferred/`,
   /**
@@ -398,7 +398,7 @@ export const environment = {
   startBloodGlucoseurl: '/api/v1/wbpoct_tests/blood_glucose',
   startRBSurl: '/api/v1/wbpoct_tests/blood_glucose',
   // Check availability of benIDs
-  getBenIDs: `${IDENTITY_API}identity-0.0.1/id/checkAvailablBenIDLocalServer`,
+  getBenIDs: `${IDENTITY_API}id/checkAvailablBenIDLocalServer`,
   generateBenID: `${MMU_API}dataSyncActivity/callCentralAPIToGenerateBenIDAndimportToLocal`,
 
   // Inventory Data Sync Download

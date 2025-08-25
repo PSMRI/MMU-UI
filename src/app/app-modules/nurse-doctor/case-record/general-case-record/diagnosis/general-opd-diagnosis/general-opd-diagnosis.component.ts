@@ -28,7 +28,7 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { ConfirmationService } from '../../../../../core/services/confirmation.service';
-import { DoctorService } from '../../../../shared/services';
+import { DoctorService, MasterdataService } from '../../../../shared/services';
 import { GeneralUtils } from '../../../../shared/utility/general-utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
@@ -47,12 +47,15 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
   utils = new GeneralUtils(this.fb, this.sessionstorage);
   diagnosisSubscription: any;
   current_language_set: any;
+  suggestedDiagnosisList: any = [];
+
   constructor(
     private fb: FormBuilder,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     private httpServiceService: HttpServiceService,
-    readonly sessionstorage: SessionStorageService
+    readonly sessionstorage: SessionStorageService,
+    private masterdataService: MasterdataService
   ) {}
 
   ngOnChanges() {
@@ -82,13 +85,11 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
       });
   }
 
-  getProvisionalDiagnosisList(): AbstractControl[] | null {
-    const provisionalDiagnosisListControl = this.generalDiagnosisForm.get(
-      'provisionalDiagnosisList'
+  get provisionalDiagnosisControls(): AbstractControl[] {
+    return (
+      (this.generalDiagnosisForm.get('provisionalDiagnosisList') as FormArray)
+        ?.controls || []
     );
-    return provisionalDiagnosisListControl instanceof FormArray
-      ? provisionalDiagnosisListControl.controls
-      : null;
   }
 
   patchDiagnosisDetails(diagnosis: any) {
@@ -105,13 +106,12 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
           conceptID: i.conceptID,
           term: i.term,
           provisionalDiagnosis: i.term,
+          viewProvisionalDiagnosisProvided: i.term,
         });
         (<FormGroup>generalArray.at(j)).controls[
           'provisionalDiagnosis'
         ].disable();
-        if (generalArray.length < previousArray.length) {
-          this.addDiagnosis();
-        }
+        this.addDiagnosis();
         j++;
       });
     }
@@ -165,5 +165,36 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
     } else {
       return true;
     }
+  }
+
+  onDiagnosisInputKeyup(value: string, index: number) {
+    if (value.length >= 3) {
+      this.masterdataService
+        .searchDiagnosisBasedOnPageNo(value, index)
+        .subscribe((results: any) => {
+          this.suggestedDiagnosisList[index] = results?.data?.sctMaster;
+        });
+    } else {
+      this.suggestedDiagnosisList[index] = [];
+    }
+  }
+
+  displayDiagnosis(diagnosis: any): string {
+    return typeof diagnosis === 'string' ? diagnosis : diagnosis?.term || '';
+  }
+
+  onDiagnosisSelected(selected: any, index: number) {
+    // this.patientQuickConsultForm.get(['provisionalDiagnosisList', index])?.setValue(selected);
+    const diagnosisFormArray = this.generalDiagnosisForm.get(
+      'provisionalDiagnosisList'
+    ) as FormArray;
+    const diagnosisFormGroup = diagnosisFormArray.at(index) as FormGroup;
+
+    // Set the nested and top-level fields
+    diagnosisFormGroup.patchValue({
+      viewProvisionalDiagnosisProvided: selected,
+      conceptID: selected?.conceptID || null,
+      term: selected?.term || null,
+    });
   }
 }

@@ -30,7 +30,8 @@ import { environment } from 'src/environments/environment';
 @Injectable()
 export class DoctorService {
   fileIDs: any; // To store fileIDs
-  enableCovidVaccinationButton: boolean = false;
+  gynecologicalFiles: any; // To store gynecological examination files
+  enableCovidVaccinationButton = false;
   prescribedDrugData: any;
   covidVaccineAgeGroup: any;
 
@@ -1004,6 +1005,7 @@ export class DoctorService {
     otherDetails: any,
     tcRequest: any
   ) {
+    const visitCategory = this.sessionstorage.getItem('visitCategory');
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
@@ -1023,6 +1025,11 @@ export class DoctorService {
     const referForm = patientMedicalForm.controls['patientReferForm'];
 
     const NCDScreeningDetails = {
+      visitDetails: this.postGenericVisitDetailForm(
+        patientMedicalForm.controls.patientVisitForm,
+        null,
+        visitCategory
+      ),
       findings: this.postGeneralCaseRecordFindings(findingForm, otherDetails),
       diagnosis: this.postNCDscreeningCaseRecordDiagnosis(
         diagnosisForm,
@@ -2902,5 +2909,33 @@ export class DoctorService {
 
   setCapturedHistoryByNurse(historyResponse: any) {
     this.populateHistoryResponse.next(historyResponse);
+  }
+
+  postGenericVisitDetailForm(
+    patientVisitForm: any,
+    benVisitID: any,
+    visitCategory: any
+  ): Observable<any> {
+    if (visitCategory === 'NCD screening') {
+      const visitDeatilsData: any = {
+        visitDetails: this.postPatientVisitDetails(
+          patientVisitForm.controls.patientVisitDetailsForm.value,
+          patientVisitForm.controls.patientFileUploadDetailsForm.value
+        ),
+      };
+      return visitDeatilsData;
+    }
+    return new Observable(observer => {
+      observer.complete();
+    });
+  }
+
+  postPatientVisitDetails(visitForm: any, files: any) {
+    const patientVisitDetails = Object.assign({}, visitForm, files, {
+      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+      createdBy: this.sessionstorage.getItem('userName'),
+    });
+    return patientVisitDetails;
   }
 }
