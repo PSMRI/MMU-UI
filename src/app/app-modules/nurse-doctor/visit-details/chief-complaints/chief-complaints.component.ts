@@ -50,6 +50,8 @@ import { environment } from 'src/environments/environment';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
+
 @Component({
   selector: 'app-patient-chief-complaints',
   templateUrl: './chief-complaints.component.html',
@@ -73,8 +75,8 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
   selectedChiefComplaintList: any = [];
   suggestedChiefComplaintList: any[] = [];
   currentLanguageSet: any;
-  enableLungAssessment: boolean = false;
-  enableProvisionalDiag: boolean = false;
+  enableLungAssessment = false;
+  enableProvisionalDiag = false;
   displayedColumns: any = [
     'chiefComplaint',
     'duration',
@@ -93,7 +95,8 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private confirmationService: ConfirmationService,
     private httpServices: HttpServiceService,
-    readonly sessionstorage: SessionStorageService
+    readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService
   ) {
     this.formUtility = new VisitDetailUtils(this.fb, this.sessionstorage);
   }
@@ -546,5 +549,9 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     } else {
       return true;
     }
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(fieldName, 'Chief Complaints');
   }
 }
