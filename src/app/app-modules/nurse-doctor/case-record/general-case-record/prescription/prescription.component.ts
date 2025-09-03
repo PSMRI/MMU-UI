@@ -43,6 +43,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
+
 interface prescribe {
   id: any;
   drugID: any;
@@ -133,7 +135,8 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
     private doctorService: DoctorService,
     private masterdataService: MasterdataService,
     readonly sessionstorage: SessionStorageService,
-    private httpServiceService: HttpServiceService
+    private httpServiceService: HttpServiceService,
+    private trackingService: AmritTrackingService
   ) {}
 
   getPrescribedDrugs(): AbstractControl[] | null {
@@ -180,6 +183,10 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
           option.unitOfMeasurement ? option.unitOfMeasurement : ''
         }${option.quantityInHand ? '(' + option.quantityInHand + ')' : ''}`
       : '';
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(fieldName, 'Prescription');
   }
 
   getFormValueChanged() {
