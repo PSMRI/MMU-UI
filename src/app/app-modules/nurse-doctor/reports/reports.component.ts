@@ -38,7 +38,6 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 declare global {
   interface Navigator {
@@ -84,8 +83,7 @@ export class ReportsComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     private formBuilder: FormBuilder,
     readonly sessionstorage: SessionStorageService,
-    private httpServices: HttpServiceService,
-    private trackingService: AmritTrackingService
+    private httpServices: HttpServiceService
   ) {}
   today!: Date;
   criteriaHead: any;
@@ -143,10 +141,6 @@ export class ReportsComponent implements OnInit, DoCheck {
 
   get report() {
     return this.reportForm.controls['report'].value;
-  }
-
-  trackFieldInteraction(fieldName: string) {
-    this.trackingService.trackFieldInteraction(fieldName, 'Reports');
   }
 
   checkReport() {

@@ -3,7 +3,7 @@
     <h4>{{ currentLanguageSet?.bendetails?.editLocation }}</h4>
     <button
       class="pull-right close-btn"
-      (click)="closeDialog(); trackFieldInteraction('Close Button')"
+      (click)="closeDialog()"
       mat-icon-button>
       <mat-icon class="md-24">close</mat-icon>
     </button>
@@ -21,9 +21,7 @@
             <mat-select
               formControlName="stateID"
               [required]="true"
-              (selectionChange)="
-                onStateChange(); trackFieldInteraction('State')
-              ">
+              (selectionChange)="onStateChange()">
               <mat-option
                 *ngFor="let state of statesList"
                 [value]="state.stateID">
@@ -42,9 +40,7 @@
             <mat-select
               [required]="true"
               formControlName="districtID"
-              (selectionChange)="
-                onDistrictChange(); trackFieldInteraction('District')
-              ">
+              (selectionChange)="onDistrictChange()">
               <mat-option
                 *ngFor="let district of districtList"
                 [value]="district.districtID">
@@ -61,9 +57,7 @@
             <mat-select
               [required]="true"
               formControlName="blockID"
-              (selectionChange)="
-                onSubDistrictChange(); trackFieldInteraction('Taluk')
-              ">
+              (selectionChange)="onSubDistrictChange()">
               <mat-option
                 *ngFor="let subDistrict of subDistrictList"
                 [value]="subDistrict.blockID">
@@ -81,9 +75,7 @@
             <mat-select
               [required]="true"
               formControlName="villageID"
-              (selectionChange)="
-                onVillageChange(); trackFieldInteraction('Street')
-              ">
+              (selectionChange)="onVillageChange()">
               <mat-option
                 *ngFor="let village of villageList"
                 [value]="village.districtBranchID">
@@ -100,7 +92,7 @@
           class="mat_blue"
           style="margin-right: 5px"
           type="submit"
-          (click)="closeDialog(); trackFieldInteraction('Cancel Button')">
+          (click)="closeDialog()">
           {{ currentLanguageSet?.common?.cancel }}
         </button>
         <button
@@ -108,7 +100,7 @@
           class="mat_blue"
           type="submit"
           [disabled]="demographicEditDetailsForm.invalid"
-          (click)="onSubmitEditLocation(); trackFieldInteraction('OK Button')">
+          (click)="onSubmitEditLocation()">
           {{ currentLanguageSet?.common?.ok }}
         </button>
       </div>

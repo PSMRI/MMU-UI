@@ -40,7 +40,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { IotcomponentComponent } from 'src/app/app-modules/core/components/iotcomponent/iotcomponent.component';
 import { ActivatedRoute } from '@angular/router';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-nurse-cancer-patient-vitals',
@@ -60,7 +59,7 @@ export class CancerPatientVitalsComponent
   mode!: string;
 
   female = false;
-  benAge = 0;
+  benAge: number = 0;
   BMI: any = null;
   male = false;
   startWeightTest = environment.startWeighturl;
@@ -71,13 +70,13 @@ export class CancerPatientVitalsComponent
   startBloodGlucose = environment.startBloodGlucoseurl;
   currentLanguageSet: any;
   bmiStatusMinor: any;
-  totalMonths = 0;
+  totalMonths: number = 0;
   beneficiary: any;
   benGenderAndAge: any;
   rbsSelectedInInvestigationSubscription: any;
-  rbsSelectedInInvestigation = false;
+  rbsSelectedInInvestigation: boolean = false;
   startRBSTest = environment.startRBSurl;
-  rbsPopup = false;
+  rbsPopup: boolean = false;
   attendant: any;
 
   constructor(
@@ -90,8 +89,7 @@ export class CancerPatientVitalsComponent
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private languageComponent: SetLanguageComponent,
     readonly sessionstorage: SessionStorageService,
-    private route: ActivatedRoute,
-    private trackingService: AmritTrackingService
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -935,11 +933,4 @@ export class CancerPatientVitalsComponent
     this.currentLanguageSet = this.languageComponent.currentLanguageObject;
   }
   //--End--
-
-  trackFieldInteraction(fieldName: string) {
-    this.trackingService.trackFieldInteraction(
-      fieldName,
-      'Cancer Patient Vitals'
-    );
-  }
 }

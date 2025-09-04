@@ -67,14 +67,6 @@ export const environment = {
 
   isMMUOfflineSync: false,
 
-  tracking: {
-    platform: 'matomo',
-    siteId: 3,
-    trackerUrl: 'https://matomo.piramalswasthya.org/',
-    trackingPlatform: 'local',
-    enabled: true,
-  },
-
   app: `MMU`,
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,

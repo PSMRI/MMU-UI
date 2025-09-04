@@ -64,14 +64,6 @@ export const environment = {
   isMMUOfflineSync: false,
   encKey: sessionStorageEncKey,
 
-  tracking: {
-    platform: 'matomo',
-    siteId: 3,
-    trackerUrl: '//127.0.0.1/',
-    trackingPlatform: 'test',
-    enabled: true,
-  },
-
   app: `MMU`,
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,

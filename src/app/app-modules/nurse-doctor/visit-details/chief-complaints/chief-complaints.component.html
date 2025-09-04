@@ -30,7 +30,6 @@
                 formControlName="chiefComplaint"
                 (keyup)="suggestChiefComplaintList(complaint, i)"
                 (blur)="reEnterChiefComplaint(complaint)"
-                (focus)="trackFieldInteraction('Chief Complaints')"
                 #complaintType
                 [matAutocomplete]="auto" />
             </mat-form-field>
@@ -76,8 +75,7 @@
                 maxlength="2"
                 formControlName="duration"
                 (input)="onInputDuration(complaint)"
-                (selectionChange)="validateDuration(complaint)"
-                (focus)="trackFieldInteraction('Duration')" />
+                (selectionChange)="validateDuration(complaint)" />
             </mat-form-field>
           </div>
 
@@ -91,10 +89,7 @@
                 class="input-full-width"
                 name="unitOfDuration"
                 formControlName="unitOfDuration"
-                (selectionChange)="
-                  validateDuration(complaint);
-                  trackFieldInteraction('Unit Of Duration')
-                ">
+                (selectionChange)="validateDuration(complaint)">
                 <mat-option value="Hours">Hour(s)</mat-option>
                 <mat-option value="Days">Day(s)</mat-option>
                 <mat-option value="Weeks">Week(s)</mat-option>
@@ -120,8 +115,7 @@
                 minRows="6"
                 name="description"
                 formControlName="description"
-                maxlength="300"
-                (focus)="trackFieldInteraction('Description')"></textarea>
+                maxlength="300"></textarea>
             </mat-form-field>
           </div>
 
@@ -130,10 +124,7 @@
             mat-mini-fab
             [id]="'removeBtn' + i"
             *ngIf="i !== 0 || (i === 0 && complaint.touched)"
-            (click)="
-              removeCheifComplaint(i, complaint);
-              trackFieldInteraction('Remove Complaint Button')
-            "
+            (click)="removeCheifComplaint(i, complaint)"
             color="warn"
             style="margin-right: 3px; margin-top: 25px"
             class="mat_warn_circle action-btn">
@@ -148,9 +139,7 @@
             [id]="'addBtn' + i"
             *ngIf="isLast"
             [disabled]="checkComplaintFormValidity(complaint)"
-            (click)="
-              addCheifComplaint(); trackFieldInteraction('Add Complaint Button')
-            ">
+            (click)="addCheifComplaint()">
             <span class="material-icons">add</span>
           </button>
         </div>
