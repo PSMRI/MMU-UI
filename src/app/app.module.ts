@@ -36,6 +36,7 @@ import { DataSYNCModule } from './app-modules/data-sync/dataSync.module';
 import { SharedModule } from './app-modules/core/components/shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { CaptchaComponent } from './app-modules/captcha/captcha.component';
+import { TrackingModule } from 'Common-UI/src/tracking';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { CaptchaComponent } from './app-modules/captcha/captcha.component';
     NgxPaginationModule,
     SharedModule,
     CoreModule.forRoot(),
+    TrackingModule.forRoot(),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [

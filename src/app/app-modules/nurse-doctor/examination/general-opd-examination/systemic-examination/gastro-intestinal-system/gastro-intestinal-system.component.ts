@@ -24,6 +24,7 @@ import { Component, OnInit, Input, DoCheck } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-nurse-gastro-intestinal-system',
@@ -84,7 +85,17 @@ export class GastroIntestinalSystemComponent implements OnInit, DoCheck {
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
 
-  constructor(private httpServiceService: HttpServiceService) {}
+  constructor(
+    private httpServiceService: HttpServiceService,
+    private trackingService: AmritTrackingService
+  ) {}
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'Gastro-Intestinal System Examination'
+    );
+  }
 
   ngOnInit() {
     this.fetchLanguageResponse();

@@ -25,6 +25,7 @@ import { MasterdataService } from '../../../../shared/services';
 import { FormGroup } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-nurse-musculoskeletal-system',
@@ -146,7 +147,8 @@ export class MusculoskeletalSystemComponent
 
   constructor(
     private httpServiceService: HttpServiceService,
-    private masterdataService: MasterdataService
+    private masterdataService: MasterdataService,
+    private trackingService: AmritTrackingService
   ) {}
 
   ngOnInit() {
@@ -178,4 +180,11 @@ export class MusculoskeletalSystemComponent
     this.currentLanguageSet = this.languageComponent.currentLanguageObject;
   }
   //--End--
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'Musculoskeletal System Examination'
+    );
+  }
 }

@@ -24,6 +24,7 @@
             formControlName="height_cm"
             (change)="checkHeight(height_cm)"
             (blur)="calculateBMI(height_cm, weight_Kg)"
+            (focus)="trackFieldInteraction('Height')"
             required />
         </mat-form-field>
       </div>
@@ -44,6 +45,7 @@
             formControlName="weight_Kg"
             (change)="checkWeight(weight_Kg)"
             (blur)="calculateBMI(height_cm, weight_Kg)"
+            (focus)="trackFieldInteraction('Weight')"
             required />
           <svg
             class="fontawesomesvg"
@@ -51,7 +53,7 @@
             viewBox="0 0 512 512"
             matTooltip="{{ currentLanguageSet?.common?.startTest }}"
             matSuffix
-            (click)="openIOTWeightModel()"
+            (click)="openIOTWeightModel(); trackFieldInteraction('Weight IoT Button')"
             onkeydown="openIOTWeightModel()"
             tabindex="{0}">
             <path
@@ -220,7 +222,8 @@
             formControlName="waistCircumference_cm"
             [ngClass]="{ abnormal: !normalWaist }"
             (change)="checkWaist(waistCircumference_cm)"
-            (keyup)="checkNormalWaist(waistCircumference_cm)" />
+            (keyup)="checkNormalWaist(waistCircumference_cm)"
+            (focus)="trackFieldInteraction('Waist Circumference')" />
         </mat-form-field>
       </div>
     </div>
@@ -253,6 +256,7 @@
                     diastolicBP_1stReading
                   )
                 "
+                (focus)="trackFieldInteraction('Systolic BP 1st Reading')"
                 [required]="benAge > 30" />
               <svg
                 class="fontawesomesvg"
@@ -260,7 +264,7 @@
                 viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                (click)="openIOTBP1Model()"
+                (click)="openIOTBP1Model(); trackFieldInteraction('BP 1st Reading IoT Button')"
                 onkeydown="openIOTBP1Model()"
                 tabindex="{0}">
                 <path
@@ -290,6 +294,7 @@
                     diastolicBP_1stReading
                   )
                 "
+                (focus)="trackFieldInteraction('Diastolic BP 1st Reading')"
                 [required]="benAge > 30" />
               <svg
                 class="fontawesomesvg"
@@ -297,7 +302,7 @@
                 viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                (click)="openIOTBP1Model()"
+                (click)="openIOTBP1Model(); trackFieldInteraction('BP 1st Reading IoT Button')"
                 onkeydown="openIOTBP1Model()"
                 tabindex="{0}">
                 <path
@@ -333,14 +338,15 @@
                     systolicBP_2ndReading,
                     diastolicBP_2ndReading
                   )
-                " />
+                "
+                (focus)="trackFieldInteraction('Systolic BP 2nd Reading')" />
               <svg
                 class="fontawesomesvg"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                (click)="openIOTBP2Model()"
+                (click)="openIOTBP2Model(); trackFieldInteraction('BP 2nd Reading IoT Button')"
                 onkeydown="openIOTBP2Model()"
                 tabindex="{0}">
                 <path
@@ -368,14 +374,15 @@
                     systolicBP_2ndReading,
                     diastolicBP_2ndReading
                   )
-                " />
+                "
+                (focus)="trackFieldInteraction('Diastolic BP 2nd Reading')" />
               <svg
                 class="fontawesomesvg"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                (click)="openIOTBP2Model()"
+                (click)="openIOTBP2Model(); trackFieldInteraction('BP 2nd Reading IoT Button')"
                 onkeydown="openIOTBP2Model()"
                 tabindex="{0}">
                 <path
@@ -411,14 +418,15 @@
                     systolicBP_3rdReading,
                     diastolicBP_3rdReading
                   )
-                " />
+                "
+                (focus)="trackFieldInteraction('Systolic BP 3rd Reading')" />
               <svg
                 class="fontawesomesvg"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                (click)="openIOTBP3Model()"
+                (click)="openIOTBP3Model(); trackFieldInteraction('BP 3rd Reading IoT Button')"
                 onkeydown="openIOTBP3Model()"
                 tabindex="{0}">
                 <path
@@ -446,14 +454,15 @@
                     systolicBP_3rdReading,
                     diastolicBP_3rdReading
                   )
-                " />
+                "
+                (focus)="trackFieldInteraction('Diastolic BP 3rd Reading')" />
               <svg
                 class="fontawesomesvg"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                (click)="openIOTBP3Model()"
+                (click)="openIOTBP3Model(); trackFieldInteraction('BP 3rd Reading IoT Button')"
                 onkeydown="openIOTBP3Model()"
                 tabindex="{0}">
                 <path
@@ -482,7 +491,8 @@
             formControlName="hbA1C"
             [ngClass]="{ abnormal: !normalHbA1C }"
             (change)="checkHbA1C(hbA1C)"
-            (keyup)="checkNormalHbA1c(hbA1C)" />
+            (keyup)="checkNormalHbA1c(hbA1C)"
+            (focus)="trackFieldInteraction('HbA1C')" />
         </mat-form-field>
       </div>
 
@@ -501,14 +511,15 @@
             allowMax="20"
             name="hemoglobin"
             formControlName="hemoglobin"
-            (change)="checkHemoglobin(hemoglobin)" />
+            (change)="checkHemoglobin(hemoglobin)"
+            (focus)="trackFieldInteraction('Hemoglobin')" />
           <svg
             class="fontawesomesvg"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
             matTooltip="{{ currentLanguageSet?.common?.startTest }}"
             matSuffix
-            (click)="openIOTHemoglobinModel()"
+            (click)="openIOTHemoglobinModel(); trackFieldInteraction('Hemoglobin IoT Button')"
             onkeydown="openIOTHemoglobinModel()"
             tabindex="{0}">
             <path
@@ -529,14 +540,15 @@
             id="sPO2"
             formControlName="sPO2"
             [ngClass]="{ abnormal: sPO2 < 1 || sPO2 > 100 }"
-            (change)="checkSpo2()" />
+            (change)="checkSpo2()"
+            (focus)="trackFieldInteraction('SPO2')" />
           <svg
             class="fontawesomesvg"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
             matTooltip="{{ currentLanguageSet?.common?.startTest }}"
             matSuffix
-            (click)="openIOTSPO2Model()"
+            (click)="openIOTSPO2Model(); trackFieldInteraction('SPO2 IoT Button')"
             onkeydown="openIOTSPO2Model()"
             tabindex="{0}">
             <path
@@ -569,14 +581,15 @@
                 formControlName="bloodGlucose_Fasting"
                 [ngClass]="{ abnormal: diabeticRangeFasting }"
                 (change)="checkBloodSugarFasting(bloodGlucose_Fasting)"
-                (keyup)="checkNormalBloodSugarFasting(bloodGlucose_Fasting)" />
+                (keyup)="checkNormalBloodSugarFasting(bloodGlucose_Fasting)"
+                (focus)="trackFieldInteraction('Blood Glucose Fasting')" />
               <svg
                 class="fontawesomesvg"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                (click)="openIOTBGFastingModel()"
+                (click)="openIOTBGFastingModel(); trackFieldInteraction('Blood Glucose Fasting IoT Button')"
                 onkeydown="openIOTBGFastingModel()"
                 tabindex="{0}">
                 <path
@@ -601,14 +614,15 @@
                 formControlName="bloodGlucose_Random"
                 [ngClass]="{ abnormal: diabeticRangeRandom }"
                 (change)="checkBloodSugarRandom(bloodGlucose_Random)"
-                (keyup)="checkNormalBloodSugarRandom(bloodGlucose_Random)" />
+                (keyup)="checkNormalBloodSugarRandom(bloodGlucose_Random)"
+                (focus)="trackFieldInteraction('Blood Glucose Random')" />
               <svg
                 class="fontawesomesvg"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                (click)="openIOTBGRandomModel()"
+                (click)="openIOTBGRandomModel(); trackFieldInteraction('Blood Glucose Random IoT Button')"
                 onkeydown="openIOTBGRandomModel()"
                 tabindex="{0}">
                 <path
@@ -639,14 +653,15 @@
                   checkNormalBloodSugarPostPrandial(
                     bloodGlucose_2HrPostPrandial
                   )
-                " />
+                "
+                (focus)="trackFieldInteraction('Blood Glucose Post Prandial')" />
               <svg
                 class="fontawesomesvg"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                (click)="openIOTBGPostPrandialModel()"
+                (click)="openIOTBGPostPrandialModel(); trackFieldInteraction('Blood Glucose Post Prandial IoT Button')"
                 onkeydown="openIOTBGPostPrandialModel()"
                 tabindex="{0}">
                 <path
@@ -678,14 +693,15 @@
             maxlength="4"
             (blur)="checkForRange()"
             [ngClass]="{ abnormal: rbsTestResult < 0 || rbsTestResult > 1000 }"
-            [disabled]="rbsResultChange()" />
+            [disabled]="rbsResultChange()"
+            (focus)="trackFieldInteraction('RBS Test Result')" />
           <svg
             class="fontawesomesvg"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
             matTooltip="{{ currentLanguageSet?.common?.startTest }}"
             matSuffix
-            (click)="openIOTRBSModel()"
+            (click)="openIOTRBSModel(); trackFieldInteraction('RBS IoT Button')"
             onkeydown="openIOTRBSModel()"
             tabindex="{0}">
             <path
@@ -706,7 +722,8 @@
             id="rbsTestRemarks"
             formControlName="rbsTestRemarks"
             maxlength="300"
-            [disabled]="rbsResultChange()" />
+            [disabled]="rbsResultChange()"
+            (focus)="trackFieldInteraction('RBS Test Remarks')" />
         </mat-form-field>
       </div>
     </div>
