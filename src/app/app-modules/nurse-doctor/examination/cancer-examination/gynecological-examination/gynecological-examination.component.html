@@ -1,7 +1,7 @@
 <div class="row m-t-10" [formGroup]="gynecologicalExaminationForm">
   <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
     <div class="col-12 row">
-      <div class="col-6 box">
+      <div class="col-6 box cell_postion">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.gynecological?.appearanceunderAceticAcid
@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="col-12 row">
-      <div class="col-6 box">
+      <div class="col-6 box cell_postion">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.gynecological?.typeoflesion
@@ -149,7 +149,7 @@
     </div>
     <div class="col-12 row">
       <div
-        class="col-6 box"
+        class="col-6 box cell_postion"
         *ngIf="sufferedFromRTIOrSTI && sufferedFromRTIOrSTI.value">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
@@ -178,17 +178,64 @@
     </div>
 
     <div class="col-xs-6 col-sm-offset-6"></div>
-    <div
-      class="col-xs-6 box"
-      *ngIf="sufferedFromRTIOrSTI && sufferedFromRTIOrSTI.value">
+   <div
+  class="col-xs-6 col-lg-12 col-md-12 col-sm-6"
+  *ngIf="sufferedFromRTIOrSTI && sufferedFromRTIOrSTI.value"
+>
+  <!-- Row for file input and upload button -->
+  <div class="row">
+    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6 box cell_postion">
+      <button
+        class="mat_blue"
+        (click)="triggerLog($event)">
+        {{ currentLanguageSet?.nurseData?.visitDetailsForm?.selectFile }}
+      </button>
+      <span class="span-style">
       <input
         autocomplete="off"
         type="file"
         id="files"
         multiple
-        (change)="selectedFiles($event)"
-         />
+        (change)="uploadFile($event)"
+      />
+      </span>
+
+       <button
+        style="margin-left: 30px"
+        class="mat_blue"
+        [disabled]="!viewFiles?.length"
+        (click)="viewNurseSelectedFiles()"
+        >
+        {{ currentLanguageSet?.nurseData?.visitDetailsForm?.viewFiles }}
+      </button>
     </div>
+
+    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6 box">
+      <button
+        mat-flat-button
+        color="primary"
+        class="mat_blue pull-right"
+        (click)="checkForDuplicateUpload()"
+        [disabled]="!fileData?.length"
+      >
+        {{ currentLanguageSet?.common?.upload || 'Upload' }}
+      </button>
+    </div>
+  </div>
+  <!-- Chips shown below the row -->
+  <div class="row m-t-10" *ngIf="fileData?.length">
+    <div class="col-12">
+      <mat-chip-listbox>
+        <mat-chip *ngFor="let file of fileData; let i = index">
+          {{ file.fileName }}
+          <mat-icon matChipRemove (click)="removeFile(i)">cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-listbox>
+    </div>
+  </div>
+</div>
+
+    
 
     <div class="clearfix"></div>
     <div class="col-12 row">

@@ -359,13 +359,15 @@
           {{ currentLanguageSet?.common?.left }}
         </th>
         <td mat-cell *matCellDef="let element; let i = index">
-          <mat-button-toggle-group
-            [attr.name]="'size_Left_' + i"
-            formControlName="size_Left">
-            <mat-button-toggle value="<3 cm"> < 3 </mat-button-toggle>
-            <mat-button-toggle value="3-6 cm">3-6 cm </mat-button-toggle>
+          <ng-container [formGroupName]="i">
+            <mat-button-toggle-group
+              [attr.name]="'size_Left_' + i"
+              formControlName="size_Left">
+              <mat-button-toggle value="<3 cm"> < 3 </mat-button-toggle>
+              <mat-button-toggle value="3-6 cm">3-6 cm </mat-button-toggle>
             <mat-button-toggle value=">6 cm">6 cm </mat-button-toggle>
           </mat-button-toggle-group>
+         </ng-container>
         </td>
       </ng-container>
 
@@ -381,12 +383,14 @@
           }}
         </th>
         <td mat-cell *matCellDef="let element; let i = index">
-          <mat-button-toggle-group
+          <ng-container [formGroupName]="i">
+            <mat-button-toggle-group
             [attr.name]="'mobility_Left_' + i"
             formControlName="mobility_Left">
             <mat-button-toggle [value]="true"> + </mat-button-toggle>
             <mat-button-toggle [value]="false"> - </mat-button-toggle>
           </mat-button-toggle-group>
+          </ng-container>        
         </td>
       </ng-container>
 
@@ -402,7 +406,9 @@
           }}
         </th>
         <td mat-cell *matCellDef="let element; let i = index">
-          {{ element.value.lymphNodeName }}
+          <ng-container [formGroupName]="i">
+            {{ element.value.lymphNodeName }}
+          </ng-container>
         </td>
       </ng-container>
 
@@ -418,12 +424,14 @@
           }}
         </th>
         <td mat-cell *matCellDef="let element; let i = index">
-          <mat-button-toggle-group
-            [attr.name]="'mobility_Right_' + i"
-            formControlName="mobility_Right">
-            <mat-button-toggle [value]="true"> + </mat-button-toggle>
-            <mat-button-toggle [value]="false"> - </mat-button-toggle>
+          <ng-container [formGroupName]="i">
+            <mat-button-toggle-group
+              [attr.name]="'mobility_Right_' + i"
+              formControlName="mobility_Right">
+              <mat-button-toggle [value]="true"> + </mat-button-toggle>
+              <mat-button-toggle [value]="false"> - </mat-button-toggle>
           </mat-button-toggle-group>
+          </ng-container>
         </td>
       </ng-container>
 
@@ -436,13 +444,15 @@
           {{ currentLanguageSet?.common?.right }}
         </th>
         <td mat-cell *matCellDef="let element; let i = index">
-          <mat-button-toggle-group
-            [attr.name]="'size_Right_' + i"
-            formControlName="size_Right">
-            <mat-button-toggle value="<3 cm"> < 3 </mat-button-toggle>
-            <mat-button-toggle value="3-6 cm">3-6 cm </mat-button-toggle>
-            <mat-button-toggle value=">6 cm">6 cm</mat-button-toggle>
-          </mat-button-toggle-group>
+          <ng-container [formGroupName]="i">
+            <mat-button-toggle-group
+              [attr.name]="'size_Right_' + i"
+              formControlName="size_Right">
+              <mat-button-toggle value="<3 cm"> < 3 </mat-button-toggle>
+              <mat-button-toggle value="3-6 cm">3-6 cm </mat-button-toggle>
+              <mat-button-toggle value=">6 cm">6 cm</mat-button-toggle>
+            </mat-button-toggle-group>
+          </ng-container>
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

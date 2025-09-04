@@ -36,7 +36,7 @@ import {
 } from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../../../../core/services/beneficiary-details.service';
 import { ConfirmationService } from './../../../../../core/services/confirmation.service';
-import { DoctorService } from '../../../../shared/services';
+import { DoctorService, MasterdataService } from '../../../../shared/services';
 import { GeneralUtils } from '../../../../shared/utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
@@ -92,15 +92,21 @@ export class PncDiagnosisComponent
   caseRecordMode!: string;
   current_language_set: any;
 
-  getProvisionalDiagnosisList(): AbstractControl[] | null {
-    const provisionalDiagnosisListControl = this.generalDiagnosisForm.get(
-      'provisionalDiagnosisList'
+  suggestedDiagnosisList: any = [];
+  suggestedConfirmatoryDiagnosisList: any = [];
+  get provisionalDiagnosisControls(): AbstractControl[] {
+    return (
+      (this.generalDiagnosisForm.get('provisionalDiagnosisList') as FormArray)
+        ?.controls || []
     );
-    return provisionalDiagnosisListControl instanceof FormArray
-      ? provisionalDiagnosisListControl.controls
-      : null;
   }
 
+  get confirmatoryDiagnosisControls(): AbstractControl[] {
+    return (
+      (this.generalDiagnosisForm.get('confirmatoryDiagnosisList') as FormArray)
+        ?.controls || []
+    );
+  }
   getConfirmatoryDiagnosisList(): AbstractControl[] | null {
     const confirmatoryDiagnosisListControl = this.generalDiagnosisForm.get(
       'confirmatoryDiagnosisList'
@@ -116,7 +122,8 @@ export class PncDiagnosisComponent
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private doctorService: DoctorService,
     private httpServiceService: HttpServiceService,
-    readonly sessionstorage: SessionStorageService
+    readonly sessionstorage: SessionStorageService,
+    private masterdataService: MasterdataService
   ) {}
 
   beneficiaryAge: any;
@@ -255,12 +262,12 @@ export class PncDiagnosisComponent
         provisionalDiagnosis: provisionalDiagnosisDataList[i].term,
         term: provisionalDiagnosisDataList[i].term,
         conceptID: provisionalDiagnosisDataList[i].conceptID,
+        viewProvisionalDiagnosisProvided: provisionalDiagnosisDataList[i].term,
       });
       (<FormGroup>provisionalDiagnosisList.at(i)).controls[
-        'provisionalDiagnosis'
+        'viewProvisionalDiagnosisProvided'
       ].disable();
-      if (provisionalDiagnosisList.length < provisionalDiagnosisDataList.length)
-        this.addProvisionalDiagnosis();
+      this.addProvisionalDiagnosis();
     }
   }
 
@@ -295,6 +302,7 @@ export class PncDiagnosisComponent
   get isMaternalDeath() {
     return this.generalDiagnosisForm.controls['isMaternalDeath'].value;
   }
+
   addConfirmatoryDiagnosis() {
     const confirmatoryDiagnosisArrayList = this.generalDiagnosisForm.controls[
       'confirmatoryDiagnosisList'
@@ -351,5 +359,65 @@ export class PncDiagnosisComponent
     } else {
       return true;
     }
+  }
+  onDiagnosisInputKeyup(value: string, index: number) {
+    if (value.length >= 3) {
+      this.masterdataService
+        .searchDiagnosisBasedOnPageNo(value, index)
+        .subscribe((results: any) => {
+          this.suggestedDiagnosisList[index] = results?.data?.sctMaster;
+        });
+    } else {
+      this.suggestedDiagnosisList[index] = [];
+    }
+  }
+
+  onConfirmatoryDiagnosisInputKeyup(value: string, index: number) {
+    if (value.length >= 3) {
+      this.masterdataService
+        .searchDiagnosisBasedOnPageNo(value, index)
+        .subscribe((results: any) => {
+          this.suggestedConfirmatoryDiagnosisList[index] =
+            results?.data?.sctMaster;
+        });
+    } else {
+      this.suggestedConfirmatoryDiagnosisList[index] = [];
+    }
+  }
+
+  displayDiagnosis(diagnosis: any): string {
+    return typeof diagnosis === 'string' ? diagnosis : diagnosis?.term || '';
+  }
+
+  displayConfirmatoryDiagnosis(diagnosis: any): string {
+    return typeof diagnosis === 'string' ? diagnosis : diagnosis?.term || '';
+  }
+
+  onDiagnosisSelected(selected: any, index: number) {
+    const diagnosisFormArray = this.generalDiagnosisForm.get(
+      'provisionalDiagnosisList'
+    ) as FormArray;
+    const diagnosisFormGroup = diagnosisFormArray.at(index) as FormGroup;
+
+    // Set the nested and top-level fields
+    diagnosisFormGroup.patchValue({
+      viewProvisionalDiagnosisProvided: selected,
+      conceptID: selected?.conceptID || null,
+      term: selected?.term || null,
+    });
+  }
+
+  onConfirmatoryDiagnosisSelected(selected: any, index: number) {
+    const diagnosisFormArray = this.generalDiagnosisForm.get(
+      'confirmatoryDiagnosisList'
+    ) as FormArray;
+    const diagnosisFormGroup = diagnosisFormArray.at(index) as FormGroup;
+
+    // Set the nested and top-level fields
+    diagnosisFormGroup.patchValue({
+      ConfirmatoryDiagnosisProvided: selected,
+      conceptID: selected?.conceptID || null,
+      term: selected?.term || null,
+    });
   }
 }
