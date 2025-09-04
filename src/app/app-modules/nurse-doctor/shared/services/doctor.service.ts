@@ -2883,9 +2883,9 @@ export class DoctorService {
 
   /* Doctor Signature download */
   downloadSign(userID: any) {
-    return this.http
-      .get(environment.downloadSignUrl + userID, { responseType: 'blob' })
-      .pipe(map((res: any) => <Blob>res.blob()));
+    return this.http.get(environment.downloadSignUrl + userID, {
+      responseType: 'blob' as 'json',
+    });
   }
 
   enableButton: any = false;
