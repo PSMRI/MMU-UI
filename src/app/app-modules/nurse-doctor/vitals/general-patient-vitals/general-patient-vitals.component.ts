@@ -43,6 +43,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-nurse-general-patient-vitals',
@@ -66,8 +67,8 @@ export class GeneralPatientVitalsComponent
 
   female: any;
   BMI: any;
-  hideForANCAndQC: boolean = true;
-  showGlucoseQC: boolean = false;
+  hideForANCAndQC = true;
+  showGlucoseQC = false;
 
   startWeightTest = environment.startWeighturl;
   startTempTest = environment.startTempurl;
@@ -75,41 +76,41 @@ export class GeneralPatientVitalsComponent
   startPulseTest = environment.startPulseurl;
   startBPTest = environment.startBPurl;
   startBloodGlucose = environment.startBloodGlucoseurl;
-  doctorScreen: boolean = false;
-  male: boolean = false;
+  doctorScreen = false;
+  male = false;
   IDRSWaistScore: any;
-  ncdTemperature: boolean = false;
+  ncdTemperature = false;
   currentLanguageSet: any;
   bmiStatusMinor: any;
   beneficiary: any;
-  totalMonths: number = 12;
+  totalMonths = 12;
   benAge: any;
-  rbsSelectedInInvestigation: boolean = false;
+  rbsSelectedInInvestigation = false;
   rbsSelectedInInvestigationSubscription: any;
-  diabetesSelected: number = 0;
-  rbsPopup: boolean = false;
-  rbsCheckBox: boolean = true;
+  diabetesSelected = 0;
+  rbsPopup = false;
+  rbsCheckBox = true;
 
   // Audio - SWAASA
-  isRecording: boolean = false;
+  isRecording = false;
   recordedTime: any;
   blobUrl: any;
   teste: any;
-  enableResult: boolean = false;
-  enableSymptoms: boolean = false;
-  frequentCough: boolean = false;
-  sputum: boolean = false;
-  coughAtNight: boolean = false;
-  wheezing: boolean = false;
-  painInChest: boolean = false;
-  shortnessOfBreath: boolean = false;
+  enableResult = false;
+  enableSymptoms = false;
+  frequentCough = false;
+  sputum = false;
+  coughAtNight = false;
+  wheezing = false;
+  painInChest = false;
+  shortnessOfBreath = false;
   benGenderType: any;
   age: any;
   coughBlobFile: Blob = new Blob([]);
   severityValue: any;
   cough_pattern_Value: any;
   assessmentDetail: any;
-  disabledLungAssesment: boolean = false;
+  disabledLungAssesment = false;
   severity: any;
   cough_pattern: any;
   cough_severity_score: any;
@@ -120,8 +121,8 @@ export class GeneralPatientVitalsComponent
   wheezingChecked: any;
   painInChestChecked: any;
   shortnessOfBreathChecked: any;
-  enableLungAssessment: boolean = false;
-  hideLungAssessment: boolean = false;
+  enableLungAssessment = false;
+  hideLungAssessment = false;
   attendant: any;
 
   constructor(
@@ -137,7 +138,8 @@ export class GeneralPatientVitalsComponent
     private sanitizer: DomSanitizer,
     readonly sessionstorage: SessionStorageService,
     private languageComponent: SetLanguageComponent,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private trackingService: AmritTrackingService
   ) {
     this.audioRecordingService
       .recordingFailed()
@@ -1259,6 +1261,10 @@ export class GeneralPatientVitalsComponent
         this.nurseService.isAssessmentDone = true;
       }
     });
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(fieldName, 'Vitals');
   }
 
   //--End--

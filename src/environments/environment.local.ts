@@ -82,14 +82,6 @@ export const environment = {
   haemoglobinTest: `Haemoglobin Test`,
   parentAPI: `${MMU_API}`,
 
-  tracking: {
-    platform: 'matomo',
-    siteId: 3,
-    trackerUrl: 'https://matomo.piramalswasthya.org/',
-    trackingPlatform: 'production',
-    enabled: true,
-  },
-
   INVENTORY_URL: `${inventoryUI_IP}:4201/#/redirin?`,
   fallbackUrl: `/pharmacist/redirfallback`,
   redirInUrl: `/pharmacist/redirin`,
