@@ -34,6 +34,7 @@ import { MasterDownloadComponent } from '../data-sync/master-download/master-dow
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { environment } from 'src/environments/environment';
 import { CaptchaComponent } from '../captcha/captcha.component';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-login-cmp',
@@ -64,7 +65,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
-    readonly sessionstorage: SessionStorageService
+    readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService
   ) {
     this._keySize = 256;
     this._ivSize = 128;
@@ -152,6 +154,9 @@ export class LoginComponent implements OnInit {
                                     this.sessionstorage.setItem(
                                       'loginDataResponse',
                                       JSON.stringify(userLoggedIn.data)
+                                    );
+                                    this.trackingService.setUserId(
+                                      userLoggedIn.data.userID
                                     );
                                     this.getServicesAuthdetails(
                                       userLoggedIn.data
@@ -250,6 +255,7 @@ export class LoginComponent implements OnInit {
       loginDataResponse.isAuthenticated
     );
     this.sessionstorage.setItem('userID', loginDataResponse.userID);
+    this.trackingService.setUserId(loginDataResponse.userID);
     this.sessionstorage.setItem('userName', loginDataResponse.userName);
     this.sessionstorage.setItem('username', userName);
     this.sessionstorage.setItem('fullName', loginDataResponse.fullName);
