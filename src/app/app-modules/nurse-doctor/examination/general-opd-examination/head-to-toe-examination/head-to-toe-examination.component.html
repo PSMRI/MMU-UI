@@ -11,7 +11,7 @@
         id="headtoToeExam"
         name="headtoToeExam"
         formControlName="headtoToeExam"
-        (change)="checkWithHeadToToe(); trackFieldInteraction('Head To Toe Exam')">
+        (change)="checkWithHeadToToe()">
         <mat-radio-button color="primary" value="Normal">{{
           currentLanguageSet?.common?.normal
         }}</mat-radio-button>
@@ -40,8 +40,7 @@
             id="head"
             name="head"
             formControlName="head"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Head')" />
+            maxlength="50" />
         </mat-form-field>
       </div>
     </div>
@@ -63,8 +62,7 @@
             id="eyes"
             name="eyes"
             formControlName="eyes"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Eyes')" />
+            maxlength="50" />
         </mat-form-field>
       </div>
     </div>
@@ -87,8 +85,7 @@
             id="ears"
             name="ears"
             formControlName="ears"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Ears')" />
+            maxlength="50" />
         </mat-form-field>
       </div>
     </div>
@@ -111,8 +108,7 @@
             id="nose"
             name="nose"
             formControlName="nose"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Nose')" />
+            maxlength="50" />
         </mat-form-field>
       </div>
     </div>
@@ -135,8 +131,7 @@
             id="oralCavity"
             name="oralCavity"
             formControlName="oralCavity"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Oral Cavity')" />
+            maxlength="50" />
         </mat-form-field>
       </div>
     </div>
@@ -159,8 +154,7 @@
             id="throat"
             name="throat"
             formControlName="throat"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Throat')" />
+            maxlength="50" />
         </mat-form-field>
       </div>
     </div>
@@ -182,8 +176,7 @@
             id="breastAndNipples"
             name="breastAndNipples"
             formControlName="breastAndNipples"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Breast And Nipples')" />
+            maxlength="50" />
         </mat-form-field>
       </div>
     </div>
@@ -206,8 +199,7 @@
             id="trunk"
             name="trunk"
             formControlName="trunk"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Trunk')" />
+            maxlength="50" />
         </mat-form-field>
       </div>
     </div>
@@ -230,8 +222,7 @@
             id="upperLimbs"
             name="upperLimbs"
             formControlName="upperLimbs"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Upper Limbs')" />
+            maxlength="50" />
         </mat-form-field>
       </div>
     </div>
@@ -254,8 +245,7 @@
             id="lowerLimbs"
             name="lowerLimbs"
             formControlName="lowerLimbs"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Lower Limbs')" />
+            maxlength="50" />
         </mat-form-field>
       </div>
     </div>
@@ -278,8 +268,7 @@
             id="skin"
             name="skin"
             formControlName="skin"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Skin')" />
+            maxlength="50" />
         </mat-form-field>
       </div>
     </div>
@@ -302,8 +291,7 @@
             id="hair"
             name="hair"
             formControlName="hair"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Hair')" />
+            maxlength="50" />
         </mat-form-field>
       </div>
     </div>
@@ -326,8 +314,7 @@
             id="nails"
             name="nails"
             formControlName="nails"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Nails')" />
+            maxlength="50" />
         </mat-form-field>
       </div>
     </div>

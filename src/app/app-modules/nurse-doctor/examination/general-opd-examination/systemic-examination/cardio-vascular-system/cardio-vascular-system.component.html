@@ -8,8 +8,7 @@
     <mat-radio-group
       style="margin-left: -9px"
       name="jugularVenousPulse_JVP"
-      formControlName="jugularVenousPulse_JVP"
-      (change)="trackFieldInteraction('Jugular Venous Pressure')">
+      formControlName="jugularVenousPulse_JVP">
       <mat-radio-button color="primary" value="Normal">{{
         currentLanguageSet?.common?.normal
       }}</mat-radio-button>
@@ -32,8 +31,7 @@
         matTextareaAutosize
         name="apexbeatLocation"
         formControlName="apexbeatLocation"
-        maxlength="300"
-        (focus)="trackFieldInteraction('Apex Beat Location')"></textarea>
+        maxlength="300"></textarea>
     </mat-form-field>
   </div>
 
@@ -50,8 +48,7 @@
         matTextareaAutosize
         name="apexbeatType"
         formControlName="apexbeatType"
-        maxlength="300"
-        (focus)="trackFieldInteraction('Apex Beat Type')"></textarea>
+        maxlength="300"></textarea>
     </mat-form-field>
   </div>
 
@@ -68,8 +65,7 @@
         matTextareaAutosize
         name="firstHeartSound_S1"
         formControlName="firstHeartSound_S1"
-        maxlength="300"
-        (focus)="trackFieldInteraction('First Heart Sound')"></textarea>
+        maxlength="300"></textarea>
     </mat-form-field>
   </div>
 
@@ -86,8 +82,7 @@
         matTextareaAutosize
         name="secondHeartSound_S2"
         formControlName="secondHeartSound_S2"
-        maxlength="300"
-        (focus)="trackFieldInteraction('Second Heart Sound')"></textarea>
+        maxlength="300"></textarea>
     </mat-form-field>
   </div>
 
@@ -104,8 +99,7 @@
         matTextareaAutosize
         name="additionalHeartSounds"
         formControlName="additionalHeartSounds"
-        maxlength="300"
-        (focus)="trackFieldInteraction('Additional Heart Sounds')"></textarea>
+        maxlength="300"></textarea>
     </mat-form-field>
   </div>
 
@@ -118,8 +112,7 @@
     <mat-radio-group
       style="margin-left: -9px"
       name="murmurs"
-      formControlName="murmurs"
-      (change)="trackFieldInteraction('Murmurs')">
+      formControlName="murmurs">
       <mat-radio-button color="primary" value="Present">{{
         currentLanguageSet?.common?.present
       }}</mat-radio-button>
@@ -138,8 +131,7 @@
     <mat-radio-group
       style="margin-left: -9px"
       name="pericardialRub"
-      formControlName="pericardialRub"
-      (change)="trackFieldInteraction('Pericardial Rub')">
+      formControlName="pericardialRub">
       <mat-radio-button color="primary" value="Present">{{
         currentLanguageSet?.common?.present
       }}</mat-radio-button>

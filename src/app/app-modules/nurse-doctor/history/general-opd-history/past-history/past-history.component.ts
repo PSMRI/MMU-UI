@@ -47,7 +47,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-general-past-history',
@@ -87,8 +86,7 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
     private doctorService: DoctorService,
     private masterdataService: MasterdataService,
     public httpServiceService: HttpServiceService,
-    readonly sessionstorage: SessionStorageService,
-    private trackingService: AmritTrackingService
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
@@ -713,9 +711,5 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
     } else {
       return true;
     }
-  }
-
-  trackFieldInteraction(fieldName: string) {
-    this.trackingService.trackFieldInteraction(fieldName, 'Past History');
   }
 }

@@ -25,7 +25,7 @@
             mat-raised-button
             id="captureButton"
             class="m-t-10 mat_captureButton"
-            (click)="captureImage(); trackFieldInteraction('Capture Photo Button')"
+            (click)="captureImage()"
             type="button">
             {{ currentLanguageSet?.ro?.personalInfo?.capturePhoto }}
           </button>
@@ -50,8 +50,7 @@
               minlength="2"
               maxlength="30"
               [min]="2"
-              required
-              (focus)="trackFieldInteraction('First Name')" />
+              required />
             <mat-error
               *ngIf="
                 personalDetailsForm.controls['firstName'].errors?.['required']
@@ -82,8 +81,7 @@
               allowText="alphabet"
               matInput
               formControlName="lastName"
-              maxlength="50"
-              (focus)="trackFieldInteraction('Last Name')" />
+              maxlength="50" />
           </mat-form-field>
         </div>
 
@@ -119,8 +117,7 @@
                   formControlName="phoneNo"
                   maxlength="10"
                   name="contactNo"
-                  [min]="10"
-                  (focus)="trackFieldInteraction('Contact No')" />
+                  [min]="10" />
                 <mat-error
                   *ngIf="
                     personalDetailsForm.controls['phoneNo'].errors?.['required']
@@ -151,7 +148,7 @@
             }}</mat-label>
             <mat-select
               required
-              (selectionChange)="onGenderSelected(); trackFieldInteraction('Gender')"
+              (selectionChange)="onGenderSelected()"
               formControlName="gender">
               <mat-option
                 *ngFor="let gender of masterData?.genderMaster"
@@ -174,8 +171,7 @@
               required
               (change)="onAgeEntered()"
               formControlName="age"
-              maxlength="3"
-              (focus)="trackFieldInteraction('Age')" />
+              maxlength="3" />
           </mat-form-field>
         </div>
 
@@ -186,7 +182,7 @@
             }}</mat-label>
             <mat-select
               required
-              (selectionChange)="onAgeUnitEntered(); trackFieldInteraction('Age Unit')"
+              (selectionChange)="onAgeUnitEntered()"
               formControlName="ageUnit">
               <mat-option value="Days">Days</mat-option>
               <mat-option value="Months">Months</mat-option>
@@ -218,8 +214,7 @@
               id="dob-input"
               type="text"
               (dateInput)="dobChangeByCalender(dobval.value)"
-              (dateChange)="dobChangeByCalender(dobval.value)"
-              (focus)="trackFieldInteraction('DOB')" />
+              (dateChange)="dobChangeByCalender(dobval.value)" />
             <mat-datepicker-toggle
               matSuffix
               [for]="dobPicker"></mat-datepicker-toggle>
@@ -235,7 +230,7 @@
               currentLanguageSet?.ro?.personalInfo?.maritalStatus
             }}</mat-label>
             <mat-select
-              (selectionChange)="onMaritalStatusChanged(); trackFieldInteraction('Marital Status')"
+              (selectionChange)="onMaritalStatusChanged()"
               [required]="enableMaritalStatus"
               formControlName="maritalStatus">
               <mat-option
@@ -261,8 +256,7 @@
               [required]="enableSpouseMandatory"
               formControlName="spouseName"
               minlength="2"
-              maxlength="50"
-              (focus)="trackFieldInteraction('Spouse Name')" />
+              maxlength="50" />
             <mat-error
               *ngIf="
                 personalDetailsForm.controls['spouseName'].errors?.['minlength']
@@ -289,8 +283,7 @@
               [required]="enableMarriageDetails"
               formControlName="ageAtMarriage"
               minlength="2"
-              maxlength="3"
-              (focus)="trackFieldInteraction('Age At Marriage')" />
+              maxlength="3" />
             <mat-error
               *ngIf="
                 personalDetailsForm.controls['ageAtMarriage'].errors?.[
@@ -316,7 +309,7 @@
             }}</mat-label>
             <mat-select
               formControlName="literacyStatus"
-              (selectionChange)="changeLiteracyStatus(); trackFieldInteraction('Literacy Status')">
+              (selectionChange)="changeLiteracyStatus()">
               <mat-option value="Illiterate">Illiterate</mat-option>
               <mat-option value="Illiterate (can sign)">
                 Illiterate (can sign)
@@ -340,7 +333,7 @@
                 personalDetailsForm.value.literacyStatus === 'Literate'
               "
               formControlName="educationQualification"
-              (selectionChange)="onEducationQualificationChanged(); trackFieldInteraction('Educational Qualification')">
+              (selectionChange)="onEducationQualificationChanged()">
               <mat-option
                 *ngFor="let qualification of masterData?.qualificationMaster"
                 [value]="qualification.educationID">
@@ -371,7 +364,7 @@
                 <mat-select
                   formControlName="occupation"
                   [required]="isOccuptionRequired"
-                  (selectionChange)="getOccupationName(); trackFieldInteraction('Occupation')">
+                  (selectionChange)="getOccupationName()">
                   <mat-option
                     *ngFor="let occupation of masterData?.occupationMaster"
                     [value]="occupation.occupationID">
@@ -397,8 +390,7 @@
               formControlName="occupationOther"
               minlength="3"
               maxlength="50"
-              [required]="true"
-              (focus)="trackFieldInteraction('Other Occupation')" />
+              [required]="true" />
           </mat-form-field>
         </div>
 
@@ -408,7 +400,7 @@
               {{ currentLanguageSet?.ro?.personalInfo?.incomeStatus }}
             </mat-label>
             <mat-select
-              (selectionChange)="onIncomeChanged(); trackFieldInteraction('Income Status')"
+              (selectionChange)="onIncomeChanged()"
               formControlName="income">
               <mat-option
                 *ngFor="let incomeStatus of masterData?.incomeMaster"
@@ -429,8 +421,7 @@
               allowText="number"
               matInput
               formControlName="monthlyFamilyIncome"
-              maxlength="7"
-              (focus)="trackFieldInteraction('Monthly Family Income')" />
+              maxlength="7" />
           </mat-form-field>
         </div>
       </div>

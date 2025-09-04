@@ -40,8 +40,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
-
 @Component({
   selector: 'app-patient-upload-files',
   templateUrl: './upload-files.component.html',
@@ -65,8 +63,8 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
     'txt',
   ];
   // invalid_file_extensions_flag: boolean = false;
-  disableFileSelection = false;
-  enableForNCDScreening = false;
+  disableFileSelection: boolean = false;
+  enableForNCDScreening: boolean = false;
   maxFileSize = 5;
 
   @Input()
@@ -89,8 +87,7 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
     private confirmationService: ConfirmationService,
     private doctorService: DoctorService,
     readonly sessionstorage: SessionStorageService,
-    private dialog: MatDialog,
-    private trackingService: AmritTrackingService
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -349,8 +346,4 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
     this.currentLanguageSet = this.languageComponent.currentLanguageObject;
   }
   //--End--
-
-  trackFieldInteraction(fieldName: string) {
-    this.trackingService.trackFieldInteraction(fieldName, 'Upload Files');
-  }
 }

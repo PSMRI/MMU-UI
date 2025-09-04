@@ -31,7 +31,6 @@ import {
   Router,
 } from '@angular/router';
 import { SpinnerService } from './app-modules/core/services';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-root',
@@ -39,11 +38,10 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  isAuthenticated = false;
+  isAuthenticated: boolean = false;
   constructor(
     private router: Router,
-    private spinnerService: SpinnerService,
-    private trackingService: AmritTrackingService
+    private spinnerService: SpinnerService
   ) {}
   @Input()
   showRoles = false;

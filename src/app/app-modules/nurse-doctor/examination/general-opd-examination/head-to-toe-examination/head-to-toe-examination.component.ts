@@ -24,7 +24,6 @@ import { Component, OnInit, Input, DoCheck } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-nurse-head-to-toe-examination',
@@ -38,10 +37,7 @@ export class HeadToToeExaminationComponent implements OnInit, DoCheck {
 
   currentLanguageSet: any;
 
-  constructor(
-    private httpServiceService: HttpServiceService,
-    private trackingService: AmritTrackingService
-  ) {}
+  constructor(private httpServiceService: HttpServiceService) {}
 
   ngOnInit() {
     this.fetchLanguageResponse();
@@ -116,11 +112,4 @@ export class HeadToToeExaminationComponent implements OnInit, DoCheck {
     this.currentLanguageSet = this.languageComponent.currentLanguageObject;
   }
   //--End--
-
-  trackFieldInteraction(fieldName: string) {
-    this.trackingService.trackFieldInteraction(
-      fieldName,
-      'Head To Toe Examination'
-    );
-  }
 }

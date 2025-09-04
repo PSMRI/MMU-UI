@@ -8,8 +8,7 @@
       <mat-select
         class="select-full-width"
         name="handedness"
-        formControlName="handedness"
-        (selectionChange)="trackFieldInteraction('Handedness Selection')">
+        formControlName="handedness">
         <mat-option
           *ngFor="let handedness of selectHandedness"
           [value]="handedness.name">
@@ -32,8 +31,7 @@
         matTextareaAutosize
         name="cranialNervesExamination"
         formControlName="cranialNervesExamination"
-        maxlength="300"
-        (focus)="trackFieldInteraction('Cranial Nerves Examination')"></textarea>
+        maxlength="300"></textarea>
     </mat-form-field>
   </div>
 
@@ -50,8 +48,7 @@
         matTextareaAutosize
         name="motorSystem"
         formControlName="motorSystem"
-        maxlength="300"
-        (focus)="trackFieldInteraction('Motor System')"></textarea>
+        maxlength="300"></textarea>
     </mat-form-field>
   </div>
 
@@ -68,8 +65,7 @@
         matTextareaAutosize
         name="sensorySystem"
         formControlName="sensorySystem"
-        maxlength="300"
-        (focus)="trackFieldInteraction('Sensory System')"></textarea>
+        maxlength="300"></textarea>
     </mat-form-field>
   </div>
 
@@ -86,8 +82,7 @@
         matTextareaAutosize
         name="autonomicSystem"
         formControlName="autonomicSystem"
-        maxlength="300"
-        (focus)="trackFieldInteraction('Autonomic System')"></textarea>
+        maxlength="300"></textarea>
     </mat-form-field>
   </div>
 
@@ -104,8 +99,7 @@
         matTextareaAutosize
         name="cerebellarSigns"
         formControlName="cerebellarSigns"
-        maxlength="300"
-        (focus)="trackFieldInteraction('Cerebellar Signs')"></textarea>
+        maxlength="300"></textarea>
     </mat-form-field>
   </div>
 
@@ -118,8 +112,7 @@
     <mat-radio-group
       style="margin-left: -9px"
       name="signsOfMeningealIrritation"
-      formControlName="signsOfMeningealIrritation"
-      (change)="trackFieldInteraction('Signs Of Meningeal Irritation')">
+      formControlName="signsOfMeningealIrritation">
       <mat-radio-button color="primary" value="Present">{{
         currentLanguageSet?.common?.present
       }}</mat-radio-button>
@@ -142,8 +135,7 @@
         matTextareaAutosize
         name="skull"
         formControlName="skull"
-        maxlength="300"
-        (focus)="trackFieldInteraction('Skull')"></textarea>
+        maxlength="300"></textarea>
     </mat-form-field>
   </div>
 </div>
