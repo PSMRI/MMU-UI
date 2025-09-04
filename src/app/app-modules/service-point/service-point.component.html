@@ -15,7 +15,8 @@
             <div class="form-group" style="margin-top: 10px; margin-left: 17px">
               <mat-radio-group
                 formControlName="sessionID"
-                (change)="filterVansList()">
+                (change)="filterVansList()"
+                (selectionChange)="trackFieldInteraction('Service Type')">
                 <strong>{{ currentLanguageSet?.serviceType }}:</strong>
                 <mat-radio-button
                   class="radio-btn"
@@ -26,6 +27,7 @@
                 </mat-radio-button>
               </mat-radio-group>
             </div>
+
             <div class="col-6 mat_form_field_width" style="margin-left: 20px">
               <mat-form-field
                 class="mat-form-field-width"
@@ -35,7 +37,9 @@
                   required
                   name="vanID"
                   formControlName="vanID"
-                  (selectionChange)="filterServicePointsList()">
+                  (selectionChange)="
+                    filterServicePointsList(); trackFieldInteraction('Van')
+                  ">
                   <mat-option
                     class="alignOption"
                     *ngFor="let van of vansList"
@@ -66,7 +70,8 @@
                     filterServicePointVan(
                       servicePointForm.controls.servicePointName.value
                     )
-                  " />
+                  "
+                  (focus)="trackFieldInteraction('Service Point')" />
                 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                   <mat-option
                     class="alignOption"
@@ -113,7 +118,8 @@
                   (selectionChange)="
                     fetchSubDistrictsOnDistrictSelection(
                       servicePointForm.controls.districtID.value
-                    )
+                    );
+                    trackFieldInteraction('District')
                   ">
                   <mat-option
                     class="alignOption"
@@ -123,6 +129,7 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
+
               <mat-form-field
                 class="mat-form-field-width"
                 style="margin-bottom: -20px">
@@ -134,7 +141,10 @@
                   name="blockID"
                   [required]="true"
                   (selectionChange)="
-                    onSubDistrictChange(servicePointForm.controls.blockID.value)
+                    onSubDistrictChange(
+                      servicePointForm.controls.blockID.value
+                    );
+                    trackFieldInteraction('Taluk')
                   ">
                   <mat-option
                     class="alignOption"
@@ -157,7 +167,8 @@
                   (selectionChange)="
                     onDistrictBranchSelection(
                       servicePointForm.controls.districtBranchID.value
-                    )
+                    );
+                    trackFieldInteraction('Street')
                   "
                   [required]="true">
                   <mat-option
@@ -175,7 +186,10 @@
               <button
                 mat-raised-button
                 color="primary"
-                (click)="saveLocationDataToStorage()"
+                (click)="
+                  saveLocationDataToStorage();
+                  trackFieldInteraction('Continue Button')
+                "
                 class="mat_blue p-l-r-38 f-s-18"
                 [disabled]="!servicePointForm.valid">
                 {{ currentLanguageSet?.spoke_selection?.continue }}

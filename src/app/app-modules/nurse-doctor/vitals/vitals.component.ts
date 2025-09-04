@@ -75,5 +75,6 @@ export class VitalsComponent implements OnInit, OnChanges, DoCheck {
     this.languageComponent.setLanguage();
     this.currentLanguageSet = this.languageComponent.currentLanguageObject;
   }
+
   //--End--
 }

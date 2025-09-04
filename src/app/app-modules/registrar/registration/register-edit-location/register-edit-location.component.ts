@@ -28,6 +28,7 @@ import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { RegistrarService } from '../../shared/services/registrar.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-register-edit-location',
@@ -53,7 +54,8 @@ export class RegisterEditLocationComponent implements OnInit, DoCheck {
     private httpServiceService: HttpServiceService,
     private fb: FormBuilder,
     readonly sessionstorage: SessionStorageService,
-    private languageComponent: SetLanguageComponent
+    private languageComponent: SetLanguageComponent,
+    private trackingService: AmritTrackingService
   ) {}
 
   ngOnInit() {
@@ -274,4 +276,11 @@ export class RegisterEditLocationComponent implements OnInit, DoCheck {
     this.currentLanguageSet = this.languageComponent.currentLanguageObject;
   }
   //--End--
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'Register Edit Location'
+    );
+  }
 }
