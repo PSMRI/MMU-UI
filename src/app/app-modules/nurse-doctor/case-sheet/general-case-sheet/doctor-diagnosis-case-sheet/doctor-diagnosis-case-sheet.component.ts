@@ -55,20 +55,20 @@ export class DoctorDiagnosisCaseSheetComponent
   caseRecords: any;
   ancDetails: any;
   symptomsList: any = [];
-  symptomFlag: boolean = false;
+  symptomFlag = false;
   contactList: any = [];
-  contactFlag: boolean = false;
+  contactFlag = false;
   travelStatus: any;
-  travelFlag: boolean = false;
-  suspectedFlag: boolean = false;
+  travelFlag = false;
+  suspectedFlag = false;
   suspected: any;
-  recFlag: boolean = false;
+  recFlag = false;
   recommendation: any = [];
   temp: any = [];
   recommendationText!: string;
   tempComp!: string;
   indexComplication!: number;
-  tempComplication: boolean = false;
+  tempComplication = false;
   newComp!: string;
   idrsDetailsHistory: any = [];
   suspect: any = [];
@@ -77,14 +77,14 @@ export class DoctorDiagnosisCaseSheetComponent
 
   severityValue: any;
   cough_pattern_Value: any;
-  enableResult: boolean = false;
+  enableResult = false;
   severity: any;
   cough_pattern: any;
   cough_severity_score: any;
   record_duration: any;
 
   idrsScore: any;
-  enableTCReferredMMUData: boolean = false;
+  enableTCReferredMMUData = false;
   showHRP!: string;
   tmCaseSheet: any;
   imgUrl!: string | ArrayBuffer;
@@ -99,7 +99,7 @@ export class DoctorDiagnosisCaseSheetComponent
   serviceList = '';
   referralReasonList = '';
   MMUReferDetails: any;
-  mmuServiceList: string = '';
+  mmuServiceList = '';
   isCovidVaccinationStatusVisible = false;
 
   constructor(
@@ -429,20 +429,19 @@ export class DoctorDiagnosisCaseSheetComponent
   }
 
   downloadSign() {
-    if (this.beneficiaryDetails?.tCSpecialistUserID) {
-      const tCSpecialistUserID = this.beneficiaryDetails.tCSpecialistUserID;
-      this.doctorService.downloadSign(tCSpecialistUserID).subscribe(
-        (response: any) => {
-          const blob = new Blob([response], { type: response.type });
-          this.showSign(blob);
-        },
-        (err: any) => {
-          console.log('error');
-        }
-      );
-    } else {
-      console.log('No tCSpecialistUserID found');
-    }
+    const userId =
+      this.beneficiaryDetails?.tCSpecialistUserID ??
+      this.sessionstorage.getItem('userID');
+
+    this.doctorService.downloadSign(userId).subscribe(
+      (response: any) => {
+        const blob = new Blob([response], { type: response.type });
+        this.showSign(blob);
+      },
+      (err: any) => {
+        console.error('Error downloading signature:', err);
+      }
+    );
   }
   showSign(blob: any) {
     const reader = new FileReader();
