@@ -2885,7 +2885,7 @@ export class DoctorService {
 
   downloadSign(userID: any) {
     return this.http.get(environment.downloadSignUrl + userID, {
-      responseType: 'blob' as 'json', // 👈 keep the cast for TS
+      responseType: 'blob' as 'json',
     });
   }
 
