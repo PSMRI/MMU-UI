@@ -55,6 +55,7 @@ import { environment } from 'src/environments/environment';
 import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard.service';
 import { OpenPreviousVisitDetailsComponent } from '../../core/components/open-previous-visit-details/open-previous-visit-details.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SmsNotificationComponent } from '../sms-notification/sms-notification.component';
 
 @Component({
   selector: 'app-workarea',
@@ -83,7 +84,7 @@ export class WorkareaComponent
   referMode: any;
   ncdScreeningMode: any;
   quickConsultMode: any;
-  newLookupMode: boolean = false;
+  newLookupMode = false;
 
   visitCategory: any;
   visitCategoryList: any;
@@ -114,18 +115,18 @@ export class WorkareaComponent
 
   patientMedicalForm!: FormGroup;
 
-  tm: boolean = false;
+  tm = false;
   schedulerData: any;
   attendantType: any;
-  enableIDRSUpdate: boolean = true;
+  enableIDRSUpdate = true;
   visualAcuityMandatory!: number;
   diabetesSelected!: number;
   rbsPresent: any = 0;
   visualAcuityPresent: any = 0;
   heamoglobinPresent: any = 0;
-  ncdTemperature: boolean = false;
+  ncdTemperature = false;
   specialistFlag: any;
-  dontEnableComponent: boolean = false;
+  dontEnableComponent = false;
   beneficiaryAge: any;
   currentLanguageSet: any;
   tmcSubmitSubscription!: Subscription;
@@ -136,12 +137,12 @@ export class WorkareaComponent
   visualAcuityMandatorySubscription!: Subscription;
   ncdTempSubscription!: Subscription;
   enableVitalsButtonSubscription!: Subscription;
-  enableUpdateButtonInVitals: boolean = false;
-  enableCovidVaccinationSaveButton: boolean = false;
-  disableSubmitButton: boolean = false;
-  showProgressBar: boolean = false;
-  enableLungAssessment: boolean = false;
-  enableProvisionalDiag: boolean = false;
+  enableUpdateButtonInVitals = false;
+  enableCovidVaccinationSaveButton = false;
+  disableSubmitButton = false;
+  showProgressBar = false;
+  enableLungAssessment = false;
+  enableProvisionalDiag = false;
   patientVisitForm!: FormGroup;
   patientANCForm!: FormGroup;
   patientPNCForm!: FormGroup;
@@ -169,9 +170,9 @@ export class WorkareaComponent
     private idrsScoreService: IdrsscoreService,
     private languageComponent: SetLanguageComponent
   ) {}
-  isSpecialist: boolean = false;
+  isSpecialist = false;
   doctorUpdateAndTCSubmit: any;
-  tmcDisable: boolean = false;
+  tmcDisable = false;
   ngOnInit() {
     this.enableUpdateButtonInVitals = false;
     this.enableCovidVaccinationSaveButton = false;
@@ -985,7 +986,7 @@ export class WorkareaComponent
 
   submitDoctorDiagnosisForm() {
     this.disableSubmitButton = true;
-    this.showProgressBar = true;
+    // this.showProgressBar = true;
 
     if (this.visitCategory === 'Cancer Screening')
       this.submitCancerDiagnosisForm();
@@ -1414,7 +1415,7 @@ export class WorkareaComponent
       );
       if (this.attendantType === 'nurse') {
         if (pregForm2.controls) {
-          const score1: number = Number(pregForm2.controls['length']);
+          const score1 = Number(pregForm2.controls['length']);
           for (let i = 0; i < score1; i++) {
             const pregForm3 = <FormGroup>pregForm2.controls[i];
             if (
@@ -2372,6 +2373,8 @@ export class WorkareaComponent
       prescribedDrugs = prescribedDrugs.filter((item: any) => !!item.createdBy);
       patientQuickConsultFormValue.prescription = prescribedDrugs;
 
+      console.log('prescription:', patientQuickConsultFormValue.prescription);
+
       let labTestOrders = [];
       if (
         patientQuickConsultFormValue.test !== null &&
@@ -2388,6 +2391,8 @@ export class WorkareaComponent
           patientQuickConsultFormValue.radiology
         );
       }
+      console.log('labTestOrders:', labTestOrders);
+
       patientQuickConsultFormValue.labTestOrders = labTestOrders;
       patientQuickConsultFormValue.test = undefined;
       patientQuickConsultFormValue.radiology = undefined;
@@ -2395,6 +2400,19 @@ export class WorkareaComponent
         this.patientReferForm,
         otherQcDetails
       );
+      console.log(
+        'patientQuickConsultFormValue:',
+        patientQuickConsultFormValue
+      );
+
+      if (labTestOrders.length === 0 && prescribedDrugs.length > 0) {
+        const prescriptionSmsObject = this.SMSObjectCreation(
+          patientQuickConsultFormValue.provisionalDiagnosisList,
+          patientQuickConsultFormValue.prescription
+        );
+
+        this.sendPrescriptionSms(prescriptionSmsObject);
+      }
 
       this.doctorService
         .postQuickConsultDetails(
@@ -2419,6 +2437,42 @@ export class WorkareaComponent
           }
         );
     }
+  }
+
+  SMSObjectCreation(diagnosisList: any, prescriptions: any) {
+    return {
+      data: {
+        prescription: [
+          {
+            prescriptionID: 'RX' + new Date().getTime(), // unique ID
+            diagnosisProvided: diagnosisList.map((d: any) => d.term).join(', '),
+            remarks: 'Please follow the prescribed dosage and stay hydrated.',
+            prescribedDrugs: prescriptions.map((p: any) => ({
+              drugName: p.drugName,
+              dosage: `${p.dose} (${p.drugStrength})`,
+              frequency: p.frequency,
+              noOfDays: p.duration,
+            })),
+          },
+        ],
+      },
+    };
+  }
+
+  sendPrescriptionSms(prescriptionSmsObject: any) {
+    const dialogRef = this.mdDialog.open(SmsNotificationComponent, {
+      width: '900px',
+      disableClose: true,
+      data: prescriptionSmsObject,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('✅ SMS flow completed');
+      } else {
+        console.log('❌ SMS canceled');
+      }
+    });
   }
 
   updateQuickConsultDiagnosisForm() {
@@ -2518,6 +2572,13 @@ export class WorkareaComponent
       otherQcDetails
     );
 
+    if (labTestOrders.length === 0 && prescribedDrugs.length > 0) {
+      const prescriptionSmsObject = this.SMSObjectCreation(
+        patientQuickConsultDetails.diagnosisList,
+        patientQuickConsultDetails.prescribedDrugs
+      );
+      this.sendPrescriptionSms(prescriptionSmsObject);
+    }
     return patientQuickConsultDetails;
   }
   /**
@@ -2863,29 +2924,118 @@ export class WorkareaComponent
       console.log('THis is Scheduler data here');
       console.log(this.schedulerData);
 
-      this.doctorService
-        .postDoctorGeneralOPDDetails(
-          this.patientMedicalForm,
-          temp,
-          this.schedulerData
+      // const patientVisitForm = <FormGroup>(
+      //   this.patientMedicalForm.controls['patientVisitForm']
+      // );
+      const patientVisitForm = <FormGroup>(
+        this.patientMedicalForm.controls['patientCaseRecordForm']
+      );
+
+      let prescribedDrugs = JSON.parse(
+        JSON.stringify(
+          (
+            patientVisitForm.get(
+              'drugPrescriptionForm.prescribedDrugs'
+            ) as FormArray
+          ).value
         )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              this.confirmationService.alert(res.data.response, 'success');
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
+      );
+
+      prescribedDrugs = prescribedDrugs.filter((item: any) => !!item.createdBy);
+
+      console.log('prescription:', prescribedDrugs);
+
+      let labTestOrders = JSON.parse(
+        JSON.stringify(
+          (
+            patientVisitForm.get(
+              'generalDoctorInvestigationForm.labTest'
+            ) as FormArray
+          ).value
+        )
+      );
+      let radiologyOrders = JSON.parse(
+        JSON.stringify(
+          (
+            patientVisitForm.get(
+              'generalDoctorInvestigationForm.radiologyTest'
+            ) as FormArray
+          ).value
+        )
+      );
+
+      labTestOrders = labTestOrders.filter((test: any) => !test.disabled);
+      radiologyOrders = radiologyOrders.filter((test: any) => !test.disabled);
+
+      labTestOrders = labTestOrders.concat(radiologyOrders);
+      console.log('labTestOrders:', labTestOrders);
+
+      if (labTestOrders.length === 0 && prescribedDrugs.length > 0) {
+        const prescriptionSmsObject = this.SMSObjectCreation(
+          JSON.parse(
+            JSON.stringify(
+              (
+                patientVisitForm.get(
+                  'generalDiagnosisForm.provisionalDiagnosisList'
+                ) as FormArray
+              ).value
+            )
+          ),
+          prescribedDrugs
         );
+        this.sendPrescriptionSms(prescriptionSmsObject);
+      }
+
+      // if (
+      //   patientVisitForm.test !== null &&
+      //   patientVisitForm.radiology !== null
+      // ) {
+      //   labTestOrders = patientVisitForm.test.concat(
+      //     patientVisitForm.radiology
+      //   );
+      // } else if (patientVisitForm.test !== null) {
+      //   labTestOrders = Object.assign([], patientVisitForm.test);
+      // } else {
+      //   labTestOrders = Object.assign(
+      //     [],
+      //     patientVisitForm.radiology
+      //   );
+      // }
+      // console.log("labTestOrders:", labTestOrders);
+
+      // if (labTestOrders.length === 0 && prescribedDrugs.length > 0) {
+
+      //   const prescriptionSmsObject = this.SMSObjectCreation(
+      //     patientQuickConsultDetails.diagnosisList,
+      //     patientQuickConsultDetails.prescribedDrugs
+      //   );
+      //   this.sendPrescriptionSms(prescriptionSmsObject);
+
+      // }
+
+      //   this.doctorService
+      //     .postDoctorGeneralOPDDetails(
+      //       this.patientMedicalForm,
+      //       temp,
+      //       this.schedulerData
+      //     )
+      //     .subscribe(
+      //       (res: any) => {
+      //         if (res.statusCode === 200 && res.data !== null) {
+      //           this.patientMedicalForm.reset();
+      //           this.removeBeneficiaryDataForDoctorVisit();
+      //           this.confirmationService.alert(res.data.response, 'success');
+      //           this.router.navigate(['/nurse-doctor/doctor-worklist']);
+      //         } else {
+      //           this.resetSpinnerandEnableTheSubmitButton();
+      //           this.confirmationService.alert(res.errorMessage, 'error');
+      //         }
+      //       },
+      //       err => {
+      //         this.resetSpinnerandEnableTheSubmitButton();
+      //         this.confirmationService.alert(err, 'error');
+      //       }
+      //     );
     }
   }
 
@@ -3012,7 +3162,7 @@ export class WorkareaComponent
     );
     const required = [];
     if (pregForm2.controls) {
-      const score1: number = Number(pregForm2.controls['length']);
+      const score1 = Number(pregForm2.controls['length']);
       for (let i = 0; i < score1; i++) {
         const pregForm3 = <FormGroup>pregForm2.controls[i];
         if (

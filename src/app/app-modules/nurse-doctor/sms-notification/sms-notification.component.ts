@@ -106,14 +106,15 @@ export class SmsNotificationComponent {
         .pipe(
           map(
             (res: any) =>
-              res?.data?.find((t: any) => t.smsType === 'Prescription SMS')
+              res?.data?.find((t: any) => t.smsType === 'MMUPrescription SMS')
                 ?.smsTypeID
           ),
           switchMap((smsTypeID: string | null) => {
             if (!smsTypeID) throw new Error('Prescription SMS type not found');
             return this._smsService
               .getSMStemplates(
-                this.sessionstorage.getItem('providerServiceMapID'),
+                // this.sessionstorage.getItem('providerServiceMapID'),
+                18,
                 smsTypeID
               )
               .pipe(
@@ -129,7 +130,7 @@ export class SmsNotificationComponent {
             // let req_arr = [];
             // for (let i = 0; i < this.row_array.length; i++) {
             const Obj = {
-              alternateNo: alternate_Phone_No,
+              alternateNo: '8147115862',
               beneficiaryRegID: '12234',
               createdBy: this.sessionstorage.getItem('userName'),
               is1097: false,
