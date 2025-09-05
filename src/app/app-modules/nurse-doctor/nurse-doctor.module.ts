@@ -149,6 +149,7 @@ import { ReportsComponent } from './reports/reports.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { DoctorInvestigationsComponent } from './case-record/general-case-record/doctor-investigations/doctor-investigations.component';
 import { SharedModule } from '../core/components/shared/shared.module';
+import { AutocompleteScrollerDirective } from './shared/utility/autocomplete-scroller.directive';
 
 @NgModule({
   imports: [
@@ -277,6 +278,7 @@ import { SharedModule } from '../core/components/shared/shared.module';
     TmVisitDetailsComponent,
     PrescribeTmMedicineComponent,
     CovidVaccinationStatusComponent,
+    AutocompleteScrollerDirective,
   ],
 
   providers: [
