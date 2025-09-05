@@ -22,7 +22,13 @@ export class HttpServiceService {
   constructor(
     private _http: HttpClient,
     private http: HttpClient
-  ) {}
+  ) {
+    const storedLang = localStorage.getItem('appLanguage');
+    this.language = storedLang ? JSON.parse(storedLang) : null;
+
+    // this.appCurrentLanguge = new BehaviorSubject(this.language);
+    // this.currentLangugae$ = this.appCurrentLanguge.asObservable();
+  }
 
   fetchLanguageSet() {
     console.log('Here i come');
@@ -32,10 +38,8 @@ export class HttpServiceService {
     return this._http.get(url);
   }
   getCurrentLanguage(response: any) {
-    console.log('here at one', response);
     this.language = response;
-    console.log('teste', this.language);
+    localStorage.setItem('appLanguage', JSON.stringify(response));
     this.appCurrentLanguge.next(response);
-    console.log('here at two', this.appCurrentLanguge.value);
   }
 }
