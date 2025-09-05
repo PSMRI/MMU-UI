@@ -50,6 +50,7 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { MasterDataService } from 'src/app/app-modules/lab/shared/services';
 
 @Component({
   selector: 'app-pnc-diagnosis',
@@ -116,7 +117,8 @@ export class PncDiagnosisComponent
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private doctorService: DoctorService,
     private httpServiceService: HttpServiceService,
-    readonly sessionstorage: SessionStorageService
+    readonly sessionstorage: SessionStorageService,
+    private masterdataService: MasterDataService
   ) {}
 
   beneficiaryAge: any;

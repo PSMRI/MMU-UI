@@ -31,6 +31,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { MasterDataService } from 'src/app/app-modules/lab/shared/services';
 import {
   DoctorService,
   NurseService,
@@ -76,7 +77,8 @@ export class NcdScreeningDiagnosisComponent
     private confirmationService: ConfirmationService,
     private httpServiceService: HttpServiceService,
     private nurseService: NurseService,
-    readonly sessionstorage: SessionStorageService
+    readonly sessionstorage: SessionStorageService,
+    private masterdataService: MasterDataService
   ) {}
 
   ngOnInit() {
