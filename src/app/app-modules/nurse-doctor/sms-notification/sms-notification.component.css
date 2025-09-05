@@ -1,0 +1,116 @@
+::ng-deep .mat-dialog-container {
+  min-width: 900px !important;
+  max-width: 95vw !important; /* prevents overflow on small screens */
+  padding: 0 !important;
+}
+/* Ensure dialog width */
+section.container-fluid {
+  min-width: 900px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Toolbar / Header */
+mat-toolbar {
+  background-color: #0277bd !important;
+  color: #fff !important;
+  border-color: unset !important;
+  font-weight: 600;
+  font-size: 18px;
+  /* border-top-left-radius: 8px;
+  border-top-right-radius: 8px; */
+}
+
+/* Dialog content padding */
+mat-dialog-content {
+  padding: 24px !important;
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+th {
+  background: #f3f4f6; /* light gray */
+  font-weight: 600;
+  text-align: left;
+  padding: 10px;
+  border-bottom: 2px solid #ddd;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+  background: #f9fafb; /* subtle hover */
+}
+
+/* SMS Section */
+.sms-section {
+  display: flex;
+  align-items: center;   /* Aligns checkbox + input vertically */
+  gap: 1.5rem;           /* Space between checkbox and input */
+  margin-top: 1rem;
+}
+
+.sms-section mat-checkbox {
+  display: flex;
+  align-items: center;   /* Align checkbox text properly */
+  font-size: 14px;       /* Keep label text size consistent */
+}
+
+.sms-section mat-form-field {
+  margin-top: 0;         /* Prevents floating shift */
+}
+
+.sms-section input[matInput] {
+  line-height: 1.5;      /* Better placeholder alignment */
+}
+
+
+/* Action Buttons (bottom row) */
+.action-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+/* Send SMS button */
+button.send-btn {
+  background-color: #0277bd !important;
+  color: #fff !important;
+  border-color: unset !important;
+  padding: 8px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  transition: background 0.2s ease-in-out;
+}
+
+button.send-btn:hover {
+  background-color: #72b6dd !important; /* darker blue */
+}
+
+.close-btn {
+  background-color: transparent !important;
+  color: #fff !important;
+  border-color: unset !important;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  box-shadow: none;
+  transition: background 0.2s ease-in-out;
+  margin-left: auto;
+}
+
+.close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
