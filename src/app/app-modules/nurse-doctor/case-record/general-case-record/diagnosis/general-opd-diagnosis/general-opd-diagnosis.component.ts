@@ -28,12 +28,11 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { ConfirmationService } from '../../../../../core/services/confirmation.service';
-import { DoctorService } from '../../../../shared/services';
+import { DoctorService, MasterdataService } from '../../../../shared/services';
 import { GeneralUtils } from '../../../../shared/utility/general-utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MasterDataService } from 'src/app/app-modules/lab/shared/services';
 @Component({
   selector: 'app-general-opd-diagnosis',
   templateUrl: './general-opd-diagnosis.component.html',
@@ -66,7 +65,7 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
     private confirmationService: ConfirmationService,
     private httpServiceService: HttpServiceService,
     readonly sessionstorage: SessionStorageService,
-    private masterdataService: MasterDataService
+    private masterdataService: MasterdataService
   ) {}
 
   ngOnChanges() {
