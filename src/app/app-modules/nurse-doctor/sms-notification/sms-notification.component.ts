@@ -53,20 +53,6 @@ export class SmsNotificationComponent {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  // Assuming prescriptionData.prescription comes from dialog config or service
-  // prescriptionData = {
-  //   prescription: [
-  //     {
-  //       prescriptionID: 'RX001',
-  //       diagnosisProvided: 'Cold',
-  //       remarks: 'Take rest',
-  //       prescribedDrugs: [
-  //         { drugName: 'Paracetamol', dosage: '500mg', frequency: '2x/day', noOfDays: 5 }
-  //       ]
-  //     }
-  //   ]
-  // };
-
   ngOnInit() {
     this.dataSource = new MatTableDataSource(this.data.prescriptionData);
     console.log('SMS object:', this.data);
@@ -113,8 +99,9 @@ export class SmsNotificationComponent {
             if (!smsTypeID) throw new Error('Prescription SMS type not found');
             return this._smsService
               .getSMStemplates(
-                // this.sessionstorage.getItem('providerServiceMapID'),
-                18,
+                this.sessionstorage.getItem('providerServiceMapID'),
+                // 18,
+                // 173,
                 smsTypeID
               )
               .pipe(
@@ -127,11 +114,11 @@ export class SmsNotificationComponent {
           }),
           switchMap(({ smsTemplateID, smsTemplateTypeID }) => {
             if (!smsTemplateID) throw new Error('Valid SMS template not found');
-            // let req_arr = [];
+            const req_arr = [];
             // for (let i = 0; i < this.row_array.length; i++) {
             const Obj = {
               alternateNo: '8147115862',
-              beneficiaryRegID: '12234',
+              // beneficiaryRegID: '12234',
               createdBy: this.sessionstorage.getItem('userName'),
               is1097: false,
               providerServiceMapID:
@@ -141,7 +128,7 @@ export class SmsNotificationComponent {
               ...this.data,
             };
 
-            // req_arr.push(Obj);
+            req_arr.push(Obj);
             // }
             return this._smsService.sendSMS(Obj);
           })

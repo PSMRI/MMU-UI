@@ -2441,21 +2441,20 @@ export class WorkareaComponent
 
   SMSObjectCreation(diagnosisList: any, prescriptions: any) {
     return {
-      data: {
-        prescription: [
-          {
-            prescriptionID: 'RX' + new Date().getTime(), // unique ID
-            diagnosisProvided: diagnosisList.map((d: any) => d.term).join(', '),
-            remarks: 'Please follow the prescribed dosage and stay hydrated.',
-            prescribedDrugs: prescriptions.map((p: any) => ({
-              drugName: p.drugName,
-              dosage: `${p.dose} (${p.drugStrength})`,
-              frequency: p.frequency,
-              noOfDays: p.duration,
-            })),
-          },
-        ],
-      },
+      beneficiaryRegID: this.beneficiaryRegID,
+      prescription: [
+        {
+          prescriptionID: 'RX' + new Date().getTime(), // unique ID
+          diagnosisProvided: diagnosisList.map((d: any) => d.term).join(', '),
+          remarks: 'Please follow the prescribed dosage and stay hydrated.',
+          prescribedDrugs: prescriptions.map((p: any) => ({
+            drugName: p.drugName,
+            dosage: `${p.dose} (${p.drugStrength})`,
+            frequency: p.frequency,
+            noOfDays: p.duration,
+          })),
+        },
+      ],
     };
   }
 
@@ -2625,6 +2624,7 @@ export class WorkareaComponent
         providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
         createdBy: this.sessionstorage.getItem('userName'),
       };
+      this.getLabandPrescriptionData();
 
       this.doctorService
         .postDoctorANCDetails(this.patientMedicalForm, temp, this.schedulerData)
@@ -2747,6 +2747,68 @@ export class WorkareaComponent
         createdBy: this.sessionstorage.getItem('userName'),
       };
 
+      const patientVisitForm = <FormGroup>(
+        this.patientMedicalForm.controls['patientCaseRecordForm']
+      );
+
+      let prescribedDrugs = JSON.parse(
+        JSON.stringify(
+          (
+            patientVisitForm.get(
+              'drugPrescriptionForm.prescribedDrugs'
+            ) as FormArray
+          ).value
+        )
+      );
+
+      prescribedDrugs = prescribedDrugs.filter((item: any) => !!item.createdBy);
+
+      console.log('prescription:', prescribedDrugs);
+
+      let labTestOrders = JSON.parse(
+        JSON.stringify(
+          (
+            patientVisitForm.get(
+              'generalDoctorInvestigationForm.labTest'
+            ) as FormArray
+          ).value
+        )
+      );
+      let radiologyOrders = JSON.parse(
+        JSON.stringify(
+          (
+            patientVisitForm.get(
+              'generalDoctorInvestigationForm.radiologyTest'
+            ) as FormArray
+          ).value
+        )
+      );
+
+      labTestOrders = labTestOrders.filter((test: any) => !test.disabled);
+      radiologyOrders = radiologyOrders.filter((test: any) => !test.disabled);
+
+      labTestOrders = labTestOrders.concat(radiologyOrders);
+      console.log('labTestOrders:', labTestOrders);
+
+      if (
+        labTestOrders.length === 0 &&
+        prescribedDrugs.length > 0 &&
+        this.attendantType === 'doctor'
+      ) {
+        const prescriptionSmsObject = this.SMSObjectCreation(
+          JSON.parse(
+            JSON.stringify(
+              (
+                patientVisitForm.get(
+                  'generalDiagnosisForm.provisionalDiagnosisList'
+                ) as FormArray
+              ).value
+            )
+          ),
+          prescribedDrugs
+        );
+        this.sendPrescriptionSms(prescriptionSmsObject);
+      }
       this.doctorService
         .postDoctorNCDCareDetails(
           this.patientMedicalForm,
@@ -2783,6 +2845,69 @@ export class WorkareaComponent
         createdBy: this.sessionstorage.getItem('userName'),
       };
 
+      const patientVisitForm = <FormGroup>(
+        this.patientMedicalForm.controls['patientCaseRecordForm']
+      );
+
+      let prescribedDrugs = JSON.parse(
+        JSON.stringify(
+          (
+            patientVisitForm.get(
+              'drugPrescriptionForm.prescribedDrugs'
+            ) as FormArray
+          ).value
+        )
+      );
+
+      prescribedDrugs = prescribedDrugs.filter((item: any) => !!item.createdBy);
+
+      console.log('prescription:', prescribedDrugs);
+
+      let labTestOrders = JSON.parse(
+        JSON.stringify(
+          (
+            patientVisitForm.get(
+              'generalDoctorInvestigationForm.labTest'
+            ) as FormArray
+          ).value
+        )
+      );
+      let radiologyOrders = JSON.parse(
+        JSON.stringify(
+          (
+            patientVisitForm.get(
+              'generalDoctorInvestigationForm.radiologyTest'
+            ) as FormArray
+          ).value
+        )
+      );
+
+      labTestOrders = labTestOrders.filter((test: any) => !test.disabled);
+      radiologyOrders = radiologyOrders.filter((test: any) => !test.disabled);
+
+      labTestOrders = labTestOrders.concat(radiologyOrders);
+      console.log('labTestOrders:', labTestOrders);
+
+      if (
+        labTestOrders.length === 0 &&
+        prescribedDrugs.length > 0 &&
+        this.attendantType === 'doctor'
+      ) {
+        const prescriptionSmsObject = this.SMSObjectCreation(
+          JSON.parse(
+            JSON.stringify(
+              (
+                patientVisitForm.get(
+                  'generalDiagnosisForm.provisionalDiagnosisList'
+                ) as FormArray
+              ).value
+            )
+          ),
+          prescribedDrugs
+        );
+        this.sendPrescriptionSms(prescriptionSmsObject);
+      }
+
       this.doctorService
         .postDoctorCovidCareDetails(
           this.patientMedicalForm,
@@ -2818,6 +2943,68 @@ export class WorkareaComponent
         createdBy: this.sessionstorage.getItem('userName'),
       };
 
+      const patientVisitForm = <FormGroup>(
+        this.patientMedicalForm.controls['patientCaseRecordForm']
+      );
+
+      let prescribedDrugs = JSON.parse(
+        JSON.stringify(
+          (
+            patientVisitForm.get(
+              'drugPrescriptionForm.prescribedDrugs'
+            ) as FormArray
+          ).value
+        )
+      );
+
+      prescribedDrugs = prescribedDrugs.filter((item: any) => !!item.createdBy);
+
+      console.log('prescription:', prescribedDrugs);
+
+      let labTestOrders = JSON.parse(
+        JSON.stringify(
+          (
+            patientVisitForm.get(
+              'generalDoctorInvestigationForm.labTest'
+            ) as FormArray
+          ).value
+        )
+      );
+      let radiologyOrders = JSON.parse(
+        JSON.stringify(
+          (
+            patientVisitForm.get(
+              'generalDoctorInvestigationForm.radiologyTest'
+            ) as FormArray
+          ).value
+        )
+      );
+
+      labTestOrders = labTestOrders.filter((test: any) => !test.disabled);
+      radiologyOrders = radiologyOrders.filter((test: any) => !test.disabled);
+
+      labTestOrders = labTestOrders.concat(radiologyOrders);
+      console.log('labTestOrders:', labTestOrders);
+
+      if (
+        labTestOrders.length === 0 &&
+        prescribedDrugs.length > 0 &&
+        this.attendantType === 'doctor'
+      ) {
+        const prescriptionSmsObject = this.SMSObjectCreation(
+          JSON.parse(
+            JSON.stringify(
+              (
+                patientVisitForm.get(
+                  'generalDiagnosisForm.provisionalDiagnosisList'
+                ) as FormArray
+              ).value
+            )
+          ),
+          prescribedDrugs
+        );
+        this.sendPrescriptionSms(prescriptionSmsObject);
+      }
       this.doctorService
         .postDoctorNCDScreeningDetails(
           this.patientMedicalForm,
@@ -2970,7 +3157,11 @@ export class WorkareaComponent
       labTestOrders = labTestOrders.concat(radiologyOrders);
       console.log('labTestOrders:', labTestOrders);
 
-      if (labTestOrders.length === 0 && prescribedDrugs.length > 0) {
+      if (
+        labTestOrders.length === 0 &&
+        prescribedDrugs.length > 0 &&
+        this.attendantType === 'doctor'
+      ) {
         const prescriptionSmsObject = this.SMSObjectCreation(
           JSON.parse(
             JSON.stringify(
@@ -2986,56 +3177,29 @@ export class WorkareaComponent
         this.sendPrescriptionSms(prescriptionSmsObject);
       }
 
-      // if (
-      //   patientVisitForm.test !== null &&
-      //   patientVisitForm.radiology !== null
-      // ) {
-      //   labTestOrders = patientVisitForm.test.concat(
-      //     patientVisitForm.radiology
-      //   );
-      // } else if (patientVisitForm.test !== null) {
-      //   labTestOrders = Object.assign([], patientVisitForm.test);
-      // } else {
-      //   labTestOrders = Object.assign(
-      //     [],
-      //     patientVisitForm.radiology
-      //   );
-      // }
-      // console.log("labTestOrders:", labTestOrders);
-
-      // if (labTestOrders.length === 0 && prescribedDrugs.length > 0) {
-
-      //   const prescriptionSmsObject = this.SMSObjectCreation(
-      //     patientQuickConsultDetails.diagnosisList,
-      //     patientQuickConsultDetails.prescribedDrugs
-      //   );
-      //   this.sendPrescriptionSms(prescriptionSmsObject);
-
-      // }
-
-      //   this.doctorService
-      //     .postDoctorGeneralOPDDetails(
-      //       this.patientMedicalForm,
-      //       temp,
-      //       this.schedulerData
-      //     )
-      //     .subscribe(
-      //       (res: any) => {
-      //         if (res.statusCode === 200 && res.data !== null) {
-      //           this.patientMedicalForm.reset();
-      //           this.removeBeneficiaryDataForDoctorVisit();
-      //           this.confirmationService.alert(res.data.response, 'success');
-      //           this.router.navigate(['/nurse-doctor/doctor-worklist']);
-      //         } else {
-      //           this.resetSpinnerandEnableTheSubmitButton();
-      //           this.confirmationService.alert(res.errorMessage, 'error');
-      //         }
-      //       },
-      //       err => {
-      //         this.resetSpinnerandEnableTheSubmitButton();
-      //         this.confirmationService.alert(err, 'error');
-      //       }
-      //     );
+      this.doctorService
+        .postDoctorGeneralOPDDetails(
+          this.patientMedicalForm,
+          temp,
+          this.schedulerData
+        )
+        .subscribe(
+          (res: any) => {
+            if (res.statusCode === 200 && res.data !== null) {
+              this.patientMedicalForm.reset();
+              this.removeBeneficiaryDataForDoctorVisit();
+              this.confirmationService.alert(res.data.response, 'success');
+              this.router.navigate(['/nurse-doctor/doctor-worklist']);
+            } else {
+              this.resetSpinnerandEnableTheSubmitButton();
+              this.confirmationService.alert(res.errorMessage, 'error');
+            }
+          },
+          err => {
+            this.resetSpinnerandEnableTheSubmitButton();
+            this.confirmationService.alert(err, 'error');
+          }
+        );
     }
   }
 
@@ -3049,6 +3213,7 @@ export class WorkareaComponent
         createdBy: this.sessionstorage.getItem('userName'),
       };
 
+      this.getLabandPrescriptionData();
       this.doctorService
         .postDoctorPNCDetails(this.patientMedicalForm, temp, this.schedulerData)
         .subscribe(
@@ -3068,6 +3233,71 @@ export class WorkareaComponent
             this.confirmationService.alert(err, 'error');
           }
         );
+    }
+  }
+
+  getLabandPrescriptionData() {
+    const patientVisitForm = <FormGroup>(
+      this.patientMedicalForm.controls['patientCaseRecordForm']
+    );
+
+    let prescribedDrugs = JSON.parse(
+      JSON.stringify(
+        (
+          patientVisitForm.get(
+            'drugPrescriptionForm.prescribedDrugs'
+          ) as FormArray
+        ).value
+      )
+    );
+
+    prescribedDrugs = prescribedDrugs.filter((item: any) => !!item.createdBy);
+
+    console.log('prescription:', prescribedDrugs);
+
+    let labTestOrders = JSON.parse(
+      JSON.stringify(
+        (
+          patientVisitForm.get(
+            'generalDoctorInvestigationForm.labTest'
+          ) as FormArray
+        ).value
+      )
+    );
+    let radiologyOrders = JSON.parse(
+      JSON.stringify(
+        (
+          patientVisitForm.get(
+            'generalDoctorInvestigationForm.radiologyTest'
+          ) as FormArray
+        ).value
+      )
+    );
+
+    labTestOrders = labTestOrders.filter((test: any) => !test.disabled);
+    radiologyOrders = radiologyOrders.filter((test: any) => !test.disabled);
+
+    labTestOrders = labTestOrders.concat(radiologyOrders);
+    console.log('labTestOrders:', labTestOrders);
+
+    if (
+      labTestOrders.length === 0 &&
+      prescribedDrugs.length > 0 &&
+      this.attendantType === 'doctor'
+    ) {
+      const prescriptionSmsObject = this.SMSObjectCreation(
+        JSON.parse(
+          JSON.stringify(
+            (
+              patientVisitForm.get(
+                'generalDiagnosisForm.provisionalDiagnosisList'
+              ) as FormArray
+            ).value
+          )
+        ),
+        prescribedDrugs
+      );
+      this.sendPrescriptionSms(prescriptionSmsObject);
     }
   }
 
