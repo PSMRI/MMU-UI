@@ -31,10 +31,10 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MasterDataService } from 'src/app/app-modules/lab/shared/services';
 import {
   DoctorService,
   NurseService,
+  MasterdataService,
 } from 'src/app/app-modules/nurse-doctor/shared/services';
 import { GeneralUtils } from 'src/app/app-modules/nurse-doctor/shared/utility';
 @Component({
@@ -78,7 +78,7 @@ export class NcdScreeningDiagnosisComponent
     private httpServiceService: HttpServiceService,
     private nurseService: NurseService,
     readonly sessionstorage: SessionStorageService,
-    private masterdataService: MasterDataService
+    private masterdataService: MasterdataService
   ) {}
 
   ngOnInit() {
