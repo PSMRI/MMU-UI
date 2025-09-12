@@ -51,26 +51,49 @@ tr:hover {
   background: #f9fafb; /* subtle hover */
 }
 
-/* SMS Section */
+/* COMPONENT STYLES */
+
+/* container: checkbox + form-field on one line, vertically centered */
 .sms-section {
   display: flex;
-  align-items: center;   /* Aligns checkbox + input vertically */
-  gap: 1.5rem;           /* Space between checkbox and input */
+  align-items: center;   /* centers both checkbox and input vertically */
+  gap: 0.75rem;
   margin-top: 1rem;
 }
 
-.sms-section mat-checkbox {
+/* make the checkbox occupy same vertical space so baseline aligns */
+.sms-section .mat-checkbox {
   display: flex;
-  align-items: center;   /* Align checkbox text properly */
-  font-size: 14px;       /* Keep label text size consistent */
+  align-items: center;
+  height: 56px; /* match material form-field height for outline appearance */
+  margin: 0;    /* remove extra margins */
 }
 
-.sms-section mat-form-field {
-  margin-top: 0;         /* Prevents floating shift */
+/* constrain the phone field width and remove extra margin */
+.sms-section .alt-phone-field {
+  margin-top: 10px;
+  margin: 0;
+  width: 260px;    /* adjust as needed */
+  min-width: 180px;/* responsive fallback */
 }
 
-.sms-section input[matInput] {
-  line-height: 1.5;      /* Better placeholder alignment */
+/* force the internal infix to center label/input vertically
+   ::ng-deep is needed to override mat-form-field internals */
+::ng-deep .sms-section .mat-form-field .mat-form-field-infix {
+  display: flex;
+  align-items: center;
+  min-height: 56px; /* keeps label from overlapping the input */
+  padding: 0 12px;  /* consistent left/right padding */
+  box-sizing: border-box;
+}
+
+/* ensure the actual native input doesn't have extra top padding
+   and has a sensible height so the floating label clears correctly */
+::ng-deep .sms-section input.mat-input-element {
+  padding: 0;
+  height: 36px;
+  line-height: 1.25;
+  box-sizing: border-box;
 }
 
 
@@ -99,18 +122,12 @@ button.send-btn:hover {
 }
 
 .close-btn {
-  background-color: transparent !important;
-  color: #fff !important;
-  border-color: unset !important;
-  padding: 8px 12px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 6px;
-  box-shadow: none;
-  transition: background 0.2s ease-in-out;
   margin-left: auto;
+  border-radius: 50%;
+  background: #0277bd !important;
+  color: white;
+  border: none;
 }
-
 .close-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1) !important;
+  background: #b0c3e7 !important;
 }

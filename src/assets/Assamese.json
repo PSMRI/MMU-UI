@@ -1706,6 +1706,8 @@
     "abhaDetails": "আভাৰ বিৱৰণ",
     "abhaAddress": "আভা ঠিকনা",
     "abhaMode": "আভা মোড",
-    "abhaDetailsNotAvailable": "আভাৰ বিৱৰণ উপলব্ধ নহয়"
+    "abhaDetailsNotAvailable": "আভাৰ বিৱৰণ উপলব্ধ নহয়",
+    "enterTenDigitMobileNumber": "মোবাইল নম্বৰ প্ৰবিষ্ট কৰক"
+
   }
 }

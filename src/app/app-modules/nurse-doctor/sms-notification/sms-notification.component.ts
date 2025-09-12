@@ -34,7 +34,7 @@ export class SmsNotificationComponent {
     private snackBar: MatSnackBar,
     private _smsService: SmsTemplateService,
     private alertMessage: ConfirmationService,
-    public dialogReff: MatDialogRef<SmsNotificationComponent>,
+    public dialogRef: MatDialogRef<SmsNotificationComponent>,
     public httpServices: HttpServiceService,
     readonly sessionstorage: SessionStorageService
   ) {}
@@ -84,7 +84,7 @@ export class SmsNotificationComponent {
     }
   }
 
-  sendSMS(alternate_Phone_No: any) {
+  sendSMS() {
     const currentServiceID = this.sessionstorage.getItem('currentServiceID');
     if (currentServiceID != undefined) {
       this._smsService
@@ -115,22 +115,27 @@ export class SmsNotificationComponent {
           switchMap(({ smsTemplateID, smsTemplateTypeID }) => {
             if (!smsTemplateID) throw new Error('Valid SMS template not found');
             const req_arr = [];
-            // for (let i = 0; i < this.row_array.length; i++) {
-            const Obj = {
-              alternateNo: '8147115862',
-              // beneficiaryRegID: '12234',
-              createdBy: this.sessionstorage.getItem('userName'),
-              is1097: false,
-              providerServiceMapID:
-                this.sessionstorage.getItem('providerServiceID'),
-              smsTemplateID: smsTemplateID,
-              smsTemplateTypeID: smsTemplateTypeID,
-              ...this.data,
-            };
+            for (let i = 0; i < this.data.prescribedDrugs.length; i++) {
+              console.log('this.data[i]', this.data[i]);
 
-            req_arr.push(Obj);
-            // }
-            return this._smsService.sendSMS(Obj);
+              const Obj = {
+                alternateNo: this.mobileNumber,
+                // beneficiaryRegID: '12234',
+                createdBy: this.sessionstorage.getItem('userName'),
+                is1097: false,
+                providerServiceMapID:
+                  this.sessionstorage.getItem('providerServiceID'),
+                smsTemplateID: smsTemplateID,
+                smsTemplateTypeID: smsTemplateTypeID,
+                ...this.data.prescribedDrugs[i],
+              };
+
+              req_arr.push(Obj);
+              console.log('Obj', Obj);
+            }
+            console.log('req_arr', req_arr);
+
+            return this._smsService.sendSMS(req_arr);
           })
         )
         .subscribe({
@@ -151,7 +156,20 @@ export class SmsNotificationComponent {
           },
         });
 
-      this.dialogReff.close();
+      this.dialogRef.close();
     }
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent) {
+    const charCode = event.which ? event.which : event.keyCode;
+    console.log('charCode', charCode);
+
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
+  }
+
+  onClose(): void {
+    this.dialogRef.close(); // closes the dialog
   }
 }
