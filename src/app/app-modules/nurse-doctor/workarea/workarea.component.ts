@@ -1110,6 +1110,9 @@ export class WorkareaComponent
       }
     } else {
       if (this.checkNurseRequirements(this.patientMedicalForm)) {
+        console.log('ANC UPDATE');
+
+        this.getLabandPrescriptionData();
         this.doctorService
           .updateDoctorDiagnosisDetails(
             this.patientMedicalForm,
@@ -2440,21 +2443,29 @@ export class WorkareaComponent
   }
 
   SMSObjectCreation(diagnosisList: any, prescriptions: any) {
+    // return {
+    //   beneficiaryRegID: this.beneficiaryRegID,
+    //   prescription: [
+    //     {
+    //       prescriptionID: 'RX' + new Date().getTime(), // unique ID
+    //       diagnosisProvided: diagnosisList.map((d: any) => d.term).join(', '),
+    //       remarks: 'Please follow the prescribed dosage and stay hydrated.',
+    //       prescribedDrugs: prescriptions.map((p: any) => ({
+    //         prescribedDrugID: p.drugID,
+    //         drugName: p.drugName,
+    //         dosage: `${p.dose} (${p.drugStrength})`,
+    //         frequency: p.frequency,
+    //         noOfDays: p.duration,
+    //       })),
+    //     },
+    //   ],
+    // };
+
     return {
-      beneficiaryRegID: this.beneficiaryRegID,
-      prescription: [
-        {
-          prescriptionID: 'RX' + new Date().getTime(), // unique ID
-          diagnosisProvided: diagnosisList.map((d: any) => d.term).join(', '),
-          remarks: 'Please follow the prescribed dosage and stay hydrated.',
-          prescribedDrugs: prescriptions.map((p: any) => ({
-            drugName: p.drugName,
-            dosage: `${p.dose} (${p.drugStrength})`,
-            frequency: p.frequency,
-            noOfDays: p.duration,
-          })),
-        },
-      ],
+      prescribedDrugs: prescriptions.map((p: any) => ({
+        beneficiaryRegID: this.beneficiaryRegID,
+        prescribedDrugID: p.drugID,
+      })),
     };
   }
 
@@ -3247,7 +3258,7 @@ export class WorkareaComponent
           patientVisitForm.get(
             'drugPrescriptionForm.prescribedDrugs'
           ) as FormArray
-        ).value
+        ).getRawValue()
       )
     );
 
@@ -3261,7 +3272,7 @@ export class WorkareaComponent
           patientVisitForm.get(
             'generalDoctorInvestigationForm.labTest'
           ) as FormArray
-        ).value
+        ).getRawValue()
       )
     );
     let radiologyOrders = JSON.parse(
@@ -3270,7 +3281,7 @@ export class WorkareaComponent
           patientVisitForm.get(
             'generalDoctorInvestigationForm.radiologyTest'
           ) as FormArray
-        ).value
+        ).getRawValue()
       )
     );
 
@@ -3292,7 +3303,7 @@ export class WorkareaComponent
               patientVisitForm.get(
                 'generalDiagnosisForm.provisionalDiagnosisList'
               ) as FormArray
-            ).value
+            ).getRawValue()
           )
         ),
         prescribedDrugs
