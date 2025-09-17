@@ -26,7 +26,7 @@
     </tr>
   </thead>
   <tbody>
-    <ng-container *ngFor="let prescription of data.prescription">
+    <ng-container *ngFor="let prescription of data.prescribedDrugs">
       <ng-container *ngFor="let p of prescription.prescribedDrugs; let i = index">
         <tr>
           <!-- Prescription ID only on first drug row -->

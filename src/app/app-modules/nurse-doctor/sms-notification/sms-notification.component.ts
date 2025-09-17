@@ -54,7 +54,7 @@ export class SmsNotificationComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource(this.data.prescriptionData);
+    this.dataSource = new MatTableDataSource(this.data.prescribedDrugs);
     console.log('SMS object:', this.data);
 
     this.assignSelectedLanguage();
@@ -86,6 +86,7 @@ export class SmsNotificationComponent {
 
   sendSMS() {
     const currentServiceID = this.sessionstorage.getItem('currentServiceID');
+    // const currentServiceID = 3; // For testing purpose, replace with actual value
     if (currentServiceID != undefined) {
       this._smsService
         .getSMStypes(currentServiceID)
@@ -95,10 +96,17 @@ export class SmsNotificationComponent {
               res?.data?.find((t: any) => t.smsType === 'MMUPrescription SMS')
                 ?.smsTypeID
           ),
+          // pipe(
+          // map(Prescription SMS
+          //   (res: any) =>
+          //     res?.data?.find((t: any) => t.smsType === 'Prescription SMS'')
+          //       ?.smsTypeID
+          // ),
           switchMap((smsTypeID: string | null) => {
             if (!smsTypeID) throw new Error('Prescription SMS type not found');
             return this._smsService
               .getSMStemplates(
+                // 1,
                 this.sessionstorage.getItem('providerServiceMapID'),
                 // 18,
                 // 173,
@@ -118,16 +126,28 @@ export class SmsNotificationComponent {
             for (let i = 0; i < this.data.prescribedDrugs.length; i++) {
               console.log('this.data[i]', this.data[i]);
 
+              // const Obj = {
+              //   alternateNo: this.mobileNumber,
+              //   // beneficiaryRegID: '12234',
+              //   createdBy: this.sessionstorage.getItem('userName'),
+              //   is1097: false,
+              //   providerServiceMapID:
+              //     this.sessionstorage.getItem('providerServiceID'),
+              //   smsTemplateID: smsTemplateID,
+              //   smsTemplateTypeID: smsTemplateTypeID,
+              //   ...this.data.prescribedDrugs[i],
+              // };
+
               const Obj = {
                 alternateNo: this.mobileNumber,
-                // beneficiaryRegID: '12234',
+                beneficiaryRegID: this.beneficiaryRegID,
+                prescribedDrugID: this.data.prescribedDrugs[i].prescribedDrugID,
                 createdBy: this.sessionstorage.getItem('userName'),
                 is1097: false,
                 providerServiceMapID:
                   this.sessionstorage.getItem('providerServiceID'),
                 smsTemplateID: smsTemplateID,
                 smsTemplateTypeID: smsTemplateTypeID,
-                ...this.data.prescribedDrugs[i],
               };
 
               req_arr.push(Obj);

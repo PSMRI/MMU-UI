@@ -2408,14 +2408,15 @@ export class WorkareaComponent
         patientQuickConsultFormValue
       );
 
-      if (labTestOrders.length === 0 && prescribedDrugs.length > 0) {
-        const prescriptionSmsObject = this.SMSObjectCreation(
-          patientQuickConsultFormValue.provisionalDiagnosisList,
-          patientQuickConsultFormValue.prescription
-        );
+      // if (prescribedDrugs.length > 0) {
+      //   const prescriptionSmsObject = this.SMSObjectCreation(
+      //     patientQuickConsultFormValue.provisionalDiagnosisList,
+      //     patientQuickConsultFormValue.prescription,
+      //     ['2317568']
+      //   );
 
-        this.sendPrescriptionSms(prescriptionSmsObject);
-      }
+      //   this.sendPrescriptionSms(prescriptionSmsObject);
+      // }
 
       this.doctorService
         .postQuickConsultDetails(
@@ -2425,8 +2426,18 @@ export class WorkareaComponent
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
+              if (prescribedDrugs.length > 0) {
+                const prescriptionSmsObject = this.SMSObjectCreation(
+                  patientQuickConsultFormValue.provisionalDiagnosisList,
+                  patientQuickConsultFormValue.prescription,
+                  res.data.prescribedDrugIDs
+                );
+
+                this.sendPrescriptionSms(prescriptionSmsObject);
+              }
               this.patientMedicalForm.reset();
               this.removeBeneficiaryDataForDoctorVisit();
+
               this.confirmationService.alert(res.data.response, 'success');
               this.router.navigate(['/nurse-doctor/doctor-worklist']);
             } else {
@@ -2442,7 +2453,11 @@ export class WorkareaComponent
     }
   }
 
-  SMSObjectCreation(diagnosisList: any, prescriptions: any) {
+  SMSObjectCreation(
+    diagnosisList: any,
+    prescriptions: any,
+    prescribedDrugIDs: any
+  ) {
     // return {
     //   beneficiaryRegID: this.beneficiaryRegID,
     //   prescription: [
@@ -2462,9 +2477,14 @@ export class WorkareaComponent
     // };
 
     return {
-      prescribedDrugs: prescriptions.map((p: any) => ({
+      diagnosisProvided: diagnosisList.map((d: any) => d.term).join(', '),
+      prescribedDrugs: prescriptions.map((p: any, index: number) => ({
         beneficiaryRegID: this.beneficiaryRegID,
-        prescribedDrugID: p.drugID,
+        prescribedDrugID: prescribedDrugIDs[index],
+        drugName: p.drugName,
+        dosage: `${p.dose} (${p.drugStrength})`,
+        frequency: p.frequency,
+        noOfDays: p.duration,
       })),
     };
   }
@@ -2585,7 +2605,8 @@ export class WorkareaComponent
     if (labTestOrders.length === 0 && prescribedDrugs.length > 0) {
       const prescriptionSmsObject = this.SMSObjectCreation(
         patientQuickConsultDetails.diagnosisList,
-        patientQuickConsultDetails.prescribedDrugs
+        patientQuickConsultDetails.prescribedDrugs,
+        ['2317568']
       );
       this.sendPrescriptionSms(prescriptionSmsObject);
     }
@@ -2816,7 +2837,8 @@ export class WorkareaComponent
               ).value
             )
           ),
-          prescribedDrugs
+          prescribedDrugs,
+          ['2317568']
         );
         this.sendPrescriptionSms(prescriptionSmsObject);
       }
@@ -2914,7 +2936,8 @@ export class WorkareaComponent
               ).value
             )
           ),
-          prescribedDrugs
+          prescribedDrugs,
+          ['2317568']
         );
         this.sendPrescriptionSms(prescriptionSmsObject);
       }
@@ -3012,7 +3035,8 @@ export class WorkareaComponent
               ).value
             )
           ),
-          prescribedDrugs
+          prescribedDrugs,
+          ['2317568']
         );
         this.sendPrescriptionSms(prescriptionSmsObject);
       }
@@ -3183,7 +3207,8 @@ export class WorkareaComponent
               ).value
             )
           ),
-          prescribedDrugs
+          prescribedDrugs,
+          ['2317568']
         );
         this.sendPrescriptionSms(prescriptionSmsObject);
       }
@@ -3306,7 +3331,8 @@ export class WorkareaComponent
             ).getRawValue()
           )
         ),
-        prescribedDrugs
+        prescribedDrugs,
+        ['2317568']
       );
       this.sendPrescriptionSms(prescriptionSmsObject);
     }
