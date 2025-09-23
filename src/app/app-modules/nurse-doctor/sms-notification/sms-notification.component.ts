@@ -131,6 +131,7 @@ export class SmsNotificationComponent {
               verticalPosition: 'top',
               panelClass: ['snackbar-success'],
             });
+            this.alertMessage.alert('Data saved successfully', 'success');
           },
           error: err => {
             console.error('Error sending SMS:', err);
