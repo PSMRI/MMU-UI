@@ -1,0 +1,133 @@
+::ng-deep .mat-dialog-container {
+  min-width: 900px !important;
+  max-width: 95vw !important; /* prevents overflow on small screens */
+  padding: 0 !important;
+}
+/* Ensure dialog width */
+section.container-fluid {
+  min-width: 900px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Toolbar / Header */
+mat-toolbar {
+  background-color: #0277bd !important;
+  color: #fff !important;
+  border-color: unset !important;
+  font-weight: 600;
+  font-size: 18px;
+  /* border-top-left-radius: 8px;
+  border-top-right-radius: 8px; */
+}
+
+/* Dialog content padding */
+mat-dialog-content {
+  padding: 24px !important;
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+th {
+  background: #f3f4f6; /* light gray */
+  font-weight: 600;
+  text-align: left;
+  padding: 10px;
+  border-bottom: 2px solid #ddd;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+  background: #f9fafb; /* subtle hover */
+}
+
+/* COMPONENT STYLES */
+
+/* container: checkbox + form-field on one line, vertically centered */
+.sms-section {
+  display: flex;
+  align-items: center;   /* centers both checkbox and input vertically */
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+/* make the checkbox occupy same vertical space so baseline aligns */
+.sms-section .mat-checkbox {
+  display: flex;
+  align-items: center;
+  height: 56px; /* match material form-field height for outline appearance */
+  margin: 0;    /* remove extra margins */
+}
+
+/* constrain the phone field width and remove extra margin */
+.sms-section .alt-phone-field {
+  margin-top: 10px;
+  margin: 0;
+  width: 260px;    /* adjust as needed */
+  min-width: 180px;/* responsive fallback */
+}
+
+/* force the internal infix to center label/input vertically
+   ::ng-deep is needed to override mat-form-field internals */
+::ng-deep .sms-section .mat-form-field .mat-form-field-infix {
+  display: flex;
+  align-items: center;
+  min-height: 56px; /* keeps label from overlapping the input */
+  padding: 0 12px;  /* consistent left/right padding */
+  box-sizing: border-box;
+}
+
+/* ensure the actual native input doesn't have extra top padding
+   and has a sensible height so the floating label clears correctly */
+::ng-deep .sms-section input.mat-input-element {
+  padding: 0;
+  height: 36px;
+  line-height: 1.25;
+  box-sizing: border-box;
+}
+
+
+/* Action Buttons (bottom row) */
+.action-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+/* Send SMS button */
+button.send-btn {
+  background-color: #0277bd !important;
+  color: #fff !important;
+  border-color: unset !important;
+  padding: 8px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  transition: background 0.2s ease-in-out;
+}
+
+button.send-btn:hover {
+  background-color: #72b6dd !important; /* darker blue */
+}
+
+.close-btn {
+  margin-left: auto;
+  border-radius: 50%;
+  background: #0277bd !important;
+  color: white;
+  border: none;
+}
+.close-btn:hover {
+  background: #b0c3e7 !important;
+}
