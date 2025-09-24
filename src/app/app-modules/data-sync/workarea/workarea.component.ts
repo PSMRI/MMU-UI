@@ -48,8 +48,8 @@ export class WorkareaComponent
   generateBenIDForm!: FormGroup;
   current_language_set: any;
   blankTable: any[] = [];
-  showTable: boolean = false;
-  displaySyncBool: boolean = true;
+  showTable = false;
+  displaySyncBool = true;
 
   constructor(
     private router: Router,
@@ -228,10 +228,6 @@ export class WorkareaComponent
           if (res.data.groupsProgress) {
             this.updateGroupStatus(res.data.groupsProgress);
           }
-          // Update group status for all groups as 'success'
-          this.syncTableGroupList.forEach((group: any) => {
-            group.status = 'success';
-          });
           this.confirmationService.alert(res.data.response, 'success');
         } else {
           this.confirmationService.alert(res.data.response, 'error');
@@ -255,17 +251,6 @@ export class WorkareaComponent
       const progress = groupsProgress.find(
         (item: any) => item.groupId === group.syncTableGroupID
       );
-      if (progress) {
-        if (progress.status === 'completed') {
-          group.status = 'success';
-        } else if (progress.status === 'failed') {
-          group.status = 'failed';
-        } else {
-          group.status = 'pending';
-        }
-      } else {
-        group.status = 'pending';
-      }
     });
   }
 

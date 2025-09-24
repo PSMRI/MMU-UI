@@ -1482,6 +1482,8 @@
     },
 
     "coreComponents": {
+      "errorForDataSync": "ডাটা ছিঙ্কত সমস্যা",
+      "partialDataSync": "আংশিকভাৱে সম্পূৰ্ণ হ’ল",
       "poweredByWipro": "দ্বাৰা চালিত: ৱাইপ্ৰো",
       "selectCallibrationStrip": "Select Callibration Strip",
       "inTableSearchStripCode": "In-Table Search (Strip Code)",
