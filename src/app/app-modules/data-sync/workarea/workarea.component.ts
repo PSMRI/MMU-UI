@@ -251,7 +251,7 @@ export class WorkareaComponent
   updateGroupStatus(groupsProgress: any[]) {
     this.syncTableGroupList.forEach((group: any) => {
       const progress = groupsProgress.find(
-        (item: any) => item.groupId === group.syncTableGroupID
+        (item: any) => item.syncTableGroupID === group.syncTableGroupID
       );
 
       if (progress) {
@@ -259,6 +259,8 @@ export class WorkareaComponent
           group.status = 'success';
         } else if (progress.status === 'failed') {
           group.status = 'failed';
+        } else if (progress.statusn === 'partial') {
+          group.status = 'partial';
         } else {
           group.status = 'pending';
         }
