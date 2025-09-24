@@ -259,7 +259,7 @@ export class WorkareaComponent
           group.status = 'success';
         } else if (progress.status === 'failed') {
           group.status = 'failed';
-        } else if (progress.statusn === 'partial') {
+        } else if (progress.status === 'partial') {
           group.status = 'partial';
         } else {
           group.status = 'pending';
