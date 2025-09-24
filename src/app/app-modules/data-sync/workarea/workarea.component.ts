@@ -253,6 +253,18 @@ export class WorkareaComponent
       const progress = groupsProgress.find(
         (item: any) => item.groupId === group.syncTableGroupID
       );
+
+      if (progress) {
+        if (progress.status === 'completed') {
+          group.status = 'success';
+        } else if (progress.status === 'failed') {
+          group.status = 'failed';
+        } else {
+          group.status = 'pending';
+        }
+      } else {
+        group.status = 'pending';
+      }
     });
   }
 
