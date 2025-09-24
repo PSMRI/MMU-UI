@@ -91,6 +91,8 @@ export class WorkareaComponent
 
   getDataSYNCGroup() {
     this.dataSyncService.getDataSYNCGroup().subscribe((res: any) => {
+      console.clear();
+      console.log(res);
       if (res.statusCode === 200) {
         this.syncTableGroupList = this.createSyncActivity(res.data);
         console.log('syncTableGroupList', this.syncTableGroupList);
