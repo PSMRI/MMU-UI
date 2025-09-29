@@ -30,7 +30,7 @@ import { environment } from 'src/environments/environment';
 @Injectable()
 export class DoctorService {
   fileIDs: any; // To store fileIDs
-  enableCovidVaccinationButton: boolean = false;
+  enableCovidVaccinationButton = false;
   prescribedDrugData: any;
   covidVaccineAgeGroup: any;
 
@@ -2879,6 +2879,11 @@ export class DoctorService {
     return this.http
       .get(environment.downloadSignUrl + userID, { responseType: 'blob' })
       .pipe(map((res: any) => <Blob>res.blob()));
+  }
+
+  /* Get UserID using UserName */
+  getUserId(userName: any) {
+    return this.http.get(environment.getUserId + userName);
   }
 
   enableButton: any = false;
