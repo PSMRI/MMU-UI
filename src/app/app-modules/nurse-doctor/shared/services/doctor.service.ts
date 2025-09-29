@@ -2888,6 +2888,11 @@ export class DoctorService {
     });
   }
 
+  /* Get UserID using UserName */
+  getUserId(userName: any) {
+    return this.http.get(environment.getUserId + userName);
+  }
+
   enableButton: any = false;
   enableVitalsUpdateButton = new BehaviorSubject(this.enableButton);
   enableVitalsUpdateButton$ = this.enableVitalsUpdateButton.asObservable();

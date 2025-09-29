@@ -490,5 +490,8 @@ export const environment = {
 
   siteKey: siteKey,
   captchaChallengeURL: captchaChallengeURL,
-  enableCaptcha: enableCaptcha
+  enableCaptcha: enableCaptcha,
+
+  getUserId: `${COMMON_API}user/userName/`
+
 };

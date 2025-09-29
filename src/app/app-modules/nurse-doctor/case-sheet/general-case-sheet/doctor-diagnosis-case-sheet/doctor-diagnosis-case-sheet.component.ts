@@ -30,6 +30,8 @@ import {
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import * as moment from 'moment';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { get } from 'jquery';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-doctor-diagnosis-case-sheet',
@@ -101,6 +103,7 @@ export class DoctorDiagnosisCaseSheetComponent
   MMUReferDetails: any;
   mmuServiceList = '';
   isCovidVaccinationStatusVisible = false;
+  userName: any;
 
   constructor(
     private doctorService: DoctorService,
@@ -178,6 +181,7 @@ export class DoctorDiagnosisCaseSheetComponent
                   .filter((name: any) => name !== null && name !== '')
                   .join(',');
             }
+            this.userName = this.MMUcaseRecords?.diagnosis?.createdBy;
           }
 
           if (this.mmuCaseSheetData?.doctorData) {
@@ -201,6 +205,8 @@ export class DoctorDiagnosisCaseSheetComponent
   ngOnChanges() {
     this.ncdScreeningCondition = null;
     if (this.caseSheetData) {
+      this.userName = this.caseSheetData?.doctorData?.diagnosis?.createdBy;
+
       const temp2 = this.caseSheetData.nurseData.covidDetails;
       const t = new Date();
       this.date =
@@ -429,19 +435,18 @@ export class DoctorDiagnosisCaseSheetComponent
   }
 
   downloadSign() {
-    const userId =
-      this.beneficiaryDetails?.tCSpecialistUserID ??
-      this.sessionstorage.getItem('userID');
-
-    this.doctorService.downloadSign(userId).subscribe(
-      (response: any) => {
-        const blob = new Blob([response], { type: response.type });
-        this.showSign(blob);
-      },
-      (err: any) => {
-        console.error('Error downloading signature:', err);
-      }
-    );
+    this.getUserId().subscribe(userId => {
+      const userIdToUse = this.beneficiaryDetails?.tCSpecialistUserID ?? userId;
+      this.doctorService.downloadSign(userIdToUse).subscribe(
+        (response: any) => {
+          const blob = new Blob([response], { type: response.type });
+          this.showSign(blob);
+        },
+        (err: any) => {
+          console.error('Error downloading signature:', err);
+        }
+      );
+    });
   }
   showSign(blob: any) {
     const reader = new FileReader();
@@ -569,5 +574,11 @@ export class DoctorDiagnosisCaseSheetComponent
         this.enableResult = true;
       }
     });
+  }
+
+  getUserId(): Observable<any> {
+    return this.doctorService
+      .getUserId(this.userName)
+      .pipe(map((res: any) => res?.userId || null));
   }
 }
