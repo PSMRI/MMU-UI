@@ -9,7 +9,7 @@
           <div
             class="row align-items-center m-t-10"
             *ngFor="
-              let diagnosis of getProvisionalDiagnosisList();
+              let diagnosis of provisionalDiagnosisControls;
               let i = index;
               let isLast = last
             ">
@@ -31,7 +31,8 @@
                     required
                     #diagnosisInput
                     [matAutocomplete]="autoDiagnosis"
-                    (keyup)="onDiagnosisInputKeyup('provisional', diagnosisInput.value, i)" />
+                    (keyup)="
+                             ('provisional', diagnosisInput.value, i)" />
                 </mat-form-field>
 
                 <mat-autocomplete
@@ -87,7 +88,7 @@
         <ng-container formArrayName="confirmatoryDiagnosisList">
           <div
             *ngFor="
-              let confirmatoryDiagnosis of getConfirmatoryDiagnosisList();
+              let confirmatoryDiagnosis of confirmatoryDiagnosisControls;
               let i = index;
               let isLast = last
             "

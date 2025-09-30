@@ -78,7 +78,7 @@
           <div
             class="col-xs-12 col-sm-12 row"
             *ngFor="
-              let diagnosis of getProvisionalDiagnosisList();
+              let diagnosis of provisionalDiagnosisControls;
               let i = index;
               let isLast = last
             ">
@@ -90,7 +90,7 @@
                   formControlName="viewProvisionalDiagnosisProvided" minlength="3" maxlength="100" required #diagnosisInput
                   [matAutocomplete]="autoDiagnosis" (keyup)="onDiagnosisInputKeyup(diagnosisInput.value, i)" />
               </mat-form-field>
-    
+
               <mat-autocomplete #autoDiagnosis="matAutocomplete" appAutocompleteScroller [threshold]="0.6"
                 (nearEnd)="onAutoNearEnd(i)" (panelReady)="onPanelReady(i, $event)" autoActiveFirstOption
                 [displayWith]="displayDiagnosis" (optionSelected)="onDiagnosisSelected($event.option.value, i)">

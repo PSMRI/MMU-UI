@@ -33,6 +33,7 @@ import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import {
   DoctorService,
+  MasterdataService,
   NurseService,
   MasterdataService,
 } from 'src/app/app-modules/nurse-doctor/shared/services';
@@ -103,15 +104,12 @@ export class NcdScreeningDiagnosisComponent
     this.assignSelectedLanguage();
   }
 
-  getProvisionalDiagnosisList(): AbstractControl[] | null {
-    const provisionalDiagnosisListControl = this.generalDiagnosisForm.get(
-      'provisionalDiagnosisList'
+  get provisionalDiagnosisControls(): AbstractControl[] {
+    return (
+      (this.generalDiagnosisForm.get('provisionalDiagnosisList') as FormArray)
+        ?.controls || []
     );
-    return provisionalDiagnosisListControl instanceof FormArray
-      ? provisionalDiagnosisListControl.controls
-      : null;
   }
-
   assignSelectedLanguage() {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
@@ -154,9 +152,10 @@ export class NcdScreeningDiagnosisComponent
           conceptID: i.conceptID,
           term: i.term,
           provisionalDiagnosis: i.term,
+          viewProvisionalDiagnosisProvided: i.term,
         });
         (<FormGroup>generalArray.at(j)).controls[
-          'provisionalDiagnosis'
+          'viewProvisionalDiagnosisProvided'
         ].disable();
         if (generalArray.length < previousArray.length) {
           this.addDiagnosis();

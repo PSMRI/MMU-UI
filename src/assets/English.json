@@ -1733,7 +1733,8 @@
     "abhaDetails":"ABHA Details",
     "abhaAddress":"ABHA Address",
     "abhaMode":"ABHA Mode",
-    "abhaDetailsNotAvailable":"ABHA details not available"
+    "abhaDetailsNotAvailable":"ABHA details not available",
+    "enterTenDigitMobileNumber": "Enter mobile number"
   }
   
 }

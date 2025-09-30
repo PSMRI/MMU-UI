@@ -8,7 +8,7 @@
         <div
           class="col-12 row"
           *ngFor="
-            let diagnosis of getProvisionalDiagnosisList();
+            let diagnosis of provisionalDiagnosisControls;
             let i = index;
             let isLast = last
           ">
@@ -31,7 +31,6 @@
                     <mat-option *ngIf="loadingMore[i]" disabled>Loading…</mat-option>
                     <mat-option *ngIf="noMore[i]" disabled>End of results</mat-option>
                   </mat-autocomplete>
-
                   </div>
         
             <div class="col-3 m-t-10" style="text-align: end; margin-top: 15px">

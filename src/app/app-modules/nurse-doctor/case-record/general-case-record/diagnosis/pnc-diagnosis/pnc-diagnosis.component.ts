@@ -92,15 +92,21 @@ export class PncDiagnosisComponent
   caseRecordMode!: string;
   current_language_set: any;
 
-  getProvisionalDiagnosisList(): AbstractControl[] | null {
-    const provisionalDiagnosisListControl = this.generalDiagnosisForm.get(
-      'provisionalDiagnosisList'
+  suggestedDiagnosisList: any = [];
+  suggestedConfirmatoryDiagnosisList: any = [];
+  get provisionalDiagnosisControls(): AbstractControl[] {
+    return (
+      (this.generalDiagnosisForm.get('provisionalDiagnosisList') as FormArray)
+        ?.controls || []
     );
-    return provisionalDiagnosisListControl instanceof FormArray
-      ? provisionalDiagnosisListControl.controls
-      : null;
   }
 
+  get confirmatoryDiagnosisControls(): AbstractControl[] {
+    return (
+      (this.generalDiagnosisForm.get('confirmatoryDiagnosisList') as FormArray)
+        ?.controls || []
+    );
+  }
   getConfirmatoryDiagnosisList(): AbstractControl[] | null {
     const confirmatoryDiagnosisListControl = this.generalDiagnosisForm.get(
       'confirmatoryDiagnosisList'
@@ -256,12 +262,12 @@ export class PncDiagnosisComponent
         provisionalDiagnosis: provisionalDiagnosisDataList[i].term,
         term: provisionalDiagnosisDataList[i].term,
         conceptID: provisionalDiagnosisDataList[i].conceptID,
+        viewProvisionalDiagnosisProvided: provisionalDiagnosisDataList[i].term,
       });
       (<FormGroup>provisionalDiagnosisList.at(i)).controls[
-        'provisionalDiagnosis'
+        'viewProvisionalDiagnosisProvided'
       ].disable();
-      if (provisionalDiagnosisList.length < provisionalDiagnosisDataList.length)
-        this.addProvisionalDiagnosis();
+      this.addProvisionalDiagnosis();
     }
   }
 
@@ -296,6 +302,7 @@ export class PncDiagnosisComponent
   get isMaternalDeath() {
     return this.generalDiagnosisForm.controls['isMaternalDeath'].value;
   }
+
   addConfirmatoryDiagnosis() {
     const confirmatoryDiagnosisArrayList = this.generalDiagnosisForm.controls[
       'confirmatoryDiagnosisList'

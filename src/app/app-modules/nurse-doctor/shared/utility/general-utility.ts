@@ -461,7 +461,7 @@ export class GeneralUtils {
     });
   }
 
-  createMenstrualHistoryForm(disableFlag: boolean = true) {
+  createMenstrualHistoryForm(disableFlag = true) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
     return this.fb.group({
@@ -644,6 +644,7 @@ export class GeneralUtils {
       conceptID: [null, Validators.required],
       term: [null, Validators.required],
       provisionalDiagnosis: [null],
+      viewProvisionalDiagnosisProvided: [null],
     });
   }
   initConfirmatoryDiagnosisList() {

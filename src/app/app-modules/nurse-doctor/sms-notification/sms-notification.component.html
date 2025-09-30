@@ -1,0 +1,83 @@
+<!-- <section class="container-fluid"> -->
+<!-- Title Bar -->
+<mat-toolbar>
+  <span>Send Prescription to Beneficiary</span>
+  <button (click)="onClose()" class="close-btn">
+    <mat-icon>cancel</mat-icon>
+  </button>
+
+</mat-toolbar>
+
+<!-- Dialog Content -->
+<mat-dialog-content>
+  <!-- Prescription Table -->
+  <div class="table-responsive">
+
+    <table class="mat-elevation-z4">
+      <thead>
+        <tr>
+          <th>Prescription ID</th>
+          <th>Diagnosis</th>
+          <th>Drug</th>
+          <th>Strength</th>
+          <th>Frequency</th>
+          <th>No. of Days</th>
+          <th>Remarks</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="data?.prescribedDrugs">
+        <ng-container *ngFor="let p of data.prescribedDrugs; let i = index">
+          <tr>
+            <td *ngIf="i === 0" [attr.rowspan]="data.prescribedDrugs.length">
+              {{ data.prescriptionID }}
+            </td>
+            <td *ngIf="i === 0" [attr.rowspan]="data.prescribedDrugs.length">
+              {{ data.diagnosisProvided }}
+            </td>
+            <td>{{ p.drugName }}</td>
+            <td>{{ p.dosage }}</td>
+            <td>{{ p.frequency }}</td>
+            <td>{{ p.noOfDays }}</td>
+            <td *ngIf="i === 0" [attr.rowspan]="data.prescribedDrugs.length">
+              {{ data.remarks }}
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- Pagination -->
+  <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+
+
+  <!-- SMS Section -->
+  <div class="sms-section">
+    <mat-checkbox color="primary" class="alt-checkbox" [(ngModel)]="altNum">
+      {{ currentLanguageSet?.alternateNumber }}
+    </mat-checkbox>
+
+    <mat-form-field appearance="outline" *ngIf="altNum" class="alt-phone-field">
+      <mat-label>{{ currentLanguageSet?.mobileNumber }}</mat-label>
+      <!-- NOTE: removed inline padding style -->
+      <input placeholder="{{ currentLanguageSet?.enterTenDigitMobileNumber }}" type="text" required minlength="10"
+        maxlength="10" [(ngModel)]="mobileNumber" name="mobileNumber" #phnNum="ngModel"
+        (keyup)="mobileNum(mobileNumber)" (keypress)="allowOnlyNumbers($event)" pattern="^[0-9]\d{9}$"
+        inputmode="numeric" />
+      <mat-error *ngIf="phnNum.invalid && phnNum.touched">
+        {{ currentLanguageSet?.enterTenDigitMobileNumber }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+
+
+  <!-- Action Buttons -->
+  <div class="action-row">
+    <button mat-raised-button class="send-btn" (click)="sendSMS()">
+      Send SMS
+    </button>
+  </div>
+</mat-dialog-content>
+<!-- </section> -->
