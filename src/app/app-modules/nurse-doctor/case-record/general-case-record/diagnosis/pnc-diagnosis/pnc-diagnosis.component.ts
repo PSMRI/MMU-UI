@@ -401,6 +401,7 @@ export class PncDiagnosisComponent
 
     // Set the nested and top-level fields
     diagnosisFormGroup.patchValue({
+      provisionalDiagnosis: selected?.term || null,
       viewProvisionalDiagnosisProvided: selected,
       conceptID: selected?.conceptID || null,
       term: selected?.term || null,
