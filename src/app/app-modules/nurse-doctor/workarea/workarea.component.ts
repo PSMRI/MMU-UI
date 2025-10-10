@@ -83,7 +83,7 @@ export class WorkareaComponent
   referMode: any;
   ncdScreeningMode: any;
   quickConsultMode: any;
-  newLookupMode: boolean = false;
+  newLookupMode = false;
 
   visitCategory: any;
   visitCategoryList: any;
@@ -114,18 +114,18 @@ export class WorkareaComponent
 
   patientMedicalForm!: FormGroup;
 
-  tm: boolean = false;
+  tm = false;
   schedulerData: any;
   attendantType: any;
-  enableIDRSUpdate: boolean = true;
+  enableIDRSUpdate = true;
   visualAcuityMandatory!: number;
   diabetesSelected!: number;
   rbsPresent: any = 0;
   visualAcuityPresent: any = 0;
   heamoglobinPresent: any = 0;
-  ncdTemperature: boolean = false;
+  ncdTemperature = false;
   specialistFlag: any;
-  dontEnableComponent: boolean = false;
+  dontEnableComponent = false;
   beneficiaryAge: any;
   currentLanguageSet: any;
   tmcSubmitSubscription!: Subscription;
@@ -136,12 +136,12 @@ export class WorkareaComponent
   visualAcuityMandatorySubscription!: Subscription;
   ncdTempSubscription!: Subscription;
   enableVitalsButtonSubscription!: Subscription;
-  enableUpdateButtonInVitals: boolean = false;
-  enableCovidVaccinationSaveButton: boolean = false;
-  disableSubmitButton: boolean = false;
-  showProgressBar: boolean = false;
-  enableLungAssessment: boolean = false;
-  enableProvisionalDiag: boolean = false;
+  enableUpdateButtonInVitals = false;
+  enableCovidVaccinationSaveButton = false;
+  disableSubmitButton = false;
+  showProgressBar = false;
+  enableLungAssessment = false;
+  enableProvisionalDiag = false;
   patientVisitForm!: FormGroup;
   patientANCForm!: FormGroup;
   patientPNCForm!: FormGroup;
@@ -169,9 +169,9 @@ export class WorkareaComponent
     private idrsScoreService: IdrsscoreService,
     private languageComponent: SetLanguageComponent
   ) {}
-  isSpecialist: boolean = false;
+  isSpecialist = false;
   doctorUpdateAndTCSubmit: any;
-  tmcDisable: boolean = false;
+  tmcDisable = false;
   ngOnInit() {
     this.enableUpdateButtonInVitals = false;
     this.enableCovidVaccinationSaveButton = false;
@@ -1414,7 +1414,7 @@ export class WorkareaComponent
       );
       if (this.attendantType === 'nurse') {
         if (pregForm2.controls) {
-          const score1: number = Number(pregForm2.controls['length']);
+          const score1 = Number(pregForm2.controls['length']);
           for (let i = 0; i < score1; i++) {
             const pregForm3 = <FormGroup>pregForm2.controls[i];
             if (
@@ -1549,6 +1549,11 @@ export class WorkareaComponent
         diagForm1.controls['provisionalDiagnosisList']
       );
       const diagForm3 = <FormGroup>diagForm2.controls[0];
+      if (diagForm3.controls['provisionalDiagnosis'].errors) {
+        required.push(
+          this.currentLanguageSet.DiagnosisDetails.provisionaldiagnosis
+        );
+      }
 
       if (!diagForm3.controls['provisionalDiagnosis'].errors) {
         diagForm2.value.filter((item: any) => {
@@ -3012,7 +3017,7 @@ export class WorkareaComponent
     );
     const required = [];
     if (pregForm2.controls) {
-      const score1: number = Number(pregForm2.controls['length']);
+      const score1 = Number(pregForm2.controls['length']);
       for (let i = 0; i < score1; i++) {
         const pregForm3 = <FormGroup>pregForm2.controls[i];
         if (
