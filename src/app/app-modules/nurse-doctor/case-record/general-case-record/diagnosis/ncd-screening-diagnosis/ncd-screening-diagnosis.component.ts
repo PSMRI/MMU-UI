@@ -130,27 +130,18 @@ export class NcdScreeningDiagnosisComponent
     ] as FormArray;
 
     const previousArray = diagnosis.provisionalDiagnosisList;
-    let j = 0;
-    if (
-      previousArray !== undefined &&
-      previousArray !== null &&
-      previousArray.length > 0
-    ) {
-      previousArray.forEach((i: any) => {
-        generalArray.at(j).patchValue({
-          conceptID: i.conceptID,
-          term: i.term,
-          provisionalDiagnosis: i.term,
-          viewProvisionalDiagnosisProvided: i.term,
-        });
-        (<FormGroup>generalArray.at(j)).controls[
-          'viewProvisionalDiagnosisProvided'
-        ].disable();
-        if (generalArray.length < previousArray.length) {
-          this.addDiagnosis();
-        }
-        j++;
+
+    while (generalArray.length < previousArray.length) {
+      generalArray.push(this.utils.initProvisionalDiagnosisList());
+    }
+    for (let i = 0; i < previousArray.length; i++) {
+      generalArray.at(i).patchValue({
+        viewProvisionalDiagnosisProvided: previousArray[i].term,
+        term: previousArray[i].term,
+        conceptID: previousArray[i].conceptID,
+        provisionalDiagnosis: previousArray[i].term, // <-- Add this line
       });
+      generalArray.at(i).get('viewProvisionalDiagnosisProvided')?.disable();
     }
   }
 

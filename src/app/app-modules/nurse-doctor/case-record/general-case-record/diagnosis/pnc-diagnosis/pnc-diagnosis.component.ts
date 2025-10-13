@@ -257,6 +257,7 @@ export class PncDiagnosisComponent
     const provisionalDiagnosisList = this.generalDiagnosisForm.controls[
       'provisionalDiagnosisList'
     ] as FormArray;
+
     for (let i = 0; i < provisionalDiagnosisDataList.length; i++) {
       provisionalDiagnosisList.at(i).patchValue({
         provisionalDiagnosis: provisionalDiagnosisDataList[i].term,
@@ -267,7 +268,8 @@ export class PncDiagnosisComponent
       (<FormGroup>provisionalDiagnosisList.at(i)).controls[
         'viewProvisionalDiagnosisProvided'
       ].disable();
-      this.addProvisionalDiagnosis();
+      if (provisionalDiagnosisList.length < provisionalDiagnosisDataList.length)
+        this.addProvisionalDiagnosis();
     }
   }
 
