@@ -40,7 +40,7 @@
                     i !== 0 ||
                     (i === 0 &&
                       (diagnosis.touched ||
-                        diagnosis.get('provisionalDiagnosis')?.disabled))
+                        diagnosis.get('viewProvisionalDiagnosisProvided')?.disabled))
                   "
                   (click)="removeProvisionalDiagnosis(i, diagnosis)">
                   <mat-icon>close</mat-icon>
