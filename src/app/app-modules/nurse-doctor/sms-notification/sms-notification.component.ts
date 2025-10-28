@@ -104,11 +104,14 @@ export class SmsNotificationComponent {
           switchMap(({ smsTemplateID, smsTemplateTypeID }) => {
             if (!smsTemplateID) throw new Error('Valid SMS template not found');
             const req_arr = [];
+            const preferredPhoneNum = this.sessionstorage.getItem('phnum');
+            const phoneNumber =
+              preferredPhoneNum == 'Not Available'
+                ? this.mobileNumber
+                : preferredPhoneNum;
             for (let i = 0; i < this.data.prescribedDrugs.length; i++) {
-              console.log('this.data[i]', this.data[i]);
-
               const Obj = {
-                alternateNo: this.mobileNumber,
+                alternateNo: phoneNumber,
                 beneficiaryRegID: this.data.prescribedDrugs[i].beneficiaryRegID,
                 prescribedDrugID: this.data.prescribedDrugs[i].prescribedDrugID,
                 createdBy: this.sessionstorage.getItem('userName'),

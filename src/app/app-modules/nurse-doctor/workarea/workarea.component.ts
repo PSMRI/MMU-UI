@@ -2488,15 +2488,10 @@ export class WorkareaComponent
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log('✅ SMS flow completed');
-        if (this.isSpecialist) {
-          this.router.navigate(['/common/tcspecialist-worklist']);
-        } else {
-          this.router.navigate(['/nurse-doctor/doctor-worklist']);
-        }
+      if (this.isSpecialist) {
+        this.router.navigate(['/common/tcspecialist-worklist']);
       } else {
-        console.log('❌ SMS canceled');
+        this.router.navigate(['/nurse-doctor/doctor-worklist']);
       }
     });
   }
