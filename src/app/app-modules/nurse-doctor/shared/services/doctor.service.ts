@@ -670,7 +670,8 @@ export class DoctorService {
   postDoctorANCDetails(
     patientMedicalForm: any,
     otherDetails: any,
-    tcRequest: any
+    tcRequest: any,
+    doctorSignatureFlag: any
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -718,6 +719,7 @@ export class DoctorService {
       serviceID: this.sessionstorage.getItem('serviceID'),
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -880,7 +882,8 @@ export class DoctorService {
   postDoctorNCDCareDetails(
     patientMedicalForm: any,
     otherDetails: any,
-    tcRequest: any
+    tcRequest: any,
+    doctorSignatureFlag: any
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -930,6 +933,7 @@ export class DoctorService {
       serviceID: this.sessionstorage.getItem('serviceID'),
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -1015,7 +1019,8 @@ export class DoctorService {
   postDoctorNCDScreeningDetails(
     patientMedicalForm: any,
     otherDetails: any,
-    tcRequest: any
+    tcRequest: any,
+    doctorSignatureFlag: any
   ) {
     const visitCategory = this.sessionstorage.getItem('visitCategory');
     const serviceLineDetails: any =
@@ -1071,6 +1076,7 @@ export class DoctorService {
       serviceID: this.sessionstorage.getItem('serviceID'),
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -2299,7 +2305,8 @@ export class DoctorService {
   postDoctorPNCDetails(
     patientMedicalForm: any,
     otherDetails: any,
-    tcRequest: any
+    tcRequest: any,
+    doctorSignatureFlag: any
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -2346,6 +2353,7 @@ export class DoctorService {
       serviceID: this.sessionstorage.getItem('serviceID'),
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(

@@ -1009,10 +1009,10 @@ export class WorkareaComponent
           if (this.visitCategory === 'PNC') this.submitPNCDiagnosisForm();
 
           if (this.visitCategory === 'General OPD')
-            if (this.visitCategory === 'NCD care')
-              // this.submitGeneralOPDDiagnosisForm();
+            this.submitGeneralOPDDiagnosisForm();
 
-              this.submitNCDCareDiagnosisForm();
+          if (this.visitCategory === 'NCD care')
+            this.submitNCDCareDiagnosisForm();
 
           if (this.visitCategory === 'COVID-19 Screening')
             this.submitCovidCareDiagnosisForm();
@@ -2670,7 +2670,12 @@ export class WorkareaComponent
       };
       const prescribedDrugs = this.getLabandPrescriptionData();
       this.doctorService
-        .postDoctorANCDetails(this.patientMedicalForm, temp, this.schedulerData)
+        .postDoctorANCDetails(
+          this.patientMedicalForm,
+          temp,
+          this.schedulerData,
+          this.doctorSignatureFlag
+        )
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
@@ -2808,7 +2813,8 @@ export class WorkareaComponent
         .postDoctorNCDCareDetails(
           this.patientMedicalForm,
           temp,
-          this.schedulerData
+          this.schedulerData,
+          this.doctorSignatureFlag
         )
         .subscribe(
           (res: any) => {
@@ -2906,7 +2912,8 @@ export class WorkareaComponent
         .postDoctorNCDScreeningDetails(
           this.patientMedicalForm,
           temp,
-          this.schedulerData
+          this.schedulerData,
+          this.doctorSignatureFlag
         )
         .subscribe(
           (res: any) => {
@@ -3081,7 +3088,12 @@ export class WorkareaComponent
 
       const prescribedDrugs = this.getLabandPrescriptionData();
       this.doctorService
-        .postDoctorPNCDetails(this.patientMedicalForm, temp, this.schedulerData)
+        .postDoctorPNCDetails(
+          this.patientMedicalForm,
+          temp,
+          this.schedulerData,
+          this.doctorSignatureFlag
+        )
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
