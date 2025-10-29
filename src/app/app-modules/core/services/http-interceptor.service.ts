@@ -45,17 +45,28 @@ export class HttpInterceptorService implements HttpInterceptor {
     const key: any = sessionStorage.getItem('key');
     const serverKey = this.sessionstorage.getItem('serverKey');
     let modifiedReq = req;
-    if (req.body instanceof FormData) {
-      modifiedReq = req.clone({
-        headers: req.headers.set('Authorization', key || ''),
-      });
+    const isPlatformFeedback =
+      req.url && req.url.toLowerCase().includes('/platform-feedback');
+
+    if (isPlatformFeedback) {
+      // For platform-feedback: remove Authorization and force JSON content-type
+      const headers = req.headers
+        .delete('Authorization')
+        .set('Content-Type', 'application/json');
+      modifiedReq = req.clone({ headers });
     } else {
-      modifiedReq = req.clone({
-        headers: req.headers
-          .set('Authorization', key || '')
-          .set('Content-Type', 'application/json')
-          .set('ServerAuthorization', serverKey || ''),
-      });
+      if (req.body instanceof FormData) {
+        modifiedReq = req.clone({
+          headers: req.headers.set('Authorization', key || ''),
+        });
+      } else {
+        modifiedReq = req.clone({
+          headers: req.headers
+            .set('Authorization', key || '')
+            .set('Content-Type', 'application/json')
+            .set('ServerAuthorization', serverKey || ''),
+        });
+      }
     }
     return next.handle(modifiedReq).pipe(
       tap((event: HttpEvent<any>) => {

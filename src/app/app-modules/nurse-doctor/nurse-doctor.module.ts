@@ -151,6 +151,7 @@ import { SharedModule } from '../core/components/shared/shared.module';
 import { SmsNotificationComponent } from './sms-notification/sms-notification.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { AutocompleteScrollerDirective } from './shared/utility/autocomplete-scroller.directive';
 
 @NgModule({
   imports: [
@@ -282,6 +283,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     PrescribeTmMedicineComponent,
     CovidVaccinationStatusComponent,
     SmsNotificationComponent,
+    AutocompleteScrollerDirective,
   ],
 
   providers: [

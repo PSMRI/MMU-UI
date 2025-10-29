@@ -31,6 +31,7 @@
               maxlength="6"
               allowMax="350"
               (blur)="calculateBMI()"
+              (focus)="trackFieldInteraction('Height')"
               required />
           </mat-form-field>
         </div>
@@ -53,6 +54,7 @@
               [ngClass]="{ weight_Kg: weight_Kg < 25 || weight_Kg > 150 }"
               maxlength="6"
               allowMax="500"
+              (focus)="trackFieldInteraction('Weight')"
               required />
             <svg
               class="fontawesomesvg"
@@ -60,7 +62,7 @@
               viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTWeightModel()"
+              (click)="openIOTWeightModel(); trackFieldInteraction('Weight IoT Button')"
               onkeydown="openIOTWeightModel()"
               tabindex="{0}">
               <!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
@@ -242,9 +244,8 @@
                 formControlName="waistCircumference_cm"
                 maxlength="6"
                 allowMax="350"
-                [required]="
-                  benAge >= 30 && visitCategory === 'NCD screening'
-                " />
+                (focus)="trackFieldInteraction('Waist Circumference')"
+                [required]="benAge >= 30 && visitCategory === 'NCD screening'" />
             </mat-form-field>
           </div>
           <div
@@ -492,6 +493,7 @@
               (change)="checkTemperature(temperature)"
               maxlength="6"
               allowMax="150"
+              (focus)="trackFieldInteraction('Temperature')"
               [required]="ncdTemperature" />
             <svg
               class="fontawesomesvg"
@@ -499,7 +501,7 @@
               viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTTempModel()"
+              (click)="openIOTTempModel(); trackFieldInteraction('Temperature IoT Button')"
               onkeydown="openIOTTempModel()"
               tabindex="{0}">
               <path
@@ -526,6 +528,7 @@
               id="pulseRate"
               formControlName="pulseRate"
               (change)="checkPulseRate(pulseRate)"
+              (focus)="trackFieldInteraction('Pulse Rate')"
               [required]="
                 visitCategory !== 'General OPD' &&
                 visitCategory !== 'NCD screening'
@@ -536,7 +539,7 @@
               viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTPulseRateModel()"
+              (click)="openIOTPulseRateModel(); trackFieldInteraction('Pulse Rate IoT Button')"
               onkeydown="openIOTPulseRateModel()"
               tabindex="{0}">
               <path
@@ -818,7 +821,7 @@
             <mat-checkbox
               color="accent"
               formControlName="rbsCheckBox"
-              (change)="onRbsCheckBox($event)">
+              (change)="onRbsCheckBox($event); trackFieldInteraction('RBS Checkbox')">
             </mat-checkbox>
           </div>
           <div class="col-xs-10 col-sm-10">
@@ -837,6 +840,7 @@
                 maxlength="4"
                 (blur)="checkForRange()"
                 (change)="rbsResultChange()"
+                (focus)="trackFieldInteraction('RBS Test Result')"
                 [ngClass]="{
                   abnormal: rbsTestResult < 0 || rbsTestResult > 1000
                 }" />
@@ -846,7 +850,7 @@
                 viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                (click)="openIOTRBSModel()"
+                (click)="openIOTRBSModel(); trackFieldInteraction('RBS IoT Button')"
                 onkeydown="openIOTRBSModel()"
                 tabindex="{0}">
                 <path
@@ -888,7 +892,7 @@
               class="mat_green font-regular"
               style="text-align: center; width: 12%; margin-left: 20px"
               *ngIf="!isRecording && !blobUrl"
-              (click)="startRecording()"
+              (click)="startRecording(); trackFieldInteraction('Start Recording Button')"
               [disabled]="disabledLungAssesment">
               Start Recording
             </button>
@@ -905,7 +909,7 @@
               style="width: 12%; margin-left: 20px"
               class="font-regular mat_red"
               *ngIf="isRecording && !blobUrl"
-              (click)="stopRecording()">
+              (click)="stopRecording(); trackFieldInteraction('Stop Recording Button')">
               Stop Recording
             </button>
 
@@ -915,7 +919,7 @@
                 color="warn"
                 class="font-regular mat_red"
                 *ngIf="!isRecording && blobUrl"
-                (click)="clearRecordedData()">
+                (click)="clearRecordedData(); trackFieldInteraction('Clear Recording Button')">
                 Clear Recording
               </button>
 
@@ -925,7 +929,7 @@
                 class="font-regular mat_blue"
                 style="margin-left: 10px"
                 *ngIf="!isRecording && blobUrl"
-                (click)="startAssessment()">
+                (click)="startAssessment(); trackFieldInteraction('Start Assessment Button')">
                 Start Assessment
               </button>
             </div>
@@ -945,42 +949,42 @@
                     color="primary"
                     class="valueCheck"
                     name="frequentCoughChecked"
-                    (change)="onCheckboxChange('frequentCough', $event)">
+                    (change)="onCheckboxChange('frequentCough', $event); trackFieldInteraction('Frequent Cough Checkbox')">
                     Frequent Cough
                   </mat-checkbox>
                   <mat-checkbox
                     color="primary"
                     class="valueCheck"
                     name="sputumChecked"
-                    (change)="onCheckboxChange('sputum', $event)">
+                    (change)="onCheckboxChange('sputum', $event); trackFieldInteraction('Sputum Checkbox')">
                     Sputum
                   </mat-checkbox>
                   <mat-checkbox
                     color="primary"
                     class="valueCheck"
                     name="coughAtNightChecked"
-                    (change)="onCheckboxChange('coughAtNight', $event)">
+                    (change)="onCheckboxChange('coughAtNight', $event); trackFieldInteraction('Cough At Night Checkbox')">
                     Cough At Night
                   </mat-checkbox>
                   <mat-checkbox
                     color="primary"
                     class="valueCheck"
                     name="wheezingChecked"
-                    (change)="onCheckboxChange('wheezing', $event)">
+                    (change)="onCheckboxChange('wheezing', $event); trackFieldInteraction('Wheezing Checkbox')">
                     Wheezing
                   </mat-checkbox>
                   <mat-checkbox
                     color="primary"
                     class="valueCheck"
                     name="painInChestChecked"
-                    (change)="onCheckboxChange('painInChest', $event)">
+                    (change)="onCheckboxChange('painInChest', $event); trackFieldInteraction('Pain In Chest Checkbox')">
                     Pain in Chest
                   </mat-checkbox>
                   <mat-checkbox
                     color="primary"
                     class="valueCheck"
                     name="shortnessOfBreathChecked"
-                    (change)="onCheckboxChange('shortnessOfBreath', $event)">
+                    (change)="onCheckboxChange('shortnessOfBreath', $event); trackFieldInteraction('Shortness Of Breath Checkbox')">
                     Shortness Of Breath
                   </mat-checkbox>
                 </div>
