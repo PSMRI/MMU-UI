@@ -33,7 +33,6 @@ import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import {
   DoctorService,
-  MasterdataService,
   NurseService,
   MasterdataService,
 } from 'src/app/app-modules/nurse-doctor/shared/services';
