@@ -1580,6 +1580,11 @@ export class WorkareaComponent
         diagForm1.controls['provisionalDiagnosisList']
       );
       const diagForm3 = <FormGroup>diagForm2.controls[0];
+      if (diagForm3.controls['provisionalDiagnosis'].errors) {
+        required.push(
+          this.currentLanguageSet.DiagnosisDetails.provisionaldiagnosis
+        );
+      }
 
       if (!diagForm3.controls['provisionalDiagnosis'].errors) {
         diagForm2.value.filter((item: any) => {

@@ -643,7 +643,7 @@ export class GeneralUtils {
     return this.fb.group({
       conceptID: [null, Validators.required],
       term: [null, Validators.required],
-      provisionalDiagnosis: [null],
+      provisionalDiagnosis: [null, Validators.required],
       viewProvisionalDiagnosisProvided: [null],
     });
   }
