@@ -447,7 +447,6 @@ export class DoctorDiagnosisCaseSheetComponent
         }
       );
     });
-
   }
   showSign(blob: any) {
     const reader = new FileReader();

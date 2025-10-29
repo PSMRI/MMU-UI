@@ -1491,6 +1491,8 @@
       "close": "बंद करें"
     },
     "coreComponents": {
+      "errorForDataSync": "डेटा सिंक में समस्या",
+      "partialDataSync": "आंशिक रूप से पूरा हुआ",
       "poweredByWipro": "द्वारा संचालित: विप्रो",
       "selectCallibrationStrip": "Select Callibration Strip",
       "inTableSearchStripCode": "In-Table Search (Strip Code)",

@@ -104,26 +104,26 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
 
   patchDiagnosisDetails(diagnosis: any) {
     this.generalDiagnosisForm.patchValue(diagnosis);
-    const generalArray = this.generalDiagnosisForm.controls[
+    const diagnosisArrayList = this.generalDiagnosisForm.controls[
       'provisionalDiagnosisList'
     ] as FormArray;
 
     const previousArray = diagnosis.provisionalDiagnosisList;
-    let j = 0;
-    if (previousArray !== undefined && previousArray.length > 0) {
-      previousArray.forEach((i: any) => {
-        generalArray.at(j).patchValue({
-          conceptID: i.conceptID,
-          term: i.term,
-          provisionalDiagnosis: i.term,
-          viewProvisionalDiagnosisProvided: i.term,
-        });
-        (<FormGroup>generalArray.at(j)).controls[
-          'provisionalDiagnosis'
-        ].disable();
-        this.addDiagnosis();
-        j++;
+
+    while (diagnosisArrayList.length < previousArray.length) {
+      diagnosisArrayList.push(this.utils.initProvisionalDiagnosisList());
+    }
+    for (let i = 0; i < previousArray.length; i++) {
+      diagnosisArrayList.at(i).patchValue({
+        viewProvisionalDiagnosisProvided: previousArray[i].term,
+        term: previousArray[i].term,
+        conceptID: previousArray[i].conceptID,
+        provisionalDiagnosis: previousArray[i].term, // <-- Add this line
       });
+      diagnosisArrayList
+        .at(i)
+        .get('viewProvisionalDiagnosisProvided')
+        ?.disable();
     }
   }
 
@@ -212,6 +212,7 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
 
     // Set the nested and top-level fields
     diagnosisFormGroup.patchValue({
+      provisionalDiagnosis: selected?.term || null,
       viewProvisionalDiagnosisProvided: selected,
       conceptID: selected?.conceptID || null,
       term: selected?.term || null,

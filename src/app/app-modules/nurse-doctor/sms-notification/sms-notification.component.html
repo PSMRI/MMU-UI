@@ -17,7 +17,6 @@
       <thead>
         <tr>
           <th>Prescription ID</th>
-          <th>Diagnosis</th>
           <th>Drug</th>
           <th>Strength</th>
           <th>Frequency</th>
@@ -28,11 +27,8 @@
       <tbody *ngIf="data?.prescribedDrugs">
         <ng-container *ngFor="let p of data.prescribedDrugs; let i = index">
           <tr>
-            <td *ngIf="i === 0" [attr.rowspan]="data.prescribedDrugs.length">
-              {{ data.prescriptionID }}
-            </td>
-            <td *ngIf="i === 0" [attr.rowspan]="data.prescribedDrugs.length">
-              {{ data.diagnosisProvided }}
+            <td>
+              {{ p.prescribedDrugID }}
             </td>
             <td>{{ p.drugName }}</td>
             <td>{{ p.dosage }}</td>

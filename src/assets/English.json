@@ -1503,6 +1503,8 @@
       "close": "Close"
     },
     "coreComponents": {
+      "errorForDataSync": "Error for Data Sync",
+      "partialDataSync":"Partially Successful",
       "poweredByWipro": "Powered by: WIPRO",
       "selectCallibrationStrip": "Select Callibration Strip",
       "inTableSearchStripCode": "In-Table Search (Strip Code)",
