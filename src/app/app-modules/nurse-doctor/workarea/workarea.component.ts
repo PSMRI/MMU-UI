@@ -983,30 +983,41 @@ export class WorkareaComponent
     sessionStorage.removeItem('benFlowID');
   }
 
+  doctorSignatureFlag = false;
+
   submitDoctorDiagnosisForm() {
     this.disableSubmitButton = true;
     this.showProgressBar = true;
 
-    if (this.visitCategory === 'Cancer Screening')
-      this.submitCancerDiagnosisForm();
+    this.doctorService
+      .checkUsersignatureExist(this.sessionstorage.getItem('userID'))
+      .subscribe((res: any) => {
+        if (res.statusCode === 200 && res.data !== null) {
+          this.doctorSignatureFlag = res.data.signStatus;
 
-    if (this.visitCategory === 'General OPD (QC)')
-      this.submitQuickConsultDiagnosisForm();
+          if (this.visitCategory === 'Cancer Screening')
+            this.submitCancerDiagnosisForm();
 
-    if (this.visitCategory === 'ANC') this.submitANCDiagnosisForm();
+          if (this.visitCategory === 'General OPD (QC)')
+            this.submitQuickConsultDiagnosisForm();
 
-    if (this.visitCategory === 'PNC') this.submitPNCDiagnosisForm();
+          if (this.visitCategory === 'ANC') this.submitANCDiagnosisForm();
 
-    if (this.visitCategory === 'General OPD')
-      this.submitGeneralOPDDiagnosisForm();
+          if (this.visitCategory === 'PNC') this.submitPNCDiagnosisForm();
 
-    if (this.visitCategory === 'NCD care') this.submitNCDCareDiagnosisForm();
+          if (this.visitCategory === 'General OPD')
+            this.submitGeneralOPDDiagnosisForm();
 
-    if (this.visitCategory === 'COVID-19 Screening')
-      this.submitCovidCareDiagnosisForm();
+          if (this.visitCategory === 'NCD care')
+            this.submitNCDCareDiagnosisForm();
 
-    if (this.visitCategory === 'NCD screening')
-      this.submitNCDScreeningDiagnosisForm();
+          if (this.visitCategory === 'COVID-19 Screening')
+            this.submitCovidCareDiagnosisForm();
+
+          if (this.visitCategory === 'NCD screening')
+            this.submitNCDScreeningDiagnosisForm();
+        }
+      });
   }
 
   removeBeneficiaryDataForDoctorVisit() {
@@ -1262,7 +1273,8 @@ export class WorkareaComponent
       this.doctorService
         .postDoctorCancerVisitDetails(
           this.patientMedicalForm,
-          this.schedulerData
+          this.schedulerData,
+          this.doctorSignatureFlag
         )
         .subscribe(
           (res: any) => {
@@ -2404,7 +2416,8 @@ export class WorkareaComponent
       this.doctorService
         .postQuickConsultDetails(
           { quickConsultation: patientQuickConsultFormValue },
-          this.schedulerData
+          this.schedulerData,
+          this.doctorSignatureFlag
         )
         .subscribe(
           (res: any) => {
@@ -2571,7 +2584,12 @@ export class WorkareaComponent
       };
 
       this.doctorService
-        .postDoctorANCDetails(this.patientMedicalForm, temp, this.schedulerData)
+        .postDoctorANCDetails(
+          this.patientMedicalForm,
+          temp,
+          this.schedulerData,
+          this.doctorSignatureFlag
+        )
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
@@ -2695,7 +2713,8 @@ export class WorkareaComponent
         .postDoctorNCDCareDetails(
           this.patientMedicalForm,
           temp,
-          this.schedulerData
+          this.schedulerData,
+          this.doctorSignatureFlag
         )
         .subscribe(
           (res: any) => {
@@ -2766,7 +2785,8 @@ export class WorkareaComponent
         .postDoctorNCDScreeningDetails(
           this.patientMedicalForm,
           temp,
-          this.schedulerData
+          this.schedulerData,
+          this.doctorSignatureFlag
         )
         .subscribe(
           (res: any) => {
@@ -2872,7 +2892,8 @@ export class WorkareaComponent
         .postDoctorGeneralOPDDetails(
           this.patientMedicalForm,
           temp,
-          this.schedulerData
+          this.schedulerData,
+          this.doctorSignatureFlag
         )
         .subscribe(
           (res: any) => {
@@ -2905,7 +2926,12 @@ export class WorkareaComponent
       };
 
       this.doctorService
-        .postDoctorPNCDetails(this.patientMedicalForm, temp, this.schedulerData)
+        .postDoctorPNCDetails(
+          this.patientMedicalForm,
+          temp,
+          this.schedulerData,
+          this.doctorSignatureFlag
+        )
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
