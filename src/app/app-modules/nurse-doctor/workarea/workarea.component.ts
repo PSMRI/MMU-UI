@@ -172,6 +172,8 @@ export class WorkareaComponent
   isSpecialist = false;
   doctorUpdateAndTCSubmit: any;
   tmcDisable = false;
+  doctorSignatureFlag = false;
+
   ngOnInit() {
     this.enableUpdateButtonInVitals = false;
     this.enableCovidVaccinationSaveButton = false;
@@ -256,6 +258,14 @@ export class WorkareaComponent
         this.enableProvisionalDiag = false;
       }
     });
+
+    this.doctorService
+      .checkUsersignatureExist(this.sessionstorage.getItem('userID'))
+      .subscribe((res: any) => {
+        if (res.statusCode === 200 && res.data !== null) {
+          this.doctorSignatureFlag = res.data.signStatus;
+        }
+      });
   }
 
   setVitalsUpdateButtonValue() {
@@ -983,41 +993,30 @@ export class WorkareaComponent
     sessionStorage.removeItem('benFlowID');
   }
 
-  doctorSignatureFlag = false;
-
   submitDoctorDiagnosisForm() {
     this.disableSubmitButton = true;
     this.showProgressBar = true;
 
-    this.doctorService
-      .checkUsersignatureExist(this.sessionstorage.getItem('userID'))
-      .subscribe((res: any) => {
-        if (res.statusCode === 200 && res.data !== null) {
-          this.doctorSignatureFlag = res.data.signStatus;
+    if (this.visitCategory === 'Cancer Screening')
+      this.submitCancerDiagnosisForm();
 
-          if (this.visitCategory === 'Cancer Screening')
-            this.submitCancerDiagnosisForm();
+    if (this.visitCategory === 'General OPD (QC)')
+      this.submitQuickConsultDiagnosisForm();
 
-          if (this.visitCategory === 'General OPD (QC)')
-            this.submitQuickConsultDiagnosisForm();
+    if (this.visitCategory === 'ANC') this.submitANCDiagnosisForm();
 
-          if (this.visitCategory === 'ANC') this.submitANCDiagnosisForm();
+    if (this.visitCategory === 'PNC') this.submitPNCDiagnosisForm();
 
-          if (this.visitCategory === 'PNC') this.submitPNCDiagnosisForm();
+    if (this.visitCategory === 'General OPD')
+      this.submitGeneralOPDDiagnosisForm();
 
-          if (this.visitCategory === 'General OPD')
-            this.submitGeneralOPDDiagnosisForm();
+    if (this.visitCategory === 'NCD care') this.submitNCDCareDiagnosisForm();
 
-          if (this.visitCategory === 'NCD care')
-            this.submitNCDCareDiagnosisForm();
+    if (this.visitCategory === 'COVID-19 Screening')
+      this.submitCovidCareDiagnosisForm();
 
-          if (this.visitCategory === 'COVID-19 Screening')
-            this.submitCovidCareDiagnosisForm();
-
-          if (this.visitCategory === 'NCD screening')
-            this.submitNCDScreeningDiagnosisForm();
-        }
-      });
+    if (this.visitCategory === 'NCD screening')
+      this.submitNCDScreeningDiagnosisForm();
   }
 
   removeBeneficiaryDataForDoctorVisit() {
@@ -1058,117 +1057,102 @@ export class WorkareaComponent
       isSpecialist: this.isSpecialist,
     };
 
-    this.doctorService
-      .checkUsersignatureExist(this.sessionstorage.getItem('userID'))
-      .subscribe((res: any) => {
-        if (res.statusCode === 200 && res.data !== null) {
-          this.doctorSignatureFlag = res.data.signStatus;
-          if (visitCategory === 'Cancer Screening') {
-            if (this.checkCancerRequiredData(this.patientMedicalForm)) {
-              this.doctorService
-                .saveSpecialistCancerObservation(
-                  this.patientMedicalForm,
-                  otherDetails,
-                  this.doctorSignatureFlag
-                )
-                .subscribe(
-                  (res: any) => {
-                    if (res.statusCode === 200 && res.data !== null) {
-                      this.patientMedicalForm.reset();
-                      this.confirmationService.alert(
-                        res.data.response,
-                        'success'
-                      );
-                      if (this.isSpecialist) {
-                        this.router.navigate(['/common/tcspecialist-worklist']);
-                      } else {
-                        this.router.navigate(['/nurse-doctor/doctor-worklist']);
-                      }
-                    } else {
-                      this.resetSpinnerandEnableTheSubmitButton();
-                      this.confirmationService.alert(res.errorMessage, 'error');
-                    }
-                  },
-                  err => {
-                    this.resetSpinnerandEnableTheSubmitButton();
-                    this.confirmationService.alert(err, 'error');
-                  }
-                );
+    if (visitCategory === 'Cancer Screening') {
+      if (this.checkCancerRequiredData(this.patientMedicalForm)) {
+        this.doctorService
+          .saveSpecialistCancerObservation(
+            this.patientMedicalForm,
+            otherDetails,
+            this.doctorSignatureFlag
+          )
+          .subscribe(
+            (res: any) => {
+              if (res.statusCode === 200 && res.data !== null) {
+                this.patientMedicalForm.reset();
+                this.confirmationService.alert(res.data.response, 'success');
+                if (this.isSpecialist) {
+                  this.router.navigate(['/common/tcspecialist-worklist']);
+                } else {
+                  this.router.navigate(['/nurse-doctor/doctor-worklist']);
+                }
+              } else {
+                this.resetSpinnerandEnableTheSubmitButton();
+                this.confirmationService.alert(res.errorMessage, 'error');
+              }
+            },
+            err => {
+              this.resetSpinnerandEnableTheSubmitButton();
+              this.confirmationService.alert(err, 'error');
             }
-          } else if (visitCategory === 'NCD screening') {
-            if (this.checkNCDScreeningRequiredData(this.patientMedicalForm)) {
-              this.doctorService
-                .updateDoctorDiagnosisDetails(
-                  this.patientMedicalForm,
-                  visitCategory,
-                  otherDetails,
-                  this.schedulerData,
-                  this.doctorSignatureFlag
-                )
-                .subscribe(
-                  (res: any) => {
-                    if (res.statusCode === 200 && res.data !== null) {
-                      this.patientMedicalForm.reset();
-                      sessionStorage.removeItem('instFlag');
-                      sessionStorage.removeItem('suspectFlag');
-                      this.confirmationService.alert(
-                        res.data.response,
-                        'success'
-                      );
-                      if (this.isSpecialist) {
-                        this.router.navigate(['/common/tcspecialist-worklist']);
-                      } else {
-                        this.router.navigate(['/nurse-doctor/doctor-worklist']);
-                      }
-                    } else {
-                      this.resetSpinnerandEnableTheSubmitButton();
-                      this.confirmationService.alert(res.errorMessage, 'error');
-                    }
-                  },
-                  err => {
-                    this.resetSpinnerandEnableTheSubmitButton();
-                    this.confirmationService.alert(err, 'error');
-                  }
-                );
+          );
+      }
+    } else if (visitCategory === 'NCD screening') {
+      if (this.checkNCDScreeningRequiredData(this.patientMedicalForm)) {
+        this.doctorService
+          .updateDoctorDiagnosisDetails(
+            this.patientMedicalForm,
+            visitCategory,
+            otherDetails,
+            this.schedulerData,
+            this.doctorSignatureFlag
+          )
+          .subscribe(
+            (res: any) => {
+              if (res.statusCode === 200 && res.data !== null) {
+                this.patientMedicalForm.reset();
+                sessionStorage.removeItem('instFlag');
+                sessionStorage.removeItem('suspectFlag');
+                this.confirmationService.alert(res.data.response, 'success');
+                if (this.isSpecialist) {
+                  this.router.navigate(['/common/tcspecialist-worklist']);
+                } else {
+                  this.router.navigate(['/nurse-doctor/doctor-worklist']);
+                }
+              } else {
+                this.resetSpinnerandEnableTheSubmitButton();
+                this.confirmationService.alert(res.errorMessage, 'error');
+              }
+            },
+            err => {
+              this.resetSpinnerandEnableTheSubmitButton();
+              this.confirmationService.alert(err, 'error');
             }
-          } else {
-            if (this.checkNurseRequirements(this.patientMedicalForm)) {
-              this.doctorService
-                .updateDoctorDiagnosisDetails(
-                  this.patientMedicalForm,
-                  visitCategory,
-                  otherDetails,
-                  this.schedulerData,
-                  this.doctorSignatureFlag
-                )
-                .subscribe(
-                  (res: any) => {
-                    if (res.statusCode === 200 && res.data !== null) {
-                      this.patientMedicalForm.reset();
-                      this.confirmationService.alert(
-                        res.data.response,
-                        'success'
-                      );
-                      if (this.isSpecialist) {
-                        this.router.navigate(['/common/tcspecialist-worklist']);
-                      } else {
-                        this.router.navigate(['/nurse-doctor/doctor-worklist']);
-                      }
-                    } else {
-                      this.resetSpinnerandEnableTheSubmitButton();
-                      this.confirmationService.alert(res.errorMessage, 'error');
-                    }
-                  },
-                  err => {
-                    this.resetSpinnerandEnableTheSubmitButton();
-                    this.confirmationService.alert(err, 'error');
-                  }
-                );
+          );
+      }
+    } else {
+      if (this.checkNurseRequirements(this.patientMedicalForm)) {
+        this.doctorService
+          .updateDoctorDiagnosisDetails(
+            this.patientMedicalForm,
+            visitCategory,
+            otherDetails,
+            this.schedulerData,
+            this.doctorSignatureFlag
+          )
+          .subscribe(
+            (res: any) => {
+              if (res.statusCode === 200 && res.data !== null) {
+                this.patientMedicalForm.reset();
+                this.confirmationService.alert(res.data.response, 'success');
+                if (this.isSpecialist) {
+                  this.router.navigate(['/common/tcspecialist-worklist']);
+                } else {
+                  this.router.navigate(['/nurse-doctor/doctor-worklist']);
+                }
+              } else {
+                this.resetSpinnerandEnableTheSubmitButton();
+                this.confirmationService.alert(res.errorMessage, 'error');
+              }
+            },
+            err => {
+              this.resetSpinnerandEnableTheSubmitButton();
+              this.confirmationService.alert(err, 'error');
             }
-          }
-        }
-      });
+          );
+      }
+    }
   }
+
   idrsChange(value: any) {
     this.enableIDRSUpdate = value;
     console.log('enableIDRSUpdate', this.enableIDRSUpdate);
@@ -2462,40 +2446,32 @@ export class WorkareaComponent
     const patientQuickConsultDetails = this.mapDoctorQuickConsultDetails();
 
     this.doctorService
-      .checkUsersignatureExist(this.sessionstorage.getItem('userID'))
-      .subscribe((res: any) => {
-        if (res.statusCode === 200 && res.data !== null) {
-          this.doctorSignatureFlag = res.data.signStatus;
-
-          this.doctorService
-            .updateQuickConsultDetails(
-              { quickConsultation: patientQuickConsultDetails },
-              this.schedulerData,
-              this.isSpecialist,
-              this.doctorSignatureFlag
-            )
-            .subscribe(
-              (res: any) => {
-                if (res.statusCode === 200 && res.data !== null) {
-                  this.patientMedicalForm.reset();
-                  this.confirmationService.alert(res.data.response, 'success');
-                  if (this.isSpecialist) {
-                    this.router.navigate(['/common/tcspecialist-worklist']);
-                  } else {
-                    this.router.navigate(['/nurse-doctor/doctor-worklist']);
-                  }
-                } else {
-                  this.resetSpinnerandEnableTheSubmitButton();
-                  this.confirmationService.alert(res.errorMessage, 'error');
-                }
-              },
-              err => {
-                this.resetSpinnerandEnableTheSubmitButton();
-                this.confirmationService.alert(err, 'error');
-              }
-            );
+      .updateQuickConsultDetails(
+        { quickConsultation: patientQuickConsultDetails },
+        this.schedulerData,
+        this.isSpecialist,
+        this.doctorSignatureFlag
+      )
+      .subscribe(
+        (res: any) => {
+          if (res.statusCode === 200 && res.data !== null) {
+            this.patientMedicalForm.reset();
+            this.confirmationService.alert(res.data.response, 'success');
+            if (this.isSpecialist) {
+              this.router.navigate(['/common/tcspecialist-worklist']);
+            } else {
+              this.router.navigate(['/nurse-doctor/doctor-worklist']);
+            }
+          } else {
+            this.resetSpinnerandEnableTheSubmitButton();
+            this.confirmationService.alert(res.errorMessage, 'error');
+          }
+        },
+        err => {
+          this.resetSpinnerandEnableTheSubmitButton();
+          this.confirmationService.alert(err, 'error');
         }
-      });
+      );
   }
 
   mapDoctorQuickConsultDetails() {
