@@ -532,7 +532,8 @@ export class DoctorService {
   updateQuickConsultDetails(
     consultationData: any,
     tcRequest: any,
-    isSpecialist: any
+    isSpecialist: any,
+    doctorSignatureFlag: any
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -555,6 +556,7 @@ export class DoctorService {
       vanID: vanID,
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
     const quickConsultation = Object.assign(
       {},
@@ -2502,7 +2504,8 @@ export class DoctorService {
     patientMedicalForm: any,
     visitCategory: any,
     otherDetails: any,
-    tcRequest: any
+    tcRequest: any,
+    doctorSignatureFlag: any
   ): Observable<object> {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -2554,6 +2557,7 @@ export class DoctorService {
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: otherDetails.isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -2707,7 +2711,8 @@ export class DoctorService {
   // }
   saveSpecialistCancerObservation(
     specialistDiagonosis: any,
-    otherDetails: any
+    otherDetails: any,
+    doctorSignatureFlag: any
   ) {
     const diagnosisDetails =
       specialistDiagonosis.controls.patientCaseRecordForm.value;
@@ -2719,7 +2724,8 @@ export class DoctorService {
       {},
       referDetails,
       diagnosisDetails,
-      otherDetails
+      otherDetails,
+      { doctorSignatureFlag: doctorSignatureFlag }
     );
     console.log(
       'saveSpecialistCancerObservation',
