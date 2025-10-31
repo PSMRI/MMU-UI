@@ -172,6 +172,8 @@ export class WorkareaComponent
   isSpecialist = false;
   doctorUpdateAndTCSubmit: any;
   tmcDisable = false;
+  doctorSignatureFlag = false;
+
   ngOnInit() {
     this.enableUpdateButtonInVitals = false;
     this.enableCovidVaccinationSaveButton = false;
@@ -256,6 +258,14 @@ export class WorkareaComponent
         this.enableProvisionalDiag = false;
       }
     });
+
+    this.doctorService
+      .checkUsersignatureExist(this.sessionstorage.getItem('userID'))
+      .subscribe((res: any) => {
+        if (res.statusCode === 200 && res.data !== null) {
+          this.doctorSignatureFlag = res.data.signStatus;
+        }
+      });
   }
 
   setVitalsUpdateButtonValue() {
@@ -983,41 +993,30 @@ export class WorkareaComponent
     sessionStorage.removeItem('benFlowID');
   }
 
-  doctorSignatureFlag = false;
-
   submitDoctorDiagnosisForm() {
     this.disableSubmitButton = true;
     this.showProgressBar = true;
 
-    this.doctorService
-      .checkUsersignatureExist(this.sessionstorage.getItem('userID'))
-      .subscribe((res: any) => {
-        if (res.statusCode === 200 && res.data !== null) {
-          this.doctorSignatureFlag = res.data.signStatus;
+    if (this.visitCategory === 'Cancer Screening')
+      this.submitCancerDiagnosisForm();
 
-          if (this.visitCategory === 'Cancer Screening')
-            this.submitCancerDiagnosisForm();
+    if (this.visitCategory === 'General OPD (QC)')
+      this.submitQuickConsultDiagnosisForm();
 
-          if (this.visitCategory === 'General OPD (QC)')
-            this.submitQuickConsultDiagnosisForm();
+    if (this.visitCategory === 'ANC') this.submitANCDiagnosisForm();
 
-          if (this.visitCategory === 'ANC') this.submitANCDiagnosisForm();
+    if (this.visitCategory === 'PNC') this.submitPNCDiagnosisForm();
 
-          if (this.visitCategory === 'PNC') this.submitPNCDiagnosisForm();
+    if (this.visitCategory === 'General OPD')
+      this.submitGeneralOPDDiagnosisForm();
 
-          if (this.visitCategory === 'General OPD')
-            this.submitGeneralOPDDiagnosisForm();
+    if (this.visitCategory === 'NCD care') this.submitNCDCareDiagnosisForm();
 
-          if (this.visitCategory === 'NCD care')
-            this.submitNCDCareDiagnosisForm();
+    if (this.visitCategory === 'COVID-19 Screening')
+      this.submitCovidCareDiagnosisForm();
 
-          if (this.visitCategory === 'COVID-19 Screening')
-            this.submitCovidCareDiagnosisForm();
-
-          if (this.visitCategory === 'NCD screening')
-            this.submitNCDScreeningDiagnosisForm();
-        }
-      });
+    if (this.visitCategory === 'NCD screening')
+      this.submitNCDScreeningDiagnosisForm();
   }
 
   removeBeneficiaryDataForDoctorVisit() {
@@ -1063,7 +1062,8 @@ export class WorkareaComponent
         this.doctorService
           .saveSpecialistCancerObservation(
             this.patientMedicalForm,
-            otherDetails
+            otherDetails,
+            this.doctorSignatureFlag
           )
           .subscribe(
             (res: any) => {
@@ -1093,7 +1093,8 @@ export class WorkareaComponent
             this.patientMedicalForm,
             visitCategory,
             otherDetails,
-            this.schedulerData
+            this.schedulerData,
+            this.doctorSignatureFlag
           )
           .subscribe(
             (res: any) => {
@@ -1125,7 +1126,8 @@ export class WorkareaComponent
             this.patientMedicalForm,
             visitCategory,
             otherDetails,
-            this.schedulerData
+            this.schedulerData,
+            this.doctorSignatureFlag
           )
           .subscribe(
             (res: any) => {
@@ -1150,6 +1152,7 @@ export class WorkareaComponent
       }
     }
   }
+
   idrsChange(value: any) {
     this.enableIDRSUpdate = value;
     console.log('enableIDRSUpdate', this.enableIDRSUpdate);
@@ -2446,7 +2449,8 @@ export class WorkareaComponent
       .updateQuickConsultDetails(
         { quickConsultation: patientQuickConsultDetails },
         this.schedulerData,
-        this.isSpecialist
+        this.isSpecialist,
+        this.doctorSignatureFlag
       )
       .subscribe(
         (res: any) => {
