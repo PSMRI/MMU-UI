@@ -35,6 +35,7 @@ import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-de
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-patient-visit-details',
@@ -66,7 +67,8 @@ export class PatientVisitDetailsComponent
     private doctorService: DoctorService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     readonly sessionstorage: SessionStorageService,
-    private languageComponent: SetLanguageComponent
+    private languageComponent: SetLanguageComponent,
+    private trackingService: AmritTrackingService
   ) {}
 
   ngOnInit() {
@@ -289,4 +291,8 @@ export class PatientVisitDetailsComponent
     this.currentLanguageSet = this.languageComponent.currentLanguageObject;
   }
   //--End--
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(fieldName, 'Visit Details');
+  }
 }

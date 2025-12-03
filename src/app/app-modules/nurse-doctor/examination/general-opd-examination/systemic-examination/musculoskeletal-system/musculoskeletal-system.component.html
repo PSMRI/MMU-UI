@@ -17,7 +17,8 @@
             <mat-select
               class="select-full-width"
               name="joint_TypeOfJoint"
-              formControlName="joint_TypeOfJoint">
+              formControlName="joint_TypeOfJoint"
+              (selectionChange)="trackFieldInteraction('Joint Type Selection')">
               <mat-option
                 *ngFor="let typeOfJoint of selectTypeOfJoint"
                 [value]="typeOfJoint.jointType">
@@ -36,7 +37,8 @@
             <mat-select
               class="select-full-width"
               name="joint_Laterality"
-              formControlName="joint_Laterality">
+              formControlName="joint_Laterality"
+              (selectionChange)="trackFieldInteraction('Joint Laterality Selection')">
               <mat-option
                 *ngFor="let jointLaterality of selectJointLaterality"
                 [value]="jointLaterality.name">
@@ -55,7 +57,8 @@
             <mat-select
               class="select-full-width"
               name="joint_Abnormality"
-              formControlName="joint_Abnormality">
+              formControlName="joint_Abnormality"
+              (selectionChange)="trackFieldInteraction('Joint Abnormality Selection')">
               <mat-option
                 *ngFor="let jointAbnormality of selectJointAbnormality"
                 [value]="jointAbnormality.name">
@@ -86,7 +89,8 @@
             <mat-select
               class="select-full-width"
               name="upperLimb_Laterality"
-              formControlName="upperLimb_Laterality">
+              formControlName="upperLimb_Laterality"
+              (selectionChange)="trackFieldInteraction('Upper Limb Laterality Selection')">
               <mat-option
                 *ngFor="let upperLimbsLaterality of selectUpperLimbsLaterality"
                 [value]="upperLimbsLaterality.name">
@@ -105,7 +109,8 @@
             <mat-select
               class="select-full-width"
               name="upperLimb_Abnormality"
-              formControlName="upperLimb_Abnormality">
+              formControlName="upperLimb_Abnormality"
+              (selectionChange)="trackFieldInteraction('Upper Limb Abnormality Selection')">
               <mat-option
                 *ngFor="
                   let upperLimbsAbnormality of selectUpperLimbsAbnormality
@@ -138,7 +143,8 @@
             <mat-select
               class="select-full-width"
               name="lowerLimb_Laterality"
-              formControlName="lowerLimb_Laterality">
+              formControlName="lowerLimb_Laterality"
+              (selectionChange)="trackFieldInteraction('Lower Limb Laterality Selection')">
               <mat-option
                 *ngFor="let lowerLimbsLaterality of selectLowerLimbsLaterality"
                 [value]="lowerLimbsLaterality.name">
@@ -157,7 +163,8 @@
             <mat-select
               class="select-full-width"
               name="lowerLimb_Abnormality"
-              formControlName="lowerLimb_Abnormality">
+              formControlName="lowerLimb_Abnormality"
+              (selectionChange)="trackFieldInteraction('Lower Limb Abnormality Selection')">
               <mat-option
                 *ngFor="
                   let lowerLimbsAbnormality of selectLowerLimbsAbnormality
@@ -194,7 +201,8 @@
               matTextareaAutosize
               name="chestWall"
               formControlName="chestWall"
-              maxlength="300"></textarea>
+              maxlength="300"
+              (focus)="trackFieldInteraction('Chest Wall')"></textarea>
           </mat-form-field>
         </div>
 
@@ -211,7 +219,8 @@
               matTextareaAutosize
               name="spine"
               formControlName="spine"
-              maxlength="300"></textarea>
+              maxlength="300"
+              (focus)="trackFieldInteraction('Spine')"></textarea>
           </mat-form-field>
         </div>
       </div>

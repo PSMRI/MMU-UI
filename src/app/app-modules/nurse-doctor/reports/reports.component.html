@@ -9,6 +9,7 @@
             name="report"
             formControlName="report"
             (selectionChange)="checkReport()"
+            (focus)="trackFieldInteraction('Report')"
             required>
             <mat-option *ngFor="let report of reportMaster" [value]="report">
               {{ report.reportName }}
@@ -27,16 +28,19 @@
             <input
               matStartDate
               formControlName="fromDate"
-              placeholder="{{ currentLanguageSet?.fromDate }}" />
+              placeholder="{{ currentLanguageSet?.fromDate }}"
+              (focus)="trackFieldInteraction('From Date')" />
             <input
               matEndDate
               formControlName="toDate"
-              placeholder="{{ currentLanguageSet?.toDate }}" />
+              placeholder="{{ currentLanguageSet?.toDate }}"
+              (focus)="trackFieldInteraction('To Date')" />
           </mat-date-range-input>
           <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle
             matSuffix
-            [for]="picker"></mat-datepicker-toggle>
+            [for]="picker"
+            (click)="trackFieldInteraction('Date Picker Button')"></mat-datepicker-toggle>
           <mat-date-range-picker #picker></mat-date-range-picker>
         </mat-form-field>
       </div>
@@ -48,6 +52,8 @@
             name="van"
             formControlName="van"
             [disabled]="!toDate"
+            (focus)="trackFieldInteraction('Van')"
+            (selectionChange)="trackFieldInteraction('Van Selection')"
             required>
             <mat-option *ngFor="let van of vanMaster" [value]="van">
               {{ van.vehicalNo }}
