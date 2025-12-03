@@ -173,6 +173,8 @@ export class WorkareaComponent
   isSpecialist = false;
   doctorUpdateAndTCSubmit: any;
   tmcDisable = false;
+  doctorSignatureFlag = false;
+
   ngOnInit() {
     this.enableUpdateButtonInVitals = false;
     this.enableCovidVaccinationSaveButton = false;
@@ -257,6 +259,14 @@ export class WorkareaComponent
         this.enableProvisionalDiag = false;
       }
     });
+
+    this.doctorService
+      .checkUsersignatureExist(this.sessionstorage.getItem('userID'))
+      .subscribe((res: any) => {
+        if (res.statusCode === 200 && res.data !== null) {
+          this.doctorSignatureFlag = res.data.signStatus;
+        }
+      });
   }
 
   setVitalsUpdateButtonValue() {
@@ -1055,7 +1065,8 @@ export class WorkareaComponent
         this.doctorService
           .saveSpecialistCancerObservation(
             this.patientMedicalForm,
-            otherDetails
+            otherDetails,
+            this.doctorSignatureFlag
           )
           .subscribe(
             (res: any) => {
@@ -1093,7 +1104,8 @@ export class WorkareaComponent
             this.patientMedicalForm,
             visitCategory,
             otherDetails,
-            this.schedulerData
+            this.schedulerData,
+            this.doctorSignatureFlag
           )
           .subscribe(
             (res: any) => {
@@ -1135,7 +1147,8 @@ export class WorkareaComponent
             this.patientMedicalForm,
             visitCategory,
             otherDetails,
-            this.schedulerData
+            this.schedulerData,
+            this.doctorSignatureFlag
           )
           .subscribe(
             (res: any) => {
@@ -1170,6 +1183,7 @@ export class WorkareaComponent
       }
     }
   }
+
   idrsChange(value: any) {
     this.enableIDRSUpdate = value;
     console.log('enableIDRSUpdate', this.enableIDRSUpdate);
@@ -1293,7 +1307,8 @@ export class WorkareaComponent
       this.doctorService
         .postDoctorCancerVisitDetails(
           this.patientMedicalForm,
-          this.schedulerData
+          this.schedulerData,
+          this.doctorSignatureFlag
         )
         .subscribe(
           (res: any) => {
@@ -2436,7 +2451,8 @@ export class WorkareaComponent
       this.doctorService
         .postQuickConsultDetails(
           { quickConsultation: patientQuickConsultFormValue },
-          this.schedulerData
+          this.schedulerData,
+          this.doctorSignatureFlag
         )
         .subscribe(
           (res: any) => {
@@ -2508,7 +2524,8 @@ export class WorkareaComponent
       .updateQuickConsultDetails(
         { quickConsultation: patientQuickConsultDetails },
         this.schedulerData,
-        this.isSpecialist
+        this.isSpecialist,
+        this.doctorSignatureFlag
       )
       .subscribe(
         (res: any) => {
@@ -2655,7 +2672,12 @@ export class WorkareaComponent
       };
       const prescribedDrugs = this.getLabandPrescriptionData();
       this.doctorService
-        .postDoctorANCDetails(this.patientMedicalForm, temp, this.schedulerData)
+        .postDoctorANCDetails(
+          this.patientMedicalForm,
+          temp,
+          this.schedulerData,
+          this.doctorSignatureFlag
+        )
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
@@ -2793,7 +2815,8 @@ export class WorkareaComponent
         .postDoctorNCDCareDetails(
           this.patientMedicalForm,
           temp,
-          this.schedulerData
+          this.schedulerData,
+          this.doctorSignatureFlag
         )
         .subscribe(
           (res: any) => {
@@ -2891,7 +2914,8 @@ export class WorkareaComponent
         .postDoctorNCDScreeningDetails(
           this.patientMedicalForm,
           temp,
-          this.schedulerData
+          this.schedulerData,
+          this.doctorSignatureFlag
         )
         .subscribe(
           (res: any) => {
@@ -3014,7 +3038,8 @@ export class WorkareaComponent
         .postDoctorGeneralOPDDetails(
           this.patientMedicalForm,
           temp,
-          this.schedulerData
+          this.schedulerData,
+          this.doctorSignatureFlag
         )
         .subscribe(
           (res: any) => {
@@ -3065,7 +3090,12 @@ export class WorkareaComponent
 
       const prescribedDrugs = this.getLabandPrescriptionData();
       this.doctorService
-        .postDoctorPNCDetails(this.patientMedicalForm, temp, this.schedulerData)
+        .postDoctorPNCDetails(
+          this.patientMedicalForm,
+          temp,
+          this.schedulerData,
+          this.doctorSignatureFlag
+        )
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
