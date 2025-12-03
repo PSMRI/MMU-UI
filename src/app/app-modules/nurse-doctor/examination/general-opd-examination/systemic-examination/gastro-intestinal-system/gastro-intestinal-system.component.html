@@ -11,7 +11,8 @@
         matTextareaAutosize
         name="inspection"
         formControlName="inspection"
-        maxlength="300"></textarea>
+        maxlength="300"
+        (focus)="trackFieldInteraction('Inspection')"></textarea>
     </mat-form-field>
   </div>
 
@@ -24,7 +25,8 @@
       <mat-select
         class="select-full-width"
         name="palpation_AbdomenTexture"
-        formControlName="palpation_AbdomenTexture">
+        formControlName="palpation_AbdomenTexture"
+        (selectionChange)="trackFieldInteraction('Abdomen Texture Selection')">
         <mat-option
           *ngFor="let texture of selectAbdomenTexture"
           [value]="texture.name">
@@ -42,7 +44,8 @@
       <mat-select
         class="select-full-width"
         name="palpation_Liver"
-        formControlName="palpation_Liver">
+        formControlName="palpation_Liver"
+        (selectionChange)="trackFieldInteraction('Liver Selection')">
         <mat-option *ngFor="let liver of selectLiver" [value]="liver.name">
           {{ liver.name }}
         </mat-option>
@@ -58,7 +61,8 @@
       <mat-select
         class="select-full-width"
         name="palpation_Spleen"
-        formControlName="palpation_Spleen">
+        formControlName="palpation_Spleen"
+        (selectionChange)="trackFieldInteraction('Spleen Selection')">
         <mat-option *ngFor="let spleen of selectSpleen" [value]="spleen.name">
           {{ spleen.name }}
         </mat-option>
@@ -101,7 +105,8 @@
         id="palpation_LocationOfTenderness"
         name="palpation_LocationOfTenderness"
         formControlName="palpation_LocationOfTenderness"
-        maxlength="300"></textarea>
+        maxlength="300"
+        (focus)="trackFieldInteraction('Location Of Tenderness')"></textarea>
     </mat-form-field>
   </div>
 
@@ -117,7 +122,8 @@
         matTextareaAutosize
         name="percussion"
         formControlName="percussion"
-        maxlength="300"></textarea>
+        maxlength="300"
+        (focus)="trackFieldInteraction('Percussion')"></textarea>
     </mat-form-field>
   </div>
 
@@ -133,7 +139,8 @@
         matTextareaAutosize
         name="auscultation"
         formControlName="auscultation"
-        maxlength="300"></textarea>
+        maxlength="300"
+        (focus)="trackFieldInteraction('Auscultation')"></textarea>
     </mat-form-field>
   </div>
 
@@ -149,7 +156,8 @@
         matTextareaAutosize
         name="analRegion"
         formControlName="analRegion"
-        maxlength="300"></textarea>
+        maxlength="300"
+        (focus)="trackFieldInteraction('Anal Region')"></textarea>
     </mat-form-field>
   </div>
 </div>

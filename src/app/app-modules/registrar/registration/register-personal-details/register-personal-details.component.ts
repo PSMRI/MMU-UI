@@ -36,6 +36,7 @@ import { CameraService } from '../../../core/services/camera.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 import {
   BsDatepickerConfig,
   BsDatepickerDirective,
@@ -122,7 +123,8 @@ export class RegisterPersonalDetailsComponent
     private registrarService: RegistrarService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private languageComponent: SetLanguageComponent,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private trackingService: AmritTrackingService
     // dateAdapter: DateAdapter<NativeDateAdapter>
   ) {
     // dateAdapter.setLocale('en-IN');
@@ -889,4 +891,11 @@ export class RegisterPersonalDetailsComponent
     this.currentLanguageSet = this.languageComponent.currentLanguageObject;
   }
   //--End--
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'Register Personal Details'
+    );
+  }
 }

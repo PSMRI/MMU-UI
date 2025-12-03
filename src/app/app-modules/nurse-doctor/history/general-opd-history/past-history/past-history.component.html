@@ -12,7 +12,10 @@
         id="previousANCPastHistory"
         class="mat_icon_blue"
         color="primary"
-        (click)="getPreviousPastHistory()">
+        (click)="
+          getPreviousPastHistory();
+          trackFieldInteraction('Previous Past History Button')
+        ">
         <mat-icon class="md-18">history</mat-icon>
       </button>
     </div>
@@ -47,7 +50,8 @@
                 name="pastAcuteIllness"
                 formControlName="illnessType"
                 (selectionChange)="
-                  filterPastIllnessType($event.value, i, pastIllness)
+                  filterPastIllnessType($event.value, i, pastIllness);
+                  trackFieldInteraction('Illness')
                 ">
                 <mat-option
                   *ngFor="let illness of pastIllnessSelectList[i]"
@@ -73,7 +77,8 @@
                 maxlength="50"
                 allowText="alphaspace"
                 name="otherIllnessType"
-                formControlName="otherIllnessType" />
+                formControlName="otherIllnessType"
+                (focus)="trackFieldInteraction('Other Illness Type')" />
             </mat-form-field>
           </div>
 
@@ -91,7 +96,8 @@
                 maxlength="2"
                 name="timePeriodAgo"
                 formControlName="timePeriodAgo"
-                (change)="validateDuration(pastIllness)" />
+                (change)="validateDuration(pastIllness)"
+                (focus)="trackFieldInteraction('Duration')" />
             </mat-form-field>
           </div>
 
@@ -104,7 +110,10 @@
                 class="select-full-width mat_border_style"
                 name="timePeriodUnit"
                 formControlName="timePeriodUnit"
-                (selectionChange)="validateDuration(pastIllness)">
+                (selectionChange)="
+                  validateDuration(pastIllness);
+                  trackFieldInteraction('Time Period Unit')
+                ">
                 <mat-option value="Days">Day(s)</mat-option>
                 <mat-option value="Weeks">Week(s)</mat-option>
                 <mat-option value="Months">Month(s)</mat-option>
@@ -123,7 +132,10 @@
                 i !== 0 ||
                 (i === 0 && (pastIllness.touched || pastIllness.dirty))
               "
-              (click)="removePastIllness(i, pastIllness)">
+              (click)="
+                removePastIllness(i, pastIllness);
+                trackFieldInteraction('Remove Past Illness Button')
+              ">
               <mat-icon class="md-18">close</mat-icon>
             </button>
             <button
@@ -132,7 +144,10 @@
               class="mat_blue_circle"
               *ngIf="isLast"
               [disabled]="checkIllnessValidity(pastIllness)"
-              (click)="addPastIllness()">
+              (click)="
+                addPastIllness();
+                trackFieldInteraction('Add Past Illness Button')
+              ">
               <mat-icon class="md-18">add</mat-icon>
             </button>
           </div>
@@ -174,7 +189,8 @@
               formControlName="surgeryType"
               name="surgeryType"
               (selectionChange)="
-                filterPastSurgeryType($event.value, i, pastSurgery)
+                filterPastSurgeryType($event.value, i, pastSurgery);
+                trackFieldInteraction('Surgery Type')
               ">
               <mat-option
                 *ngFor="let surgery of pastSurgerySelectList[i]"
@@ -200,7 +216,8 @@
               maxlength="50"
               allowText="alphaspace"
               name="otherSurgeryType"
-              formControlName="otherSurgeryType" />
+              formControlName="otherSurgeryType"
+              (focus)="trackFieldInteraction('Other Surgery Type')" />
           </mat-form-field>
         </div>
 
@@ -218,7 +235,8 @@
               maxlength="2"
               name="timePeriodAgo"
               formControlName="timePeriodAgo"
-              (change)="validateDuration(pastSurgery)" />
+              (change)="validateDuration(pastSurgery)"
+              (focus)="trackFieldInteraction('Duration')" />
           </mat-form-field>
         </div>
 
@@ -231,7 +249,10 @@
               class="select-full-width"
               formControlName="timePeriodUnit"
               name="timePeriodUnit"
-              (change)="validateDuration(pastSurgery)">
+              (selectionChange)="
+                validateDuration(pastSurgery);
+                trackFieldInteraction('Time Period Unit')
+              ">
               <mat-option value="Days">Day(s)</mat-option>
               <mat-option value="Weeks">Week(s)</mat-option>
               <mat-option value="Months">Month(s)</mat-option>
@@ -250,7 +271,10 @@
             *ngIf="
               i !== 0 || (i === 0 && (pastSurgery.touched || pastSurgery.dirty))
             "
-            (click)="removePastSurgery(i, pastSurgery)">
+            (click)="
+              removePastSurgery(i, pastSurgery);
+              trackFieldInteraction('Remove Past Surgery Button')
+            ">
             <mat-icon class="md-18">close</mat-icon>
           </button>
           <button
@@ -260,7 +284,9 @@
             *ngIf="isLast"
             [disabled]="checkSurgeryValidity(pastSurgery)"
             id="addPastSurgery"
-            (click)="addPastSurgery()">
+            (click)="
+              addPastSurgery(); trackFieldInteraction('Add Past Surgery Button')
+            ">
             <mat-icon class="md-18">add</mat-icon>
           </button>
         </div>

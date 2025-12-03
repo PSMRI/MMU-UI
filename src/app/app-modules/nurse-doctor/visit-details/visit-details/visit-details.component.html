@@ -6,7 +6,11 @@
       <mat-label class="mat-label-text">{{
         currentLanguageSet?.Reports?.visitcode
       }}</mat-label>
-      <input matInput name="visitCode" formControlName="visitCode" />
+      <input
+        matInput
+        name="visitCode"
+        formControlName="visitCode"
+        (focus)="trackFieldInteraction('Visit Code')" />
     </mat-form-field>
   </div>
 
@@ -21,7 +25,8 @@
         name="visitReason"
         formControlName="visitReason"
         (selectionChange)="
-          reasonSelected(patientVisitDetailsForm.controls['visitReason'].value)
+          reasonSelected(patientVisitDetailsForm.controls['visitReason'].value);
+          trackFieldInteraction('Reason For Visit')
         "
         required>
         <mat-option
@@ -48,7 +53,8 @@
         (selectionChange)="
           checkCategoryDependent(
             patientVisitDetailsForm.controls['visitCategory'].value
-          )
+          );
+          trackFieldInteraction('Visit Category')
         "
         required>
         <mat-option
@@ -80,7 +86,8 @@
         formControlName="pregnancyStatus"
         [attr.readonly]="
           patientVisitDetailsForm.controls['visitCategory'].value === 'ANC'
-        ">
+        "
+        (selectionChange)="trackFieldInteraction('Pregnancy Status')">
         <mat-option
           *ngFor="let pregnancyStatus of templatePregnancyStatus"
           [value]="pregnancyStatus">
@@ -109,7 +116,8 @@
         allowText="number"
         maxlength="20"
         name="rCHID"
-        formControlName="rCHID" />
+        formControlName="rCHID"
+        (focus)="trackFieldInteraction('MCTS Or RCH ID')" />
     </mat-form-field>
   </div>
 </div>
