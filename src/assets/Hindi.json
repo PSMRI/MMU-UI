@@ -1724,6 +1724,24 @@
     "abhaAddress":"ABHA Address",
     "abhaMode":"ABHA Mode",
     "abhaDetailsNotAvailable":"ABHA details not available",
+    "enterMobileNumberToBeLinkedWithAbha": "Enter Phone number to be linked with ABHA",
+    "doYouWantToVerifyMobileOtpForAbha": "Your provided mobile number is not linked with Aadhaar, Do you want to verify it?",
+    "abhaCardAlreadyExists": "ABHA already exists for the Aadhaar Number",
+    "enterABHANumber": "Please Enter ABHA Number",
+    "enterABHAAddress": "Please Enter ABHA Address",
+    "enterAadhaarNumber": "Please Enter Aadhaar Number",
+    "enterMobileNumber": "Please Enter Mobile Number",
+    "enterCorrectAuthIdForAuthMode": "Please Enter correct Authentication ID for choosen AuthMode",
+    "abhaAddressFound" : "ABHA Address Found:",
+    "searchAndDownloadAbha": "Search and Download ABHA",
+    "abhaSearchMode": "ABHA Search Mode*",
+    "verifyAbha": "Verify ABHA",
+    "issueInAbhaCard": "Issue in printing ABHA Card",
+    "fileUploadedSuccessfully": "File Uploaded successfully",
+    "verifyMobileOtp": "Verify Mobile OTP",
+    "enterMobileOtp": "Enter Mobile OTP",
+    "verify": "Verify",
+    "abhaNumberAlreadyWith": "The Abha number is already linked with beneficiary ID - "
     "enterTenDigitMobileNumber": "Enter mobile number"
 
 
