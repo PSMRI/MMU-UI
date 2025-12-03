@@ -4,6 +4,18 @@
       "spoke": "Spoke",
       "continue": "Continue"
     },
+    "platform_feedback": {
+      "feedback": "Feedback",
+      "weValueYourFeedback": "We value your feedback",
+      "youHaveLoggedOut":"You have logged out of the session",
+      "subtitle": " We’d love to hear about your experience (optional)",
+      "category": "Category",
+      "selectCategory": "Select Category",
+      "loggedInConsent":"Submit anonymously (if unchecked, we will store your user id for follow-up)",
+      "anonymousInfo":"You are not logged in, this feedback will be submitted anonymously.",
+      "okay": "Okay",
+      "thankYou": "Thank you, your feedback is valuable to us!"
+  },
     "role_selection": {
       "Registrar": "Registrar",
       "Nurse": "Nurse",
@@ -248,6 +260,7 @@
       "resultMammogram": "Results of Mammogram",
       "otherComplication": "Other Complication of Current Pregnancy",
       "add": "add",
+      "remove":"remove",
       "confirmDiagnosis": "Confirmatory Diagnosis",
       "labTest": "Test Report",
       "annotatedimagereport": "Annotated Image Report",
@@ -1741,6 +1754,7 @@
     "enterMobileOtp": "Enter Mobile OTP",
     "verify": "Verify",
     "abhaNumberAlreadyWith": "The Abha number is already linked with beneficiary ID - "
+    "enterTenDigitMobileNumber": "Enter mobile number"
   }
   
 }
