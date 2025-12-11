@@ -144,6 +144,9 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
         } else this.confirmationService.alert(data.errorMessage, 'error');
       },
       err => {
+        if (err?.handled) {
+          return;
+        }
         this.confirmationService.alert(err, 'error');
       }
     );
