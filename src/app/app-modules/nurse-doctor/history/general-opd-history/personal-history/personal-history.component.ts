@@ -200,6 +200,15 @@ export class GeneralPersonalHistoryComponent
           history.data.PersonalHistory
         ) {
           this.personalHistoryData = history.data.PersonalHistory;
+          if (
+            this.personalHistoryData &&
+            this.personalHistoryData.riskySexualPracticesStatus !== null
+          ) {
+            this.personalHistoryData.riskySexualPracticesStatus =
+              this.personalHistoryData.riskySexualPracticesStatus == '1'
+                ? true
+                : false;
+          }
           this.generalPersonalHistoryForm.patchValue(this.personalHistoryData);
           this.handlePersonalTobaccoHistoryData();
           this.handlePersonalAlcoholHistoryData();
