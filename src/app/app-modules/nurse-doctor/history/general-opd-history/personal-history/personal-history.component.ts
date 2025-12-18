@@ -456,17 +456,18 @@ export class GeneralPersonalHistoryComponent
     const formArray = this.generalPersonalHistoryForm.controls[
       'allergicList'
     ] as FormArray;
+
     if (this.personalHistoryData && this.personalHistoryData.allergicList) {
       const temp = this.personalHistoryData.allergicList.slice();
 
-      while (formArray.length < temp.length - 1) {
+      while (formArray.length < temp.length) {
         formArray.push(this.initAllergyList());
       }
-      // Optionally, remove extra FormGroups if any
       while (formArray.length > temp.length) {
         formArray.removeAt(formArray.length - 1);
       }
-      for (let i = 0; i < temp.length - 1; i++) {
+
+      for (let i = 0; i < temp.length; i++) {
         const allergyType = this.allergyMasterData.filter(item => {
           return item.allergyType === temp[i].allergyType;
         });
@@ -489,6 +490,17 @@ export class GeneralPersonalHistoryComponent
           k.patchValue(temp[i]);
           k.markAsTouched();
           this.filterAlleryList(temp[i].allergyType, i);
+
+          // ✅ FIX: Explicitly enable the disabled fields when data exists
+          if (temp[i].snomedTerm && temp[i].snomedCode) {
+            k.get('snomedTerm')?.enable();
+          }
+          if (
+            temp[i].typeOfAllergicReactions &&
+            temp[i].typeOfAllergicReactions.length > 0
+          ) {
+            k.get('typeOfAllergicReactions')?.enable();
+          }
         }
 
         if (i + 1 < temp.length) this.addAllergy(true);
