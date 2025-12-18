@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.iemr.mmu-ui</groupId>
 	<artifactId>mmu-ui</artifactId>
-	<version>3.6.0</version>
+	<version>3.4.1</version>
 	<name>MMU-UI</name>
 	<description>Piramal - mmu Module ui</description>
 	<packaging>war</packaging>
