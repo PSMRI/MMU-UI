@@ -48,6 +48,16 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
   diagnosisSubscription: any;
   current_language_set: any;
   suggestedDiagnosisList: any = [];
+  private readonly PAGE_BASE = 0;
+  pageSize: number | undefined = undefined;
+
+  private readonly BOOTSTRAP_MAX_PAGES = 3; // when first page can't scroll, prefill up to this many extra pages
+
+  loadingMore: boolean[] = [];
+  noMore: boolean[] = [];
+  wantMore: boolean[] = [];
+  pageByIndex: number[] = [];
+  lastQueryByIndex: string[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -94,26 +104,26 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
 
   patchDiagnosisDetails(diagnosis: any) {
     this.generalDiagnosisForm.patchValue(diagnosis);
-    const generalArray = this.generalDiagnosisForm.controls[
+    const diagnosisArrayList = this.generalDiagnosisForm.controls[
       'provisionalDiagnosisList'
     ] as FormArray;
 
     const previousArray = diagnosis.provisionalDiagnosisList;
-    let j = 0;
-    if (previousArray !== undefined && previousArray.length > 0) {
-      previousArray.forEach((i: any) => {
-        generalArray.at(j).patchValue({
-          conceptID: i.conceptID,
-          term: i.term,
-          provisionalDiagnosis: i.term,
-          viewProvisionalDiagnosisProvided: i.term,
-        });
-        (<FormGroup>generalArray.at(j)).controls[
-          'provisionalDiagnosis'
-        ].disable();
-        this.addDiagnosis();
-        j++;
+
+    while (diagnosisArrayList.length < previousArray.length) {
+      diagnosisArrayList.push(this.utils.initProvisionalDiagnosisList());
+    }
+    for (let i = 0; i < previousArray.length; i++) {
+      diagnosisArrayList.at(i).patchValue({
+        viewProvisionalDiagnosisProvided: previousArray[i].term,
+        term: previousArray[i].term,
+        conceptID: previousArray[i].conceptID,
+        provisionalDiagnosis: previousArray[i].term, // <-- Add this line
       });
+      diagnosisArrayList
+        .at(i)
+        .get('viewProvisionalDiagnosisProvided')
+        ?.disable();
     }
   }
 
@@ -168,19 +178,29 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
   }
 
   onDiagnosisInputKeyup(value: string, index: number) {
-    if (value.length >= 3) {
-      this.masterdataService
-        .searchDiagnosisBasedOnPageNo(value, index)
-        .subscribe((results: any) => {
-          this.suggestedDiagnosisList[index] = results?.data?.sctMaster;
-        });
+
+    const term = (value || '').trim();
+
+    if (term.length >= 3) {
+      if (this.lastQueryByIndex[index] !== term) {
+        this.lastQueryByIndex[index] = term;
+        this.pageByIndex[index] = 0; // logical 0th page
+        this.noMore[index] = false;
+        this.wantMore[index] = false;
+        this.suggestedDiagnosisList[index] = [];
+      }
+      this.fetchPage(index, false);
     } else {
+      this.lastQueryByIndex[index] = '';
+      this.pageByIndex[index] = 0;
+      this.noMore[index] = false;
+      this.wantMore[index] = false;
       this.suggestedDiagnosisList[index] = [];
     }
   }
 
   displayDiagnosis(diagnosis: any): string {
-    return typeof diagnosis === 'string' ? diagnosis : diagnosis?.term || '';
+    return diagnosis?.term || '';
   }
 
   onDiagnosisSelected(selected: any, index: number) {
@@ -192,9 +212,106 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
 
     // Set the nested and top-level fields
     diagnosisFormGroup.patchValue({
+      provisionalDiagnosis: selected?.term || null,
       viewProvisionalDiagnosisProvided: selected,
       conceptID: selected?.conceptID || null,
       term: selected?.term || null,
     });
+  }
+
+  onPanelReady(index: number, panelEl: HTMLElement) {
+    if (panelEl.scrollHeight <= panelEl.clientHeight && !this.noMore[index]) {
+      this.bootstrapUntilScrollable(index, panelEl);
+    }
+  }
+
+  onAutoNearEnd(index: number) {
+    if (!this.loadingMore[index] && !this.noMore[index]) {
+      this.fetchPage(index, true);
+    } else if (this.loadingMore[index]) {
+      this.wantMore[index] = true;
+    }
+  }
+
+  private bootstrapUntilScrollable(rowIndex: number, panelEl: HTMLElement) {
+    let fetched = 0;
+
+    const tryFill = () => {
+      const scrollable = panelEl.scrollHeight > panelEl.clientHeight;
+      if (
+        scrollable ||
+        this.noMore[rowIndex] ||
+        fetched >= this.BOOTSTRAP_MAX_PAGES
+      )
+        return;
+
+      if (this.loadingMore[rowIndex]) {
+        requestAnimationFrame(tryFill);
+        return;
+      }
+
+      fetched++;
+      this.fetchPage(rowIndex, true);
+
+      requestAnimationFrame(tryFill);
+    };
+
+    if (this.lastQueryByIndex[rowIndex]?.length >= 3) {
+      tryFill();
+    }
+  }
+
+  private fetchPage(index: number, append = false) {
+    const term = this.lastQueryByIndex[index];
+    if (!term) return;
+
+    const nextLogical = (this.pageByIndex[index] ?? 0) + (append ? 1 : 0);
+    const pageAtReq = nextLogical + this.PAGE_BASE;
+
+    if (this.loadingMore[index]) return;
+    this.loadingMore[index] = true;
+
+    const termAtReq = term;
+
+    this.masterdataService
+      .searchDiagnosisBasedOnPageNo(termAtReq, pageAtReq)
+      .subscribe({
+        next: (results: any) => {
+          if (this.lastQueryByIndex[index] !== termAtReq) return;
+
+          const list = results?.data?.sctMaster ?? [];
+
+          if (append) {
+            const existing = new Set(
+              (this.suggestedDiagnosisList[index] ?? []).map(
+                (d: any) => d.id ?? d.code ?? d.term
+              )
+            );
+            this.suggestedDiagnosisList[index] = [
+              ...(this.suggestedDiagnosisList[index] ?? []),
+              ...list.filter(
+                (d: any) => !existing.has(d.id ?? d.code ?? d.term)
+              ),
+            ];
+          } else {
+            this.suggestedDiagnosisList[index] = list;
+          }
+
+          this.pageByIndex[index] = nextLogical;
+          if (!list.length) {
+            this.noMore[index] = true;
+          }
+        },
+        error: () => {
+          console.error('Error fetching diagnosis data');
+        },
+        complete: () => {
+          const wantChain = this.wantMore[index] && !this.noMore[index];
+          this.loadingMore[index] = false;
+          this.wantMore[index] = false;
+
+          if (wantChain) this.fetchPage(index, true);
+        },
+      });
   }
 }

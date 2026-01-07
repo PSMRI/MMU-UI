@@ -20,31 +20,19 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, Input } from '@angular/core';
-import {
-  NavigationCancel,
-  NavigationEnd,
-  NavigationError,
-  ResolveStart,
-  RouteConfigLoadEnd,
-  RouteConfigLoadStart,
-  Router,
-} from '@angular/router';
-import { SpinnerService } from './app-modules/core/services';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { TestBed } from '@angular/core/testing';
 
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-})
-export class AppComponent {
-  isAuthenticated = false;
-  constructor(
-    private router: Router,
-    private spinnerService: SpinnerService,
-    private trackingService: AmritTrackingService
-  ) {}
-  @Input()
-  showRoles = false;
-}
+import { SmsTemplateService } from './sms-template.service';
+
+describe('SmsTemplateService', () => {
+  let service: SmsTemplateService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(SmsTemplateService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});

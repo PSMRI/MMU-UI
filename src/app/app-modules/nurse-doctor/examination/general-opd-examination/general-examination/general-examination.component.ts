@@ -25,6 +25,7 @@ import { FormGroup } from '@angular/forms';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-nurse-general-examination',
@@ -204,13 +205,14 @@ export class GeneralExaminationComponent implements OnInit, DoCheck, OnChanges {
     },
   ];
   visitCategory: any;
-  hideForANCAndQC: boolean = true;
+  hideForANCAndQC = true;
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
 
   constructor(
     private httpServiceService: HttpServiceService,
-    readonly sessionstorage: SessionStorageService
+    readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService
   ) {}
 
   ngOnInit() {
@@ -287,6 +289,13 @@ export class GeneralExaminationComponent implements OnInit, DoCheck, OnChanges {
     this.languageComponent = new SetLanguageComponent(this.httpServiceService);
     this.languageComponent.setLanguage();
     this.currentLanguageSet = this.languageComponent.currentLanguageObject;
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'General Examination'
+    );
   }
   //--End--
 }
