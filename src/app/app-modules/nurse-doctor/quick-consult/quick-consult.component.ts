@@ -730,29 +730,6 @@ export class QuickConsultComponent
         }
       }
 
-      // if (diagnosis && diagnosis.provisionalDiagnosisList) {
-      //   const generalArray = this.patientQuickConsultForm.controls[
-      //     'provisionalDiagnosisList'
-      //   ] as FormArray;
-      //   const previousArray = diagnosis.provisionalDiagnosisList;
-      //   let j = 0;
-      //   if (previousArray.length > 0) {
-      //     previousArray.forEach((i: any) => {
-      //       generalArray.at(j).patchValue({
-      //         conceptID: i.conceptID,
-      //         term: i.term,
-      //         viewProvisionalDiagnosisProvided: i.term,
-      //       });
-      //       (<FormGroup>generalArray.at(j)).controls[
-      //         'viewProvisionalDiagnosisProvided'
-      //       ].disable();
-      //       if (generalArray.length < previousArray.length) {
-      //         this.addDiagnosis();
-      //       }
-      //       j++;
-      //     });
-      //   }
-      // }
       this.patchPrescriptionDetails(response.prescription);
     }
   }
