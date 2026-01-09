@@ -149,7 +149,7 @@ export class NcdScreeningDiagnosisComponent
         viewProvisionalDiagnosisProvided: previousArray[i].term,
         term: previousArray[i].term,
         conceptID: previousArray[i].conceptID,
-        provisionalDiagnosis: previousArray[i].term, // <-- Add this line
+        provisionalDiagnosis: previousArray[i].term,
       });
       generalArray.at(i).get('viewProvisionalDiagnosisProvided')?.disable();
     }
