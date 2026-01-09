@@ -178,7 +178,6 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
   }
 
   onDiagnosisInputKeyup(value: string, index: number) {
-
     const term = (value || '').trim();
 
     if (term.length >= 3) {
@@ -200,7 +199,7 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
   }
 
   displayDiagnosis(diagnosis: any): string {
-    return diagnosis?.term || '';
+    return typeof diagnosis === 'string' ? diagnosis : diagnosis?.Term || '';
   }
 
   onDiagnosisSelected(selected: any, index: number) {
