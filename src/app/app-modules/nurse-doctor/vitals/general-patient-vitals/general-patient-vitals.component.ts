@@ -1264,7 +1264,7 @@ export class GeneralPatientVitalsComponent
   }
 
   trackFieldInteraction(fieldName: string) {
-    this.trackingService.trackFieldInteraction(fieldName, 'Visit Details');
+    this.trackingService.trackFieldInteraction(fieldName, 'Vitals');
   }
 
   //--End--

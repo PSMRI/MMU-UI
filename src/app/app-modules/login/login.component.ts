@@ -259,12 +259,21 @@ export class LoginComponent implements OnInit {
     this.sessionstorage.setItem('userName', loginDataResponse.userName);
     this.sessionstorage.setItem('username', userName);
     this.sessionstorage.setItem('fullName', loginDataResponse.fullName);
+    this.sessionstorage.setItem(
+      'providerServiceMapID',
+      loginDataResponse.previlegeObj[0].providerServiceMapID
+    );
     const services: any = [];
     loginDataResponse.previlegeObj.map((item: any) => {
       if (
         item.roles[0].serviceRoleScreenMappings[0].providerServiceMapping
           .serviceID === 2
       ) {
+        this.sessionstorage.setItem(
+          'currentServiceID',
+          item.roles[0].serviceRoleScreenMappings[0].providerServiceMapping
+            .serviceID
+        );
         const service = {
           providerServiceID: item.serviceID,
           serviceName: item.serviceName,

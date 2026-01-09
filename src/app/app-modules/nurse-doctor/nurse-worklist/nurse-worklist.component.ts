@@ -55,7 +55,7 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
   filteredBeneficiaryList: any = [];
   filterTerm: any;
   currentLanguageSet: any;
-  currentPage: number = 0;
+  currentPage = 0;
   displayedColumns: any = [
     'sno',
     'beneficiaryID',
@@ -144,6 +144,9 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
         }
       },
       err => {
+        if (err?.handled) {
+          return;
+        }
         this.confirmationService.alert(err, 'error');
       }
     );
