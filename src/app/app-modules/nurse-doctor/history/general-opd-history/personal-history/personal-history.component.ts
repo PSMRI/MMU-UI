@@ -460,12 +460,16 @@ export class GeneralPersonalHistoryComponent
     if (this.personalHistoryData && this.personalHistoryData.allergicList) {
       const temp = this.personalHistoryData.allergicList.slice();
 
-      while (formArray.length < temp.length) {
+      while (formArray.length > 0) {
+        formArray.removeAt(0);
+      }
+
+      for (let i = 0; i < temp.length; i++) {
         formArray.push(this.initAllergyList());
       }
-      while (formArray.length > temp.length) {
-        formArray.removeAt(formArray.length - 1);
-      }
+
+      this.allerySelectList = [];
+      this.previousSelectedAlleryList = [];
 
       for (let i = 0; i < temp.length; i++) {
         const allergyType = this.allergyMasterData.filter(item => {
@@ -485,25 +489,30 @@ export class GeneralPersonalHistoryComponent
 
         if (temp[i].otherAllergicReaction) temp[i].enableOtherAllergy = true;
 
+        const selectedAllergies = temp
+          .filter((t: any, idx: any) => idx !== i && t.allergyType)
+          .map((t: any) => t.allergyType.allergyType);
+
+        const availableAllergies = this.allergyMasterData.filter(
+          item => !selectedAllergies.includes(item.allergyType)
+        );
+
+        this.allerySelectList.push(availableAllergies.slice());
+
         if (temp[i].allergyType) {
-          const k: any = formArray.get('' + i);
+          this.previousSelectedAlleryList[i] = temp[i].allergyType;
+        }
+
+        const k: any = formArray.get('' + i);
+        if (k) {
           k.patchValue(temp[i]);
           k.markAsTouched();
-          this.filterAlleryList(temp[i].allergyType, i);
 
-          // ✅ FIX: Explicitly enable the disabled fields when data exists
-          if (temp[i].snomedTerm && temp[i].snomedCode) {
+          if (temp[i].allergyType) {
             k.get('snomedTerm')?.enable();
-          }
-          if (
-            temp[i].typeOfAllergicReactions &&
-            temp[i].typeOfAllergicReactions.length > 0
-          ) {
             k.get('typeOfAllergicReactions')?.enable();
           }
         }
-
-        if (i + 1 < temp.length) this.addAllergy(true);
       }
     }
   }
