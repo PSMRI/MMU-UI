@@ -212,7 +212,7 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
     // Set the nested and top-level fields
     diagnosisFormGroup.patchValue({
       provisionalDiagnosis: selected?.term || null,
-      viewProvisionalDiagnosisProvided: selected,
+      viewProvisionalDiagnosisProvided: selected?.term || null,
       conceptID: selected?.conceptID || null,
       term: selected?.term || null,
     });
