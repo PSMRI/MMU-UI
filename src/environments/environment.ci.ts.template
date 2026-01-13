@@ -505,7 +505,7 @@ export const environment = {
   getSMStypes_url:`${COMMON_API}sms/getSMSTypes`,
   sendSMS_url:`${COMMON_API}sms/sendSMS`,
 
-  getUserId: `${COMMON_API}user/userName/`,
+  getUserId: `${COMMON_API}user/checkUserName/`,
   checkUsersignExistUrl: `${ADMIN_API}signature1/signexist/`,
     isEnableES: false,
 
