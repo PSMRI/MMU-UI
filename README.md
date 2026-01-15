@@ -103,6 +103,4 @@ Join our [Discord server](https://discord.gg/FVQWsf5ENS) to connect with contrib
 
 ## Documentation
 
-Detailed technical documentation for this service is available on DeepWiki:
-
-- https://deepwiki.com/PSMRI/MMU-UI
+[DeepWiki - MMU-UI](https://deepwiki.com/PSMRI/MMU-UI)
