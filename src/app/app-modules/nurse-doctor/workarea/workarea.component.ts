@@ -2520,7 +2520,7 @@ export class WorkareaComponent
 
   updateQuickConsultDiagnosisForm() {
     const patientQuickConsultDetails = this.mapDoctorQuickConsultDetails();
-    const prescribedDrugs = this.getLabandPrescriptionData();
+    const prescribedDrugs = patientQuickConsultDetails.prescription || [];
     this.doctorService
       .updateQuickConsultDetails(
         { quickConsultation: patientQuickConsultDetails },
