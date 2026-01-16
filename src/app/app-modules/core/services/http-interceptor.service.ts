@@ -9,8 +9,8 @@ import {
   HttpErrorResponse,
   HttpHeaders,
 } from '@angular/common/http';
-import { catchError, tap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { catchError, tap, finalize } from 'rxjs/operators';
+import { Observable, of, Subject, EMPTY } from 'rxjs';
 import { Router } from '@angular/router';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { SpinnerService } from './spinner.service';
@@ -23,12 +23,17 @@ import { CookieService } from 'ngx-cookie-service';
   providedIn: 'root',
 })
 export class HttpInterceptorService implements HttpInterceptor {
-  timerRef: any;
+  private sessionTimeoutRef: any;
+  private pendingRequests = 0;
+  private isHandlingSessionExpiry = false;
+  private logoutMessageShown = false;
+
   currentLanguageSet: any;
   donotShowSpinnerUrl = [
     environment.syncDownloadProgressUrl,
     environment.ioturl,
   ];
+
   constructor(
     private spinnerService: SpinnerService,
     private router: Router,
@@ -36,12 +41,23 @@ export class HttpInterceptorService implements HttpInterceptor {
     readonly sessionstorage: SessionStorageService,
     private http: HttpClient,
     private cookieService: CookieService
-  ) {}
+  ) {
+    // Reset state when navigating to login
+    this.router.events.subscribe((event: any) => {
+      if (event.url === '/login') {
+        this.resetSessionState();
+      }
+    });
+  }
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    const isLoginRequest =
+      req.url && req.url.toLowerCase().includes('user/userAuthenticate');
+
+    this.pendingRequests++;
     const key: any = sessionStorage.getItem('key');
     const serverKey = this.sessionstorage.getItem('serverKey');
     let modifiedReq = req;
@@ -49,7 +65,6 @@ export class HttpInterceptorService implements HttpInterceptor {
       req.url && req.url.toLowerCase().includes('/platform-feedback');
 
     if (isPlatformFeedback) {
-      // For platform-feedback: remove Authorization and force JSON content-type
       const headers = req.headers
         .delete('Authorization')
         .set('Content-Type', 'application/json');
@@ -68,107 +83,294 @@ export class HttpInterceptorService implements HttpInterceptor {
         });
       }
     }
+
     return next.handle(modifiedReq).pipe(
       tap((event: HttpEvent<any>) => {
-        if (req.url !== undefined && !req.url.includes('cti/getAgentState'))
+        if (req.url !== undefined && !req.url.includes('cti/getAgentState')) {
           this.spinnerService.setLoading(true);
+        }
         if (event instanceof HttpResponse) {
-          console.log(event.body);
+          // Reset session expiry state on successful login
+          if (isLoginRequest && event.status === 200) {
+            this.resetSessionState();
+          }
           this.onSuccess(req.url, event.body);
-          this.spinnerService.setLoading(false);
           return event.body;
         }
       }),
 
       catchError((error: HttpErrorResponse) => {
-        console.error(error);
+        // Set flag IMMEDIATELY before any async operations
+        let sessionExpired = false;
+
+        if (!this.isHandlingSessionExpiry) {
+          if (error.status === 401) {
+            this.isHandlingSessionExpiry = true;
+            sessionExpired = true;
+            this.handleSessionExpiry('Unauthorized: Session has expired.');
+          } else if (error.status === 200 && error.error?.statusCode === 5002) {
+            this.isHandlingSessionExpiry = true;
+            sessionExpired = true;
+            // Extract error message properly, ensuring it's a string
+            const rawErrorMsg =
+              error.error?.errorMessage ||
+              'Session has expired. Please login again.';
+            const errorMsg = this.getErrorMessage(rawErrorMsg);
+            this.handleSessionExpiry(errorMsg);
+          }
+        }
+
+        // If session is expired, don't propagate the error to components
+        // If not session expiry, let components handle the error
         this.spinnerService.setLoading(false);
-        let message = '';
-        if (error.status === 401) {
-          if (error.error) {
-            if (typeof error.error === 'string') {
-              message = error.error;
-            } else if (error.error.message) {
-              message = error.error.message;
-            }
-          }
 
-          if (!message) {
-            message = 'Invalid token. Please login again.';
-          }
-
-          this.confirmationService.alert(message, 'error');
-          sessionStorage.clear();
-          setTimeout(() => this.router.navigate(['/login']), 0);
+        if (sessionExpired) {
+          // Return empty observable to prevent error from reaching components
+          return EMPTY;
         }
 
         return throwError(error);
+      }),
+
+      finalize(() => {
+        this.pendingRequests--;
+        if (this.pendingRequests === 0) {
+          this.spinnerService.setLoading(false);
+        }
       })
     );
   }
 
-  private onSuccess(url: string, response: any): void {
-    if (this.timerRef) clearTimeout(this.timerRef);
+  /**
+   * Public method to check if session expiry is being handled
+   * Components should check this before showing error dialogs
+   */
+  public isSessionExpiryInProgress(): boolean {
+    return this.isHandlingSessionExpiry;
+  }
 
-    if (
-      response.statusCode === 5002 &&
-      url.indexOf('user/userAuthenticate') < 0
-    ) {
-      sessionStorage.clear();
-      // this.sessionstorage.clear();
-      setTimeout(() => this.router.navigate(['/login']), 0);
-      this.confirmationService.alert(response.errorMessage, 'error');
-    } else {
-      this.startTimer();
+  /**
+   * Convert error to string message, handling object errors
+   */
+  private getErrorMessage(error: any): string {
+    try {
+      // If already a string, return it
+      if (typeof error === 'string') {
+        return error && error.trim().length > 0
+          ? error
+          : 'Your session has expired. Please login again.';
+      }
+
+      // If it's an object with a message property
+      if (error && typeof error === 'object') {
+        if (error.message && typeof error.message === 'string') {
+          return error.message;
+        }
+        if (error.errorMessage && typeof error.errorMessage === 'string') {
+          return error.errorMessage;
+        }
+        if (error.error && typeof error.error === 'string') {
+          return error.error;
+        }
+      }
+
+      // Default message
+      return 'Your session has expired. Please login again.';
+    } catch (err) {
+      console.error('Error extracting message:', err);
+      return 'Your session has expired. Please login again.';
     }
   }
 
-  startTimer() {
-    this.timerRef = setTimeout(
-      () => {
-        console.log('there', Date());
+  /**
+   * Handle session expiry with atomic lock to prevent race conditions
+   */
+  private handleSessionExpiry(errorMessage: string): void {
+    // Atomic check and set to prevent race conditions
+    if (this.isHandlingSessionExpiry) {
+      this.confirmationService.dialog.closeAll();
+      this.confirmationService.alert(
+        'Session has expired. Please login again.',
+        'error'
+      );
+      this.router.navigate(['/login']);
+      return;
+    }
 
-        if (
-          sessionStorage.getItem('authenticationToken') &&
-          sessionStorage.getItem('isAuthenticated')
-        ) {
-          this.confirmationService
-            .alert(
-              'Your session is about to Expire. Do you need more time ? ',
-              'sessionTimeOut'
-            )
-            .afterClosed()
-            .subscribe((result: any) => {
-              if (result.action === 'continue') {
-                this.http.post(environment.extendSessionUrl, {}).subscribe(
-                  (res: any) => {},
-                  (err: any) => {}
-                );
-              } else if (result.action === 'timeout') {
-                clearTimeout(this.timerRef);
-                sessionStorage.clear();
-                // this.sessionstorage.clear();
-                this.confirmationService.alert(
-                  this.currentLanguageSet.sessionExpired,
-                  'error'
-                );
-                this.router.navigate(['/login']);
-              } else if (result.action === 'cancel') {
-                setTimeout(() => {
-                  clearTimeout(this.timerRef);
-                  sessionStorage.clear();
-                  // this.sessionstorage.clear();
-                  this.confirmationService.alert(
-                    this.currentLanguageSet.sessionExpired,
-                    'error'
+    this.isHandlingSessionExpiry = true;
+    this.clearSessionTimeoutTimer();
+
+    // Clear all storage immediately
+    sessionStorage.clear();
+    this.sessionstorage.clear();
+
+    // Ensure error message is a string
+    const displayMessage = this.getErrorMessage(errorMessage);
+
+    // Navigate to login immediately with error handling
+    try {
+      this.router
+        .navigate(['/login'])
+        .then((navigated: boolean) => {
+          if (!navigated) {
+            console.error('Navigation to login failed');
+          }
+
+          // Show error dialog after navigation is complete
+          if (!this.logoutMessageShown) {
+            this.logoutMessageShown = true;
+            setTimeout(() => {
+              try {
+                this.confirmationService
+                  .alert(displayMessage, 'error')
+                  .afterClosed()
+                  .subscribe(
+                    () => {
+                      // Dialog closed
+                      console.log('Session expiry dialog closed');
+                    },
+                    (dialogError: any) => {
+                      console.error('Error in dialog:', dialogError);
+                    }
                   );
-                  this.router.navigate(['/login']);
-                }, result.remainingTime * 1000);
+              } catch (dialogErr) {
+                console.error(
+                  'Failed to show session expiry dialog:',
+                  dialogErr
+                );
               }
-            });
-        }
+            }, 300);
+          }
+        })
+        .catch((navError: any) => {
+          console.error('Navigation error:', navError);
+        });
+    } catch (err) {
+      console.error('Error during session expiry handling:', err);
+    }
+  }
+
+  /**
+   * Reset session state when user successfully logs in or navigates to login
+   */
+  private resetSessionState(): void {
+    this.isHandlingSessionExpiry = false;
+    this.logoutMessageShown = false;
+    this.clearSessionTimeoutTimer();
+  }
+
+  /**
+   * Handle successful responses and manage session timeout timer
+   */
+  private onSuccess(url: string, response: any): void {
+    // Restart session timeout timer only for successful authenticated requests
+    if (this.isValidAuthenticatedResponse(response, url)) {
+      this.resetSessionTimeoutTimer();
+    }
+  }
+
+  /**
+   * Validate if response is from an authenticated request
+   */
+  private isValidAuthenticatedResponse(response: any, url: string): boolean {
+    // Don't restart timer for login/authentication endpoints
+    if (url && url.indexOf('user/userAuthenticate') >= 0) {
+      return false;
+    }
+
+    // Exclude platform-feedback and other public endpoints
+    if (url && url.toLowerCase().includes('/platform-feedback')) {
+      return false;
+    }
+
+    return sessionStorage.getItem('authenticationToken') ? true : false;
+  }
+
+  /**
+   * Reset the session timeout timer
+   * Clears existing timer and starts a new one
+   */
+  private resetSessionTimeoutTimer(): void {
+    this.clearSessionTimeoutTimer();
+    this.startSessionTimeoutTimer();
+  }
+
+  /**
+   * Clear the session timeout timer
+   */
+  private clearSessionTimeoutTimer(): void {
+    if (this.sessionTimeoutRef) {
+      clearTimeout(this.sessionTimeoutRef);
+      this.sessionTimeoutRef = null;
+    }
+  }
+
+  /**
+   * Start the session timeout timer (27 minutes)
+   * Shows a warning dialog when session is about to expire
+   */
+  private startSessionTimeoutTimer(): void {
+    this.sessionTimeoutRef = setTimeout(
+      () => {
+        this.showSessionExpiryWarning();
       },
       27 * 60 * 1000
-    );
+    ); // 27 minutes
+  }
+
+  /**
+   * Show session expiry warning dialog
+   * Allows user to extend session or logout
+   */
+  private showSessionExpiryWarning(): void {
+    if (
+      !sessionStorage.getItem('authenticationToken') ||
+      !sessionStorage.getItem('isAuthenticated') ||
+      this.isHandlingSessionExpiry
+    ) {
+      return;
+    }
+
+    this.confirmationService
+      .alert(
+        this.currentLanguageSet?.sessionTimeoutWarning ||
+          'Your session is about to expire. Do you need more time?',
+        'sessionTimeOut'
+      )
+      .afterClosed()
+      .subscribe((result: any) => {
+        if (result?.action === 'continue') {
+          // Extend session
+          this.extendSession();
+        } else if (
+          result?.action === 'timeout' ||
+          result?.action === 'cancel'
+        ) {
+          // Handle logout
+          this.handleSessionExpiry(
+            this.currentLanguageSet?.sessionExpired ||
+              'Your session has expired. Please login again.'
+          );
+        }
+      });
+  }
+
+  /**
+   * Extend the current session
+   */
+  private extendSession(): void {
+    this.http
+      .post(environment.extendSessionUrl, {})
+      .pipe(
+        catchError((error: any) => {
+          console.error('Failed to extend session:', error);
+          // On extension failure, let timeout happen naturally
+          return of(null);
+        })
+      )
+      .subscribe(() => {
+        // Reset timer for another 27 minutes
+        this.resetSessionTimeoutTimer();
+      });
   }
 }
