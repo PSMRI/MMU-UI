@@ -1828,6 +1828,36 @@ export class WorkareaComponent
       }
     }
 
+    // Ensure doctor has added at least one prescription
+    if (this.attendantType === 'doctor') {
+      try {
+        const caseRecordForm = <FormGroup>(
+          medicalForm.controls['patientCaseRecordForm']
+        );
+        const drugPrescriptionForm = <FormGroup>(
+          (caseRecordForm && caseRecordForm.controls
+            ? caseRecordForm.controls['drugPrescriptionForm']
+            : null)
+        );
+        if (drugPrescriptionForm) {
+          let prescribedDrugs =
+            drugPrescriptionForm.value &&
+            drugPrescriptionForm.value.prescribedDrugs
+              ? drugPrescriptionForm.value.prescribedDrugs
+              : [];
+          prescribedDrugs = prescribedDrugs.filter((d: any) => !!d.createdBy);
+          if (!prescribedDrugs || prescribedDrugs.length === 0) {
+            required.push(
+              this.currentLanguageSet?.Prescription?.prescriptionRequired ||
+                'Please add at least one prescription'
+            );
+          }
+        }
+      } catch (err) {
+        console.warn('Error validating prescription presence', err);
+      }
+    }
+
     if (required.length) {
       this.confirmationService.notify(
         this.currentLanguageSet.alerts.info.mandatoryFields,
@@ -2373,6 +2403,37 @@ export class WorkareaComponent
         if (referForm.controls['referralReason'].errors) {
           required.push(this.currentLanguageSet.Referdetails.referralReason);
         }
+      }
+    }
+
+    // For quick consult doctor flow, ensure at least one prescription exists
+    if (this.attendantType === 'doctor') {
+      try {
+        const quickConsultCaseRecordForm = <FormGroup>(
+          this.patientMedicalForm.controls['patientCaseRecordForm']
+        );
+        const prescription =
+          quickConsultCaseRecordForm && quickConsultCaseRecordForm.controls
+            ? quickConsultCaseRecordForm.controls['drugPrescriptionForm']
+            : null;
+        if (prescription) {
+          let prescribedDrugs =
+            prescription.value && prescription.value.prescribedDrugs
+              ? prescription.value.prescribedDrugs
+              : [];
+          prescribedDrugs = prescribedDrugs.filter((d: any) => !!d.createdBy);
+          if (!prescribedDrugs || prescribedDrugs.length === 0) {
+            required.push(
+              this.currentLanguageSet?.Prescription?.prescriptionRequired ||
+                'Please add at least one prescription'
+            );
+          }
+        }
+      } catch (err) {
+        console.warn(
+          'Error validating quick consult prescription presence',
+          err
+        );
       }
     }
 
