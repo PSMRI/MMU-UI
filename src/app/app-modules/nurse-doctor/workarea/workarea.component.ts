@@ -2376,37 +2376,6 @@ export class WorkareaComponent
       }
     }
 
-    // For quick consult doctor flow, ensure at least one prescription exists
-    if (this.attendantType === 'doctor') {
-      try {
-        const quickConsultCaseRecordForm = <FormGroup>(
-          this.patientMedicalForm.controls['patientCaseRecordForm']
-        );
-        const prescription =
-          quickConsultCaseRecordForm && quickConsultCaseRecordForm.controls
-            ? quickConsultCaseRecordForm.controls['drugPrescriptionForm']
-            : null;
-        if (prescription) {
-          let prescribedDrugs =
-            prescription.value && prescription.value.prescribedDrugs
-              ? prescription.value.prescribedDrugs
-              : [];
-          prescribedDrugs = prescribedDrugs.filter((d: any) => !!d.createdBy);
-          if (!prescribedDrugs || prescribedDrugs.length === 0) {
-            required.push(
-              this.currentLanguageSet?.Prescription?.prescriptionRequired ||
-                'Please add at least one prescription'
-            );
-          }
-        }
-      } catch (err) {
-        console.warn(
-          'Error validating quick consult prescription presence',
-          err
-        );
-      }
-    }
-
     if (required.length) {
       this.confirmationService.notify(
         this.currentLanguageSet.alerts.info.mandatoryFields,
