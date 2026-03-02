@@ -1828,36 +1828,6 @@ export class WorkareaComponent
       }
     }
 
-    // Ensure doctor has added at least one prescription
-    if (this.attendantType === 'doctor') {
-      try {
-        const caseRecordForm = <FormGroup>(
-          medicalForm.controls['patientCaseRecordForm']
-        );
-        const drugPrescriptionForm = <FormGroup>(
-          (caseRecordForm && caseRecordForm.controls
-            ? caseRecordForm.controls['drugPrescriptionForm']
-            : null)
-        );
-        if (drugPrescriptionForm) {
-          let prescribedDrugs =
-            drugPrescriptionForm.value &&
-            drugPrescriptionForm.value.prescribedDrugs
-              ? drugPrescriptionForm.value.prescribedDrugs
-              : [];
-          prescribedDrugs = prescribedDrugs.filter((d: any) => !!d.createdBy);
-          if (!prescribedDrugs || prescribedDrugs.length === 0) {
-            required.push(
-              this.currentLanguageSet?.Prescription?.prescriptionRequired ||
-                'Please add at least one prescription'
-            );
-          }
-        }
-      } catch (err) {
-        console.warn('Error validating prescription presence', err);
-      }
-    }
-
     if (required.length) {
       this.confirmationService.notify(
         this.currentLanguageSet.alerts.info.mandatoryFields,
