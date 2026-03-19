@@ -11,7 +11,7 @@ import { CommonDialogComponent } from '../components/common-dialog/common-dialog
 @Injectable()
 export class ConfirmationService {
   constructor(
-    private dialog: MatDialog,
+    public dialog: MatDialog,
     @Inject(DOCUMENT) doc: any
   ) {}
 

@@ -31,11 +31,11 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
 
 @Injectable()
 export class NurseService {
-  temp: boolean = false;
+  temp = false;
   private _listners = new Subject<any>();
   ncdTemp = new BehaviorSubject(this.temp);
   ncdTemp$ = this.ncdTemp.asObservable();
-  rbsSelectedInvestigation: boolean = false;
+  rbsSelectedInvestigation = false;
   rbsSelectedInInvestigation = new BehaviorSubject(
     this.rbsSelectedInvestigation
   );
@@ -44,7 +44,7 @@ export class NurseService {
   rbsCurrentTestResult: any = null;
   rbsTestResultCurrent = new BehaviorSubject(this.rbsCurrentTestResult);
   rbsTestResultCurrent$ = this.rbsTestResultCurrent.asObservable();
-  isAssessmentDone: boolean = false;
+  isAssessmentDone = false;
   enableLAssessment = new BehaviorSubject(this.temp);
   enableLAssessment$ = this.enableLAssessment.asObservable();
   enableProvisionalDiag = new BehaviorSubject(this.temp);
@@ -66,7 +66,21 @@ export class NurseService {
     readonly sessionstorage: SessionStorageService
   ) {}
 
+  private normalizeToUTCMidnight(date: Date | null | undefined): string | null {
+    if (!date) return null;
+
+    const d = new Date(date);
+
+    const utcDate = new Date(
+      Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0)
+    );
+    return utcDate.toISOString();
+  }
+
   getNurseWorklist() {
+    const testDate = new Date('2025-10-07T00:00:00');
+    console.log('Test normalization:', this.normalizeToUTCMidnight(testDate));
+
     console.log(
       'getNurseWorklistUrl',
       this.sessionstorage.getItem('providerServiceID')
@@ -679,12 +693,17 @@ export class NurseService {
     const obstetricFormula = JSON.parse(
       JSON.stringify(patientANCForm.controls.obstetricFormulaForm.value)
     );
+
     if (detailedANC.lmpDate) {
-      const lmpDate = new Date(detailedANC.lmpDate);
-      const adjustedDate = new Date(
-        lmpDate.getTime() - lmpDate.getTimezoneOffset() * 60000
+      detailedANC.lmpDate = this.normalizeToUTCMidnight(
+        new Date(detailedANC.lmpDate)
       );
-      detailedANC.lmpDate = adjustedDate.toISOString();
+    }
+
+    if (detailedANC.expDelDt) {
+      detailedANC.expDelDt = this.normalizeToUTCMidnight(
+        new Date(detailedANC.expDelDt)
+      );
     }
 
     const combinedANCForm = Object.assign({}, detailedANC, {
@@ -705,7 +724,28 @@ export class NurseService {
   }
 
   postANCImmunizationForm(patientANCImmunizationForm: any, benVisitID: any) {
-    const immunizationForm = Object.assign({}, patientANCImmunizationForm, {
+    const immunizationFormValue = JSON.parse(
+      JSON.stringify(patientANCImmunizationForm)
+    );
+
+    if (immunizationFormValue.dateReceivedForTT_1) {
+      immunizationFormValue.dateReceivedForTT_1 = this.normalizeToUTCMidnight(
+        new Date(immunizationFormValue.dateReceivedForTT_1)
+      );
+    }
+
+    if (immunizationFormValue.dateReceivedForTT_2) {
+      immunizationFormValue.dateReceivedForTT_2 = this.normalizeToUTCMidnight(
+        new Date(immunizationFormValue.dateReceivedForTT_2)
+      );
+    }
+
+    if (immunizationFormValue.dateReceivedForTT_3) {
+      immunizationFormValue.dateReceivedForTT_3 = this.normalizeToUTCMidnight(
+        new Date(immunizationFormValue.dateReceivedForTT_3)
+      );
+    }
+    const immunizationForm = Object.assign({}, immunizationFormValue, {
       beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
       benVisitID: benVisitID,
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
@@ -1278,13 +1318,8 @@ export class NurseService {
     if (!temp.lMPDate) {
       temp.lMPDate = undefined;
     } else {
-      const lmpDate = new Date(temp.lMPDate);
-      const adjustedDate = new Date(
-        lmpDate.getTime() - lmpDate.getTimezoneOffset() * 60000
-      );
-      temp.lMPDate = adjustedDate.toISOString();
+      temp.lMPDate = this.normalizeToUTCMidnight(new Date(temp.lMPDate));
     }
-
     const menstrualHistoryData = Object.assign({}, temp, otherDetails);
 
     // console.log("Menstrual History Data", JSON.stringify(menstrualHistoryData, null, 4));
@@ -1990,9 +2025,10 @@ export class NurseService {
         temp.newBornHealthStatus.newBornHealthStatusID;
       temp.newBornHealthStatus = temp.newBornHealthStatus.newBornHealthStatus;
     }
-    // if (!temp.dateOfDelivery) {
-    //   temp.dateOfDelivery = undefined;
-    // }
+    if (temp.dDate) {
+      temp.dateOfDelivery = this.normalizeToUTCMidnight(new Date(temp.dDate));
+      temp.dDate = temp.dateOfDelivery;
+    }
 
     const patientPNCDetails = Object.assign({}, temp, {
       beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),

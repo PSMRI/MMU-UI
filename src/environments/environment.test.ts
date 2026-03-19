@@ -510,4 +510,5 @@ export const environment = {
   generateABHAForBioMobileOTP: `${FHIR_API}healthIDWithBio/generateMobileOTP`,
 
   getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`,
+  isEnableES: false,
 };

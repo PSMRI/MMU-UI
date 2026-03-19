@@ -484,4 +484,5 @@ export const environment = {
   printWebLoginPhrCard: `${FHIR_API}abhaCreation/printWebLoginPhrCard`,
 
   getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`,
+  isEnableES: false,
 };

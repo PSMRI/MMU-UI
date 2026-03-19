@@ -200,6 +200,15 @@ export class GeneralPersonalHistoryComponent
           history.data.PersonalHistory
         ) {
           this.personalHistoryData = history.data.PersonalHistory;
+          if (
+            this.personalHistoryData &&
+            this.personalHistoryData.riskySexualPracticesStatus !== null
+          ) {
+            this.personalHistoryData.riskySexualPracticesStatus =
+              this.personalHistoryData.riskySexualPracticesStatus == '1'
+                ? true
+                : false;
+          }
           this.generalPersonalHistoryForm.patchValue(this.personalHistoryData);
           this.handlePersonalTobaccoHistoryData();
           this.handlePersonalAlcoholHistoryData();
@@ -447,17 +456,22 @@ export class GeneralPersonalHistoryComponent
     const formArray = this.generalPersonalHistoryForm.controls[
       'allergicList'
     ] as FormArray;
+
     if (this.personalHistoryData && this.personalHistoryData.allergicList) {
       const temp = this.personalHistoryData.allergicList.slice();
 
-      while (formArray.length < temp.length - 1) {
+      while (formArray.length > 0) {
+        formArray.removeAt(0);
+      }
+
+      for (let i = 0; i < temp.length; i++) {
         formArray.push(this.initAllergyList());
       }
-      // Optionally, remove extra FormGroups if any
-      while (formArray.length > temp.length) {
-        formArray.removeAt(formArray.length - 1);
-      }
-      for (let i = 0; i < temp.length - 1; i++) {
+
+      this.allerySelectList = [];
+      this.previousSelectedAlleryList = [];
+
+      for (let i = 0; i < temp.length; i++) {
         const allergyType = this.allergyMasterData.filter(item => {
           return item.allergyType === temp[i].allergyType;
         });
@@ -475,14 +489,30 @@ export class GeneralPersonalHistoryComponent
 
         if (temp[i].otherAllergicReaction) temp[i].enableOtherAllergy = true;
 
+        const selectedAllergies = temp
+          .filter((t: any, idx: any) => idx !== i && t.allergyType)
+          .map((t: any) => t.allergyType.allergyType);
+
+        const availableAllergies = this.allergyMasterData.filter(
+          item => !selectedAllergies.includes(item.allergyType)
+        );
+
+        this.allerySelectList.push(availableAllergies.slice());
+
         if (temp[i].allergyType) {
-          const k: any = formArray.get('' + i);
-          k.patchValue(temp[i]);
-          k.markAsTouched();
-          this.filterAlleryList(temp[i].allergyType, i);
+          this.previousSelectedAlleryList[i] = temp[i].allergyType;
         }
 
-        if (i + 1 < temp.length) this.addAllergy(true);
+        const k: any = formArray.get('' + i);
+        if (k) {
+          k.patchValue(temp[i]);
+          k.markAsTouched();
+
+          if (temp[i].allergyType) {
+            k.get('snomedTerm')?.enable();
+            k.get('typeOfAllergicReactions')?.enable();
+          }
+        }
       }
     }
   }

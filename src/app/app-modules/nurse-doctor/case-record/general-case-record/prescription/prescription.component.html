@@ -68,7 +68,6 @@
           (keyup)="filterMedicine(tempDrugName)"
           (blur)="reEnterMedicine()"
           (focus)="trackFieldInteraction('Medicine')"
-          required
           [matAutocomplete]="autoGroup" />
         <mat-autocomplete
           #autoGroup="matAutocomplete"
@@ -92,7 +91,7 @@
           [disabled]="!currentPrescription.drugID"
           (focus)="trackFieldInteraction('Dosage')"
           (selectionChange)="trackFieldInteraction('Dosage Selection')"
-          required>
+          >
           <mat-option
             *ngFor="let item of filteredDrugDoseMaster"
             [value]="item.drugDose">
@@ -113,7 +112,7 @@
           [(ngModel)]="currentPrescription.frequency"
           [disabled]="!currentPrescription.drugID"
           (focus)="trackFieldInteraction('Frequency')"
-          required>
+          >
           <mat-option
             *ngFor="let item of drugFrequencyMaster"
             [value]="item.frequency">
@@ -136,7 +135,7 @@
           [(ngModel)]="currentPrescription.duration"
           [disabled]="!currentPrescription.drugID"
           (focus)="trackFieldInteraction('Duration')"
-          required>
+          >
           <mat-option *ngFor="let item of drugDurationMaster" [value]="item">
             {{ item }}
           </mat-option>
@@ -154,7 +153,7 @@
           [disabled]="!currentPrescription.drugID"
           
           (selectionChange)="trackFieldInteraction('Unit Selection')"
-          required>
+          >
           <mat-option
             *ngFor="let item of drugDurationUnitMaster"
             [value]="item.drugDuration">
@@ -180,7 +179,7 @@
           [(ngModel)]="currentPrescription.qtyPrescribed"
           [disabled]="!currentPrescription.drugID"
           (selectionChange)="trackFieldInteraction('Quantity Selection')"
-          required>
+          >
           <mat-option
             *ngFor="let item of drugDurationMaster | slice: 0 : 5"
             [value]="item">

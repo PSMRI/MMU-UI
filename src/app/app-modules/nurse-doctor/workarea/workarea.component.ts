@@ -1072,15 +1072,16 @@ export class WorkareaComponent
             (res: any) => {
               if (res.statusCode === 200 && res.data !== null) {
                 this.patientMedicalForm.reset();
-                this.confirmationService.alert(res.data.response, 'success');
-                if (prescribedDrugs.length > 0) {
-                  const prescriptionSmsObject = this.SMSObjectCreation(
-                    [],
-                    prescribedDrugs,
-                    res.data.prescribedDrugIDs
-                  );
-                  this.sendPrescriptionSms(prescriptionSmsObject);
-                }
+                this.confirmationService.alert(res.data.message, 'success');
+                // if (prescribedDrugs.length > 0) {
+                //   const prescriptionSmsObject = this.SMSObjectCreation(
+                //     [],
+                //     prescribedDrugs,
+                //     res.data.prescribedDrugIDs
+                //   );
+                //   this.sendPrescriptionSms(prescriptionSmsObject);
+                // }
+                this.confirmationService.alert(res.data.message, 'success');
                 if (this.isSpecialist) {
                   this.router.navigate(['/common/tcspecialist-worklist']);
                 } else {
@@ -1114,21 +1115,21 @@ export class WorkareaComponent
                 sessionStorage.removeItem('instFlag');
                 sessionStorage.removeItem('suspectFlag');
 
-                if (prescribedDrugs.length > 0) {
-                  const prescriptionSmsObject = this.SMSObjectCreation(
-                    [],
-                    prescribedDrugs,
-                    res.data.prescribedDrugIDs
-                  );
-                  this.sendPrescriptionSms(prescriptionSmsObject);
+                // if (prescribedDrugs.length > 0) {
+                //   const prescriptionSmsObject = this.SMSObjectCreation(
+                //     [],
+                //     prescribedDrugs,
+                //     res.data.prescribedDrugIDs
+                //   );
+                //   this.sendPrescriptionSms(prescriptionSmsObject);
+                // } else {
+                this.confirmationService.alert(res.data.message, 'success');
+                if (this.isSpecialist) {
+                  this.router.navigate(['/common/tcspecialist-worklist']);
                 } else {
-                  this.confirmationService.alert(res.data.response, 'success');
-                  if (this.isSpecialist) {
-                    this.router.navigate(['/common/tcspecialist-worklist']);
-                  } else {
-                    this.router.navigate(['/nurse-doctor/doctor-worklist']);
-                  }
+                  this.router.navigate(['/nurse-doctor/doctor-worklist']);
                 }
+                // }
               } else {
                 this.resetSpinnerandEnableTheSubmitButton();
                 this.confirmationService.alert(res.errorMessage, 'error');
@@ -1155,21 +1156,21 @@ export class WorkareaComponent
               if (res.statusCode === 200 && res.data !== null) {
                 this.patientMedicalForm.reset();
 
-                if (prescribedDrugs.length > 0) {
-                  const prescriptionSmsObject = this.SMSObjectCreation(
-                    [],
-                    prescribedDrugs,
-                    res.data.prescribedDrugIDs
-                  );
-                  this.sendPrescriptionSms(prescriptionSmsObject);
+                // if (prescribedDrugs.length > 0) {
+                //   const prescriptionSmsObject = this.SMSObjectCreation(
+                //     [],
+                //     prescribedDrugs,
+                //     res.data.prescribedDrugIDs
+                //   );
+                //   this.sendPrescriptionSms(prescriptionSmsObject);
+                // } else {
+                this.confirmationService.alert(res.data.message, 'success');
+                if (this.isSpecialist) {
+                  this.router.navigate(['/common/tcspecialist-worklist']);
                 } else {
-                  this.confirmationService.alert(res.data.response, 'success');
-                  if (this.isSpecialist) {
-                    this.router.navigate(['/common/tcspecialist-worklist']);
-                  } else {
-                    this.router.navigate(['/nurse-doctor/doctor-worklist']);
-                  }
+                  this.router.navigate(['/nurse-doctor/doctor-worklist']);
                 }
+                // }
               } else {
                 this.resetSpinnerandEnableTheSubmitButton();
                 this.confirmationService.alert(res.errorMessage, 'error');
@@ -1315,7 +1316,7 @@ export class WorkareaComponent
             if (res.statusCode === 200 && res.data !== null) {
               this.patientMedicalForm.reset();
               this.removeBeneficiaryDataForDoctorVisit();
-              this.confirmationService.alert(res.data.response, 'success');
+              this.confirmationService.alert(res.data.message, 'success');
               this.router.navigate(['/nurse-doctor/doctor-worklist']);
             } else {
               this.resetSpinnerandEnableTheSubmitButton();
@@ -1825,6 +1826,36 @@ export class WorkareaComponent
           this.currentLanguageSet.ExaminationData.ANC_OPD_PNCExamination
             .genExamination.typeofEdema
         );
+      }
+    }
+
+    // Ensure doctor has added at least one prescription
+    if (this.attendantType === 'doctor') {
+      try {
+        const caseRecordForm = <FormGroup>(
+          medicalForm.controls['patientCaseRecordForm']
+        );
+        const drugPrescriptionForm = <FormGroup>(
+          (caseRecordForm && caseRecordForm.controls
+            ? caseRecordForm.controls['drugPrescriptionForm']
+            : null)
+        );
+        if (drugPrescriptionForm) {
+          let prescribedDrugs =
+            drugPrescriptionForm.value &&
+            drugPrescriptionForm.value.prescribedDrugs
+              ? drugPrescriptionForm.value.prescribedDrugs
+              : [];
+          prescribedDrugs = prescribedDrugs.filter((d: any) => !!d.createdBy);
+          if (!prescribedDrugs || prescribedDrugs.length === 0) {
+            required.push(
+              this.currentLanguageSet?.Prescription?.prescriptionRequired ||
+                'Please add at least one prescription'
+            );
+          }
+        }
+      } catch (err) {
+        console.warn('Error validating prescription presence', err);
       }
     }
 
@@ -2376,6 +2407,37 @@ export class WorkareaComponent
       }
     }
 
+    // For quick consult doctor flow, ensure at least one prescription exists
+    if (this.attendantType === 'doctor') {
+      try {
+        const quickConsultCaseRecordForm = <FormGroup>(
+          this.patientMedicalForm.controls['patientCaseRecordForm']
+        );
+        const prescription =
+          quickConsultCaseRecordForm && quickConsultCaseRecordForm.controls
+            ? quickConsultCaseRecordForm.controls['drugPrescriptionForm']
+            : null;
+        if (prescription) {
+          let prescribedDrugs =
+            prescription.value && prescription.value.prescribedDrugs
+              ? prescription.value.prescribedDrugs
+              : [];
+          prescribedDrugs = prescribedDrugs.filter((d: any) => !!d.createdBy);
+          if (!prescribedDrugs || prescribedDrugs.length === 0) {
+            required.push(
+              this.currentLanguageSet?.Prescription?.prescriptionRequired ||
+                'Please add at least one prescription'
+            );
+          }
+        }
+      } catch (err) {
+        console.warn(
+          'Error validating quick consult prescription presence',
+          err
+        );
+      }
+    }
+
     if (required.length) {
       this.confirmationService.notify(
         this.currentLanguageSet.alerts.info.mandatoryFields,
@@ -2459,17 +2521,17 @@ export class WorkareaComponent
             if (res.statusCode === 200 && res.data !== null) {
               this.patientMedicalForm.reset();
               this.removeBeneficiaryDataForDoctorVisit();
-              if (prescribedDrugs.length > 0) {
-                const prescriptionSmsObject = this.SMSObjectCreation(
-                  [],
-                  prescribedDrugs,
-                  res.data.prescribedDrugIDs
-                );
-                this.sendPrescriptionSms(prescriptionSmsObject);
-              } else {
-                this.confirmationService.alert(res.data.response, 'success');
-                this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              }
+              // if (prescribedDrugs.length > 0) {
+              //   const prescriptionSmsObject = this.SMSObjectCreation(
+              //     [],
+              //     prescribedDrugs,
+              //     res.data.prescribedDrugIDs
+              //   );
+              //   this.sendPrescriptionSms(prescriptionSmsObject);
+              // } else {
+              this.confirmationService.alert(res.data.message, 'success');
+              this.router.navigate(['/nurse-doctor/doctor-worklist']);
+              // }
             } else {
               this.resetSpinnerandEnableTheSubmitButton();
               this.confirmationService.alert(res.errorMessage, 'error');
@@ -2519,7 +2581,7 @@ export class WorkareaComponent
 
   updateQuickConsultDiagnosisForm() {
     const patientQuickConsultDetails = this.mapDoctorQuickConsultDetails();
-    const prescribedDrugs = this.getLabandPrescriptionData();
+    const prescribedDrugs = patientQuickConsultDetails.prescription || [];
     this.doctorService
       .updateQuickConsultDetails(
         { quickConsultation: patientQuickConsultDetails },
@@ -2531,21 +2593,21 @@ export class WorkareaComponent
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
             this.patientMedicalForm.reset();
-            if (prescribedDrugs.length > 0) {
-              const prescriptionSmsObject = this.SMSObjectCreation(
-                [],
-                prescribedDrugs,
-                res.data.prescribedDrugIDs
-              );
-              this.sendPrescriptionSms(prescriptionSmsObject);
+            // if (prescribedDrugs.length > 0) {
+            //   const prescriptionSmsObject = this.SMSObjectCreation(
+            //     [],
+            //     prescribedDrugs,
+            //     res.data.prescribedDrugIDs
+            //   );
+            //   this.sendPrescriptionSms(prescriptionSmsObject);
+            // } else {
+            this.confirmationService.alert(res.data.message, 'success');
+            if (this.isSpecialist) {
+              this.router.navigate(['/common/tcspecialist-worklist']);
             } else {
-              this.confirmationService.alert(res.data.response, 'info');
-              if (this.isSpecialist) {
-                this.router.navigate(['/common/tcspecialist-worklist']);
-              } else {
-                this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              }
+              this.router.navigate(['/nurse-doctor/doctor-worklist']);
             }
+            // }
           } else {
             this.resetSpinnerandEnableTheSubmitButton();
             this.confirmationService.alert(res.errorMessage, 'error');
@@ -2683,17 +2745,17 @@ export class WorkareaComponent
             if (res.statusCode === 200 && res.data !== null) {
               this.patientMedicalForm.reset();
               this.removeBeneficiaryDataForDoctorVisit();
-              if (prescribedDrugs.length > 0) {
-                const prescriptionSmsObject = this.SMSObjectCreation(
-                  [],
-                  prescribedDrugs,
-                  res.data.prescribedDrugIDs
-                );
-                this.sendPrescriptionSms(prescriptionSmsObject);
-              } else {
-                this.confirmationService.alert(res.data.response, 'success');
-                this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              }
+              // if (prescribedDrugs.length > 0) {
+              //   const prescriptionSmsObject = this.SMSObjectCreation(
+              //     [],
+              //     prescribedDrugs,
+              //     res.data.prescribedDrugIDs
+              //   );
+              //   this.sendPrescriptionSms(prescriptionSmsObject);
+              // } else {
+              this.confirmationService.alert(res.data.message, 'success');
+              this.router.navigate(['/nurse-doctor/doctor-worklist']);
+              // }
             } else {
               this.resetSpinnerandEnableTheSubmitButton();
               this.confirmationService.alert(res.errorMessage, 'error');
@@ -2823,25 +2885,25 @@ export class WorkareaComponent
             if (res.statusCode === 200 && res.data !== null) {
               this.patientMedicalForm.reset();
               this.removeBeneficiaryDataForDoctorVisit();
-              if (prescribedDrugs.length > 0) {
-                const prescriptionSmsObject = this.SMSObjectCreation(
-                  JSON.parse(
-                    JSON.stringify(
-                      (
-                        patientVisitForm.get(
-                          'generalDiagnosisForm.provisionalDiagnosisList'
-                        ) as FormArray
-                      ).value
-                    )
-                  ),
-                  prescribedDrugs,
-                  res.data.prescribedDrugIDs
-                );
-                this.sendPrescriptionSms(prescriptionSmsObject);
-              } else {
-                this.confirmationService.alert(res.data.response, 'success');
-                this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              }
+              // if (prescribedDrugs.length > 0) {
+              //   const prescriptionSmsObject = this.SMSObjectCreation(
+              //     JSON.parse(
+              //       JSON.stringify(
+              //         (
+              //           patientVisitForm.get(
+              //             'generalDiagnosisForm.provisionalDiagnosisList'
+              //           ) as FormArray
+              //         ).value
+              //       )
+              //     ),
+              //     prescribedDrugs,
+              //     res.data.prescribedDrugIDs
+              //   );
+              //   this.sendPrescriptionSms(prescriptionSmsObject);
+              // } else {
+              this.confirmationService.alert(res.data.message, 'success');
+              this.router.navigate(['/nurse-doctor/doctor-worklist']);
+              // }
             } else {
               this.resetSpinnerandEnableTheSubmitButton();
               this.confirmationService.alert(res.errorMessage, 'error');
@@ -2924,25 +2986,25 @@ export class WorkareaComponent
               this.removeBeneficiaryDataForDoctorVisit();
               sessionStorage.removeItem('instFlag');
               sessionStorage.removeItem('suspectFlag');
-              if (prescribedDrugs.length > 0) {
-                const prescriptionSmsObject = this.SMSObjectCreation(
-                  JSON.parse(
-                    JSON.stringify(
-                      (
-                        patientVisitForm.get(
-                          'generalDiagnosisForm.provisionalDiagnosisList'
-                        ) as FormArray
-                      ).value
-                    )
-                  ),
-                  prescribedDrugs,
-                  res.data.prescribedDrugIDs
-                );
-                this.sendPrescriptionSms(prescriptionSmsObject);
-              } else {
-                this.confirmationService.alert(res.data.response, 'success');
-                this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              }
+              // if (prescribedDrugs.length > 0) {
+              //   const prescriptionSmsObject = this.SMSObjectCreation(
+              //     JSON.parse(
+              //       JSON.stringify(
+              //         (
+              //           patientVisitForm.get(
+              //             'generalDiagnosisForm.provisionalDiagnosisList'
+              //           ) as FormArray
+              //         ).value
+              //       )
+              //     ),
+              //     prescribedDrugs,
+              //     res.data.prescribedDrugIDs
+              //   );
+              //   this.sendPrescriptionSms(prescriptionSmsObject);
+              // } else {
+              this.confirmationService.alert(res.data.message, 'success');
+              this.router.navigate(['/nurse-doctor/doctor-worklist']);
+              // }
             } else {
               this.resetSpinnerandEnableTheSubmitButton();
               this.confirmationService.alert(res.errorMessage, 'error');
@@ -3046,25 +3108,25 @@ export class WorkareaComponent
             if (res.statusCode === 200 && res.data !== null) {
               this.patientMedicalForm.reset();
               this.removeBeneficiaryDataForDoctorVisit();
-              if (prescribedDrugs.length > 0) {
-                const prescriptionSmsObject = this.SMSObjectCreation(
-                  JSON.parse(
-                    JSON.stringify(
-                      (
-                        patientVisitForm.get(
-                          'generalDiagnosisForm.provisionalDiagnosisList'
-                        ) as FormArray
-                      ).value
-                    )
-                  ),
-                  prescribedDrugs,
-                  res.data.prescribedDrugIDs
-                );
-                this.sendPrescriptionSms(prescriptionSmsObject);
-              } else {
-                this.confirmationService.alert(res.data.response, 'info');
-                this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              }
+              // if (prescribedDrugs.length > 0) {
+              //   const prescriptionSmsObject = this.SMSObjectCreation(
+              //     JSON.parse(
+              //       JSON.stringify(
+              //         (
+              //           patientVisitForm.get(
+              //             'generalDiagnosisForm.provisionalDiagnosisList'
+              //           ) as FormArray
+              //         ).value
+              //       )
+              //     ),
+              //     prescribedDrugs,
+              //     res.data.prescribedDrugIDs
+              //   );
+              //   this.sendPrescriptionSms(prescriptionSmsObject);
+              // } else {
+              this.confirmationService.alert(res.data.message, 'success');
+              this.router.navigate(['/nurse-doctor/doctor-worklist']);
+              // }
             } else {
               this.resetSpinnerandEnableTheSubmitButton();
               this.confirmationService.alert(res.errorMessage, 'error');
@@ -3101,25 +3163,25 @@ export class WorkareaComponent
             if (res.statusCode === 200 && res.data !== null) {
               this.patientMedicalForm.reset();
               this.removeBeneficiaryDataForDoctorVisit();
-              if (prescribedDrugs.length > 0) {
-                const prescriptionSmsObject = this.SMSObjectCreation(
-                  JSON.parse(
-                    JSON.stringify(
-                      (
-                        this.patientVisitForm.get(
-                          'generalDiagnosisForm.provisionalDiagnosisList'
-                        ) as FormArray
-                      ).value
-                    )
-                  ),
-                  prescribedDrugs,
-                  res.data.prescribedDrugIDs
-                );
-                this.sendPrescriptionSms(prescriptionSmsObject);
-              } else {
-                this.confirmationService.alert(res.data.response, 'success');
-                this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              }
+              // if (prescribedDrugs.length > 0) {
+              //   const prescriptionSmsObject = this.SMSObjectCreation(
+              //     JSON.parse(
+              //       JSON.stringify(
+              //         (
+              //           this.patientVisitForm.get(
+              //             'generalDiagnosisForm.provisionalDiagnosisList'
+              //           ) as FormArray
+              //         ).value
+              //       )
+              //     ),
+              //     prescribedDrugs,
+              //     res.data.prescribedDrugIDs
+              //   );
+              //   this.sendPrescriptionSms(prescriptionSmsObject);
+              // } else {
+              this.confirmationService.alert(res.data.message, 'success');
+              this.router.navigate(['/nurse-doctor/doctor-worklist']);
+              // }
             } else {
               this.resetSpinnerandEnableTheSubmitButton();
               this.confirmationService.alert(res.errorMessage, 'error');
