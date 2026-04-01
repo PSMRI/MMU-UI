@@ -192,15 +192,13 @@ export class AppHeaderComponent implements OnInit {
   }
   logout() {
     this.auth.logout().subscribe(res => {
-      this.router
-        .navigate(['/feedback'], { queryParams: { sl: 'MMU' } })
-        .then(result => {
-          if (result) {
-            this.changeLanguage('English');
-            // this.sessionstorage.clear();
-            sessionStorage.clear();
-          }
-        });
+      this.router.navigate(['/login']).then(result => {
+        if (result) {
+          this.changeLanguage('English');
+          // this.sessionstorage.clear();
+          sessionStorage.clear();
+        }
+      });
     });
   }
   rolenavigation() {
