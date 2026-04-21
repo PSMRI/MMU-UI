@@ -142,14 +142,16 @@ export class AppHeaderComponent implements OnInit {
             this.languageSuccessHandler(response, language);
           } else {
             this.confirmationService.alert(
-              this.currentLanguageSet.alerts.info.langNotDefinesd,
+              this.currentLanguageSet?.alerts?.info?.langNotDefinesd ??
+                'Selected language is not defined',
               'error'
             );
           }
         },
         error => {
           this.confirmationService.alert(
-            this.currentLanguageSet.alerts.info.comingUpWithThisLang +
+            (this.currentLanguageSet?.alerts?.info?.comingUpWithThisLang ??
+              'Selected language is coming up with') +
               ' ' +
               language,
             'error'
@@ -168,9 +170,11 @@ export class AppHeaderComponent implements OnInit {
   languageSuccessHandler(response: any, language: any) {
     if (response === undefined) {
       this.confirmationService.alert(
-        this.currentLanguageSet.alerts.info.langNotDefinesd,
+        this.currentLanguageSet?.alerts?.info?.langNotDefinesd ??
+          'Selected language is not defined',
         'error'
       );
+      return;
     }
 
     if (response[language] !== undefined) {
@@ -190,7 +194,8 @@ export class AppHeaderComponent implements OnInit {
       this.rolenavigation();
     } else {
       this.confirmationService.alert(
-        this.currentLanguageSet.alerts.info.comingUpWithThisLang +
+        (this.currentLanguageSet?.alerts?.info?.comingUpWithThisLang ??
+          'Selected language is coming up with') +
           ' ' +
           language,
         'error'
