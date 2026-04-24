@@ -71,6 +71,43 @@ Nurse-doctor sub-routes: role-specific worklists, patient workarea (`attendant/:
 - **Formatting**: Prettier — 2-space tabs, single quotes, semicolons, 80 char width, ES5 trailing commas
 - **TypeScript**: strict mode, ES5 target, strict templates enabled
 
+## Critical Rules — Read Before Making Any Change
+
+### 1. Never use native `alert()` or `confirm()`
+Always use the injected `ConfirmationService` for all user-facing dialogs and alerts.
+Native browser dialogs are inconsistent with the Material Design UI and block the JS thread.
+```typescript
+// WRONG
+alert('Something went wrong');
+confirm('Are you sure?');
+
+// CORRECT
+this.confirmationService.alert('Something went wrong', 'error');
+this.confirmationService.confirm('Are you sure?').subscribe(yes => { ... });
+```
+
+### 2. Always clean up RxJS subscriptions
+`AuthGuard` is a singleton. Any `subscribe()` inside `canActivate()` without `take(1)` or
+`takeUntilDestroyed()` will accumulate a new subscription on every route navigation.
+```typescript
+// WRONG — leaks a subscription on every route change
+this.someService.someObservable$.subscribe(val => (this.data = val));
+
+// CORRECT — auto-unsubscribes after first emission
+this.someService.someObservable$.pipe(take(1)).subscribe(val => (this.data = val));
+
+// CORRECT in components — use AsyncPipe in templates wherever possible
+```
+
+### 3. Never modify clinical code values
+Files containing **ICD-10**, **LOINC**, or **SnomedCT** codes are clinical data, not dead code.
+Do not rename, restructure, or remove any constant containing these values without explicit
+clinical team approval. They are used for interoperability with national health systems.
+
+### 4. Use optional chaining on `currentLanguageSet`
+`currentLanguageSet` may be `undefined` on first load (before the language file is fetched).
+Always use optional chaining: `this.currentLanguageSet?.alerts?.info?.someKey ?? 'fallback'`.
+
 ## Environment Configuration
 
 Environment files in `src/environments/`. CI build uses EJS template (`environment.ci.ts.template`) with env vars for API endpoints, encryption keys, captcha config, and tracking config. Key environment properties:
