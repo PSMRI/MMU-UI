@@ -25,78 +25,114 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import {
+  LoginRequest,
+  LoginResponse,
+  SecurityQuestion,
+  SecurityQuestionAnswer,
+  ApiResponse,
+} from '../models';
 
 @Injectable()
 export class AuthService {
-  transactionId: any;
+  transactionId: string = '';
+
   constructor(
     private router: Router,
     private http: HttpClient
   ) {}
 
-  login(userName: any, password: string, doLogout: any, captchaToken?: any) {
-    const requestBody: any = {
-      userName: userName,
-      password: password,
-      doLogout: doLogout,
+  login(
+    userName: string,
+    password: string,
+    doLogout: boolean,
+    captchaToken?: string
+  ): Observable<ApiResponse<LoginResponse>> {
+    const requestBody: LoginRequest = {
+      userName,
+      password,
+      doLogout,
       withCredentials: true,
     };
     if (captchaToken) {
       requestBody.captchaToken = captchaToken;
     }
 
-    return this.http.post(environment.loginUrl, requestBody);
+    return this.http.post<ApiResponse<LoginResponse>>(
+      environment.loginUrl,
+      requestBody
+    );
   }
-  userlogoutPreviousSession(userName: any) {
+
+  userlogoutPreviousSession(userName: string): Observable<ApiResponse<unknown>> {
     console.log(
       'environment.userlogoutPreviousSessionUrl',
       environment.userlogoutPreviousSessionUrl
     );
-    return this.http.post(environment.userlogoutPreviousSessionUrl, {
-      userName: userName,
-    });
+    return this.http.post<ApiResponse<unknown>>(
+      environment.userlogoutPreviousSessionUrl,
+      { userName }
+    );
   }
 
-  getUserSecurityQuestionsAnswer(uname: any): Observable<any> {
-    return this.http.post(environment.getUserSecurityQuestionsAnswerUrl, {
-      userName: uname.toLowerCase(),
-    });
+  getUserSecurityQuestionsAnswer(
+    uname: string
+  ): Observable<ApiResponse<SecurityQuestion[]>> {
+    return this.http.post<ApiResponse<SecurityQuestion[]>>(
+      environment.getUserSecurityQuestionsAnswerUrl,
+      { userName: uname.toLowerCase() }
+    );
   }
 
-  validateSecurityQuestionAndAnswer(ans: any, uname: any): Observable<any> {
-    return this.http.post(environment.validateSecurityQuestionAndAnswerUrl, {
-      SecurityQuesAns: ans,
-      userName: uname.toLowerCase(),
-    });
+  validateSecurityQuestionAndAnswer(
+    ans: SecurityQuestionAnswer,
+    uname: string
+  ): Observable<ApiResponse<unknown>> {
+    return this.http.post<ApiResponse<unknown>>(
+      environment.validateSecurityQuestionAndAnswerUrl,
+      {
+        SecurityQuesAns: ans,
+        userName: uname.toLowerCase(),
+      }
+    );
   }
 
-  getTransactionIdForChangePassword(uname: any): Observable<any> {
-    return this.http.post(environment.getTransactionIdForChangePasswordUrl, {
-      userName: uname.toLowerCase(),
-    });
+  getTransactionIdForChangePassword(uname: string): Observable<ApiResponse<{ transactionId: string }>> {
+    return this.http.post<ApiResponse<{ transactionId: string }>>(
+      environment.getTransactionIdForChangePasswordUrl,
+      { userName: uname.toLowerCase() }
+    );
   }
 
-  getSecurityQuestions() {
-    return this.http.get(environment.getSecurityQuestionUrl);
+  getSecurityQuestions(): Observable<ApiResponse<SecurityQuestion[]>> {
+    return this.http.get<ApiResponse<SecurityQuestion[]>>(
+      environment.getSecurityQuestionUrl
+    );
   }
 
-  saveUserSecurityQuestionsAnswer(userQuestionAnswer: any) {
-    return this.http.post(
+  saveUserSecurityQuestionsAnswer(
+    userQuestionAnswer: SecurityQuestionAnswer[]
+  ): Observable<ApiResponse<unknown>> {
+    return this.http.post<ApiResponse<unknown>>(
       environment.saveUserSecurityQuestionsAnswerUrl,
       userQuestionAnswer
     );
   }
 
-  setNewPassword(userName: string, password: string, transactionId: string) {
-    return this.http.post(environment.setNewPasswordUrl, {
-      userName: userName,
-      password: password,
+  setNewPassword(
+    userName: string,
+    password: string,
+    transactionId: string
+  ): Observable<ApiResponse<unknown>> {
+    return this.http.post<ApiResponse<unknown>>(environment.setNewPasswordUrl, {
+      userName,
+      password,
       transactionId: this.transactionId,
     });
   }
 
-  validateSessionKey() {
-    return this.http.post(environment.getSessionExistsURL, {});
+  validateSessionKey(): Observable<ApiResponse<unknown>> {
+    return this.http.post<ApiResponse<unknown>>(environment.getSessionExistsURL, {});
   }
 
   logout() {
