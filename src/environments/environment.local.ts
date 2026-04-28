@@ -64,14 +64,13 @@ const captchaChallengeURL = '';
 const enableCaptcha = false;
 
 export const environment = {
-  production: false,
-  isMMUOfflineSync: true,
+  production: true,
+  isMMUOfflineSync: false,
   encKey: sessionStorageEncKey,
-
   tracking: {
     platform: 'matomo',
     siteId: 3,
-    trackerUrl: '//127.0.0.1/',
+    trackerUrl: 'https://matomo.piramalswasthya.org/',
     trackingPlatform: 'local',
     enabled: true,
   },
@@ -82,16 +81,16 @@ export const environment = {
   haemoglobinTest: `Haemoglobin Test`,
   parentAPI: `${MMU_API}`,
 
-  INVENTORY_URL: `${inventoryUI_IP}:4201/#/redirin?`,
+  INVENTORY_URL: `${inventoryUI_IP}inventory/#/redirin?`,
   fallbackUrl: `/pharmacist/redirfallback`,
   redirInUrl: `/pharmacist/redirin`,
 
-  TELEMEDICINE_URL: `${schedulerUI_IP}:4208/#/?`,
+  TELEMEDICINE_URL: `${schedulerUI_IP}scheduler/#/?`,
   fallbackMMUUrl: `/logout-tm`,
   redirInMMUUrl: `/common/tcspecialist-worklist`,
   licenseURL: `${COMMON_API}license.html`,
   getSessionExistsURL: `${COMMON_API}user/getLoginResponse`,
-  extendSessionUrl: `${MMU_API}common/extend/redisSession`,
+  extendSessionUrl: `${MMU_API}common/extehttps://amritwprdev.piramalswasthya.orgnd/redisSession`,
   /**
    * Login and Logout Urls
    */
@@ -108,7 +107,7 @@ export const environment = {
   getSecurityQuestionUrl: `${COMMON_API_OPEN}user/getsecurityquetions`,
   saveUserSecurityQuestionsAnswerUrl: `${COMMON_API_OPEN}user/saveUserSecurityQuesAns`,
   setNewPasswordUrl: `${COMMON_API_OPEN}user/setForgetPassword`,
-  previousVisitDataUrl: `${MMU_API}common/getBenSymptomaticQuestionnaireDetails`,
+
   servicePointUrl: `${MMU_API}user/getUserVanSpDetails`,
   servicePointVillages: `${MMU_API}user/getServicepointVillages`,
 
@@ -127,9 +126,7 @@ export const environment = {
   /**
    * Master Data Urls
    */
-  previousPhyscialactivityHistoryUrl: `${MMU_API}common/getBenPhysicalHistory`,
-  previousDiabetesHistoryUrl: `${MMU_API}common/getBenPreviousDiabetesHistoryDetails`,
-  previousReferredHistoryUrl: `${MMU_API}common/getBenPreviousReferralHistoryDetails`,
+  getNCDScreeningIDRSDetails: `${MMU_API}NCD/getBenIdrsDetailsFrmNurse`,
   getDistrictListUrl: `${MMU_API}location/get/districtMaster/`,
   getSubDistrictListUrl: `${MMU_API}location/get/districtBlockMaster/`,
   getVillageListUrl: `${MMU_API}location/get/villageMasterFromBlockID/`,
@@ -140,12 +137,12 @@ export const environment = {
   snomedCTRecordURL: `${MMU_API}snomed/getSnomedCTRecord`,
   diagnosisSnomedCTRecordUrl: `${MMU_API}snomed/getSnomedCTRecordList`,
   getDistrictTalukUrl: `${MMU_API}location/get/DistrictTalukMaster/`,
-  snomedCTRecordListURL1: `${COMMON_API}snomed/getSnomedCTRecordList`,
   diagnosisSnomedCTRecordUrl1: `${COMMON_API}snomed/getSnomedCTRecordList`,
+
   /**
    * Lab Data Urls
    */
-  getNCDScreeningIDRSDetails: `${MMU_API}NCD/getBenIdrsDetailsFrmNurse`,
+
   getprescribedTestDataUrl: `${MMU_API}labTechnician/get/prescribedProceduresList`,
   labSaveWork: `${MMU_API}labTechnician/save/LabTestResult`,
   getEcgAbnormalitiesMasterUrl: `${MMU_API}master/ecgAbnormalities`,
@@ -185,7 +182,8 @@ export const environment = {
   getStatesURL: `${MMU_API}location/get/stateMaster`,
   getDistrictsURL: `${MMU_API}location/get/districtMaster/`,
   countryId: 1,
-
+  updateNCDScreeningIDRSDetailsUrl: `${MMU_API}NCD/update/idrsScreen`,
+  previousVisitDataUrl: `${MMU_API}common/getBenSymptomaticQuestionnaireDetails`,
   /**
    * NCD SCREENING API URLs
    */
@@ -193,22 +191,22 @@ export const environment = {
   // getNCDScreeningVisitDetails: `${MMU_API}CS-cancerScreening/getBenDataFrmNurseToDocVisitDetailsScreen`,
   getNCDScreeningVisitDetails: `${MMU_API}NCD/getBenVisitDetailsFrmNurseNCDScreening`,
   getNCDScreeningDetails: `${MMU_API}NCD/get/nurseData`,
-  updateNCDScreeningDetails: `${MMU_API}NCD/update/nurseData`,
-  saveDoctorNCDScreeningDetails: `${MMU_API}NCD/save/doctorData`,
   getNCDScreeningHistoryDetails: `${MMU_API}NCD/getBenHistoryDetails`,
   getNCDSceeriningVitalDetails: `${MMU_API}NCD/getBenVitalDetailsFrmNurse`,
-
+  getNCDScreeningDoctorDetails: `${MMU_API}NCD/getBenCaseRecordFromDoctorNCDScreening`,
+  previousPhyscialactivityHistoryUrl: `${MMU_API}common/getBenPhysicalHistory`,
+  previousDiabetesHistoryUrl: `${MMU_API}common/getBenPreviousDiabetesHistoryDetails`,
+  previousReferredHistoryUrl: `${MMU_API}common/getBenPreviousReferralHistoryDetails`,
+  updateNCDScreeningDetails: `${MMU_API}NCD/update/nurseData`,
   updateNCDScreeningHistoryDetailsUrl: `${MMU_API}NCD/update/historyScreen`,
-  updateNCDScreeningDoctorDetails: `${MMU_API}NCD/update/doctorData`,
-  updateNCDVitalsDetailsUrl: `${MMU_API}NCD/update/vitalScreen`,
-  updateNCDScreeningIDRSDetailsUrl: `${MMU_API}NCD/update/idrsScreen`,
 
+  updateNCDVitalsDetailsUrl: `${MMU_API}NCD/update/vitalScreen`,
   /**
    * GENERAL OPD QUICK CONSULT API URLs
    */
   saveNurseGeneralQuickConsult: `${MMU_API}genOPD-QC-quickConsult/save/nurseData`,
   saveDoctorGeneralQuickConsult: `${MMU_API}genOPD-QC-quickConsult/save/doctorData`,
-
+  saveDoctorNCDScreeningDetails: `${MMU_API}NCD/save/doctorData`,
   getGeneralOPDQuickConsultVisitDetails: `${MMU_API}genOPD-QC-quickConsult/getBenDataFrmNurseToDocVisitDetailsScreen`,
   getGeneralOPDQuickConsultVitalDetails: `${MMU_API}genOPD-QC-quickConsult/getBenVitalDetailsFrmNurse`,
 
@@ -329,7 +327,6 @@ export const environment = {
   getPreviousSignificiantFindingUrl: `${MMU_API}common/getDoctorPreviousSignificantFindings`,
 
   getCancerScreeningDoctorDetails: `${MMU_API}CS-cancerScreening/getBenCaseRecordFromDoctorCS`,
-
   getGeneralOPDQuickConsultDoctorDetails: `${MMU_API}genOPD-QC-quickConsult/getBenCaseRecordFromDoctorQuickConsult`,
   getANCDoctorDetails: `${MMU_API}ANC/getBenCaseRecordFromDoctorANC`,
   getGeneralOPDDoctorDetails: `${MMU_API}generalOPD/getBenCaseRecordFromDoctorGeneralOPD`,
@@ -337,7 +334,7 @@ export const environment = {
   getPNCDoctorDetails: `${MMU_API}PNC/getBenCaseRecordFromDoctorPNC`,
 
   updateCancerScreeningDoctorDetails: `${MMU_API}CS-cancerScreening/update/doctorData`,
-
+  updateNCDScreeningDoctorDetails: `${MMU_API}NCD/update/doctorData`,
   updateGeneralOPDQuickConsultDoctorDetails: `${MMU_API}genOPD-QC-quickConsult/update/doctorData`,
   updateANCDoctorDetails: `${MMU_API}ANC/update/doctorData`,
   updateGeneralOPDDoctorDetails: `${MMU_API}generalOPD/update/doctorData`,
@@ -379,13 +376,12 @@ export const environment = {
   syncDataDownloadUrl: `${MMU_API}dataSyncActivity/startMasterDownload`,
   syncDownloadProgressUrl: `${MMU_API}dataSyncActivity/checkMastersDownloadProgress`,
   getNcdScreeningVisitCountUrl: `${MMU_API}NCD/getNcdScreeningVisitCount/`,
-  getNCDScreeningDoctorDetails: `${MMU_API}NCD/getBenCaseRecordFromDoctorNCDScreening`,
   getVanDetailsForMasterDownloadUrl: `${MMU_API}dataSyncActivity/getVanDetailsForMasterDownload`,
 
-  getMasterSpecializationUrl: `${SCHEDULER_API}/specialist/masterspecialization`,
-  getSpecialistUrl: `${SCHEDULER_API}/specialist/getSpecialist`,
-  getAvailableSlotUrl: `${SCHEDULER_API}/schedule/getavailableSlot`,
-  getSwymedMailUrl: `${SCHEDULER_API}/van/getvan`,
+  getMasterSpecializationUrl: `${SCHEDULER_API}specialist/masterspecialization`,
+  getSpecialistUrl: `${SCHEDULER_API}specialist/getSpecialist`,
+  getAvailableSlotUrl: `${SCHEDULER_API}schedule/getavailableSlot`,
+  getSwymedMailUrl: `${SCHEDULER_API}van/getvan`,
 
   updateBeneficiaryArrivalStatusUrl: `${MMU_API}tc/update/benArrivalStatus`,
   cancelBeneficiaryTCRequestUrl: `${MMU_API}tc/cancel/benTCRequest`,
@@ -435,14 +431,13 @@ export const environment = {
 
   /*Doctor signature download */
   downloadSignUrl: `${COMMON_API}signature1/`,
+  // downloadSignUrl: `${COMMON_API}getSignClass/`,
 
-  //calibration integration
+  //SH20094090,calibration integration,09-06-2021
   getCalibrationStrips: `${ADMIN_API}fetchCalibrationStrips`,
-
   getLanguageList: `${COMMON_API}beneficiary/getLanguageList`,
 
   calculateBmiStatus: `${TM_API}common/calculateBMIStatus`,
-
   validateSecurityQuestionAndAnswerUrl: `${COMMON_API_OPEN}user/validateSecurityQuestionAndAnswer`,
   getTransactionIdForChangePasswordUrl: `${COMMON_API_OPEN}user/getTransactionIdForChangePassword`,
 
@@ -454,7 +449,7 @@ export const environment = {
   /* SWAASA Urls*/
   getResultStatusURL: `${COMMON_API}lungAssessment/startAssesment`,
   getAssessmentUrl: `${COMMON_API}lungAssessment/getAssesment`,
-  getAssessmentIdUrl: `${COMMON_API}lungAssessment/getAssesmentDetails`,
+  getAssessmentIdUrl: `${COMMON_API}swaalungAssessmentsa/getAssesmentDetails`,
 
   /* Customization APIs*/
   getAllRegistrationData: `${COMMON_API}customization/fetchAllData`,
@@ -506,7 +501,9 @@ export const environment = {
   verifyOtpForLogin: `${FHIR_API}abhaLogin/verifyAbhaLogin`,
   printPngCard: `${FHIR_API}abhaCreation/printAbhaCard`,
   printWebLoginPhrCard: `${FHIR_API}abhaCreation/printWebLoginPhrCard`,
-  abhaExtension: `@sbx`,
+
+  /* ABHA Extension */
+  abhaExtension: `@sbx`, // or '@abdm' based on your production environment
   confirmAadharBio: `${FHIR_API}healthIDWithBio/confirmWithAadhaarBio`,
   generateABHAForBio: `${FHIR_API}healthIDWithBio/verifyBio`,
   generateABHAForBioMobileOTP: `${FHIR_API}healthIDWithBio/generateMobileOTP`,
@@ -516,5 +513,16 @@ export const environment = {
   siteKey: siteKey,
   captchaChallengeURL: captchaChallengeURL,
   enableCaptcha: enableCaptcha,
+
+  // SMSTenplateURLS
+  getSMStemplates_url: `${COMMON_API}sms/getSMSTemplates`,
+  getSMStypes_url: `${COMMON_API}sms/getSMSTypes`,
+  sendSMS_url: `${COMMON_API}sms/sendSMS`,
+
+  getUserId: `${COMMON_API}user/checkUserName/`,
+  checkUsersignExistUrl: `${ADMIN_API}signature1/signexist/`,
   isEnableES: false,
+  elasticSearchUrl: `${MMU_API}registrar/quickSearchES`,
+  advanceElasticSearchUrl: `${MMU_API}registrar/advancedSearchES`,
+  isSMSFeatureEnabled: false,
 };

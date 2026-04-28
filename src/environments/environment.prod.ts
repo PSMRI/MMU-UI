@@ -41,21 +41,17 @@ const adminIP = 'https://amritwprdev.piramalswasthya.org/';
 const FHIRIP = 'https://amritwprdev.piramalswasthya.org';
 const sessionStorageEncKey = '';
 
-const ADMIN_API = `${adminIP}/adminapi-v1.0/`;
-// With API MAN Configuration
-// const COMMON_API_OPEN = `http://${IP}:8080/apiman-gateway/IEMR/Common/open/`;
-// const COMMON_API = `http://${IP}:8080/apiman-gateway/IEMR/Common/open/`;
-// const MMU_API = `http://${IP}:8080/apiman-gateway/IEMR/MMU/1.0/`;
+const ADMIN_API = `${adminIP}admin-api/`;
 
-// Without API MAN Configuration
-const COMMON_API_OPEN = `${commonIP}commonapi-v1.0/`;
-const COMMON_API = `${commonIP}commonapi-v1.0/`;
-const MMU_API = `${mmuIP}mmuapi-v1.0/`;
-const TM_API = `${tmIP}tmapi-v1.0/`;
-const COMMON_API_OPEN_SYNC = `${SERVER_IP}commonapi-v1.0/`;
-const SCHEDULER_API = `${schedulerIP}schedulerapi-v1.0/`;
-const FHIR_API = `${FHIRIP}/fhirapi-v1.0/`;
-const IDENTITY_API = `${identityIP}`;
+const COMMON_API_OPEN = `${commonIP}common-api/`;
+const COMMON_API = `${commonIP}common-api/`;
+
+const MMU_API = `${mmuIP}mmu-api/`;
+const TM_API = `${tmIP}tm-api/`;
+const COMMON_API_OPEN_SYNC = `${SERVER_IP}common-api-v3.0/`;
+const SCHEDULER_API = `${schedulerIP}scheduler-api/`;
+const FHIR_API = `${FHIRIP}/fhir-api/`;
+const IDENTITY_API = `${identityIP}identity-0.0.1/`;
 
 const mmuUICasesheet = `${mmuUI_IP}mmuui-v1.0`;
 const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
@@ -68,21 +64,21 @@ export const environment = {
   production: true,
   isMMUOfflineSync: false,
   encKey: sessionStorageEncKey,
+  tracking: {
+    platform: 'matomo',
+    siteId: 3,
+    trackerUrl: 'https://matomo.piramalswasthya.org/',
+    trackingPlatform: 'local',
+    enabled: true,
+  },
+
   app: `MMU`,
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,
   haemoglobinTest: `Haemoglobin Test`,
   parentAPI: `${MMU_API}`,
 
-  tracking: {
-    platform: 'matomo',
-    siteId: 3,
-    trackerUrl: 'https://matomo.piramalswasthya.org/',
-    trackingPlatform: 'production',
-    enabled: true,
-  },
-
-  INVENTORY_URL: `${inventoryUI_IP}#/redirin?`,
+  INVENTORY_URL: `${inventoryUI_IP}inventory/#/redirin?`,
   fallbackUrl: `/pharmacist/redirfallback`,
   redirInUrl: `/pharmacist/redirin`,
 
@@ -91,7 +87,7 @@ export const environment = {
   redirInMMUUrl: `/common/tcspecialist-worklist`,
   licenseURL: `${COMMON_API}license.html`,
   getSessionExistsURL: `${COMMON_API}user/getLoginResponse`,
-  extendSessionUrl: `${MMU_API}common/extend/redisSession`,
+  extendSessionUrl: `${MMU_API}common/extehttps://amritwprdev.piramalswasthya.orgnd/redisSession`,
   /**
    * Login and Logout Urls
    */
@@ -432,6 +428,7 @@ export const environment = {
 
   /*Doctor signature download */
   downloadSignUrl: `${COMMON_API}signature1/`,
+  // downloadSignUrl: `${COMMON_API}getSignClass/`,
 
   //SH20094090,calibration integration,09-06-2021
   getCalibrationStrips: `${ADMIN_API}fetchCalibrationStrips`,
@@ -513,5 +510,16 @@ export const environment = {
   siteKey: siteKey,
   captchaChallengeURL: captchaChallengeURL,
   enableCaptcha: enableCaptcha,
+
+  // SMSTenplateURLS
+  getSMStemplates_url: `${COMMON_API}sms/getSMSTemplates`,
+  getSMStypes_url: `${COMMON_API}sms/getSMSTypes`,
+  sendSMS_url: `${COMMON_API}sms/sendSMS`,
+
+  getUserId: `${COMMON_API}user/checkUserName/`,
+  checkUsersignExistUrl: `${ADMIN_API}signature1/signexist/`,
   isEnableES: false,
+  elasticSearchUrl: `${MMU_API}registrar/quickSearchES`,
+  advanceElasticSearchUrl: `${MMU_API}registrar/advancedSearchES`,
+  isSMSFeatureEnabled: false,
 };
