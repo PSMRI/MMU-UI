@@ -8,7 +8,6 @@ Thank you for your interest in contributing to the AMRIT Mobile Medical Unit UI.
 - [Prerequisites](#prerequisites)
 - [Setting Up the Repository](#setting-up-the-repository)
 - [Development Workflow](#development-workflow)
-- [Branching Strategy](#branching-strategy)
 - [Coding Standards](#coding-standards)
 - [Commit Convention](#commit-convention)
 - [Submitting a Pull Request](#submitting-a-pull-request)
@@ -131,7 +130,7 @@ Allowed types:
 ## Submitting a Pull Request
 
 1. Ensure `npm run lint`, `npm test`, and `npm run build` all pass locally.
-2. Push your branch to your fork and open a PR against `PSMRI/MMU-UI:develop`.
+2. Push your branch to your fork and open a PR against `PSMRI/MMU-UI:main`.
 3. Fill in the PR template (describe the problem, what changed, and how to test it).
 4. Link to the related issue (if any) using `Closes #<issue-number>`.
 5. Wait for a review. Address all comments before requesting a re-review.
