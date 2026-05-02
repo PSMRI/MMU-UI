@@ -90,8 +90,7 @@
           [(ngModel)]="currentPrescription.dose"
           [disabled]="!currentPrescription.drugID"
           (focus)="trackFieldInteraction('Dosage')"
-          (selectionChange)="trackFieldInteraction('Dosage Selection')"
-          >
+          (selectionChange)="trackFieldInteraction('Dosage Selection')">
           <mat-option
             *ngFor="let item of filteredDrugDoseMaster"
             [value]="item.drugDose">
@@ -111,8 +110,7 @@
           name="frequency"
           [(ngModel)]="currentPrescription.frequency"
           [disabled]="!currentPrescription.drugID"
-          (focus)="trackFieldInteraction('Frequency')"
-          >
+          (focus)="trackFieldInteraction('Frequency')">
           <mat-option
             *ngFor="let item of drugFrequencyMaster"
             [value]="item.frequency">
@@ -134,8 +132,7 @@
           name="duration"
           [(ngModel)]="currentPrescription.duration"
           [disabled]="!currentPrescription.drugID"
-          (focus)="trackFieldInteraction('Duration')"
-          >
+          (focus)="trackFieldInteraction('Duration')">
           <mat-option *ngFor="let item of drugDurationMaster" [value]="item">
             {{ item }}
           </mat-option>
@@ -151,9 +148,7 @@
           name="unit"
           [(ngModel)]="currentPrescription.unit"
           [disabled]="!currentPrescription.drugID"
-          
-          (selectionChange)="trackFieldInteraction('Unit Selection')"
-          >
+          (selectionChange)="trackFieldInteraction('Unit Selection')">
           <mat-option
             *ngFor="let item of drugDurationUnitMaster"
             [value]="item.drugDuration">
@@ -163,8 +158,9 @@
       </mat-form-field>
     </div>
 
-    <div class="col-md-3 box"
-    *ngIf="
+    <div
+      class="col-md-3 box"
+      *ngIf="
         currentPrescription.formID &&
         currentPrescription.formID !== 1 &&
         currentPrescription.formID !== 2
@@ -178,8 +174,7 @@
           name="quantity"
           [(ngModel)]="currentPrescription.qtyPrescribed"
           [disabled]="!currentPrescription.drugID"
-          (selectionChange)="trackFieldInteraction('Quantity Selection')"
-          >
+          (selectionChange)="trackFieldInteraction('Quantity Selection')">
           <mat-option
             *ngFor="let item of drugDurationMaster | slice: 0 : 5"
             [value]="item">
@@ -372,7 +367,10 @@
     [pageSizeOptions]="[5, 10, 20]"
     [pageSize]="pageSize"
     hidePageSize="true"
-    (page)="setLimits($event.pageIndex); trackFieldInteraction('Prescription Pagination')"
+    (page)="
+      setLimits($event.pageIndex);
+      trackFieldInteraction('Prescription Pagination')
+    "
     showFirstLastButtons
     aria-label="Select patient in doctorWorklist">
   </mat-paginator>

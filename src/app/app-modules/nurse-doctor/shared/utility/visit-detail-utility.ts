@@ -29,7 +29,7 @@ export class VisitDetailUtils {
     readonly sessionstorage: SessionStorageService
   ) {}
 
-  createPatientVisitForm(diasableFlag: boolean = false) {
+  createPatientVisitForm(diasableFlag = false) {
     return this.fb.group({
       patientVisitDetailsForm: this.createPatientVisitDetails(diasableFlag),
       patientChiefComplaintsForm:
@@ -46,7 +46,7 @@ export class VisitDetailUtils {
     });
   }
 
-  createPatientAdherenceForm(disableFlag: boolean = false) {
+  createPatientAdherenceForm(disableFlag = false) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
     return this.fb.group({
@@ -64,7 +64,7 @@ export class VisitDetailUtils {
     });
   }
 
-  createPatientInvestigationsForm(disableFlag: boolean = false) {
+  createPatientInvestigationsForm(disableFlag = false) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
     return this.fb.group({
@@ -78,7 +78,7 @@ export class VisitDetailUtils {
     });
   }
 
-  createANCPatientChiefComplaintArrayForm(disableFlag: boolean = false) {
+  createANCPatientChiefComplaintArrayForm(disableFlag = false) {
     return this.fb.group({
       complaints: this.fb.array([
         this.createPatientChiefComplaintsForm(disableFlag),
@@ -105,7 +105,7 @@ export class VisitDetailUtils {
     });
   }
 
-  createPatientVisitDetails(disableFlag: boolean = false) {
+  createPatientVisitDetails(disableFlag = false) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
     return this.fb.group({
@@ -125,13 +125,13 @@ export class VisitDetailUtils {
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
-  createPatientFileUploadDetailsForm(disableFlag: boolean = false) {
+  createPatientFileUploadDetailsForm(disableFlag = false) {
     return this.fb.group({
       fileIDs: null,
     });
   }
 
-  createPatientCovidForm(disableFlag: boolean = false) {
+  createPatientCovidForm(disableFlag = false) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
     return this.fb.group({
@@ -165,13 +165,13 @@ export class VisitDetailUtils {
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
-  createPatientDiseaseForm(disableFlag: boolean = false) {
+  createPatientDiseaseForm(disableFlag = false) {
     return this.fb.group({
       diseaseFormsArray: this.fb.array([]),
     });
   }
 
-  createPatientTmcConfirmationForm(disableFlag: boolean = false) {
+  createPatientTmcConfirmationForm(disableFlag = false) {
     return this.fb.group({
       tmcConfirmed: null,
       refrredToAdditionalServiceList: null,

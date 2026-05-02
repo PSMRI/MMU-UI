@@ -82,12 +82,12 @@ export class WorkareaComponent
   ];
   // invalid_file_extensions_flag: boolean = false;
   stepExpand!: number;
-  stripSelected: boolean = true;
+  stripSelected = true;
   testName!: string;
   current_language_set: any;
   maxFileSize = 5;
   ecgAbnormalities: any;
-  enableEcgAbnormal: boolean = false;
+  enableEcgAbnormal = false;
 
   constructor(
     private fb: FormBuilder,

@@ -59,7 +59,7 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
   currentLanguageSet: any;
   rbsTestResultSubscription!: Subscription;
   RBSTestScore!: number;
-  RBStestDone: boolean = false;
+  RBStestDone = false;
   rbsTestResultCurrent: any;
 
   constructor(

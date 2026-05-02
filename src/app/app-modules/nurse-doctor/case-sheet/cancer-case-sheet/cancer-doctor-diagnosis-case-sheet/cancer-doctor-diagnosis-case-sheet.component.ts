@@ -44,7 +44,7 @@ export class CancerDoctorDiagnosisCaseSheetComponent
   currentVitals: any;
   caseSheetDiagnosisData: any;
   date: any;
-  enableDoctorSign: boolean = false;
+  enableDoctorSign = false;
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
   servicePointName: any;

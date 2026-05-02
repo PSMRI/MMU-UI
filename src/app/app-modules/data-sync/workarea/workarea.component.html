@@ -57,11 +57,13 @@
                         <div
                           [ngClass]="{
                             visitStatus: true,
-                            'p-f-c': syncTableGroup.status === 'partial' ||
+                            'p-f-c':
+                              syncTableGroup.status === 'partial' ||
                               syncTableGroup.status === 'pending',
-                            'c-d': syncTableGroup.status === 'completed' ||
+                            'c-d':
+                              syncTableGroup.status === 'completed' ||
                               syncTableGroup.status === 'success',
-                            't-d': syncTableGroup.status === 'failed'
+                            't-d': syncTableGroup.status === 'failed',
                           }"></div>
                       </td>
                       <td>
@@ -70,25 +72,28 @@
                       <td>
                         <span
                           class="material-icons"
-                          style="color: #0b69b2;"
+                          style="color: #0b69b2"
                           *ngIf="syncTableGroup.status === 'pending'"
                           >hourglass_empty</span
                         >
                         <span
                           class="material-icons"
-                          style="color: #eaaa26;"
+                          style="color: #eaaa26"
                           *ngIf="syncTableGroup.status === 'partial'"
                           >indeterminate_check_box</span
                         >
                         <span
                           class="material-icons"
-                          style="color: #43760f;"
-                          *ngIf="syncTableGroup.status === 'success' || syncTableGroup.status === 'completed'"
+                          style="color: #43760f"
+                          *ngIf="
+                            syncTableGroup.status === 'success' ||
+                            syncTableGroup.status === 'completed'
+                          "
                           >check_circle</span
                         >
                         <span
                           class="material-icons"
-                          style="color: #e44e4f;"
+                          style="color: #e44e4f"
                           *ngIf="syncTableGroup.status === 'failed'"
                           >error</span
                         >
@@ -101,10 +106,12 @@
                     <td colspan="3">
                       <ul
                         class="description"
-                        style="display: flex;justify-content: center;"
+                        style="display: flex; justify-content: center"
                         *ngIf="syncTableGroupList.length > 0">
                         <li>
-                          <div class="marker-p-f-c" style="margin-right: 4px; margin-top: 4px;"></div>
+                          <div
+                            class="marker-p-f-c"
+                            style="margin-right: 4px; margin-top: 4px"></div>
                           <p>
                             {{
                               current_language_set?.coreComponents
@@ -113,7 +120,9 @@
                           </p>
                         </li>
                         <li>
-                          <div class="marker-t-d" style="margin-right: 4px; margin-top: 4px;"></div>
+                          <div
+                            class="marker-t-d"
+                            style="margin-right: 4px; margin-top: 4px"></div>
                           <p>
                             {{
                               current_language_set?.coreComponents
@@ -122,7 +131,9 @@
                           </p>
                         </li>
                         <li>
-                          <div class="marker-p-f-t" style="margin-right: 4px; margin-top: 4px;"></div>
+                          <div
+                            class="marker-p-f-t"
+                            style="margin-right: 4px; margin-top: 4px"></div>
                           <p>
                             {{
                               current_language_set?.coreComponents
@@ -131,7 +142,9 @@
                           </p>
                         </li>
                         <li>
-                          <div class="marker-c-d" style="margin-right: 4px; margin-top: 4px;"></div>
+                          <div
+                            class="marker-c-d"
+                            style="margin-right: 4px; margin-top: 4px"></div>
                           <p>
                             {{
                               current_language_set?.coreComponents?.dataSynced

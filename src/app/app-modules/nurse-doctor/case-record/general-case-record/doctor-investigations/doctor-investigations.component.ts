@@ -61,15 +61,15 @@ export class DoctorInvestigationsComponent
 
   previousLabTestList: any;
   diabetesSelected: any;
-  VisualAcuityMandatory: boolean = false;
-  RBSTestDoneInVitals: boolean = false;
-  VisualAcuityTestDone: boolean = false;
+  VisualAcuityMandatory = false;
+  RBSTestDoneInVitals = false;
+  VisualAcuityTestDone = false;
   diastolicBpValue: any;
   systolicBpValue: any;
   RBSTestScore!: number;
-  rbsPresent: boolean = false;
-  visualAcuityPresent: boolean = false;
-  RBSAndHeamoglobinSelected: boolean = false;
+  rbsPresent = false;
+  visualAcuityPresent = false;
+  RBSAndHeamoglobinSelected = false;
   confirmedDiabeticValue: any;
   hypertensionSelected: any;
   current_language_set: any;
@@ -80,7 +80,7 @@ export class DoctorInvestigationsComponent
   systolicSubscription!: Subscription;
   diastolicSubscription!: Subscription;
   rbsTestResultSubscription!: Subscription;
-  rbsSelectedInInvestigation: boolean = false;
+  rbsSelectedInInvestigation = false;
   hemoglobbinSelected!: boolean;
   RBSTestScoreInVitals!: number;
 

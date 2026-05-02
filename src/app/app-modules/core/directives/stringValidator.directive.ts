@@ -51,7 +51,7 @@ export class StringValidatorDirective {
   usernameValidator = /^[a-zA-Z0-9]+$/;
 
   lastValue = null;
-  result: boolean = false;
+  result = false;
 
   constructor(private elementRef: ElementRef) {}
 

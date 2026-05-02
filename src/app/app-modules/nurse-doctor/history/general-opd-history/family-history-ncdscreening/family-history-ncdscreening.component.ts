@@ -71,11 +71,11 @@ export class FamilyHistoryNcdscreeningComponent
   IDRSScoreForFamilyMembes: any = 0;
   dummyValue: any;
   idrsscoredummy: any;
-  diabetesMellitusSelected: boolean = false;
+  diabetesMellitusSelected = false;
   beneficiaryDetailSubscription: any;
   age: any;
   currentLanguageSet: any;
-  diabetesPresent: boolean = false;
+  diabetesPresent = false;
 
   constructor(
     private fb: FormBuilder,

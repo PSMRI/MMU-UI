@@ -47,7 +47,7 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
 
   caseSheetData: any;
   visitCategory: any;
-  hideBack: boolean = false;
+  hideBack = false;
 
   printPagePreviewSelect = {
     caseSheetANC: true,
@@ -56,7 +56,7 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
     caseSheetExamination: true,
     caseSheetCovidVaccinationDetails: true,
   };
-  enablePrescriptionButton: boolean = false;
+  enablePrescriptionButton = false;
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
 
@@ -142,7 +142,7 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   casesheetSubs: any;
-  hideSelectQC: boolean = false;
+  hideSelectQC = false;
 
   getTMReferredCasesheetData(caseSheetRequest: any) {
     this.casesheetSubs = this.nurseService

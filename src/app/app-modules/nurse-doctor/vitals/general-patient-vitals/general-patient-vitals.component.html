@@ -62,7 +62,9 @@
               viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTWeightModel(); trackFieldInteraction('Weight IoT Button')"
+              (click)="
+                openIOTWeightModel(); trackFieldInteraction('Weight IoT Button')
+              "
               onkeydown="openIOTWeightModel()"
               tabindex="{0}">
               <!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. -->
@@ -235,7 +237,7 @@
                 allowText="decimal"
                 [ngClass]="{
                   abnormal:
-                    waistCircumference_cm < 50 || waistCircumference_cm > 150
+                    waistCircumference_cm < 50 || waistCircumference_cm > 150,
                 }"
                 (change)="checkIDRSForWaist(waistCircumference_cm)"
                 (blur)="hipWaistRatio()"
@@ -245,7 +247,9 @@
                 maxlength="6"
                 allowMax="350"
                 (focus)="trackFieldInteraction('Waist Circumference')"
-                [required]="benAge >= 30 && visitCategory === 'NCD screening'" />
+                [required]="
+                  benAge >= 30 && visitCategory === 'NCD screening'
+                " />
             </mat-form-field>
           </div>
           <div
@@ -385,7 +389,7 @@
                 (change)="checkHeadCircumference(headCircumference_cm)"
                 [ngClass]="{
                   abnormal:
-                    headCircumference_cm < 25 || headCircumference_cm > 75
+                    headCircumference_cm < 25 || headCircumference_cm > 75,
                 }"
                 id="headCircumference_cm"
                 name="headCircumference_cm"
@@ -416,7 +420,7 @@
                 [ngClass]="{
                   abnormal:
                     midUpperArmCircumference_MUAC_cm < 5 ||
-                    midUpperArmCircumference_MUAC_cm > 31
+                    midUpperArmCircumference_MUAC_cm > 31,
                 }"
                 name="midUpperArmCircumference_MUAC_cm"
                 formControlName="midUpperArmCircumference_MUAC_cm"
@@ -501,7 +505,10 @@
               viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTTempModel(); trackFieldInteraction('Temperature IoT Button')"
+              (click)="
+                openIOTTempModel();
+                trackFieldInteraction('Temperature IoT Button')
+              "
               onkeydown="openIOTTempModel()"
               tabindex="{0}">
               <path
@@ -539,7 +546,10 @@
               viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTPulseRateModel(); trackFieldInteraction('Pulse Rate IoT Button')"
+              (click)="
+                openIOTPulseRateModel();
+                trackFieldInteraction('Pulse Rate IoT Button')
+              "
               onkeydown="openIOTPulseRateModel()"
               tabindex="{0}">
               <path
@@ -588,7 +598,7 @@
               appDefaultNull
               [ngClass]="{
                 abnormal:
-                  systolicBP_1stReading < 110 || systolicBP_1stReading > 140
+                  systolicBP_1stReading < 110 || systolicBP_1stReading > 140,
               }"
               (change)="checkSystolic(systolicBP_1stReading)"
               allowText="number"
@@ -636,7 +646,7 @@
               appDefaultNull
               [ngClass]="{
                 abnormal:
-                  diastolicBP_1stReading < 60 || diastolicBP_1stReading > 90
+                  diastolicBP_1stReading < 60 || diastolicBP_1stReading > 90,
               }"
               (change)="checkDiastolic(diastolicBP_1stReading)"
               allowText="number"
@@ -686,7 +696,7 @@
               appDefaultNull
               allowText="number"
               [ngClass]="{
-                abnormal: respiratoryRate < 11 || respiratoryRate > 23
+                abnormal: respiratoryRate < 11 || respiratoryRate > 23,
               }"
               name="respiratoryRate"
               id="respiratoryRate"
@@ -723,7 +733,7 @@
                   formControlName="bloodGlucose_Fasting"
                   [ngClass]="{
                     abnormal:
-                      bloodGlucose_Fasting < 50 || bloodGlucose_Fasting > 700
+                      bloodGlucose_Fasting < 50 || bloodGlucose_Fasting > 700,
                   }"
                   (change)="checkBloodSugarFasting(bloodGlucose_Fasting)" />
                 <svg
@@ -821,7 +831,9 @@
             <mat-checkbox
               color="accent"
               formControlName="rbsCheckBox"
-              (change)="onRbsCheckBox($event); trackFieldInteraction('RBS Checkbox')">
+              (change)="
+                onRbsCheckBox($event); trackFieldInteraction('RBS Checkbox')
+              ">
             </mat-checkbox>
           </div>
           <div class="col-xs-10 col-sm-10">
@@ -842,7 +854,7 @@
                 (change)="rbsResultChange()"
                 (focus)="trackFieldInteraction('RBS Test Result')"
                 [ngClass]="{
-                  abnormal: rbsTestResult < 0 || rbsTestResult > 1000
+                  abnormal: rbsTestResult < 0 || rbsTestResult > 1000,
                 }" />
               <svg
                 class="fontawesomesvg"
@@ -850,7 +862,9 @@
                 viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                (click)="openIOTRBSModel(); trackFieldInteraction('RBS IoT Button')"
+                (click)="
+                  openIOTRBSModel(); trackFieldInteraction('RBS IoT Button')
+                "
                 onkeydown="openIOTRBSModel()"
                 tabindex="{0}">
                 <path
@@ -892,7 +906,10 @@
               class="mat_green font-regular"
               style="text-align: center; width: 12%; margin-left: 20px"
               *ngIf="!isRecording && !blobUrl"
-              (click)="startRecording(); trackFieldInteraction('Start Recording Button')"
+              (click)="
+                startRecording();
+                trackFieldInteraction('Start Recording Button')
+              "
               [disabled]="disabledLungAssesment">
               Start Recording
             </button>
@@ -909,7 +926,9 @@
               style="width: 12%; margin-left: 20px"
               class="font-regular mat_red"
               *ngIf="isRecording && !blobUrl"
-              (click)="stopRecording(); trackFieldInteraction('Stop Recording Button')">
+              (click)="
+                stopRecording(); trackFieldInteraction('Stop Recording Button')
+              ">
               Stop Recording
             </button>
 
@@ -919,7 +938,10 @@
                 color="warn"
                 class="font-regular mat_red"
                 *ngIf="!isRecording && blobUrl"
-                (click)="clearRecordedData(); trackFieldInteraction('Clear Recording Button')">
+                (click)="
+                  clearRecordedData();
+                  trackFieldInteraction('Clear Recording Button')
+                ">
                 Clear Recording
               </button>
 
@@ -929,7 +951,10 @@
                 class="font-regular mat_blue"
                 style="margin-left: 10px"
                 *ngIf="!isRecording && blobUrl"
-                (click)="startAssessment(); trackFieldInteraction('Start Assessment Button')">
+                (click)="
+                  startAssessment();
+                  trackFieldInteraction('Start Assessment Button')
+                ">
                 Start Assessment
               </button>
             </div>
@@ -949,42 +974,60 @@
                     color="primary"
                     class="valueCheck"
                     name="frequentCoughChecked"
-                    (change)="onCheckboxChange('frequentCough', $event); trackFieldInteraction('Frequent Cough Checkbox')">
+                    (change)="
+                      onCheckboxChange('frequentCough', $event);
+                      trackFieldInteraction('Frequent Cough Checkbox')
+                    ">
                     Frequent Cough
                   </mat-checkbox>
                   <mat-checkbox
                     color="primary"
                     class="valueCheck"
                     name="sputumChecked"
-                    (change)="onCheckboxChange('sputum', $event); trackFieldInteraction('Sputum Checkbox')">
+                    (change)="
+                      onCheckboxChange('sputum', $event);
+                      trackFieldInteraction('Sputum Checkbox')
+                    ">
                     Sputum
                   </mat-checkbox>
                   <mat-checkbox
                     color="primary"
                     class="valueCheck"
                     name="coughAtNightChecked"
-                    (change)="onCheckboxChange('coughAtNight', $event); trackFieldInteraction('Cough At Night Checkbox')">
+                    (change)="
+                      onCheckboxChange('coughAtNight', $event);
+                      trackFieldInteraction('Cough At Night Checkbox')
+                    ">
                     Cough At Night
                   </mat-checkbox>
                   <mat-checkbox
                     color="primary"
                     class="valueCheck"
                     name="wheezingChecked"
-                    (change)="onCheckboxChange('wheezing', $event); trackFieldInteraction('Wheezing Checkbox')">
+                    (change)="
+                      onCheckboxChange('wheezing', $event);
+                      trackFieldInteraction('Wheezing Checkbox')
+                    ">
                     Wheezing
                   </mat-checkbox>
                   <mat-checkbox
                     color="primary"
                     class="valueCheck"
                     name="painInChestChecked"
-                    (change)="onCheckboxChange('painInChest', $event); trackFieldInteraction('Pain In Chest Checkbox')">
+                    (change)="
+                      onCheckboxChange('painInChest', $event);
+                      trackFieldInteraction('Pain In Chest Checkbox')
+                    ">
                     Pain in Chest
                   </mat-checkbox>
                   <mat-checkbox
                     color="primary"
                     class="valueCheck"
                     name="shortnessOfBreathChecked"
-                    (change)="onCheckboxChange('shortnessOfBreath', $event); trackFieldInteraction('Shortness Of Breath Checkbox')">
+                    (change)="
+                      onCheckboxChange('shortnessOfBreath', $event);
+                      trackFieldInteraction('Shortness Of Breath Checkbox')
+                    ">
                     Shortness Of Breath
                   </mat-checkbox>
                 </div>

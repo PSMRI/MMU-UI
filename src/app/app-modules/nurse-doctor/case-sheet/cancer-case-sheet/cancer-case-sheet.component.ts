@@ -50,7 +50,7 @@ export class CancerCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
   };
 
   visitCategory!: string;
-  hideBack: boolean = false;
+  hideBack = false;
   getCaseSheetDataVisit: any;
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;

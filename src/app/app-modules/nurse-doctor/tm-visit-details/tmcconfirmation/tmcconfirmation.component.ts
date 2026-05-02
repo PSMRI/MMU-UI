@@ -78,7 +78,7 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
   casesheetSubs: any;
   caseSheetData: any;
   disableNoOnSuccessOfYes: any;
-  showRadio: boolean = false;
+  showRadio = false;
   confirmedDisease: any;
   currentLanguageSet: any;
 
@@ -259,7 +259,7 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
       this.selectValueService = true;
     }
   }
-  dataSync: boolean = false;
+  dataSync = false;
   viewAndPrintCaseSheet() {
     // this.confirmedDisease = res.data.nurseData.idrs.idrsDetail.confirmedDisease;
     this.onceAuthorizeViewTMCS();

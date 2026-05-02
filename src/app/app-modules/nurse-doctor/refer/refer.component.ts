@@ -38,8 +38,8 @@ export class ReferComponent implements OnInit {
   @Input()
   visitCategory!: string;
 
-  showGeneralOPD: boolean = false;
-  showCancer: boolean = false;
+  showGeneralOPD = false;
+  showCancer = false;
 
   constructor() {}
 

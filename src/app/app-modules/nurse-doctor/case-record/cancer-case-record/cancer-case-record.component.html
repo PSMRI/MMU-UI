@@ -41,7 +41,7 @@
               }}(Kg/m<sup>2</sup>):
               <span
                 [ngClass]="{
-                  abnormal: calculateBMI() < 18.5 || calculateBMI() > 24.9
+                  abnormal: calculateBMI() < 18.5 || calculateBMI() > 24.9,
                 }"
                 >{{ calculateBMI() }}</span
               >
@@ -67,7 +67,8 @@
               {{ current_language_set?.sPOTwoWithUnit }}:
               <span
                 [ngClass]="{
-                  abnormal: currentVitals?.sPO2 < 1 || currentVitals?.sPO2 > 100
+                  abnormal:
+                    currentVitals?.sPO2 < 1 || currentVitals?.sPO2 > 100,
                 }"
                 >{{ currentVitals?.sPO2 }}</span
               >
@@ -131,7 +132,7 @@
               }}:
               <span
                 [ngClass]="{
-                  abnormal: currentVitals?.bloodGlucose_Fasting > 100
+                  abnormal: currentVitals?.bloodGlucose_Fasting > 100,
                 }"
                 >{{ currentVitals?.bloodGlucose_Fasting }}</span
               >
@@ -143,7 +144,7 @@
               }}:
               <span
                 [ngClass]="{
-                  abnormal: currentVitals?.bloodGlucose_Random > 140
+                  abnormal: currentVitals?.bloodGlucose_Random > 140,
                 }"
                 >{{ currentVitals?.bloodGlucose_Random }}</span
               >
@@ -155,7 +156,7 @@
               }}:
               <span
                 [ngClass]="{
-                  abnormal: currentVitals?.bloodGlucose_2HrPostPrandial > 140
+                  abnormal: currentVitals?.bloodGlucose_2HrPostPrandial > 140,
                 }"
                 >{{ currentVitals?.bloodGlucose_2HrPostPrandial }}</span
               >

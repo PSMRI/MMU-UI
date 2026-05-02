@@ -56,7 +56,7 @@ export class ExaminationCaseSheetComponent
   revisitDate: any;
   referDetails: any;
   date: any;
-  serviceList: string = '';
+  serviceList = '';
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
 

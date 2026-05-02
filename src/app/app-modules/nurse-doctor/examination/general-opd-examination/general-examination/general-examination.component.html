@@ -300,7 +300,9 @@
         id="lymphadenopathy"
         name="lymphadenopathy"
         formControlName="lymphadenopathy"
-        (change)="checkWithLymphadenopathy(); trackFieldInteraction('Lymphadenopathy')">
+        (change)="
+          checkWithLymphadenopathy(); trackFieldInteraction('Lymphadenopathy')
+        ">
         <mat-radio-button color="primary" class="radio-btn" value="Present">{{
           currentLanguageSet?.common?.present
         }}</mat-radio-button>

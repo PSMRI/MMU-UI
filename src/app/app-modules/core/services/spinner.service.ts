@@ -29,7 +29,7 @@ export interface SpinnerState {
 
 @Injectable()
 export class SpinnerService {
-  private loading: boolean = false;
+  private loading = false;
   spinnerSubject = new Subject<SpinnerState>();
   spinnerState = this.spinnerSubject.asObservable();
   temp: any = [];

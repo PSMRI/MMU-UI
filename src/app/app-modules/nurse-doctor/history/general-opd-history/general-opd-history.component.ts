@@ -63,7 +63,7 @@ export class GeneralOpdHistoryComponent
   showObstetricHistory = false;
   currentLanguageSet: any;
 
-  showHistory: boolean = false;
+  showHistory = false;
   pastHistory!: FormGroup;
   comorbidityHistory!: FormGroup;
   medicationHistory!: FormGroup;

@@ -124,7 +124,9 @@
               #auto="matAutocomplete"
               [displayWith]="displayChiefComplaint"
               (optionSelected)="
-                filterComplaints($event, i); getSCTid($event, i); trackFieldInteraction('Chief Complaint Selection')
+                filterComplaints($event, i);
+                getSCTid($event, i);
+                trackFieldInteraction('Chief Complaint Selection')
               ">
               <mat-option
                 *ngFor="let compl of suggestedChiefComplaintList[i]"
@@ -177,7 +179,10 @@
                 name="unitOfDuration"
                 formControlName="unitOfDuration"
                 [disabled]="!complaint.value.duration"
-                (selectionChange)="validateDuration(complaint); trackFieldInteraction('Unit Of Duration')">
+                (selectionChange)="
+                  validateDuration(complaint);
+                  trackFieldInteraction('Unit Of Duration')
+                ">
                 <mat-option value="Hours">Hour(s)</mat-option>
                 <mat-option value="Days">Day(s)</mat-option>
                 <mat-option value="Weeks">Week(s)</mat-option>
@@ -210,7 +215,10 @@
               mat-mini-fab
               [id]="'removeBtn' + i"
               *ngIf="i !== 0 || (i === 0 && complaint.touched)"
-              (click)="removeCheifComplaint(i, complaint); trackFieldInteraction('Remove Complaint Button')"
+              (click)="
+                removeCheifComplaint(i, complaint);
+                trackFieldInteraction('Remove Complaint Button')
+              "
               color="warn"
               style="margin-right: 3px"
               class="mat_warn_circle">
@@ -221,7 +229,10 @@
               [id]="'addBtn' + i"
               *ngIf="isLast"
               [disabled]="checkComplaintFormValidity(complaint)"
-              (click)="addCheifComplaint(); trackFieldInteraction('Add Complaint Button')"
+              (click)="
+                addCheifComplaint();
+                trackFieldInteraction('Add Complaint Button')
+              "
               color="primary"
               class="mat_blue_circle">
               <span class="material-icons">add</span>

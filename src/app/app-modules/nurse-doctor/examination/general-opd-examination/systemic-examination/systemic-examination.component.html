@@ -1,9 +1,8 @@
 <div class="p-t-10">
   <mat-accordion>
-    <mat-expansion-panel 
+    <mat-expansion-panel
       *ngIf="displayGeneral"
-      (opened)="trackFieldInteraction('Gastro Intestinal System Panel')"
-      >
+      (opened)="trackFieldInteraction('Gastro Intestinal System Panel')">
       <mat-expansion-panel-header>
         <h5>
           {{
@@ -19,8 +18,7 @@
     </mat-expansion-panel>
 
     <mat-expansion-panel
-      (opened)="trackFieldInteraction('Cardio Vascular System Panel')"
-      >
+      (opened)="trackFieldInteraction('Cardio Vascular System Panel')">
       <mat-expansion-panel-header>
         <h5>
           {{
@@ -37,8 +35,7 @@
     </mat-expansion-panel>
 
     <mat-expansion-panel
-      (opened)="trackFieldInteraction('Respiratory System Panel')"
-      >
+      (opened)="trackFieldInteraction('Respiratory System Panel')">
       <mat-expansion-panel-header>
         <h5>
           {{
@@ -55,8 +52,7 @@
     </mat-expansion-panel>
 
     <mat-expansion-panel
-      (opened)="trackFieldInteraction('Central Nervous System Panel')"
-      >
+      (opened)="trackFieldInteraction('Central Nervous System Panel')">
       <mat-expansion-panel-header>
         <h5>
           {{
@@ -73,8 +69,7 @@
     </mat-expansion-panel>
 
     <mat-expansion-panel
-      (opened)="trackFieldInteraction('Musculoskeletal System Panel')"
-      >
+      (opened)="trackFieldInteraction('Musculoskeletal System Panel')">
       <mat-expansion-panel-header>
         <h5>
           {{
@@ -90,8 +85,7 @@
     </mat-expansion-panel>
 
     <mat-expansion-panel
-      (opened)="trackFieldInteraction('Genito Urinary System Panel')"
-      >
+      (opened)="trackFieldInteraction('Genito Urinary System Panel')">
       <mat-expansion-panel-header>
         <h5>
           {{
@@ -107,10 +101,9 @@
         "></app-nurse-genito-urinary-system>
     </mat-expansion-panel>
 
-    <mat-expansion-panel 
+    <mat-expansion-panel
       *ngIf="displayANC"
-      (opened)="trackFieldInteraction('Obstetric Examination Panel')"
-      >
+      (opened)="trackFieldInteraction('Obstetric Examination Panel')">
       <mat-expansion-panel-header>
         <h5>
           {{

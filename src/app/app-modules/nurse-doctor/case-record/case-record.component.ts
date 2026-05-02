@@ -47,8 +47,8 @@ export class CaseRecordComponent implements OnInit {
   @Input()
   pregnancyStatus: any;
 
-  showGeneralOPD: boolean = false;
-  showCancer: boolean = false;
+  showGeneralOPD = false;
+  showCancer = false;
 
   constructor() {}
 

@@ -307,7 +307,7 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
       }
     });
   }
-  enableArchiveView: boolean = false;
+  enableArchiveView = false;
   archivedLabResults: any = [];
   filteredArchivedLabResults: any = [];
   archivedRadiologyResults: any = [];
