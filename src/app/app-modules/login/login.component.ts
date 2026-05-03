@@ -20,7 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
@@ -41,7 +41,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit {
   @ViewChild('captchaCmp') captchaCmp: CaptchaComponent | undefined;
   dynamictype = 'password';
   encryptedVar: any;
@@ -88,7 +88,7 @@ export class LoginComponent implements OnInit {
       sessionStorage.clear();
     }
   }
-  public AfterViewInit(): void {
+  ngAfterViewInit(): void {
     this.elementRef.nativeElement.focus();
   }
 
