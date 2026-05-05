@@ -22,7 +22,6 @@
 
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
 import {
@@ -197,37 +196,17 @@ export class LoginComponent implements OnInit {
               }
             }
           },
-          (err: HttpErrorResponse) => {
+          err => {
             this.resetCaptcha();
+            const message = [err?.error?.errorMessage, err?.message].find(
+              msg => !!msg
+            );
             this.confirmationService.alert(
-              this.getHttpErrorMessage(err),
+              message || 'Login request failed. Please try again.',
               'error'
             );
           }
         );
-    }
-  }
-
-  private getHttpErrorMessage(err: HttpErrorResponse): string {
-    if (err?.error?.errorMessage) {
-      return err.error.errorMessage;
-    }
-
-    switch (err?.status) {
-      case 400:
-        return 'Invalid request. Please verify the input and try again.';
-      case 401:
-        return 'Authentication failed. Please check your credentials.';
-      case 403:
-        return 'Access denied. You do not have permission for this action.';
-      case 404:
-        return 'Requested API was not found.';
-      case 409:
-        return 'Request conflict occurred. Please retry.';
-      case 500:
-        return 'Server error occurred. Please try again in a moment.';
-      default:
-        return 'Something went wrong. Please try again.';
     }
   }
 
