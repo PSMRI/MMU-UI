@@ -22,7 +22,7 @@
 
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { tap } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -33,11 +33,11 @@ export class AuthGuard implements CanActivate {
 
   canActivate(route: any, state: any) {
     return this.auth.validateSessionKey().pipe(
-      tap((res: any) => {
-        if (!(res && res.statusCode === 200 && res.data)) {
-          this.router.navigate(['/login']);
-        }
-      })
+      map((res: any) =>
+        res && res.statusCode === 200 && res.data
+          ? true
+          : this.router.createUrlTree(['/login'])
+      )
     );
   }
 }
