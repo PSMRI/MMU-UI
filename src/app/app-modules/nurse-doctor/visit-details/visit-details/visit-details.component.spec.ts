@@ -30,7 +30,7 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MaterialModule } from '../../../core/material.module';
+
 
 import { VisitDetailUtils } from '../../shared/utility';
 
@@ -53,7 +53,7 @@ describe('VisitDetailsComponent', () => {
   let debugElement: any;
   let fb: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         NoopAnimationsModule,
@@ -153,7 +153,7 @@ describe('VisitDetailsComponent', () => {
     doctorService => {
       localStorage.setItem('visitCategory', 'General OPD');
       spyOn(doctorService, 'getVisitComplaintDetails').and.returnValue(
-        Observable.of(data.generalOPDVisitDetails)
+        of(data.generalOPDVisitDetails)
       );
       spyOn(component, 'getVisitDetails').and.callThrough();
       component.mode = new String('view');

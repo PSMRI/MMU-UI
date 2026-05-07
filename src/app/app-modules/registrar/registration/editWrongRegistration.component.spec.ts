@@ -20,18 +20,18 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegistrationComponent } from './registration.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { CameraService } from '../../core/services/camera.service';
 import { RegistrarService } from '../../../../../Common-UI/src/registrar/services/registrar.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of, BehaviorSubject, Subject } from 'rxjs';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/empty';
 import 'rxjs/add/observable/throw';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -39,7 +39,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 // import { fakeAsync, tick } from '@angular/core/testing';
 // import { RouterTestingModule } from '@angular/router/testing';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MaterialModule } from '../../core/material.module';
 
 class RouterStub {
   // navigateByUrl(url: string) { return url; }
@@ -159,7 +158,7 @@ describe('RegisterComponent', () => {
   let fixture: ComponentFixture<RegistrationComponent>;
   let registrarService;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [

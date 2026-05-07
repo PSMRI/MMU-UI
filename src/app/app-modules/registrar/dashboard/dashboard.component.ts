@@ -21,12 +21,17 @@
  */
 
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AppHeaderComponent } from '../../core/components/app-header/app-header.component';
+import { AppFooterComponent } from '../../core/components/app-footer/app-footer.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  standalone: false,
+  standalone: true,
+  imports: [CommonModule, AppHeaderComponent, AppFooterComponent, RouterModule],
 })
 export class DashboardComponent {
   constructor() {}

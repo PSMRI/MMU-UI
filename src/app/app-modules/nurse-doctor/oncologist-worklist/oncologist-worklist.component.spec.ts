@@ -20,7 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { OncologistWorklistComponent } from './oncologist-worklist.component';
 
@@ -28,7 +28,7 @@ describe('OncologistWorklistComponent', () => {
   let component: OncologistWorklistComponent;
   let fixture: ComponentFixture<OncologistWorklistComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [OncologistWorklistComponent],
     }).compileComponents();

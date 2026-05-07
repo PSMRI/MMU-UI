@@ -26,7 +26,8 @@ import {
   normalizeCalendarValue,
 } from '@/components/ui/calendar/calendar.utils';
 import { calendarVariants } from '@/components/ui/calendar/calendar.variants';
-import { mergeClasses, noopFn } from '@/lib/utils/merge-classes';
+import { mergeClasses } from '@/lib/utils/merge-classes';
+const noopFn = () => {};
 
 @Component({
   selector: 'z-calendar, [z-calendar]',

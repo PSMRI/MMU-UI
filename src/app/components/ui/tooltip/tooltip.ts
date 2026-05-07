@@ -34,8 +34,7 @@ import {
   tooltipVariants,
   type ZardTooltipPositionVariants,
 } from '@/components/ui/tooltip/tooltip.variants';
-import { ZardIdDirective } from '@/shared/core';
-import { ZardStringTemplateOutletDirective } from '@/lib/core/directives/string-template-outlet/string-template-outlet.directive';
+import { ZardIdDirective, ZardStringTemplateOutletDirective } from '@/shared/core';
 import { mergeClasses } from '@/lib/utils/merge-classes';
 
 export type ZardTooltipTriggers = 'click' | 'hover';

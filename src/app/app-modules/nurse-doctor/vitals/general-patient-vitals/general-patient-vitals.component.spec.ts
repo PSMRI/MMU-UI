@@ -35,7 +35,7 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../../core/material.module';
+
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { GeneralPatientVitalsComponent } from './general-patient-vitals.component';
@@ -50,7 +50,7 @@ import { NurseServiceStub } from '../../shared/mocks/nurse-service-stub';
 import { BeneficiaryDetailsServiceStub } from '../../../core/mocks/beneficiary-details-service-stub';
 
 import * as data from '../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of, BehaviorSubject, Subject } from "rxjs";
 
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
@@ -67,7 +67,7 @@ describe('GeneralPatientVitalsComponent', () => {
   let el: HTMLElement;
   let spy: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
@@ -1830,7 +1830,7 @@ describe('GeneralPatientVitalsComponent', () => {
         localStorage.setItem('visitCategory', 'General OPD');
         component.visitCategory = 'General OPD';
         spyOn(doctorService, 'getGenericVitals').and.returnValue(
-          Observable.of(data.generalOPDVitalData.data)
+          of(data.generalOPDVitalData.data)
         );
         spyOn(component, 'getGeneralVitalsData').and.callThrough();
         component.mode = new String('view');
@@ -1851,7 +1851,7 @@ describe('GeneralPatientVitalsComponent', () => {
         localStorage.setItem('visitCategory', 'General OPD');
         component.visitCategory = 'General OPD';
         spyOn(doctorService, 'getGenericVitals').and.returnValue(
-          Observable.of(data.generalOPDVitalData.data)
+          of(data.generalOPDVitalData.data)
         );
         spyOn(component, 'getGeneralVitalsData').and.callThrough();
         component.mode = new String('view');
@@ -1872,7 +1872,7 @@ describe('GeneralPatientVitalsComponent', () => {
         localStorage.setItem('visitCategory', 'General OPD');
         component.visitCategory = 'General OPD';
         spyOn(doctorService, 'getGenericVitals').and.returnValue(
-          Observable.of(data.generalOPDVitalData.data)
+          of(data.generalOPDVitalData.data)
         );
         spyOn(component, 'getGeneralVitalsData').and.callThrough();
         component.mode = new String('view');
@@ -1893,7 +1893,7 @@ describe('GeneralPatientVitalsComponent', () => {
         localStorage.setItem('visitCategory', 'General OPD');
         component.visitCategory = 'General OPD';
         spyOn(doctorService, 'getGenericVitals').and.returnValue(
-          Observable.of(data.generalOPDVitalData.data)
+          of(data.generalOPDVitalData.data)
         );
         spyOn(component, 'getGeneralVitalsData').and.callThrough();
         component.mode = new String('view');
@@ -1915,7 +1915,7 @@ describe('GeneralPatientVitalsComponent', () => {
         localStorage.setItem('visitCategory', 'General OPD');
         component.visitCategory = 'General OPD';
         spyOn(doctorService, 'getGenericVitals').and.returnValue(
-          Observable.of(data.generalOPDVitalData.data)
+          of(data.generalOPDVitalData.data)
         );
         spyOn(component, 'getGeneralVitalsData').and.callThrough();
         component.mode = new String('view');
@@ -1937,7 +1937,7 @@ describe('GeneralPatientVitalsComponent', () => {
         localStorage.setItem('visitCategory', 'General OPD');
         component.visitCategory = 'General OPD';
         spyOn(doctorService, 'getGenericVitals').and.returnValue(
-          Observable.of(data.generalOPDVitalData.data)
+          of(data.generalOPDVitalData.data)
         );
         spyOn(component, 'getGeneralVitalsData').and.callThrough();
         component.mode = new String('view');
@@ -1958,7 +1958,7 @@ describe('GeneralPatientVitalsComponent', () => {
         localStorage.setItem('visitCategory', 'General OPD');
         component.visitCategory = 'General OPD';
         spyOn(doctorService, 'getGenericVitals').and.returnValue(
-          Observable.of(data.generalOPDVitalData.data)
+          of(data.generalOPDVitalData.data)
         );
         spyOn(component, 'getGeneralVitalsData').and.callThrough();
         component.mode = new String('view');
@@ -1979,7 +1979,7 @@ describe('GeneralPatientVitalsComponent', () => {
         localStorage.setItem('visitCategory', 'General OPD');
         component.visitCategory = 'General OPD';
         spyOn(doctorService, 'getGenericVitals').and.returnValue(
-          Observable.of(data.generalOPDVitalData.data)
+          of(data.generalOPDVitalData.data)
         );
         spyOn(component, 'getGeneralVitalsData').and.callThrough();
         component.mode = new String('view');
@@ -2000,7 +2000,7 @@ describe('GeneralPatientVitalsComponent', () => {
         localStorage.setItem('visitCategory', 'General OPD');
         component.visitCategory = 'General OPD';
         spyOn(doctorService, 'getGenericVitals').and.returnValue(
-          Observable.of(data.generalOPDVitalData.data)
+          of(data.generalOPDVitalData.data)
         );
         spyOn(component, 'getGeneralVitalsData').and.callThrough();
         component.mode = new String('view');
@@ -2022,7 +2022,7 @@ describe('GeneralPatientVitalsComponent', () => {
         localStorage.setItem('visitCategory', 'General OPD');
         component.visitCategory = 'General OPD';
         spyOn(doctorService, 'getGenericVitals').and.returnValue(
-          Observable.of(data.generalOPDVitalData.data)
+          of(data.generalOPDVitalData.data)
         );
         spyOn(component, 'getGeneralVitalsData').and.callThrough();
         component.mode = new String('view');
@@ -2046,7 +2046,7 @@ describe('GeneralPatientVitalsComponent', () => {
         localStorage.setItem('visitCategory', 'General OPD');
         component.visitCategory = 'General OPD';
         spyOn(doctorService, 'getGenericVitals').and.returnValue(
-          Observable.of(data.generalOPDVitalData.data)
+          of(data.generalOPDVitalData.data)
         );
         spyOn(component, 'getGeneralVitalsData').and.callThrough();
         component.mode = new String('view');
@@ -2067,7 +2067,7 @@ describe('GeneralPatientVitalsComponent', () => {
         localStorage.setItem('visitCategory', 'General OPD');
         component.visitCategory = 'General OPD';
         spyOn(doctorService, 'getGenericVitals').and.returnValue(
-          Observable.of(data.generalOPDVitalData.data)
+          of(data.generalOPDVitalData.data)
         );
         spyOn(component, 'getGeneralVitalsData').and.callThrough();
         component.mode = new String('view');

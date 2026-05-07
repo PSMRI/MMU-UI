@@ -29,12 +29,29 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { RegistrarService } from '../../shared/services/registrar.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-register-edit-location',
   templateUrl: './register-edit-location.component.html',
   styleUrls: ['./register-edit-location.component.css'],
-  standalone: false,
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatIconModule,
+  ],
 })
 export class RegisterEditLocationComponent implements OnInit, DoCheck {
   statesList: any;

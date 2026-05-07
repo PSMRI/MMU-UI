@@ -25,7 +25,8 @@ import {
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideX } from '@ng-icons/lucide';
 
-import { mergeClasses, noopFn } from '@/lib/utils/merge-classes';
+import { mergeClasses } from '@/lib/utils/merge-classes';
+const noopFn = () => {};
 
 import type { ZardDialogRef } from './dialog-ref';
 import { dialogVariants } from './dialog.variants';

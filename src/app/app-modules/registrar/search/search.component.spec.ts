@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   ComponentFixture,
   tick,
   inject,
@@ -33,19 +33,13 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { CameraService } from '../../core/services/camera.service';
 import { RegistrarService } from '../shared/services/registrar.service';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/from';
-import 'rxjs/add/observable/empty';
-import 'rxjs/add/observable/throw';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable, of, BehaviorSubject, Subject } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchComponent } from './search.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Md2Module } from 'md2';
-import { MaterialModule } from '../../core/material.module';
-import { BeneficiaryDetailsService } from 'app/app-modules/core/services/beneficiary-details.service';
+import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services/beneficiary-details.service';
 
 class RouterStub {
   navigateByUrl(url: string) {
@@ -73,10 +67,10 @@ class RegistrarServiceMock {
 
   quickSearch() {}
   // submitBeneficiary = jasmine.createSpy('submitBeneficiary').andCallFake(function () {
-  //   return Observable.of(true);
+  //   return of(true);
   // });
   // updateBeneficiary = jasmine.createSpy('updateBeneficiary').andCallFake(function () {
-  //   return Observable.of(true);
+  //   return of(true);
   // });
 
   registrationMaster = {
@@ -172,10 +166,10 @@ class RegistrarServiceMock {
   }
 
   submitBeneficiary() {
-    return Observable.of(true);
+    return of(true);
   }
   updateBeneficiary() {
-    return Observable.of(false);
+    return of(false);
   }
 }
 
@@ -261,16 +255,10 @@ describe('SearchComponent', () => {
     },
   ];
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        Md2Module,
-        MaterialModule,
-        NoopAnimationsModule,
-      ],
+      imports: [ReactiveFormsModule, FormsModule, NoopAnimationsModule],
       declarations: [SearchComponent],
       providers: [
         { provide: RegistrarService, useClass: RegistrarServiceMock },
@@ -305,15 +293,17 @@ describe('SearchComponent', () => {
   });
 
   it('should call Quick Search without any search value and give alert to user', () => {
-    const spier = spyOn(confirmService, 'alert').and.returnValue(1);
-    component.quickSearch();
+    const spier = spyOn(confirmService, 'alert').and.returnValue(
+      1 as any as any
+    );
+    (component as any).quickSearch();
     expect(spier).toHaveBeenCalledWith(
       'Please enter Beneficiary ID, Name or Phone No first...'
     );
   });
 
   it('should call Quick Search when search button is clicked', fakeAsync(() => {
-    const spier = spyOn(component, 'quickSearch').and.callThrough();
+    const spier = spyOn(component as any, 'quickSearch').and.callThrough();
     const compiled = fixture.debugElement.nativeElement;
     compiled.querySelector('button').click();
     tick();
@@ -322,8 +312,10 @@ describe('SearchComponent', () => {
   }));
 
   it('should call Quick Search with 1 char in search value and give alert to user', () => {
-    const spier = spyOn(confirmService, 'alert').and.returnValue(1);
-    component.quickSearch('b');
+    const spier = spyOn(confirmService, 'alert').and.returnValue(
+      1 as any as any
+    );
+    (component as any).quickSearch('b');
     expect(spier).toHaveBeenCalledWith(
       'Minimum 2 Character is required to search Beneficiary !!!'
     );
@@ -331,35 +323,37 @@ describe('SearchComponent', () => {
 
   it('should call registrar service when 2 chars are given for searching', () => {
     const spier = spyOn(registrarService, 'quickSearch').and.returnValue(
-      Observable.of(1)
+      of(1) as any
     );
-    component.quickSearch('ab');
+    (component as any).quickSearch('ab');
     expect(spier).toHaveBeenCalledWith({ benID: 'ab' });
   });
 
   it('should call alert when nothing is returned by search service', () => {
     const spier = spyOn(registrarService, 'quickSearch').and.returnValue(
-      Observable.of(null)
+      of(null) as any
     );
-    const spiAlert = spyOn(confirmService, 'alert').and.returnValue(1);
-    component.quickSearch('ab');
+    const spiAlert = spyOn(confirmService, 'alert').and.returnValue(
+      1 as any as any
+    );
+    (component as any).quickSearch('ab');
     expect(spiAlert).toHaveBeenCalledWith('Beneficiary Not found...');
   });
 
   it('should load data returned by search service into beneficiarylist', () => {
     const spier = spyOn(registrarService, 'quickSearch').and.returnValue(
-      Observable.of(searchForOm)
+      of(searchForOm) as any
     );
-    component.quickSearch('OM');
+    (component as any).quickSearch('OM');
     fixture.autoDetectChanges();
     expect(component.beneficiaryList).toBe(searchForOm);
   });
 
   it('should set default filtered list to be equal to beneficiarylist', () => {
     const spier = spyOn(registrarService, 'quickSearch').and.returnValue(
-      Observable.of(searchForOm)
+      of(searchForOm) as any
     );
-    component.quickSearch('OM');
+    (component as any).quickSearch('OM');
     fixture.autoDetectChanges();
     expect(component.filteredBeneficiaryList).toBe(component.beneficiaryList);
   });
@@ -382,7 +376,7 @@ describe('SearchComponent', () => {
 
   it('should confirm when user tries to submit patient to nurse', () => {
     const spier = spyOn(confirmService, 'confirm').and.returnValue(
-      Observable.of(false)
+      of(false) as any
     );
     component.patientRevisited(123);
     fixture.autoDetectChanges();
@@ -394,9 +388,11 @@ describe('SearchComponent', () => {
 
   it('should call sendToNurseWindow function if user confirms for revisit', () => {
     const spi = spyOn(confirmService, 'confirm').and.returnValue(
-      Observable.of(true)
+      of(true) as any
     );
-    const spier = spyOn(component, 'sendToNurseWindow').and.returnValue(1);
+    const spier = spyOn(component as any, 'sendToNurseWindow').and.returnValue(
+      1 as any as any
+    );
     component.patientRevisited(123);
     fixture.autoDetectChanges();
     expect(spier).toHaveBeenCalled();
@@ -404,9 +400,11 @@ describe('SearchComponent', () => {
 
   it('should not call sendToNurseWindow function if user doesnt confirm for revisit', () => {
     const spi = spyOn(confirmService, 'confirm').and.returnValue(
-      Observable.of(false)
+      of(false) as any
     );
-    const spier = spyOn(component, 'sendToNurseWindow').and.returnValue(1);
+    const spier = spyOn(component as any, 'sendToNurseWindow').and.returnValue(
+      1 as any as any
+    );
     component.patientRevisited(123);
     fixture.autoDetectChanges();
     expect(spier).not.toHaveBeenCalled();
@@ -414,7 +412,7 @@ describe('SearchComponent', () => {
 
   it('should ask for confirmation if used wants to edit the registration', () => {
     const spier = spyOn(confirmService, 'confirm').and.returnValue(
-      Observable.of(false)
+      of(false) as any
     );
     component.editPatientInfo(123);
     fixture.autoDetectChanges();
@@ -426,10 +424,12 @@ describe('SearchComponent', () => {
 
   it('should navigate to editing page if user confirms editing registration', () => {
     const spi = spyOn(confirmService, 'confirm').and.returnValue(
-      Observable.of(true)
+      of(true) as any
     );
-    const spier = spyOn(router, 'navigate').and.returnValue(1);
-    const benRegID = 123;
+    const spier = spyOn(router as any, 'navigate').and.returnValue(
+      1 as any as any
+    );
+    const benRegID = '123';
     component.editPatientInfo(benRegID);
     fixture.autoDetectChanges();
     expect(spier).toHaveBeenCalledWith(['/registrar/search/' + benRegID]);
@@ -437,10 +437,12 @@ describe('SearchComponent', () => {
 
   it('should not navigate to editing page if user doesnt confirm editing registration', () => {
     const spi = spyOn(confirmService, 'confirm').and.returnValue(
-      Observable.of(false)
+      of(false) as any
     );
-    const spier = spyOn(router, 'navigate').and.returnValue(1);
-    const benRegID = 123;
+    const spier = spyOn(router as any, 'navigate').and.returnValue(
+      1 as any as any
+    );
+    const benRegID = '123';
     component.editPatientInfo(benRegID);
     fixture.autoDetectChanges();
     expect(spier).not.toHaveBeenCalled();
@@ -448,11 +450,11 @@ describe('SearchComponent', () => {
 
   it('should call registrarService.patientRevisit if sendToNurseWindows gets user permission', () => {
     const res = 'sent to nurse window';
-    const spi = spyOn(confirmService, 'alert').and.returnValue(1);
+    const spi = spyOn(confirmService, 'alert').and.returnValue(1 as any as any);
     const spier = spyOn(registrarService, 'patientRevisit').and.returnValue(
-      Observable.of({ response: res })
+      of({ response: res }) as any
     );
-    const benRegID = 123;
+    const benRegID = '123';
     component.sendToNurseWindow(true, benRegID);
     fixture.autoDetectChanges();
     expect(spier).toHaveBeenCalledWith({ beneficiaryRegID: benRegID });
@@ -461,10 +463,12 @@ describe('SearchComponent', () => {
   it('should alert after calling registrarService.patientRevisit if sendToNurseWindows gets user permission', () => {
     const res = 'sent to nurse window';
     const spi = spyOn(registrarService, 'patientRevisit').and.returnValue(
-      Observable.of({ response: res })
+      of({ response: res }) as any
     );
-    const spier = spyOn(confirmService, 'alert').and.returnValue(1);
-    const benRegID = 123;
+    const spier = spyOn(confirmService, 'alert').and.returnValue(
+      1 as any as any as any as any
+    );
+    const benRegID = '123';
     component.sendToNurseWindow(true, benRegID);
     fixture.autoDetectChanges();
     expect(spier).toHaveBeenCalledWith(res);
@@ -473,9 +477,9 @@ describe('SearchComponent', () => {
   it('should not call registrarService.patientRevisit if sendToNurseWindows doenst get user permission', () => {
     const res = 'sent to nurse window';
     const spier = spyOn(registrarService, 'patientRevisit').and.returnValue(
-      Observable.of({ response: res })
+      of({ response: res }) as any
     );
-    const benRegID = 123;
+    const benRegID = '123';
     component.sendToNurseWindow(false, benRegID);
     fixture.autoDetectChanges();
     expect(spier).not.toHaveBeenCalled();
@@ -485,8 +489,8 @@ describe('SearchComponent', () => {
     const spier = spyOn(
       beneficiaryService,
       'getBeneficiaryImage'
-    ).and.returnValue(Observable.of(1));
-    const benRegID = 123;
+    ).and.returnValue(of(1 as any) as any);
+    const benRegID = '123';
     component.patientImageView(benRegID);
     fixture.autoDetectChanges();
     expect(spier).toHaveBeenCalledWith(benRegID);
@@ -496,7 +500,7 @@ describe('SearchComponent', () => {
     const spier = spyOn(
       beneficiaryService,
       'getBeneficiaryImage'
-    ).and.returnValue(Observable.of(1));
+    ).and.returnValue(of(1 as any) as any);
     component.patientImageView('');
     fixture.autoDetectChanges();
     expect(spier).not.toHaveBeenCalled();
@@ -507,9 +511,9 @@ describe('SearchComponent', () => {
     const spi = spyOn(
       beneficiaryService,
       'getBeneficiaryImage'
-    ).and.returnValue(Observable.of(imageData));
+    ).and.returnValue(of(imageData as any) as any);
     const spier = spyOn(camera, 'viewImage').and.callFake(() => {});
-    const benRegID = 123;
+    const benRegID = '123';
     component.patientImageView(benRegID);
     fixture.autoDetectChanges();
     expect(spier).toHaveBeenCalled();
@@ -520,9 +524,9 @@ describe('SearchComponent', () => {
     const spi = spyOn(
       beneficiaryService,
       'getBeneficiaryImage'
-    ).and.returnValue(Observable.of({ benImage: imageData }));
+    ).and.returnValue(of({ benImage: imageData } as any) as any);
     const spier = spyOn(camera, 'viewImage').and.callFake(() => {});
-    const benRegID = 123;
+    const benRegID = '123';
     component.patientImageView(benRegID);
     fixture.autoDetectChanges();
     expect(spier).toHaveBeenCalledWith(imageData);

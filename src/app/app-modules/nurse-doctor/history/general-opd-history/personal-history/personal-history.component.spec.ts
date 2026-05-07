@@ -35,7 +35,7 @@ import {
   FormArray,
 } from '@angular/forms';
 import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
-import { MaterialModule } from '../../../../core/material.module';
+
 
 import { GeneralUtils } from '../../../shared/utility';
 
@@ -56,7 +56,7 @@ describe('GeneralPersonalHistoryComponent', () => {
   let component: GeneralPersonalHistoryComponent;
   let fixture: ComponentFixture<GeneralPersonalHistoryComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [GeneralPersonalHistoryComponent],
     }).compileComponents();

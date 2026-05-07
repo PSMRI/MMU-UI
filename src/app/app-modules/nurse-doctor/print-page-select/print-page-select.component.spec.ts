@@ -20,7 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PrintPageSelectComponent } from './print-page-select.component';
 
@@ -28,7 +28,7 @@ describe('PrintPageSelectComponent', () => {
   let component: PrintPageSelectComponent;
   let fixture: ComponentFixture<PrintPageSelectComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [PrintPageSelectComponent],
     }).compileComponents();

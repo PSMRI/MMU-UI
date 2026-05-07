@@ -14,7 +14,8 @@ import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
-import { mergeClasses, noopFn } from '@/lib/utils/merge-classes';
+import { mergeClasses } from '@/lib/utils/merge-classes';
+const noopFn = () => {};
 
 import {
   inputVariants,

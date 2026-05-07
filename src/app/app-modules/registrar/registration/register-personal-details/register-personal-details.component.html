@@ -25,7 +25,9 @@
             mat-raised-button
             id="captureButton"
             class="m-t-10 mat_captureButton"
-            (click)="captureImage(); trackFieldInteraction('Capture Photo Button')"
+            (click)="
+              captureImage(); trackFieldInteraction('Capture Photo Button')
+            "
             type="button">
             {{ currentLanguageSet?.ro?.personalInfo?.capturePhoto }}
           </button>
@@ -151,7 +153,9 @@
             }}</mat-label>
             <mat-select
               required
-              (selectionChange)="onGenderSelected(); trackFieldInteraction('Gender')"
+              (selectionChange)="
+                onGenderSelected(); trackFieldInteraction('Gender')
+              "
               formControlName="gender">
               <mat-option
                 *ngFor="let gender of masterData?.genderMaster"
@@ -186,7 +190,9 @@
             }}</mat-label>
             <mat-select
               required
-              (selectionChange)="onAgeUnitEntered(); trackFieldInteraction('Age Unit')"
+              (selectionChange)="
+                onAgeUnitEntered(); trackFieldInteraction('Age Unit')
+              "
               formControlName="ageUnit">
               <mat-option value="Days">Days</mat-option>
               <mat-option value="Months">Months</mat-option>
@@ -235,7 +241,10 @@
               currentLanguageSet?.ro?.personalInfo?.maritalStatus
             }}</mat-label>
             <mat-select
-              (selectionChange)="onMaritalStatusChanged(); trackFieldInteraction('Marital Status')"
+              (selectionChange)="
+                onMaritalStatusChanged();
+                trackFieldInteraction('Marital Status')
+              "
               [required]="enableMaritalStatus"
               formControlName="maritalStatus">
               <mat-option
@@ -316,7 +325,9 @@
             }}</mat-label>
             <mat-select
               formControlName="literacyStatus"
-              (selectionChange)="changeLiteracyStatus(); trackFieldInteraction('Literacy Status')">
+              (selectionChange)="
+                changeLiteracyStatus(); trackFieldInteraction('Literacy Status')
+              ">
               <mat-option value="Illiterate">Illiterate</mat-option>
               <mat-option value="Illiterate (can sign)">
                 Illiterate (can sign)
@@ -340,7 +351,10 @@
                 personalDetailsForm.value.literacyStatus === 'Literate'
               "
               formControlName="educationQualification"
-              (selectionChange)="onEducationQualificationChanged(); trackFieldInteraction('Educational Qualification')">
+              (selectionChange)="
+                onEducationQualificationChanged();
+                trackFieldInteraction('Educational Qualification')
+              ">
               <mat-option
                 *ngFor="let qualification of masterData?.qualificationMaster"
                 [value]="qualification.educationID">
@@ -371,7 +385,9 @@
                 <mat-select
                   formControlName="occupation"
                   [required]="isOccuptionRequired"
-                  (selectionChange)="getOccupationName(); trackFieldInteraction('Occupation')">
+                  (selectionChange)="
+                    getOccupationName(); trackFieldInteraction('Occupation')
+                  ">
                   <mat-option
                     *ngFor="let occupation of masterData?.occupationMaster"
                     [value]="occupation.occupationID">
@@ -408,7 +424,9 @@
               {{ currentLanguageSet?.ro?.personalInfo?.incomeStatus }}
             </mat-label>
             <mat-select
-              (selectionChange)="onIncomeChanged(); trackFieldInteraction('Income Status')"
+              (selectionChange)="
+                onIncomeChanged(); trackFieldInteraction('Income Status')
+              "
               formControlName="income">
               <mat-option
                 *ngFor="let incomeStatus of masterData?.incomeMaster"

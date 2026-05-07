@@ -35,7 +35,7 @@ import {
   FormArray,
 } from '@angular/forms';
 import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
-import { MaterialModule } from '../../../core/material.module';
+
 
 import { VisitDetailUtils } from '../../shared/utility';
 
@@ -58,7 +58,7 @@ describe('ChiefComplaintsComponent', () => {
   let debugElement: DebugElement;
   let fb: FormBuilder;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         NoopAnimationsModule,
@@ -189,7 +189,7 @@ describe('ChiefComplaintsComponent', () => {
         component.mode = String('view');
         spyOn(component, 'getChiefComplaints').and.callThrough();
         spyOn(doctorService, 'getVisitComplaintDetails').and.returnValue(
-          Observable.of(data.generalOPDVisitDetails)
+          of(data.generalOPDVisitDetails)
         );
         masterdataService.nurseMasterDataSource.next(
           data.generalOPDNurseMasterdata.data
@@ -205,7 +205,7 @@ describe('ChiefComplaintsComponent', () => {
       [DoctorService, MasterdataService],
       (doctorService, masterdataService) => {
         spyOn(doctorService, 'getVisitComplaintDetails').and.returnValue(
-          Observable.of(data.generalOPDVisitDetails)
+          of(data.generalOPDVisitDetails)
         );
         component.mode = String('view');
         masterdataService.nurseMasterDataSource.next(

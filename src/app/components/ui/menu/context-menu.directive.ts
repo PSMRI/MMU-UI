@@ -1,8 +1,9 @@
 import { CdkContextMenuTrigger } from '@angular/cdk/menu';
-import { DestroyRef, Directive, DOCUMENT, ElementRef, inject, input, type TemplateRef } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { DestroyRef, Directive, ElementRef, inject, input, type TemplateRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { noopFn } from '@/lib/utils/merge-classes';
+const noopFn = () => {};
 
 @Directive({
   selector: '[z-context-menu]',
@@ -41,7 +42,7 @@ export class ZardContextMenuDirective {
         overlayY: 'top',
       },
     ];
-    this.cdkTrigger.opened.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.attachCloseListeners());
+    (this.cdkTrigger.opened as any).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.attachCloseListeners());
   }
 
   protected handleKeyDown(event: KeyboardEvent): void {

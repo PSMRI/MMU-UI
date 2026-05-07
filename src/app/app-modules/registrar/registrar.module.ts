@@ -22,56 +22,49 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { RegistrarRoutingModule } from './registrar-routing.module';
+import { RegistrarService } from './shared/services/registrar.service';
+import { CoreModule } from '../core/core.module';
+import { RegistrationComponent } from './registration/registration.component';
 import { RegisterPersonalDetailsComponent } from './registration/register-personal-details/register-personal-details.component';
 import { RegisterDemographicDetailsComponent } from './registration/register-demographic-details/register-demographic-details.component';
 import { RegisterOtherDetailsComponent } from './registration/register-other-details/register-other-details.component';
-
 import { RegisterEditLocationComponent } from './registration/register-edit-location/register-edit-location.component';
-import { MaterialModule } from '../core/material.module';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { CoreModule } from '../core/core.module';
-import { RegistrarRoutingModule } from './registrar-routing.module';
-import { RegistrationComponent } from './registration/registration.component';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatTableModule } from '@angular/material/table';
-import { RegistrarService } from './shared/services/registrar.service';
 import { SearchComponent } from './search/search.component';
 import { SearchDialogComponent } from './search-dialog/search-dialog.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { SharedModule } from '../core/components/shared/shared.module';
-// import { SharedModule } from '../core/shared/shared/shared.module';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   imports: [
     CommonModule,
-    MaterialModule,
-    FormsModule,
-    CoreModule,
-    MatSelectModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatDialogModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatTooltipModule,
-    MatTableModule,
     RegistrarRoutingModule,
     ReactiveFormsModule,
-    SharedModule,
-    BsDatepickerModule.forRoot(),
-  ],
-  providers: [RegistrarService],
-  declarations: [
+    FormsModule,
+    CoreModule,
+    MatStepperModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    // Standalone components
     RegistrationComponent,
     RegisterPersonalDetailsComponent,
     RegisterDemographicDetailsComponent,
@@ -81,5 +74,7 @@ import { SharedModule } from '../core/components/shared/shared.module';
     SearchDialogComponent,
     DashboardComponent,
   ],
+  declarations: [],
+  providers: [RegistrarService],
 })
 export class RegistrarModule {}

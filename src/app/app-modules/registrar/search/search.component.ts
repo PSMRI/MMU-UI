@@ -28,6 +28,7 @@ import {
   DoCheck,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SearchDialogComponent } from '../search-dialog/search-dialog.component';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { CameraService } from '../../core/services/camera.service';
@@ -41,11 +42,28 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css'],
-  standalone: false,
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatCardModule,
+  ],
 })
 export class SearchComponent implements OnInit, DoCheck {
   rowsPerPage = 5;

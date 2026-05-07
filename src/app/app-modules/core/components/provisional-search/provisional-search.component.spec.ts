@@ -20,7 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProvisionalSearchComponent } from './provisional-search.component';
 
@@ -28,7 +28,7 @@ describe('ProvisionalSearchComponent', () => {
   let component: ProvisionalSearchComponent;
   let fixture: ComponentFixture<ProvisionalSearchComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [ProvisionalSearchComponent],
     }).compileComponents();

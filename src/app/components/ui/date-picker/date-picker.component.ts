@@ -22,7 +22,8 @@ import { ZardButtonComponent, type ZardButtonTypeVariants } from '@/components/u
 import { ZardCalendarComponent } from '@/components/ui/calendar';
 import type { ZardDatePickerSizeVariants } from '@/components/ui/date-picker/date-picker.variants';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@/components/ui/popover';
-import { mergeClasses, noopFn } from '@/lib/utils/merge-classes';
+import { mergeClasses } from '@/lib/utils/merge-classes';
+const noopFn = () => {};
 
 /**
  * Height overrides for date-picker sizes.

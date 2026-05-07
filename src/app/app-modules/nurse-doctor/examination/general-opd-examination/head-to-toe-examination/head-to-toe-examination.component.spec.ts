@@ -35,7 +35,7 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../../../core/material.module';
+
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { HeadToToeExaminationComponent } from './head-to-toe-examination.component';
@@ -47,7 +47,7 @@ import { DoctorService } from '../../../shared/services';
 import { DoctorServiceStub } from '../../../shared/mocks/doctor-service-stub';
 
 import * as data from '../../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of, BehaviorSubject, Subject } from "rxjs";
 
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
@@ -62,7 +62,7 @@ describe('HeadToToeExaminationComponent', () => {
   let el: HTMLElement;
   let spy: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
@@ -99,7 +99,7 @@ describe('HeadToToeExaminationComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should check head to toe examination and make dependentfield null', async(() => {
+  it('should check head to toe examination and make dependentfield null', waitForAsync(() => {
     spyOn(component, 'checkWithHeadToToe').and.callThrough();
     component.headToToeExaminationForm.patchValue({
       headtoToeExam: 'Abnormal',

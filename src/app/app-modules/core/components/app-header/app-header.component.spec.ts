@@ -30,14 +30,14 @@ import {
 import { AuthService } from '../../app-modules/services/auth.service';
 import { AppHeaderComponent } from './app-header.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of, BehaviorSubject, Subject } from "rxjs";
 import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/empty';
 import 'rxjs/add/observable/throw';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MaterialModule } from '../../../core/material.module';
+
 
 class MockActivatedRoute {
   snapshot = {
@@ -51,7 +51,7 @@ describe('AppHeaderComponent', () => {
   let authService: AuthService;
   let router: Router;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
       imports: [MaterialModule, NoopAnimationsModule, AppHeaderComponent],
@@ -139,7 +139,7 @@ describe('AppHeaderComponent', () => {
 
   it('should call logout method on click of logout tag', fakeAsync(() => {
     const spy = spyOn(authService, 'logoutUser').and.returnValue(
-      Observable.of(1)
+      of(1)
     );
     component.ngOnInit();
     fixture.detectChanges();
@@ -152,7 +152,7 @@ describe('AppHeaderComponent', () => {
 
   it('should not clear local storage asresponse is not correct', () => {
     spyOn(authService, 'logoutUser').and.returnValue(
-      Observable.of({ statusCode: 401 })
+      of({ statusCode: 401 })
     );
     component.ngOnInit();
     component.logout();
@@ -162,7 +162,7 @@ describe('AppHeaderComponent', () => {
 
   it('should not clear session storage asresponse is not correct', () => {
     spyOn(authService, 'logoutUser').and.returnValue(
-      Observable.of({ statusCode: 401 })
+      of({ statusCode: 401 })
     );
     component.ngOnInit();
     component.logout();
@@ -172,7 +172,7 @@ describe('AppHeaderComponent', () => {
 
   it('should  clear local storage as response is  correct', () => {
     spyOn(authService, 'logoutUser').and.returnValue(
-      Observable.of({ statusCode: 200 })
+      of({ statusCode: 200 })
     );
     component.ngOnInit();
     component.logout();
@@ -182,7 +182,7 @@ describe('AppHeaderComponent', () => {
 
   it('should  clear local storage as response is  correct', () => {
     spyOn(authService, 'logoutUser').and.returnValue(
-      Observable.of({ statusCode: 200 })
+      of({ statusCode: 200 })
     );
     component.ngOnInit();
     component.logout();
@@ -192,7 +192,7 @@ describe('AppHeaderComponent', () => {
 
   it('should call to navigate to other component', () => {
     spyOn(authService, 'logoutUser').and.returnValue(
-      Observable.of({ statusCode: 200 })
+      of({ statusCode: 200 })
     );
     const spier = spyOn(router, 'navigate');
     component.ngOnInit();
@@ -202,7 +202,7 @@ describe('AppHeaderComponent', () => {
 
   it('should call to navigate to login component', () => {
     spyOn(authService, 'logoutUser').and.returnValue(
-      Observable.of({ statusCode: 200 })
+      of({ statusCode: 200 })
     );
     const spier = spyOn(router, 'navigate');
     component.ngOnInit();
