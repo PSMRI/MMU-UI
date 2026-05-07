@@ -30,7 +30,7 @@ describe('ContactHistoryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ContactHistoryComponent],
+      imports: [ContactHistoryComponent],
     }).compileComponents();
   }));
 

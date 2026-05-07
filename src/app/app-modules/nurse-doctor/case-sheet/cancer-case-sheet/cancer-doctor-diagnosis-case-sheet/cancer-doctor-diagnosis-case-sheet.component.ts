@@ -25,11 +25,13 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MasterdataService } from '../../../shared/services';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-cancer-doctor-diagnosis-case-sheet',
   templateUrl: './cancer-doctor-diagnosis-case-sheet.component.html',
   styleUrls: ['./cancer-doctor-diagnosis-case-sheet.component.css'],
+  imports: [NgIf],
 })
 export class CancerDoctorDiagnosisCaseSheetComponent
   implements OnInit, OnChanges, DoCheck
@@ -44,7 +46,7 @@ export class CancerDoctorDiagnosisCaseSheetComponent
   currentVitals: any;
   caseSheetDiagnosisData: any;
   date: any;
-  enableDoctorSign: boolean = false;
+  enableDoctorSign = false;
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
   servicePointName: any;

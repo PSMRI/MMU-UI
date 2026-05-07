@@ -58,7 +58,7 @@ describe('OtherVaccinesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [OtherVaccinesComponent],
+      imports: [OtherVaccinesComponent],
     }).compileComponents();
   }));
 

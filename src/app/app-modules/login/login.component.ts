@@ -22,27 +22,41 @@
 
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
 import {
   AuthService,
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { DataSyncLoginComponent } from '../core/components/data-sync-login/data-sync-login.component';
 import { MasterDownloadComponent } from '../data-sync/master-download/master-download.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { environment } from 'src/environments/environment';
 import { CaptchaComponent } from '../captcha/captcha.component';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { MatIcon } from '@angular/material/icon';
+import { StringValidatorDirective } from '../core/directives/stringValidator.directive';
+import { NgIf } from '@angular/common';
+import { AppFooterComponent } from '../core/components/app-footer/app-footer.component';
 
 @Component({
   selector: 'app-login-cmp',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    MatIcon,
+    StringValidatorDirective,
+    NgIf,
+    RouterLink,
+    AppFooterComponent,
+    CaptchaComponent,
+  ],
 })
 export class LoginComponent implements OnInit {
   @ViewChild('captchaCmp') captchaCmp: CaptchaComponent | undefined;
+  currentYear = new Date().getFullYear();
   dynamictype = 'password';
   encryptedVar: any;
   key: any;

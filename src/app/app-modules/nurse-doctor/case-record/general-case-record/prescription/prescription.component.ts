@@ -35,15 +35,27 @@ import {
   FormArray,
   NgForm,
   AbstractControl,
+  ReactiveFormsModule,
+  FormsModule,
 } from '@angular/forms';
 import { MasterdataService, DoctorService } from '../../../shared/services';
 import { GeneralUtils } from '../../../shared/utility/general-utility';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { NgIf, NgFor, NgClass, SlicePipe } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import {
+  MatOption,
+  MatAutocompleteTrigger,
+  MatAutocomplete,
+} from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 interface prescribe {
   id: any;
@@ -70,6 +82,24 @@ interface prescribe {
   templateUrl: './prescription.component.html',
   styleUrls: ['./prescription.component.css'],
   encapsulation: ViewEncapsulation.None,
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    NgIf,
+    MatIcon,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    NgFor,
+    MatOption,
+    MatInput,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    StringValidatorDirective,
+    NgClass,
+    MatPaginator,
+    SlicePipe,
+  ],
 })
 export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
   generalUtils = new GeneralUtils(this.fb, this.sessionstorage);

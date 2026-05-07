@@ -63,9 +63,13 @@ describe('FamilyHistoryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        FamilyHistoryComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
-      declarations: [FamilyHistoryComponent],
       providers: [
         ConfirmationService,
         { provide: MasterdataService, useClass: MasterdataServiceStub },

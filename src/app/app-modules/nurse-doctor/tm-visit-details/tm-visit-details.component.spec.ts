@@ -30,7 +30,7 @@ describe('TmVisitDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [TmVisitDetailsComponent],
+      imports: [TmVisitDetailsComponent],
     }).compileComponents();
   }));
 

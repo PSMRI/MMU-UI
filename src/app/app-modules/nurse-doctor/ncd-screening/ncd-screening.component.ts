@@ -29,7 +29,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
 import {
@@ -54,6 +54,28 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import {
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
+import {
+  MatFormField,
+  MatLabel,
+  MatSelect,
+  MatSuffix,
+} from '@angular/material/select';
+import { NgFor, NgIf, NgClass } from '@angular/common';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../../core/directives/stringValidator.directive';
+import { NumberValidatorDirective } from '../../core/directives/numberValidator.directive';
+import { MatTooltip } from '@angular/material/tooltip';
+import {
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatDatepicker,
+} from '@angular/material/datepicker';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
   selector: 'app-nurse-ncd-screening',
@@ -83,6 +105,28 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
         },
       },
     },
+  ],
+  imports: [
+    ReactiveFormsModule,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    NgFor,
+    MatOption,
+    MatInput,
+    StringValidatorDirective,
+    NumberValidatorDirective,
+    MatSuffix,
+    MatTooltip,
+    NgIf,
+    NgClass,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatDatepicker,
+    MatRadioGroup,
+    MatRadioButton,
   ],
 })
 export class NcdScreeningComponent

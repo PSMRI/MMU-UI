@@ -26,6 +26,8 @@ import {
   FormArray,
   FormBuilder,
   FormGroup,
+  ReactiveFormsModule,
+  FormsModule,
 } from '@angular/forms';
 import { MasterdataService, DoctorService } from '../../../../shared/services';
 import { ActivatedRoute } from '@angular/router';
@@ -34,10 +36,37 @@ import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { GeneralUtils } from 'src/app/app-modules/nurse-doctor/shared/utility';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import { NgIf, NgFor } from '@angular/common';
+import {
+  MatOption,
+  MatAutocompleteTrigger,
+  MatAutocomplete,
+} from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../../../../../core/directives/stringValidator.directive';
+import { AutocompleteScrollerDirective } from '../../../../shared/utility/autocomplete-scroller.directive';
+import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-ncd-care-diagnosis',
   templateUrl: './ncd-care-diagnosis.component.html',
   styleUrls: ['./ncd-care-diagnosis.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    NgIf,
+    MatSelect,
+    FormsModule,
+    NgFor,
+    MatOption,
+    MatInput,
+    StringValidatorDirective,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    AutocompleteScrollerDirective,
+    MatIcon,
+  ],
 })
 export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
   utils = new GeneralUtils(this.fb, this.sessionstorage);

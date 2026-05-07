@@ -21,7 +21,7 @@
  */
 
 import { Component, DoCheck, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import {
   BeneficiaryDetailsService,
@@ -34,20 +34,32 @@ import {
   DoctorService,
 } from '../../shared/services';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import { NgFor, NgIf } from '@angular/common';
+import { MatOption } from '@angular/material/autocomplete';
 @Component({
   selector: 'app-covid-vaccination-status',
   templateUrl: './covid-vaccination-status.component.html',
   styleUrls: ['./covid-vaccination-status.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    NgFor,
+    MatOption,
+    NgIf,
+  ],
 })
 export class CovidVaccinationStatusComponent implements OnInit, DoCheck {
   currentLanguageSet: any;
   beneficiaryAge: any;
-  enableVaccinationStatusFields: boolean = false;
-  enableVaccineTypeAndDoseTakenFlag: boolean = false;
+  enableVaccinationStatusFields = false;
+  enableVaccineTypeAndDoseTakenFlag = false;
   doseTypeList: any = [];
   vaccineTypeList: any = [];
   today: Date = new Date();
-  enableSaveButton: boolean = true;
+  enableSaveButton = true;
 
   constructor(
     private httpService: HttpServiceService,

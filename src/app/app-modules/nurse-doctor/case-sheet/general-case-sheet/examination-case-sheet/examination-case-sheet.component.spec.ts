@@ -30,7 +30,7 @@ describe('ExaminationCaseSheetComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ExaminationCaseSheetComponent],
+      imports: [ExaminationCaseSheetComponent],
     }).compileComponents();
   }));
 

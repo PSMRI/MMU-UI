@@ -24,10 +24,14 @@ import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
+import { NgIf } from '@angular/common';
+import { CancerPatientVitalsComponent } from './cancer-patient-vitals/cancer-patient-vitals.component';
+import { GeneralPatientVitalsComponent } from './general-patient-vitals/general-patient-vitals.component';
 @Component({
   selector: 'app-nurse-vitals',
   templateUrl: './vitals.component.html',
   styleUrls: ['./vitals.component.css'],
+  imports: [NgIf, CancerPatientVitalsComponent, GeneralPatientVitalsComponent],
 })
 export class VitalsComponent implements OnInit, OnChanges, DoCheck {
   @Input()

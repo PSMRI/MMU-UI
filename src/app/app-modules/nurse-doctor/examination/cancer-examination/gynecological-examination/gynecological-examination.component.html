@@ -203,7 +203,7 @@
        <button
         style="margin-left: 30px"
         class="mat_blue"
-        [disabled]="!viewFiles?.length"
+        [disabled]="!viewFiles.length"
         (click)="viewNurseSelectedFiles()"
         >
         {{ currentLanguageSet?.nurseData?.visitDetailsForm?.viewFiles }}
@@ -216,7 +216,7 @@
         color="primary"
         class="mat_blue pull-right"
         (click)="checkForDuplicateUpload()"
-        [disabled]="!fileData?.length"
+        [disabled]="!fileData.length"
       >
         {{ currentLanguageSet?.common?.upload || 'Upload' }}
       </button>

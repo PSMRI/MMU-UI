@@ -26,15 +26,53 @@ import { SetLanguageComponent } from '../core/components/set-language.component'
 import { ConfirmationService } from '../core/services';
 import { HttpServiceService } from '../core/services/http-service.service';
 import { ServicePointService } from './service-point.service';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { RegistrarService } from '../registrar/shared/services/registrar.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { AppHeaderComponent } from '../core/components/app-header/app-header.component';
+import {
+  MatCard,
+  MatCardHeader,
+  MatCardContent,
+  MatCardActions,
+} from '@angular/material/card';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { NgFor } from '@angular/common';
+import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import {
+  MatOption,
+  MatAutocompleteTrigger,
+  MatAutocomplete,
+} from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../core/directives/stringValidator.directive';
+import { AppFooterComponent } from '../core/components/app-footer/app-footer.component';
 
 @Component({
   selector: 'app-service-point',
   templateUrl: './service-point.component.html',
   styleUrls: ['./service-point.component.css'],
+  imports: [
+    AppHeaderComponent,
+    MatCard,
+    MatCardHeader,
+    MatCardContent,
+    ReactiveFormsModule,
+    MatRadioGroup,
+    NgFor,
+    MatRadioButton,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatInput,
+    MatAutocompleteTrigger,
+    StringValidatorDirective,
+    MatAutocomplete,
+    MatCardActions,
+    AppFooterComponent,
+  ],
 })
 export class ServicePointComponent implements OnInit, DoCheck {
   designation: any;

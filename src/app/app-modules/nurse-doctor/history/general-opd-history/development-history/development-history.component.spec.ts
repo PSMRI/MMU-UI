@@ -63,9 +63,13 @@ describe('DevelopmentHistoryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        DevelopmentHistoryComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
-      declarations: [DevelopmentHistoryComponent],
       providers: [
         ConfirmationService,
         { provide: MasterdataService, useClass: MasterdataServiceStub },

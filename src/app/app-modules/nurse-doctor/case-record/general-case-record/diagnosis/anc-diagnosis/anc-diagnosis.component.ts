@@ -21,7 +21,7 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MasterdataService, DoctorService } from '../../../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
@@ -36,6 +36,23 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgIf, NgFor } from '@angular/common';
+import {
+  MatLabel,
+  MatFormField,
+  MatSelect,
+  MatSuffix,
+} from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../../../../../core/directives/stringValidator.directive';
+import { NumberValidatorDirective } from '../../../../../core/directives/numberValidator.directive';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import {
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatDatepicker,
+} from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-anc-diagnosis',
@@ -66,6 +83,24 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
       },
     },
   ],
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    MatLabel,
+    MatFormField,
+    MatInput,
+    StringValidatorDirective,
+    NumberValidatorDirective,
+    MatSelect,
+    NgFor,
+    MatOption,
+    MatRadioGroup,
+    MatRadioButton,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+  ],
 })
 export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
   masterData: any;
@@ -76,11 +111,11 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
 
   minimumDeathDate!: Date;
 
-  showOtherPregnancyComplication: boolean = false;
-  disableNonePregnancyComplication: boolean = false;
-  showAllPregComplication: boolean = true;
+  showOtherPregnancyComplication = false;
+  disableNonePregnancyComplication = false;
+  showAllPregComplication = true;
   showHRP: any;
-  complicationPregHRP: string = 'false';
+  complicationPregHRP = 'false';
 
   @Input()
   generalDiagnosisForm!: FormGroup;

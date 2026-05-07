@@ -30,7 +30,7 @@ describe('MasterDownloadComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MasterDownloadComponent],
+      imports: [MasterDownloadComponent],
     }).compileComponents();
   }));
 

@@ -42,8 +42,12 @@ describe('GynecologicalExaminationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
-      declarations: [GynecologicalExaminationComponent],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        GynecologicalExaminationComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [{ provide: CameraService, useClass: CameraServiceStub }],
     }).compileComponents();

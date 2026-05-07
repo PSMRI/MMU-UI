@@ -6,13 +6,14 @@ import { AppComponent } from './app.component';
 import {
   HTTP_INTERCEPTORS,
   HttpClient,
-  HttpClientModule,
+  provideHttpClient,
+  withInterceptorsFromDi,
 } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { CoreModule } from './app-modules/core/core.module';
-import { MaterialModule } from './app-modules/core/material.module';
+
 import { HttpInterceptorService } from './app-modules/core/services/http-interceptor.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { LoginComponent } from './app-modules/login/login.component';
@@ -33,24 +34,16 @@ import { NgxPaginationModule } from 'ngx-pagination';
 // import { SharedModule } from './app-modules/core/shared/shared/shared.module';
 import { RegistrarService } from './app-modules/registrar/shared/services/registrar.service';
 import { DataSYNCModule } from './app-modules/data-sync/dataSync.module';
-import { SharedModule } from './app-modules/core/components/shared/shared.module';
+
 import { CommonModule } from '@angular/common';
 import { CaptchaComponent } from './app-modules/captcha/captcha.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { TrackingModule } from 'Common-UI/src/tracking';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    ServiceComponent,
-    ServicePointComponent,
-    SetSecurityQuestionsComponent,
-    SetPasswordComponent,
-    ResetPasswordComponent,
-    TmLogoutComponent,
-    CaptchaComponent,
-  ],
+  declarations: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  bootstrap: [AppComponent],
   imports: [
     CommonModule,
     BrowserModule,
@@ -60,19 +53,23 @@ import { TrackingModule } from 'Common-UI/src/tracking';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    HttpClientModule,
-    MaterialModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     MatGridListModule,
     WebcamModule,
     NgxPaginationModule,
-    SharedModule,
     CoreModule.forRoot(),
     MatChipsModule,
     TrackingModule.forRoot(),
+    LoginComponent,
+    ServiceComponent,
+    ServicePointComponent,
+    SetSecurityQuestionsComponent,
+    SetPasswordComponent,
+    ResetPasswordComponent,
+    TmLogoutComponent,
+    CaptchaComponent,
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     HttpClient,
     ServicePointResolve,
@@ -84,7 +81,7 @@ import { TrackingModule } from 'Common-UI/src/tracking';
       useClass: HttpInterceptorService,
       multi: true,
     },
+    provideHttpClient(withInterceptorsFromDi()),
   ],
-  bootstrap: [AppComponent],
 })
 export class AppModule {}

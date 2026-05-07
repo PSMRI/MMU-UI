@@ -30,7 +30,7 @@ describe('RadiologistWorklistComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [RadiologistWorklistComponent],
+      imports: [RadiologistWorklistComponent],
     }).compileComponents();
   }));
 

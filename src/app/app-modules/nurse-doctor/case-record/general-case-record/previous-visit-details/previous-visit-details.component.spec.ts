@@ -30,7 +30,7 @@ describe('PreviousVisitDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PreviousVisitDetailsComponent],
+      imports: [PreviousVisitDetailsComponent],
     }).compileComponents();
   }));
 

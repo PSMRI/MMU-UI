@@ -58,13 +58,13 @@ describe('SystemicExaminationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SystemicExaminationComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
         ReactiveFormsModule,
         FormsModule,
         MaterialModule,
         NoopAnimationsModule,
+        SystemicExaminationComponent,
       ],
     }).compileComponents();
   }));

@@ -30,7 +30,7 @@ describe('PncCaseSheetComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PncCaseSheetComponent],
+      imports: [PncCaseSheetComponent],
     }).compileComponents();
   }));
 

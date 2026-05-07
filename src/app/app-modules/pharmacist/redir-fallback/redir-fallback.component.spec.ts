@@ -30,7 +30,7 @@ describe('RedirFallbackComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [RedirFallbackComponent],
+      imports: [RedirFallbackComponent],
     }).compileComponents();
   }));
 

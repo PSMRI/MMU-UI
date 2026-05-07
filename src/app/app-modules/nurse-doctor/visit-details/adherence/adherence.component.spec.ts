@@ -55,8 +55,12 @@ describe('AdherenceComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
-      declarations: [AdherenceComponent],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        AdherenceComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [{ provide: DoctorService, useClass: DoctorServiceStub }],
     }).compileComponents();

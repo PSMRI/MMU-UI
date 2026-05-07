@@ -30,7 +30,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { DoctorService } from '../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
@@ -39,10 +39,35 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
+import { BeneficiaryPlatformHistoryComponent } from '../beneficiary-platform-history/beneficiary-platform-history.component';
+import { NgClass, NgIf } from '@angular/common';
+import { NgChartsModule } from 'ng2-charts';
+import { MatFormField, MatLabel } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
 @Component({
   selector: 'app-cancer-case-record',
   templateUrl: './cancer-case-record.component.html',
   styleUrls: ['./cancer-case-record.component.css'],
+  imports: [
+    MatAccordion,
+    ReactiveFormsModule,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    BeneficiaryPlatformHistoryComponent,
+    NgClass,
+    NgIf,
+    NgChartsModule,
+    MatFormField,
+    MatInput,
+    StringValidatorDirective,
+    MatLabel,
+  ],
 })
 export class CancerCaseRecordComponent
   implements OnInit, DoCheck, AfterViewInit, OnDestroy
@@ -67,8 +92,8 @@ export class CancerCaseRecordComponent
       pointHoverBorderColor: 'maroon',
     },
   ];
-  weightChartLegend: boolean = true;
-  weightChartType: string = 'line';
+  weightChartLegend = true;
+  weightChartType = 'line';
   // Ends Weight Graph
 
   // Bp Graph
@@ -94,8 +119,8 @@ export class CancerCaseRecordComponent
       pointHoverBorderColor: 'rgba(222,92,132,1)',
     },
   ];
-  bpChartLegend: boolean = true;
-  bpChartType: string = 'line';
+  bpChartLegend = true;
+  bpChartType = 'line';
   // Ends Bp Graph
 
   // Bg Chart
@@ -131,8 +156,8 @@ export class CancerCaseRecordComponent
       pointHoverBorderColor: 'rgba(222,92,132,1)',
     },
   ];
-  bgChartLegend: boolean = true;
-  bgChartType: string = 'line';
+  bgChartLegend = true;
+  bgChartType = 'line';
 
   //Ends Bg Chart
 
@@ -447,7 +472,7 @@ export class CancerCaseRecordComponent
   rotate = true;
   historyOfMMU = [];
   filteredMMUHistory: any = [];
-  hideMMUFetch: boolean = false;
+  hideMMUFetch = false;
   getMMUHistory() {
     this.doctorService.getMMUHistory().subscribe((data: any) => {
       console.log('data', data);

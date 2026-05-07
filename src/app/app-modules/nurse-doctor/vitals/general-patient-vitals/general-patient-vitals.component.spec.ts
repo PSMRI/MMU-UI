@@ -69,13 +69,13 @@ describe('GeneralPatientVitalsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [GeneralPatientVitalsComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
         ReactiveFormsModule,
         FormsModule,
         MaterialModule,
         NoopAnimationsModule,
+        GeneralPatientVitalsComponent,
       ],
       providers: [
         ConfirmationService,

@@ -30,7 +30,7 @@ describe('NurseWorklistTabsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [NurseWorklistTabsComponent],
+      imports: [NurseWorklistTabsComponent],
     }).compileComponents();
   }));
 

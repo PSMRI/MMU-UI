@@ -33,17 +33,53 @@ import { BeneficiaryDetailsService } from '../../core/services/beneficiary-detai
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { DoctorService, MasterdataService } from '../shared/services';
 import { CameraService } from '../../core/services/camera.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatCard } from '@angular/material/card';
+import { NgClass, NgIf, TitleCasePipe } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
 @Component({
   selector: 'app-doctor-worklist',
   templateUrl: './doctor-worklist.component.html',
   styleUrls: ['./doctor-worklist.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    MatCard,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    NgClass,
+    MatTooltip,
+    NgIf,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatPaginator,
+    TitleCasePipe,
+  ],
 })
 export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
   rowsPerPage = 5;

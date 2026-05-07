@@ -22,10 +22,13 @@
 
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MaterialModule } from './material.module';
+
 import { AppFooterComponent } from './components/app-footer/app-footer.component';
 import { AppHeaderComponent } from './components/app-header/app-header.component';
 import { CommonDialogComponent } from './components/common-dialog/common-dialog.component';
@@ -68,21 +71,41 @@ import { MyEmailDirective } from './directives/email/myEmail.directive';
 import { MyMobileNumberDirective } from './directives/MobileNumber/myMobileNumber.directive';
 import { MyNameDirective } from './directives/name/myName.directive';
 import { MyPasswordDirective } from './directives/password/myPassword.directive';
-import { SharedModule } from './components/shared/shared.module';
 
 @NgModule({
+  exports: [
+    CommonDialogComponent,
+    IotBluetoothComponent,
+    ShowCommitAndVersionDetailsComponent,
+    CameraDialogComponent,
+    SpinnerComponent,
+    BeneficiaryDetailsComponent,
+    PreviousDetailsComponent,
+    MyEmailDirective,
+    MyMobileNumberDirective,
+    OpenModalDirective,
+    ConfirmatoryDiagnosisDirective,
+    MyNameDirective,
+    MyPasswordDirective,
+    DisableFormControlDirective,
+    StringValidatorDirective,
+    NumberValidatorDirective,
+    NullDefaultValueDirective,
+    IotcomponentComponent,
+    AllergenSearchComponent,
+    CalibrationComponent,
+    OpenPreviousVisitDetailsComponent,
+    WebcamModule,
+    NgChartsModule,
+  ],
   imports: [
     CommonModule,
-    MaterialModule,
-    HttpClientModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
     NgChartsModule,
     WebcamModule,
     MatTableModule,
-  ],
-  declarations: [
     CommonDialogComponent,
     CameraDialogComponent,
     ProvisionalSearchComponent,
@@ -107,32 +130,7 @@ import { SharedModule } from './components/shared/shared.module';
     AllergenSearchComponent,
     OpenPreviousVisitDetailsComponent,
   ],
-  exports: [
-    MaterialModule,
-    CommonDialogComponent,
-    IotBluetoothComponent,
-    ShowCommitAndVersionDetailsComponent,
-    CameraDialogComponent,
-    SpinnerComponent,
-    BeneficiaryDetailsComponent,
-    PreviousDetailsComponent,
-    MyEmailDirective,
-    MyMobileNumberDirective,
-    OpenModalDirective,
-    ConfirmatoryDiagnosisDirective,
-    MyNameDirective,
-    MyPasswordDirective,
-    DisableFormControlDirective,
-    StringValidatorDirective,
-    NumberValidatorDirective,
-    NullDefaultValueDirective,
-    IotcomponentComponent,
-    AllergenSearchComponent,
-    CalibrationComponent,
-    OpenPreviousVisitDetailsComponent,
-    WebcamModule,
-    NgChartsModule,
-  ],
+  providers: [provideHttpClient(withInterceptorsFromDi())],
 })
 export class CoreModule {
   static forRoot(): ModuleWithProviders<CoreModule> {

@@ -30,7 +30,7 @@ describe('TmLogoutComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [TmLogoutComponent],
+      imports: [TmLogoutComponent],
     }).compileComponents();
   }));
 

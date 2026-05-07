@@ -30,7 +30,7 @@ describe('PrintPageSelectComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PrintPageSelectComponent],
+      imports: [PrintPageSelectComponent],
     }).compileComponents();
   }));
 

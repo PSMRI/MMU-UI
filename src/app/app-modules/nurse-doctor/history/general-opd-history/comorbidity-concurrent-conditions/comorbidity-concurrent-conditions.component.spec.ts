@@ -65,9 +65,13 @@ describe('ComorbidityConcurrentConditionsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        ComorbidityConcurrentConditionsComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
-      declarations: [ComorbidityConcurrentConditionsComponent],
       providers: [
         ConfirmationService,
         { provide: MasterdataService, useClass: MasterdataServiceStub },

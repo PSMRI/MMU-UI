@@ -21,13 +21,16 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnChanges } from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { NgIf, NgFor } from '@angular/common';
+import { ImageToCanvasComponent } from '../image-to-canvas/image-to-canvas.component';
 @Component({
   selector: 'app-cancer-examination-case-sheet',
   templateUrl: './cancer-examination-case-sheet.component.html',
   styleUrls: ['./cancer-examination-case-sheet.component.css'],
+  imports: [NgIf, NgFor, ImageToCanvasComponent],
 })
 export class CancerExaminationCaseSheetComponent
   implements OnInit, OnChanges, DoCheck

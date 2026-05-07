@@ -55,8 +55,12 @@ describe('VisitDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
-      declarations: [VisitDetailsComponent],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        VisitDetailsComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: MasterdataService, useClass: MasterdataServiceStub },

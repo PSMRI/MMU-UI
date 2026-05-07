@@ -30,7 +30,7 @@ describe('TmcconfirmationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [TmcconfirmationComponent],
+      imports: [TmcconfirmationComponent],
     }).compileComponents();
   }));
 

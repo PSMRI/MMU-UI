@@ -30,7 +30,7 @@ describe('CancerCaseSheetComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CancerCaseSheetComponent],
+      imports: [CancerCaseSheetComponent],
     }).compileComponents();
   }));
 

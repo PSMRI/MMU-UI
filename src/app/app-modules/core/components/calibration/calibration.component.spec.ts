@@ -30,7 +30,7 @@ describe('CalibrationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CalibrationComponent],
+      imports: [CalibrationComponent],
     }).compileComponents();
   }));
 

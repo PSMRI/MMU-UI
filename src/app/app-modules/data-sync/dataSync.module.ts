@@ -33,7 +33,6 @@ import { DataSyncService } from './shared/service/data-sync.service';
 import { MasterDownloadComponent } from './master-download/master-download.component';
 // import { SharedModule } from '../core/shared/shared/shared.module';
 import { DataSyncLoginComponent } from '../core/components/data-sync-login/data-sync-login.component';
-import { SharedModule } from '../core/components/shared/shared.module';
 
 @NgModule({
   imports: [
@@ -42,9 +41,6 @@ import { SharedModule } from '../core/components/shared/shared.module';
     CoreModule,
     ReactiveFormsModule,
     FormsModule,
-    SharedModule,
-  ],
-  declarations: [
     WorkareaComponent,
     DashboardComponent,
     MasterDownloadComponent,

@@ -36,13 +36,49 @@ import { BeneficiaryDetailsService } from '../../core/services/beneficiary-detai
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatCard } from '@angular/material/card';
+import { NgClass, NgIf, TitleCasePipe } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-nurse-worklist',
   templateUrl: './nurse-worklist.component.html',
   styleUrls: ['./nurse-worklist.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    MatCard,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    NgClass,
+    MatTooltip,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    NgIf,
+    MatPaginator,
+    TitleCasePipe,
+  ],
 })
 export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
   rowsPerPage = 5;

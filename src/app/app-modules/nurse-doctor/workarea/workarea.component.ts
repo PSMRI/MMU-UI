@@ -31,7 +31,12 @@ import {
   AfterViewInit,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  FormArray,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import {
   NurseService,
   DoctorService,
@@ -56,11 +61,63 @@ import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard
 import { OpenPreviousVisitDetailsComponent } from '../../core/components/open-previous-visit-details/open-previous-visit-details.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { SmsNotificationComponent } from '../sms-notification/sms-notification.component';
+import { NgIf } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatSidenavContainer, MatSidenav } from '@angular/material/sidenav';
+import { BeneficiaryDetailsComponent } from '../../core/components/beneficiary-details/beneficiary-details.component';
+import {
+  MatStepper,
+  MatStep,
+  MatStepLabel,
+  MatStepperNext,
+  MatStepperPrevious,
+} from '@angular/material/stepper';
+import { VisitDetailsComponent } from '../visit-details/visit-details.component';
+import { TmVisitDetailsComponent } from '../tm-visit-details/tm-visit-details.component';
+import { MatHint } from '@angular/material/select';
+import { AncComponent } from '../anc/anc.component';
+import { PncComponent } from '../pnc/pnc.component';
+import { HistoryComponent } from '../history/history.component';
+import { VitalsComponent } from '../vitals/vitals.component';
+import { ExaminationComponent } from '../examination/examination.component';
+import { IdrsComponent } from '../idrs/idrs.component';
+import { CaseRecordComponent } from '../case-record/case-record.component';
+import { QuickConsultComponent } from '../quick-consult/quick-consult.component';
+import { ReferComponent } from '../refer/refer.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-workarea',
   templateUrl: './workarea.component.html',
   styleUrls: ['./workarea.component.css'],
+  imports: [
+    NgIf,
+    MatProgressSpinner,
+    MatSidenavContainer,
+    MatSidenav,
+    BeneficiaryDetailsComponent,
+    ReactiveFormsModule,
+    MatStepper,
+    MatStep,
+    MatStepLabel,
+    VisitDetailsComponent,
+    MatStepperNext,
+    TmVisitDetailsComponent,
+    MatHint,
+    AncComponent,
+    MatStepperPrevious,
+    PncComponent,
+    HistoryComponent,
+    VitalsComponent,
+    ExaminationComponent,
+    IdrsComponent,
+    CaseRecordComponent,
+    QuickConsultComponent,
+    ReferComponent,
+    MatIcon,
+    MatTooltip,
+  ],
 })
 export class WorkareaComponent
   implements

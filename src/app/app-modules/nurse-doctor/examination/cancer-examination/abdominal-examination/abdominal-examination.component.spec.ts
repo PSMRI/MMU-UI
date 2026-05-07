@@ -40,8 +40,12 @@ describe('AbdominalExaminationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
-      declarations: [AbdominalExaminationComponent],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        AbdominalExaminationComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [{ provide: CameraService, useClass: CameraServiceStub }],
     }).compileComponents();

@@ -26,6 +26,7 @@ import {
   FormGroup,
   FormArray,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { ConfirmationService } from '../../../../../core/services/confirmation.service';
 import { DoctorService, MasterdataService } from '../../../../shared/services';
@@ -33,10 +34,33 @@ import { GeneralUtils } from '../../../../shared/utility/general-utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgFor, NgIf } from '@angular/common';
+import { MatFormField, MatLabel } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import {
+  MatAutocompleteTrigger,
+  MatAutocomplete,
+  MatOption,
+} from '@angular/material/autocomplete';
+import { AutocompleteScrollerDirective } from '../../../../shared/utility/autocomplete-scroller.directive';
+import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-general-opd-diagnosis',
   templateUrl: './general-opd-diagnosis.component.html',
   styleUrls: ['./general-opd-diagnosis.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    AutocompleteScrollerDirective,
+    MatOption,
+    NgIf,
+    MatIcon,
+  ],
 })
 export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
   @Input()

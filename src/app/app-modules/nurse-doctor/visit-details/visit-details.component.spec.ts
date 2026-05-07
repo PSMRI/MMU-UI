@@ -43,8 +43,12 @@ describe('VisitDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, ReactiveFormsModule, MaterialModule],
-      declarations: [VisitDetailsComponent],
+      imports: [
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        VisitDetailsComponent,
+      ],
       providers: [
         ConfirmationService,
         { provide: DoctorService, useClass: DoctorServiceStub },

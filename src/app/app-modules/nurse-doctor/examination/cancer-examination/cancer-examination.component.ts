@@ -28,7 +28,7 @@ import {
   OnChanges,
   OnDestroy,
 } from '@angular/core';
-import { FormGroup, FormArray } from '@angular/forms';
+import { FormGroup, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { DoctorService } from '../../shared/services/doctor.service';
 import {
   BeneficiaryDetailsService,
@@ -37,10 +37,33 @@ import {
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
+import { SignsAndSymptomsComponent } from './signs-and-symptoms/signs-and-symptoms.component';
+import { OralExaminationComponent } from './oral-examination/oral-examination.component';
+import { NgIf } from '@angular/common';
+import { BreastExaminationComponent } from './breast-examination/breast-examination.component';
+import { AbdominalExaminationComponent } from './abdominal-examination/abdominal-examination.component';
+import { GynecologicalExaminationComponent } from './gynecological-examination/gynecological-examination.component';
 @Component({
   selector: 'app-cancer-examination',
   templateUrl: './cancer-examination.component.html',
   styleUrls: ['./cancer-examination.component.css'],
+  imports: [
+    MatAccordion,
+    ReactiveFormsModule,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    SignsAndSymptomsComponent,
+    OralExaminationComponent,
+    NgIf,
+    BreastExaminationComponent,
+    AbdominalExaminationComponent,
+    GynecologicalExaminationComponent,
+  ],
 })
 export class CancerExaminationComponent
   implements OnInit, DoCheck, OnChanges, OnDestroy

@@ -21,7 +21,7 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import {
   MasterdataService,
@@ -34,11 +34,27 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { environment } from 'src/environments/environment';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgIf, NgFor } from '@angular/common';
+import { MatLabel, MatFormField, MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-doctor-investigations',
   templateUrl: './doctor-investigations.component.html',
   styleUrls: ['./doctor-investigations.component.css'],
+  imports: [
+    NgIf,
+    MatLabel,
+    ReactiveFormsModule,
+    MatFormField,
+    MatSelect,
+    NgFor,
+    MatOption,
+    MatInput,
+    StringValidatorDirective,
+  ],
 })
 export class DoctorInvestigationsComponent
   implements OnInit, DoCheck, OnDestroy
@@ -61,15 +77,15 @@ export class DoctorInvestigationsComponent
 
   previousLabTestList: any;
   diabetesSelected: any;
-  VisualAcuityMandatory: boolean = false;
-  RBSTestDoneInVitals: boolean = false;
-  VisualAcuityTestDone: boolean = false;
+  VisualAcuityMandatory = false;
+  RBSTestDoneInVitals = false;
+  VisualAcuityTestDone = false;
   diastolicBpValue: any;
   systolicBpValue: any;
   RBSTestScore!: number;
-  rbsPresent: boolean = false;
-  visualAcuityPresent: boolean = false;
-  RBSAndHeamoglobinSelected: boolean = false;
+  rbsPresent = false;
+  visualAcuityPresent = false;
+  RBSAndHeamoglobinSelected = false;
   confirmedDiabeticValue: any;
   hypertensionSelected: any;
   current_language_set: any;
@@ -80,7 +96,7 @@ export class DoctorInvestigationsComponent
   systolicSubscription!: Subscription;
   diastolicSubscription!: Subscription;
   rbsTestResultSubscription!: Subscription;
-  rbsSelectedInInvestigation: boolean = false;
+  rbsSelectedInInvestigation = false;
   hemoglobbinSelected!: boolean;
   RBSTestScoreInVitals!: number;
 

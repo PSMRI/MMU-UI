@@ -30,7 +30,7 @@ describe('CaseRecordComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CaseRecordComponent],
+      imports: [CaseRecordComponent],
     }).compileComponents();
   }));
 

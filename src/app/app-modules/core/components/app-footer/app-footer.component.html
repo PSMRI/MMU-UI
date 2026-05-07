@@ -1,66 +1,39 @@
-<footer class="footer container-fluid">
-  <div class="row">
-    <div class="col-3 text-left">
-      <span
-        class="footer-text"
-        *ngIf="currentLanguageSet === null || currentLanguageSet === undefined"
-        >Powered by: WIPRO</span
-      >
-      <span
-        class="footer-text"
-        *ngIf="currentLanguageSet !== null && currentLanguageSet !== undefined"
-        >{{ currentLanguageSet?.coreComponents?.poweredByWipro }}</span
-      >
-    </div>
-    <div class="col-3 text-center">
-      <p
-        class="footer-text"
-        *ngIf="currentLanguageSet === null || currentLanguageSet === undefined">
-        {{ year }} © PSMRI
-      </p>
-      <p
-        class="footer-text"
-        *ngIf="currentLanguageSet !== null && currentLanguageSet !== undefined">
-        {{ year }} © {{ currentLanguageSet?.psmri }}
-      </p>
-    </div>
-    <div
-      class="col-3 text-end"
-      style="cursor: pointer"
+<!-- App Footer — Modernized with Tailwind CSS v4 -->
+<footer class="w-full bg-gray-900 text-gray-300 text-xs py-2 px-4 border-t border-gray-700">
+  <div class="max-w-screen-xl mx-auto flex flex-wrap items-center justify-between gap-2">
+
+    <!-- Powered by -->
+    <span>
+      <span *ngIf="!currentLanguageSet">Powered by: WIPRO</span>
+      <span *ngIf="currentLanguageSet">{{ currentLanguageSet?.coreComponents?.poweredByWipro }}</span>
+    </span>
+
+    <!-- Copyright -->
+    <span>
+      <span *ngIf="!currentLanguageSet">{{ year }} © PSMRI</span>
+      <span *ngIf="currentLanguageSet">{{ year }} © {{ currentLanguageSet?.psmri }}</span>
+    </span>
+
+    <!-- Feedback link -->
+    <a
+      class="flex items-center gap-1 text-gray-300 hover:text-white transition-colors cursor-pointer no-underline"
       [routerLink]="['/feedback']"
       [queryParams]="{ sl: 'MMU' }"
       role="link">
-      <mat-icon style="vertical-align: top; font-size: medium; margin-right: 2%"
-        >mail</mat-icon
-      >
-      <span class="footer-text"
-        >{{ currentLanguageSet?.platform_feedback?.feedback ?? 'Feedback' }}
+      <mat-icon class="text-sm leading-none" style="font-size: 14px;">mail</mat-icon>
+      <span>{{ currentLanguageSet?.platform_feedback?.feedback ?? 'Feedback' }}</span>
+    </a>
+
+    <!-- Online status -->
+    <span class="flex items-center gap-1.5">
+      <span
+        class="inline-block h-2 w-2 rounded-full"
+        [class]="status ? 'bg-green-400' : 'bg-red-500'">
       </span>
-    </div>
-    <div class="col-3 text-end">
-      <p class="footer-text">
-        <span
-          class="footer-text"
-          *ngIf="
-            currentLanguageSet === null || currentLanguageSet === undefined
-          "
-          >{{ status ? 'Online' : 'Offline' }}</span
-        >
-        <span
-          [style.background]="status ? 'green' : 'red'"
-          style="
-            display: inline-block;
-            height: 10px;
-            width: 10px;
-            border-radius: 50%;
-          "
-          *ngIf="
-            currentLanguageSet !== null && currentLanguageSet !== undefined
-          "></span>
-        {{
-          status ? currentLanguageSet?.online : currentLanguageSet?.offline
-        }}&nbsp;
-      </p>
-    </div>
+      <span *ngIf="!currentLanguageSet">{{ status ? 'Online' : 'Offline' }}</span>
+      <span *ngIf="currentLanguageSet">
+        {{ status ? currentLanguageSet?.online : currentLanguageSet?.offline }}
+      </span>
+    </span>
   </div>
 </footer>

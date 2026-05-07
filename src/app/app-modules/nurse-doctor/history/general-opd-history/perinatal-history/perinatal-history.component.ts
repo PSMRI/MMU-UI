@@ -21,7 +21,7 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import {
   MasterdataService,
@@ -33,10 +33,34 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import { NgFor, NgIf } from '@angular/common';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { NumberValidatorDirective } from '../../../../core/directives/numberValidator.directive';
 @Component({
   selector: 'app-general-perinatal-history',
   templateUrl: './perinatal-history.component.html',
   styleUrls: ['./perinatal-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    MatTooltip,
+    MatIcon,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    NgFor,
+    MatOption,
+    NgIf,
+    MatInput,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+    NumberValidatorDirective,
+  ],
 })
 export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

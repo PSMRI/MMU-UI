@@ -35,11 +35,51 @@ import { DoctorService } from '../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
+import { NgIf } from '@angular/common';
+import { PastHistoryComponent } from './past-history/past-history.component';
+import { ComorbidityConcurrentConditionsComponent } from './comorbidity-concurrent-conditions/comorbidity-concurrent-conditions.component';
+import { MedicationHistoryComponent } from './medication-history/medication-history.component';
+import { GeneralPersonalHistoryComponent } from './personal-history/personal-history.component';
+import { FamilyHistoryComponent } from './family-history/family-history.component';
+import { MenstrualHistoryComponent } from './menstrual-history/menstrual-history.component';
+import { PerinatalHistoryComponent } from './perinatal-history/perinatal-history.component';
+import { PastObstericHistoryComponent } from './past-obsteric-history/past-obsteric-history.component';
+import { ImmunizationHistoryComponent } from './immunization-history/immunization-history.component';
+import { OtherVaccinesComponent } from './other-vaccines/other-vaccines.component';
+import { FeedingHistoryComponent } from './feeding-history/feeding-history.component';
+import { DevelopmentHistoryComponent } from './development-history/development-history.component';
+import { FamilyHistoryNcdscreeningComponent } from './family-history-ncdscreening/family-history-ncdscreening.component';
+import { PhysicalActivityHistoryComponent } from './physical-activity-history/physical-activity-history.component';
 
 @Component({
   selector: 'app-nurse-general-opd-history',
   templateUrl: './general-opd-history.component.html',
   styleUrls: ['./general-opd-history.component.css'],
+  imports: [
+    MatAccordion,
+    NgIf,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    PastHistoryComponent,
+    ComorbidityConcurrentConditionsComponent,
+    MedicationHistoryComponent,
+    GeneralPersonalHistoryComponent,
+    FamilyHistoryComponent,
+    MenstrualHistoryComponent,
+    PerinatalHistoryComponent,
+    PastObstericHistoryComponent,
+    ImmunizationHistoryComponent,
+    OtherVaccinesComponent,
+    FeedingHistoryComponent,
+    DevelopmentHistoryComponent,
+    FamilyHistoryNcdscreeningComponent,
+    PhysicalActivityHistoryComponent,
+  ],
 })
 export class GeneralOpdHistoryComponent
   implements OnInit, DoCheck, OnChanges, OnDestroy
@@ -63,7 +103,7 @@ export class GeneralOpdHistoryComponent
   showObstetricHistory = false;
   currentLanguageSet: any;
 
-  showHistory: boolean = false;
+  showHistory = false;
   pastHistory!: FormGroup;
   comorbidityHistory!: FormGroup;
   medicationHistory!: FormGroup;

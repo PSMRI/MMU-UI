@@ -33,19 +33,63 @@ import {
   FormArray,
   FormBuilder,
   FormGroup,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 import { CancerUtils } from '../../../shared/utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { NgIf } from '@angular/common';
+import { MatFormField, MatLabel } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import {
+  MatButtonToggleGroup,
+  MatButtonToggle,
+} from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-doctor-signs-and-symptoms',
   templateUrl: './signs-and-symptoms.component.html',
   styleUrls: ['./signs-and-symptoms.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    MatRadioGroup,
+    MatRadioButton,
+    NgIf,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    StringValidatorDirective,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+  ],
 })
 export class SignsAndSymptomsComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

@@ -34,17 +34,51 @@ import { ConfirmationService } from '../../core/services/confirmation.service';
 import { PharmacistService } from '../shared/services/pharmacist.service';
 import { CameraService } from '../../core/services/camera.service';
 import { InventoryService } from '../../core/services/inventory.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatCard } from '@angular/material/card';
+import { MatTooltip } from '@angular/material/tooltip';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-worklist',
   templateUrl: './worklist.component.html',
   styleUrls: ['./worklist.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    MatCard,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatTooltip,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatPaginator,
+    TitleCasePipe,
+  ],
 })
 export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
   rowsPerPage = 5;

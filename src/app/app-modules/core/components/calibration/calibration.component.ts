@@ -23,26 +23,69 @@
 //SH20094090,calibration integration,09-06-2021
 
 import { Component, Inject, OnInit, DoCheck, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogContent,
+} from '@angular/material/dialog';
 import { MasterdataService } from 'src/app/app-modules/nurse-doctor/shared/services';
 import { ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatLabel } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-calibration',
   templateUrl: './calibration.component.html',
   styleUrls: ['./calibration.component.css'],
+  imports: [
+    MatTooltip,
+    MatIcon,
+    CdkScrollable,
+    MatDialogContent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatPaginator,
+    DatePipe,
+  ],
 })
 export class CalibrationComponent implements OnInit, DoCheck {
   searchTerm: any;
-  pageNo: number = 0;
-  message: string = '';
+  pageNo = 0;
+  message = '';
   pageCount: any;
   selectedComponentsList = [];
-  currentPage: number = 1;
+  currentPage = 1;
   pager: any = {
     totalItems: 0,
     currentPage: 0,

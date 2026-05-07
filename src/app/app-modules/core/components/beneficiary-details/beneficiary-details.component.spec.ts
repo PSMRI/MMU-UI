@@ -30,7 +30,7 @@ describe('BeneficiaryDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [BeneficiaryDetailsComponent],
+      imports: [BeneficiaryDetailsComponent],
     }).compileComponents();
   }));
 

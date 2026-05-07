@@ -30,7 +30,7 @@ describe('AncDiagnosisComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AncDiagnosisComponent],
+      imports: [AncDiagnosisComponent],
     }).compileComponents();
   }));
 

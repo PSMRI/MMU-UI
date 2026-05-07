@@ -58,8 +58,12 @@ describe('InvestigationsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
-      declarations: [InvestigationsComponent],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        InvestigationsComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         ConfirmationService,

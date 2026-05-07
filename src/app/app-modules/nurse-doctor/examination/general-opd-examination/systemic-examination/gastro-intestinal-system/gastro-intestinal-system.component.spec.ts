@@ -57,13 +57,13 @@ describe('GastroIntestinalSystemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [GastroIntestinalSystemComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
         ReactiveFormsModule,
         FormsModule,
         MaterialModule,
         NoopAnimationsModule,
+        GastroIntestinalSystemComponent,
       ],
     }).compileComponents();
   }));

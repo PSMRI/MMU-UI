@@ -58,7 +58,7 @@ describe('PastHistoryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PastHistoryComponent],
+      imports: [PastHistoryComponent],
     }).compileComponents();
   }));
 

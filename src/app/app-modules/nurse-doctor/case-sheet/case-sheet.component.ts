@@ -24,19 +24,31 @@ import { Component, OnInit, Injector, DoCheck } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgIf, NgClass } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { CancerCaseSheetComponent } from './cancer-case-sheet/cancer-case-sheet.component';
+import { GeneralCaseSheetComponent } from './general-case-sheet/general-case-sheet.component';
 
 @Component({
   selector: 'app-case-sheet',
   templateUrl: './case-sheet.component.html',
   styleUrls: ['./case-sheet.component.css'],
+  imports: [
+    NgIf,
+    MatIcon,
+    MatDialogClose,
+    NgClass,
+    CancerCaseSheetComponent,
+    GeneralCaseSheetComponent,
+  ],
 })
 export class CaseSheetComponent implements OnInit, DoCheck {
-  QC: boolean = false;
-  General: boolean = false;
-  NCDScreening: boolean = false;
-  CancerScreening: boolean = false;
+  QC = false;
+  General = false;
+  NCDScreening = false;
+  CancerScreening = false;
 
   preview: any;
   previous: any;

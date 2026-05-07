@@ -21,15 +21,33 @@
  */
 
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import { NgFor } from '@angular/common';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../../../../../core/directives/stringValidator.directive';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
   selector: 'app-nurse-central-nervous-system',
   templateUrl: './central-nervous-system.component.html',
   styleUrls: ['./central-nervous-system.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    NgFor,
+    MatOption,
+    MatInput,
+    StringValidatorDirective,
+    MatRadioGroup,
+    MatRadioButton,
+  ],
 })
 export class CentralNervousSystemComponent implements OnInit, DoCheck {
   @Input()

@@ -58,7 +58,7 @@ describe('GeneralPersonalHistoryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [GeneralPersonalHistoryComponent],
+      imports: [GeneralPersonalHistoryComponent],
     }).compileComponents();
   }));
 

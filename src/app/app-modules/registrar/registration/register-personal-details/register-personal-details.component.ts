@@ -52,7 +52,7 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
   selector: 'app-register-personal-details',
@@ -83,6 +83,7 @@ import * as moment from 'moment';
       },
     },
   ],
+  standalone: false,
 })
 export class RegisterPersonalDetailsComponent
   implements OnInit, DoCheck, OnDestroy

@@ -30,7 +30,7 @@ describe('IdrsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [IdrsComponent],
+      imports: [IdrsComponent],
     }).compileComponents();
   }));
 

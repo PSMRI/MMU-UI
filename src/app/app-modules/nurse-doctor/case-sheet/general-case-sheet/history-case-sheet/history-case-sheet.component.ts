@@ -21,18 +21,20 @@
  */
 
 import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
-import { DatePipe } from '@angular/common';
-import * as moment from 'moment';
+import { DatePipe, NgIf, NgFor } from '@angular/common';
+import moment from 'moment';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { DoctorService } from '../../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-history-case-sheet',
   templateUrl: './history-case-sheet.component.html',
   styleUrls: ['./history-case-sheet.component.css'],
   providers: [DatePipe],
+  imports: [NgIf, NgFor, MatCheckbox, DatePipe],
 })
 export class HistoryCaseSheetComponent implements OnInit, OnChanges, DoCheck {
   @Input()
@@ -60,13 +62,13 @@ export class HistoryCaseSheetComponent implements OnInit, OnChanges, DoCheck {
   generalhistory: any;
   visitCategory: any;
   blankRows = [1, 2, 3, 4];
-  serviceList: string = '';
+  serviceList = '';
   previousPhysicalList: any;
-  enableTCReferredMMUData: boolean = false;
+  enableTCReferredMMUData = false;
   mmuCaseSheetData: any;
   MMUcaseRecords: any;
   MMUReferDetails: any;
-  mmuServiceList: string = '';
+  mmuServiceList = '';
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
 

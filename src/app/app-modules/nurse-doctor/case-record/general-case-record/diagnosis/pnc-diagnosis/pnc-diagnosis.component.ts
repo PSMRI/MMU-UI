@@ -33,6 +33,7 @@ import {
   FormGroup,
   FormArray,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../../../../core/services/beneficiary-details.service';
 import { ConfirmationService } from './../../../../../core/services/confirmation.service';
@@ -50,6 +51,22 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgFor, NgIf } from '@angular/common';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import {
+  MatAutocompleteTrigger,
+  MatAutocomplete,
+  MatOption,
+} from '@angular/material/autocomplete';
+import { MatIcon } from '@angular/material/icon';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { StringValidatorDirective } from '../../../../../core/directives/stringValidator.directive';
+import {
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatDatepicker,
+} from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-pnc-diagnosis',
@@ -79,6 +96,25 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
         },
       },
     },
+  ],
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    MatOption,
+    NgIf,
+    MatIcon,
+    MatRadioGroup,
+    MatRadioButton,
+    StringValidatorDirective,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
   ],
 })
 export class PncDiagnosisComponent

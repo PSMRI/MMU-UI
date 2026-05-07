@@ -30,7 +30,7 @@ describe('GeneralOpdDiagnosisComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [GeneralOpdDiagnosisComponent],
+      imports: [GeneralOpdDiagnosisComponent],
     }).compileComponents();
   }));
 

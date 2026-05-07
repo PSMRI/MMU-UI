@@ -30,7 +30,7 @@ describe('ObstetricHistoryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ObstetricHistoryComponent],
+      imports: [ObstetricHistoryComponent],
     }).compileComponents();
   }));
 

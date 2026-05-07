@@ -60,9 +60,13 @@ describe('ImmunizationHistoryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        ImmunizationHistoryComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
-      declarations: [ImmunizationHistoryComponent],
       providers: [
         ConfirmationService,
         { provide: MasterdataService, useClass: MasterdataServiceStub },

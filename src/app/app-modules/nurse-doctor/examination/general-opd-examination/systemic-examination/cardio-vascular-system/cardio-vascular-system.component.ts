@@ -21,15 +21,28 @@
  */
 
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatFormField, MatLabel } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-nurse-cardio-vascular-system',
   templateUrl: './cardio-vascular-system.component.html',
   styleUrls: ['./cardio-vascular-system.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    MatRadioGroup,
+    MatRadioButton,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    StringValidatorDirective,
+  ],
 })
 export class CardioVascularSystemComponent implements OnInit, DoCheck {
   @Input()

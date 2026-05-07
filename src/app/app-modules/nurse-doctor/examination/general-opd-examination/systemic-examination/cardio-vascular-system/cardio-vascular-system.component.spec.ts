@@ -57,13 +57,13 @@ describe('CardioVascularSystemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CardioVascularSystemComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
         ReactiveFormsModule,
         FormsModule,
         MaterialModule,
         NoopAnimationsModule,
+        CardioVascularSystemComponent,
       ],
     }).compileComponents();
   }));

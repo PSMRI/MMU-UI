@@ -30,7 +30,7 @@ describe('TravelHistoryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [TravelHistoryComponent],
+      imports: [TravelHistoryComponent],
     }).compileComponents();
   }));
 

@@ -23,7 +23,13 @@
 import { DataManipulation } from './LabSubmissionDataManipulation';
 import { Component, OnInit, ViewChild, DoCheck } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormArray, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormGroup,
+  FormBuilder,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { LabService, MasterDataService } from '../shared/services';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
@@ -37,14 +43,111 @@ import { environment } from 'src/environments/environment';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { Observable, of } from 'rxjs';
 import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import {
+  NgIf,
+  NgFor,
+  NgClass,
+  JsonPipe,
+  TitleCasePipe,
+  DatePipe,
+} from '@angular/common';
+import { MatSidenavContainer, MatSidenav } from '@angular/material/sidenav';
+import { BeneficiaryDetailsComponent } from '../../core/components/beneficiary-details/beneficiary-details.component';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle,
+  MatExpansionPanelDescription,
+} from '@angular/material/expansion';
+import { MatTooltip } from '@angular/material/tooltip';
+import {
+  MatCard,
+  MatCardTitle,
+  MatCardContent,
+  MatCardSubtitle,
+} from '@angular/material/card';
+import { MatCheckbox } from '@angular/material/checkbox';
+import {
+  MatFormField,
+  MatLabel,
+  MatHint,
+  MatSelect,
+  MatSuffix,
+} from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../../core/directives/stringValidator.directive';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-workarea',
   templateUrl: './workarea.component.html',
   styleUrls: ['./workarea.component.css'],
+  imports: [
+    NgIf,
+    MatSidenavContainer,
+    MatSidenav,
+    BeneficiaryDetailsComponent,
+    ReactiveFormsModule,
+    MatTabGroup,
+    MatTab,
+    MatAccordion,
+    NgFor,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+    MatTooltip,
+    MatExpansionPanelDescription,
+    MatCard,
+    MatCardTitle,
+    MatCheckbox,
+    MatCardContent,
+    MatFormField,
+    NgClass,
+    MatLabel,
+    MatInput,
+    StringValidatorDirective,
+    MatHint,
+    MatRadioGroup,
+    MatRadioButton,
+    MatSelect,
+    MatOption,
+    MatCardSubtitle,
+    MatIcon,
+    MatSuffix,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatPaginator,
+    JsonPipe,
+    TitleCasePipe,
+    DatePipe,
+  ],
 })
 export class WorkareaComponent
   implements OnInit, DoCheck, CanComponentDeactivate
@@ -82,12 +185,12 @@ export class WorkareaComponent
   ];
   // invalid_file_extensions_flag: boolean = false;
   stepExpand!: number;
-  stripSelected: boolean = true;
+  stripSelected = true;
   testName!: string;
   current_language_set: any;
   maxFileSize = 5;
   ecgAbnormalities: any;
-  enableEcgAbnormal: boolean = false;
+  enableEcgAbnormal = false;
 
   constructor(
     private fb: FormBuilder,

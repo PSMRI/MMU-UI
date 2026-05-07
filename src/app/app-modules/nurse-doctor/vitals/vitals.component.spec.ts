@@ -37,8 +37,12 @@ describe('VitalsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, ReactiveFormsModule, MaterialModule],
-      declarations: [VitalsComponent],
+      imports: [
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        VitalsComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

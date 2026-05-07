@@ -30,7 +30,7 @@ describe('DataSyncLoginComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [DataSyncLoginComponent],
+      imports: [DataSyncLoginComponent],
     }).compileComponents();
   }));
 

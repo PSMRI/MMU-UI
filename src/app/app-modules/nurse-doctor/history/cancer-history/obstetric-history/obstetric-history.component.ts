@@ -28,7 +28,12 @@ import {
   OnDestroy,
   DoCheck,
 } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import {
   MasterdataService,
@@ -41,11 +46,36 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import { NgFor, NgIf } from '@angular/common';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatInput } from '@angular/material/input';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-nurse-cancer-obstetric-history',
   templateUrl: './obstetric-history.component.html',
   styleUrls: ['./obstetric-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    MatTooltip,
+    MatIcon,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    NgFor,
+    MatOption,
+    NgIf,
+    MatRadioGroup,
+    MatRadioButton,
+    MatInput,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+  ],
 })
 export class ObstetricHistoryComponent
   implements OnInit, OnChanges, OnDestroy, DoCheck

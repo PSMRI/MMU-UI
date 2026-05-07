@@ -22,11 +22,14 @@
 
 import { Component } from '@angular/core';
 import { SpinnerService } from '../../services';
+import { NgIf } from '@angular/common';
+import { ZardLoaderComponent } from '@/components/ui/loader/loader.component';
 
 @Component({
   selector: 'app-spinner',
   templateUrl: './spinner.component.html',
   styleUrls: ['./spinner.component.css'],
+  imports: [NgIf, ZardLoaderComponent],
 })
 export class SpinnerComponent {
   constructor(public spinnerService: SpinnerService) {}

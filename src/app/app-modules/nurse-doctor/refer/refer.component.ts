@@ -22,11 +22,15 @@
 
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { NgIf } from '@angular/common';
+import { CancerReferComponent } from './cancer-refer/cancer-refer.component';
+import { GeneralReferComponent } from './general-refer/general-refer.component';
 
 @Component({
   selector: 'app-refer',
   templateUrl: './refer.component.html',
   styleUrls: ['./refer.component.css'],
+  imports: [NgIf, CancerReferComponent, GeneralReferComponent],
 })
 export class ReferComponent implements OnInit {
   @Input()
@@ -38,8 +42,8 @@ export class ReferComponent implements OnInit {
   @Input()
   visitCategory!: string;
 
-  showGeneralOPD: boolean = false;
-  showCancer: boolean = false;
+  showGeneralOPD = false;
+  showCancer = false;
 
   constructor() {}
 

@@ -30,7 +30,7 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import {
@@ -39,11 +39,23 @@ import {
   NurseService,
 } from '../../shared/services';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { MatLabel, MatFormField, MatSelect } from '@angular/material/select';
+import { NgIf, NgFor } from '@angular/common';
+import { MatOption } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-contact-history',
   templateUrl: './contact-history.component.html',
   styleUrls: ['./contact-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    MatLabel,
+    NgIf,
+    MatFormField,
+    MatSelect,
+    NgFor,
+    MatOption,
+  ],
 })
 export class ContactHistoryComponent
   implements OnInit, DoCheck, OnChanges, OnDestroy
@@ -65,7 +77,7 @@ export class ContactHistoryComponent
   allSymp: any;
   contactReqiured!: string;
   contactResponseList: any;
-  contactFlag: boolean = false;
+  contactFlag = false;
   currentLanguageSet: any;
   constructor(
     private doctorService: DoctorService,

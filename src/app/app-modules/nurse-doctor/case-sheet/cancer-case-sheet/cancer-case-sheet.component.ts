@@ -21,7 +21,7 @@
  */
 
 import { Component, OnInit, Input, OnDestroy, DoCheck } from '@angular/core';
-import { Location } from '@angular/common';
+import { Location, NgIf } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { DoctorService } from '../../shared/services/doctor.service';
@@ -30,11 +30,24 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { CancerDoctorDiagnosisCaseSheetComponent } from './cancer-doctor-diagnosis-case-sheet/cancer-doctor-diagnosis-case-sheet.component';
+import { CancerHistoryCaseSheetComponent } from './cancer-history-case-sheet/cancer-history-case-sheet.component';
+import { CancerExaminationCaseSheetComponent } from './cancer-examination-case-sheet/cancer-examination-case-sheet.component';
 
 @Component({
   selector: 'app-cancer-case-sheet',
   templateUrl: './cancer-case-sheet.component.html',
   styleUrls: ['./cancer-case-sheet.component.css'],
+  imports: [
+    NgIf,
+    MatTooltip,
+    MatIcon,
+    CancerDoctorDiagnosisCaseSheetComponent,
+    CancerHistoryCaseSheetComponent,
+    CancerExaminationCaseSheetComponent,
+  ],
 })
 export class CancerCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
   @Input()
@@ -50,7 +63,7 @@ export class CancerCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
   };
 
   visitCategory!: string;
-  hideBack: boolean = false;
+  hideBack = false;
   getCaseSheetDataVisit: any;
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;

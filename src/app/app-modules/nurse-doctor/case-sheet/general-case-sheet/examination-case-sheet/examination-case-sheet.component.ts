@@ -21,7 +21,7 @@
  */
 
 import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgIf } from '@angular/common';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
@@ -31,6 +31,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   templateUrl: './examination-case-sheet.component.html',
   styleUrls: ['./examination-case-sheet.component.css'],
   providers: [DatePipe],
+  imports: [NgIf],
 })
 export class ExaminationCaseSheetComponent
   implements OnInit, OnChanges, DoCheck
@@ -56,7 +57,7 @@ export class ExaminationCaseSheetComponent
   revisitDate: any;
   referDetails: any;
   date: any;
-  serviceList: string = '';
+  serviceList = '';
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
 

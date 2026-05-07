@@ -25,11 +25,15 @@ import { FormGroup } from '@angular/forms';
 import { DoctorService } from '../shared/services/doctor.service';
 import { ActivatedRoute } from '@angular/router';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgIf } from '@angular/common';
+import { CancerHistoryComponent } from './cancer-history/cancer-history.component';
+import { GeneralOpdHistoryComponent } from './general-opd-history/general-opd-history.component';
 
 @Component({
   selector: 'app-nurse-history',
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.css'],
+  imports: [NgIf, CancerHistoryComponent, GeneralOpdHistoryComponent],
 })
 export class HistoryComponent implements OnInit, OnChanges {
   @Input()

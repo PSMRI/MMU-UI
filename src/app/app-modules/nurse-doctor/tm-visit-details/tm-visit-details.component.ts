@@ -21,17 +21,32 @@
  */
 
 import { Component, DoCheck, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DoctorService, MasterdataService } from '../shared/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
+import { PatientVisitDetailsComponent } from '../visit-details/visit-details/visit-details.component';
+import { TmcconfirmationComponent } from './tmcconfirmation/tmcconfirmation.component';
 
 @Component({
   selector: 'app-tm-visit-details',
   templateUrl: './tm-visit-details.component.html',
   styleUrls: ['./tm-visit-details.component.css'],
+  imports: [
+    MatAccordion,
+    ReactiveFormsModule,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    PatientVisitDetailsComponent,
+    TmcconfirmationComponent,
+  ],
 })
 export class TmVisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

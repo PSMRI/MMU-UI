@@ -65,13 +65,13 @@ describe('GeneralExaminationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [GeneralExaminationComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
         ReactiveFormsModule,
         FormsModule,
         MaterialModule,
         NoopAnimationsModule,
+        GeneralExaminationComponent,
       ],
       providers: [
         ConfirmationService,

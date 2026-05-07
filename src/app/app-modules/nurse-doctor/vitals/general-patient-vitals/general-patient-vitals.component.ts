@@ -28,7 +28,7 @@ import {
   OnDestroy,
   DoCheck,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { NurseService, DoctorService } from '../../shared/services';
@@ -44,11 +44,41 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { NullDefaultValueDirective } from '../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
+import { NumberValidatorDirective } from '../../../core/directives/numberValidator.directive';
+import { NgClass, NgIf } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-nurse-general-patient-vitals',
   templateUrl: './general-patient-vitals.component.html',
   styleUrls: ['./general-patient-vitals.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+    NumberValidatorDirective,
+    NgClass,
+    MatSuffix,
+    MatTooltip,
+    NgIf,
+    MatCheckbox,
+  ],
 })
 export class GeneralPatientVitalsComponent
   implements OnInit, OnChanges, OnDestroy, DoCheck

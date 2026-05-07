@@ -30,7 +30,7 @@ describe('FindingsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [FindingsComponent],
+      imports: [FindingsComponent],
     }).compileComponents();
   }));
 

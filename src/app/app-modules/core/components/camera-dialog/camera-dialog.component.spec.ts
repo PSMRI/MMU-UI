@@ -30,7 +30,7 @@ describe('CameraDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CameraDialogComponent],
+      imports: [CameraDialogComponent],
     }).compileComponents();
   }));
 

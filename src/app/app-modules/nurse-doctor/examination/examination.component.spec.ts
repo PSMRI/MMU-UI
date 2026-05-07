@@ -37,8 +37,12 @@ describe('ExaminationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, ReactiveFormsModule, MaterialModule],
-      declarations: [ExaminationComponent],
+      imports: [
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        ExaminationComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));

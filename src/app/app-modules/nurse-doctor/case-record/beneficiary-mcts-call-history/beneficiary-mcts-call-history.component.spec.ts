@@ -30,7 +30,7 @@ describe('BeneficiaryMctsCallHistoryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [BeneficiaryMctsCallHistoryComponent],
+      imports: [BeneficiaryMctsCallHistoryComponent],
     }).compileComponents();
   }));
 

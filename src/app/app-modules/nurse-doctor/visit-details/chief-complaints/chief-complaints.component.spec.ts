@@ -60,8 +60,12 @@ describe('ChiefComplaintsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
-      declarations: [ChiefComplaintsComponent],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        ChiefComplaintsComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         ConfirmationService,

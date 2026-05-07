@@ -33,7 +33,7 @@ import { ConfirmationService } from '../../core/services/confirmation.service';
 import { CameraService } from '../../core/services/camera.service';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
 import { RegistrarService } from '../shared/services/registrar.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
@@ -45,6 +45,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css'],
+  standalone: false,
 })
 export class SearchComponent implements OnInit, DoCheck {
   rowsPerPage = 5;

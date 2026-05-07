@@ -64,13 +64,13 @@ describe('HeadToToeExaminationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [HeadToToeExaminationComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
         ReactiveFormsModule,
         FormsModule,
         MaterialModule,
         NoopAnimationsModule,
+        HeadToToeExaminationComponent,
       ],
       providers: [
         ConfirmationService,

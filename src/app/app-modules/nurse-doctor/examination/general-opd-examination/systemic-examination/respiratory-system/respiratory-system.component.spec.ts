@@ -57,13 +57,13 @@ describe('RespiratorySystemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [RespiratorySystemComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
         ReactiveFormsModule,
         FormsModule,
         MaterialModule,
         NoopAnimationsModule,
+        RespiratorySystemComponent,
       ],
     }).compileComponents();
   }));

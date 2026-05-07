@@ -22,7 +22,7 @@
 
 import { Component, OnInit, Input, OnDestroy, DoCheck } from '@angular/core';
 import { DoctorService } from '../../shared/services/doctor.service';
-import { Location } from '@angular/common';
+import { Location, NgIf } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { PrescribeTmMedicineComponent } from '../prescribe-tm-medicine/prescribe-tm-medicine.component';
 import { NurseService } from '../../shared/services';
@@ -32,11 +32,28 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { PrintPageSelectComponent } from '../../print-page-select/print-page-select.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { DoctorDiagnosisCaseSheetComponent } from './doctor-diagnosis-case-sheet/doctor-diagnosis-case-sheet.component';
+import { AncCaseSheetComponent } from './anc-case-sheet/anc-case-sheet.component';
+import { PncCaseSheetComponent } from './pnc-case-sheet/pnc-case-sheet.component';
+import { HistoryCaseSheetComponent } from './history-case-sheet/history-case-sheet.component';
+import { ExaminationCaseSheetComponent } from './examination-case-sheet/examination-case-sheet.component';
 
 @Component({
   selector: 'app-general-case-sheet',
   templateUrl: './general-case-sheet.component.html',
   styleUrls: ['./general-case-sheet.component.css'],
+  imports: [
+    NgIf,
+    MatTooltip,
+    MatIcon,
+    DoctorDiagnosisCaseSheetComponent,
+    AncCaseSheetComponent,
+    PncCaseSheetComponent,
+    HistoryCaseSheetComponent,
+    ExaminationCaseSheetComponent,
+  ],
 })
 export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
   @Input()
@@ -47,7 +64,7 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
 
   caseSheetData: any;
   visitCategory: any;
-  hideBack: boolean = false;
+  hideBack = false;
 
   printPagePreviewSelect = {
     caseSheetANC: true,
@@ -56,7 +73,7 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
     caseSheetExamination: true,
     caseSheetCovidVaccinationDetails: true,
   };
-  enablePrescriptionButton: boolean = false;
+  enablePrescriptionButton = false;
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
 
@@ -142,7 +159,7 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   casesheetSubs: any;
-  hideSelectQC: boolean = false;
+  hideSelectQC = false;
 
   getTMReferredCasesheetData(caseSheetRequest: any) {
     this.casesheetSubs = this.nurseService

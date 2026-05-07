@@ -21,7 +21,12 @@
  */
 
 import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import {
   DoctorService,
@@ -31,11 +36,14 @@ import {
 import { IdrsscoreService } from '../../shared/services/idrsscore.service';
 import { VisitDetailUtils } from '../../shared/utility/visit-detail-utility';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgFor } from '@angular/common';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-diseaseconfirmation',
   templateUrl: './diseaseconfirmation.component.html',
   styleUrls: ['./diseaseconfirmation.component.css'],
+  imports: [ReactiveFormsModule, NgFor, MatCheckbox],
 })
 export class DiseaseconfirmationComponent implements OnInit {
   @Input()
@@ -52,7 +60,7 @@ export class DiseaseconfirmationComponent implements OnInit {
   revisit: any;
   diseaseArray: any = [];
   attendantType: any;
-  isDoctor: boolean = true;
+  isDoctor = true;
   currentLanguageSet: any;
   constructor(
     private fb: FormBuilder,

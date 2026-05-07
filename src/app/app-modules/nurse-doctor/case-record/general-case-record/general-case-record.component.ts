@@ -21,13 +21,38 @@
  */
 
 import { Component, Input, DoCheck } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
+import { PreviousSignificiantFindingsComponent } from './previous-significiant-findings/previous-significiant-findings.component';
+import { PreviousVisitDetailsComponent } from './previous-visit-details/previous-visit-details.component';
+import { FindingsComponent } from './findings/findings.component';
+import { DiagnosisComponent } from './diagnosis/diagnosis.component';
+import { DoctorInvestigationsComponent } from './doctor-investigations/doctor-investigations.component';
+import { PrescriptionComponent } from './prescription/prescription.component';
+import { TestAndRadiologyComponent } from './test-and-radiology/test-and-radiology.component';
 @Component({
   selector: 'app-general-case-record',
   templateUrl: './general-case-record.component.html',
   styleUrls: ['./general-case-record.component.css'],
+  imports: [
+    MatAccordion,
+    ReactiveFormsModule,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    PreviousSignificiantFindingsComponent,
+    PreviousVisitDetailsComponent,
+    FindingsComponent,
+    DiagnosisComponent,
+    DoctorInvestigationsComponent,
+    PrescriptionComponent,
+    TestAndRadiologyComponent,
+  ],
 })
 export class GeneralCaseRecordComponent implements DoCheck {
   @Input()

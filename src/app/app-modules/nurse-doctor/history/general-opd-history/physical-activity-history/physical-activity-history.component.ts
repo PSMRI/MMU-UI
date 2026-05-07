@@ -21,7 +21,7 @@
  */
 
 import { Component, DoCheck, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import {
   ConfirmationService,
@@ -37,10 +37,28 @@ import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import { NgFor } from '@angular/common';
+import { MatOption } from '@angular/material/autocomplete';
 @Component({
   selector: 'app-physical-activity-history',
   templateUrl: './physical-activity-history.component.html',
   styleUrls: ['./physical-activity-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    MatTooltip,
+    MatIcon,
+    MatRadioGroup,
+    MatRadioButton,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    NgFor,
+    MatOption,
+  ],
 })
 export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
   @Input()

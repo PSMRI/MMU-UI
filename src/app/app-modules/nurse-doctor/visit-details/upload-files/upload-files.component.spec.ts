@@ -30,7 +30,7 @@ describe('UploadFilesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [UploadFilesComponent],
+      imports: [UploadFilesComponent],
     }).compileComponents();
   }));
 

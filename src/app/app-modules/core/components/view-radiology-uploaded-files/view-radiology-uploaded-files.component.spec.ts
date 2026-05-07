@@ -30,7 +30,7 @@ describe('ViewRadiologyUploadedFilesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ViewRadiologyUploadedFilesComponent],
+      imports: [ViewRadiologyUploadedFilesComponent],
     }).compileComponents();
   }));
 

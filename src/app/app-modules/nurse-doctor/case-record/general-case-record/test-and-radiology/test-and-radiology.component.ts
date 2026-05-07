@@ -38,12 +38,51 @@ import { TestInVitalsService } from '../../../shared/services/test-in-vitals.ser
 import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { NgIf, NgFor, DatePipe } from '@angular/common';
+import { MatFormField, MatSuffix } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-test-and-radiology',
   templateUrl: './test-and-radiology.component.html',
   styleUrls: ['./test-and-radiology.component.css'],
+  imports: [
+    MatTabGroup,
+    MatTab,
+    NgIf,
+    MatFormField,
+    MatInput,
+    MatIcon,
+    MatSuffix,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    NgFor,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatPaginator,
+    DatePipe,
+  ],
 })
 export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
   current_language_set: any;
@@ -307,7 +346,7 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
       }
     });
   }
-  enableArchiveView: boolean = false;
+  enableArchiveView = false;
   archivedLabResults: any = [];
   filteredArchivedLabResults: any = [];
   archivedRadiologyResults: any = [];

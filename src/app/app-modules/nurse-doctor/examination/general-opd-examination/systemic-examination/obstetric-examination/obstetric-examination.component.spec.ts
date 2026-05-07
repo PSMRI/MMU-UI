@@ -57,13 +57,13 @@ describe('ObstetricExaminationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ObstetricExaminationComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
         ReactiveFormsModule,
         FormsModule,
         MaterialModule,
         NoopAnimationsModule,
+        ObstetricExaminationComponent,
       ],
     }).compileComponents();
   }));

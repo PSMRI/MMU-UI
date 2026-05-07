@@ -30,7 +30,7 @@ describe('QuickConsultComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [QuickConsultComponent],
+      imports: [QuickConsultComponent],
     }).compileComponents();
   }));
 

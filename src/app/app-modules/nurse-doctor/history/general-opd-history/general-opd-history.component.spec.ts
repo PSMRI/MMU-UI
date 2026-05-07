@@ -58,7 +58,7 @@ describe('GeneralOpdHistoryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [GeneralOpdHistoryComponent],
+      imports: [GeneralOpdHistoryComponent],
     }).compileComponents();
   }));
 

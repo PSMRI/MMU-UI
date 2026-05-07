@@ -21,15 +21,30 @@
  */
 
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { NgIf } from '@angular/common';
+import { MatFormField, MatLabel } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-nurse-head-to-toe-examination',
   templateUrl: './head-to-toe-examination.component.html',
   styleUrls: ['./head-to-toe-examination.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    MatRadioGroup,
+    MatRadioButton,
+    NgIf,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    StringValidatorDirective,
+  ],
 })
 export class HeadToToeExaminationComponent implements OnInit, DoCheck {
   @Input()

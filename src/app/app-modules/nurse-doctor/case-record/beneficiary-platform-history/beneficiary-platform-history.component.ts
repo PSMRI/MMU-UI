@@ -29,14 +29,56 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { environment } from 'src/environments/environment';
 import { BeneficiaryMctsCallHistoryComponent } from '../beneficiary-mcts-call-history/beneficiary-mcts-call-history.component';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { CaseSheetComponent } from '../../case-sheet/case-sheet.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { Router } from '@angular/router';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { NgFor, NgIf, DatePipe } from '@angular/common';
+import { MatFormField, MatSuffix, MatLabel } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
 @Component({
   selector: 'app-beneficiary-platform-history',
   templateUrl: './beneficiary-platform-history.component.html',
   styleUrls: ['./beneficiary-platform-history.component.css'],
+  imports: [
+    MatTabGroup,
+    NgFor,
+    MatTab,
+    NgIf,
+    MatFormField,
+    MatInput,
+    MatIcon,
+    MatSuffix,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatPaginator,
+    MatLabel,
+    MatTooltip,
+    DatePipe,
+  ],
 })
 export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   current_language_set: any;

@@ -30,7 +30,7 @@ describe('CancerReferComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CancerReferComponent],
+      imports: [CancerReferComponent],
     }).compileComponents();
   }));
 
