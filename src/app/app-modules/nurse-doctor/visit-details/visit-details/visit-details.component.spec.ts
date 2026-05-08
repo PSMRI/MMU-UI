@@ -31,7 +31,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-
 import { VisitDetailUtils } from '../../shared/utility';
 
 import { ConfirmationService } from '../../../core/services/confirmation.service';

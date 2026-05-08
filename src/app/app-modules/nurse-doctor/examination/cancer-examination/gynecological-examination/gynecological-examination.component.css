@@ -1,45 +1,45 @@
 .form-radio-btn {
-    margin-right: 15px;
+  margin-right: 15px;
 }
 
 .input-full-width {
-    width: 100%;
+  width: 100%;
 }
 
 .form-textarea {
-    width: 100%;
+  width: 100%;
 }
 
 md-select {
-    width: 100%;
+  width: 100%;
 }
 
-.image-placeholder{
-    text-align: center;
+.image-placeholder {
+  text-align: center;
 }
 
 img {
-    margin-top: 5px;
-    height: 200px;
-    width: 200px;
+  margin-top: 5px;
+  height: 200px;
+  width: 200px;
 }
 
-.box{
-    height: 60px;
+.box {
+  height: 60px;
 }
-.cell_postion{
-    padding-top: 10px !important;
+.cell_postion {
+  padding-top: 10px !important;
 }
-.chipEdit{
-    background-color: #99cc00;
+.chipEdit {
+  background-color: #99cc00;
 }
 .span-style {
-    visibility: hidden;
-    position: absolute; 
-    overflow: hidden; 
-    width: 0px; 
-    height:0px;
-    border:none;
-    margin:0; 
-    padding:0;
+  visibility: hidden;
+  position: absolute;
+  overflow: hidden;
+  width: 0px;
+  height: 0px;
+  border: none;
+  margin: 0;
+  padding: 0;
 }

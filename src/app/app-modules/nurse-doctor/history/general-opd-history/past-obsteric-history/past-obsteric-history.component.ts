@@ -48,39 +48,48 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardCardImports } from '@/components/ui/card/card.imports';
+import { ZardCheckboxImports } from '@/components/ui/checkbox/checkbox.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory, lucidePlus, lucideX } from '@ng-icons/lucide';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 import { NumberValidatorDirective } from '../../../../core/directives/numberValidator.directive';
-import { NgIf, NgFor } from '@angular/common';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { MatCard, MatCardContent } from '@angular/material/card';
-import { MatOption } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-general-past-obsteric-history',
+  standalone: true,
   templateUrl: './past-obsteric-history.component.html',
   styleUrls: ['./past-obsteric-history.component.css'],
   imports: [
-    MatTooltip,
-    MatIcon,
     ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatInput,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardCardImports,
+    ZardCheckboxImports,
+    ZardLabelImports,
+    ZardSelectImports,
+    NgIf,
+    NgFor,
+    NgClass,
+    NgIcon,
     NullDefaultValueDirective,
     StringValidatorDirective,
     NumberValidatorDirective,
-    NgIf,
-    NgFor,
-    MatCheckbox,
-    MatCard,
-    MatCardContent,
-    MatSelect,
-    MatOption,
+  ],
+  providers: [
+    provideIcons({
+      lucideHistory,
+      lucidePlus,
+      lucideX,
+    }),
   ],
 })
 export class PastObstericHistoryComponent

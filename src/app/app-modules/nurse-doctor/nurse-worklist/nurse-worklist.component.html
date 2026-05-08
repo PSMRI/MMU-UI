@@ -1,244 +1,191 @@
-<div class="container-fluid">
-  <div class="row m-t-10">
-    <div class="col-xs-8 col-sm-6 col-md-4 fit_to_content">
-      <div class="sw">
-        <input
-          type="search"
-          class="search"
-          autocomplete="off"
-          placeholder="{{ currentLanguageSet?.common?.inTableSearch }}"
-          name="filterTerm"
-          [(ngModel)]="filterTerm"
-          (keyup)="filterBeneficiaryList(filterTerm)" />
-        <button class="go" (click)="filterBeneficiaryList(filterTerm)">
-          <span class="material-icons">search</span>
-        </button>
+<div class="container mx-auto p-4 space-y-6">
+  <!-- Header Section -->
+  <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+    <div class="w-full max-w-sm relative group">
+      <div
+        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground group-focus-within:text-primary transition-colors">
+        <ng-icon name="lucideSearch" class="size-4" />
       </div>
-    </div>
-    <div class="col-xs-4 col-sm-6 col-md-8 fit_to_content">
+      <input
+        type="search"
+        class="flex h-10 w-full rounded-md border border-input bg-background px-9 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        autocomplete="off"
+        placeholder="{{ currentLanguageSet?.common?.inTableSearch }}"
+        name="filterTerm"
+        [(ngModel)]="filterTerm"
+        (keyup)="filterBeneficiaryList(filterTerm)" />
       <button
-        md-button
+        z-button
+        zType="ghost"
+        zSize="icon"
+        class="absolute inset-y-0 right-0 h-full px-3 text-muted-foreground hover:text-primary"
+        (click)="filterBeneficiaryList(filterTerm)">
+        <span class="sr-only">Search</span>
+      </button>
+    </div>
+
+    <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+      <button
+        z-button
+        zType="outline"
         id="caseSheetButton"
         style="display: none"
-        [disabled]="true"
-        class="btn btn-link pull-right">
+        [zDisabled]="true"
+        class="hidden md:flex">
         {{ currentLanguageSet?.bendetails?.emergencyCaseSheet }}
       </button>
       <button
+        z-button
         id="refresh"
-        class="mat_blue pull-right"
+        zType="default"
+        class="w-full md:w-auto shadow-sm"
         (click)="getNurseWorklist()">
+        <ng-icon name="lucideRefreshCcw" class="mr-2 size-4" />
         {{ currentLanguageSet?.common?.refresh }}
       </button>
     </div>
   </div>
-  <div class="row m-t-10 m-b-40">
-    <div class="col-sm-12">
-      <mat-card>
-        <section class="">
-          <div class="">
-            <table
-              mat-table
-              class="table table-striped"
-              [dataSource]="dataSource"
-              aria-describedby="nurseWorklist">
-              <ng-container matColumnDef="sno">
-                <th
-                  mat-header-cell
-                  style="border-bottom: none"
-                  *matHeaderCellDef
-                  mat-sort-header>
-                  {{ currentLanguageSet?.casesheet?.serialNo }}
-                </th>
+
+  <!-- Content Section -->
+  <div class="grid grid-cols-1">
+    <z-card
+      class="overflow-hidden border-none shadow-lg ring-1 ring-black/5 dark:ring-white/10">
+      <div class="overflow-x-auto">
+        <table z-table class="w-full">
+          <thead z-table-header>
+            <tr z-table-row>
+              <th z-table-head class="w-16">
+                {{ currentLanguageSet?.casesheet?.serialNo }}
+              </th>
+              <th z-table-head>
+                {{ currentLanguageSet?.bendetails?.beneficiaryID }}
+              </th>
+              <th z-table-head>
+                {{ currentLanguageSet?.bendetails?.beneficiaryName }}
+              </th>
+              <th z-table-head>
+                {{ currentLanguageSet?.bendetails?.gender }}
+              </th>
+              <th z-table-head>
+                {{ currentLanguageSet?.bendetails?.age }}
+              </th>
+              <th z-table-head>
+                {{ currentLanguageSet?.bendetails?.status }}
+              </th>
+              <th z-table-head>
+                {{ currentLanguageSet?.bendetails?.fatherName }}
+              </th>
+              <th z-table-head>
+                {{ currentLanguageSet?.bendetails?.district }}
+              </th>
+              <th z-table-head>
+                {{ currentLanguageSet?.bendetails?.phoneNo }}
+              </th>
+              <th z-table-head class="text-right">
+                {{ currentLanguageSet?.bendetails?.image }}
+              </th>
+            </tr>
+          </thead>
+          <tbody z-table-body>
+            @for (element of dataSource.data; track element.beneficiaryRegID) {
+              <tr
+                z-table-row
+                class="group cursor-pointer hover:bg-muted/50 transition-colors">
                 <td
-                  mat-cell
-                  *matCellDef="let element"
+                  z-table-cell
                   [ngClass]="{
-                    visitStatus: true,
-                    'first-visit': element?.benVisitNo === 1,
-                    revisit: element?.benVisitNo !== 1
+                    'border-l-4': true,
+                    'border-l-primary': element?.benVisitNo === 1,
+                    'border-l-orange-500': element?.benVisitNo !== 1,
                   }">
                   {{ element.sno }}
                 </td>
-              </ng-container>
-              <ng-container matColumnDef="beneficiaryID">
-                <th
-                  mat-header-cell
-                  style="border-bottom: none"
-                  *matHeaderCellDef
-                  mat-sort-header>
-                  {{ currentLanguageSet?.bendetails?.beneficiaryID }}
-                </th>
                 <td
-                  mat-cell
-                  *matCellDef="let element"
-                  (click)="loadNursePatientDetails(element)">
+                  z-table-cell
+                  (click)="loadNursePatientDetails(element)"
+                  class="font-medium">
                   {{ element?.beneficiaryID }}
                 </td>
-              </ng-container>
-              <ng-container matColumnDef="beneficiaryName">
-                <th
-                  mat-header-cell
-                  style="border-bottom: none"
-                  *matHeaderCellDef
-                  mat-sort-header>
-                  {{ currentLanguageSet?.bendetails?.beneficiaryName }}
-                </th>
-                <td
-                  mat-cell
-                  *matCellDef="let element"
-                  (click)="loadNursePatientDetails(element)">
+                <td z-table-cell (click)="loadNursePatientDetails(element)">
                   {{ element?.benName | titlecase }}
                 </td>
-              </ng-container>
-              <ng-container matColumnDef="gender">
-                <th
-                  mat-header-cell
-                  style="border-bottom: none"
-                  *matHeaderCellDef
-                  mat-sort-header>
-                  {{ currentLanguageSet?.bendetails?.gender }}
-                </th>
-                <td
-                  mat-cell
-                  *matCellDef="let element"
-                  (click)="loadNursePatientDetails(element)">
+                <td z-table-cell (click)="loadNursePatientDetails(element)">
                   {{ element.genderName | titlecase }}
                 </td>
-              </ng-container>
-              <ng-container matColumnDef="age">
-                <th
-                  mat-header-cell
-                  style="border-bottom: none"
-                  *matHeaderCellDef
-                  mat-sort-header>
-                  {{ currentLanguageSet?.bendetails?.age }}
-                </th>
-                <td
-                  mat-cell
-                  *matCellDef="let element"
-                  (click)="loadNursePatientDetails(element)">
+                <td z-table-cell (click)="loadNursePatientDetails(element)">
                   {{ element.age }}
                 </td>
-              </ng-container>
-              <ng-container matColumnDef="status">
-                <th
-                  mat-header-cell
-                  style="border-bottom: none"
-                  *matHeaderCellDef
-                  mat-sort-header>
-                  {{ currentLanguageSet?.bendetails?.status }}
-                </th>
-                <td
-                  mat-cell
-                  *matCellDef="let element"
-                  (click)="loadNursePatientDetails(element)">
-                  {{ element.benVisitNo === 1 ? 'First visit' : 'Revisit' }}
+                <td z-table-cell (click)="loadNursePatientDetails(element)">
+                  <span
+                    [class]="
+                      element.benVisitNo === 1
+                        ? 'text-primary'
+                        : 'text-orange-500'
+                    ">
+                    {{ element.benVisitNo === 1 ? 'First visit' : 'Revisit' }}
+                  </span>
                 </td>
-              </ng-container>
-              <ng-container matColumnDef="fatherName">
-                <th
-                  mat-header-cell
-                  style="border-bottom: none"
-                  *matHeaderCellDef
-                  mat-sort-header>
-                  {{ currentLanguageSet?.bendetails?.fatherName }}
-                </th>
-                <td
-                  mat-cell
-                  *matCellDef="let element"
-                  (click)="loadNursePatientDetails(element)">
+                <td z-table-cell (click)="loadNursePatientDetails(element)">
                   {{ element.fatherName | titlecase }}
                 </td>
-              </ng-container>
-              <ng-container matColumnDef="district">
-                <th
-                  mat-header-cell
-                  style="border-bottom: none"
-                  *matHeaderCellDef
-                  mat-sort-header>
-                  {{ currentLanguageSet?.bendetails?.district }}
-                </th>
-                <td
-                  mat-cell
-                  *matCellDef="let element"
-                  (click)="loadNursePatientDetails(element)">
+                <td z-table-cell (click)="loadNursePatientDetails(element)">
                   {{ element.districtName | titlecase }} /
                   {{ element.villageName | titlecase }}
                 </td>
-              </ng-container>
-              <ng-container matColumnDef="phoneNo">
-                <th
-                  mat-header-cell
-                  style="border-bottom: none"
-                  *matHeaderCellDef
-                  mat-sort-header>
-                  {{ currentLanguageSet?.bendetails?.phoneNo }}
-                </th>
-                <td
-                  mat-cell
-                  *matCellDef="let element"
-                  (click)="loadNursePatientDetails(element)">
+                <td z-table-cell (click)="loadNursePatientDetails(element)">
                   {{ element.preferredPhoneNum }}
                 </td>
-              </ng-container>
-              <ng-container matColumnDef="image">
-                <th
-                  mat-header-cell
-                  style="border-bottom: none"
-                  *matHeaderCellDef
-                  mat-sort-header>
-                  {{ currentLanguageSet?.bendetails?.image }}
-                </th>
-                <td
-                  mat-cell
-                  *matCellDef="let element"
-                  (click)="patientImageView(element.beneficiaryRegID)"
-                  matTooltip="{{ currentLanguageSet?.tc?.image }}">
-                  <img
-                    src="assets/images/Avatar-Profile_30X30.png "
-                    alt="image" />
+                <td z-table-cell class="text-right">
+                  <div class="flex justify-end">
+                    <button
+                      z-button
+                      zType="ghost"
+                      zSize="icon"
+                      [zTooltip]="currentLanguageSet?.tc?.image"
+                      (click)="patientImageView(element.beneficiaryRegID)">
+                      <img
+                        class="size-8 rounded-full border border-muted"
+                        src="assets/images/Avatar-Profile_30X30.png"
+                        alt="image" />
+                    </button>
+                  </div>
                 </td>
-              </ng-container>
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-            </table>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- No Records State -->
+      <div
+        class="flex flex-col items-center justify-center py-20 text-muted-foreground"
+        *ngIf="dataSource.data.length === 0">
+        <ng-icon name="lucideInbox" class="size-12 mb-4 opacity-20" />
+        <strong>{{ currentLanguageSet?.noRecordsFound }}</strong>
+      </div>
+
+      <!-- Footer / Pagination -->
+      <div
+        class="p-4 border-t bg-muted/5 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-6 text-sm">
+          <div class="flex items-center gap-2">
+            <div class="size-3 rounded-full bg-primary"></div>
+            <p>{{ currentLanguageSet?.common?.firstVisit }}</p>
           </div>
-          <div
-            class="pull-center"
-            style="margin-top: 35px; text-align: center"
-            [hidden]="dataSource.data.length > 0">
-            <strong>{{ currentLanguageSet?.noRecordsFound }}</strong>
+          <div class="flex items-center gap-2">
+            <div class="size-3 rounded-full bg-orange-500"></div>
+            <p>{{ currentLanguageSet?.common?.reVisit }}</p>
           </div>
-          <div class="col-12 row">
-            <div class="col-6" style="margin-top: 15px">
-              <ul
-                class="description"
-                style="display: unset"
-                *ngIf="dataSource.data.length > 0">
-                <li>
-                  <div class="first-visit-marker"></div>
-                  <p>{{ currentLanguageSet?.common?.firstVisit }}</p>
-                </li>
-                <li>
-                  <div class="revisit-marker"></div>
-                  <p>{{ currentLanguageSet?.common?.reVisit }}</p>
-                </li>
-              </ul>
-            </div>
-            <div class="col-6">
-              <mat-paginator
-                style="display: unset"
-                [hidden]="dataSource.data.length === 0"
-                [pageSizeOptions]="[5, 10, 20]"
-                [pageSize]="5"
-                showFirstLastButtons
-                aria-label="Select patient in nurseWorklist">
-              </mat-paginator>
-            </div>
-          </div>
-        </section>
-      </mat-card>
-    </div>
+        </div>
+
+        <div class="w-full md:w-auto" *ngIf="dataSource.data.length > 0">
+          <z-pagination
+            [zPageIndex]="activePage"
+            [zTotal]="Math.ceil(dataSource.data.length / rowsPerPage)"
+            (zPageIndexChange)="activePage = $event">
+          </z-pagination>
+        </div>
+      </div>
+    </z-card>
   </div>
 </div>

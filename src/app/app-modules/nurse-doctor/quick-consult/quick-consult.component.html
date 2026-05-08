@@ -1,1053 +1,1086 @@
 <div>
-  <mat-accordion>
-    <mat-expansion-panel expanded="true">
-      <mat-expansion-panel-header>
-        <h5>
-          {{
-            currentLanguageSet?.historyData?.QuickConsultDetails?.quickconsult
-          }}
-        </h5>
-      </mat-expansion-panel-header>
-
-      <div class="container-fluid" [formGroup]="patientQuickConsultForm">
-        <header class="mat-expansion-panel-header m-t-5">
-          <h4>
+  <z-accordion multiple class="modern-accordion">
+    <z-accordion-item [expanded]="true">
+      <z-accordion-trigger>
+        <div class="flex items-center gap-3">
+          <span class="text-lg font-bold text-gray-900">
             {{
-              currentLanguageSet?.historyData?.QuickConsultDetails
-                ?.basicinformation
+              currentLanguageSet?.historyData?.QuickConsultDetails?.quickconsult
             }}
-          </h4>
-        </header>
-        <ng-container formArrayName="chiefComplaintList">
-          <div class="row m-t-10" *ngIf="dataSource.data.length >= 1">
-            <div class="col-xs-12">
-              <table
-                class="table table-bordered"
-                mat-table
-                [dataSource]="dataSource"
-                aria-describedby="qcChiefComplaints">
-                <ng-container matColumnDef="chiefcomplaint">
-                  <th
-                    mat-header-cell
-                    style="border-bottom: none"
-                    *matHeaderCellDef
-                    mat-sort-header>
-                    {{ currentLanguageSet?.Find?.chiefcomplaint }}
-                  </th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.chiefComplaint }}
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="ConceptID">
-                  <th
-                    mat-header-cell
-                    style="border-bottom: none"
-                    *matHeaderCellDef
-                    mat-sort-header>
-                    {{ currentLanguageSet?.common?.ConceptID }}
-                  </th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.conceptID }}
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="description">
-                  <th
-                    mat-header-cell
-                    style="border-bottom: none"
-                    *matHeaderCellDef
-                    mat-sort-header>
-                    {{
-                      currentLanguageSet?.nurseData?.chiefComplaintsDetails
-                        ?.description
-                    }}
-                  </th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.description }}
-                  </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr
-                  mat-row
-                  *matRowDef="let row; columns: displayedColumns"></tr>
-              </table>
-            </div>
-          </div>
-
-          <div
-            class="row m-t-10"
-            *ngFor="
-              let chiefComplaint of getChiefComplaintList();
-              let i = index;
-              let isLast = last
-            ">
-            <ng-container [formGroupName]="i">
-              <div class="col-xs-12 col-sm-3">
-                <mat-form-field class="input-full-width">
-                  <mat-label>{{
-                    currentLanguageSet?.Find?.chiefcomplaint
-                  }}</mat-label>
-                  <input
-                    autocomplete="off"
-                    type="text"
-                    matInput
-                    name="chiefComplaint"
-                    formControlName="chiefComplaint"
-                    (keyup)="suggestChiefComplaintList(chiefComplaint, i)"
-                    [matAutocomplete]="auto" />
-                </mat-form-field>
-
-                <mat-autocomplete
-                  #auto="matAutocomplete"
-                  autoActiveFirstOption
-                  [displayWith]="displayChiefComplaint"
-                  (optionSelected)="filterComplaints($event.option.value, i)">
-                  <mat-option
-                    *ngFor="let compl of suggestedChiefComplaintList[i]"
-                    [value]="compl">
-                    {{ compl.chiefComplaint }}
-                  </mat-option>
-                </mat-autocomplete>
-              </div>
-
-              <div class="col-xs-12 col-sm-3" [hidden]="true">
-                <mat-form-field class="input-full-width">
-                  <mat-label>{{
-                    currentLanguageSet?.nurseData?.chiefComplaintsDetails?.SCTID
-                  }}</mat-label>
-                  <input
-                    matInput
-                    defaultNull
-                    name="conceptID"
-                    formControlName="conceptID"
-                    readonly />
-                </mat-form-field>
-              </div>
-
-              <div class="col-xs-10 col-sm-4">
-                <mat-form-field class="input-full-width">
-                  <mat-label>{{
-                    currentLanguageSet?.historyData?.QuickConsultDetails
-                      ?.chiefcomplaintsdescription
-                  }}</mat-label>
-                  <input
-                    matInput
-                    defaultNull
-                    name="description"
-                    formControlName="description"
-                    maxlength="300" />
-                </mat-form-field>
-              </div>
-
-              <div
-                class="col-sm-2 col-md-2 box action-btn-container pull-right">
-                <button
-                  [id]="'removeBtn' + i"
-                  *ngIf="
-                    i !== 0 ||
-                    (i === 0 &&
-                      patientQuickConsultForm.get('chiefComplaintList')?.value
-                        .length === 1 &&
-                      patientQuickConsultForm.get('chiefComplaintList')?.value[
-                        i
-                      ].chiefComplaint !== null &&
-                      patientQuickConsultForm.get('chiefComplaintList')?.value[
-                        i
-                      ].chiefComplaint !== '') ||
-                    (i === 0 &&
-                      patientQuickConsultForm.get('chiefComplaintList')?.value
-                        ?.length > 1)
-                  "
-                  type="button"
-                  mat-mini-fab
-                  color="warn"
-                  class="mat_warn_circle"
-                  (click)="deleteChiefComplaint(i, chiefComplaint)">
-                  <span class="material-icons">close</span>
-                </button>
-
-                <button
-                  class="mat_blue_circle"
-                  *ngIf="isLast"
-                  [id]="'addBtn' + i"
-                  [disabled]="checkComplaintFormValidity(chiefComplaint)"
-                  type="button"
-                  mat-mini-fab
-                  color="primary"
-                  (click)="addChiefComplaint()">
-                  <span class="material-icons">add</span>
-                </button>
-              </div>
-            </ng-container>
-          </div>
-        </ng-container>
-
-        <header class="mat-expansion-panel-header m-t-10">
-          <h4>
-            {{
-              currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-                ?.vitals
-            }}
-          </h4>
-        </header>
-        <div class="row m-t-10">
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                currentLanguageSet?.vitalsDetails
-                  ?.AnthropometryDataANC_OPD_NCD_PNC?.height
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                defaultNull
-                allowText="number"
-                name="height_cm"
-                formControlName="height_cm" />
-            </mat-form-field>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                currentLanguageSet?.vitalsDetails
-                  ?.AnthropometryDataANC_OPD_NCD_PNC?.weight
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                defaultNull
-                allowText="number"
-                name="weight_Kg"
-                formControlName="weight_Kg" />
-            </mat-form-field>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                currentLanguageSet?.vitalsDetails
-                  ?.AnthropometryDataANC_OPD_NCD_PNC?.BMI
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                defaultNull
-                allowText="number"
-                name="bMI"
-                formControlName="bMI"
-                [ngClass]="{ abnormal: bMI < 18.5 || bMI > 24.9 }" />
-            </mat-form-field>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                currentLanguageSet?.vitalsDetails
-                  ?.AnthropometryDataANC_OPD_NCD_PNC?.BodyTemperature
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                defaultNull
-                allowText="decimal"
-                name="temperature"
-                formControlName="temperature"
-                [ngClass]="{
-                  abnormal: temperature < 96 || temperature > 100
-                }" />
-            </mat-form-field>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                currentLanguageSet?.casesheet?.pulseRate
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                defaultNull
-                allowText="number"
-                name="pulseRate"
-                formControlName="pulseRate"
-                [ngClass]="{ abnormal: pulseRate < 49 || pulseRate > 101 }" />
-            </mat-form-field>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{ currentLanguageSet?.sPOTwoWithUnit }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                defaultNull
-                allowText="number"
-                name="SPO2"
-                formControlName="sPO2"
-                [ngClass]="{ abnormal: sPO2 < 1 || sPO2 > 100 }" />
-            </mat-form-field>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-                  ?.respiratoryRate
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                defaultNull
-                allowText="number"
-                name="respiratoryRate"
-                formControlName="respiratoryRate"
-                [ngClass]="{
-                  abnormal: respiratoryRate < 11 || respiratoryRate > 19
-                }" />
-            </mat-form-field>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-                  ?.systolicBP
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                defaultNull
-                allowText="number"
-                name="systolicBP_1stReading"
-                formControlName="systolicBP_1stReading"
-                [ngClass]="{
-                  abnormal:
-                    systolicBP_1stReading < 110 || systolicBP_1stReading > 140
-                }" />
-            </mat-form-field>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-                  ?.diastolicBP
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                defaultNull
-                allowText="number"
-                name="diastolicBP_1stReading"
-                formControlName="diastolicBP_1stReading"
-                [ngClass]="{
-                  abnormal:
-                    diastolicBP_1stReading < 60 || diastolicBP_1stReading > 90
-                }" />
-            </mat-form-field>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-                  ?.BloodGlucoseFasting
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                defaultNull
-                type="number"
-                [min]="1"
-                allowMax="199"
-                name="bloodGlucose_Fasting"
-                formControlName="bloodGlucose_Fasting"
-                [ngClass]="{
-                  abnormal:
-                    bloodGlucose_Fasting < 50 || bloodGlucose_Fasting > 700
-                }" />
-            </mat-form-field>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-                  ?.BloodGlucoseRandom
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                defaultNull
-                type="number"
-                [min]="1"
-                allowMax="199"
-                name="bloodGlucose_Random"
-                formControlName="bloodGlucose_Random"
-                [ngClass]="{ abnormal: bloodGlucose_Random < 140 }" />
-            </mat-form-field>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-                  ?.BloodGlucosePP
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                defaultNull
-                [min]="1"
-                type="number"
-                name="bloodGlucose_2hr_PP"
-                formControlName="bloodGlucose_2hr_PP"
-                allowMax="199"
-                [ngClass]="{ abnormal: bloodGlucose_2hr_PP < 140 }" />
-            </mat-form-field>
-          </div>
-
-          <div class="row m-t-20">
-            <div
-              class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-              <strong>Random Glucose Test</strong>
-            </div>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{ currentLanguageSet?.rbsTestResult }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                defaultNull
-                allowText="number"
-                [disabled]="rbsResultChange()"
-                name="rbsTestResult"
-                id="rbsTestResult"
-                formControlName="rbsTestResult"
-                min="1"
-                maxlength="4"
-                (blur)="checkForRange()"
-                (change)="rbsResultChange(); setRBSResultInReport()"
-                [ngClass]="{
-                  abnormal: rbsTestResult < 0 || rbsTestResult > 1000
-                }" />
-              <svg
-                class="fontawesomesvg"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                matTooltip="{{ currentLanguageSet?.common?.startTest }}"
-                matSuffix
-                (click)="openIOTRBSModel()"
-                onkeydown="openIOTRBSModel()"
-                tabindex="{0}">
-                <path
-                  d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
-              </svg>
-            </mat-form-field>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{ currentLanguageSet?.rbsTestRemarks }}</mat-label>
-              <input
-                autocomplete="off"
-                allowText="textAreaValidator"
-                matInput
-                defaultNull
-                [ngClass]=""
-                name="rbsTestRemarks"
-                id="rbsTestRemarks"
-                (change)="setRBSResultInReport()"
-                formControlName="rbsTestRemarks"
-                maxlength="300"
-                [disabled]="rbsResultChange()" />
-            </mat-form-field>
-          </div>
+          </span>
         </div>
-
-        <header class="mat-expansion-panel-header m-t-10">
-          <h4>
-            {{
-              currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                ?.oral?.observations
-            }}
-          </h4>
-        </header>
-        <div class="row m-t-10">
-          <div class="col-sm-12 col-md-12">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                currentLanguageSet?.casesheet?.clinicalObs
-              }}</mat-label>
-              <textarea
-                matInput
-                allowText="textAreaValidator"
-                defaultNull
-                matTextareaAutosize
-                name="clinicalObservation"
-                formControlName="clinicalObservation"
-                maxlength="500"
-                required>
-              </textarea>
-            </mat-form-field>
-          </div>
-        </div>
-
-        <header class="mat-expansion-panel-header m-t-10">
-          <h4>
-            {{
-              currentLanguageSet?.nurseData?.investigationsDetails
-                ?.investigations
-            }}
-          </h4>
-        </header>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-6 m-t-10">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                currentLanguageSet?.common?.SelectTestname
-              }}</mat-label>
-              <mat-select
-                class="input-full-width-select"
-                multiple
-                name="test"
-                formControlName="test"
-                (change)="checkTestName($event)">
-                <mat-option
-                  *ngFor="let nonRadiology of nonRadiologyMaster"
-                  [value]="nonRadiology"
-                  [disabled]="canDisableTest(nonRadiology)">
-                  {{ nonRadiology.procedureName }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 m-t-10">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                currentLanguageSet?.labTechnicianData?.radiologyimaging
-              }}</mat-label>
-              <mat-select
-                class="input-full-width-select"
-                multiple
-                name="radiology"
-                formControlName="radiology">
-                <mat-option
-                  *ngFor="let radiology of radiologyMaster"
-                  [value]="radiology"
-                  [disabled]="canDisableTest(radiology)">
-                  {{ radiology.procedureName }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-
-          <div class="col-sm-12 col-md-12 m-t-10">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                currentLanguageSet?.Investigationdetails?.externalinvestigations
-              }}</mat-label>
-              <textarea
-                matInput
-                allowText="textAreaValidator"
-                defaultNull
-                matTextareaAutosize
-                name="externalInvestigation"
-                formControlName="externalInvestigation"
-                maxlength="300">
-              </textarea>
-            </mat-form-field>
-          </div>
-        </div>
-
-        <div class="m-t-10">
-          <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <header class="mat-expansion-panel-header m-t-5">
-                <h4>
-                  {{
-                    currentLanguageSet?.DiagnosisDetails?.provisionaldiagnosis
-                  }}
-                  *
-                </h4>
-              </header>
-              <ng-container formArrayName="provisionalDiagnosisList">
-                <div class="row align-items-center m-t-10"
-                  *ngFor="let diagnosis of getProvisionalDiagnosisList(); let i = index; let isLast = last">
-                  <ng-container [formGroupName]="i">
-                    <!-- Diagnosis Input -->
-                    <div class="col-xs-12 col-sm-8 col-md-10 col-lg-10">
-                      <mat-form-field class="input-full-width" appearance="fill">
-                        <mat-label>{{ currentLanguageSet?.DiagnosisDetails?.provisionaldiagnosis }}</mat-label>
-                        <input matInput type="text" autocomplete="off" name="provisionalDiagnosis"
-                          formControlName="provisionalDiagnosis" minlength="3" maxlength="100" required
-                          #diagnosisInput [matAutocomplete]="autoDiagnosis"
-                          (keyup)="onDiagnosisInputKeyup(diagnosisInput.value, i)" />
-                      </mat-form-field>
-  
-                      <mat-autocomplete
-                        #autoDiagnosis="matAutocomplete"
-                        appAutocompleteScroller
-                        [threshold]="0.6"
-                        (nearEnd)="onAutoNearEnd(i)"
-                        (panelReady)="onPanelReady(i, $event)"
-                        autoActiveFirstOption
-                        [displayWith]="displayDiagnosis"
-                        (optionSelected)="
-                          onDiagnosisSelected($event.option.value, i)
-                        "
-                      >
-                        <mat-option
-                          *ngFor="let diag of suggestedDiagnosisList[i]"
-                          [value]="diag"
-                        >
-                          {{ diag.term }}
-                        </mat-option>
-                        <mat-option *ngIf="loadingMore[i]" disabled
-                          >Loading…</mat-option
-                        >
-                        <mat-option *ngIf="noMore[i]" disabled
-                          >End of results</mat-option
-                        >
-                      </mat-autocomplete>
-                    </div>
-          
-                    <!-- Action Buttons (Add & Remove) -->
-                    <div
-                    class="col-xs-12 col-sm-3 col-md-2 col-lg-2"
-                    >
-                    <button
-                      mat-mini-fab
-                      type="button"
-                      *ngIf="isLast"
-                      [disabled]="
-                        checkProvisionalDiagnosisValidity(diagnosis)
-                      "
-                      color="primary"
-                      class="mat_blue_circle"
-                      (click)="addDiagnosis()"
-                      style="margin-right: 10px">
-                      <mat-icon>add</mat-icon>
-                    </button>
-                    <button
-                      mat-mini-fab
-                      type="button"
-                      color="warn"
-                      class="mat_warn_circle"
-                      *ngIf="
-                        diagnosis.get('provisionalDiagnosisList')?.disabled ||
-                        i !== 0 ||
-                        (i === 0 &&
-                          patientQuickConsultForm.get(
-                            'provisionalDiagnosisList'
-                          )?.value[i]?.provisionalDiagnosis !== null &&
-                          patientQuickConsultForm.get(
-                            'provisionalDiagnosisList'
-                          )?.value[i]?.provisionalDiagnosis !== '')
-                      "
-                      (click)="deleteDiagnosis(i, diagnosis)">
-                      <mat-icon>close</mat-icon>
-                    </button>
-                  </div>
+      </z-accordion-trigger>
+      <div class="p-6">
+        <div class="container-fluid" [formGroup]="patientQuickConsultForm">
+          <header class="mat-expansion-panel-header m-t-5">
+            <h4>
+              {{
+                currentLanguageSet?.historyData?.QuickConsultDetails
+                  ?.basicinformation
+              }}
+            </h4>
+          </header>
+          <ng-container formArrayName="chiefComplaintList">
+            <div class="row m-t-10" *ngIf="dataSource.data.length >= 1">
+              <div class="col-xs-12">
+                <table
+                  class="table table-bordered"
+                  mat-table
+                  [dataSource]="dataSource"
+                  aria-describedby="qcChiefComplaints">
+                  <ng-container matColumnDef="chiefcomplaint">
+                    <th
+                      mat-header-cell
+                      style="border-bottom: none"
+                      *matHeaderCellDef
+                      mat-sort-header>
+                      {{ currentLanguageSet?.Find?.chiefcomplaint }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.chiefComplaint }}
+                    </td>
                   </ng-container>
+
+                  <ng-container matColumnDef="ConceptID">
+                    <th
+                      mat-header-cell
+                      style="border-bottom: none"
+                      *matHeaderCellDef
+                      mat-sort-header>
+                      {{ currentLanguageSet?.common?.ConceptID }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.conceptID }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="description">
+                    <th
+                      mat-header-cell
+                      style="border-bottom: none"
+                      *matHeaderCellDef
+                      mat-sort-header>
+                      {{
+                        currentLanguageSet?.nurseData?.chiefComplaintsDetails
+                          ?.description
+                      }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.description }}
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+              </div>
+            </div>
+
+            <div
+              class="row m-t-10"
+              *ngFor="
+                let chiefComplaint of getChiefComplaintList();
+                let i = index;
+                let isLast = last
+              ">
+              <ng-container [formGroupName]="i">
+                <div class="col-xs-12 col-sm-3">
+                  <mat-form-field class="input-full-width">
+                    <mat-label>{{
+                      currentLanguageSet?.Find?.chiefcomplaint
+                    }}</mat-label>
+                    <input
+                      autocomplete="off"
+                      type="text"
+                      matInput
+                      name="chiefComplaint"
+                      formControlName="chiefComplaint"
+                      (keyup)="suggestChiefComplaintList(chiefComplaint, i)"
+                      [matAutocomplete]="auto" />
+                  </mat-form-field>
+
+                  <mat-autocomplete
+                    #auto="matAutocomplete"
+                    autoActiveFirstOption
+                    [displayWith]="displayChiefComplaint"
+                    (optionSelected)="filterComplaints($event.option.value, i)">
+                    <mat-option
+                      *ngFor="let compl of suggestedChiefComplaintList[i]"
+                      [value]="compl">
+                      {{ compl.chiefComplaint }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </div>
+
+                <div class="col-xs-12 col-sm-3" [hidden]="true">
+                  <mat-form-field class="input-full-width">
+                    <mat-label>{{
+                      currentLanguageSet?.nurseData?.chiefComplaintsDetails
+                        ?.SCTID
+                    }}</mat-label>
+                    <input
+                      matInput
+                      defaultNull
+                      name="conceptID"
+                      formControlName="conceptID"
+                      readonly />
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xs-10 col-sm-4">
+                  <mat-form-field class="input-full-width">
+                    <mat-label>{{
+                      currentLanguageSet?.historyData?.QuickConsultDetails
+                        ?.chiefcomplaintsdescription
+                    }}</mat-label>
+                    <input
+                      matInput
+                      defaultNull
+                      name="description"
+                      formControlName="description"
+                      maxlength="300" />
+                  </mat-form-field>
+                </div>
+
+                <div
+                  class="col-sm-2 col-md-2 box action-btn-container pull-right">
+                  <button
+                    [id]="'removeBtn' + i"
+                    *ngIf="
+                      i !== 0 ||
+                      (i === 0 &&
+                        patientQuickConsultForm.get('chiefComplaintList')?.value
+                          .length === 1 &&
+                        patientQuickConsultForm.get('chiefComplaintList')
+                          ?.value[i].chiefComplaint !== null &&
+                        patientQuickConsultForm.get('chiefComplaintList')
+                          ?.value[i].chiefComplaint !== '') ||
+                      (i === 0 &&
+                        patientQuickConsultForm.get('chiefComplaintList')?.value
+                          ?.length > 1)
+                    "
+                    type="button"
+                    mat-mini-fab
+                    color="warn"
+                    class="mat_warn_circle"
+                    (click)="deleteChiefComplaint(i, chiefComplaint)">
+                    <span class="material-icons">close</span>
+                  </button>
+
+                  <button
+                    class="mat_blue_circle"
+                    *ngIf="isLast"
+                    [id]="'addBtn' + i"
+                    [disabled]="checkComplaintFormValidity(chiefComplaint)"
+                    type="button"
+                    mat-mini-fab
+                    color="primary"
+                    (click)="addChiefComplaint()">
+                    <span class="material-icons">add</span>
+                  </button>
                 </div>
               </ng-container>
             </div>
-          </div>
-        </div>
+          </ng-container>
 
-        <header class="mat-expansion-panel-header m-t-10">
-          <h4>{{ currentLanguageSet?.casesheet?.prescribe }}</h4>
-        </header>
-        <form #prescriptionForm="ngForm" class="m-t-20">
-          <section class="row no-row">
-            <div class="col-md-3" style="padding-bottom: 8px">
-              <div *ngIf="isStockAvalable === 'primary'">
-                <mat-icon
-                  style="
-                    background-color: green;
-                    color: white;
-                    font-size: 20px;
-                    height: 20px;
-                    width: 20px;
-                  "
-                  class="mat-18">
-                  check
-                </mat-icon>
-                <span style="color: green; padding-left: 1px">{{
-                  currentLanguageSet?.stockAvailability
-                }}</span>
-              </div>
-              <div *ngIf="isStockAvalable === 'warn'">
-                <mat-icon
-                  style="
-                    background-color: #c30d0d;
-                    color: white;
-                    font-size: 20px;
-                    height: 20px;
-                    width: 20px;
-                  "
-                  class="md-18">
-                  close </mat-icon
-                ><span style="color: #c30d0d; padding-left: 5px">{{
-                  currentLanguageSet?.stockAvailability
-                }}</span>
-              </div>
-            </div>
-          </section>
-          <section class="row no-row">
-            <div class="col-md-3">
-              <mat-form-field class="input-full-width">
-                <mat-label>{{ currentLanguageSet?.casesheet?.form }}</mat-label>
-                <mat-select
-                  class="input-full-width-select"
-                  name="form"
-                  [(ngModel)]="tempform"
-                  (selectionChange)="getFormValueChanged()"
-                  required>
-                  <mat-option
-                    *ngFor="let item of drugFormMaster"
-                    [value]="item">
-                    {{ item.itemFormName }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="col-md-3">
+          <header class="mat-expansion-panel-header m-t-10">
+            <h4>
+              {{
+                currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
+                  ?.vitals
+              }}
+            </h4>
+          </header>
+          <div class="row m-t-10">
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
               <mat-form-field class="input-full-width">
                 <mat-label>{{
-                  currentLanguageSet?.Prescription?.medicine
+                  currentLanguageSet?.vitalsDetails
+                    ?.AnthropometryDataANC_OPD_NCD_PNC?.height
                 }}</mat-label>
                 <input
                   autocomplete="off"
-                  type="text"
-                  name="medicine"
-                  [disabled]="!currentPrescription.formID"
                   matInput
-                  [(ngModel)]="tempDrugName"
-                  (keyup)="filterMedicine(tempDrugName)"
-                  (blur)="reEnterMedicine()"
-                  required
-                  [matAutocomplete]="autoGroup" />
-                <mat-autocomplete
-                  #autoGroup="matAutocomplete"
-                  [displayWith]="displayFn">
-                  <mat-option
-                    *ngFor="let item of subFilteredDrugMaster"
-                    [value]="item"
-                    (onSelectionChange)="selectMedicineObject($event)">
-                    {{ item.itemName }} {{ item.strength
-                    }}{{ item.unitOfMeasurement }}
-                    {{
-                      item.quantityInHand ? '(' + item.quantityInHand + ')' : ''
-                    }}
-                  </mat-option>
-                </mat-autocomplete>
+                  defaultNull
+                  allowText="number"
+                  name="height_cm"
+                  formControlName="height_cm" />
               </mat-form-field>
             </div>
-            <div class="col-md-2">
+
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
               <mat-form-field class="input-full-width">
                 <mat-label>{{
-                  currentLanguageSet?.Prescription?.dosage
+                  currentLanguageSet?.vitalsDetails
+                    ?.AnthropometryDataANC_OPD_NCD_PNC?.weight
                 }}</mat-label>
-                <mat-select
-                  class="input-full-width-select"
-                  name="dose"
-                  [(ngModel)]="currentPrescription.dose"
-                  [disabled]="!currentPrescription.drugID"
-                  required>
-                  <mat-option
-                    *ngFor="let item of filteredDrugDoseMaster"
-                    [value]="item.drugDose">
-                    {{ item.drugDose }}
-                  </mat-option>
-                </mat-select>
+                <input
+                  autocomplete="off"
+                  matInput
+                  defaultNull
+                  allowText="number"
+                  name="weight_Kg"
+                  formControlName="weight_Kg" />
               </mat-form-field>
             </div>
-            <div class="col-md-4">
+
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
               <mat-form-field class="input-full-width">
                 <mat-label>{{
-                  currentLanguageSet?.Prescription?.frequency
+                  currentLanguageSet?.vitalsDetails
+                    ?.AnthropometryDataANC_OPD_NCD_PNC?.BMI
                 }}</mat-label>
-                <mat-select
-                  class="input-full-width-select"
-                  name="frequency"
-                  [(ngModel)]="currentPrescription.frequency"
-                  [disabled]="!currentPrescription.drugID"
-                  required>
-                  <mat-option
-                    *ngFor="let item of drugFrequencyMaster"
-                    [value]="item.frequency">
-                    {{ item.frequency }}
-                  </mat-option>
-                </mat-select>
+                <input
+                  autocomplete="off"
+                  matInput
+                  defaultNull
+                  allowText="number"
+                  name="bMI"
+                  formControlName="bMI"
+                  [ngClass]="{ abnormal: bMI < 18.5 || bMI > 24.9 }" />
               </mat-form-field>
             </div>
-          </section>
-          <section class="row no-row" style="margin-top: 10px !important">
-            <div class="col-md-3">
+
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
               <mat-form-field class="input-full-width">
                 <mat-label>{{
-                  currentLanguageSet?.nurseData?.chiefComplaintsDetails
-                    ?.duration
+                  currentLanguageSet?.vitalsDetails
+                    ?.AnthropometryDataANC_OPD_NCD_PNC?.BodyTemperature
                 }}</mat-label>
-                <mat-select
-                  class="input-full-width-select"
-                  name="duration"
-                  [(ngModel)]="currentPrescription.duration"
-                  [disabled]="!currentPrescription.drugID"
-                  required>
-                  <mat-option
-                    *ngFor="let item of drugDurationMaster"
-                    [value]="item">
-                    {{ item }}
-                  </mat-option>
-                </mat-select>
+                <input
+                  autocomplete="off"
+                  matInput
+                  defaultNull
+                  allowText="decimal"
+                  name="temperature"
+                  formControlName="temperature"
+                  [ngClass]="{
+                    abnormal: temperature < 96 || temperature > 100,
+                  }" />
               </mat-form-field>
             </div>
-            <div class="col-md-3">
+
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
               <mat-form-field class="input-full-width">
                 <mat-label>{{
-                  currentLanguageSet?.Prescription?.unit
+                  currentLanguageSet?.casesheet?.pulseRate
                 }}</mat-label>
-                <mat-select
-                  class="input-full-width-select"
-                  name="unit"
-                  [(ngModel)]="currentPrescription.unit"
-                  [disabled]="!currentPrescription.drugID"
-                  required>
-                  <mat-option
-                    *ngFor="let item of drugDurationUnitMaster"
-                    [value]="item.drugDuration">
-                    {{ item.drugDuration }}
-                  </mat-option>
-                </mat-select>
+                <input
+                  autocomplete="off"
+                  matInput
+                  defaultNull
+                  allowText="number"
+                  name="pulseRate"
+                  formControlName="pulseRate"
+                  [ngClass]="{ abnormal: pulseRate < 49 || pulseRate > 101 }" />
               </mat-form-field>
             </div>
-            <div
-              class="col-md-2"
-              *ngIf="
-                currentPrescription.formID &&
-                currentPrescription.formID !== 1 &&
-                currentPrescription.formID !== 2
-              ">
+
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+              <mat-form-field class="input-full-width">
+                <mat-label>{{ currentLanguageSet?.sPOTwoWithUnit }}</mat-label>
+                <input
+                  autocomplete="off"
+                  matInput
+                  defaultNull
+                  allowText="number"
+                  name="SPO2"
+                  formControlName="sPO2"
+                  [ngClass]="{ abnormal: sPO2 < 1 || sPO2 > 100 }" />
+              </mat-form-field>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
               <mat-form-field class="input-full-width">
                 <mat-label>{{
-                  currentLanguageSet?.Prescription?.quantity
+                  currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
+                    ?.respiratoryRate
                 }}</mat-label>
-                <mat-select
-                  class="input-full-width-select"
-                  name="quantity"
-                  [(ngModel)]="currentPrescription.qtyPrescribed"
-                  [disabled]="!currentPrescription.drugID"
-                  required>
-                  <mat-option
-                    *ngFor="let item of drugDurationMaster | slice: 0 : 5"
-                    [value]="item">
-                    {{ item }}
-                  </mat-option>
-                </mat-select>
+                <input
+                  autocomplete="off"
+                  matInput
+                  defaultNull
+                  allowText="number"
+                  name="respiratoryRate"
+                  formControlName="respiratoryRate"
+                  [ngClass]="{
+                    abnormal: respiratoryRate < 11 || respiratoryRate > 19,
+                  }" />
               </mat-form-field>
             </div>
-            <div
-              [ngClass]="{
-                'col-md-6':
-                  !currentPrescription.formID ||
-                  (currentPrescription.formID &&
-                    currentPrescription.formID <= '2'),
-                'col-md-4':
-                  currentPrescription.formID && currentPrescription.formID > '2'
-              }">
+
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
               <mat-form-field class="input-full-width">
                 <mat-label>{{
-                  currentLanguageSet?.Prescription?.Route
+                  currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
+                    ?.systolicBP
                 }}</mat-label>
-                <mat-select
-                  class="input-full-width-select"
-                  name="route"
-                  [(ngModel)]="currentPrescription.route"
-                  [disabled]="!currentPrescription.drugID">
-                  <mat-option
-                    *ngFor="let item of drugRouteMaster"
-                    [value]="item.routeName">
-                    {{ item.routeName }}
-                  </mat-option>
-                </mat-select>
+                <input
+                  autocomplete="off"
+                  matInput
+                  defaultNull
+                  allowText="number"
+                  name="systolicBP_1stReading"
+                  formControlName="systolicBP_1stReading"
+                  [ngClass]="{
+                    abnormal:
+                      systolicBP_1stReading < 110 ||
+                      systolicBP_1stReading > 140,
+                  }" />
               </mat-form-field>
             </div>
-          </section>
-          <section class="row no-row" style="margin-top: 10px !important">
-            <div class="col-md-10">
+
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
               <mat-form-field class="input-full-width">
                 <mat-label>{{
-                  currentLanguageSet?.Prescription?.instructions
+                  currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
+                    ?.diastolicBP
+                }}</mat-label>
+                <input
+                  autocomplete="off"
+                  matInput
+                  defaultNull
+                  allowText="number"
+                  name="diastolicBP_1stReading"
+                  formControlName="diastolicBP_1stReading"
+                  [ngClass]="{
+                    abnormal:
+                      diastolicBP_1stReading < 60 ||
+                      diastolicBP_1stReading > 90,
+                  }" />
+              </mat-form-field>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+              <mat-form-field class="input-full-width">
+                <mat-label>{{
+                  currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
+                    ?.BloodGlucoseFasting
+                }}</mat-label>
+                <input
+                  autocomplete="off"
+                  matInput
+                  defaultNull
+                  type="number"
+                  [min]="1"
+                  allowMax="199"
+                  name="bloodGlucose_Fasting"
+                  formControlName="bloodGlucose_Fasting"
+                  [ngClass]="{
+                    abnormal:
+                      bloodGlucose_Fasting < 50 || bloodGlucose_Fasting > 700,
+                  }" />
+              </mat-form-field>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+              <mat-form-field class="input-full-width">
+                <mat-label>{{
+                  currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
+                    ?.BloodGlucoseRandom
+                }}</mat-label>
+                <input
+                  autocomplete="off"
+                  matInput
+                  defaultNull
+                  type="number"
+                  [min]="1"
+                  allowMax="199"
+                  name="bloodGlucose_Random"
+                  formControlName="bloodGlucose_Random"
+                  [ngClass]="{ abnormal: bloodGlucose_Random < 140 }" />
+              </mat-form-field>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+              <mat-form-field class="input-full-width">
+                <mat-label>{{
+                  currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
+                    ?.BloodGlucosePP
+                }}</mat-label>
+                <input
+                  autocomplete="off"
+                  matInput
+                  defaultNull
+                  [min]="1"
+                  type="number"
+                  name="bloodGlucose_2hr_PP"
+                  formControlName="bloodGlucose_2hr_PP"
+                  allowMax="199"
+                  [ngClass]="{ abnormal: bloodGlucose_2hr_PP < 140 }" />
+              </mat-form-field>
+            </div>
+
+            <div class="row m-t-20">
+              <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                <strong>Random Glucose Test</strong>
+              </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+              <mat-form-field class="input-full-width">
+                <mat-label>{{ currentLanguageSet?.rbsTestResult }}</mat-label>
+                <input
+                  autocomplete="off"
+                  matInput
+                  defaultNull
+                  allowText="number"
+                  [disabled]="rbsResultChange()"
+                  name="rbsTestResult"
+                  id="rbsTestResult"
+                  formControlName="rbsTestResult"
+                  min="1"
+                  maxlength="4"
+                  (blur)="checkForRange()"
+                  (change)="rbsResultChange(); setRBSResultInReport()"
+                  [ngClass]="{
+                    abnormal: rbsTestResult < 0 || rbsTestResult > 1000,
+                  }" />
+                <svg
+                  class="fontawesomesvg"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                  matTooltip="{{ currentLanguageSet?.common?.startTest }}"
+                  matSuffix
+                  (click)="openIOTRBSModel()"
+                  onkeydown="openIOTRBSModel()"
+                  tabindex="{0}">
+                  <path
+                    d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
+                </svg>
+              </mat-form-field>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+              <mat-form-field class="input-full-width">
+                <mat-label>{{ currentLanguageSet?.rbsTestRemarks }}</mat-label>
+                <input
+                  autocomplete="off"
+                  allowText="textAreaValidator"
+                  matInput
+                  defaultNull
+                  [ngClass]=""
+                  name="rbsTestRemarks"
+                  id="rbsTestRemarks"
+                  (change)="setRBSResultInReport()"
+                  formControlName="rbsTestRemarks"
+                  maxlength="300"
+                  [disabled]="rbsResultChange()" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <header class="mat-expansion-panel-header m-t-10">
+            <h4>
+              {{
+                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+                  ?.oral?.observations
+              }}
+            </h4>
+          </header>
+          <div class="row m-t-10">
+            <div class="col-sm-12 col-md-12">
+              <mat-form-field class="input-full-width">
+                <mat-label>{{
+                  currentLanguageSet?.casesheet?.clinicalObs
                 }}</mat-label>
                 <textarea
                   matInput
                   allowText="textAreaValidator"
                   defaultNull
                   matTextareaAutosize
-                  name="instructions"
-                  maxlength="300"
-                  name="instructions"
-                  [disabled]="!currentPrescription.drugID"
-                  [(ngModel)]="currentPrescription.instructions">
+                  name="clinicalObservation"
+                  formControlName="clinicalObservation"
+                  maxlength="500"
+                  required>
                 </textarea>
               </mat-form-field>
             </div>
-            <div class="col-md-2 centered-button">
-              <button
-                id="add-button"
-                style="margin-bottom: 20px"
-                [disabled]="prescriptionForm.invalid"
-                mat-raised-button
-                color="primary"
-                class="mat_green"
-                type="button"
-                (click)="submitForUpload()">
-                {{ currentLanguageSet?.common?.add }}
-              </button>
+          </div>
+
+          <header class="mat-expansion-panel-header m-t-10">
+            <h4>
+              {{
+                currentLanguageSet?.nurseData?.investigationsDetails
+                  ?.investigations
+              }}
+            </h4>
+          </header>
+
+          <div class="row">
+            <div class="col-xs-12 col-sm-6 m-t-10">
+              <mat-form-field class="input-full-width">
+                <mat-label>{{
+                  currentLanguageSet?.common?.SelectTestname
+                }}</mat-label>
+                <mat-select
+                  class="input-full-width-select"
+                  multiple
+                  name="test"
+                  formControlName="test"
+                  (change)="checkTestName($event)">
+                  <mat-option
+                    *ngFor="let nonRadiology of nonRadiologyMaster"
+                    [value]="nonRadiology"
+                    [disabled]="canDisableTest(nonRadiology)">
+                    {{ nonRadiology.procedureName }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
-          </section>
-        </form>
-        <span
-          *ngIf="
-            drugPrescriptionForm.controls['prescribedDrugs'].value.length > 0
-          ">
-          <hr />
-          <div [formGroup]="drugPrescriptionForm">
-            <div formArrayName="prescribedDrugs">
-              <div
-                class="col-md-12"
-                *ngFor="let drug of getPrescribedDrugs(); let j = index">
-                <ng-container
-                  [formGroupName]="j"
-                  *ngIf="j >= pageLimits[0] && j < pageLimits[1]">
-                  <fieldset
-                    class="m-b-20"
-                    [ngClass]="{ fieldset: drug.value.createdBy }">
-                    <legend>
-                      {{ drug.value.drugName }} {{ drug.value.drugStrength }}
-                      {{ drug.value.isEDL ? '' : '- (Non-EDL) Medicine' }}
-                    </legend>
-                    <div class="row">
-                      <div class="col-md-1 right-padding-remove-desktop">
-                        <mat-form-field class="input-full-width">
+
+            <div class="col-xs-12 col-sm-6 m-t-10">
+              <mat-form-field class="input-full-width">
+                <mat-label>{{
+                  currentLanguageSet?.labTechnicianData?.radiologyimaging
+                }}</mat-label>
+                <mat-select
+                  class="input-full-width-select"
+                  multiple
+                  name="radiology"
+                  formControlName="radiology">
+                  <mat-option
+                    *ngFor="let radiology of radiologyMaster"
+                    [value]="radiology"
+                    [disabled]="canDisableTest(radiology)">
+                    {{ radiology.procedureName }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-12 col-md-12 m-t-10">
+              <mat-form-field class="input-full-width">
+                <mat-label>{{
+                  currentLanguageSet?.Investigationdetails
+                    ?.externalinvestigations
+                }}</mat-label>
+                <textarea
+                  matInput
+                  allowText="textAreaValidator"
+                  defaultNull
+                  matTextareaAutosize
+                  name="externalInvestigation"
+                  formControlName="externalInvestigation"
+                  maxlength="300">
+                </textarea>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="m-t-10">
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <header class="mat-expansion-panel-header m-t-5">
+                  <h4>
+                    {{
+                      currentLanguageSet?.DiagnosisDetails?.provisionaldiagnosis
+                    }}
+                    *
+                  </h4>
+                </header>
+                <ng-container formArrayName="provisionalDiagnosisList">
+                  <div
+                    class="row align-items-center m-t-10"
+                    *ngFor="
+                      let diagnosis of getProvisionalDiagnosisList();
+                      let i = index;
+                      let isLast = last
+                    ">
+                    <ng-container [formGroupName]="i">
+                      <!-- Diagnosis Input -->
+                      <div class="col-xs-12 col-sm-8 col-md-10 col-lg-10">
+                        <mat-form-field
+                          class="input-full-width"
+                          appearance="fill">
                           <mat-label>{{
-                            currentLanguageSet?.Prescription?.form
+                            currentLanguageSet?.DiagnosisDetails
+                              ?.provisionaldiagnosis
                           }}</mat-label>
                           <input
-                            autocomplete="off"
-                            readonly="true"
-                            type="text"
                             matInput
-                            formControlName="formName" />
-                        </mat-form-field>
-                      </div>
-                      <div class="col-md-2">
-                        <mat-form-field class="input-full-width">
-                          <mat-label>{{
-                            currentLanguageSet?.casesheet?.dose
-                          }}</mat-label>
-                          <input
-                            autocomplete="off"
-                            readonly="true"
                             type="text"
-                            matInput
-                            formControlName="dose" />
-                        </mat-form-field>
-                      </div>
-                      <div class="col-md-2 p-a-0">
-                        <mat-form-field class="input-full-width">
-                          <mat-label>{{
-                            currentLanguageSet?.Prescription?.frequency
-                          }}</mat-label>
-                          <input
                             autocomplete="off"
-                            readonly="true"
-                            type="text"
-                            matInput
-                            formControlName="frequency" />
+                            name="provisionalDiagnosis"
+                            formControlName="provisionalDiagnosis"
+                            minlength="3"
+                            maxlength="100"
+                            required
+                            #diagnosisInput
+                            [matAutocomplete]="autoDiagnosis"
+                            (keyup)="
+                              onDiagnosisInputKeyup(diagnosisInput.value, i)
+                            " />
                         </mat-form-field>
+
+                        <mat-autocomplete
+                          #autoDiagnosis="matAutocomplete"
+                          appAutocompleteScroller
+                          [threshold]="0.6"
+                          (nearEnd)="onAutoNearEnd(i)"
+                          (panelReady)="onPanelReady(i, $event)"
+                          autoActiveFirstOption
+                          [displayWith]="displayDiagnosis"
+                          (optionSelected)="
+                            onDiagnosisSelected($event.option.value, i)
+                          ">
+                          <mat-option
+                            *ngFor="let diag of suggestedDiagnosisList[i]"
+                            [value]="diag">
+                            {{ diag.term }}
+                          </mat-option>
+                          <mat-option *ngIf="loadingMore[i]" disabled
+                            >Loading…</mat-option
+                          >
+                          <mat-option *ngIf="noMore[i]" disabled
+                            >End of results</mat-option
+                          >
+                        </mat-autocomplete>
                       </div>
-                      <div class="col-md-2">
-                        <mat-form-field class="input-full-width">
-                          <mat-label>{{
-                            currentLanguageSet?.nurseData
-                              ?.chiefComplaintsDetails?.duration
-                          }}</mat-label>
-                          <input
-                            autocomplete="off"
-                            readonly="true"
-                            type="text"
-                            matInput
-                            formControlName="durationView" />
-                        </mat-form-field>
-                      </div>
-                      <div class="col-md-1 p-a-0">
-                        <mat-form-field class="input-full-width">
-                          <mat-label>{{
-                            currentLanguageSet?.Prescription?.quantity
-                          }}</mat-label>
-                          <input
-                            autocomplete="off"
-                            readonly="true"
-                            type="text"
-                            matInput
-                            formControlName="qtyPrescribed" />
-                        </mat-form-field>
-                      </div>
-                      <div class="col-md-3">
-                        <mat-form-field class="input-full-width">
-                          <mat-label>{{
-                            currentLanguageSet?.Prescription?.instructions
-                          }}</mat-label>
-                          <input
-                            autocomplete="off"
-                            readonly="true"
-                            type="text"
-                            matInput
-                            formControlName="instructions" />
-                        </mat-form-field>
-                      </div>
-                      <div class="col-md-1 centered-button">
+
+                      <!-- Action Buttons (Add & Remove) -->
+                      <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2">
                         <button
                           mat-mini-fab
-                          id="deleteMedicine"
-                          (click)="deleteMedicine(j, drug.value.id)"
+                          type="button"
+                          *ngIf="isLast"
+                          [disabled]="
+                            checkProvisionalDiagnosisValidity(diagnosis)
+                          "
+                          color="primary"
+                          class="mat_blue_circle"
+                          (click)="addDiagnosis()"
+                          style="margin-right: 10px">
+                          <mat-icon>add</mat-icon>
+                        </button>
+                        <button
+                          mat-mini-fab
+                          type="button"
                           color="warn"
-                          class="mat_warn_circle">
-                          <span class="material-icons">close</span>
+                          class="mat_warn_circle"
+                          *ngIf="
+                            diagnosis.get('provisionalDiagnosisList')
+                              ?.disabled ||
+                            i !== 0 ||
+                            (i === 0 &&
+                              patientQuickConsultForm.get(
+                                'provisionalDiagnosisList'
+                              )?.value[i]?.provisionalDiagnosis !== null &&
+                              patientQuickConsultForm.get(
+                                'provisionalDiagnosisList'
+                              )?.value[i]?.provisionalDiagnosis !== '')
+                          "
+                          (click)="deleteDiagnosis(i, diagnosis)">
+                          <mat-icon>close</mat-icon>
                         </button>
                       </div>
-                    </div>
-                  </fieldset>
+                    </ng-container>
+                  </div>
                 </ng-container>
               </div>
             </div>
           </div>
-          <mat-paginator
-            [length]="
-              drugPrescriptionForm.controls['prescribedDrugs'].value?.length
-            "
-            [pageSize]="pageSize"
-            hidePageSize="true"
-            (page)="setLimits($event.pageIndex)">
-          </mat-paginator>
-        </span>
+
+          <header class="mat-expansion-panel-header m-t-10">
+            <h4>{{ currentLanguageSet?.casesheet?.prescribe }}</h4>
+          </header>
+          <form #prescriptionForm="ngForm" class="m-t-20">
+            <section class="row no-row">
+              <div class="col-md-3" style="padding-bottom: 8px">
+                <div *ngIf="isStockAvalable === 'primary'">
+                  <mat-icon
+                    style="
+                      background-color: green;
+                      color: white;
+                      font-size: 20px;
+                      height: 20px;
+                      width: 20px;
+                    "
+                    class="mat-18">
+                    check
+                  </mat-icon>
+                  <span style="color: green; padding-left: 1px">{{
+                    currentLanguageSet?.stockAvailability
+                  }}</span>
+                </div>
+                <div *ngIf="isStockAvalable === 'warn'">
+                  <mat-icon
+                    style="
+                      background-color: #c30d0d;
+                      color: white;
+                      font-size: 20px;
+                      height: 20px;
+                      width: 20px;
+                    "
+                    class="md-18">
+                    close </mat-icon
+                  ><span style="color: #c30d0d; padding-left: 5px">{{
+                    currentLanguageSet?.stockAvailability
+                  }}</span>
+                </div>
+              </div>
+            </section>
+            <section class="row no-row">
+              <div class="col-md-3">
+                <mat-form-field class="input-full-width">
+                  <mat-label>{{
+                    currentLanguageSet?.casesheet?.form
+                  }}</mat-label>
+                  <mat-select
+                    class="input-full-width-select"
+                    name="form"
+                    [(ngModel)]="tempform"
+                    (selectionChange)="getFormValueChanged()"
+                    required>
+                    <mat-option
+                      *ngFor="let item of drugFormMaster"
+                      [value]="item">
+                      {{ item.itemFormName }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field class="input-full-width">
+                  <mat-label>{{
+                    currentLanguageSet?.Prescription?.medicine
+                  }}</mat-label>
+                  <input
+                    autocomplete="off"
+                    type="text"
+                    name="medicine"
+                    [disabled]="!currentPrescription.formID"
+                    matInput
+                    [(ngModel)]="tempDrugName"
+                    (keyup)="filterMedicine(tempDrugName)"
+                    (blur)="reEnterMedicine()"
+                    required
+                    [matAutocomplete]="autoGroup" />
+                  <mat-autocomplete
+                    #autoGroup="matAutocomplete"
+                    [displayWith]="displayFn">
+                    <mat-option
+                      *ngFor="let item of subFilteredDrugMaster"
+                      [value]="item"
+                      (onSelectionChange)="selectMedicineObject($event)">
+                      {{ item.itemName }} {{ item.strength
+                      }}{{ item.unitOfMeasurement }}
+                      {{
+                        item.quantityInHand
+                          ? '(' + item.quantityInHand + ')'
+                          : ''
+                      }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+              <div class="col-md-2">
+                <mat-form-field class="input-full-width">
+                  <mat-label>{{
+                    currentLanguageSet?.Prescription?.dosage
+                  }}</mat-label>
+                  <mat-select
+                    class="input-full-width-select"
+                    name="dose"
+                    [(ngModel)]="currentPrescription.dose"
+                    [disabled]="!currentPrescription.drugID"
+                    required>
+                    <mat-option
+                      *ngFor="let item of filteredDrugDoseMaster"
+                      [value]="item.drugDose">
+                      {{ item.drugDose }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field class="input-full-width">
+                  <mat-label>{{
+                    currentLanguageSet?.Prescription?.frequency
+                  }}</mat-label>
+                  <mat-select
+                    class="input-full-width-select"
+                    name="frequency"
+                    [(ngModel)]="currentPrescription.frequency"
+                    [disabled]="!currentPrescription.drugID"
+                    required>
+                    <mat-option
+                      *ngFor="let item of drugFrequencyMaster"
+                      [value]="item.frequency">
+                      {{ item.frequency }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </section>
+            <section class="row no-row" style="margin-top: 10px !important">
+              <div class="col-md-3">
+                <mat-form-field class="input-full-width">
+                  <mat-label>{{
+                    currentLanguageSet?.nurseData?.chiefComplaintsDetails
+                      ?.duration
+                  }}</mat-label>
+                  <mat-select
+                    class="input-full-width-select"
+                    name="duration"
+                    [(ngModel)]="currentPrescription.duration"
+                    [disabled]="!currentPrescription.drugID"
+                    required>
+                    <mat-option
+                      *ngFor="let item of drugDurationMaster"
+                      [value]="item">
+                      {{ item }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field class="input-full-width">
+                  <mat-label>{{
+                    currentLanguageSet?.Prescription?.unit
+                  }}</mat-label>
+                  <mat-select
+                    class="input-full-width-select"
+                    name="unit"
+                    [(ngModel)]="currentPrescription.unit"
+                    [disabled]="!currentPrescription.drugID"
+                    required>
+                    <mat-option
+                      *ngFor="let item of drugDurationUnitMaster"
+                      [value]="item.drugDuration">
+                      {{ item.drugDuration }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div
+                class="col-md-2"
+                *ngIf="
+                  currentPrescription.formID &&
+                  currentPrescription.formID !== 1 &&
+                  currentPrescription.formID !== 2
+                ">
+                <mat-form-field class="input-full-width">
+                  <mat-label>{{
+                    currentLanguageSet?.Prescription?.quantity
+                  }}</mat-label>
+                  <mat-select
+                    class="input-full-width-select"
+                    name="quantity"
+                    [(ngModel)]="currentPrescription.qtyPrescribed"
+                    [disabled]="!currentPrescription.drugID"
+                    required>
+                    <mat-option
+                      *ngFor="let item of drugDurationMaster | slice: 0 : 5"
+                      [value]="item">
+                      {{ item }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div
+                [ngClass]="{
+                  'col-md-6':
+                    !currentPrescription.formID ||
+                    (currentPrescription.formID &&
+                      currentPrescription.formID <= '2'),
+                  'col-md-4':
+                    currentPrescription.formID &&
+                    currentPrescription.formID > '2',
+                }">
+                <mat-form-field class="input-full-width">
+                  <mat-label>{{
+                    currentLanguageSet?.Prescription?.Route
+                  }}</mat-label>
+                  <mat-select
+                    class="input-full-width-select"
+                    name="route"
+                    [(ngModel)]="currentPrescription.route"
+                    [disabled]="!currentPrescription.drugID">
+                    <mat-option
+                      *ngFor="let item of drugRouteMaster"
+                      [value]="item.routeName">
+                      {{ item.routeName }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </section>
+            <section class="row no-row" style="margin-top: 10px !important">
+              <div class="col-md-10">
+                <mat-form-field class="input-full-width">
+                  <mat-label>{{
+                    currentLanguageSet?.Prescription?.instructions
+                  }}</mat-label>
+                  <textarea
+                    matInput
+                    allowText="textAreaValidator"
+                    defaultNull
+                    matTextareaAutosize
+                    name="instructions"
+                    maxlength="300"
+                    name="instructions"
+                    [disabled]="!currentPrescription.drugID"
+                    [(ngModel)]="currentPrescription.instructions">
+                  </textarea>
+                </mat-form-field>
+              </div>
+              <div class="col-md-2 centered-button">
+                <button
+                  id="add-button"
+                  style="margin-bottom: 20px"
+                  [disabled]="prescriptionForm.invalid"
+                  mat-raised-button
+                  color="primary"
+                  class="mat_green"
+                  type="button"
+                  (click)="submitForUpload()">
+                  {{ currentLanguageSet?.common?.add }}
+                </button>
+              </div>
+            </section>
+          </form>
+          <span
+            *ngIf="
+              drugPrescriptionForm.controls['prescribedDrugs'].value.length > 0
+            ">
+            <hr />
+            <div [formGroup]="drugPrescriptionForm">
+              <div formArrayName="prescribedDrugs">
+                <div
+                  class="col-md-12"
+                  *ngFor="let drug of getPrescribedDrugs(); let j = index">
+                  <ng-container
+                    [formGroupName]="j"
+                    *ngIf="j >= pageLimits[0] && j < pageLimits[1]">
+                    <fieldset
+                      class="m-b-20"
+                      [ngClass]="{ fieldset: drug.value.createdBy }">
+                      <legend>
+                        {{ drug.value.drugName }} {{ drug.value.drugStrength }}
+                        {{ drug.value.isEDL ? '' : '- (Non-EDL) Medicine' }}
+                      </legend>
+                      <div class="row">
+                        <div class="col-md-1 right-padding-remove-desktop">
+                          <mat-form-field class="input-full-width">
+                            <mat-label>{{
+                              currentLanguageSet?.Prescription?.form
+                            }}</mat-label>
+                            <input
+                              autocomplete="off"
+                              readonly="true"
+                              type="text"
+                              matInput
+                              formControlName="formName" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                          <mat-form-field class="input-full-width">
+                            <mat-label>{{
+                              currentLanguageSet?.casesheet?.dose
+                            }}</mat-label>
+                            <input
+                              autocomplete="off"
+                              readonly="true"
+                              type="text"
+                              matInput
+                              formControlName="dose" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-2 p-a-0">
+                          <mat-form-field class="input-full-width">
+                            <mat-label>{{
+                              currentLanguageSet?.Prescription?.frequency
+                            }}</mat-label>
+                            <input
+                              autocomplete="off"
+                              readonly="true"
+                              type="text"
+                              matInput
+                              formControlName="frequency" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                          <mat-form-field class="input-full-width">
+                            <mat-label>{{
+                              currentLanguageSet?.nurseData
+                                ?.chiefComplaintsDetails?.duration
+                            }}</mat-label>
+                            <input
+                              autocomplete="off"
+                              readonly="true"
+                              type="text"
+                              matInput
+                              formControlName="durationView" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-1 p-a-0">
+                          <mat-form-field class="input-full-width">
+                            <mat-label>{{
+                              currentLanguageSet?.Prescription?.quantity
+                            }}</mat-label>
+                            <input
+                              autocomplete="off"
+                              readonly="true"
+                              type="text"
+                              matInput
+                              formControlName="qtyPrescribed" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                          <mat-form-field class="input-full-width">
+                            <mat-label>{{
+                              currentLanguageSet?.Prescription?.instructions
+                            }}</mat-label>
+                            <input
+                              autocomplete="off"
+                              readonly="true"
+                              type="text"
+                              matInput
+                              formControlName="instructions" />
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-1 centered-button">
+                          <button
+                            mat-mini-fab
+                            id="deleteMedicine"
+                            (click)="deleteMedicine(j, drug.value.id)"
+                            color="warn"
+                            class="mat_warn_circle">
+                            <span class="material-icons">close</span>
+                          </button>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+            <mat-paginator
+              [length]="
+                drugPrescriptionForm.controls['prescribedDrugs'].value?.length
+              "
+              [pageSize]="pageSize"
+              hidePageSize="true"
+              (page)="setLimits($event.pageIndex)">
+            </mat-paginator>
+          </span>
+        </div>
       </div>
-    </mat-expansion-panel>
-    <mat-expansion-panel class="m-t-10">
-      <mat-expansion-panel-header>
-        <h5>{{ currentLanguageSet?.common?.report }}</h5>
-      </mat-expansion-panel-header>
-      <app-test-and-radiology></app-test-and-radiology>
-    </mat-expansion-panel>
-  </mat-accordion>
+    </z-accordion-item>
+
+    <z-accordion-item class="m-t-10">
+      <z-accordion-trigger>
+        <div class="flex items-center gap-3">
+          <span class="text-lg font-bold text-gray-900">{{
+            currentLanguageSet?.common?.report
+          }}</span>
+        </div>
+      </z-accordion-trigger>
+      <div class="p-6">
+        <app-test-and-radiology></app-test-and-radiology>
+      </div>
+    </z-accordion-item>
+  </z-accordion>
 </div>

@@ -41,23 +41,15 @@ import {
 import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+  MatMomentDateModule,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { NgIf, NgFor } from '@angular/common';
-import {
-  MatFormField,
-  MatLabel,
-  MatSelect,
-  MatSuffix,
-} from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
-import {
-  MatDatepickerInput,
-  MatDatepickerToggle,
-  MatDatepicker,
-} from '@angular/material/datepicker';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { ZardDatePickerImports } from '@/components/ui/date-picker/date-picker.imports';
 
 @Component({
   selector: 'app-nurse-anc-immunization',
@@ -91,18 +83,12 @@ import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
   imports: [
     ReactiveFormsModule,
     NgIf,
-    MatFormField,
-    MatLabel,
-    MatSelect,
     NgFor,
-    MatOption,
-    MatInput,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-    MatSuffix,
-    MatDatepicker,
-    MatRadioGroup,
-    MatRadioButton,
+    ZardFormImports,
+    ZardSelectImports,
+    ZardRadioImports,
+    ZardLabelImports,
+    ZardDatePickerImports,
   ],
 })
 export class AncImmunizationComponent

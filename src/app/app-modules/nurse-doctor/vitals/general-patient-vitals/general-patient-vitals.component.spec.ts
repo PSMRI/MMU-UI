@@ -50,7 +50,7 @@ import { NurseServiceStub } from '../../shared/mocks/nurse-service-stub';
 import { BeneficiaryDetailsServiceStub } from '../../../core/mocks/beneficiary-details-service-stub';
 
 import * as data from '../../shared/mocks/mock-data';
-import { Observable, of, BehaviorSubject, Subject } from "rxjs";
+import { Observable, of, BehaviorSubject, Subject } from 'rxjs';
 
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
@@ -1124,7 +1124,7 @@ describe('GeneralPatientVitalsComponent', () => {
         );
         fixture.detectChanges();
         expect(component.checkMidUpperArmCircumference).toHaveBeenCalled();
-        fixture.detectChanges;
+        fixture.detectChanges();
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1164,7 +1164,7 @@ describe('GeneralPatientVitalsComponent', () => {
         expect(component.temperature).toEqual(debugElement.nativeElement.value);
         fixture.detectChanges();
         expect(component.checkTemperature).toHaveBeenCalled();
-        fixture.detectChanges;
+        fixture.detectChanges();
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1204,7 +1204,7 @@ describe('GeneralPatientVitalsComponent', () => {
         expect(component.temperature).toEqual(debugElement.nativeElement.value);
         fixture.detectChanges();
         expect(component.checkTemperature).toHaveBeenCalled();
-        fixture.detectChanges;
+        fixture.detectChanges();
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1242,7 +1242,7 @@ describe('GeneralPatientVitalsComponent', () => {
         expect(component.pulseRate).toEqual(debugElement.nativeElement.value);
         fixture.detectChanges();
         expect(component.checkPulseRate).toHaveBeenCalled();
-        fixture.detectChanges;
+        fixture.detectChanges();
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1280,7 +1280,7 @@ describe('GeneralPatientVitalsComponent', () => {
         expect(component.pulseRate).toEqual(debugElement.nativeElement.value);
         fixture.detectChanges();
         expect(component.checkPulseRate).toHaveBeenCalled();
-        fixture.detectChanges;
+        fixture.detectChanges();
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1320,7 +1320,7 @@ describe('GeneralPatientVitalsComponent', () => {
         );
         fixture.detectChanges();
         expect(component.checkRespiratoryRate).toHaveBeenCalled();
-        fixture.detectChanges;
+        fixture.detectChanges();
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1360,7 +1360,7 @@ describe('GeneralPatientVitalsComponent', () => {
         );
         fixture.detectChanges();
         expect(component.checkRespiratoryRate).toHaveBeenCalled();
-        fixture.detectChanges;
+        fixture.detectChanges();
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1402,7 +1402,7 @@ describe('GeneralPatientVitalsComponent', () => {
         );
         fixture.detectChanges();
         expect(component.checkSystolic).toHaveBeenCalled();
-        fixture.detectChanges;
+        fixture.detectChanges();
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1444,7 +1444,7 @@ describe('GeneralPatientVitalsComponent', () => {
         );
         fixture.detectChanges();
         expect(component.checkSystolic).toHaveBeenCalled();
-        fixture.detectChanges;
+        fixture.detectChanges();
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1488,7 +1488,7 @@ describe('GeneralPatientVitalsComponent', () => {
         );
         fixture.detectChanges();
         expect(component.checkDiastolic).toHaveBeenCalled();
-        fixture.detectChanges;
+        fixture.detectChanges();
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1530,7 +1530,7 @@ describe('GeneralPatientVitalsComponent', () => {
         );
         fixture.detectChanges();
         expect(component.checkDiastolic).toHaveBeenCalled();
-        fixture.detectChanges;
+        fixture.detectChanges();
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1572,7 +1572,7 @@ describe('GeneralPatientVitalsComponent', () => {
         );
         fixture.detectChanges();
         expect(component.checkBloodSugarFasting).toHaveBeenCalled();
-        fixture.detectChanges;
+        fixture.detectChanges();
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1614,7 +1614,7 @@ describe('GeneralPatientVitalsComponent', () => {
         );
         fixture.detectChanges();
         expect(component.checkBloodSugarRandom).toHaveBeenCalled();
-        fixture.detectChanges;
+        fixture.detectChanges();
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');
@@ -1656,7 +1656,7 @@ describe('GeneralPatientVitalsComponent', () => {
         );
         fixture.detectChanges();
         expect(component.checkBloodSugar2HrPostPrandial).toHaveBeenCalled();
-        fixture.detectChanges;
+        fixture.detectChanges();
         console.log(component.female);
         expect(component.female).toEqual(true);
         //  spyOn(confirmationService, 'alert');

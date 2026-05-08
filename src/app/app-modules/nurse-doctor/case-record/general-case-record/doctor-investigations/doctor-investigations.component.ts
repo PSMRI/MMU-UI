@@ -22,6 +22,7 @@
 
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NgIf, NgFor } from '@angular/common';
 
 import {
   MasterdataService,
@@ -31,28 +32,42 @@ import {
 import { Subscription } from 'rxjs';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { environment } from 'src/environments/environment';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { NgIf, NgFor } from '@angular/common';
-import { MatLabel, MatFormField, MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
-import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { StringValidatorDirective } from '@/app-modules/core/directives/stringValidator.directive';
+import { environment } from 'src/environments/environment';
+import {
+  ZardFormImports,
+  ZardRadioImports,
+  ZardSelectImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+  ZardAccordionImports,
+  ZardDatePickerImports,
+} from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-doctor-investigations',
   templateUrl: './doctor-investigations.component.html',
   styleUrls: ['./doctor-investigations.component.css'],
+  standalone: true,
   imports: [
     NgIf,
-    MatLabel,
-    ReactiveFormsModule,
-    MatFormField,
-    MatSelect,
     NgFor,
-    MatOption,
-    MatInput,
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    ZardAccordionImports,
+    ZardDatePickerImports,
+    LucideAngularModule,
     StringValidatorDirective,
   ],
 })

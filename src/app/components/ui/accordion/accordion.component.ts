@@ -49,7 +49,8 @@ export class ZardAccordionComponent implements AfterContentInit {
   ngAfterContentInit(): void {
     for (const item of this.items()) {
       item.accordion = this;
-      item.isOpen.set(this.defaultValue().includes(item.zValue()));
+      const shouldBeOpen = this.defaultValue().includes(item.zValue()) || item.expanded();
+      item.isOpen.set(shouldBeOpen);
     }
   }
 

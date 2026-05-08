@@ -21,8 +21,8 @@
  */
 
 import { Component, OnInit, Input, OnDestroy, DoCheck } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
 import { DoctorService } from '../../shared/services/doctor.service';
-import { Location, NgIf } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { PrescribeTmMedicineComponent } from '../prescribe-tm-medicine/prescribe-tm-medicine.component';
 import { NurseService } from '../../shared/services';
@@ -32,28 +32,31 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { PrintPageSelectComponent } from '../../print-page-select/print-page-select.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
 import { DoctorDiagnosisCaseSheetComponent } from './doctor-diagnosis-case-sheet/doctor-diagnosis-case-sheet.component';
 import { AncCaseSheetComponent } from './anc-case-sheet/anc-case-sheet.component';
 import { PncCaseSheetComponent } from './pnc-case-sheet/pnc-case-sheet.component';
 import { HistoryCaseSheetComponent } from './history-case-sheet/history-case-sheet.component';
 import { ExaminationCaseSheetComponent } from './examination-case-sheet/examination-case-sheet.component';
 
+import { ZardButtonImports, ZardTooltipImports } from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
+
 @Component({
   selector: 'app-general-case-sheet',
-  templateUrl: './general-case-sheet.component.html',
-  styleUrls: ['./general-case-sheet.component.css'],
+  standalone: true,
   imports: [
-    NgIf,
-    MatTooltip,
-    MatIcon,
+    CommonModule,
+    ZardTooltipImports,
+    ZardButtonImports,
+    LucideAngularModule,
     DoctorDiagnosisCaseSheetComponent,
     AncCaseSheetComponent,
     PncCaseSheetComponent,
     HistoryCaseSheetComponent,
     ExaminationCaseSheetComponent,
   ],
+  templateUrl: './general-case-sheet.component.html',
+  styleUrls: ['./general-case-sheet.component.css'],
 })
 export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
   @Input()

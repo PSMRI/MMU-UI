@@ -40,7 +40,10 @@ import { HttpServiceService } from '../services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProvisionalSearchComponent } from '../components/provisional-search/provisional-search.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-@Directive({ selector: '[appConfirmatoryDiagnosis]' })
+@Directive({
+  standalone: true,
+  selector: '[appConfirmatoryDiagnosis]',
+})
 export class ConfirmatoryDiagnosisDirective implements OnInit, DoCheck {
   @Input()
   previousSelected: any;

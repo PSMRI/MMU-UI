@@ -1,54 +1,17 @@
-import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronDown } from '@ng-icons/lucide';
+import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncapsulation, booleanAttribute } from '@angular/core';
 import type { ClassValue } from 'clsx';
-
-import type { ZardAccordionComponent } from '@/components/ui/accordion/accordion.component';
-import {
-  accordionContentVariants,
-  accordionItemVariants,
-  accordionTriggerVariants,
-} from '@/components/ui/accordion/accordion.variants';
+import { ZardAccordionComponent } from '@/components/ui/accordion/accordion.component';
+import { accordionItemVariants } from '@/components/ui/accordion/accordion.variants';
 import { mergeClasses } from '@/lib/utils/merge-classes';
 
 @Component({
   selector: 'z-accordion-item',
-  imports: [NgIcon],
+  standalone: true,
   template: `
-    <button
-      type="button"
-      [attr.aria-controls]="'content-' + zValue()"
-      [attr.aria-expanded]="isOpen()"
-      [id]="'accordion-' + zValue()"
-      [class]="triggerClasses()"
-      (click)="toggle()"
-    >
-      {{ zTitle() }}
-      <ng-icon
-        name="lucideChevronDown"
-        class="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200"
-        [class]="isOpen() ? 'rotate-180' : ''"
-      />
-    </button>
-
-    <div
-      role="region"
-      [attr.aria-labelledby]="'accordion-' + zValue()"
-      [attr.data-state]="isOpen() ? 'open' : 'closed'"
-      [id]="'content-' + zValue()"
-      [class]="contentClasses()"
-    >
-      <div class="overflow-hidden">
-        <div class="pt-0 pb-4">
-          <ng-content />
-        </div>
-      </div>
-    </div>
+    <ng-content></ng-content>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ lucideChevronDown })],
   host: {
     '[class]': 'itemClasses()',
     '[attr.data-state]': "isOpen() ? 'open' : 'closed'",
@@ -58,14 +21,17 @@ import { mergeClasses } from '@/lib/utils/merge-classes';
 export class ZardAccordionItemComponent {
   readonly zTitle = input<string>('');
   readonly zValue = input<string>('');
+  readonly expanded = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
 
   accordion!: ZardAccordionComponent;
   readonly isOpen = signal(false);
 
   protected readonly itemClasses = computed(() => mergeClasses(accordionItemVariants(), this.class()));
-  protected readonly triggerClasses = computed(() => mergeClasses(accordionTriggerVariants()));
-  protected readonly contentClasses = computed(() => mergeClasses(accordionContentVariants({ isOpen: this.isOpen() })));
+
+  constructor() {
+    // We will set isOpen based on expanded input in ngAfterContentInit or using an effect
+  }
 
   toggle(): void {
     if (this.accordion) {

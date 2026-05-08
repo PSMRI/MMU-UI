@@ -49,33 +49,44 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
 import { NgFor, NgClass, NgIf } from '@angular/common';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory, lucidePlus, lucideX } from '@ng-icons/lucide';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-general-past-history',
+  standalone: true,
   templateUrl: './past-history.component.html',
   styleUrls: ['./past-history.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatTooltip,
-    MatIcon,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardLabelImports,
+    ZardSelectImports,
     NgFor,
     NgClass,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
     NgIf,
-    MatInput,
+    NgIcon,
+    LucideAngularModule,
     NullDefaultValueDirective,
     StringValidatorDirective,
+  ],
+  providers: [
+    provideIcons({
+      lucideHistory,
+      lucidePlus,
+      lucideX,
+    }),
   ],
 })
 export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {

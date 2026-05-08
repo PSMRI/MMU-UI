@@ -36,24 +36,18 @@ import { BeneficiaryDetailsService } from '../../core/services/beneficiary-detai
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MatCard } from '@angular/material/card';
 import { NgClass, NgIf, TitleCasePipe } from '@angular/common';
-import { MatTooltip } from '@angular/material/tooltip';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideSearch, lucideRefreshCcw, lucideInbox } from '@ng-icons/lucide';
+
+import { ZardTableImports } from '@/components/ui/table/table.imports';
+import { ZardCardComponent } from '@/components/ui/card';
+import { ZardButtonComponent } from '@/components/ui/button';
+import { ZardPaginationImports } from '@/components/ui/pagination/pagination.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
 
 @Component({
   selector: 'app-nurse-worklist',
@@ -62,25 +56,22 @@ import { MatTooltip } from '@angular/material/tooltip';
   imports: [
     ReactiveFormsModule,
     FormsModule,
-    MatCard,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
+    ZardCardComponent,
+    ZardTableImports,
+    ZardButtonComponent,
+    ZardPaginationImports,
+    ZardTooltipImports,
     NgClass,
-    MatTooltip,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
     NgIf,
-    MatPaginator,
     TitleCasePipe,
+    NgIcon,
+  ],
+  viewProviders: [
+    provideIcons({ lucideSearch, lucideRefreshCcw, lucideInbox }),
   ],
 })
 export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
+  protected readonly Math = Math;
   rowsPerPage = 5;
   activePage = 1;
   pagedList: any = [];

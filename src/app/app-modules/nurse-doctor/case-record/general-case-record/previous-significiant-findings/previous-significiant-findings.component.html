@@ -1,82 +1,104 @@
-<div class="row m-t-20">
-  <div class="col-sm-12">
-    <div *ngIf="dataSource.data.length > 0" class="pull-right">
-      <mat-form-field id="filterbox" class="m-t-20-">
-        <mat-label>{{ current_language_set?.common?.inTableSearch }}</mat-label>
-        <input
-          autocomplete="off"
-          matInput
-          #filterTerm
-          (keyup)="filterPreviousSignificiantFindingsList(filterTerm.value)" />
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
+<div class="space-y-6 mt-8">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <h3 class="text-xl font-bold text-gray-900 flex items-center gap-3">
+      <ng-icon name="lucideHistory" class="text-blue-500"></ng-icon>
+      {{
+        current_language_set?.Significantfindingsdetails
+          ?.previousSignificantFindings
+      }}
+    </h3>
+
+    <div *ngIf="dataSource.data.length > 0" class="w-full md:w-80">
+      <z-form-field class="!m-0">
+        <div class="relative group">
+          <ng-icon
+            name="lucideSearch"
+            class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors"></ng-icon>
+          <input
+            z-input
+            class="pl-10"
+            autocomplete="off"
+            #filterTerm
+            (keyup)="filterPreviousSignificiantFindingsList(filterTerm.value)"
+            [placeholder]="current_language_set?.common?.inTableSearch" />
+        </div>
+      </z-form-field>
     </div>
-    <div class="clearfix"></div>
-    <section class="table-responsive" style="margin-top: 4rem">
-      <table
-        mat-table
-        [dataSource]="dataSource"
-        aria-describedby="significantFindings">
-        <ng-container matColumnDef="sno">
-          <th
-            mat-header-cell
-            style="border-bottom: none"
-            *matHeaderCellDef
-            mat-sort-header>
-            {{ current_language_set?.casesheet?.serialNo }}
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.sno }}
-          </td>
-        </ng-container>
+  </div>
 
-        <ng-container matColumnDef="significantfindings">
-          <th
-            mat-header-cell
-            style="border-bottom: none"
-            *matHeaderCellDef
-            mat-sort-header>
-            {{
-              current_language_set?.Significantfindingsdetails
-                ?.significantfindings
-            }}
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.significantFindings }}
-          </td>
-        </ng-container>
+  <div
+    class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-gray-50/50">
+            <th
+              class="px-8 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider w-24">
+              {{ current_language_set?.casesheet?.serialNo }}
+            </th>
+            <th
+              class="px-8 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">
+              {{
+                current_language_set?.Significantfindingsdetails
+                  ?.significantfindings
+              }}
+            </th>
+            <th
+              class="px-8 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider w-48">
+              {{
+                current_language_set?.Significantfindingsdetails?.captureddate
+              }}
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr
+            *ngFor="let element of dataSource.data"
+            class="hover:bg-blue-50/30 transition-colors">
+            <td class="px-8 py-4 text-gray-500 font-medium">
+              {{ element.sno }}
+            </td>
+            <td class="px-8 py-4 text-gray-700 font-medium leading-relaxed">
+              {{ element.significantFindings }}
+            </td>
+            <td class="px-8 py-4">
+              <div class="flex items-center gap-2 text-gray-600">
+                <ng-icon name="lucideCalendar" class="text-blue-400"></ng-icon>
+                <span>{{ element.captureDate | date: 'dd/MM/yyyy' }}</span>
+              </div>
+            </td>
+          </tr>
 
-        <ng-container matColumnDef="captureddate">
-          <th
-            mat-header-cell
-            style="border-bottom: none"
-            *matHeaderCellDef
-            mat-sort-header>
-            {{ current_language_set?.Significantfindingsdetails?.captureddate }}
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.captureDate | date: 'dd/MM/yyyy' }}
-          </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr *ngIf="dataSource.data.length === 0">
+            <td colspan="3" class="px-8 py-12 text-center">
+              <div class="flex flex-col items-center gap-3 text-gray-400">
+                <ng-icon
+                  name="lucideInbox"
+                  size="48"
+                  class="opacity-20"></ng-icon>
+                <p class="text-lg font-medium">
+                  {{
+                    current_language_set?.Significantfindingsdetails
+                      ?.noprevioussignificantrecord
+                  }}
+                </p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
       </table>
-      <div
-        *ngIf="dataSource.data.length === 0"
-        class="pull-center"
-        style="margin-top: 5px; text-align: center">
-        <strong>{{
-          current_language_set?.Significantfindingsdetails
-            ?.noprevioussignificantrecord
-        }}</strong>
-      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div
+      class="border-t border-gray-100 p-4 bg-gray-50/50"
+      [hidden]="dataSource.data.length === 0">
       <mat-paginator
-        [hidden]="dataSource.data.length === 0"
         [pageSizeOptions]="[5, 10, 20]"
         [pageSize]="5"
         showFirstLastButtons
-        aria-label="Select patient in doctorWorklist">
+        class="!bg-transparent">
       </mat-paginator>
-    </section>
+    </div>
   </div>
 </div>

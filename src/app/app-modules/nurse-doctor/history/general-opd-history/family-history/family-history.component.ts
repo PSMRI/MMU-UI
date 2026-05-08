@@ -40,36 +40,56 @@ import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { NgFor, NgClass, NgIf } from '@angular/common';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import {
+  LucideAngularModule,
+  Users,
+  History,
+  Trash2,
+  Plus,
+  Dna,
+  Link2,
+  Info,
+} from 'lucide-angular';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
   selector: 'app-general-family-history',
+  standalone: true,
   templateUrl: './family-history.component.html',
   styleUrls: ['./family-history.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatTooltip,
-    MatIcon,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardRadioImports,
+    ZardLabelImports,
+    ZardSelectImports,
+    NgIf,
     NgFor,
     NgClass,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
-    NgIf,
-    MatInput,
+    LucideAngularModule,
     NullDefaultValueDirective,
     StringValidatorDirective,
-    MatRadioGroup,
-    MatRadioButton,
+  ],
+  providers: [
+    LucideAngularModule.pick({
+      Users,
+      History,
+      Trash2,
+      Plus,
+      Dna,
+      Link2,
+      Info,
+    }).providers,
   ],
 })
 export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {

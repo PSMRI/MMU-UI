@@ -1,731 +1,676 @@
-<div class="m-t-10" [formGroup]="patientVitalsForm">
-  <mat-expansion-panel expanded="true">
-    <mat-expansion-panel-header>
-      <h5>
-        {{
-          currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC?.vitals
-        }}
-      </h5>
-    </mat-expansion-panel-header>
-    <div class="row">
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.vitalsDetails?.AnthropometryDataANC_OPD_NCD_PNC
-              ?.height
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            allowText="decimal"
-            allowMax="350"
-            name="height_cm"
-            formControlName="height_cm"
-            (change)="checkHeight(height_cm)"
-            (blur)="calculateBMI(height_cm, weight_Kg)"
-            (focus)="trackFieldInteraction('Height')"
-            required />
-        </mat-form-field>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.vitalsDetails?.AnthropometryDataANC_OPD_NCD_PNC
-              ?.weight
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            allowText="decimal"
-            allowMax="500"
-            name="weight_Kg"
-            formControlName="weight_Kg"
-            (change)="checkWeight(weight_Kg)"
-            (blur)="calculateBMI(height_cm, weight_Kg)"
-            (focus)="trackFieldInteraction('Weight')"
-            required />
-          <svg
-            class="fontawesomesvg"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"
-            matTooltip="{{ currentLanguageSet?.common?.startTest }}"
-            matSuffix
-            (click)="openIOTWeightModel(); trackFieldInteraction('Weight IoT Button')"
-            onkeydown="openIOTWeightModel()"
-            tabindex="{0}">
-            <path
-              d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
-          </svg>
-        </mat-form-field>
-      </div>
-
-      <div
-        class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10"
-        *ngIf="totalMonths > 60">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.vitalsDetails?.AnthropometryDataANC_OPD_NCD_PNC
-              ?.BMI
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            allowText="decimal"
-            name="BMI"
-            [ngClass]="{ abnormal: !normalBMI }"
-            [value]="BMI"
-            disabled />
-        </mat-form-field>
-      </div>
-      <div
-        class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
-        *ngIf="
-          (totalMonths !== undefined && totalMonths > 228) ||
-          (totalMonths !== undefined &&
-            totalMonths > 60 &&
-            totalMonths <= 228 &&
-            !male &&
-            !female)
-        ">
-        <div
-          class="marker"
-          *ngIf="BMI !== null && BMI < 18.5"
-          style="color: red">
-          <i class="material-icons">brightness_1</i>
-          <span>{{
-            currentLanguageSet?.vitalsDetails?.AnthropometryDataANC_OPD_NCD_PNC
-              ?.underweight
-          }}</span>
-        </div>
-        <div
-          class="marker"
-          *ngIf="BMI !== null && BMI >= 18.5 && BMI < 25"
-          style="color: green">
-          <i class="material-icons">brightness_1</i>
-          <span>{{
-            currentLanguageSet?.vitalsDetails?.AnthropometryDataANC_OPD_NCD_PNC
-              ?.normalWeight
-          }}</span>
-        </div>
-        <div
-          class="marker"
-          *ngIf="BMI !== null && BMI >= 25 && BMI < 30"
-          style="color: darkorange">
-          <i class="material-icons">brightness_1</i>
-          <span>{{
-            currentLanguageSet?.vitalsDetails?.AnthropometryDataANC_OPD_NCD_PNC
-              ?.overweight
-          }}</span>
-        </div>
-        <div
-          class="marker"
-          *ngIf="BMI !== null && BMI >= 30"
-          style="color: red">
-          <em class="material-icons">brightness_1</em>
-          <span>{{
-            currentLanguageSet?.vitalsDetails?.AnthropometryDataANC_OPD_NCD_PNC
-              ?.obesity
-          }}</span>
-        </div>
-        <span
-          *ngIf="
-            BMI !== null &&
-            BMI !== undefined &&
-            totalMonths !== undefined &&
-            totalMonths > 60 &&
-            totalMonths <= 228 &&
-            !male &&
-            !female
-          ">
-          <span style="padding: 8px; color: #b3b3b3; font-size: 12px"
-            >{{ currentLanguageSet?.pleaseConfirmClinically }}
-          </span>
-        </span>
-      </div>
-
-      <div
-        class="col-xs-12 col-sm-6 col-md-3 col-lg-3"
-        *ngIf="totalMonths > 60 && totalMonths <= 228">
-        <div
-          class="marker"
-          *ngIf="bmiStatusMinor === 'mild malnourished'"
-          style="color: rgb(255, 200, 0)">
-          <span class="material-icons">brightness_1</span>
-          <span>{{ currentLanguageSet?.mildMalnourished }}</span>
-        </div>
-        <div
-          class="marker"
-          *ngIf="bmiStatusMinor === 'moderately malnourished'"
-          style="color: rgba(255, 102, 0, 0.938)">
-          <span class="material-icons">brightness_1</span>
-          <span>{{ currentLanguageSet?.moderatelyMalnourished }}</span>
-        </div>
-
-        <div
-          class="marker"
-          *ngIf="bmiStatusMinor === 'severely malnourished'"
-          style="color: red">
-          <span class="material-icons">brightness_1</span>
-          <span>{{ currentLanguageSet?.severelyMalnourished }}</span>
-        </div>
-
-        <div
-          class="marker"
-          *ngIf="bmiStatusMinor === 'normal'"
-          style="color: green">
-          <span class="material-icons">brightness_1</span>
-          <span>{{ currentLanguageSet?.normal }}</span>
-        </div>
-
-        <div
-          class="marker"
-          *ngIf="bmiStatusMinor === 'overweight'"
-          style="color: rgb(255, 200, 0)">
-          <span class="material-icons">brightness_1</span>
-          <span>{{ currentLanguageSet?.overweight }}</span>
-        </div>
-
-        <div
-          class="marker"
-          *ngIf="bmiStatusMinor === 'obese'"
-          style="color: rgb(255, 102, 0)">
-          <span class="material-icons">brightness_1</span>
-          <span>{{ currentLanguageSet?.obese }}</span>
-        </div>
-
-        <div
-          class="marker"
-          *ngIf="bmiStatusMinor === 'severely obese'"
-          style="color: red">
-          <span class="material-icons">brightness_1</span>
-          <span>{{ currentLanguageSet?.severelyObese }}</span>
-        </div>
-      </div>
-      <div class="clearfix"></div>
-
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-              ?.waistCircumference
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            allowText="decimal"
-            allowMax="350"
-            name="waistCircumference_cm"
-            formControlName="waistCircumference_cm"
-            [ngClass]="{ abnormal: !normalWaist }"
-            (change)="checkWaist(waistCircumference_cm)"
-            (keyup)="checkNormalWaist(waistCircumference_cm)"
-            (focus)="trackFieldInteraction('Waist Circumference')" />
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 m-t-10">
-        <strong>{{
-          currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-            ?.bloodPressure1
-        }}</strong>
-        <div class="row">
-          <div class="col-xs-12 col-sm-6 m-t-10">
-            <mat-form-field>
-              <mat-label>{{
-                currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-                  ?.systolicBP
-              }}</mat-label>
+<div class="p-4" [formGroup]="patientVitalsForm">
+  <z-accordion zType="multiple" class="space-y-6">
+    <!-- Vitals Section -->
+    <z-accordion-item
+      zValue="vitals"
+      [zTitle]="
+        currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC?.vitals
+      "
+      class="border rounded-xl overflow-hidden shadow-sm bg-card">
+      <div class="p-6 space-y-8">
+        <!-- Anthropometry Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Height -->
+          <z-form-field>
+            <z-form-label [zRequired]="true">{{
+              currentLanguageSet?.vitalsDetails
+                ?.AnthropometryDataANC_OPD_NCD_PNC?.height
+            }}</z-form-label>
+            <div class="relative group">
               <input
+                z-input
                 autocomplete="off"
-                matInput
-                appDefaultNull
-                allowText="number"
-                allowMax="400"
-                name="systolicBP_1stReading"
-                formControlName="systolicBP_1stReading"
-                (change)="checkSystolicBP1(systolicBP_1stReading)"
-                (blur)="
-                  checkSystolicGreater1(
-                    systolicBP_1stReading,
-                    diastolicBP_1stReading
-                  )
+                name="height_cm"
+                formControlName="height_cm"
+                (change)="checkHeight(height_cm)"
+                (blur)="calculateBMI(height_cm, weight_Kg)"
+                (focus)="trackFieldInteraction('Height')"
+                placeholder="0" />
+              <span
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs font-medium"
+                >cm</span
+              >
+            </div>
+          </z-form-field>
+
+          <!-- Weight -->
+          <z-form-field>
+            <z-form-label [zRequired]="true">{{
+              currentLanguageSet?.vitalsDetails
+                ?.AnthropometryDataANC_OPD_NCD_PNC?.weight
+            }}</z-form-label>
+            <div class="flex items-center gap-2">
+              <div class="relative flex-1 group">
+                <input
+                  z-input
+                  autocomplete="off"
+                  name="weight_Kg"
+                  formControlName="weight_Kg"
+                  (change)="checkWeight(weight_Kg)"
+                  (blur)="calculateBMI(height_cm, weight_Kg)"
+                  (focus)="trackFieldInteraction('Weight')"
+                  placeholder="0" />
+                <span
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs font-medium"
+                  >kg</span
+                >
+              </div>
+              <button
+                z-button
+                zType="outline"
+                zSize="icon"
+                class="shrink-0 hover:bg-primary/5 transition-colors"
+                (click)="
+                  openIOTWeightModel();
+                  trackFieldInteraction('Weight IoT Button')
                 "
-                (focus)="trackFieldInteraction('Systolic BP 1st Reading')"
-                [required]="benAge > 30" />
-              <svg
-                class="fontawesomesvg"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                matTooltip="{{ currentLanguageSet?.common?.startTest }}"
-                matSuffix
-                (click)="openIOTBP1Model(); trackFieldInteraction('BP 1st Reading IoT Button')"
-                onkeydown="openIOTBP1Model()"
-                tabindex="{0}">
-                <path
-                  d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
-              </svg>
-            </mat-form-field>
+                [zTooltip]="currentLanguageSet?.common?.startTest">
+                <ng-icon name="lucideScale" class="size-4" />
+              </button>
+            </div>
+          </z-form-field>
+
+          <!-- BMI -->
+          <z-form-field *ngIf="totalMonths > 60">
+            <z-form-label>{{
+              currentLanguageSet?.vitalsDetails
+                ?.AnthropometryDataANC_OPD_NCD_PNC?.BMI
+            }}</z-form-label>
+            <div class="space-y-3">
+              <input
+                z-input
+                [value]="BMI"
+                disabled
+                [zStatus]="!normalBMI ? 'error' : 'default'"
+                class="bg-muted/50 font-bold text-center" />
+
+              <!-- BMI Status Markers -->
+              <div
+                class="flex flex-wrap gap-2"
+                *ngIf="
+                  totalMonths > 228 ||
+                  (totalMonths > 60 && totalMonths <= 228 && !male && !female)
+                ">
+                <div
+                  *ngIf="BMI !== null && BMI < 18.5"
+                  class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-red-50 text-red-700 text-[10px] font-bold uppercase tracking-wider">
+                  <span
+                    class="size-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                  {{
+                    currentLanguageSet?.vitalsDetails
+                      ?.AnthropometryDataANC_OPD_NCD_PNC?.underweight
+                  }}
+                </div>
+                <div
+                  *ngIf="BMI !== null && BMI >= 18.5 && BMI < 25"
+                  class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-50 text-green-700 text-[10px] font-bold uppercase tracking-wider">
+                  <span class="size-1.5 rounded-full bg-green-500"></span>
+                  {{
+                    currentLanguageSet?.vitalsDetails
+                      ?.AnthropometryDataANC_OPD_NCD_PNC?.normalWeight
+                  }}
+                </div>
+                <div
+                  *ngIf="BMI !== null && BMI >= 25 && BMI < 30"
+                  class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-orange-50 text-orange-700 text-[10px] font-bold uppercase tracking-wider">
+                  <span class="size-1.5 rounded-full bg-orange-500"></span>
+                  {{
+                    currentLanguageSet?.vitalsDetails
+                      ?.AnthropometryDataANC_OPD_NCD_PNC?.overweight
+                  }}
+                </div>
+                <div
+                  *ngIf="BMI !== null && BMI >= 30"
+                  class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-red-50 text-red-700 text-[10px] font-bold uppercase tracking-wider">
+                  <span
+                    class="size-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                  {{
+                    currentLanguageSet?.vitalsDetails
+                      ?.AnthropometryDataANC_OPD_NCD_PNC?.obesity
+                  }}
+                </div>
+              </div>
+
+              <!-- Pediatric/Minor BMI Status -->
+              <div
+                class="flex flex-wrap gap-2"
+                *ngIf="totalMonths > 60 && totalMonths <= 228">
+                <div
+                  *ngIf="bmiStatusMinor === 'mild malnourished'"
+                  class="px-2 py-1 rounded-full bg-yellow-50 text-yellow-700 text-[10px] font-bold uppercase">
+                  {{ currentLanguageSet?.mildMalnourished }}
+                </div>
+                <div
+                  *ngIf="bmiStatusMinor === 'moderately malnourished'"
+                  class="px-2 py-1 rounded-full bg-orange-50 text-orange-700 text-[10px] font-bold uppercase">
+                  {{ currentLanguageSet?.moderatelyMalnourished }}
+                </div>
+                <div
+                  *ngIf="bmiStatusMinor === 'severely malnourished'"
+                  class="px-2 py-1 rounded-full bg-red-50 text-red-700 text-[10px] font-bold uppercase">
+                  {{ currentLanguageSet?.severelyMalnourished }}
+                </div>
+                <div
+                  *ngIf="bmiStatusMinor === 'normal'"
+                  class="px-2 py-1 rounded-full bg-green-50 text-green-700 text-[10px] font-bold uppercase">
+                  {{ currentLanguageSet?.normal }}
+                </div>
+                <div
+                  *ngIf="bmiStatusMinor === 'overweight'"
+                  class="px-2 py-1 rounded-full bg-yellow-50 text-yellow-700 text-[10px] font-bold uppercase">
+                  {{ currentLanguageSet?.overweight }}
+                </div>
+                <div
+                  *ngIf="bmiStatusMinor === 'obese'"
+                  class="px-2 py-1 rounded-full bg-orange-50 text-orange-700 text-[10px] font-bold uppercase">
+                  {{ currentLanguageSet?.obese }}
+                </div>
+                <div
+                  *ngIf="bmiStatusMinor === 'severely obese'"
+                  class="px-2 py-1 rounded-full bg-red-50 text-red-700 text-[10px] font-bold uppercase">
+                  {{ currentLanguageSet?.severelyObese }}
+                </div>
+              </div>
+            </div>
+          </z-form-field>
+
+          <!-- Waist Circumference -->
+          <z-form-field>
+            <z-form-label>{{
+              currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
+                ?.waistCircumference
+            }}</z-form-label>
+            <div class="relative group">
+              <input
+                z-input
+                autocomplete="off"
+                name="waistCircumference_cm"
+                formControlName="waistCircumference_cm"
+                [zStatus]="!normalWaist ? 'error' : 'default'"
+                (change)="checkWaist(waistCircumference_cm)"
+                (keyup)="checkNormalWaist(waistCircumference_cm)"
+                (focus)="trackFieldInteraction('Waist Circumference')"
+                placeholder="0" />
+              <span
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs font-medium"
+                >cm</span
+              >
+            </div>
+          </z-form-field>
+        </div>
+
+        <hr class="border-muted/50" />
+
+        <!-- Blood Pressure Readings -->
+        <div class="space-y-6">
+          <div class="flex items-center justify-between">
+            <h6 class="text-sm font-bold flex items-center gap-2">
+              <ng-icon name="lucideActivity" class="size-4 text-primary" />
+              Blood Pressure Readings
+            </h6>
           </div>
 
-          <div class="col-xs-12 col-sm-6 m-t-10">
-            <mat-form-field>
-              <mat-label>{{
-                currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-                  ?.diastolicBP
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                allowText="number"
-                allowMax="240"
-                name="diastolicBP_1stReading"
-                formControlName="diastolicBP_1stReading"
-                (change)="checkDiastolicBP1(diastolicBP_1stReading)"
-                (blur)="
-                  checkDiastolicLesser1(
-                    systolicBP_1stReading,
-                    diastolicBP_1stReading
-                  )
-                "
-                (focus)="trackFieldInteraction('Diastolic BP 1st Reading')"
-                [required]="benAge > 30" />
-              <svg
-                class="fontawesomesvg"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                matTooltip="{{ currentLanguageSet?.common?.startTest }}"
-                matSuffix
-                (click)="openIOTBP1Model(); trackFieldInteraction('BP 1st Reading IoT Button')"
-                onkeydown="openIOTBP1Model()"
-                tabindex="{0}">
-                <path
-                  d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
-              </svg>
-            </mat-form-field>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- 1st Reading -->
+            <div
+              class="bg-muted/5 p-4 rounded-xl space-y-4 border border-muted/30">
+              <div class="flex items-center justify-between border-b pb-2">
+                <span
+                  class="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                  >1st Reading</span
+                >
+                <button
+                  z-button
+                  zType="outline"
+                  zSize="sm"
+                  class="h-8"
+                  (click)="
+                    openIOTBP1Model();
+                    trackFieldInteraction('BP 1st Reading IoT Button')
+                  ">
+                  <ng-icon name="lucideDroplet" class="size-3 mr-1.5" />
+                  IoT Start
+                </button>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <z-form-field>
+                  <z-form-label [zRequired]="benAge > 30"
+                    >Systolic</z-form-label
+                  >
+                  <div class="relative">
+                    <input
+                      z-input
+                      formControlName="systolicBP_1stReading"
+                      (change)="checkSystolicBP1(systolicBP_1stReading)"
+                      (blur)="
+                        checkSystolicGreater1(
+                          systolicBP_1stReading,
+                          diastolicBP_1stReading
+                        )
+                      "
+                      placeholder="0" />
+                    <span
+                      class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground font-mono"
+                      >mmHg</span
+                    >
+                  </div>
+                </z-form-field>
+                <z-form-field>
+                  <z-form-label [zRequired]="benAge > 30"
+                    >Diastolic</z-form-label
+                  >
+                  <div class="relative">
+                    <input
+                      z-input
+                      formControlName="diastolicBP_1stReading"
+                      (change)="checkDiastolicBP1(diastolicBP_1stReading)"
+                      (blur)="
+                        checkDiastolicLesser1(
+                          systolicBP_1stReading,
+                          diastolicBP_1stReading
+                        )
+                      "
+                      placeholder="0" />
+                    <span
+                      class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground font-mono"
+                      >mmHg</span
+                    >
+                  </div>
+                </z-form-field>
+              </div>
+            </div>
+
+            <!-- 2nd Reading -->
+            <div
+              class="bg-muted/5 p-4 rounded-xl space-y-4 border border-muted/30">
+              <div class="flex items-center justify-between border-b pb-2">
+                <span
+                  class="text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                  >2nd Reading</span
+                >
+                <button
+                  z-button
+                  zType="outline"
+                  zSize="sm"
+                  class="h-8"
+                  (click)="
+                    openIOTBP2Model();
+                    trackFieldInteraction('BP 2nd Reading IoT Button')
+                  ">
+                  <ng-icon name="lucideDroplet" class="size-3 mr-1.5" />
+                  IoT Start
+                </button>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <z-form-field>
+                  <z-form-label>Systolic</z-form-label>
+                  <div class="relative">
+                    <input
+                      z-input
+                      formControlName="systolicBP_2ndReading"
+                      (change)="checkSystolicBP2(systolicBP_2ndReading)"
+                      (blur)="
+                        checkSystolicGreater2(
+                          systolicBP_2ndReading,
+                          diastolicBP_2ndReading
+                        )
+                      "
+                      placeholder="0" />
+                    <span
+                      class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground font-mono"
+                      >mmHg</span
+                    >
+                  </div>
+                </z-form-field>
+                <z-form-field>
+                  <z-form-label>Diastolic</z-form-label>
+                  <div class="relative">
+                    <input
+                      z-input
+                      formControlName="diastolicBP_2ndReading"
+                      (change)="checkDiastolicBP2(diastolicBP_2ndReading)"
+                      (blur)="
+                        checkDiastolicLesser2(
+                          systolicBP_2ndReading,
+                          diastolicBP_2ndReading
+                        )
+                      "
+                      placeholder="0" />
+                    <span
+                      class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground font-mono"
+                      >mmHg</span
+                    >
+                  </div>
+                </z-form-field>
+              </div>
+            </div>
+
+            <!-- 3rd Reading (Conditional) -->
+            <div
+              *ngIf="showBP3"
+              class="bg-primary/5 p-4 rounded-xl space-y-4 border border-primary/20 animate-in fade-in slide-in-from-right-1">
+              <div
+                class="flex items-center justify-between border-b border-primary/10 pb-2">
+                <span
+                  class="text-xs font-bold uppercase tracking-wider text-primary"
+                  >3rd Reading</span
+                >
+                <button
+                  z-button
+                  zType="outline"
+                  zSize="sm"
+                  class="h-8 bg-white"
+                  (click)="
+                    openIOTBP3Model();
+                    trackFieldInteraction('BP 3rd Reading IoT Button')
+                  ">
+                  <ng-icon name="lucideDroplet" class="size-3 mr-1.5" />
+                  IoT Start
+                </button>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <z-form-field>
+                  <z-form-label>Systolic</z-form-label>
+                  <div class="relative">
+                    <input
+                      z-input
+                      formControlName="systolicBP_3rdReading"
+                      (change)="checkSystolicBP3(systolicBP_3rdReading)"
+                      (blur)="
+                        checkSystolicGreater3(
+                          systolicBP_3rdReading,
+                          diastolicBP_3rdReading
+                        )
+                      "
+                      placeholder="0" />
+                    <span
+                      class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground font-mono"
+                      >mmHg</span
+                    >
+                  </div>
+                </z-form-field>
+                <z-form-field>
+                  <z-form-label>Diastolic</z-form-label>
+                  <div class="relative">
+                    <input
+                      z-input
+                      formControlName="diastolicBP_3rdReading"
+                      (change)="checkDiastolicBP3(diastolicBP_3rdReading)"
+                      (blur)="
+                        checkDiastolicLesser3(
+                          systolicBP_3rdReading,
+                          diastolicBP_3rdReading
+                        )
+                      "
+                      placeholder="0" />
+                    <span
+                      class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground font-mono"
+                      >mmHg</span
+                    >
+                  </div>
+                </z-form-field>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 m-t-10">
-        <strong>{{
-          currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-            ?.bloodPressure2
-        }}</strong>
-        <div class="row">
-          <div class="col-xs-12 col-sm-6 m-t-10">
-            <mat-form-field>
-              <mat-label>{{
-                currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-                  ?.systolicBP
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                allowText="number"
-                allowMax="400"
-                formControlName="systolicBP_2ndReading"
-                (change)="checkSystolicBP2(systolicBP_2ndReading)"
-                (blur)="
-                  checkSystolicGreater2(
-                    systolicBP_2ndReading,
-                    diastolicBP_2ndReading
-                  )
-                "
-                (focus)="trackFieldInteraction('Systolic BP 2nd Reading')" />
-              <svg
-                class="fontawesomesvg"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                matTooltip="{{ currentLanguageSet?.common?.startTest }}"
-                matSuffix
-                (click)="openIOTBP2Model(); trackFieldInteraction('BP 2nd Reading IoT Button')"
-                onkeydown="openIOTBP2Model()"
-                tabindex="{0}">
-                <path
-                  d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
-              </svg>
-            </mat-form-field>
-          </div>
+        <hr class="border-muted/50" />
 
-          <div class="col-xs-12 col-sm-6 m-t-10">
-            <mat-form-field>
-              <mat-label>{{
-                currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-                  ?.diastolicBP
-              }}</mat-label>
+        <!-- Metabolic & Oxygen Markers -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- HbA1c -->
+          <z-form-field>
+            <z-form-label>{{
+              currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC?.HbA1c
+            }}</z-form-label>
+            <div class="relative group">
               <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                allowText="number"
-                allowMax="240"
-                formControlName="diastolicBP_2ndReading"
-                (change)="checkDiastolicBP2(diastolicBP_2ndReading)"
-                (blur)="
-                  checkDiastolicLesser2(
-                    systolicBP_2ndReading,
-                    diastolicBP_2ndReading
-                  )
-                "
-                (focus)="trackFieldInteraction('Diastolic BP 2nd Reading')" />
-              <svg
-                class="fontawesomesvg"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                matTooltip="{{ currentLanguageSet?.common?.startTest }}"
-                matSuffix
-                (click)="openIOTBP2Model(); trackFieldInteraction('BP 2nd Reading IoT Button')"
-                onkeydown="openIOTBP2Model()"
-                tabindex="{0}">
-                <path
-                  d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
-              </svg>
-            </mat-form-field>
-          </div>
+                z-input
+                formControlName="hbA1C"
+                [zStatus]="!normalHbA1C ? 'error' : 'default'"
+                (change)="checkHbA1C(hbA1C)"
+                (keyup)="checkNormalHbA1c(hbA1C)"
+                placeholder="0.0" />
+              <span
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs font-medium"
+                >%</span
+              >
+            </div>
+          </z-form-field>
+
+          <!-- Hemoglobin -->
+          <z-form-field>
+            <z-form-label>{{
+              currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
+                ?.hemoglobin
+            }}</z-form-label>
+            <div class="flex items-center gap-2">
+              <div class="relative flex-1 group">
+                <input
+                  z-input
+                  formControlName="hemoglobin"
+                  (change)="checkHemoglobin(hemoglobin)"
+                  placeholder="0.0" />
+                <span
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs font-medium"
+                  >g/dL</span
+                >
+              </div>
+              <button
+                z-button
+                zType="outline"
+                zSize="icon"
+                class="shrink-0"
+                (click)="
+                  openIOTHemoglobinModel();
+                  trackFieldInteraction('Hemoglobin IoT Button')
+                ">
+                <ng-icon name="lucideDroplet" class="size-4" />
+              </button>
+            </div>
+          </z-form-field>
+
+          <!-- SPO2 -->
+          <z-form-field>
+            <z-form-label>{{
+              currentLanguageSet?.sPOTwoWithUnit
+            }}</z-form-label>
+            <div class="flex items-center gap-2">
+              <div class="relative flex-1 group">
+                <input
+                  z-input
+                  formControlName="sPO2"
+                  [zStatus]="sPO2 < 1 || sPO2 > 100 ? 'error' : 'default'"
+                  (change)="checkSpo2()"
+                  placeholder="0" />
+                <span
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs font-medium"
+                  >%</span
+                >
+              </div>
+              <button
+                z-button
+                zType="outline"
+                zSize="icon"
+                class="shrink-0"
+                (click)="
+                  openIOTSPO2Model(); trackFieldInteraction('SPO2 IoT Button')
+                ">
+                <ng-icon name="lucideThermometer" class="size-4" />
+              </button>
+            </div>
+          </z-form-field>
         </div>
-      </div>
 
-      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 m-t-10" *ngIf="showBP3">
-        <strong>{{
-          currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-            ?.bloodPressure3
-        }}</strong>
-        <div class="row">
-          <div class="col-xs-12 col-sm-6 m-t-10">
-            <mat-form-field>
-              <mat-label>{{
-                currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-                  ?.systolicBP
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                allowText="number"
-                allowMax="400"
-                formControlName="systolicBP_3rdReading"
-                (change)="checkSystolicBP3(systolicBP_3rdReading)"
-                (blur)="
-                  checkSystolicGreater3(
-                    systolicBP_3rdReading,
-                    diastolicBP_3rdReading
-                  )
-                "
-                (focus)="trackFieldInteraction('Systolic BP 3rd Reading')" />
-              <svg
-                class="fontawesomesvg"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                matTooltip="{{ currentLanguageSet?.common?.startTest }}"
-                matSuffix
-                (click)="openIOTBP3Model(); trackFieldInteraction('BP 3rd Reading IoT Button')"
-                onkeydown="openIOTBP3Model()"
-                tabindex="{0}">
-                <path
-                  d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
-              </svg>
-            </mat-form-field>
-          </div>
+        <hr class="border-muted/50" />
 
-          <div class="col-xs-12 col-sm-6 m-t-10">
-            <mat-form-field>
-              <mat-label>{{
-                currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-                  ?.diastolicBP
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                allowText="number"
-                allowMax="240"
-                formControlName="diastolicBP_3rdReading"
-                (change)="checkDiastolicBP3(diastolicBP_3rdReading)"
-                (blur)="
-                  checkDiastolicLesser3(
-                    systolicBP_3rdReading,
-                    diastolicBP_3rdReading
-                  )
-                "
-                (focus)="trackFieldInteraction('Diastolic BP 3rd Reading')" />
-              <svg
-                class="fontawesomesvg"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                matTooltip="{{ currentLanguageSet?.common?.startTest }}"
-                matSuffix
-                (click)="openIOTBP3Model(); trackFieldInteraction('BP 3rd Reading IoT Button')"
-                onkeydown="openIOTBP3Model()"
-                tabindex="{0}">
-                <path
-                  d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
-              </svg>
-            </mat-form-field>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC?.HbA1c
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            allowText="decimal"
-            allowMax="100"
-            maxlength="5"
-            name="hbA1C"
-            formControlName="hbA1C"
-            [ngClass]="{ abnormal: !normalHbA1C }"
-            (change)="checkHbA1C(hbA1C)"
-            (keyup)="checkNormalHbA1c(hbA1C)"
-            (focus)="trackFieldInteraction('HbA1C')" />
-        </mat-form-field>
-      </div>
-
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-              ?.hemoglobin
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            allowText="decimal"
-            maxlength="5"
-            allowMax="20"
-            name="hemoglobin"
-            formControlName="hemoglobin"
-            (change)="checkHemoglobin(hemoglobin)"
-            (focus)="trackFieldInteraction('Hemoglobin')" />
-          <svg
-            class="fontawesomesvg"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"
-            matTooltip="{{ currentLanguageSet?.common?.startTest }}"
-            matSuffix
-            (click)="openIOTHemoglobinModel(); trackFieldInteraction('Hemoglobin IoT Button')"
-            onkeydown="openIOTHemoglobinModel()"
-            tabindex="{0}">
-            <path
-              d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
-          </svg>
-        </mat-form-field>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
-        <mat-form-field>
-          <mat-label>{{ currentLanguageSet?.sPOTwoWithUnit }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            allowText="number"
-            maxlength="3"
-            name="sPO2"
-            id="sPO2"
-            formControlName="sPO2"
-            [ngClass]="{ abnormal: sPO2 < 1 || sPO2 > 100 }"
-            (change)="checkSpo2()"
-            (focus)="trackFieldInteraction('SPO2')" />
-          <svg
-            class="fontawesomesvg"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"
-            matTooltip="{{ currentLanguageSet?.common?.startTest }}"
-            matSuffix
-            (click)="openIOTSPO2Model(); trackFieldInteraction('SPO2 IoT Button')"
-            onkeydown="openIOTSPO2Model()"
-            tabindex="{0}">
-            <path
-              d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
-          </svg>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="row row m-t-20">
-      <div class="col-xs-12 col-sm-12 m-t-10">
-        <strong>{{
-          currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
-            ?.bloodGlucose
-        }}</strong>
-        <div class="row">
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
-            <mat-form-field>
-              <mat-label>{{
+        <!-- Blood Glucose Section -->
+        <div class="space-y-4">
+          <h6 class="text-sm font-bold flex items-center gap-2">
+            <ng-icon name="lucideDroplet" class="size-4 text-primary" />
+            {{
+              currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
+                ?.bloodGlucose
+            }}
+          </h6>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Fasting -->
+            <z-form-field>
+              <z-form-label>{{
                 currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
                   ?.fasting
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                allowText="number"
-                allowMax="900"
-                name="bloodGlucose_Fasting"
-                formControlName="bloodGlucose_Fasting"
-                [ngClass]="{ abnormal: diabeticRangeFasting }"
-                (change)="checkBloodSugarFasting(bloodGlucose_Fasting)"
-                (keyup)="checkNormalBloodSugarFasting(bloodGlucose_Fasting)"
-                (focus)="trackFieldInteraction('Blood Glucose Fasting')" />
-              <svg
-                class="fontawesomesvg"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                matTooltip="{{ currentLanguageSet?.common?.startTest }}"
-                matSuffix
-                (click)="openIOTBGFastingModel(); trackFieldInteraction('Blood Glucose Fasting IoT Button')"
-                onkeydown="openIOTBGFastingModel()"
-                tabindex="{0}">
-                <path
-                  d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
-              </svg>
-            </mat-form-field>
-          </div>
+              }}</z-form-label>
+              <div class="flex items-center gap-2">
+                <div class="relative flex-1 group">
+                  <input
+                    z-input
+                    formControlName="bloodGlucose_Fasting"
+                    [zStatus]="diabeticRangeFasting ? 'error' : 'default'"
+                    (change)="checkBloodSugarFasting(bloodGlucose_Fasting)"
+                    (keyup)="checkNormalBloodSugarFasting(bloodGlucose_Fasting)"
+                    placeholder="0" />
+                  <span
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs font-medium"
+                    >mg/dL</span
+                  >
+                </div>
+                <button
+                  z-button
+                  zType="outline"
+                  zSize="icon"
+                  class="shrink-0"
+                  (click)="openIOTBGFastingModel()">
+                  <ng-icon name="lucideDroplet" class="size-4" />
+                </button>
+              </div>
+            </z-form-field>
 
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
-            <mat-form-field>
-              <mat-label>{{
+            <!-- Random -->
+            <z-form-field>
+              <z-form-label>{{
                 currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
                   ?.random
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                allowText="number"
-                allowMax="900"
-                name="bloodGlucose_Random"
-                formControlName="bloodGlucose_Random"
-                [ngClass]="{ abnormal: diabeticRangeRandom }"
-                (change)="checkBloodSugarRandom(bloodGlucose_Random)"
-                (keyup)="checkNormalBloodSugarRandom(bloodGlucose_Random)"
-                (focus)="trackFieldInteraction('Blood Glucose Random')" />
-              <svg
-                class="fontawesomesvg"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                matTooltip="{{ currentLanguageSet?.common?.startTest }}"
-                matSuffix
-                (click)="openIOTBGRandomModel(); trackFieldInteraction('Blood Glucose Random IoT Button')"
-                onkeydown="openIOTBGRandomModel()"
-                tabindex="{0}">
-                <path
-                  d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
-              </svg>
-            </mat-form-field>
-          </div>
+              }}</z-form-label>
+              <div class="flex items-center gap-2">
+                <div class="relative flex-1 group">
+                  <input
+                    z-input
+                    formControlName="bloodGlucose_Random"
+                    [zStatus]="diabeticRangeRandom ? 'error' : 'default'"
+                    (change)="checkBloodSugarRandom(bloodGlucose_Random)"
+                    (keyup)="checkNormalBloodSugarRandom(bloodGlucose_Random)"
+                    placeholder="0" />
+                  <span
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs font-medium"
+                    >mg/dL</span
+                  >
+                </div>
+                <button
+                  z-button
+                  zType="outline"
+                  zSize="icon"
+                  class="shrink-0"
+                  (click)="openIOTBGRandomModel()">
+                  <ng-icon name="lucideDroplet" class="size-4" />
+                </button>
+              </div>
+            </z-form-field>
 
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
-            <mat-form-field>
-              <mat-label>{{
+            <!-- Post Prandial -->
+            <z-form-field>
+              <z-form-label>{{
                 currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
                   ?.postPrandial
-              }}</mat-label>
+              }}</z-form-label>
+              <div class="flex items-center gap-2">
+                <div class="relative flex-1 group">
+                  <input
+                    z-input
+                    formControlName="bloodGlucose_2HrPostPrandial"
+                    [zStatus]="diabeticRangePostPrandial ? 'error' : 'default'"
+                    (change)="
+                      checkBloodSugar2HrPostPrandial(
+                        bloodGlucose_2HrPostPrandial
+                      )
+                    "
+                    (keyup)="
+                      checkNormalBloodSugarPostPrandial(
+                        bloodGlucose_2HrPostPrandial
+                      )
+                    "
+                    placeholder="0" />
+                  <span
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs font-medium"
+                    >mg/dL</span
+                  >
+                </div>
+                <button
+                  z-button
+                  zType="outline"
+                  zSize="icon"
+                  class="shrink-0"
+                  (click)="openIOTBGPostPrandialModel()">
+                  <ng-icon name="lucideDroplet" class="size-4" />
+                </button>
+              </div>
+            </z-form-field>
+          </div>
+        </div>
+
+        <hr class="border-muted/50" />
+
+        <!-- Random Glucose Test (RBS) -->
+        <div class="space-y-4">
+          <h6 class="text-sm font-bold">Random Glucose Test (RBS)</h6>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <z-form-field>
+              <z-form-label>{{
+                currentLanguageSet?.rbsTestResult
+              }}</z-form-label>
+              <div class="flex items-center gap-2">
+                <div class="relative flex-1 group">
+                  <input
+                    z-input
+                    id="rbsTestResult"
+                    formControlName="rbsTestResult"
+                    [zStatus]="
+                      rbsTestResult < 0 || rbsTestResult > 1000
+                        ? 'error'
+                        : 'default'
+                    "
+                    [disabled]="rbsResultChange()"
+                    (blur)="checkForRange()"
+                    placeholder="0" />
+                  <span
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs font-medium"
+                    >mg/dL</span
+                  >
+                </div>
+                <button
+                  z-button
+                  zType="outline"
+                  zSize="icon"
+                  class="shrink-0"
+                  (click)="openIOTRBSModel()">
+                  <ng-icon name="lucideDroplet" class="size-4" />
+                </button>
+              </div>
+            </z-form-field>
+
+            <z-form-field>
+              <z-form-label>{{
+                currentLanguageSet?.rbsTestRemarks
+              }}</z-form-label>
               <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                allowText="number"
-                allowMax="900"
-                name="bloodGlucose_2HrPostPrandial"
-                formControlName="bloodGlucose_2HrPostPrandial"
-                [ngClass]="{ abnormal: diabeticRangePostPrandial }"
-                (change)="
-                  checkBloodSugar2HrPostPrandial(bloodGlucose_2HrPostPrandial)
-                "
-                (keyup)="
-                  checkNormalBloodSugarPostPrandial(
-                    bloodGlucose_2HrPostPrandial
-                  )
-                "
-                (focus)="trackFieldInteraction('Blood Glucose Post Prandial')" />
-              <svg
-                class="fontawesomesvg"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                matTooltip="{{ currentLanguageSet?.common?.startTest }}"
-                matSuffix
-                (click)="openIOTBGPostPrandialModel(); trackFieldInteraction('Blood Glucose Post Prandial IoT Button')"
-                onkeydown="openIOTBGPostPrandialModel()"
-                tabindex="{0}">
-                <path
-                  d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
-              </svg>
-            </mat-form-field>
+                z-input
+                id="rbsTestRemarks"
+                formControlName="rbsTestRemarks"
+                [disabled]="rbsResultChange()"
+                placeholder="Enter remarks..." />
+            </z-form-field>
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="row m-t-20">
-      <div class="col-xs-12 col-sm-12 m-t-10">
-        <strong>Random Glucose Test</strong>
-      </div>
-    </div>
-    <div class="row" style="display: flex">
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
-        <mat-form-field>
-          <mat-label>{{ currentLanguageSet?.rbsTestResult }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            allowText="number"
-            name="rbsTestResult"
-            id="rbsTestResult"
-            formControlName="rbsTestResult"
-            maxlength="4"
-            (blur)="checkForRange()"
-            [ngClass]="{ abnormal: rbsTestResult < 0 || rbsTestResult > 1000 }"
-            [disabled]="rbsResultChange()"
-            (focus)="trackFieldInteraction('RBS Test Result')" />
-          <svg
-            class="fontawesomesvg"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"
-            matTooltip="{{ currentLanguageSet?.common?.startTest }}"
-            matSuffix
-            (click)="openIOTRBSModel(); trackFieldInteraction('RBS IoT Button')"
-            onkeydown="openIOTRBSModel()"
-            tabindex="{0}">
-            <path
-              d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z" />
-          </svg>
-        </mat-form-field>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 m-t-10">
-        <mat-form-field>
-          <mat-label>{{ currentLanguageSet?.rbsTestRemarks }}</mat-label>
-          <input
-            autocomplete="off"
-            allowText="textAreaValidator"
-            matInput
-            appDefaultNull
-            [ngClass]=""
-            name="rbsTestRemarks"
-            id="rbsTestRemarks"
-            formControlName="rbsTestRemarks"
-            maxlength="300"
-            [disabled]="rbsResultChange()"
-            (focus)="trackFieldInteraction('RBS Test Remarks')" />
-        </mat-form-field>
-      </div>
-    </div>
-  </mat-expansion-panel>
+    </z-accordion-item>
+  </z-accordion>
 </div>

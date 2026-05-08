@@ -8,7 +8,9 @@ import { DOCUMENT } from '@angular/common';
 import { Observable } from 'rxjs';
 import { CommonDialogComponent } from '../components/common-dialog/common-dialog.component';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ConfirmationService {
   constructor(
     public dialog: MatDialog,

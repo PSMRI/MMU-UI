@@ -43,7 +43,7 @@ import { SystemicExaminationComponent } from './systemic-examination.component';
 import { GeneralUtils } from '../../../shared/utility';
 
 import * as data from '../../../shared/mocks/mock-data';
-import { Observable, of, BehaviorSubject, Subject } from "rxjs";
+import { Observable, of, BehaviorSubject, Subject } from 'rxjs';
 
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';

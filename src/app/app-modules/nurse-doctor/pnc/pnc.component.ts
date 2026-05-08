@@ -28,7 +28,12 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  FormArray,
+} from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import {
@@ -48,36 +53,31 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import {
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
-import {
-  MatFormField,
-  MatLabel,
-  MatSelect,
-  MatSuffix,
-} from '@angular/material/select';
 import { NgFor, NgIf } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NullDefaultValueDirective } from '../../core/directives/null-default-value.directive';
-import {
-  MatDatepickerInput,
-  MatDatepickerToggle,
-  MatDatepicker,
-} from '@angular/material/datepicker';
 import { StringValidatorDirective } from '../../core/directives/stringValidator.directive';
 import { NumberValidatorDirective } from '../../core/directives/numberValidator.directive';
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { LucideAngularModule, Heart } from 'lucide-angular';
 
 @Component({
   selector: 'app-nurse-pnc',
   templateUrl: './pnc.component.html',
   styleUrls: ['./pnc.component.css'],
+  standalone: true,
   providers: [
     {
       provide: MAT_DATE_LOCALE,
-      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
+      useValue: 'en-US',
     },
     {
       provide: DateAdapter,
@@ -91,7 +91,7 @@ import { NumberValidatorDirective } from '../../core/directives/numberValidator.
           dateInput: 'LL',
         },
         display: {
-          dateInput: 'DD/MM/YYYY', // Set the desired display format
+          dateInput: 'DD/MM/YYYY',
           monthYearLabel: 'MMM YYYY',
           dateA11yLabel: 'LL',
           monthYearA11yLabel: 'MMMM YYYY',
@@ -100,21 +100,21 @@ import { NumberValidatorDirective } from '../../core/directives/numberValidator.
     },
   ],
   imports: [
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
     ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatSelect,
+    ZardAccordionImports,
+    ZardFormImports,
+    ZardSelectImports,
+    ZardRadioImports,
+    ZardLabelImports,
     NgFor,
-    MatOption,
     NgIf,
-    MatInput,
+    LucideAngularModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatExpansionModule,
     NullDefaultValueDirective,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-    MatSuffix,
-    MatDatepicker,
     StringValidatorDirective,
     NumberValidatorDirective,
   ],

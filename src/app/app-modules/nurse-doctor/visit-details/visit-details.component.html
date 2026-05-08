@@ -1,129 +1,377 @@
-<mat-accordion [formGroup]="patientVisitDataForm">
-  <mat-expansion-panel expanded="true">
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.nurseData?.visitDetails }}</h5>
-    </mat-expansion-panel-header>
-    <app-patient-visit-details
-      [mode]="mode"
-      [patientVisitDetailsForm]="
-        patientVisitDetailsForm
-      "></app-patient-visit-details>
-  </mat-expansion-panel>
+<div
+  class="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-1000"
+  [formGroup]="patientVisitDataForm">
+  <!-- Header / Orchestration Status -->
+  <div class="flex items-center justify-between px-2">
+    <div class="space-y-1">
+      <h2 class="text-2xl font-black text-gray-900 tracking-tight uppercase">
+        Visit Documentation
+      </h2>
+      <p
+        class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] flex items-center gap-2">
+        <span class="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+        Clinical Intake & Screening Session
+      </p>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="px-4 py-2 bg-zinc-100 rounded-full border border-zinc-200">
+        <span
+          class="text-[10px] font-black text-zinc-500 uppercase tracking-widest"
+          >{{ visitCategory || 'Pending Category' }}</span
+        >
+      </div>
+    </div>
+  </div>
 
-  <mat-expansion-panel *ngIf="isCovidVaccinationStatusVisible">
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.covidVaccinationStatus }}</h5>
-    </mat-expansion-panel-header>
-    <app-covid-vaccination-status
-      [covidVaccineStatusForm]="
-        covidVaccineStatusForm
-      "></app-covid-vaccination-status>
-  </mat-expansion-panel>
+  <z-accordion zType="multiple" class="w-full space-y-4">
+    <!-- Visit Details Section -->
+    <z-accordion-item
+      zValue="visit-details"
+      [expanded]="true"
+      class="border border-gray-100 rounded-[2rem] overflow-hidden shadow-sm bg-white transition-all duration-500 hover:shadow-md">
+      <z-accordion-trigger class="px-8 py-6 hover:bg-gray-50/50">
+        <div class="flex items-center gap-4">
+          <div class="p-3 bg-blue-50 rounded-2xl">
+            <lucide-icon
+              name="clipboard-list"
+              class="size-5 text-blue-600"></lucide-icon>
+          </div>
+          <div class="text-left">
+            <span
+              class="block font-black text-gray-900 uppercase tracking-widest text-xs"
+              >{{ current_language_set?.nurseData?.visitDetails }}</span
+            >
+            <span
+              class="text-[10px] text-gray-400 font-bold uppercase tracking-tight"
+              >Core Visit Parameters</span
+            >
+          </div>
+        </div>
+      </z-accordion-trigger>
+      <z-accordion-content class="px-8 pb-8">
+        <div class="pt-4 border-t border-gray-50">
+          <app-patient-visit-details
+            [mode]="mode"
+            [patientVisitDetailsForm]="patientVisitDetailsForm">
+          </app-patient-visit-details>
+        </div>
+      </z-accordion-content>
+    </z-accordion-item>
 
-  <mat-expansion-panel
-    *ngIf="
-      hideAll === true ||
-      showANCVisit === true ||
-      showNcdScreeningVisit === true ||
-      showPNC === true
-    ">
-    <mat-expansion-panel-header>
-      <h5>
-        {{
-          current_language_set?.nurseData?.chiefComplaintsDetails
-            ?.chiefComplaints
-        }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-patient-chief-complaints
-      [mode]="mode"
-      [patientChiefComplaintsForm]="
-        patientChiefComplaintsForm
-      "></app-patient-chief-complaints>
-  </mat-expansion-panel>
+    <!-- COVID Vaccination Status Section -->
+    <z-accordion-item
+      zValue="covid-vax"
+      *ngIf="isCovidVaccinationStatusVisible"
+      class="border border-gray-100 rounded-[2rem] overflow-hidden shadow-sm bg-white transition-all duration-500 hover:shadow-md border-l-4 border-l-emerald-400">
+      <z-accordion-trigger class="px-8 py-6 hover:bg-emerald-50/10">
+        <div class="flex items-center gap-4">
+          <div class="p-3 bg-emerald-50 rounded-2xl">
+            <lucide-icon
+              name="syringe"
+              class="size-5 text-emerald-600"></lucide-icon>
+          </div>
+          <div class="text-left">
+            <span
+              class="block font-black text-gray-900 uppercase tracking-widest text-xs"
+              >{{ current_language_set?.covidVaccinationStatus }}</span
+            >
+            <span
+              class="text-[10px] text-gray-400 font-bold uppercase tracking-tight"
+              >Immunization Record</span
+            >
+          </div>
+        </div>
+      </z-accordion-trigger>
+      <z-accordion-content class="px-8 pb-8">
+        <div class="pt-4 border-t border-gray-50">
+          <app-covid-vaccination-status
+            [covidVaccineStatusForm]="covidVaccineStatusForm">
+          </app-covid-vaccination-status>
+        </div>
+      </z-accordion-content>
+    </z-accordion-item>
 
-  <mat-expansion-panel
-    *ngIf="hideAll === true || showANCVisit === true || showNCDCare">
-    <mat-expansion-panel-header>
-      <h5>
-        {{ current_language_set?.nurseData?.adherenceDetails?.adherence }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-patient-adherence
-      [mode]="mode"
-      [patientAdherenceForm]="patientAdherenceForm"></app-patient-adherence>
-  </mat-expansion-panel>
+    <!-- Chief Complaints Section -->
+    <z-accordion-item
+      zValue="chief-complaints"
+      *ngIf="hideAll || showANCVisit || showNcdScreeningVisit || showPNC"
+      class="border border-gray-100 rounded-[2rem] overflow-hidden shadow-sm bg-white transition-all duration-500 hover:shadow-md border-l-4 border-l-amber-400">
+      <z-accordion-trigger class="px-8 py-6 hover:bg-amber-50/10">
+        <div class="flex items-center gap-4">
+          <div class="p-3 bg-amber-50 rounded-2xl">
+            <lucide-icon
+              name="message-square"
+              class="size-5 text-amber-600"></lucide-icon>
+          </div>
+          <div class="text-left">
+            <span
+              class="block font-black text-gray-900 uppercase tracking-widest text-xs">
+              {{
+                current_language_set?.nurseData?.chiefComplaintsDetails
+                  ?.chiefComplaints
+              }}
+            </span>
+            <span
+              class="text-[10px] text-gray-400 font-bold uppercase tracking-tight"
+              >Presenting Symptoms</span
+            >
+          </div>
+        </div>
+      </z-accordion-trigger>
+      <z-accordion-content class="px-8 pb-8">
+        <div class="pt-4 border-t border-gray-50">
+          <app-patient-chief-complaints
+            [mode]="mode"
+            [patientChiefComplaintsForm]="patientChiefComplaintsForm">
+          </app-patient-chief-complaints>
+        </div>
+      </z-accordion-content>
+    </z-accordion-item>
 
-  <mat-expansion-panel
-    *ngIf="hideAll === true || showANCVisit === true || showNCDCare">
-    <mat-expansion-panel-header>
-      <h5>
-        {{
-          current_language_set?.nurseData?.investigationsDetails?.investigations
-        }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-patient-investigations
-      [mode]="mode"
-      [patientInvestigationsForm]="
-        patientInvestigationsForm
-      "></app-patient-investigations>
-  </mat-expansion-panel>
-  <mat-expansion-panel *ngIf="hideAll === true || showCOVID">
-    <mat-expansion-panel-header>
-      <h5>
-        {{
-          current_language_set?.ExaminationData?.cancerScreeningExamination
-            ?.symptoms?.symptoms
-        }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-symptoms
-      [mode]="mode"
-      [patientCovidForm]="patientCovidForm"></app-symptoms>
-  </mat-expansion-panel>
-  <mat-expansion-panel *ngIf="hideAll === true || showCOVID">
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.contactHistory }}</h5>
-    </mat-expansion-panel-header>
-    <app-contact-history
-      [mode]="mode"
-      [patientCovidForm]="patientCovidForm"></app-contact-history>
-  </mat-expansion-panel>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header *ngIf="hideAll === true || showCOVID">
-      <h5>{{ current_language_set?.covid?.travelHistory }}</h5>
-    </mat-expansion-panel-header>
-    <app-travel-history
-      [mode]="mode"
-      [patientCovidForm]="patientCovidForm"></app-travel-history>
-  </mat-expansion-panel>
+    <!-- Adherence Section -->
+    <z-accordion-item
+      zValue="adherence"
+      *ngIf="hideAll || showANCVisit || showNCDCare"
+      class="border border-gray-100 rounded-[2rem] overflow-hidden shadow-sm bg-white transition-all duration-500 hover:shadow-md border-l-4 border-l-indigo-400">
+      <z-accordion-trigger class="px-8 py-6 hover:bg-indigo-50/10">
+        <div class="flex items-center gap-4">
+          <div class="p-3 bg-indigo-50 rounded-2xl">
+            <lucide-icon
+              name="check-circle"
+              class="size-5 text-indigo-600"></lucide-icon>
+          </div>
+          <div class="text-left">
+            <span
+              class="block font-black text-gray-900 uppercase tracking-widest text-xs">
+              {{ current_language_set?.nurseData?.adherenceDetails?.adherence }}
+            </span>
+            <span
+              class="text-[10px] text-gray-400 font-bold uppercase tracking-tight"
+              >Treatment Compliance</span
+            >
+          </div>
+        </div>
+      </z-accordion-trigger>
+      <z-accordion-content class="px-8 pb-8">
+        <div class="pt-4 border-t border-gray-50">
+          <app-patient-adherence
+            [mode]="mode"
+            [patientAdherenceForm]="patientAdherenceForm">
+          </app-patient-adherence>
+        </div>
+      </z-accordion-content>
+    </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header *ngIf="visitCategory">
-      <h5>
-        {{ current_language_set?.nurseData?.visitDetailsForm?.uploadFiles }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-patient-upload-files
-      [mode]="mode"
-      [enableFileSelection]="enableFileSelection"
-      [patientFileUploadDetailsForm]="
-        patientFileUploadDetailsForm
-      "></app-patient-upload-files>
-  </mat-expansion-panel>
+    <!-- Investigations Section -->
+    <z-accordion-item
+      zValue="investigations"
+      *ngIf="hideAll || showANCVisit || showNCDCare"
+      class="border border-gray-100 rounded-[2rem] overflow-hidden shadow-sm bg-white transition-all duration-500 hover:shadow-md border-l-4 border-l-rose-400">
+      <z-accordion-trigger class="px-8 py-6 hover:bg-rose-50/10">
+        <div class="flex items-center gap-4">
+          <div class="p-3 bg-rose-50 rounded-2xl">
+            <lucide-icon
+              name="flask-conical"
+              class="size-5 text-rose-600"></lucide-icon>
+          </div>
+          <div class="text-left">
+            <span
+              class="block font-black text-gray-900 uppercase tracking-widest text-xs">
+              {{
+                current_language_set?.nurseData?.investigationsDetails
+                  ?.investigations
+              }}
+            </span>
+            <span
+              class="text-[10px] text-gray-400 font-bold uppercase tracking-tight"
+              >Laboratory Tests</span
+            >
+          </div>
+        </div>
+      </z-accordion-trigger>
+      <z-accordion-content class="px-8 pb-8">
+        <div class="pt-4 border-t border-gray-50">
+          <app-patient-investigations
+            [mode]="mode"
+            [patientInvestigationsForm]="patientInvestigationsForm">
+          </app-patient-investigations>
+        </div>
+      </z-accordion-content>
+    </z-accordion-item>
 
-  <mat-expansion-panel
-    *ngIf="hideAll === true || showNcdScreeningVisit === true">
-    <mat-expansion-panel-header>
-      <h5>
-        {{
-          current_language_set?.nurseData?.visitDetailsForm?.diseaseConfirmation
-        }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-diseaseconfirmation
-      [mode]="mode"
-      [diseaseFormsGroup]="patientDiseaseForm"></app-diseaseconfirmation>
-  </mat-expansion-panel>
-</mat-accordion>
+    <!-- Symptoms Section -->
+    <z-accordion-item
+      zValue="symptoms"
+      *ngIf="hideAll || showCOVID"
+      class="border border-gray-100 rounded-[2rem] overflow-hidden shadow-sm bg-white transition-all duration-500 hover:shadow-md border-l-4 border-l-orange-400">
+      <z-accordion-trigger class="px-8 py-6 hover:bg-orange-50/10">
+        <div class="flex items-center gap-4">
+          <div class="p-3 bg-orange-50 rounded-2xl">
+            <lucide-icon
+              name="activity"
+              class="size-5 text-orange-600"></lucide-icon>
+          </div>
+          <div class="text-left">
+            <span
+              class="block font-black text-gray-900 uppercase tracking-widest text-xs">
+              {{
+                current_language_set?.ExaminationData
+                  ?.cancerScreeningExamination?.symptoms?.symptoms
+              }}
+            </span>
+            <span
+              class="text-[10px] text-gray-400 font-bold uppercase tracking-tight"
+              >Clinical Signs</span
+            >
+          </div>
+        </div>
+      </z-accordion-trigger>
+      <z-accordion-content class="px-8 pb-8">
+        <div class="pt-4 border-t border-gray-50">
+          <app-symptoms [mode]="mode" [patientCovidForm]="patientCovidForm">
+          </app-symptoms>
+        </div>
+      </z-accordion-content>
+    </z-accordion-item>
+
+    <!-- Contact History Section -->
+    <z-accordion-item
+      zValue="contact-history"
+      *ngIf="hideAll || showCOVID"
+      class="border border-gray-100 rounded-[2rem] overflow-hidden shadow-sm bg-white transition-all duration-500 hover:shadow-md border-l-4 border-l-cyan-400">
+      <z-accordion-trigger class="px-8 py-6 hover:bg-cyan-50/10">
+        <div class="flex items-center gap-4">
+          <div class="p-3 bg-cyan-50 rounded-2xl">
+            <lucide-icon
+              name="users"
+              class="size-5 text-cyan-600"></lucide-icon>
+          </div>
+          <div class="text-left">
+            <span
+              class="block font-black text-gray-900 uppercase tracking-widest text-xs"
+              >{{ current_language_set?.contactHistory }}</span
+            >
+            <span
+              class="text-[10px] text-gray-400 font-bold uppercase tracking-tight"
+              >Social Exposure Record</span
+            >
+          </div>
+        </div>
+      </z-accordion-trigger>
+      <z-accordion-content class="px-8 pb-8">
+        <div class="pt-4 border-t border-gray-50">
+          <app-contact-history
+            [mode]="mode"
+            [patientCovidForm]="patientCovidForm">
+          </app-contact-history>
+        </div>
+      </z-accordion-content>
+    </z-accordion-item>
+
+    <!-- Travel History Section -->
+    <z-accordion-item
+      zValue="travel-history"
+      *ngIf="hideAll || showCOVID"
+      class="border border-gray-100 rounded-[2rem] overflow-hidden shadow-sm bg-white transition-all duration-500 hover:shadow-md border-l-4 border-l-sky-400">
+      <z-accordion-trigger class="px-8 py-6 hover:bg-sky-50/10">
+        <div class="flex items-center gap-4">
+          <div class="p-3 bg-sky-50 rounded-2xl">
+            <lucide-icon name="plane" class="size-5 text-sky-600"></lucide-icon>
+          </div>
+          <div class="text-left">
+            <span
+              class="block font-black text-gray-900 uppercase tracking-widest text-xs"
+              >{{ current_language_set?.covid?.travelHistory }}</span
+            >
+            <span
+              class="text-[10px] text-gray-400 font-bold uppercase tracking-tight"
+              >Geographic Exposure</span
+            >
+          </div>
+        </div>
+      </z-accordion-trigger>
+      <z-accordion-content class="px-8 pb-8">
+        <div class="pt-4 border-t border-gray-50">
+          <app-travel-history
+            [mode]="mode"
+            [patientCovidForm]="patientCovidForm">
+          </app-travel-history>
+        </div>
+      </z-accordion-content>
+    </z-accordion-item>
+
+    <!-- Upload Files Section -->
+    <z-accordion-item
+      zValue="upload-files"
+      *ngIf="visitCategory"
+      class="border border-gray-100 rounded-[2rem] overflow-hidden shadow-sm bg-white transition-all duration-500 hover:shadow-md border-l-4 border-l-violet-400">
+      <z-accordion-trigger class="px-8 py-6 hover:bg-violet-50/10">
+        <div class="flex items-center gap-4">
+          <div class="p-3 bg-violet-50 rounded-2xl">
+            <lucide-icon
+              name="upload-cloud"
+              class="size-5 text-violet-600"></lucide-icon>
+          </div>
+          <div class="text-left">
+            <span
+              class="block font-black text-gray-900 uppercase tracking-widest text-xs">
+              {{
+                current_language_set?.nurseData?.visitDetailsForm?.uploadFiles
+              }}
+            </span>
+            <span
+              class="text-[10px] text-gray-400 font-bold uppercase tracking-tight"
+              >Supporting Documents</span
+            >
+          </div>
+        </div>
+      </z-accordion-trigger>
+      <z-accordion-content class="px-8 pb-8">
+        <div class="pt-4 border-t border-gray-50">
+          <app-patient-upload-files
+            [mode]="mode"
+            [enableFileSelection]="enableFileSelection"
+            [patientFileUploadDetailsForm]="patientFileUploadDetailsForm">
+          </app-patient-upload-files>
+        </div>
+      </z-accordion-content>
+    </z-accordion-item>
+
+    <!-- Disease Confirmation Section -->
+    <z-accordion-item
+      zValue="disease-confirmation"
+      *ngIf="hideAll || showNcdScreeningVisit"
+      class="border border-gray-100 rounded-[2rem] overflow-hidden shadow-sm bg-white transition-all duration-500 hover:shadow-md border-l-4 border-l-teal-400">
+      <z-accordion-trigger class="px-8 py-6 hover:bg-teal-50/10">
+        <div class="flex items-center gap-4">
+          <div class="p-3 bg-teal-50 rounded-2xl">
+            <lucide-icon
+              name="stethoscope"
+              class="size-5 text-teal-600"></lucide-icon>
+          </div>
+          <div class="text-left">
+            <span
+              class="block font-black text-gray-900 uppercase tracking-widest text-xs">
+              {{
+                current_language_set?.nurseData?.visitDetailsForm
+                  ?.diseaseConfirmation
+              }}
+            </span>
+            <span
+              class="text-[10px] text-gray-400 font-bold uppercase tracking-tight"
+              >Clinical Validation</span
+            >
+          </div>
+        </div>
+      </z-accordion-trigger>
+      <z-accordion-content class="px-8 pb-8">
+        <div class="pt-4 border-t border-gray-50">
+          <app-diseaseconfirmation
+            [mode]="mode"
+            [diseaseFormsGroup]="patientDiseaseForm">
+          </app-diseaseconfirmation>
+        </div>
+      </z-accordion-content>
+    </z-accordion-item>
+  </z-accordion>
+</div>

@@ -1,133 +1,151 @@
-<div [formGroup]="cancerPatientFamilyMedicalHistoryForm">
-  <div class="m-t-10">
-    <div class="col-12" style="text-align: right">
-      <span class="font-history-label m-t-10">{{
-        currentLanguageSet?.alerts?.info?.familyDisease
+<div [formGroup]="cancerPatientFamilyMedicalHistoryForm" class="space-y-6">
+  <!-- Header with History Button -->
+  <div
+    class="flex items-center justify-between bg-zinc-50/50 p-3 rounded-lg border border-zinc-100">
+    <span class="text-sm font-medium text-zinc-600">
+      {{ currentLanguageSet?.alerts?.info?.familyDisease }}
+    </span>
+    <button
+      z-button
+      variant="ghost"
+      size="sm"
+      zTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+      id="previousCancerFamilyHistory"
+      (click)="getPreviousCancerFamilyHistory()"
+      class="text-blue-600 hover:text-blue-700 hover:bg-blue-50/50 rounded-xl px-4">
+      <lucide-icon name="history" class="mr-2 size-4"></lucide-icon>
+      <span class="text-xs font-bold uppercase tracking-wider">{{
+        currentLanguageSet?.DurationData?.previousDetails
       }}</span>
-      <button
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        class="mat_icon_blue"
-        color="primary"
-        id="previousCancerFamilyHistory"
-        (click)="getPreviousCancerFamilyHistory()">
-        <mat-icon class="md-18">history</mat-icon>
-      </button>
-    </div>
+    </button>
   </div>
-  <div class="m-t-10 col-12" formArrayName="diseases">
+
+  <!-- Disease Form Array -->
+  <div formArrayName="diseases" class="grid grid-cols-1 gap-6">
     <div
-      class="multi_row_select"
-      style="margin: 15px 0px 15px 0px; background-color: #f0f5f5"
-      *ngFor="
-        let disease of getDiseases();
-        let i = index;
-        let isLast = last;
-        let isOdd = odd
-      "
-      [ngClass]="{ odd: !isOdd }">
-      <div [formGroupName]="i" class="col-12 row">
-        <div class="col-3 box">
-          <mat-form-field class="input-full-width">
-            <mat-label>{{
-              currentLanguageSet?.historyData?.cancerScreeningHistory
-                ?.familyMedical?.diseaseType
-            }}</mat-label>
-            <mat-select
-              class="input-full-width"
-              name="cancerDiseaseType"
+      *ngFor="let disease of getDiseases(); let i = index; let isLast = last"
+      [formGroupName]="i"
+      class="group relative bg-white rounded-[2rem] border border-gray-100 p-8 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500">
+      <div class="grid grid-cols-12 gap-8 items-start">
+        <!-- Disease Type Select -->
+        <div class="col-span-12 md:col-span-4 lg:col-span-4">
+          <z-form-field>
+            <z-label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block">
+              {{
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.familyMedical?.diseaseType
+              }}
+            </z-label>
+            <z-select
               formControlName="cancerDiseaseType"
+              class="w-full"
               (selectionChange)="
                 filterFamilyMember(disease.value?.cancerDiseaseType, i, disease)
               ">
-              <mat-option
+              <z-select-option
                 *ngFor="let cancerDisease of temp[i]?.diseaseType"
-                [value]="cancerDisease">
+                [zValue]="cancerDisease">
                 {{ cancerDisease.cancerDiseaseType }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+              </z-select-option>
+            </z-select>
+          </z-form-field>
         </div>
 
+        <!-- Other Cancer Details (Conditional) -->
         <div
-          class="col-3 box"
+          class="col-span-12 md:col-span-4 lg:col-span-4"
           *ngIf="
             disease.value?.cancerDiseaseType?.cancerDiseaseType ===
             'Any other Cancer'
           ">
-          <mat-form-field class="input-full-width">
-            <mat-label>{{
-              currentLanguageSet?.historyData?.cancerScreeningHistory
-                ?.familyMedical?.otherCancerDetails
-            }}</mat-label>
+          <z-form-field>
+            <z-label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block">
+              {{
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.familyMedical?.otherCancerDetails
+              }}
+            </z-label>
             <input
-              autocomplete="off"
-              matInput
-              appDefaultNull
-              name="otherDiseaseType"
+              z-input
               formControlName="otherDiseaseType"
+              [placeholder]="
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.familyMedical?.otherCancerDetails
+              "
+              appDefaultNull
               allowText="alphaspace"
+              class="w-full"
               maxlength="25" />
-          </mat-form-field>
+          </z-form-field>
         </div>
 
-        <div class="col-3 box" [hidden]="true">
-          <mat-form-field class="input-full-width">
-            <mat-label>{{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
-                ?.sctCode
-            }}</mat-label>
-            <input
-              maxlength="100"
-              matInput
-              formControlName="snomedCode"
-              readonly />
-          </mat-form-field>
-        </div>
-
-        <div class="col-3 box">
-          <mat-form-field class="input-full-width">
-            <mat-label>{{
-              currentLanguageSet?.historyData?.cancerScreeningHistory
-                ?.familyMedical?.familyMembers
-            }}</mat-label>
-            <mat-select
-              class="input-full-width"
+        <!-- Family Members Multi-Select -->
+        <div
+          class="col-span-12"
+          [ngClass]="{
+            'md:col-span-6 lg:col-span-6':
+              disease.value?.cancerDiseaseType?.cancerDiseaseType ===
+              'Any other Cancer',
+            'md:col-span-7 lg:col-span-7':
+              disease.value?.cancerDiseaseType?.cancerDiseaseType !==
+              'Any other Cancer',
+          }">
+          <z-form-field>
+            <z-label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block">
+              {{
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.familyMedical?.familyMembers
+              }}
+            </z-label>
+            <z-select
               multiple
-              name="familyMemberList"
               formControlName="familyMemberList"
-              #memberSelect>
-              <mat-option
+              class="w-full">
+              <z-select-option
                 *ngFor="let familyMembers of temp[i]?.familyMembers"
-                [value]="familyMembers.benRelationshipType">
+                [zValue]="familyMembers.benRelationshipType">
                 {{ familyMembers.benRelationshipType }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+              </z-select-option>
+            </z-select>
+          </z-form-field>
         </div>
 
-        <div class="col-3 box action-btn-container" style="text-align: end">
+        <!-- Actions -->
+        <div
+          class="col-span-12 lg:col-span-1 flex items-center justify-end gap-3 pt-6">
           <button
-            md-mini-fab
-            id="removeDisease"
-            style="margin-right: 5px"
-            class="mat_warn_circle"
             *ngIf="i !== 0 || (i === 0 && !disease.untouched)"
+            z-button
+            variant="ghost"
+            size="icon"
+            id="removeDisease"
             (click)="removeDisease(i, disease)"
-            color="warn">
-            <span class="material-icons">close</span>
+            class="size-10 rounded-xl text-rose-500 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+            title="Remove">
+            <lucide-icon name="trash-2" class="size-5"></lucide-icon>
           </button>
+
           <button
-            md-mini-fab
             *ngIf="isLast"
+            z-button
+            variant="ghost"
+            size="icon"
             id="addFamilyDisease"
             (click)="addFamilyDisease()"
-            color="primary"
-            class="mat_blue_circle"
-            [disabled]="checkValidity(disease)">
-            <span class="material-icons">add</span>
+            [disabled]="checkValidity(disease)"
+            class="size-10 rounded-xl text-blue-600 hover:text-blue-700 hover:bg-blue-50 transition-colors"
+            title="Add More">
+            <lucide-icon name="plus" class="size-5"></lucide-icon>
           </button>
         </div>
+      </div>
+
+      <!-- Hidden SNOMED Code Field -->
+      <div [hidden]="true">
+        <input formControlName="snomedCode" readonly />
       </div>
     </div>
   </div>

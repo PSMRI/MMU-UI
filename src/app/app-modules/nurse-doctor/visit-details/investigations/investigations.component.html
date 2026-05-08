@@ -1,21 +1,60 @@
-<div class="row m-t-20" [formGroup]="patientInvestigationsForm">
-  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 box">
-    <mat-form-field class="input-full-width">
-      <mat-label>{{
-        currentLanguageSet?.nurseData?.investigationsDetails?.laboratory
-      }}</mat-label>
-      <mat-select
-        multiple
-        name="laboratoryList"
+<div
+  class="pt-6 animate-in fade-in slide-in-from-bottom-4 duration-700"
+  [formGroup]="patientInvestigationsForm">
+  <div class="max-w-3xl space-y-6">
+    <div class="flex items-center gap-3">
+      <div class="p-2 bg-rose-100 rounded-lg shadow-sm">
+        <lucide-icon
+          name="flask-conical"
+          class="size-4 text-rose-600"></lucide-icon>
+      </div>
+      <div class="text-left">
+        <z-form-label
+          class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
+          {{ currentLanguageSet?.nurseData?.investigationsDetails?.laboratory }}
+        </z-form-label>
+        <span
+          class="text-[10px] text-gray-400 font-bold uppercase tracking-tight"
+          >Select required diagnostic procedures</span
+        >
+      </div>
+    </div>
+
+    <z-form-field>
+      <z-select
+        zMultiple="true"
         formControlName="laboratoryList"
-        (selectionChange)="checkTestName($event)">
-        <mat-option
+        (zSelectionChange)="checkTestName($event)"
+        [zPlaceholder]="'Add tests to investigation list...'"
+        class="min-h-14 bg-white border-gray-200 rounded-[1.5rem] shadow-sm font-black text-sm">
+        <z-select-item
           *ngFor="let laboratary of selectLabTest"
-          [value]="laboratary"
-          [disabled]="canDisable(laboratary)">
-          {{ laboratary.procedureName }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+          [zValue]="laboratary"
+          [zDisabled]="canDisable(laboratary)"
+          class="font-medium hover:bg-rose-50 transition-colors">
+          <div class="flex items-center gap-2">
+            <div class="h-1.5 w-1.5 rounded-full bg-rose-400"></div>
+            {{ laboratary.procedureName }}
+          </div>
+        </z-select-item>
+      </z-select>
+    </z-form-field>
+
+    <div
+      class="bg-gray-50/50 p-6 rounded-[2rem] border border-gray-100 mt-8"
+      *ngIf="laboratoryList.value?.length > 0">
+      <h4
+        class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">
+        Selected Investigations
+      </h4>
+      <div class="flex flex-wrap gap-2">
+        <span
+          *ngFor="let test of laboratoryList.value"
+          class="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-full text-xs font-bold shadow-sm flex items-center gap-2 animate-in zoom-in duration-300">
+          <div class="h-1.5 w-1.5 rounded-full bg-rose-500"></div>
+          {{ test.procedureName }}
+        </span>
+      </div>
+    </div>
   </div>
 </div>

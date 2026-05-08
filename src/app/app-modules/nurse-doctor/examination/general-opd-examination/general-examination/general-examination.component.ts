@@ -26,10 +26,12 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { ZardInputImports } from '@/components/ui/input/input.imports';
 import { NgFor, NgIf } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
   selector: 'app-nurse-general-examination',
@@ -37,13 +39,12 @@ import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
   styleUrls: ['./general-examination.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatSelect,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardInputImports,
     NgFor,
-    MatOption,
-    MatRadioGroup,
-    MatRadioButton,
     NgIf,
   ],
 })

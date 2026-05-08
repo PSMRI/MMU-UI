@@ -39,30 +39,13 @@ import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary
 import { CancerUtils } from '../../../shared/utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardTableImports } from '@/components/ui/table/table.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
 import { NgIf } from '@angular/common';
-import { MatFormField, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
-import {
-  MatButtonToggleGroup,
-  MatButtonToggle,
-} from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-doctor-signs-and-symptoms',
@@ -70,25 +53,12 @@ import {
   styleUrls: ['./signs-and-symptoms.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatRadioGroup,
-    MatRadioButton,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardTableImports,
+    ZardLabelImports,
     NgIf,
-    MatFormField,
-    MatLabel,
-    MatInput,
     StringValidatorDirective,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatButtonToggleGroup,
-    MatButtonToggle,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
   ],
 })
 export class SignsAndSymptomsComponent implements OnInit, DoCheck, OnDestroy {
@@ -101,16 +71,6 @@ export class SignsAndSymptomsComponent implements OnInit, DoCheck, OnDestroy {
   languageComponent!: SetLanguageComponent;
 
   currentLanguageSet: any;
-  displayedColumns: any = [
-    'left',
-    'mobility_left',
-    'lymphnodes',
-    'mobility_right',
-    'right',
-  ];
-
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
 
   constructor(
     private fb: FormBuilder,
@@ -127,13 +87,6 @@ export class SignsAndSymptomsComponent implements OnInit, DoCheck, OnDestroy {
 
   ngOnDestroy() {
     if (this.beneficiaryDetailsSubs) this.beneficiaryDetailsSubs.unsubscribe();
-  }
-
-  getLymphNodes(): AbstractControl[] | null {
-    const lymphNodesControl = this.signsForm.get('lymphNodes');
-    return lymphNodesControl instanceof FormArray
-      ? lymphNodesControl.controls
-      : null;
   }
 
   beneficiaryDetailsSubs: any;
@@ -174,13 +127,6 @@ export class SignsAndSymptomsComponent implements OnInit, DoCheck, OnDestroy {
         ).lymphNodesArray.map(item => item),
       });
     }
-    const lymphNodesControl = this.signsForm.get('lymphNodes');
-    let LymphNodesdata: any = [];
-    LymphNodesdata =
-      lymphNodesControl instanceof FormArray
-        ? lymphNodesControl.controls
-        : null;
-    this.dataSource.data = LymphNodesdata;
   }
 
   get observation() {
@@ -192,7 +138,7 @@ export class SignsAndSymptomsComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   get lymphNodes() {
-    return this.signsForm.controls['lymphNodes'].value;
+    return this.signsForm.controls['lymphNodes'] as FormArray;
   }
 
   //BU40088124 12/10/2021 Integrating Multilingual Functionality --Start--

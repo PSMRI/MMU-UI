@@ -21,18 +21,27 @@
  */
 
 import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { BeneficiaryDetailsService } from '../../services/beneficiary-details.service';
-import { HttpServiceService } from '../../services/http-service.service';
-import { SetLanguageComponent } from '../set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { NgIf, DatePipe } from '@angular/common';
+import { Router, ActivatedRoute } from '@angular/router';
+import {
+  LucideAngularModule,
+  User,
+  Phone,
+  Calendar,
+  MapPin,
+  Info,
+} from 'lucide-angular';
+import { HttpServiceService } from '../../services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { BeneficiaryDetailsService } from '../../services/beneficiary-details.service';
+import { SetLanguageComponent } from '../set-language.component';
 
 @Component({
   selector: 'app-beneficiary-details',
   templateUrl: './beneficiary-details.component.html',
   styleUrls: ['./beneficiary-details.component.css'],
-  imports: [NgIf, DatePipe],
+  standalone: true,
+  imports: [LucideAngularModule, NgIf, DatePipe],
 })
 export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
   beneficiary: any;

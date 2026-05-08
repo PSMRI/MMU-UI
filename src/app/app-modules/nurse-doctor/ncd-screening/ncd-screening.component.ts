@@ -38,6 +38,18 @@ import {
   DoctorService,
 } from '../shared/services';
 import { NCDScreeningUtils } from '../shared/utility';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideHistory,
+  lucideSearch,
+  lucideScale,
+  lucideShieldAlert,
+  lucideHeart,
+  lucideActivity,
+  lucideClipboardList,
+  lucideTrash2,
+  lucidePlus,
+} from '@ng-icons/lucide';
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
@@ -76,11 +88,24 @@ import {
   MatDatepicker,
 } from '@angular/material/datepicker';
 import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import {
+  ZardFormImports,
+  ZardRadioImports,
+  ZardSelectImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+  ZardAccordionImports,
+  ZardDatePickerImports,
+} from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-nurse-ncd-screening',
   templateUrl: './ncd-screening.component.html',
   styleUrls: ['./ncd-screening.component.css'],
+  standalone: true,
   providers: [
     {
       provide: MAT_DATE_LOCALE,
@@ -105,28 +130,36 @@ import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
         },
       },
     },
+    provideIcons({
+      lucideHistory,
+      lucideSearch,
+      lucideScale,
+      lucideShieldAlert,
+      lucideHeart,
+      lucideActivity,
+      lucideClipboardList,
+      lucideTrash2,
+      lucidePlus,
+    }),
   ],
   imports: [
     ReactiveFormsModule,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
-    MatFormField,
-    MatLabel,
-    MatSelect,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    ZardAccordionImports,
+    ZardDatePickerImports,
+    NgIf,
     NgFor,
-    MatOption,
-    MatInput,
+    NgClass,
     StringValidatorDirective,
     NumberValidatorDirective,
-    MatSuffix,
-    MatTooltip,
-    NgIf,
-    NgClass,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-    MatDatepicker,
-    MatRadioGroup,
-    MatRadioButton,
+    NgIcon,
+    LucideAngularModule,
   ],
 })
 export class NcdScreeningComponent

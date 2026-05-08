@@ -1,1476 +1,602 @@
-<div class="container">
-  <div class="row col-xs-12">
-    <h2 class="text-center">{{ currentLanguageSet?.common?.history }}</h2>
-    <hr />
-  </div>
-  <!--Past Illness Starts-->
-  <div class="row m-t-10" *ngIf="visitCategory !== 'NCD screening'">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.pastIllnessDataANC_OPD_NCD_PNC?.pastIllness
-        }}:
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered table-striped casesheet-table"
-        aria-describedby="PastIllnessStartsTbl">
-        <thead>
-          <tr>
-            <th id="serialNo">{{ currentLanguageSet?.casesheet?.serialNo }}</th>
-            <th id="illness">
-              {{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.pastIllnessDataANC_OPD_NCD_PNC?.illness
-              }}
-            </th>
-            <th id="duration">
-              {{ currentLanguageSet?.DurationData?.duration }}
-            </th>
-            <th id="unitOfDuration">
-              {{ currentLanguageSet?.DurationData?.durationUnit }}
-            </th>
-          </tr>
-        </thead>
-        <tbody *ngIf="!pastIllnessList">
-          <tr>
-            <td class="text-center" colspan="4">
-              {{ currentLanguageSet?.casesheet?.noRecordFound }}
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="pastIllnessList">
-          <tr *ngFor="let pastIllness of pastIllnessList; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ pastIllness.illnessType }}</td>
-            <td>{{ pastIllness.timePeriodAgo }}</td>
-            <td>
-              {{
-                pastIllness.timePeriodUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : pastIllness.timePeriodUnit === 'Days'
-                    ? 'Day(s)'
-                    : pastIllness.timePeriodUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : pastIllness.timePeriodUnit === 'Months'
-                        ? 'Month(s)'
-                        : pastIllness.timePeriodUnit === 'Years'
-                          ? 'Year(s)'
-                          : pastIllness.timePeriodUnit
-              }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <!--Past Illness ends-->
-
-  <!--Past Surgery Starts-->
-  <div class="row m-t-10" *ngIf="visitCategory !== 'NCD screening'">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.pastSurgery }}:</h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered table-striped casesheet-table"
-        aria-describedby="PastSurgeryTbl">
-        <thead>
-          <tr>
-            <th id="serialNo">{{ currentLanguageSet?.casesheet?.serialNo }}</th>
-            <th id="surgery">{{ currentLanguageSet?.common?.surgery }}</th>
-            <th id="duration">
-              {{ currentLanguageSet?.DurationData?.duration }}
-            </th>
-            <th id="unitOfDuration">
-              {{ currentLanguageSet?.DurationData?.durationUnit }}
-            </th>
-          </tr>
-        </thead>
-        <tbody *ngIf="!pastSurgeryList">
-          <tr>
-            <td class="text-center" colspan="4">
-              {{ currentLanguageSet?.casesheet?.noRecordFound }}
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="pastSurgeryList">
-          <tr *ngFor="let pastSurgery of pastSurgeryList; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ pastSurgery.surgeryType }}</td>
-            <td>{{ pastSurgery.timePeriodAgo }}</td>
-            <td>
-              {{
-                pastSurgery.timePeriodUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : pastSurgery.timePeriodUnit === 'Days'
-                    ? 'Day(s)'
-                    : pastSurgery.timePeriodUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : pastSurgery.timePeriodUnit === 'Months'
-                        ? 'Month(s)'
-                        : pastSurgery.timePeriodUnit === 'Years'
-                          ? 'Year(s)'
-                          : pastSurgery.timePeriodUnit
-              }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <!--Past Surgery Ends-->
-
-  <!--Family History Starts-->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.familyHistoryDataANC_OPD_NCD_PNC?.familyHistory
-        }}:
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered table-striped"
-        aria-describedby="FamilyHistoryTbl">
-        <thead>
-          <tr>
-            <th style="width: 10%" id="serialNo">
-              {{ currentLanguageSet?.casesheet?.serialNo }}
-            </th>
-            <th style="width: 20%" id="disease">
-              {{ currentLanguageSet?.common?.disease }}
-            </th>
-            <th style="width: 40%" id="fMembers">
-              {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory
-                  ?.familyMedical?.familyMembers
-              }}
-            </th>
-          </tr>
-        </thead>
-        <tbody
-          *ngIf="
-            !familyHistory?.familyDiseaseList ||
-            familyHistory?.familyDiseaseList.length === 0
-          ">
-          <tr>
-            <td class="text-center" colspan="3">
-              {{ currentLanguageSet?.casesheet?.noRecordFound }}
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="familyHistory?.familyDiseaseList">
-          <tr
-            *ngFor="
-              let familyDisease of familyHistory?.familyDiseaseList;
-              let i = index
-            ">
-            <td>{{ i + 1 }}</td>
-            <td>{{ familyDisease.diseaseType }}</td>
-            <td>{{ familyDisease.familyMembers }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="col-xs-12 m-t-10" *ngIf="visitCategory !== 'NCD screening'">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="ancHistoryTbl">
-        <tr>
-          <th id="H_geneticDisorders">
-            {{
-              currentLanguageSet?.historyData?.ancHistory
-                ?.familyHistoryDataANC_OPD_NCD_PNC?.H_geneticDisorders
-            }}:
-          </th>
-          <td>
-            {{
-              familyHistory?.isGeneticDisorder === undefined
-                ? null
-                : familyHistory?.isGeneticDisorder
-                  ? 'Yes'
-                  : 'No'
-            }}
-          </td>
-          <th id="geneticDisorders">
-            {{
-              currentLanguageSet?.historyData?.ancHistory
-                ?.familyHistoryDataANC_OPD_NCD_PNC?.geneticDisorders
-            }}:
-          </th>
-          <td>{{ familyHistory?.geneticDisorder }}</td>
-        </tr>
-        <tr>
-          <th id="consanguineousMarriage">
-            {{
-              currentLanguageSet?.historyData?.ancHistory
-                ?.familyHistoryDataANC_OPD_NCD_PNC?.consanguineousMarriage
-            }}:
-          </th>
-          <td>
-            {{
-              familyHistory?.isConsanguineousMarrige === undefined
-                ? null
-                : familyHistory?.isConsanguineousMarrige
-                  ? 'Yes'
-                  : 'No'
-            }}
-          </td>
-          <td colspan="2"></td>
-        </tr>
-      </table>
-    </div>
-  </div>
-  <!--Family History Ends-->
-
-  <!--Child Optional Vaccine Starts-->
-  <div
-    class="row m-t-10"
-    *ngIf="
-      beneficiary &&
-      beneficiary?.ageVal <= 16 &&
-      visitCategory !== 'NCD screening'
-    ">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.childVaccine }}</h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered table-striped casesheet-table"
-        aria-describedby="ChildOptionalVaccineTbl">
-        <thead>
-          <tr>
-            <th id="serialNo">{{ currentLanguageSet?.casesheet?.serialNo }}</th>
-            <th id="vaccine">
-              {{
-                currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
-                  ?.vaccine
-              }}
-            </th>
-            <th id="otherVaccineName">
-              {{
-                currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
-                  ?.otherVaccineName
-              }}
-            </th>
-            <th id="ageatReceived">
-              {{
-                currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
-                  ?.ageatReceived
-              }}
-            </th>
-            <th id="facilityName">
-              {{
-                currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
-                  ?.facilityName
-              }}
-            </th>
-          </tr>
-        </thead>
-        <tbody
-          *ngIf="
-            !childOptionalVaccineList || childOptionalVaccineList.length === 0
-          ">
-          <tr>
-            <td class="text-center" colspan="6">
-              {{ currentLanguageSet?.casesheet?.noRecordFound }}
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="childOptionalVaccineList">
-          <tr
-            *ngFor="
-              let childOptionalVaccine of childOptionalVaccineList;
-              let i = index
-            ">
-            <td>{{ i + 1 }}</td>
-            <td>{{ childOptionalVaccine.vaccineName }}</td>
-            <td>{{ childOptionalVaccine.otherVaccineName }}</td>
-            <td>{{ childOptionalVaccine.actualReceivingAge }}</td>
-            <td>{{ childOptionalVaccine.receivedFacilityName }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <!--Child Optional Vaccine Ends-->
-
-  <!--Comorbid condition Starts-->
-  <div class="row m-t-10" *ngIf="visitCategory !== 'NCD screening'">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.ancHistory?.combordityANC_OPD_NCD_PNC
-            ?.comorbidConditions
-        }}:
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered table-striped casesheet-table"
-        aria-describedby="ComorbidconditionTbl">
-        <thead>
-          <tr>
-            <th id="serialNo">{{ currentLanguageSet?.casesheet?.serialNo }}</th>
-            <th id="comoridCond">
-              {{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.combordityANC_OPD_NCD_PNC?.comorbidConditions
-              }}
-            </th>
-            <th id="duration">
-              {{ currentLanguageSet?.DurationData?.duration }}
-            </th>
-            <th id="unitOfDuration">
-              {{ currentLanguageSet?.DurationData?.durationUnit }}
-            </th>
-          </tr>
-        </thead>
-        <tbody
-          *ngIf="!comorbidConditionList || comorbidConditionList.length === 0">
-          <tr>
-            <td class="text-center" colspan="4">
-              {{ currentLanguageSet?.casesheet?.noRecordFound }}
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="comorbidConditionList">
-          <tr
-            *ngFor="
-              let comorbidityConditions of comorbidConditionList;
-              let i = index
-            ">
-            <td>{{ i + 1 }}</td>
-            <td>{{ comorbidityConditions.comorbidCondition }}</td>
-            <td>{{ comorbidityConditions.timePeriodAgo }}</td>
-            <td>
-              {{
-                comorbidityConditions.timePeriodUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : comorbidityConditions.timePeriodUnit === 'Days'
-                    ? 'Day(s)'
-                    : comorbidityConditions.timePeriodUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : comorbidityConditions.timePeriodUnit === 'Months'
-                        ? 'Month(s)'
-                        : comorbidityConditions.timePeriodUnit === 'Years'
-                          ? 'Year(s)'
-                          : comorbidityConditions.timePeriodUnit
-              }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <!--Comorbid condition Ends-->
-
-  <!--Medication History Starts-->
-  <div class="row m-t-10" *ngIf="visitCategory !== 'NCD screening'">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.ancHistory?.medicationANC_OPD_NCD_PNC
-            ?.medicationHistory
-        }}:
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered table-striped casesheet-table"
-        aria-describedby="MedicationHistoryTbl">
-        <thead>
-          <tr>
-            <th id="serialNo">{{ currentLanguageSet?.casesheet?.serialNo }}</th>
-            <th id="medicationHistory">
-              {{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.medicationANC_OPD_NCD_PNC?.medicationHistory
-              }}
-            </th>
-            <th id="duration">
-              {{ currentLanguageSet?.DurationData?.duration }}
-            </th>
-            <th id="unitOfDuration">
-              {{ currentLanguageSet?.DurationData?.durationUnit }}
-            </th>
-          </tr>
-        </thead>
-        <tbody
-          *ngIf="!medicationHistoryList || medicationHistoryList.length === 0">
-          <tr>
-            <td class="text-center" colspan="4">
-              {{ currentLanguageSet?.casesheet?.noRecordFound }}
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="medicationHistoryList">
-          <tr
-            *ngFor="
-              let medicationHistory of medicationHistoryList;
-              let i = index
-            ">
-            <td>{{ i + 1 }}</td>
-            <td>{{ medicationHistory.currentMedication }}</td>
-            <td>{{ medicationHistory.timePeriodAgo }}</td>
-            <td>
-              {{
-                medicationHistory.timePeriodUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : medicationHistory.timePeriodUnit === 'Days'
-                    ? 'Day(s)'
-                    : medicationHistory.timePeriodUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : medicationHistory.timePeriodUnit === 'Months'
-                        ? 'Month(s)'
-                        : medicationHistory.timePeriodUnit === 'Years'
-                          ? 'Year(s)'
-                          : medicationHistory.timePeriodUnit
-              }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <!--Medication History Ends-->
-
-  <!--Menstrual History Starts-->
-  <div
-    class="row m-t-10"
-    *ngIf="
-      beneficiary &&
-      beneficiary?.ageVal >= 8 &&
-      beneficiary?.genderName !== 'Male' &&
-      visitCategory !== 'NCD screening'
-    ">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-            ?.menstrualHistory
-        }}:
-      </h4>
-    </div>
-
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="MenstrualHistoryTbl">
-        <tr>
-          <th id="menstrualCycleStatus">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-                ?.menstrualCycleStatus
-            }}:
-          </th>
-          <td>{{ menstrualHistory?.menstrualCycleStatus }}</td>
-          <th id="regularityofMenstrualCycle">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-                ?.regularityofMenstrualCycles
-            }}:
-          </th>
-          <td>{{ menstrualHistory?.regularity }}</td>
-        </tr>
-
-        <tr>
-          <th id="lengthofMenstrualCycle">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-                ?.lengthofMenstrualCycle
-            }}:
-          </th>
-          <td>{{ menstrualHistory?.cycleLength }}</td>
-          <th id="menstrualFlowduration">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-                ?.menstrualBloodFlowDuration
-            }}:
-          </th>
-          <td>{{ menstrualHistory?.bloodFlowDuration }}</td>
-        </tr>
-
-        <tr>
-          <th id="menstrualProblems">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-                ?.menstrualProblems
-            }}:
-          </th>
-          <td>{{ menstrualHistory?.problemName }}</td>
-          <th id="lastMenstrualPeriod">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-                ?.lastMenstrualPeriod
-            }}:
-          </th>
-          <td>{{ menstrualHistory?.lMPDate | date: 'dd/MM/yyyy' }}</td>
-        </tr>
-      </table>
-    </div>
-  </div>
-  <!--Menstrual History Ends-->
-
-  <!--Developmental History Starts-->
-  <div
-    class="row m-t-10"
-    *ngIf="
-      beneficiary &&
-      beneficiary?.ageVal <= 2 &&
-      visitCategory !== 'NCD screening'
-    ">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-            ?.developmentHistory
-        }}
-      </h4>
-    </div>
-
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="DevelopmentalHistoryTbl">
-        <tr>
-          <th id="grossMotorMilestone">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-                ?.grossMotorMilestone
-            }}:
-          </th>
-          <td>{{ developmentalHistory?.grossMotorMilestone }}</td>
-          <th id="fineMotorMilestone">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-                ?.fineMotorMilestone
-            }}:
-          </th>
-          <td>{{ developmentalHistory?.fineMotorMilestone }}</td>
-        </tr>
-
-        <tr>
-          <th id="socialMilestone">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-                ?.socialMilestone
-            }}:
-          </th>
-          <td>{{ developmentalHistory?.socialMilestone }}</td>
-          <th id="languageMilestone">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-                ?.languageMilestone
-            }}:
-          </th>
-          <td>{{ developmentalHistory?.languageMilestone }}</td>
-        </tr>
-
-        <tr>
-          <th id="developmentalProblems">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-                ?.developmentalProblems
-            }}:
-          </th>
-          <td>{{ developmentalHistory?.developmentProblem }}</td>
-          <td colspan="2"></td>
-        </tr>
-      </table>
-    </div>
-  </div>
-  <!--Developmental History Ends-->
-
-  <!--Feeding History Starts-->
-  <div
-    class="row m-t-10"
-    *ngIf="
-      beneficiary &&
-      beneficiary?.ageVal <= 6 &&
-      visitCategory !== 'NCD screening'
-    ">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
-            ?.feedingHistory
-        }}
-      </h4>
-    </div>
-
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="FeedingHistoryTbl">
-        <tr>
-          <th id="typeofFeeds">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
-                ?.typeofFeeds
-            }}:
-          </th>
-          <td>{{ feedingHistory?.typeOfFeed }}</td>
-          <th id="ageatweaning">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
-                ?.ageatweaning
-            }}:
-          </th>
-          <td>{{ feedingHistory?.compFeedStartAge }}</td>
-        </tr>
-
-        <tr>
-          <th id="numberofComplimentaryfoodservings">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
-                ?.numberofComplimentaryfoodservings
-            }}:
-          </th>
-          <td>{{ feedingHistory?.noOfCompFeedPerDay }}</td>
-          <th id="foodIntoleranceStatus">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
-                ?.foodIntoleranceStatus
-            }}:
-          </th>
-          <td>{{ feedingHistory?.foodIntoleranceStatus }}</td>
-        </tr>
-
-        <tr>
-          <th id="typeofFoodIntolerance">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
-                ?.typeofFoodIntolerance
-            }}:
-          </th>
-          <td>
-            {{
-              feedingHistory?.typeofFoodIntolerance === undefined
-                ? null
-                : feedingHistory?.typeofFoodIntolerance
-                  ? 'Yes'
-                  : 'No'
-            }}
-          </td>
-          <td></td>
-          <td></td>
-        </tr>
-      </table>
-    </div>
-  </div>
-  <!--Feeding History Ends-->
-
-  <!--Perinatal History Starts-->
-  <div
-    class="row m-t-10"
-    *ngIf="
-      beneficiary &&
-      beneficiary?.ageVal <= 1 &&
-      visitCategory !== 'NCD screening'
-    ">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
-            ?.perintalHistory
-        }}
-      </h4>
-    </div>
-
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="PerinatalHistoryTbl">
-        <tr>
-          <th id="placeofDelivery">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
-                ?.placeofDelivery
-            }}:
-          </th>
-          <td>{{ perinatalHistory?.placeOfDelivery }}</td>
-          <th id="typeofDelivery">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
-                ?.typeofDelivery
-            }}:
-          </th>
-          <td>{{ perinatalHistory?.typeOfDelivery }}</td>
-        </tr>
-
-        <tr>
-          <th id="complicationatBirth">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
-                ?.complicationatBirth
-            }}:
-          </th>
-          <td>{{ perinatalHistory?.complicationAtBirth }}</td>
-          <th id="gestation">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
-                ?.gestation
-            }}:
-          </th>
-          <td>{{ perinatalHistory?.gestation }}</td>
-        </tr>
-
-        <tr>
-          <th id="birthWeight">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
-                ?.birthWeight
-            }}:
-          </th>
-          <td>{{ perinatalHistory?.birthWeight_kg }}</td>
-          <td></td>
-          <td></td>
-        </tr>
-      </table>
-    </div>
-  </div>
-  <!--Perinatal History Ends-->
-
-  <!--Immunization History Starts-->
-  <div
-    class="row m-t-10"
-    *ngIf="
-      beneficiary &&
-      beneficiary?.ageVal <= 16 &&
-      visitCategory !== 'NCD screening'
-    ">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.immunization
-            ?.ImmunizationHistory
-        }}
-      </h4>
-    </div>
-
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered table-striped casesheet-table"
-        aria-describedby="ImmunizationHistoryTbl">
-        <thead>
-          <tr>
-            <th id="age">
-              {{
-                currentLanguageSet?.historyData?.opdNCDPNCHistory?.immunization
-                  ?.age
-              }}
-            </th>
-            <th id="Vaccines">
-              {{
-                currentLanguageSet?.historyData?.opdNCDPNCHistory?.immunization
-                  ?.Vaccines
-              }}
-            </th>
-            <th id="Status">
-              {{
-                currentLanguageSet?.historyData?.opdNCDPNCHistory?.immunization
-                  ?.Status
-              }}
-            </th>
-          </tr>
-        </thead>
-        <tbody
-          *ngIf="
-            !immunizationHistory ||
-            immunizationHistory?.immunizationList.length === 0
-          ">
-          <tr>
-            <td class="text-center" colspan="5">
-              {{ currentLanguageSet?.common?.noRecordFound }}
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="immunizationHistory">
-          <ng-container
-            *ngFor="let immunization of immunizationHistory?.immunizationList">
-            <tr>
-              <th
-                [attr.rowspan]="immunization.vaccines.length + 1"
-                id="defaultReceivingAge">
-                {{ immunization.defaultReceivingAge }}
-              </th>
-            </tr>
-            <tr *ngFor="let vaccine of immunization?.vaccines">
-              <td>{{ vaccine.vaccine }}</td>
-              <td>
-                <mat-checkbox
-                  [checked]="vaccine.status"
-                  disabled></mat-checkbox>
-              </td>
-            </tr>
-          </ng-container>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <!--Immunization History Ends-->
-
-  <!--Personal History Starts-->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.personalHistoryANC_OPD_NCD_PNC?.personalHistoryData
-        }}:
-      </h4>
-    </div>
-
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="PersonalHistoryTbl">
-        <tr>
-          <th id="dietaryType">
-            {{
-              currentLanguageSet?.historyData?.ancHistory
-                ?.personalHistoryANC_OPD_NCD_PNC?.dietaryType
-            }}:
-          </th>
-          <td>{{ personalHistory?.dietaryType }}</td>
-          <th id="physicalActivityType">
-            {{
-              currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                ?.physicalActivityType
-            }}:
-          </th>
-          <td>{{ personalHistory?.physicalActivityType }}</td>
-        </tr>
-
-        <tr *ngIf="beneficiary && beneficiary?.ageVal >= 18">
-          <th id="riskySexualPracticesStatus">
-            {{
-              currentLanguageSet?.historyData?.ancHistory
-                ?.personalHistoryANC_OPD_NCD_PNC?.riskySexualPracticesStatus
-            }}:
-          </th>
-
-          <td>
-            {{
-              personalHistory?.riskySexualPracticesStatus === undefined
-                ? null
-                : personalHistory?.riskySexualPracticesStatus
-                  ? 'Yes'
-                  : 'No'
-            }}
-          </td>
-          <td colspan="2"></td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="col-xs-12 m-t-10">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="allergicStatus">
-        <tbody>
-          <tr>
-            <th id="allergicStatus">
-              {{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus
-                  ?.allergicStatus
-              }}:
-            </th>
-            <td>{{ personalHistory?.allergyStatus }}</td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="col-xs-12 m-t-10">
-      <table
-        class="table table-bordered table-striped"
-        aria-describedby="personalHistory">
-        <thead>
-          <tr>
-            <th style="width: 5%" id="serialNo">
-              {{ currentLanguageSet?.casesheet?.serialNo }}
-            </th>
-            <th style="width: 10%" id="allergyType">
-              {{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus?.allergyType
-              }}
-            </th>
-            <th style="width: 20%" id="allergenName">
-              {{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus?.allergenName
-              }}
-            </th>
-            <th style="width: 35%" id="typeOfReaction">
-              {{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus
-                  ?.typeofReaction
-              }}
-            </th>
-          </tr>
-        </thead>
-        <tbody *ngIf="personalHistory?.allergicList?.length === 0">
-          <tr>
-            <td class="text-center" colspan="4">
-              {{ currentLanguageSet?.casesheet?.noRecordFound }}
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="personalHistory?.allergicList">
-          <tr
-            *ngFor="
-              let allergy of personalHistory?.allergicList;
-              let i = index
-            ">
-            <td>{{ i + 1 }}</td>
-            <td>{{ allergy.allergyType }}</td>
-            <td>{{ allergy.snomedTerm }}</td>
-            <td>{{ allergy.allergicReactionType }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div
-      class="col-xs-12 m-t-10"
-      *ngIf="beneficiary && beneficiary?.ageVal >= 13">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="tobaccoStatus">
-        <tbody>
-          <tr>
-            <th id="tobaccoUseStatus">
-              {{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData
-                  ?.tobaccoUseStatus
-              }}:
-            </th>
-            <td>{{ personalHistory?.tobaccoUseStatus }}</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div
-      class="col-xs-12 m-t-10"
-      *ngIf="beneficiary && beneficiary?.ageVal >= 13">
-      <table
-        class="table table-bordered table-striped"
-        aria-describedby="tobaccosage">
-        <thead>
-          <tr>
-            <th style="width: 5%" id="serialNo">
-              {{ currentLanguageSet?.casesheet?.serialNo }}
-            </th>
-            <th style="width: 20%" id="typeofTobaccoUse">
-              {{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData
-                  ?.typeofTobaccoUse
-              }}
-            </th>
-            <th style="width: 25%" id="numberPerDay">
-              {{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData?.numberPerDay
-              }}
-            </th>
-            <th style="width: 25%" id="duration1">
-              {{ currentLanguageSet?.DurationData?.duration }}
-            </th>
-            <th style="width: 25%" id="unitOfDuration1">
-              {{ currentLanguageSet?.DurationData?.durationUnit }}
-            </th>
-          </tr>
-        </thead>
-        <tbody *ngIf="personalHistory?.tobaccoList?.length === 0">
-          <tr>
-            <td class="text-center" colspan="5">
-              {{ currentLanguageSet?.casesheet?.noRecordFound }}
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="personalHistory?.tobaccoList">
-          <tr
-            *ngFor="let tobacco of personalHistory?.tobaccoList; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ tobacco.tobaccoUseType }}</td>
-            <td>{{ tobacco.numberperDay }}</td>
-            <td>{{ tobacco.duration }}</td>
-            <td>
-              {{
-                tobacco.durationUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : tobacco.durationUnit === 'Days'
-                    ? 'Day(s)'
-                    : tobacco.durationUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : tobacco.durationUnit === 'Months'
-                        ? 'Month(s)'
-                        : tobacco.durationUnit === 'Years'
-                          ? 'Year(s)'
-                          : tobacco.durationUnit
-              }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div
-      class="col-xs-12 m-t-10"
-      *ngIf="beneficiary && beneficiary?.ageVal >= 13">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="alcoholIntakeStatus">
-        <tbody>
-          <tr>
-            <th id="alcoholUseStatus">
-              {{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData
-                  ?.alcoholUseStatus
-              }}:
-            </th>
-            <td>{{ personalHistory?.alcoholIntakeStatus }}</td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div
-      class="col-xs-12 m-t-10"
-      *ngIf="beneficiary && beneficiary?.ageVal >= 13">
-      <table
-        class="table table-bordered table-striped"
-        aria-describedby="alcoholData">
-        <thead>
-          <tr>
-            <th style="width: 5%" id="serialNo">
-              {{ currentLanguageSet?.casesheet?.serialNo }}
-            </th>
-            <th style="width: 20%" id="typeofAlcohol3">
-              {{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.typeofAlcohol
-              }}
-            </th>
-            <th style="width: 25%" id="freqofAlcohol2">
-              {{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.freqofAlcohol
-              }}
-            </th>
-            <th style="width: 20%" id="qtyofAlcoholintake">
-              {{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData
-                  ?.qtyofAlcoholintake
-              }}
-            </th>
-            <th style="width: 15%" id="duration2">
-              {{ currentLanguageSet?.DurationData?.duration }}
-            </th>
-            <th style="width: 15%" id="unitOfDuration2">
-              {{ currentLanguageSet?.DurationData?.durationUnit }}
-            </th>
-          </tr>
-        </thead>
-        <tbody *ngIf="personalHistory?.alcoholList?.length === 0">
-          <tr>
-            <td class="text-center" colspan="6">
-              {{ currentLanguageSet?.casesheet?.noRecordFound }}
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="personalHistory?.alcoholList">
-          <tr
-            *ngFor="let alcohol of personalHistory?.alcoholList; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ alcohol.alcoholType }}</td>
-            <td>{{ alcohol.alcoholIntakeFrequency }}</td>
-            <td>{{ alcohol.avgAlcoholConsumption }}</td>
-            <td>{{ alcohol.duration }}</td>
-            <td>
-              {{
-                alcohol.durationUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : alcohol.durationUnit === 'Days'
-                    ? 'Day(s)'
-                    : alcohol.durationUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : alcohol.durationUnit === 'Months'
-                        ? 'Month(s)'
-                        : alcohol.durationUnit === 'Years'
-                          ? 'Year(s)'
-                          : alcohol.durationUnit
-              }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <!--Personal History Ends-->
-
-  <!--Female Obstetric History Starts-->
-  <div
-    class="row m-t-10"
-    *ngIf="
-      beneficiary &&
-      beneficiary?.ageVal >= 12 &&
-      beneficiary?.genderName !== 'Male' &&
-      !ANCDetailsAndFormula?.primiGravida &&
-      visitCategory !== 'NCD screening'
-    ">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.femaleObstetric }}:</h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-responsive table-bordered"
-        aria-describedby="FemaleObstetricHistoryTbl">
-        <tbody
-          *ngIf="
-            !femaleObstetricHistory?.femaleObstetricHistoryList ||
-            femaleObstetricHistory?.femaleObstetricHistoryList.length === 0
-          ">
-          <tr>
-            <td class="text-center" colspan="11">
-              {{ currentLanguageSet?.common?.noRecordFound }}
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="femaleObstetricHistory?.femaleObstetricHistoryList">
-          <ng-container
-            *ngFor="
-              let femaleObstetricHistory of femaleObstetricHistory?.femaleObstetricHistoryList;
-              let i = index
-            ">
-            <tr>
-              <th id="pregOrder">
-                {{ currentLanguageSet?.casesheet?.pregOrder }}:
-              </th>
-              <td>{{ femaleObstetricHistory.pregOrder }}</td>
-              <th id="pregComp">
-                {{ currentLanguageSet?.casesheet?.pregComp }}:
-              </th>
-              <td>{{ femaleObstetricHistory.pregComplicationType }}</td>
-            </tr>
-            <tr *ngIf="femaleObstetricHistory?.otherPregComplication">
-              <th colspan="2" id="otherPregComp">
-                {{ currentLanguageSet?.casesheet?.otherPregComp }}:
-              </th>
-              <td colspan="2">
-                {{ femaleObstetricHistory?.otherPregComplication }}
-              </td>
-            </tr>
-            <tr>
-              <th id="durationofPregnancy">
-                {{
-                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.durationofPregnancy
-                }}:
-              </th>
-              <td>{{ femaleObstetricHistory.durationType }}</td>
-              <th id="placeofDelivery">
-                {{
-                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.placeofDelivery
-                }}:
-              </th>
-              <td>{{ femaleObstetricHistory.deliveryPlace }}</td>
-            </tr>
-            <tr>
-              <th id="deliveryType">
-                {{
-                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.deliveryType
-                }}:
-              </th>
-              <td>{{ femaleObstetricHistory.deliveryType }}</td>
-              <th id="deliveryComplication">
-                {{
-                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.deliveryComplication
-                }}:
-              </th>
-              <td>{{ femaleObstetricHistory.deliveryComplicationType }}</td>
-            </tr>
-            <tr *ngIf="femaleObstetricHistory?.otherDeliveryComplication">
-              <th colspan="2" id="otherdeliverycomplication">
-                {{
-                  currentLanguageSet?.historyData?.obstetrichistory
-                    ?.otherdeliverycomplication
-                }}:
-              </th>
-              <td colspan="2">
-                {{ femaleObstetricHistory?.otherDeliveryComplication }}
-              </td>
-            </tr>
-            <tr>
-              <th id="PregOutcome">
-                {{
-                  currentLanguageSet?.historyData?.obstetrichistory
-                    ?.PregOutcome
-                }}:
-              </th>
-              <td>{{ femaleObstetricHistory.pregOutcome }}</td>
-              <th id="postpartumComplication">
-                {{
-                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.postpartumComplication
-                }}:
-              </th>
-              <td>{{ femaleObstetricHistory.postpartumComplicationType }}</td>
-            </tr>
-            <tr *ngIf="femaleObstetricHistory?.otherPostpartumCompType">
-              <th id="otherpostpartumcompType">
-                {{
-                  currentLanguageSet?.historyData?.obstetrichistory
-                    ?.otherpostpartumcompType
-                }}:
-              </th>
-              <td>
-                {{ femaleObstetricHistory?.otherPostpartumCompType }}
-              </td>
-            </tr>
-            <tr>
-              <th id="newBornComplication">
-                {{
-                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.newBornComplication
-                }}:
-              </th>
-              <td>{{ femaleObstetricHistory.newBornComplication }}</td>
-              <th id="congenitalAnomalies">
-                {{
-                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.congenitalAnomalies
-                }}:
-              </th>
-              <td>{{ femaleObstetricHistory.congenitalAnomalies }}</td>
-            </tr>
-            <tr>
-              <th id="typeOfAbortion">
-                {{
-                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.typeOfAbortion
-                }}:
-              </th>
-              <td>{{ femaleObstetricHistory.typeOfAbortionValue }}</td>
-              <th id="typeofFacility">
-                {{
-                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.typeofFacility
-                }}:
-              </th>
-              <td>{{ femaleObstetricHistory.serviceFacilityValue }}</td>
-            </tr>
-            <tr>
-              <th id="noOfcompletedWeeks1">
-                {{
-                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.noOfcompletedWeeks
-                }}:
-              </th>
-              <td>{{ femaleObstetricHistory.pregDuration }}</td>
-              <th complicationPostAbortion id="complicationPostAbortion">
-                {{
-                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.complicationPostAbortion
-                }}:
-              </th>
-              <td>
-                {{ femaleObstetricHistory.postAbortionComplicationsValues }}
-              </td>
-            </tr>
-            <tr>
-              <td class="text-center" colspan="11"></td>
-            </tr>
-          </ng-container>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <!--Female Obstetric History Ends-->
-
-  <!--Physical Activity History Starts-->
-  <div class="row m-t-10" *ngIf="visitCategory === 'NCD screening'">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.physicalActivity }}</h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered table-striped casesheet-table"
-        aria-describedby="PhysicalActivityHistory">
-        <thead>
-          <tr>
-            <th style="width: 10%" id="sno">
-              {{ currentLanguageSet?.casesheet?.serialNo }}
-            </th>
-            <th style="width: 30%" id="pat">
-              {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory
-                  ?.personal?.physicalActivityType
-              }}
-            </th>
-            <th style="width: 60%" id="ActivityType">
-              {{ currentLanguageSet?.activityType }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>{{ previousPhysicalList?.physicalActivityType }}</td>
-            <td>{{ previousPhysicalList?.activityType }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <!--Physical Activity History ends-->
-</div>
-<div
-  *ngIf="visitCategory === 'NCD care' || visitCategory === 'COVID-19 Screening'"
-  class="container">
-  <div class="row col-xs-12">
-    <h2 class="text-center">
-      {{ currentLanguageSet?.Referdetails?.revisitAndRefer }}
+<div class="p-6 space-y-12 animate-in fade-in duration-1000">
+  <!-- Main Header -->
+  <div class="text-center space-y-3">
+    <h2 class="text-3xl font-black text-gray-900 tracking-tighter uppercase">
+      {{ currentLanguageSet?.historyData?.history }}
     </h2>
-    <hr />
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="revisitAndRefer">
-        <tbody>
-          <tr>
-            <th id="referredToInstituteName">
-              {{ currentLanguageSet?.Referdetails?.higherhealthcarecenter }}:
-            </th>
-            <td>{{ referDetails?.referredToInstituteName }}</td>
-          </tr>
-          <tr>
-            <th id="serviceList">
-              {{ currentLanguageSet?.Referdetails?.additionalservices }}:
-            </th>
-            <td>{{ serviceList }}</td>
-          </tr>
-          <tr>
-            <th id="referralReason">
-              {{ currentLanguageSet?.Referdetails?.referralReason }}:
-            </th>
-            <td>{{ referDetails?.referralReason }}</td>
-          </tr>
-          <tr>
-            <th id="revisitDate">{{ currentLanguageSet?.revisitDate }}:</th>
-            <td>{{ referDetails?.revisitDate }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-<div *ngIf="visitCategory === 'NCD screening'" class="container">
-  <div class="row col-xs-12">
-    <h2 class="text-center">
-      {{ currentLanguageSet?.Referdetails?.revisitAndRefer }}
-    </h2>
-    <hr />
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="referDetails">
-        <tbody>
-          <tr>
-            <th id="ncdHigherhealthcarecenter">
-              {{ currentLanguageSet?.Referdetails?.higherhealthcarecenter }}:
-            </th>
-            <td>{{ referDetails?.referredToInstituteName }}</td>
-          </tr>
-          <tr>
-            <th id="ncdAdditionalservices">
-              {{ currentLanguageSet?.Referdetails?.additionalservices }}:
-            </th>
-            <td>{{ serviceList }}</td>
-          </tr>
-          <tr>
-            <th id="ncdReferralReason">
-              {{ currentLanguageSet?.Referdetails?.referralReason }}:
-            </th>
-            <td>{{ referDetails?.referralReason }}</td>
-          </tr>
-          <tr>
-            <th id="ncdRevisitDate">{{ currentLanguageSet?.revisitDate }}:</th>
-            <td>{{ referDetails?.revisitDate }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <div
+      class="h-1.5 w-24 bg-indigo-600 mx-auto rounded-full shadow-lg shadow-indigo-100"></div>
   </div>
 
-  <!--MMU-WDF-Revisit&Refer-->
-  <div class="row col-xs-12" *ngIf="enableTCReferredMMUData === true">
-    <h2 class="text-center" style="margin-left: 50px">
-      {{ currentLanguageSet?.mmuRevisitRefer }}
-    </h2>
-    <hr />
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="wdfRevisit">
-        <tbody>
-          <tr>
-            <th id="mmuReferredtoinstitute">
-              {{ currentLanguageSet?.Referdetails?.referredtoinstitute }}:
-            </th>
-            <td>{{ MMUReferDetails?.referredToInstituteName }}</td>
-          </tr>
-          <tr>
-            <th id="mmuadditionalservices">
-              {{ currentLanguageSet?.Referdetails?.additionalservices }}:
-            </th>
-            <td>{{ mmuServiceList }}</td>
-          </tr>
-          <tr>
-            <th id="mmuReferralReason">
-              {{ currentLanguageSet?.Referdetails?.referralReason }}:
-            </th>
-            <td>{{ MMUReferDetails?.referralReason }}</td>
-          </tr>
-          <tr>
-            <th id="mmurevisitDate">
-              {{ currentLanguageSet?.Referdetails?.revisitDate }}:
-            </th>
-            <td>
+  <!-- Chief Complaints -->
+  <z-card
+    variant="outline"
+    class="overflow-hidden border-gray-100 shadow-sm border-l-4 border-l-rose-400">
+    <div
+      class="bg-rose-50/30 p-4 border-b border-gray-100 flex items-center gap-3">
+      <div class="p-2 bg-rose-100 rounded-lg">
+        <ng-icon name="lucideClipboardList" class="text-rose-600"></ng-icon>
+      </div>
+      <h3 class="font-black text-gray-800 uppercase tracking-widest text-xs">
+        {{ currentLanguageSet?.historyData?.chiefComplaints }}
+      </h3>
+    </div>
+    <div class="p-8">
+      <div class="space-y-6">
+        <div
+          *ngIf="
+            caseSheetData?.nurseData?.complaints?.complaintsList?.length > 0;
+            else noComplaints
+          "
+          class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div
+            *ngFor="
+              let complaint of caseSheetData.nurseData.complaints.complaintsList
+            "
+            class="p-4 bg-gray-50 rounded-2xl border border-gray-100 flex justify-between items-center group hover:bg-rose-50 hover:border-rose-100 transition-all duration-300">
+            <div class="space-y-1">
+              <label
+                class="text-[10px] font-black text-gray-400 uppercase tracking-widest group-hover:text-rose-400"
+                >Complaint</label
+              >
+              <p
+                class="text-sm font-bold text-gray-900 group-hover:text-rose-900">
+                {{ complaint.complaintName }}
+              </p>
+            </div>
+            <div class="text-right">
+              <label
+                class="text-[10px] font-black text-gray-400 uppercase tracking-widest group-hover:text-rose-400"
+                >Duration</label
+              >
+              <p class="text-sm font-black text-rose-600">
+                {{ complaint.duration }} {{ complaint.unit }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <ng-template #noComplaints>
+          <p class="text-sm font-medium text-gray-400 italic text-center py-4">
+            No chief complaints recorded
+          </p>
+        </ng-template>
+      </div>
+    </div>
+  </z-card>
+
+  <!-- Personal History -->
+  <z-card variant="outline" class="overflow-hidden border-gray-100 shadow-sm">
+    <div
+      class="bg-gray-50/50 p-4 border-b border-gray-100 flex items-center gap-3">
+      <div class="p-2 bg-slate-100 rounded-lg">
+        <ng-icon name="lucideUser" class="text-slate-600"></ng-icon>
+      </div>
+      <h3 class="font-black text-gray-800 uppercase tracking-widest text-xs">
+        {{ currentLanguageSet?.historyData?.personalHistory }}
+      </h3>
+    </div>
+    <div class="p-8">
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-8">
+        <div class="space-y-1">
+          <label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+            >{{ currentLanguageSet?.historyData?.smoking }}</label
+          >
+          <p class="text-sm font-bold text-gray-900">
+            {{ personalHistory?.isSmoker || '--' }}
+            <span
+              *ngIf="personalHistory?.isSmoker === 'Yes'"
+              class="text-xs text-rose-500 font-black"
+              >({{ personalHistory?.smokingFrequency }})</span
+            >
+          </p>
+        </div>
+        <div class="space-y-1">
+          <label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+            >{{ currentLanguageSet?.historyData?.alcohol }}</label
+          >
+          <p class="text-sm font-bold text-gray-900">
+            {{ personalHistory?.isAlcoholic || '--' }}
+            <span
+              *ngIf="personalHistory?.isAlcoholic === 'Yes'"
+              class="text-xs text-rose-500 font-black"
+              >({{ personalHistory?.alcoholFrequency }})</span
+            >
+          </p>
+        </div>
+        <div class="space-y-1">
+          <label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+            >{{ currentLanguageSet?.historyData?.tobacco }}</label
+          >
+          <p class="text-sm font-bold text-gray-900">
+            {{ personalHistory?.isTobaccoUser || '--' }}
+            <span
+              *ngIf="personalHistory?.isTobaccoUser === 'Yes'"
+              class="text-xs text-rose-500 font-black"
+              >({{ personalHistory?.tobaccoFrequency }})</span
+            >
+          </p>
+        </div>
+        <div class="space-y-1">
+          <label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+            >{{ currentLanguageSet?.historyData?.diet }}</label
+          >
+          <p class="text-sm font-bold text-gray-900">
+            {{ personalHistory?.dietaryHabit || '--' }}
+          </p>
+        </div>
+        <div class="space-y-1 border-t border-gray-50 pt-4">
+          <label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+            >{{ currentLanguageSet?.historyData?.sleep }}</label
+          >
+          <p class="text-sm font-bold text-gray-900">
+            {{ personalHistory?.sleep || '--' }}
+          </p>
+        </div>
+        <div class="space-y-1 border-t border-gray-50 pt-4">
+          <label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+            >{{ currentLanguageSet?.historyData?.appetite }}</label
+          >
+          <p class="text-sm font-bold text-gray-900">
+            {{ personalHistory?.appetite || '--' }}
+          </p>
+        </div>
+        <div class="space-y-1 border-t border-gray-50 pt-4">
+          <label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+            >{{ currentLanguageSet?.historyData?.bowelHabit }}</label
+          >
+          <p class="text-sm font-bold text-gray-900">
+            {{ personalHistory?.bowelHabit || '--' }}
+          </p>
+        </div>
+        <div class="space-y-1 border-t border-gray-50 pt-4">
+          <label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+            >{{ currentLanguageSet?.historyData?.bladderHabit }}</label
+          >
+          <p class="text-sm font-bold text-gray-900">
+            {{ personalHistory?.bladderHabit || '--' }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </z-card>
+
+  <!-- Past History -->
+  <z-card
+    variant="outline"
+    class="overflow-hidden border-gray-100 shadow-sm border-l-4 border-l-indigo-400">
+    <div
+      class="bg-indigo-50/30 p-4 border-b border-gray-100 flex items-center gap-3">
+      <div class="p-2 bg-indigo-100 rounded-lg">
+        <ng-icon name="lucideHistory" class="text-indigo-600"></ng-icon>
+      </div>
+      <h3 class="font-black text-gray-800 uppercase tracking-widest text-xs">
+        {{ currentLanguageSet?.historyData?.pastHistory }}
+      </h3>
+    </div>
+    <div class="p-8 space-y-10">
+      <!-- Past Illness -->
+      <div class="space-y-4">
+        <label
+          class="text-[10px] font-black text-indigo-900 uppercase tracking-widest flex items-center gap-2">
+          <div class="w-1 h-3 bg-indigo-400 rounded-full"></div>
+          {{ currentLanguageSet?.historyData?.pastIllness }}
+        </label>
+        <div
+          *ngIf="pastIllnessList?.length > 0; else noIllness"
+          class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div
+            *ngFor="let illness of pastIllnessList"
+            class="p-4 bg-indigo-50/30 rounded-2xl border border-indigo-50 flex justify-between items-center">
+            <span class="text-sm font-bold text-gray-900">{{
+              illness.pastIllnessName
+            }}</span>
+            <span
+              class="text-[10px] font-black text-indigo-400 uppercase tracking-widest"
+              >Recorded</span
+            >
+          </div>
+        </div>
+        <ng-template #noIllness
+          ><p class="text-xs text-gray-400 italic px-4">
+            No past illness recorded
+          </p></ng-template
+        >
+      </div>
+
+      <!-- Past Surgery -->
+      <div class="space-y-4 pt-6 border-t border-gray-50">
+        <label
+          class="text-[10px] font-black text-indigo-900 uppercase tracking-widest flex items-center gap-2">
+          <div class="w-1 h-3 bg-indigo-400 rounded-full"></div>
+          {{ currentLanguageSet?.historyData?.pastSurgery }}
+        </label>
+        <div
+          *ngIf="pastSurgeryList?.length > 0; else noSurgery"
+          class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div
+            *ngFor="let surgery of pastSurgeryList"
+            class="p-4 bg-indigo-50/30 rounded-2xl border border-indigo-50 flex justify-between items-center">
+            <span class="text-sm font-bold text-gray-900">{{
+              surgery.pastSurgeryName
+            }}</span>
+            <span
+              class="text-[10px] font-black text-indigo-400 uppercase tracking-widest"
+              >Performed</span
+            >
+          </div>
+        </div>
+        <ng-template #noSurgery
+          ><p class="text-xs text-gray-400 italic px-4">
+            No past surgery recorded
+          </p></ng-template
+        >
+      </div>
+    </div>
+  </z-card>
+
+  <!-- Family History -->
+  <z-card
+    variant="outline"
+    class="overflow-hidden border-gray-100 shadow-sm border-l-4 border-l-emerald-400">
+    <div
+      class="bg-emerald-50/30 p-4 border-b border-gray-100 flex items-center gap-3">
+      <div class="p-2 bg-emerald-100 rounded-lg">
+        <ng-icon name="lucideUsers" class="text-emerald-600"></ng-icon>
+      </div>
+      <h3 class="font-black text-gray-800 uppercase tracking-widest text-xs">
+        {{ currentLanguageSet?.historyData?.familyHistory }}
+      </h3>
+    </div>
+    <div class="p-8">
+      <div
+        *ngIf="
+          familyHistory?.FamilyHistoryDiseaseList?.length > 0;
+          else noFamily
+        "
+        class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div
+          *ngFor="let disease of familyHistory.FamilyHistoryDiseaseList"
+          class="p-5 bg-emerald-50/30 rounded-3xl border border-emerald-50 space-y-3">
+          <div
+            class="flex justify-between items-center border-b border-emerald-100 pb-2">
+            <span class="text-sm font-black text-emerald-900">{{
+              disease.diseaseName
+            }}</span>
+            <span
+              class="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[8px] font-black uppercase rounded"
+              >Family</span
+            >
+          </div>
+          <p class="text-xs font-medium text-emerald-700 italic">
+            Commonly reported in immediate family members.
+          </p>
+        </div>
+      </div>
+      <ng-template #noFamily
+        ><p class="text-sm font-medium text-gray-400 italic text-center py-4">
+          No family medical history recorded
+        </p></ng-template
+      >
+    </div>
+  </z-card>
+
+  <!-- Comorbidity Conditions -->
+  <z-card
+    variant="outline"
+    class="overflow-hidden border-gray-100 shadow-sm border-l-4 border-l-amber-400">
+    <div
+      class="bg-amber-50/30 p-4 border-b border-gray-100 flex items-center gap-3">
+      <div class="p-2 bg-amber-100 rounded-lg">
+        <ng-icon name="lucideActivity" class="text-amber-600"></ng-icon>
+      </div>
+      <h3 class="font-black text-gray-800 uppercase tracking-widest text-xs">
+        {{ currentLanguageSet?.historyData?.comorbidCondition }}
+      </h3>
+    </div>
+    <div class="p-8">
+      <div
+        *ngIf="comorbidConditionList?.length > 0; else noComorbid"
+        class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div
+          *ngFor="let condition of comorbidConditionList"
+          class="p-4 bg-amber-50/30 rounded-2xl border border-amber-50 flex items-center gap-4">
+          <div class="h-2 w-2 bg-amber-400 rounded-full"></div>
+          <span class="text-sm font-bold text-gray-900">{{
+            condition.comorbidityConcurrentConditionName
+          }}</span>
+        </div>
+      </div>
+      <ng-template #noComorbid
+        ><p class="text-sm font-medium text-gray-400 italic text-center py-4">
+          No comorbid conditions recorded
+        </p></ng-template
+      >
+    </div>
+  </z-card>
+
+  <!-- Medication History -->
+  <z-card
+    variant="outline"
+    class="overflow-hidden border-gray-100 shadow-sm border-l-4 border-l-sky-400">
+    <div
+      class="bg-sky-50/30 p-4 border-b border-gray-100 flex items-center gap-3">
+      <div class="p-2 bg-sky-100 rounded-lg">
+        <ng-icon name="lucidePill" class="text-sky-600"></ng-icon>
+      </div>
+      <h3 class="font-black text-gray-800 uppercase tracking-widest text-xs">
+        {{ currentLanguageSet?.historyData?.medicationHistory }}
+      </h3>
+    </div>
+    <div class="p-8">
+      <div
+        *ngIf="medicationHistoryList?.length > 0; else noMedication"
+        class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div
+          *ngFor="let med of medicationHistoryList"
+          class="p-4 bg-sky-50/30 rounded-2xl border border-sky-50 space-y-1">
+          <label
+            class="text-[8px] font-black text-sky-400 uppercase tracking-widest"
+            >Drug Name</label
+          >
+          <p class="text-sm font-bold text-gray-900">{{ med.drugName }}</p>
+        </div>
+      </div>
+      <ng-template #noMedication
+        ><p class="text-sm font-medium text-gray-400 italic text-center py-4">
+          No medication history recorded
+        </p></ng-template
+      >
+    </div>
+  </z-card>
+
+  <!-- Obstetric & Menstrual History (Female Only) -->
+  <div *ngIf="beneficiary?.gender === 'Female'" class="space-y-10">
+    <z-card
+      variant="outline"
+      class="overflow-hidden border-gray-100 shadow-sm border-l-4 border-l-rose-400">
+      <div
+        class="bg-rose-50/30 p-4 border-b border-gray-100 flex items-center gap-3">
+        <div class="p-2 bg-rose-100 rounded-lg">
+          <ng-icon name="lucideBaby" class="text-rose-600"></ng-icon>
+        </div>
+        <h3 class="font-black text-gray-800 uppercase tracking-widest text-xs">
+          Obstetric & Menstrual History
+        </h3>
+      </div>
+      <div class="p-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="space-y-1">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >Menstrual Cycles</label
+            >
+            <p class="text-sm font-bold text-gray-900">
+              {{ menstrualHistory?.isCycleRegular || '--' }}
+            </p>
+          </div>
+          <div class="space-y-1">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >LMP Date</label
+            >
+            <p class="text-sm font-black text-rose-600">
               {{
-                mmuCaseSheetData?.referDetails?.revisitDate | date: 'dd/MM/yyyy'
+                (menstrualHistory?.lastMenstrualPeriodDate
+                  | date: 'dd/MM/yyyy') || '--'
               }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+            </p>
+          </div>
+          <div class="space-y-1">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >Obstetric Formula</label
+            >
+            <p class="text-sm font-black text-gray-900">
+              G:{{ femaleObstetricHistory?.gravida }} P:{{
+                femaleObstetricHistory?.para
+              }}
+              A:{{ femaleObstetricHistory?.abortion }} L:{{
+                femaleObstetricHistory?.liveChildren
+              }}
+            </p>
+          </div>
+          <div class="space-y-1">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >EDD</label
+            >
+            <p class="text-sm font-black text-emerald-600">
+              {{ (ANCDetailsAndFormula?.edd | date: 'dd/MM/yyyy') || '--' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </z-card>
   </div>
 
-  <!--END MMU-WDF-Revisit&Refer-->
+  <!-- Pediatric Sections (Conditional) -->
+  <div
+    *ngIf="visitCategory === 'PNC' || beneficiary?.age < 12"
+    class="space-y-10">
+    <!-- Developmental & Feeding History -->
+    <z-card
+      variant="outline"
+      class="overflow-hidden border-gray-100 shadow-sm border-l-4 border-l-blue-400">
+      <div
+        class="bg-blue-50/30 p-4 border-b border-gray-100 flex items-center gap-3">
+        <div class="p-2 bg-blue-100 rounded-lg">
+          <ng-icon name="lucideBaby" class="text-blue-600"></ng-icon>
+        </div>
+        <h3 class="font-black text-gray-800 uppercase tracking-widest text-xs">
+          Developmental & Feeding History
+        </h3>
+      </div>
+      <div class="p-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div class="space-y-4">
+            <label
+              class="text-[10px] font-black text-blue-900 uppercase tracking-widest border-b border-blue-100 pb-2 block"
+              >Development</label
+            >
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="text-[8px] font-black text-gray-400 uppercase"
+                  >Gross Motor</label
+                >
+                <p class="text-xs font-bold text-gray-900">
+                  {{ developmentalHistory?.grossMotor || '--' }}
+                </p>
+              </div>
+              <div class="space-y-1">
+                <label class="text-[8px] font-black text-gray-400 uppercase"
+                  >Fine Motor</label
+                >
+                <p class="text-xs font-bold text-gray-900">
+                  {{ developmentalHistory?.fineMotor || '--' }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <label
+              class="text-[10px] font-black text-blue-900 uppercase tracking-widest border-b border-blue-100 pb-2 block"
+              >Feeding</label
+            >
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="text-[8px] font-black text-gray-400 uppercase"
+                  >Method</label
+                >
+                <p class="text-xs font-bold text-gray-900">
+                  {{ feedingHistory?.feedingMethod || '--' }}
+                </p>
+              </div>
+              <div class="space-y-1">
+                <label class="text-[8px] font-black text-gray-400 uppercase"
+                  >Compl. Feeding</label
+                >
+                <p class="text-xs font-bold text-gray-900">
+                  {{ feedingHistory?.ageOfComplementaryFeeding || '--' }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </z-card>
+
+    <!-- Immunization History -->
+    <z-card
+      variant="outline"
+      class="overflow-hidden border-gray-100 shadow-sm border-l-4 border-l-sky-400">
+      <div
+        class="bg-sky-50/30 p-4 border-b border-gray-100 flex items-center gap-3">
+        <div class="p-2 bg-sky-100 rounded-lg">
+          <ng-icon name="lucideSyringe" class="text-sky-600"></ng-icon>
+        </div>
+        <h3 class="font-black text-gray-800 uppercase tracking-widest text-xs">
+          {{ currentLanguageSet?.historyData?.immunizationHistory }}
+        </h3>
+      </div>
+      <div class="p-8">
+        <div
+          *ngIf="
+            immunizationHistory?.ImmunizationHistoryList?.length > 0;
+            else noImmunization
+          "
+          class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div
+            *ngFor="let imm of immunizationHistory.ImmunizationHistoryList"
+            class="p-3 bg-sky-50/30 rounded-2xl border border-sky-50 flex items-center gap-3">
+            <div class="h-2 w-2 bg-sky-400 rounded-full"></div>
+            <span class="text-xs font-black text-gray-700">{{
+              imm.immunizationName
+            }}</span>
+          </div>
+        </div>
+        <ng-template #noImmunization
+          ><p class="text-sm font-medium text-gray-400 italic text-center py-4">
+            No immunization history recorded
+          </p></ng-template
+        >
+      </div>
+    </z-card>
+  </div>
+
+  <!-- Revisit & Refer Footer -->
+  <div class="mt-16 space-y-8 animate-in slide-in-from-bottom-8 duration-1000">
+    <div class="flex items-center gap-4">
+      <div class="h-px flex-1 bg-gray-100"></div>
+      <h2 class="text-lg font-black text-gray-900 tracking-tighter uppercase">
+        {{ currentLanguageSet?.Referdetails?.revisitAndRefer }}
+      </h2>
+      <div class="h-px flex-1 bg-gray-100"></div>
+    </div>
+
+    <z-card
+      variant="outline"
+      class="border-amber-100 overflow-hidden shadow-sm max-w-4xl mx-auto">
+      <div
+        class="bg-amber-50/50 p-4 border-b border-amber-100 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <ng-icon name="lucideRedo2" class="text-amber-500"></ng-icon>
+          <h3 class="font-bold text-amber-900 uppercase tracking-wider text-xs">
+            Standard Referral
+          </h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <ng-icon
+            name="lucideCalendar"
+            class="text-amber-400"
+            size="14"></ng-icon>
+          <span class="text-xs font-black text-amber-700">{{
+            referDetails?.revisitDate || 'No Revisit'
+          }}</span>
+        </div>
+      </div>
+      <div class="p-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="space-y-1">
+            <label
+              class="text-[10px] font-black text-amber-400 uppercase tracking-wider"
+              >{{
+                currentLanguageSet?.Referdetails?.higherhealthcarecenter
+              }}</label
+            >
+            <p class="text-sm font-black text-gray-900 leading-relaxed">
+              {{ referDetails?.referredToInstituteName || 'Not Referred' }}
+            </p>
+          </div>
+          <div class="space-y-1">
+            <label
+              class="text-[10px] font-black text-amber-400 uppercase tracking-wider"
+              >{{ currentLanguageSet?.Referdetails?.additionalservices }}</label
+            >
+            <p class="text-sm font-medium text-gray-700 leading-relaxed">
+              {{ serviceList || '--' }}
+            </p>
+          </div>
+          <div class="col-span-full space-y-1 border-t border-amber-50 pt-4">
+            <label
+              class="text-[10px] font-black text-amber-400 uppercase tracking-wider"
+              >{{ currentLanguageSet?.Referdetails?.referralReason }}</label
+            >
+            <p
+              class="text-sm italic text-gray-500 leading-relaxed bg-gray-50 p-4 rounded-2xl">
+              {{ referDetails?.referralReason || '--' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </z-card>
+  </div>
 </div>

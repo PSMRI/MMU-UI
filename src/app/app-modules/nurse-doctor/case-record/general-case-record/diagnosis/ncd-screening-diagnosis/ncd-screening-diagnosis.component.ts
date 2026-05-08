@@ -38,16 +38,22 @@ import {
   MasterdataService,
 } from 'src/app/app-modules/nurse-doctor/shared/services';
 import { GeneralUtils } from 'src/app/app-modules/nurse-doctor/shared/utility';
-import { NgIf, NgFor } from '@angular/common';
-import { MatFormField, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
 import {
-  MatAutocompleteTrigger,
-  MatAutocomplete,
-  MatOption,
-} from '@angular/material/autocomplete';
-import { AutocompleteScrollerDirective } from '../../../../shared/utility/autocomplete-scroller.directive';
-import { MatIcon } from '@angular/material/icon';
+  ZardFormImports,
+  ZardRadioImports,
+  ZardSelectImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+  ZardAccordionImports,
+  ZardDatePickerImports,
+} from 'zard-ui';
+import { NgIf, NgFor } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucidePlusCircle, lucideTrash2, lucideInfo } from '@ng-icons/lucide';
+
 @Component({
   selector: 'app-ncd-screening-diagnosis',
   templateUrl: './ncd-screening-diagnosis.component.html',
@@ -56,15 +62,19 @@ import { MatIcon } from '@angular/material/icon';
     ReactiveFormsModule,
     NgIf,
     NgFor,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatAutocompleteTrigger,
-    MatAutocomplete,
-    AutocompleteScrollerDirective,
-    MatOption,
-    MatIcon,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    ZardAccordionImports,
+    ZardDatePickerImports,
+    LucideAngularModule,
+    NgIcon,
   ],
+  providers: [provideIcons({ lucidePlusCircle, lucideTrash2, lucideInfo })],
 })
 export class NcdScreeningDiagnosisComponent
   implements OnInit, OnChanges, DoCheck

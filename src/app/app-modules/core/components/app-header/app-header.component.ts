@@ -30,28 +30,33 @@ import { IotService } from '../../services/iot.service';
 import { IotBluetoothComponent } from '../iot-bluetooth/iot-bluetooth.component';
 import { ShowCommitAndVersionDetailsComponent } from '../show-commit-and-version-details/show-commit-and-version-details.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatIcon } from '@angular/material/icon';
+import {
+  LucideAngularModule,
+  HelpCircle,
+  Bluetooth,
+  Power,
+  User,
+  MapPin,
+} from 'lucide-angular';
+import { ZardMenuImports } from '@/components/ui/menu/menu.imports';
 import { NgIf, NgFor, NgClass, TitleCasePipe } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-header',
   templateUrl: './app-header.component.html',
   styleUrls: ['./app-header.component.css'],
   imports: [
-    MatIcon,
+    LucideAngularModule,
     NgIf,
-    ReactiveFormsModule,
-    FormsModule,
     NgFor,
     NgClass,
-    MatMenu,
-    MatMenuItem,
+    ZardMenuImports,
     RouterLink,
-    MatMenuTrigger,
     RouterLinkActive,
     TitleCasePipe,
+    ReactiveFormsModule,
+    FormsModule,
   ],
 })
 export class AppHeaderComponent implements OnInit {

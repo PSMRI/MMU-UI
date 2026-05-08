@@ -25,12 +25,13 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import { StringValidatorDirective } from '../../../../../core/directives/stringValidator.directive';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { ZardInputImports } from '@/components/ui/input/input.imports';
+import { StringValidatorDirective } from '@/app-modules/core/directives/stringValidator.directive';
 import { NgFor, NgIf } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
   selector: 'app-nurse-gastro-intestinal-system',
@@ -38,15 +39,13 @@ import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
   styleUrls: ['./gastro-intestinal-system.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatInput,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardInputImports,
     StringValidatorDirective,
-    MatSelect,
     NgFor,
-    MatOption,
-    MatRadioGroup,
-    MatRadioButton,
     NgIf,
   ],
 })

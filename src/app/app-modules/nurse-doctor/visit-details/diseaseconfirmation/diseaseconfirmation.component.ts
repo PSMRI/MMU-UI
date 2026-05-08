@@ -36,14 +36,22 @@ import {
 import { IdrsscoreService } from '../../shared/services/idrsscore.service';
 import { VisitDetailUtils } from '../../shared/utility/visit-detail-utility';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { NgFor } from '@angular/common';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { CommonModule } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
+import { ZardCheckboxImports, ZardFormImports } from 'zard-ui';
 
 @Component({
   selector: 'app-diseaseconfirmation',
   templateUrl: './diseaseconfirmation.component.html',
   styleUrls: ['./diseaseconfirmation.component.css'],
-  imports: [ReactiveFormsModule, NgFor, MatCheckbox],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ZardCheckboxImports,
+    ZardFormImports,
+    LucideAngularModule,
+  ],
 })
 export class DiseaseconfirmationComponent implements OnInit {
   @Input()

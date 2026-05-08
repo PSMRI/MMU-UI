@@ -39,12 +39,24 @@ h5 {
   th,
   strong {
     font-weight: bold;
-    font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif
+    font-family:
+      Cambria,
+      Cochin,
+      Georgia,
+      Times,
+      Times New Roman,
+      serif;
   }
   h4,
   h5 {
     font-weight: bold;
-    font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif
+    font-family:
+      Cambria,
+      Cochin,
+      Georgia,
+      Times,
+      Times New Roman,
+      serif;
   }
   .page-break {
     page-break-after: always;

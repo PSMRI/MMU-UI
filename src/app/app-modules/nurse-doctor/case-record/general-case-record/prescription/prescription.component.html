@@ -1,379 +1,367 @@
-<form #prescriptionForm="ngForm" class="m-t-20">
-  <section class="row no-row">
-    <div class="col-md-3" style="padding-bottom: 8px">
-      <div *ngIf="isStockAvalable === 'primary'">
-        <mat-icon
-          style="
-            background-color: green;
-            color: white;
-            font-size: 20px;
-            height: 20px;
-            width: 20px;
-          "
-          class="md-18">
-          check
-        </mat-icon>
-        <span style="color: green; padding-left: 1px">{{
-          current_language_set?.stockAvailability
-        }}</span>
+<form #prescriptionForm="ngForm" class="space-y-8 mt-10">
+  <!-- Stock Availability Indicator -->
+  <div
+    class="flex items-center gap-4 px-6 py-3 rounded-2xl bg-gray-50/50 border border-gray-100 w-fit">
+    <div
+      *ngIf="isStockAvalable === 'primary'"
+      class="flex items-center gap-2 text-emerald-600 font-semibold">
+      <div class="bg-emerald-100 p-1 rounded-full">
+        <ng-icon name="lucideCheck" class="text-lg"></ng-icon>
       </div>
-      <div *ngIf="isStockAvalable === 'warn'">
-        <mat-icon
-          style="
-            background-color: #c30d0d;
-            color: white;
-            font-size: 20px;
-            height: 20px;
-            width: 20px;
-          "
-          class="md-18">
-          close </mat-icon
-        ><span style="color: #c30d0d; padding-left: 5px">{{
-          current_language_set?.stockAvailability
-        }}</span>
-      </div>
+      <span>{{ current_language_set?.stockAvailability }}</span>
     </div>
-  </section>
-  <section class="row no-row">
-    <div class="col-md-3 box">
-      <mat-form-field [style.width]="'100%'">
-        <mat-label>{{ current_language_set?.Prescription?.form }}</mat-label>
-        <mat-select
-          class="input-full-width"
+    <div
+      *ngIf="isStockAvalable === 'warn'"
+      class="flex items-center gap-2 text-red-600 font-semibold">
+      <div class="bg-red-100 p-1 rounded-full">
+        <ng-icon name="lucideX" class="text-lg"></ng-icon>
+      </div>
+      <span>{{ current_language_set?.stockAvailability }}</span>
+    </div>
+    <div *ngIf="!isStockAvalable" class="text-gray-400 italic text-sm">
+      Stock status will appear here after selecting medicine
+    </div>
+  </div>
+
+  <!-- Prescription Entry Card -->
+  <div
+    class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 space-y-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <!-- Drug Form -->
+      <z-form-field>
+        <z-label>{{ current_language_set?.Prescription?.form }}</z-label>
+        <z-select
           name="form"
           [(ngModel)]="currentPrescription.formName"
           (selectionChange)="getFormValueChanged()"
           (focus)="trackFieldInteraction('Form')"
+          placeholder="Select Form"
           required>
-          <mat-option
+          <z-option
             *ngFor="let item of drugFormMaster"
-            [value]="item.itemFormName">
+            [zValue]="item.itemFormName">
             {{ item.itemFormName }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+          </z-option>
+        </z-select>
+      </z-form-field>
 
-    <div class="col-md-3 box">
-      <mat-form-field [style.width]="'100%'">
-        <mat-label>{{
-          current_language_set?.Prescription?.medicine
-        }}</mat-label>
-        <input
-          type="text"
-          name="medicine"
-          [disabled]="!currentPrescription.formID"
-          matInput
-          [(ngModel)]="tempDrugName"
-          (keyup)="filterMedicine(tempDrugName)"
-          (blur)="reEnterMedicine()"
-          (focus)="trackFieldInteraction('Medicine')"
-          [matAutocomplete]="autoGroup" />
-        <mat-autocomplete
-          #autoGroup="matAutocomplete"
-          [displayWith]="displayFn"
-          (optionSelected)="selectMedicineObject($event)">
-          <mat-option *ngFor="let item of subFilteredDrugMaster" [value]="item">
-            {{ item.itemName }} {{ item.strength }}{{ item.unitOfMeasurement }}
-            {{ item.quantityInHand ? '(' + item.quantityInHand + ')' : '' }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
-    </div>
+      <!-- Medicine Search (Manual Dropdown) -->
+      <z-form-field>
+        <z-label>{{ current_language_set?.Prescription?.medicine }}</z-label>
+        <div class="relative">
+          <input
+            z-input
+            type="text"
+            name="medicine"
+            [disabled]="!currentPrescription.formID"
+            [(ngModel)]="tempDrugName"
+            (keyup)="filterMedicine(tempDrugName)"
+            (blur)="reEnterMedicine()"
+            (focus)="trackFieldInteraction('Medicine')"
+            placeholder="Search medicine..." />
 
-    <div class="col-md-3 box">
-      <mat-form-field [style.width]="'100%'">
-        <mat-label>{{ current_language_set?.Prescription?.dosage }}</mat-label>
-        <mat-select
-          class="input-full-width"
+          <div
+            *ngIf="
+              subFilteredDrugMaster?.length > 0 && tempDrugName?.length > 0
+            "
+            class="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden max-h-60 overflow-y-auto">
+            <button
+              *ngFor="let item of subFilteredDrugMaster"
+              type="button"
+              class="w-full px-4 py-3 text-left hover:bg-blue-50 text-sm border-b border-gray-50 last:border-none transition-colors"
+              (click)="selectMedicineObject({ option: { value: item } })">
+              <div class="font-medium text-gray-900">
+                {{ item.itemName }} {{ item.strength
+                }}{{ item.unitOfMeasurement }}
+              </div>
+              <div class="text-xs text-gray-500" *ngIf="item.quantityInHand">
+                Stock: {{ item.quantityInHand }}
+              </div>
+            </button>
+          </div>
+        </div>
+      </z-form-field>
+
+      <!-- Dosage -->
+      <z-form-field>
+        <z-label>{{ current_language_set?.Prescription?.dosage }}</z-label>
+        <z-select
           name="dose"
           [(ngModel)]="currentPrescription.dose"
           [disabled]="!currentPrescription.drugID"
           (focus)="trackFieldInteraction('Dosage')"
           (selectionChange)="trackFieldInteraction('Dosage Selection')"
-          >
-          <mat-option
+          placeholder="Select Dosage">
+          <z-option
             *ngFor="let item of filteredDrugDoseMaster"
-            [value]="item.drugDose">
+            [zValue]="item.drugDose">
             {{ item.drugDose }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+          </z-option>
+        </z-select>
+      </z-form-field>
 
-    <div class="col-md-3 box">
-      <mat-form-field [style.width]="'100%'">
-        <mat-label>{{
-          current_language_set?.Prescription?.frequency
-        }}</mat-label>
-        <mat-select
-          class="input-full-width"
+      <!-- Frequency -->
+      <z-form-field>
+        <z-label>{{ current_language_set?.Prescription?.frequency }}</z-label>
+        <z-select
           name="frequency"
           [(ngModel)]="currentPrescription.frequency"
           [disabled]="!currentPrescription.drugID"
           (focus)="trackFieldInteraction('Frequency')"
-          >
-          <mat-option
+          placeholder="Select Frequency">
+          <z-option
             *ngFor="let item of drugFrequencyMaster"
-            [value]="item.frequency">
+            [zValue]="item.frequency">
             {{ item.frequency }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </section>
+          </z-option>
+        </z-select>
+      </z-form-field>
 
-  <section class="row no-row" style="margin-top: 10px !important">
-    <div class="col-md-3 box">
-      <mat-form-field [style.width]="'100%'">
-        <mat-label>{{
+      <!-- Duration -->
+      <z-form-field>
+        <z-label>{{
           current_language_set?.nurseData?.chiefComplaintsDetails?.duration
-        }}</mat-label>
-        <mat-select
-          class="input-full-width"
+        }}</z-label>
+        <z-select
           name="duration"
           [(ngModel)]="currentPrescription.duration"
           [disabled]="!currentPrescription.drugID"
           (focus)="trackFieldInteraction('Duration')"
-          >
-          <mat-option *ngFor="let item of drugDurationMaster" [value]="item">
+          placeholder="Count">
+          <z-option *ngFor="let item of drugDurationMaster" [zValue]="item">
             {{ item }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+          </z-option>
+        </z-select>
+      </z-form-field>
 
-    <div class="col-md-3 box">
-      <mat-form-field [style.width]="'100%'">
-        <mat-label>{{ current_language_set?.Prescription?.unit }}</mat-label>
-        <mat-select
-          class="input-full-width"
+      <!-- Unit -->
+      <z-form-field>
+        <z-label>{{ current_language_set?.Prescription?.unit }}</z-label>
+        <z-select
           name="unit"
           [(ngModel)]="currentPrescription.unit"
           [disabled]="!currentPrescription.drugID"
-          
           (selectionChange)="trackFieldInteraction('Unit Selection')"
-          >
-          <mat-option
+          placeholder="Select Unit">
+          <z-option
             *ngFor="let item of drugDurationUnitMaster"
-            [value]="item.drugDuration">
+            [zValue]="item.drugDuration">
             {{ item.drugDuration }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+          </z-option>
+        </z-select>
+      </z-form-field>
 
-    <div class="col-md-3 box"
-    *ngIf="
-        currentPrescription.formID &&
-        currentPrescription.formID !== 1 &&
-        currentPrescription.formID !== 2
-      ">
-      <mat-form-field [style.width]="'100%'">
-        <mat-label>{{
-          current_language_set?.Prescription?.quantity
-        }}</mat-label>
-        <mat-select
-          class="input-full-width"
+      <!-- Quantity (Conditional) -->
+      <z-form-field
+        *ngIf="
+          currentPrescription.formID &&
+          currentPrescription.formID !== 1 &&
+          currentPrescription.formID !== 2
+        ">
+        <z-label>{{ current_language_set?.Prescription?.quantity }}</z-label>
+        <z-select
           name="quantity"
           [(ngModel)]="currentPrescription.qtyPrescribed"
           [disabled]="!currentPrescription.drugID"
           (selectionChange)="trackFieldInteraction('Quantity Selection')"
-          >
-          <mat-option
+          placeholder="Qty">
+          <z-option
             *ngFor="let item of drugDurationMaster | slice: 0 : 5"
-            [value]="item">
+            [zValue]="item">
             {{ item }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+          </z-option>
+        </z-select>
+      </z-form-field>
 
-    <div class="box col-md-3">
-      <mat-form-field [style.width]="'100%'">
-        <mat-label>{{ current_language_set?.Prescription?.Route }}</mat-label>
-        <mat-select
-          class="input-full-width"
+      <!-- Route -->
+      <z-form-field>
+        <z-label>{{ current_language_set?.Prescription?.Route }}</z-label>
+        <z-select
           name="route"
           [(ngModel)]="currentPrescription.route"
           [disabled]="!currentPrescription.drugID"
-          (selectionChange)="trackFieldInteraction('Route Selection')">
-          <mat-option
+          (selectionChange)="trackFieldInteraction('Route Selection')"
+          placeholder="Select Route">
+          <z-option
             *ngFor="let item of drugRouteMaster"
-            [value]="item.routeName">
+            [zValue]="item.routeName">
             {{ item.routeName }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+          </z-option>
+        </z-select>
+      </z-form-field>
     </div>
-  </section>
 
-  <section
-    class="row no-row"
-    style="margin-top: 10px !important; padding-bottom: 30px">
-    <div class="col-md-10 box">
-      <mat-form-field [style.width]="'100%'">
-        <mat-label>{{
+    <div class="grid grid-cols-1 lg:grid-cols-6 gap-8 items-end">
+      <!-- Instructions -->
+      <z-form-field class="lg:col-span-5">
+        <z-label>{{
           current_language_set?.Prescription?.instructions
-        }}</mat-label>
+        }}</z-label>
         <textarea
-          matInput
-          allowText="textAreaValidator"
-          defaultNull
-          matTextareaAutosize
+          z-input
+          rows="2"
           name="instructions"
           maxlength="300"
-          name="instructions"
           [disabled]="!currentPrescription.drugID"
           [(ngModel)]="currentPrescription.instructions"
-          (focus)="trackFieldInteraction('Instructions')">
-        </textarea>
-      </mat-form-field>
+          (focus)="trackFieldInteraction('Instructions')"
+          placeholder="Special instructions for the patient..."></textarea>
+      </z-form-field>
+
+      <!-- Add Button -->
+      <div class="pb-1">
+        <button
+          z-button
+          class="w-full h-12 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-lg shadow-emerald-200 transition-all active:scale-95 flex items-center justify-center gap-2"
+          [disabled]="prescriptionForm.invalid"
+          type="button"
+          (click)="submitForUpload()">
+          <ng-icon name="lucidePlusCircle" class="text-xl"></ng-icon>
+          <span>{{ current_language_set?.common?.add }}</span>
+        </button>
+      </div>
     </div>
-    <div class="col-md-2 box centered-button">
-      <button
-        id="add-button"
-        [disabled]="prescriptionForm.invalid"
-        mat-raised-button
-        class="mat_green"
-        color="primary"
-        type="button"
-        (click)="submitForUpload()">
-        {{ current_language_set?.common?.add }}
-      </button>
-    </div>
-  </section>
+  </div>
 </form>
 
-<div *ngIf="drugPrescriptionForm.get('prescribedDrugs')?.value.length > 0">
-  <hr />
+<!-- Prescribed Drugs List -->
+<div
+  *ngIf="drugPrescriptionForm.get('prescribedDrugs')?.value.length > 0"
+  class="mt-12 space-y-8">
+  <div class="flex items-center justify-between">
+    <h3 class="text-2xl font-bold text-gray-900 flex items-center gap-3">
+      <ng-icon name="lucideTablets" class="text-blue-500"></ng-icon>
+      Prescribed Medications
+    </h3>
+    <span
+      class="px-4 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-bold">
+      {{ drugPrescriptionForm.get('prescribedDrugs')?.value.length }} Item(s)
+    </span>
+  </div>
+
   <div [formGroup]="drugPrescriptionForm">
-    <div class="row" formArrayName="prescribedDrugs">
-      <div
-        class="col-xs-12"
-        *ngFor="let drug of getPrescribedDrugs(); let j = index">
+    <div class="grid grid-cols-1 gap-6" formArrayName="prescribedDrugs">
+      <div *ngFor="let drug of getPrescribedDrugs(); let j = index">
         <ng-container
           [formGroupName]="j"
           *ngIf="j >= pageLimits[0] && j < pageLimits[1]">
-          <fieldset
-            class="m-b-20"
-            [ngClass]="{ fieldset: drug.value.createdBy }">
-            <legend>
-              {{ drug.value.drugName }} {{ drug.value.drugStrength }}
-              {{ drug.value.isEDL ? '' : current_language_set?.nonEDLMedicine }}
-            </legend>
-            <div class="row">
-              <div class="col-md-2">
-                <mat-form-field [style.width]="'100%'">
-                  <mat-label>{{
-                    current_language_set?.Prescription?.form
-                  }}</mat-label>
-                  <input
-                    autocomplete="off"
-                    readonly="true"
-                    type="text"
-                    matInput
-                    formControlName="formName" />
-                </mat-form-field>
-              </div>
-              <div class="col-md-2">
-                <mat-form-field [style.width]="'100%'">
-                  <mat-label>{{
-                    current_language_set?.casesheet?.dose
-                  }}</mat-label>
-                  <input
-                    autocomplete="off"
-                    readonly="true"
-                    type="text"
-                    matInput
-                    formControlName="dose" />
-                </mat-form-field>
-              </div>
-              <div class="col-md-2">
-                <mat-form-field [style.width]="'100%'">
-                  <mat-label>{{
-                    current_language_set?.Prescription?.frequency
-                  }}</mat-label>
-                  <input
-                    autocomplete="off"
-                    readonly="true"
-                    type="text"
-                    matInput
-                    formControlName="frequency" />
-                </mat-form-field>
-              </div>
-              <div class="col-md-2">
-                <mat-form-field [style.width]="'100%'">
-                  <mat-label>{{
-                    current_language_set?.nurseData?.chiefComplaintsDetails
-                      ?.duration
-                  }}</mat-label>
-                  <input
-                    autocomplete="off"
-                    readonly="true"
-                    type="text"
-                    matInput
-                    formControlName="durationView" />
-                </mat-form-field>
-              </div>
-              <div class="col-md-1">
-                <mat-form-field [style.width]="'100%'">
-                  <mat-label>{{
-                    current_language_set?.Prescription?.quantity
-                  }}</mat-label>
-                  <input
-                    autocomplete="off"
-                    readonly="true"
-                    type="text"
-                    matInput
-                    formControlName="qtyPrescribed" />
-                </mat-form-field>
-              </div>
-              <div class="col-md-3">
-                <mat-form-field [style.width]="'100%'">
-                  <mat-label>{{
-                    current_language_set?.Prescription?.instructions
-                  }}</mat-label>
-                  <input
-                    autocomplete="off"
-                    readonly="true"
-                    type="text"
-                    matInput
-                    formControlName="instructions" />
-                </mat-form-field>
-              </div>
-              <div class="col-md-12 centered-button">
-                <button
-                  mat-mini-fab
-                  style="margin-right: 3px"
-                  id="editMedicine"
-                  (click)="editMedicine(j, drug.value.id)"
-                  color="primary"
-                  class="mat_blue_circle">
-                  <span class="material-icons">edit</span>
-                </button>
-                <button
-                  mat-mini-fab
-                  id="deleteMedicine"
-                  (click)="deleteMedicine(j, drug.value.id)"
-                  color="warn"
-                  class="mat_warn_circle">
-                  <span class="material-icons">close</span>
-                </button>
+          <div
+            class="bg-white rounded-3xl shadow-sm border-l-4 border-l-blue-500 border border-gray-100 p-8 hover:shadow-md transition-all group">
+            <div class="flex flex-col lg:flex-row gap-8">
+              <div class="flex-1 space-y-6">
+                <!-- Header Info -->
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h4
+                      class="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                      {{ drug.value.drugName }} {{ drug.value.drugStrength }}
+                    </h4>
+                    <span
+                      *ngIf="!drug.value.isEDL"
+                      class="text-xs font-bold text-amber-600 uppercase tracking-widest bg-amber-50 px-2 py-0.5 rounded">
+                      {{ current_language_set?.nonEDLMedicine }}
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <button
+                      z-button
+                      variant="ghost"
+                      size="icon"
+                      class="text-blue-500 hover:bg-blue-50"
+                      (click)="editMedicine(j, drug.value.id)"
+                      zTooltip="Edit">
+                      <ng-icon name="lucidePencil" class="text-lg"></ng-icon>
+                    </button>
+                    <button
+                      z-button
+                      variant="ghost"
+                      size="icon"
+                      class="text-red-500 hover:bg-red-50"
+                      (click)="deleteMedicine(j, drug.value.id)"
+                      zTooltip="Remove">
+                      <ng-icon name="lucideTrash2" class="text-lg"></ng-icon>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Prescription Details Grid -->
+                <div
+                  class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                  <div class="space-y-1">
+                    <p class="text-xs text-gray-400 font-medium uppercase">
+                      {{ current_language_set?.Prescription?.form }}
+                    </p>
+                    <p class="text-sm font-semibold text-gray-700">
+                      {{ drug.value.formName }}
+                    </p>
+                  </div>
+                  <div class="space-y-1">
+                    <p class="text-xs text-gray-400 font-medium uppercase">
+                      {{ current_language_set?.casesheet?.dose }}
+                    </p>
+                    <p class="text-sm font-semibold text-gray-700">
+                      {{ drug.value.dose }}
+                    </p>
+                  </div>
+                  <div class="space-y-1">
+                    <p class="text-xs text-gray-400 font-medium uppercase">
+                      {{ current_language_set?.Prescription?.frequency }}
+                    </p>
+                    <p class="text-sm font-semibold text-gray-700">
+                      {{ drug.value.frequency }}
+                    </p>
+                  </div>
+                  <div class="space-y-1">
+                    <p class="text-xs text-gray-400 font-medium uppercase">
+                      {{
+                        current_language_set?.nurseData?.chiefComplaintsDetails
+                          ?.duration
+                      }}
+                    </p>
+                    <p class="text-sm font-semibold text-gray-700">
+                      {{ drug.value.durationView }}
+                    </p>
+                  </div>
+                  <div class="space-y-1">
+                    <p class="text-xs text-gray-400 font-medium uppercase">
+                      {{ current_language_set?.Prescription?.quantity }}
+                    </p>
+                    <p class="text-sm font-semibold text-gray-700">
+                      {{ drug.value.qtyPrescribed }}
+                    </p>
+                  </div>
+                  <div class="space-y-1 lg:col-span-1">
+                    <p class="text-xs text-gray-400 font-medium uppercase">
+                      {{ current_language_set?.Prescription?.instructions }}
+                    </p>
+                    <p
+                      class="text-sm font-semibold text-gray-700 truncate"
+                      [zTooltip]="drug.value.instructions">
+                      {{ drug.value.instructions || '---' }}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
-          </fieldset>
+          </div>
         </ng-container>
       </div>
     </div>
   </div>
-  <mat-paginator
-    [length]="drugPrescriptionForm.get('prescribedDrugs')?.value.length"
-    [pageSizeOptions]="[5, 10, 20]"
-    [pageSize]="pageSize"
-    hidePageSize="true"
-    (page)="setLimits($event.pageIndex); trackFieldInteraction('Prescription Pagination')"
-    showFirstLastButtons
-    aria-label="Select patient in doctorWorklist">
-  </mat-paginator>
+
+  <!-- Pagination -->
+  <div class="bg-white rounded-3xl border border-gray-100 p-4 shadow-sm">
+    <mat-paginator
+      [length]="drugPrescriptionForm.get('prescribedDrugs')?.value.length"
+      [pageSizeOptions]="[5, 10, 20]"
+      [pageSize]="pageSize"
+      hidePageSize="true"
+      (page)="
+        setLimits($event.pageIndex);
+        trackFieldInteraction('Prescription Pagination')
+      "
+      showFirstLastButtons
+      class="rounded-2xl">
+    </mat-paginator>
+  </div>
 </div>

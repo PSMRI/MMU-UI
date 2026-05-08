@@ -36,7 +36,6 @@ import {
 } from '@angular/forms';
 import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
 
-
 import { GeneralUtils } from '../../../shared/utility';
 
 import { ConfirmationService } from '../../../../core/services/confirmation.service';

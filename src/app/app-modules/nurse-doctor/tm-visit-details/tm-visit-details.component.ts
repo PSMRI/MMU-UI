@@ -27,11 +27,7 @@ import { DoctorService, MasterdataService } from '../shared/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
 import { PatientVisitDetailsComponent } from '../visit-details/visit-details/visit-details.component';
 import { TmcconfirmationComponent } from './tmcconfirmation/tmcconfirmation.component';
 
@@ -40,10 +36,8 @@ import { TmcconfirmationComponent } from './tmcconfirmation/tmcconfirmation.comp
   templateUrl: './tm-visit-details.component.html',
   styleUrls: ['./tm-visit-details.component.css'],
   imports: [
-    MatAccordion,
+    ZardAccordionImports,
     ReactiveFormsModule,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
     PatientVisitDetailsComponent,
     TmcconfirmationComponent,
   ],

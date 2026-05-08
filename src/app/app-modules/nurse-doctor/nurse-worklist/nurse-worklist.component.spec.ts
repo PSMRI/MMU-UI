@@ -83,9 +83,7 @@ describe('NurseWorklistComponent', () => {
     debugElement = fixture.debugElement;
     nurseService = debugElement.injector.get(NurseService);
 
-    spyOn(nurseService, 'getNurseWorklist').and.returnValue(
-      of(nurseWorklist)
-    );
+    spyOn(nurseService, 'getNurseWorklist').and.returnValue(of(nurseWorklist));
 
     fixture.detectChanges();
   });

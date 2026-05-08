@@ -21,63 +21,79 @@
  */
 
 import { Component, DoCheck, OnInit, ViewChild } from '@angular/core';
+import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { DoctorService } from '../../shared/services';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { BeneficiaryMctsCallHistoryComponent } from '../beneficiary-mcts-call-history/beneficiary-mcts-call-history.component';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { environment } from 'src/environments/environment';
-import { BeneficiaryMctsCallHistoryComponent } from '../beneficiary-mcts-call-history/beneficiary-mcts-call-history.component';
 import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { CaseSheetComponent } from '../../case-sheet/case-sheet.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { Router } from '@angular/router';
-import { MatTabGroup, MatTab } from '@angular/material/tabs';
-import { NgFor, NgIf, DatePipe } from '@angular/common';
-import { MatFormField, MatSuffix, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import { MatIcon } from '@angular/material/icon';
-import { MatTooltip } from '@angular/material/tooltip';
+import {
+  ZardFormImports,
+  ZardRadioImports,
+  ZardSelectImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+  ZardAccordionImports,
+  ZardDatePickerImports,
+} from 'zard-ui';
+import { ZardTabsImports } from '@/components/ui/tabs/tabs.imports';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideHistory,
+  lucideCalendar,
+  lucideUser,
+  lucideClipboardList,
+} from '@ng-icons/lucide';
+
 @Component({
   selector: 'app-beneficiary-platform-history',
   templateUrl: './beneficiary-platform-history.component.html',
   styleUrls: ['./beneficiary-platform-history.component.css'],
   imports: [
-    MatTabGroup,
-    NgFor,
-    MatTab,
     NgIf,
-    MatFormField,
-    MatInput,
-    MatIcon,
-    MatSuffix,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
-    MatPaginator,
-    MatLabel,
-    MatTooltip,
+    NgFor,
     DatePipe,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    ZardAccordionImports,
+    ZardDatePickerImports,
+    ZardTabsImports,
+    LucideAngularModule,
+    NgIcon,
+    MatPaginator,
+    MatTabsModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    BeneficiaryMctsCallHistoryComponent,
+  ],
+  providers: [
+    provideIcons({
+      lucideHistory,
+      lucideCalendar,
+      lucideUser,
+      lucideClipboardList,
+    }),
   ],
 })
 export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
@@ -540,5 +556,12 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
       endItem
     );
     console.log('list', this.previousTMHistoryPagedList);
+  }
+
+  medsList(element: any) {
+    return element.benPreviousData?.doctorData?.prescription
+      ?.filter((m: any) => m.drugName !== null)
+      ?.map((m: any) => `${m.drugName} ${m.drugStrength || ''}`)
+      ?.join(', ');
   }
 }

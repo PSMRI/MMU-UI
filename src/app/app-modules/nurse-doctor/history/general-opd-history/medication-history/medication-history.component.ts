@@ -49,33 +49,54 @@ import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
 import { NgFor, NgClass, NgIf } from '@angular/common';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import {
+  LucideAngularModule,
+  Pill,
+  History,
+  Beaker,
+  Timer,
+  Trash2,
+  Plus,
+  Info,
+} from 'lucide-angular';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
-import { MatOption } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-general-medication-history',
+  standalone: true,
   templateUrl: './medication-history.component.html',
   styleUrls: ['./medication-history.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatTooltip,
-    MatIcon,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardLabelImports,
+    ZardSelectImports,
     NgFor,
     NgClass,
-    MatFormField,
-    MatLabel,
-    MatInput,
+    NgIf,
+    LucideAngularModule,
     NullDefaultValueDirective,
     StringValidatorDirective,
-    MatSelect,
-    MatOption,
-    NgIf,
+  ],
+  providers: [
+    LucideAngularModule.pick({
+      Pill,
+      History,
+      Beaker,
+      Timer,
+      Trash2,
+      Plus,
+      Info,
+    }).providers,
   ],
 })
 export class MedicationHistoryComponent implements OnInit, OnDestroy, DoCheck {

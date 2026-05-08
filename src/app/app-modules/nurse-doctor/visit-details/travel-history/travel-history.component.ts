@@ -40,31 +40,34 @@ import {
   NurseService,
   DoctorService,
 } from '../../shared/services';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SetLanguageComponent } from '@/app-modules/core/components/set-language.component';
+import { HttpServiceService } from '@/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatLabel, MatFormField, MatSelect } from '@angular/material/select';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
-import { NgIf, NgFor } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardCardImports } from '@/components/ui/card/card.imports';
+import { LucideAngularModule } from 'lucide-angular';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-travel-history',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardCardImports,
+    LucideAngularModule,
+  ],
   templateUrl: './travel-history.component.html',
   styleUrls: ['./travel-history.component.css'],
-  imports: [
-    ReactiveFormsModule,
-    MatLabel,
-    MatRadioGroup,
-    MatRadioButton,
-    NgIf,
-    NgFor,
-    MatFormField,
-    MatSelect,
-    MatOption,
-    MatInput,
-  ],
 })
 export class TravelHistoryComponent
   implements OnInit, OnChanges, DoCheck, OnDestroy

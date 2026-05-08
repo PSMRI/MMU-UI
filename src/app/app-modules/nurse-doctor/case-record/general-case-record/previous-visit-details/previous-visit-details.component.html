@@ -1,188 +1,351 @@
 <app-beneficiary-platform-history></app-beneficiary-platform-history>
 
-<div class="row m-t-20">
-  <div class="col-xs-12 col-sm-12 col-md-6">
-    <h4>{{ current_language_set?.previousvisit?.currentvitals }}</h4>
-    <table
-      class="table table-bordered currentVitals-table"
-      style="overflow-y: hidden; border: 1px solid #ddd"
-      aria-describedby="currentVitals">
-      <tr>
-        <td>
-          {{
-            current_language_set?.vitalsDetails
-              ?.AnthropometryDataANC_OPD_NCD_PNC?.weight
-          }}: <span>{{ currentVitals?.weight_Kg }}</span>
-        </td>
-        <td>
-          {{
-            current_language_set?.vitalsDetails
-              ?.AnthropometryDataANC_OPD_NCD_PNC?.height
-          }}: <span>{{ currentVitals?.height_cm }}</span>
-        </td>
-        <td>
-          {{
-            current_language_set?.vitalsDetails
-              ?.AnthropometryDataANC_OPD_NCD_PNC?.BMI
-          }}(Kg/m<sup>2</sup>):
-          <span
-            [ngClass]="{
-              abnormal: calculateBMI() < 18.5 || calculateBMI() > 24.9
-            }"
-            >{{ calculateBMI() }}</span
-          >
-        </td>
-      </tr>
-      <tr>
-        <td>
-          {{
-            current_language_set?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-              ?.temperature
-          }}:
-          <span
-            [ngClass]="{
-              abnormal:
-                +currentVitals?.temperature < 96 ||
-                +currentVitals?.temperature > 100
-            }"
-            >{{ currentVitals?.temperature }}</span
-          >
-        </td>
-        <td>
-          {{ current_language_set?.common?.hR }}:
-          <span
-            [ngClass]="{
-              abnormal:
-                +currentVitals?.pulseRate < 49 ||
-                +currentVitals?.pulseRate > 101
-            }"
-            >{{ currentVitals?.pulseRate }}</span
-          >
-        </td>
-        <td>
-          {{ current_language_set?.common?.rR }}:
-          <span
-            [ngClass]="{
-              abnormal:
-                +currentVitals?.respiratoryRate < 11 ||
-                +currentVitals?.respiratoryRate > 19
-            }"
-            >{{ currentVitals?.respiratoryRate }}</span
-          >
-        </td>
-      </tr>
-      <tr>
-        <td>
-          {{ current_language_set?.sPOTwoWithUnit }}:
-          <span
-            [ngClass]="{
-              abnormal: currentVitals?.sPO2 < 1 || currentVitals?.sPO2 > 100
-            }"
-            >{{ currentVitals?.sPO2 }}</span
-          >
-        </td>
-      </tr>
-      <tr>
-        <th colspan="3" id="bloodpressuremmhg">
-          {{ current_language_set?.previousvisit?.bloodpressuremmhg }}
-        </th>
-      </tr>
-      <tr>
-        <td colspan="3">
-          <div class="firstHalf">
-            {{ current_language_set?.previousvisit?.systolic }}:
-            <span
-              [ngClass]="{
-                abnormal:
-                  +currentVitals?.systolicBP_1stReading > 80 ||
-                  +currentVitals?.systolicBP_1stReading > 100
-              }"
-              >{{ currentVitals?.systolicBP_1stReading }}</span
-            >
+<div class="mt-8 space-y-8">
+  <!-- Current Vitals Section -->
+  <div
+    class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+    <div
+      class="px-8 py-6 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <ng-icon
+          name="lucideHeartPulse"
+          class="text-rose-500 text-xl"></ng-icon>
+        <h3 class="text-lg font-bold text-gray-900">
+          {{ current_language_set?.previousvisit?.currentvitals }}
+        </h3>
+      </div>
+    </div>
+
+    <div class="p-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Weight -->
+        <div
+          class="bg-gray-50 rounded-2xl p-6 border border-gray-100 flex items-center gap-4">
+          <div class="p-3 bg-blue-100 rounded-xl">
+            <ng-icon
+              name="lucideScale"
+              class="text-blue-600 text-2xl"></ng-icon>
           </div>
-          <div class="secondHalf">
-            {{ current_language_set?.previousvisit?.diastolic }}:
-            <span
-              [ngClass]="{
-                abnormal:
-                  +currentVitals?.diastolicBP_1stReading > 120 ||
-                  +currentVitals?.diastolicBP_1stReading > 140
-              }"
-              >{{ currentVitals?.diastolicBP_1stReading }}</span
-            >
+          <div>
+            <p
+              class="text-xs text-gray-500 font-medium uppercase tracking-wider">
+              {{
+                current_language_set?.vitalsDetails
+                  ?.AnthropometryDataANC_OPD_NCD_PNC?.weight
+              }}
+            </p>
+            <p class="text-xl font-bold text-gray-900">
+              {{ currentVitals?.weight_Kg }}
+              <span class="text-sm font-normal text-gray-400 ml-1">Kg</span>
+            </p>
           </div>
-        </td>
-      </tr>
-    </table>
+        </div>
+
+        <!-- Height -->
+        <div
+          class="bg-gray-50 rounded-2xl p-6 border border-gray-100 flex items-center gap-4">
+          <div class="p-3 bg-indigo-100 rounded-xl">
+            <ng-icon
+              name="lucideRuler"
+              class="text-indigo-600 text-2xl"></ng-icon>
+          </div>
+          <div>
+            <p
+              class="text-xs text-gray-500 font-medium uppercase tracking-wider">
+              {{
+                current_language_set?.vitalsDetails
+                  ?.AnthropometryDataANC_OPD_NCD_PNC?.height
+              }}
+            </p>
+            <p class="text-xl font-bold text-gray-900">
+              {{ currentVitals?.height_cm }}
+              <span class="text-sm font-normal text-gray-400 ml-1">cm</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- BMI -->
+        <div
+          class="bg-gray-50 rounded-2xl p-6 border border-gray-100 flex items-center gap-4">
+          <div class="p-3 bg-amber-100 rounded-xl">
+            <ng-icon
+              name="lucideInfo"
+              class="text-amber-600 text-2xl"></ng-icon>
+          </div>
+          <div>
+            <p
+              class="text-xs text-gray-500 font-medium uppercase tracking-wider">
+              {{
+                current_language_set?.vitalsDetails
+                  ?.AnthropometryDataANC_OPD_NCD_PNC?.BMI
+              }}
+            </p>
+            <div class="flex items-center gap-2">
+              <p
+                class="text-xl font-bold text-gray-900"
+                [ngClass]="{
+                  'text-red-500':
+                    calculateBMI() < 18.5 || calculateBMI() > 24.9,
+                }">
+                {{ calculateBMI() }}
+              </p>
+              <span class="text-xs text-gray-400 font-normal">Kg/m²</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Temperature -->
+        <div
+          class="bg-gray-50 rounded-2xl p-6 border border-gray-100 flex items-center gap-4">
+          <div class="p-3 bg-orange-100 rounded-xl">
+            <ng-icon
+              name="lucideThermometer"
+              class="text-orange-600 text-2xl"></ng-icon>
+          </div>
+          <div>
+            <p
+              class="text-xs text-gray-500 font-medium uppercase tracking-wider">
+              {{
+                current_language_set?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
+                  ?.temperature
+              }}
+            </p>
+            <p
+              class="text-xl font-bold text-gray-900"
+              [ngClass]="{
+                'text-red-500':
+                  +currentVitals?.temperature < 96 ||
+                  +currentVitals?.temperature > 100,
+              }">
+              {{ currentVitals?.temperature }}
+              <span class="text-sm font-normal text-gray-400 ml-1">°F</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Heart Rate / Pulse -->
+        <div
+          class="bg-gray-50 rounded-2xl p-6 border border-gray-100 flex items-center gap-4">
+          <div class="p-3 bg-rose-100 rounded-xl">
+            <ng-icon
+              name="lucideActivity"
+              class="text-rose-600 text-2xl"></ng-icon>
+          </div>
+          <div>
+            <p
+              class="text-xs text-gray-500 font-medium uppercase tracking-wider">
+              {{ current_language_set?.common?.hR }}
+            </p>
+            <p
+              class="text-xl font-bold text-gray-900"
+              [ngClass]="{
+                'text-red-500':
+                  +currentVitals?.pulseRate < 49 ||
+                  +currentVitals?.pulseRate > 101,
+              }">
+              {{ currentVitals?.pulseRate }}
+              <span class="text-sm font-normal text-gray-400 ml-1">bpm</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Respiratory Rate -->
+        <div
+          class="bg-gray-50 rounded-2xl p-6 border border-gray-100 flex items-center gap-4">
+          <div class="p-3 bg-cyan-100 rounded-xl">
+            <ng-icon name="lucideWind" class="text-cyan-600 text-2xl"></ng-icon>
+          </div>
+          <div>
+            <p
+              class="text-xs text-gray-500 font-medium uppercase tracking-wider">
+              {{ current_language_set?.common?.rR }}
+            </p>
+            <p
+              class="text-xl font-bold text-gray-900"
+              [ngClass]="{
+                'text-red-500':
+                  +currentVitals?.respiratoryRate < 11 ||
+                  +currentVitals?.respiratoryRate > 19,
+              }">
+              {{ currentVitals?.respiratoryRate }}
+              <span class="text-sm font-normal text-gray-400 ml-1">rpm</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- SpO2 -->
+        <div
+          class="bg-gray-50 rounded-2xl p-6 border border-gray-100 flex items-center gap-4">
+          <div class="p-3 bg-sky-100 rounded-xl">
+            <ng-icon
+              name="lucideDroplets"
+              class="text-sky-600 text-2xl"></ng-icon>
+          </div>
+          <div>
+            <p
+              class="text-xs text-gray-500 font-medium uppercase tracking-wider">
+              {{ current_language_set?.sPOTwoWithUnit }}
+            </p>
+            <p
+              class="text-xl font-bold text-gray-900"
+              [ngClass]="{
+                'text-red-500':
+                  currentVitals?.sPO2 < 1 || currentVitals?.sPO2 > 100,
+              }">
+              {{ currentVitals?.sPO2 }}
+              <span class="text-sm font-normal text-gray-400 ml-1">%</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Blood Pressure (Full Width or Spanning 2) -->
+        <div
+          class="bg-gray-50 rounded-2xl p-6 border border-gray-100 md:col-span-2 space-y-4">
+          <div class="flex items-center gap-3 border-b border-gray-200 pb-2">
+            <ng-icon
+              name="lucideActivity"
+              class="text-rose-500 text-xl"></ng-icon>
+            <h4
+              class="text-sm font-bold text-gray-700 uppercase tracking-wider">
+              {{ current_language_set?.previousvisit?.bloodpressuremmhg }}
+            </h4>
+          </div>
+          <div class="grid grid-cols-2 gap-8">
+            <div class="space-y-1">
+              <p class="text-xs text-gray-500 font-medium">
+                {{ current_language_set?.previousvisit?.systolic }}
+              </p>
+              <p
+                class="text-xl font-bold text-gray-900"
+                [ngClass]="{
+                  'text-red-500':
+                    +currentVitals?.systolicBP_1stReading > 80 ||
+                    +currentVitals?.systolicBP_1stReading > 100,
+                }">
+                {{ currentVitals?.systolicBP_1stReading }}
+              </p>
+            </div>
+            <div class="space-y-1 border-l border-gray-200 pl-8">
+              <p class="text-xs text-gray-500 font-medium">
+                {{ current_language_set?.previousvisit?.diastolic }}
+              </p>
+              <p
+                class="text-xl font-bold text-gray-900"
+                [ngClass]="{
+                  'text-red-500':
+                    +currentVitals?.diastolicBP_1stReading > 120 ||
+                    +currentVitals?.diastolicBP_1stReading > 140,
+                }">
+                {{ currentVitals?.diastolicBP_1stReading }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="col-xs-12 col-sm-12 col-md-6 p-t-10">
+
+  <!-- Trends Charts Section -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Weight Trends -->
     <div
-      style="margin: 10px; display: block; max-height: 150px"
-      *ngIf="weightChartData.length && weightChartLabels.length">
-      <h5>{{ current_language_set?.previousvisit?.bodyweighttrends }}</h5>
-
-      <canvas
-        baseChart
-        [datasets]="weightChartData"
-        [labels]="weightChartLabels"
-        [options]="lineChartOptions"
-        [legend]="weightChartLegend"
-        [type]="'line'"
-        (chartClick)="chartClicked('bw')"></canvas>
+      class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 space-y-6">
+      <div class="flex items-center justify-between">
+        <h5 class="text-lg font-bold text-gray-900 flex items-center gap-3">
+          <ng-icon name="lucideTrendingUp" class="text-blue-500"></ng-icon>
+          {{ current_language_set?.previousvisit?.bodyweighttrends }}
+        </h5>
+      </div>
+      <div
+        class="h-64 relative"
+        *ngIf="weightChartData.length && weightChartLabels.length">
+        <canvas
+          baseChart
+          [datasets]="weightChartData"
+          [labels]="weightChartLabels"
+          [options]="lineChartOptions"
+          [legend]="weightChartLegend"
+          [type]="'line'"
+          (chartClick)="chartClicked('bw')"></canvas>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center h-64 bg-gray-50 rounded-2xl border border-dashed border-gray-200"
+        *ngIf="!weightChartData.length">
+        <ng-icon name="lucideBox" size="48" class="text-gray-200"></ng-icon>
+        <p class="text-gray-400 font-medium mt-2">
+          {{
+            current_language_set?.previousvisit?.nopreviousweightrecordsfound
+          }}
+        </p>
+      </div>
     </div>
-    <div class="no_records" *ngIf="!weightChartData.length">
-      <h4>
-        {{ current_language_set?.previousvisit?.nopreviousweightrecordsfound }}
-      </h4>
-    </div>
-  </div>
-</div>
 
-<div class="row m-t-30">
-  <div class="col-md-6 p-t-10">
+    <!-- Blood Pressure Trends -->
     <div
-      style="margin: 10px; display: block; max-height: 150px"
-      *ngIf="bpChartData.length && bpChartLabels.length">
-      <h5>{{ current_language_set?.previousvisit?.bloodPressureTrends }}</h5>
-      <canvas
-        baseChart
-        [datasets]="bpChartData"
-        [labels]="bpChartLabels"
-        [options]="lineChartOptions"
-        [legend]="bpChartLegend"
-        [type]="'line'"
-        (chartClick)="chartClicked('bp')"></canvas>
+      class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 space-y-6">
+      <div class="flex items-center justify-between">
+        <h5 class="text-lg font-bold text-gray-900 flex items-center gap-3">
+          <ng-icon name="lucideActivity" class="text-rose-500"></ng-icon>
+          {{ current_language_set?.previousvisit?.bloodPressureTrends }}
+        </h5>
+      </div>
+      <div
+        class="h-64 relative"
+        *ngIf="bpChartData.length && bpChartLabels.length">
+        <canvas
+          baseChart
+          [datasets]="bpChartData"
+          [labels]="bpChartLabels"
+          [options]="lineChartOptions"
+          [legend]="bpChartLegend"
+          [type]="'line'"
+          (chartClick)="chartClicked('bp')"></canvas>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center h-64 bg-gray-50 rounded-2xl border border-dashed border-gray-200"
+        *ngIf="!bpChartData.length">
+        <ng-icon name="lucideBox" size="48" class="text-gray-200"></ng-icon>
+        <p class="text-gray-400 font-medium mt-2">
+          {{
+            current_language_set?.previousvisit
+              ?.previousbloodpressurerecordsfound
+          }}
+        </p>
+      </div>
     </div>
-    <div class="no_records" *ngIf="!bpChartData.length">
-      <h4>
-        {{
-          current_language_set?.previousvisit?.previousbloodpressurerecordsfound
-        }}
-      </h4>
-    </div>
-  </div>
 
-  <div class="col-md-6 p-t-10">
+    <!-- Blood Glucose Trends -->
     <div
-      style="margin: 10px; display: block; max-height: 150px"
-      *ngIf="bgChartData.length && bgChartLabels.length">
-      <h5>{{ current_language_set?.previousvisit?.bloodGlucoseTrends }}</h5>
-
-      <canvas
-        baseChart
-        [datasets]="bgChartData"
-        [labels]="bgChartLabels"
-        [options]="lineChartOptions"
-        [legend]="bgChartLegend"
-        [type]="'line'"
-        (chartClick)="chartClicked('bg')"></canvas>
-    </div>
-    <div class="no_records" *ngIf="!bgChartData.length">
-      <h4>
-        {{
-          current_language_set?.previousvisit?.previousbloodglucoserecordsfound
-        }}
-      </h4>
+      class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 space-y-6 lg:col-span-2">
+      <div class="flex items-center justify-between">
+        <h5 class="text-lg font-bold text-gray-900 flex items-center gap-3">
+          <ng-icon name="lucideDroplets" class="text-amber-500"></ng-icon>
+          {{ current_language_set?.previousvisit?.bloodGlucoseTrends }}
+        </h5>
+      </div>
+      <div
+        class="h-80 relative"
+        *ngIf="bgChartData.length && bgChartLabels.length">
+        <canvas
+          baseChart
+          [datasets]="bgChartData"
+          [labels]="bgChartLabels"
+          [options]="lineChartOptions"
+          [legend]="bgChartLegend"
+          [type]="'line'"
+          (chartClick)="chartClicked('bg')"></canvas>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center h-80 bg-gray-50 rounded-2xl border border-dashed border-gray-200"
+        *ngIf="!bgChartData.length">
+        <ng-icon name="lucideBox" size="48" class="text-gray-200"></ng-icon>
+        <p class="text-gray-400 font-medium mt-2">
+          {{
+            current_language_set?.previousvisit
+              ?.previousbloodglucoserecordsfound
+          }}
+        </p>
+      </div>
     </div>
   </div>
 </div>

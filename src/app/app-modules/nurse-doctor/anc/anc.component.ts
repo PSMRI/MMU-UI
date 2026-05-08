@@ -35,28 +35,29 @@ import { SetLanguageComponent } from '../../core/components/set-language.compone
 import { BeneficiaryDetailsService } from '../../core/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
 import { AncDetailsComponent } from './anc-details/anc-details.component';
 import { ObstetricFormulaComponent } from './obstetric-formula/obstetric-formula.component';
 import { NgIf } from '@angular/common';
 import { AncImmunizationComponent } from './anc-immunization/anc-immunization.component';
+import {
+  LucideAngularModule,
+  Baby,
+  ClipboardList,
+  Syringe,
+} from 'lucide-angular';
 @Component({
   selector: 'app-nurse-anc',
   templateUrl: './anc.component.html',
   styleUrls: ['./anc.component.css'],
   imports: [
-    MatAccordion,
+    ZardAccordionImports,
     ReactiveFormsModule,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
     AncDetailsComponent,
     ObstetricFormulaComponent,
     NgIf,
     AncImmunizationComponent,
+    LucideAngularModule,
   ],
 })
 export class AncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {

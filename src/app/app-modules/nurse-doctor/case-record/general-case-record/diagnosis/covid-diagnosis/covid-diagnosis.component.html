@@ -1,22 +1,30 @@
-<!-- {{ generalDiagnosisForm.value | json}} -->
-<div class="row" [formGroup]="generalDiagnosisForm">
-  <div class="col-xs-12 col-sm-6 m-t-6">
-    <header class="mat-expansion-panel-header">
-      <h4>{{ current_language_set?.doctorDiagnosis }}*</h4>
-    </header>
-    <mat-form-field>
-      <textarea
-        matInput
-        allowText="textAreaValidator"
-        defaultNull
-        matTextareaAutosize
-        maxlength="300"
-        name="doctorDiagnosis"
-        formControlName="doctorDiagnosis"
-        [readonly]="specialist"
-        required
-        >{{ doctorDiagnosis }} </textarea
-      >
-    </mat-form-field>
-  </div>
+<div class="space-y-8" [formGroup]="generalDiagnosisForm">
+  <section class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+    <div class="max-w-2xl space-y-6">
+      <h4
+        class="text-xl font-bold text-gray-900 border-l-4 border-red-500 pl-4 flex items-center gap-2">
+        <ng-icon name="lucideStethoscope" class="text-red-500"></ng-icon>
+        {{ current_language_set?.doctorDiagnosis }} *
+      </h4>
+
+      <z-form-field>
+        <z-label>{{ current_language_set?.doctorDiagnosis }}</z-label>
+        <textarea
+          z-input
+          rows="5"
+          formControlName="doctorDiagnosis"
+          [readonly]="specialist"
+          maxlength="300"
+          placeholder="Enter detailed diagnosis findings...">
+        </textarea>
+        <p
+          class="text-xs text-gray-400 mt-2 flex justify-end"
+          *ngIf="!specialist">
+          {{
+            generalDiagnosisForm.get('doctorDiagnosis')?.value?.length || 0
+          }}/300 characters
+        </p>
+      </z-form-field>
+    </div>
+  </section>
 </div>

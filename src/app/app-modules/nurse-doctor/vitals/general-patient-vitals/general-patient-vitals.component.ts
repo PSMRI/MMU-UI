@@ -44,19 +44,28 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
 import { NullDefaultValueDirective } from '../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
 import { NumberValidatorDirective } from '../../../core/directives/numberValidator.directive';
 import { NgClass, NgIf } from '@angular/common';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideSearch,
+  lucideRefreshCcw,
+  lucideInbox,
+  lucideInfo,
+  lucideStethoscope,
+  lucideThermometer,
+  lucideActivity,
+  lucideDroplet,
+  lucideScale,
+} from '@ng-icons/lucide';
+
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardInputDirective } from '@/components/ui/input/input.directive';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardCheckboxComponent } from '@/components/ui/checkbox/checkbox.component';
 
 @Component({
   selector: 'app-nurse-general-patient-vitals',
@@ -64,25 +73,36 @@ import { MatCheckbox } from '@angular/material/checkbox';
   styleUrls: ['./general-patient-vitals.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatAccordion,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
-    MatFormField,
-    MatLabel,
-    MatInput,
+    ZardAccordionImports,
+    ZardFormImports,
+    ZardInputDirective,
     NullDefaultValueDirective,
     StringValidatorDirective,
     NumberValidatorDirective,
     NgClass,
-    MatSuffix,
-    MatTooltip,
+    ZardTooltipImports,
     NgIf,
-    MatCheckbox,
+    ZardCheckboxComponent,
+    NgIcon,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideSearch,
+      lucideRefreshCcw,
+      lucideInbox,
+      lucideInfo,
+      lucideStethoscope,
+      lucideThermometer,
+      lucideActivity,
+      lucideDroplet,
+      lucideScale,
+    }),
   ],
 })
 export class GeneralPatientVitalsComponent
   implements OnInit, OnChanges, OnDestroy, DoCheck
 {
+  protected readonly Math = Math;
   @Input()
   patientVitalsForm!: FormGroup;
 
@@ -120,6 +140,11 @@ export class GeneralPatientVitalsComponent
   diabetesSelected = 0;
   rbsPopup = false;
   rbsCheckBox = true;
+  showIDRS = false;
+
+  rbsCheckBoxChange() {
+    this.rbsCheckBox = !this.rbsCheckBox;
+  }
 
   // Audio - SWAASA
   isRecording = false;
@@ -1158,14 +1183,6 @@ export class GeneralPatientVitalsComponent
     this.languageComponent = new SetLanguageComponent(this.httpServiceService);
     this.languageComponent.setLanguage();
     this.currentLanguageSet = this.languageComponent.currentLanguageObject;
-  }
-
-  onRbsCheckBox(event: any) {
-    if (event.checked) {
-      this.rbsCheckBox = true;
-    } else {
-      this.rbsCheckBox = false;
-    }
   }
 
   startRecording() {

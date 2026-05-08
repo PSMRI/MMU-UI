@@ -1,438 +1,440 @@
-<div [formGroup]="patientCovidForm">
-  <div class="row">
-    <div class="container">
-      <div class="col-12 row">
-        <div class="col-6 cell_postion">
-          <mat-label>
-            {{ currentLanguageSet?.travel?.haveyouTravelledlast14days }} *
-          </mat-label>
-        </div>
-        <div class="col-6">
-          <mat-radio-group
-            class="test"
-            [style.width]="'50%'"
-            formControlName="travelStatus"
-            name="travelStatus"
-            placeholder="Travelled last 14 days"
-            (change)="travelStatuschange(travelStatus)"
-            id="travelStatus"
-            required="{{ travelReqiured }}">
-            <mat-radio-button value="true">{{
-              currentLanguageSet?.common?.yes
-            }}</mat-radio-button>
-            <mat-radio-button value="false">{{
-              currentLanguageSet?.common?.no
-            }}</mat-radio-button>
-          </mat-radio-group>
-        </div>
+<div
+  [formGroup]="patientCovidForm"
+  class="space-y-12 pt-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+  <!-- Travel Status Question -->
+  <div
+    class="flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 rounded-[2.5rem] bg-white border border-gray-100 shadow-xl shadow-gray-100/50 transition-all duration-500 hover:shadow-2xl hover:scale-[1.005]">
+    <div class="flex items-center gap-4">
+      <div class="p-3 bg-sky-100 rounded-2xl">
+        <lucide-icon name="plane" class="size-6 text-sky-600"></lucide-icon>
       </div>
-
-      <div *ngIf="istravelStatus">
-        <div>
-          <br />
-          <h5>{{ currentLanguageSet?.travel?.travelType }}</h5>
-          <div *ngIf="readTravel === false">
-            <div *ngFor="let travel of travelTypeList">
-              <input
-                type="checkbox"
-                style="width: 20px; height: 20px"
-                (change)="onChange(travel, $event)"
-                id="travelType" />
-              <span>{{ travel }}</span>
-            </div>
-          </div>
-          <div *ngIf="readTravel === true">
-            <input
-              type="checkbox"
-              style="width: 20px; height: 20px"
-              id="travelType"
-              [checked]="domtravel"
-              [disabled]="readTravel" />
-            {{ currentLanguageSet?.travel?.domestic }}
-            <br />
-            <input
-              type="checkbox"
-              style="width: 20px; height: 20px"
-              id="travelType"
-              [checked]="intertravel"
-              [disabled]="readTravel" />
-            {{ currentLanguageSet?.travel?.international }}
-          </div>
-          <br />
-          <br />
-          <!--Grid row-->
-          <div class="row">
-            <!--Grid column-->
-            <div class="col-md-6 mb-4" *ngIf="istravelModeDomestic">
-              <!-- Card -->
-              <div class="card gradient-card">
-                <!-- Content -->
-
-                <div
-                  class="text-white d-flex h-100 mask blue-gradient-rgba"
-                  style="justify-content: center">
-                  <div class="first-content align-self-left p-3">
-                    <h4 style="text-align: center; color: black; size: 40px">
-                      <br />
-                      <strong>{{
-                        currentLanguageSet?.travel?.domestic
-                      }}</strong>
-                    </h4>
-                    <br />
-                    <div style="text-align: center">
-                      <mat-form-field>
-                        <mat-label>{{
-                          currentLanguageSet?.travel?.modeofTravel
-                        }}</mat-label>
-                        <mat-select
-                          class="test"
-                          name="modeOfTravelDomestic"
-                          formControlName="modeOfTravelDomestic"
-                          id="modeOfTravelDomestic"
-                          (selectionChange)="
-                            traveldomesticStatuschange(modeOfTravelDomestic)
-                          ">
-                          <mat-option
-                            *ngFor="let type of domestictype"
-                            value="{{ type }}"
-                            >{{ type }}</mat-option
-                          >
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-                    <div style="text-align: center; color: black; size: 30px">
-                      <h5>
-                        {{ currentLanguageSet?.travel?.locationTravelledFrom }}
-                      </h5>
-                    </div>
-                    <div style="text-align: center">
-                      <mat-form-field>
-                        <mat-label>{{
-                          currentLanguageSet?.travel?.state
-                        }}</mat-label>
-                        <mat-select
-                          name="fromStateDom"
-                          id="fromStateDom"
-                          formControlName="fromStateDom"
-                          (selectionChange)="GetDistrictsFromDom(fromStateDom)">
-                          <mat-option
-                            *ngFor="let state of states"
-                            [value]="state.stateID">
-                            {{ state.stateName }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-
-                    <div style="text-align: center">
-                      <mat-form-field>
-                        <mat-label>{{
-                          currentLanguageSet?.travel?.district
-                        }}</mat-label>
-                        <mat-select
-                          id="fromDistrictDom"
-                          name="fromDistrictDom"
-                          formControlName="fromDistrictDom"
-                          (selectionChange)="
-                            GetSubDistrictFromDom(fromDistrictDom)
-                          ">
-                          <mat-option
-                            *ngFor="let district of districtsFromDom"
-                            [value]="district.districtID">
-                            {{ district.districtName }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-
-                    <div style="text-align: center">
-                      <mat-form-field>
-                        <mat-label>{{
-                          currentLanguageSet?.travel?.subDistrict
-                        }}</mat-label>
-                        <mat-select
-                          id="fromSubDistrictDom"
-                          formControlName="fromSubDistrictDom"
-                          name="fromSubDistrictDom"
-                          (selectionChange)="getVillage(fromSubDistrictDom)">
-                          <mat-option
-                            *ngFor="let item of subDistrictsFromDom"
-                            [value]="item.blockID"
-                            >{{ item.blockName }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-
-                    <div style="text-align: center; color: black; size: 30px">
-                      <h5>
-                        {{ currentLanguageSet?.travel?.locationTravelledTo }}
-                      </h5>
-                    </div>
-                    <div style="text-align: center">
-                      <mat-form-field>
-                        <mat-label>{{
-                          currentLanguageSet?.travel?.state
-                        }}</mat-label>
-                        <mat-select
-                          name="toStateDom"
-                          formControlName="toStateDom"
-                          id="toStateDom"
-                          (selectionChange)="GetDistrictsToDom(toStateDom)">
-                          <mat-option
-                            *ngFor="let state of states"
-                            [value]="state.stateID">
-                            {{ state.stateName }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-
-                    <div style="text-align: center">
-                      <mat-form-field>
-                        <mat-label>{{
-                          currentLanguageSet?.travel?.district
-                        }}</mat-label>
-                        <mat-select
-                          name="toDistrictDom"
-                          formControlName="toDistrictDom"
-                          id="toDistrictDom"
-                          (selectionChange)="
-                            getSubDistrictToDom(toDistrictDom)
-                          ">
-                          <mat-option
-                            *ngFor="let district of districtsToDom"
-                            [value]="district.districtID">
-                            {{ district.districtName }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-
-                    <div style="text-align: center">
-                      <mat-form-field>
-                        <mat-label>{{
-                          currentLanguageSet?.travel?.subDistrict
-                        }}</mat-label>
-                        <mat-select
-                          name="toSubDistrictDom"
-                          id="toSubDistrictDom"
-                          formControlName="toSubDistrictDom"
-                          (selectionChange)="
-                            getVillageTosubDistrictDom(toSubDistrictDom)
-                          ">
-                          <mat-option
-                            *ngFor="let item of subDistrictsToDom"
-                            [value]="item.blockID"
-                            >{{ item.blockName }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-
-                    <div
-                      class="second-content align-self-center mx-auto text-center">
-                      <span class="far fa-money-bill-alt fa-3x"></span>
-                    </div>
-                  </div>
-                </div>
-
-                <br />
-                <!-- Data -->
-                <div class="third-content ml-auto mr-4 mb-2">
-                  <p class="text-uppercase text-muted"></p>
-                </div>
-              </div>
-            </div>
-
-            <!--Grid column-->
-
-            <!--Grid column-->
-            <div class="col-md-6 mb-4" *ngIf="istravelModeInternatinal">
-              <!-- Card -->
-              <div class="card gradient-card">
-                <!-- Content -->
-
-                <div
-                  class="text-white d-flex h-100 mask purple-gradient-rgba"
-                  style="justify-content: center">
-                  <div class="first-content align-self-left p-3">
-                    <h4 style="text-align: center; color: black; size: 30px">
-                      <br />
-                      <strong>{{
-                        currentLanguageSet?.travel?.international
-                      }}</strong>
-                    </h4>
-                    <br />
-                    <div style="text-align: center">
-                      <mat-form-field>
-                        <mat-label>{{
-                          currentLanguageSet?.travel?.modeofTravel
-                        }}</mat-label>
-                        <mat-select
-                          class="test"
-                          id="modeOfTravelInter"
-                          formControlName="modeOfTravelInter"
-                          name="modeOfTravelInter"
-                          (selectionChange)="
-                            travelinternationalStatuschange(modeOfTravelInter)
-                          ">
-                          <mat-option
-                            *ngFor="let type of internationaltype"
-                            value="{{ type }}"
-                            >{{ type }}</mat-option
-                          >
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-
-                    <div style="text-align: center; color: black; size: 30px">
-                      <h5>
-                        {{ currentLanguageSet?.travel?.locationTravelledFrom }}
-                      </h5>
-                    </div>
-
-                    <div style="text-align: center">
-                      <mat-form-field>
-                        <mat-label>{{
-                          currentLanguageSet?.travel?.country
-                        }}</mat-label>
-                        <mat-select
-                          id="fromCountryInter"
-                          formControlName="fromCountryInter"
-                          name="fromCountryInter"
-                          (selectionChange)="
-                            getCitiesFromInter(fromCountryInter)
-                          ">
-                          <mat-option
-                            *ngFor="let country of countries"
-                            [value]="country.countryID">
-                            {{ country.countryName }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-
-                    <div style="text-align: center">
-                      <mat-form-field>
-                        <mat-label>{{
-                          currentLanguageSet?.travel?.city
-                        }}</mat-label>
-                        <mat-select
-                          formControlName="fromCityInter"
-                          id="fromCityInter"
-                          name="fromCityInter"
-                          (selectionChange)="CitiesFromInter(fromCityInter)">
-                          <mat-option
-                            *ngFor="let city of citiesFromInter"
-                            [value]="city.cityID">
-                            {{ city.cityName }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-
-                    <div style="text-align: center; color: black; size: 40px">
-                      <h5>
-                        {{ currentLanguageSet?.travel?.locationTravelledTo }}
-                      </h5>
-                    </div>
-
-                    <div style="text-align: center">
-                      <mat-form-field>
-                        <mat-label>{{
-                          currentLanguageSet?.travel?.country
-                        }}</mat-label>
-                        <mat-select
-                          formControlName="toCountryInter"
-                          name="toCountryInter"
-                          id="toCountryInter"
-                          (selectionChange)="getCitiesToInter(toCountryInter)">
-                          <mat-option
-                            *ngFor="let country of countries"
-                            [value]="country.countryID">
-                            {{ country.countryName }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-
-                    <div style="text-align: center">
-                      <mat-form-field>
-                        <mat-label>{{
-                          currentLanguageSet?.travel?.city
-                        }}</mat-label>
-                        <mat-select
-                          name="toCityInter"
-                          id="toCityInter"
-                          formControlName="toCityInter"
-                          (selectionChange)="CitiesToInter(toCityInter)">
-                          <mat-option
-                            *ngFor="let city of citiesToInter"
-                            [value]="city.cityID">
-                            {{ city.cityName }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-
-                    <div
-                      class="second-content align-self-center mx-auto text-center">
-                      <span class="fas fa-chart-line fa-3x"></span>
-                    </div>
-                  </div>
-                </div>
-
-                <br />
-
-                <!-- Data -->
-                <div class="third-content ml-auto mr-4 mb-2">
-                  <p class="text-uppercase text-muted"></p>
-                  <!-- <h4 class="font-weight-bold float-right"></h4> -->
-                </div>
-
-                <!-- Content -->
-              </div>
-              <!-- Card -->
-            </div>
-            <!--Grid column-->
-          </div>
-        </div>
-        <br />
-      </div>
-
-      <br />
-      <h4>{{ currentLanguageSet?.travel?.outcome }}</h4>
-
       <div>
-        <h5>{{ currentLanguageSet?.travel?.suspectedCOVID }}</h5>
-        <mat-form-field>
-          <input
-            matInput
-            class="test"
-            name="suspectedStatusUI"
-            id="suspectedStatusUI"
-            formControlName="suspectedStatusUI"
-            value="{{ suspectedCovid }}"
-            readonly />
-        </mat-form-field>
-        <br />
-        <br />
-
-        <mat-form-field [style.width]="'50%'">
-          <h4>{{ currentLanguageSet?.travel?.recommendation }} :</h4>
-          <br />
-
-          <textarea
-            matInput
-            rows="6"
-            value="{{ recommendationText }}"
-            id="recommendation"
-            formControlName="recommendation"
-            readonly></textarea>
-        </mat-form-field>
+        <z-label class="text-base font-black text-gray-900 tracking-tight">
+          {{ currentLanguageSet?.travel?.haveyouTravelledlast14days }}
+        </z-label>
+        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-tight">
+          Recent travel screening protocol
+        </p>
       </div>
-      <!--Grid column-->
+    </div>
+
+    <z-radio-group
+      formControlName="travelStatus"
+      (change)="travelStatuschange($event)"
+      id="travelStatus"
+      class="flex items-center gap-4">
+      <div
+        class="flex items-center space-x-2 bg-gray-50 px-6 py-3 rounded-2xl border border-transparent hover:border-sky-400 transition-all cursor-pointer group">
+        <z-radio [zValue]="'true'" id="travelYes">{{
+          currentLanguageSet?.common?.yes
+        }}</z-radio>
+      </div>
+      <div
+        class="flex items-center space-x-2 bg-gray-50 px-6 py-3 rounded-2xl border border-transparent hover:border-rose-400 transition-all cursor-pointer group">
+        <z-radio [zValue]="'false'" id="travelNo">{{
+          currentLanguageSet?.common?.no
+        }}</z-radio>
+      </div>
+    </z-radio-group>
+  </div>
+
+  <div
+    *ngIf="istravelStatus"
+    class="space-y-12 animate-in zoom-in-95 duration-700">
+    <!-- Travel Type Selection -->
+    <div class="p-8 rounded-[2.5rem] bg-gray-50/50 border border-gray-100">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="h-1.5 w-1.5 rounded-full bg-sky-500 animate-pulse"></div>
+        <h5
+          class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
+          {{ currentLanguageSet?.travel?.travelType }} Selection
+        </h5>
+      </div>
+
+      <div *ngIf="!readTravel" class="flex flex-wrap gap-4">
+        <label
+          *ngFor="let travel of travelTypeList"
+          class="flex items-center gap-3 px-6 py-3 bg-white rounded-2xl border border-gray-100 shadow-sm cursor-pointer group hover:border-sky-400 hover:shadow-md transition-all duration-300">
+          <input
+            type="checkbox"
+            class="w-5 h-5 rounded-lg border-gray-200 text-sky-500 focus:ring-sky-500 transition-all cursor-pointer"
+            (change)="onChange(travel, $event)"
+            id="travelType" />
+          <span
+            class="text-xs font-black text-gray-700 uppercase tracking-widest group-hover:text-sky-600 transition-colors">
+            {{ travel }}
+          </span>
+        </label>
+      </div>
+
+      <div *ngIf="readTravel" class="flex flex-wrap gap-4">
+        <div
+          class="flex items-center gap-3 px-6 py-3 bg-white/50 rounded-2xl border border-gray-100 opacity-75">
+          <lucide-icon
+            [name]="domtravel ? 'check-circle' : 'circle'"
+            class="size-4"
+            [ngClass]="
+              domtravel ? 'text-emerald-500' : 'text-gray-300'
+            "></lucide-icon>
+          <span
+            class="text-xs font-black text-gray-700 uppercase tracking-widest">
+            {{ currentLanguageSet?.travel?.domestic }}
+          </span>
+        </div>
+        <div
+          class="flex items-center gap-3 px-6 py-3 bg-white/50 rounded-2xl border border-gray-100 opacity-75">
+          <lucide-icon
+            [name]="intertravel ? 'check-circle' : 'circle'"
+            class="size-4"
+            [ngClass]="
+              intertravel ? 'text-emerald-500' : 'text-gray-300'
+            "></lucide-icon>
+          <span
+            class="text-xs font-black text-gray-700 uppercase tracking-widest">
+            {{ currentLanguageSet?.travel?.international }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <!-- Domestic Travel Card -->
+      <z-card
+        *ngIf="istravelModeDomestic"
+        class="border-none shadow-2xl shadow-sky-500/10 rounded-[3rem] overflow-hidden group/card animate-in slide-in-from-left duration-700">
+        <z-card-header
+          class="bg-gradient-to-br from-sky-50/80 to-white p-8 border-b border-sky-100/50">
+          <z-card-title class="flex items-center gap-4 text-sky-900">
+            <div
+              class="w-12 h-12 rounded-2xl bg-sky-500 shadow-lg shadow-sky-200 flex items-center justify-center group-hover/card:scale-110 transition-transform duration-500">
+              <lucide-icon
+                name="map-pin"
+                class="text-white size-6"></lucide-icon>
+            </div>
+            <div>
+              <span class="block text-xl font-black tracking-tight uppercase">
+                {{ currentLanguageSet?.travel?.domestic }}
+              </span>
+              <span
+                class="text-[10px] text-sky-400 font-bold uppercase tracking-widest"
+                >Internal Logistics</span
+              >
+            </div>
+          </z-card-title>
+        </z-card-header>
+        <z-card-content class="p-8 space-y-10 bg-white">
+          <z-form-field>
+            <z-form-label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.travel?.modeofTravel }}</z-form-label
+            >
+            <z-select
+              formControlName="modeOfTravelDomestic"
+              id="modeOfTravelDomestic"
+              (zSelectionChange)="traveldomesticStatuschange($event)"
+              class="h-12 rounded-2xl bg-gray-50 border-transparent focus:border-sky-400 transition-all">
+              <z-select-item *ngFor="let type of domestictype" [zValue]="type">
+                {{ type }}
+              </z-select-item>
+            </z-select>
+          </z-form-field>
+
+          <div class="space-y-8 pt-8 border-t border-gray-50">
+            <h6
+              class="text-[10px] font-black text-sky-500 uppercase tracking-[0.2em] flex items-center gap-2">
+              <span
+                class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+              Origin Parameters
+            </h6>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <z-form-field>
+                <z-form-label
+                  class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+                  >{{ currentLanguageSet?.travel?.state }}</z-form-label
+                >
+                <z-select
+                  id="fromStateDom"
+                  formControlName="fromStateDom"
+                  (zSelectionChange)="GetDistrictsFromDom($event)"
+                  class="h-12 rounded-2xl bg-gray-50">
+                  <z-select-item
+                    *ngFor="let state of states"
+                    [zValue]="state.stateID">
+                    {{ state.stateName }}
+                  </z-select-item>
+                </z-select>
+              </z-form-field>
+
+              <z-form-field>
+                <z-form-label
+                  class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+                  >{{ currentLanguageSet?.travel?.district }}</z-form-label
+                >
+                <z-select
+                  id="fromDistrictDom"
+                  formControlName="fromDistrictDom"
+                  (zSelectionChange)="GetSubDistrictFromDom($event)"
+                  class="h-12 rounded-2xl bg-gray-50">
+                  <z-select-item
+                    *ngFor="let district of districtsFromDom"
+                    [zValue]="district.districtID">
+                    {{ district.districtName }}
+                  </z-select-item>
+                </z-select>
+              </z-form-field>
+            </div>
+          </div>
+
+          <div class="space-y-8 pt-8 border-t border-gray-50">
+            <h6
+              class="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] flex items-center gap-2">
+              <span
+                class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              Destination Parameters
+            </h6>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <z-form-field>
+                <z-form-label
+                  class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+                  >{{ currentLanguageSet?.travel?.state }}</z-form-label
+                >
+                <z-select
+                  id="toStateDom"
+                  formControlName="toStateDom"
+                  (zSelectionChange)="GetDistrictsToDom($event)"
+                  class="h-12 rounded-2xl bg-gray-50">
+                  <z-select-item
+                    *ngFor="let state of states"
+                    [zValue]="state.stateID">
+                    {{ state.stateName }}
+                  </z-select-item>
+                </z-select>
+              </z-form-field>
+
+              <z-form-field>
+                <z-form-label
+                  class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+                  >{{ currentLanguageSet?.travel?.district }}</z-form-label
+                >
+                <z-select
+                  id="toDistrictDom"
+                  formControlName="toDistrictDom"
+                  (zSelectionChange)="getSubDistrictToDom($event)"
+                  class="h-12 rounded-2xl bg-gray-50">
+                  <z-select-item
+                    *ngFor="let district of districtsToDom"
+                    [zValue]="district.districtID">
+                    {{ district.districtName }}
+                  </z-select-item>
+                </z-select>
+              </z-form-field>
+            </div>
+          </div>
+        </z-card-content>
+      </z-card>
+
+      <!-- International Travel Card -->
+      <z-card
+        *ngIf="istravelModeInternatinal"
+        class="border-none shadow-2xl shadow-violet-500/10 rounded-[3rem] overflow-hidden group/card animate-in slide-in-from-right duration-700">
+        <z-card-header
+          class="bg-gradient-to-br from-violet-50/80 to-white p-8 border-b border-violet-100/50">
+          <z-card-title class="flex items-center gap-4 text-violet-900">
+            <div
+              class="w-12 h-12 rounded-2xl bg-violet-500 shadow-lg shadow-violet-200 flex items-center justify-center group-hover/card:scale-110 transition-transform duration-500">
+              <lucide-icon name="globe" class="text-white size-6"></lucide-icon>
+            </div>
+            <div>
+              <span class="block text-xl font-black tracking-tight uppercase">
+                {{ currentLanguageSet?.travel?.international }}
+              </span>
+              <span
+                class="text-[10px] text-violet-400 font-bold uppercase tracking-widest"
+                >Global Logistics</span
+              >
+            </div>
+          </z-card-title>
+        </z-card-header>
+        <z-card-content class="p-8 space-y-10 bg-white">
+          <z-form-field>
+            <z-form-label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.travel?.modeofTravel }}</z-form-label
+            >
+            <z-select
+              id="modeOfTravelInter"
+              formControlName="modeOfTravelInter"
+              (zSelectionChange)="travelinternationalStatuschange($event)"
+              class="h-12 rounded-2xl bg-gray-50">
+              <z-select-item
+                *ngFor="let type of internationaltype"
+                [zValue]="type">
+                {{ type }}
+              </z-select-item>
+            </z-select>
+          </z-form-field>
+
+          <div class="space-y-8 pt-8 border-t border-gray-50">
+            <h6
+              class="text-[10px] font-black text-violet-500 uppercase tracking-[0.2em] flex items-center gap-2">
+              <span
+                class="w-2 h-2 rounded-full bg-violet-400 animate-pulse"></span>
+              Origin Parameters
+            </h6>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <z-form-field>
+                <z-form-label
+                  class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+                  >{{ currentLanguageSet?.travel?.country }}</z-form-label
+                >
+                <z-select
+                  id="fromCountryInter"
+                  formControlName="fromCountryInter"
+                  (zSelectionChange)="getCitiesFromInter($event)"
+                  class="h-12 rounded-2xl bg-gray-50">
+                  <z-select-item
+                    *ngFor="let country of countries"
+                    [zValue]="country.countryID">
+                    {{ country.countryName }}
+                  </z-select-item>
+                </z-select>
+              </z-form-field>
+
+              <z-form-field>
+                <z-form-label
+                  class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+                  >{{ currentLanguageSet?.travel?.city }}</z-form-label
+                >
+                <z-select
+                  id="fromCityInter"
+                  formControlName="fromCityInter"
+                  (zSelectionChange)="CitiesFromInter($event)"
+                  class="h-12 rounded-2xl bg-gray-50">
+                  <z-select-item
+                    *ngFor="let city of citiesFromInter"
+                    [zValue]="city.cityID">
+                    {{ city.cityName }}
+                  </z-select-item>
+                </z-select>
+              </z-form-field>
+            </div>
+          </div>
+
+          <div class="space-y-8 pt-8 border-t border-gray-50">
+            <h6
+              class="text-[10px] font-black text-rose-500 uppercase tracking-[0.2em] flex items-center gap-2">
+              <span
+                class="w-2 h-2 rounded-full bg-rose-400 animate-pulse"></span>
+              Destination Parameters
+            </h6>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <z-form-field>
+                <z-form-label
+                  class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+                  >{{ currentLanguageSet?.travel?.country }}</z-form-label
+                >
+                <z-select
+                  id="toCountryInter"
+                  formControlName="toCountryInter"
+                  (zSelectionChange)="getCitiesToInter($event)"
+                  class="h-12 rounded-2xl bg-gray-50">
+                  <z-select-item
+                    *ngFor="let country of countries"
+                    [zValue]="country.countryID">
+                    {{ country.countryName }}
+                  </z-select-item>
+                </z-select>
+              </z-form-field>
+
+              <z-form-field>
+                <z-form-label
+                  class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+                  >{{ currentLanguageSet?.travel?.city }}</z-form-label
+                >
+                <z-select
+                  id="toCityInter"
+                  formControlName="toCityInter"
+                  (zSelectionChange)="CitiesToInter($event)"
+                  class="h-12 rounded-2xl bg-gray-50">
+                  <z-select-item
+                    *ngFor="let city of citiesToInter"
+                    [zValue]="city.cityID">
+                    {{ city.cityName }}
+                  </z-select-item>
+                </z-select>
+              </z-form-field>
+            </div>
+          </div>
+        </z-card-content>
+      </z-card>
+    </div>
+  </div>
+
+  <!-- Outcome Section -->
+  <div class="pt-16 border-t border-gray-100 animate-in fade-in duration-1000">
+    <div class="flex items-center gap-4 mb-10">
+      <div class="p-4 bg-gray-900 rounded-[1.5rem] shadow-xl shadow-gray-200">
+        <lucide-icon name="search" class="size-6 text-white"></lucide-icon>
+      </div>
+      <div>
+        <h4
+          class="text-2xl font-black text-gray-900 tracking-tight uppercase italic">
+          {{ currentLanguageSet?.travel?.outcome }}
+        </h4>
+        <p
+          class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+          Diagnostic screening result
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div class="lg:col-span-4">
+        <z-form-field>
+          <z-form-label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+            >{{ currentLanguageSet?.travel?.suspectedCOVID }}</z-form-label
+          >
+          <div
+            class="mt-2 p-6 bg-white border-2 border-dashed border-gray-100 rounded-[2rem] flex items-center justify-center transition-all duration-500 hover:border-sky-200 group">
+            <span
+              class="text-2xl font-black italic tracking-tighter transition-all duration-500 group-hover:scale-110"
+              [ngClass]="
+                suspectedStatusUI === 'YES'
+                  ? 'text-rose-500'
+                  : suspectedStatusUI === 'NO'
+                    ? 'text-emerald-500'
+                    : 'text-gray-300'
+              ">
+              {{ suspectedStatusUI || 'N/A' }}
+            </span>
+          </div>
+        </z-form-field>
+      </div>
+
+      <div class="lg:col-span-8">
+        <z-form-field>
+          <z-form-label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+            >{{ currentLanguageSet?.travel?.recommendation }}</z-form-label
+          >
+          <div class="relative mt-2">
+            <textarea
+              z-input
+              rows="6"
+              id="recommendation"
+              formControlName="recommendation"
+              readonly
+              class="w-full bg-gray-50/50 border-transparent focus:ring-0 resize-none font-bold text-sm leading-relaxed p-8 rounded-[2.5rem] text-gray-600 italic shadow-inner">
+            </textarea>
+            <div class="absolute top-4 right-8">
+              <lucide-icon
+                name="quote"
+                class="size-8 text-gray-100"></lucide-icon>
+            </div>
+          </div>
+        </z-form-field>
+      </div>
     </div>
   </div>
 </div>

@@ -5,7 +5,8 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/app/*"],
-      "Common-UI/*": ["Common-UI/*"]
+      "Common-UI/*": ["Common-UI/*"],
+      "zard-ui": ["src/app/components/ui/index.ts"]
     },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,

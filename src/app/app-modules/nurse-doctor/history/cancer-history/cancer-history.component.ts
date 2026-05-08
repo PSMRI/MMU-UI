@@ -41,14 +41,10 @@ import { DoctorService } from '../../shared/services/doctor.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
+import { NgIf } from '@angular/common';
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
 import { FamilyDiseaseHistoryComponent } from './family-disease-history/family-disease-history.component';
 import { PersonalHistoryComponent } from './personal-history/personal-history.component';
-import { NgIf } from '@angular/common';
 import { ObstetricHistoryComponent } from './obstetric-history/obstetric-history.component';
 
 @Component({
@@ -56,13 +52,11 @@ import { ObstetricHistoryComponent } from './obstetric-history/obstetric-history
   templateUrl: './cancer-history.component.html',
   styleUrls: ['./cancer-history.component.css'],
   imports: [
-    MatAccordion,
     ReactiveFormsModule,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
+    ZardAccordionImports,
+    NgIf,
     FamilyDiseaseHistoryComponent,
     PersonalHistoryComponent,
-    NgIf,
     ObstetricHistoryComponent,
   ],
 })

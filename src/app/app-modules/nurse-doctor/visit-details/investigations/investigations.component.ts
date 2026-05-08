@@ -43,25 +43,25 @@ import {
   DoctorService,
   NurseService,
 } from '../../shared/services';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SetLanguageComponent } from '@/app-modules/core/components/set-language.component';
+import { HttpServiceService } from '@/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { NgFor } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
+import { CommonModule } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
+import { ZardFormImports, ZardSelectImports } from 'zard-ui';
 
 @Component({
   selector: 'app-patient-investigations',
   templateUrl: './investigations.component.html',
   styleUrls: ['./investigations.component.css'],
+  standalone: true,
   imports: [
+    CommonModule,
     ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    NgFor,
-    MatOption,
+    ZardFormImports,
+    ZardSelectImports,
+    LucideAngularModule,
   ],
 })
 export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {

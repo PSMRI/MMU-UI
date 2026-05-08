@@ -21,20 +21,45 @@
  */
 
 import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
-import { DatePipe, NgIf, NgFor } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import moment from 'moment';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { DoctorService } from '../../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { ZardCardImports, ZardTableImports } from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideCalendar,
+  lucideUser,
+  lucideHistory,
+  lucideClipboardList,
+  lucideActivity,
+} from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-history-case-sheet',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ZardCardImports,
+    ZardTableImports,
+    LucideAngularModule,
+    NgIcon,
+  ],
   templateUrl: './history-case-sheet.component.html',
   styleUrls: ['./history-case-sheet.component.css'],
-  providers: [DatePipe],
-  imports: [NgIf, NgFor, MatCheckbox, DatePipe],
+  providers: [
+    DatePipe,
+    provideIcons({
+      lucideCalendar,
+      lucideUser,
+      lucideHistory,
+      lucideClipboardList,
+      lucideActivity,
+    }),
+  ],
 })
 export class HistoryCaseSheetComponent implements OnInit, OnChanges, DoCheck {
   @Input()

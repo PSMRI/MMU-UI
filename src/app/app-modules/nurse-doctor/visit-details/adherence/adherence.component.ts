@@ -23,35 +23,34 @@
 import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DoctorService } from '../../shared/services';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SetLanguageComponent } from '@/app-modules/core/components/set-language.component';
+import { HttpServiceService } from '@/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatLabel, MatFormField, MatSelect } from '@angular/material/select';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
-import { NgIf, NgFor } from '@angular/common';
-import { MatInput } from '@angular/material/input';
-import { NullDefaultValueDirective } from '../../../core/directives/null-default-value.directive';
-import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
-import { MatOption } from '@angular/material/autocomplete';
+import { CommonModule } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
+import { ZardFormImports, ZardSelectImports, ZardRadioImports } from 'zard-ui';
+import { NullDefaultValueDirective } from '@/app-modules/core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '@/app-modules/core/directives/stringValidator.directive';
+
+import { MatRadioModule } from '@angular/material/radio';
+import { ZardInputDirective } from '@/components/ui/input/input.directive';
 
 @Component({
   selector: 'app-patient-adherence',
-  templateUrl: './adherence.component.html',
-  styleUrls: ['./adherence.component.css'],
+  standalone: true,
   imports: [
+    CommonModule,
     ReactiveFormsModule,
-    MatLabel,
-    MatRadioGroup,
-    MatRadioButton,
-    NgIf,
-    MatFormField,
-    MatInput,
+    ZardFormImports,
+    ZardSelectImports,
+    ZardRadioImports,
     NullDefaultValueDirective,
     StringValidatorDirective,
-    MatSelect,
-    NgFor,
-    MatOption,
+    ZardInputDirective,
+    LucideAngularModule,
   ],
+  templateUrl: './adherence.component.html',
+  styleUrls: ['./adherence.component.css'],
 })
 export class AdherenceComponent implements OnInit, DoCheck, OnChanges {
   @Input()

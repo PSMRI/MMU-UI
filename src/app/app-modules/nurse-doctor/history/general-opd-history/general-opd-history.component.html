@@ -1,250 +1,601 @@
-<mat-accordion>
-  <div *ngIf="visitCategory !== 'NCD screening'">
-    <mat-expansion-panel expanded="true">
-      <mat-expansion-panel-header>
-        <h5>{{ currentLanguageSet?.historyData?.ancHistory?.pastHistory }}</h5>
-      </mat-expansion-panel-header>
-      <app-general-past-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [pastHistoryForm]="pastHistory">
-      </app-general-past-history>
-    </mat-expansion-panel>
+<div class="space-y-8 animate-in fade-in duration-700">
+  <!-- General OPD History Sections -->
+  <z-accordion zType="multiple" class="space-y-6">
+    <div *ngIf="visitCategory !== 'NCD screening'" class="space-y-6">
+      <!-- Past History -->
+      <z-accordion-item
+        expanded="true"
+        zValue="past-history"
+        class="border-none rounded-[2.5rem] bg-white shadow-xl shadow-gray-100/50 overflow-hidden group/acc">
+        <div
+          zAccordionTrigger
+          class="px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors cursor-pointer">
+          <div class="flex items-center gap-4">
+            <div
+              class="p-3 bg-blue-100 rounded-2xl group-hover/acc:scale-110 transition-transform duration-500">
+              <lucide-icon
+                name="history"
+                class="size-6 text-blue-600"></lucide-icon>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+                {{ currentLanguageSet?.historyData?.ancHistory?.pastHistory }}
+              </h3>
+              <p
+                class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                Medical Chronology
+              </p>
+            </div>
+          </div>
+          <lucide-icon
+            name="chevron-down"
+            class="size-5 text-gray-300 group-data-[state=open]/acc:rotate-180 transition-transform duration-500"></lucide-icon>
+        </div>
+        <div zAccordionContent class="p-8 border-t border-gray-50">
+          <app-general-past-history
+            [mode]="mode"
+            [visitCategory]="visitCategory"
+            [pastHistoryForm]="pastHistory">
+          </app-general-past-history>
+        </div>
+      </z-accordion-item>
 
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <h5>
-          {{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.combordityANC_OPD_NCD_PNC?.comorbidityConditions
-          }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-comorbidity-concurrent-conditions
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [comorbidityConcurrentConditionsForm]="comorbidityHistory">
-      </app-general-comorbidity-concurrent-conditions>
-    </mat-expansion-panel>
+      <!-- Comorbidity -->
+      <z-accordion-item
+        zValue="comorbidity"
+        class="border-none rounded-[2.5rem] bg-white shadow-xl shadow-gray-100/50 overflow-hidden group/acc">
+        <div
+          zAccordionTrigger
+          class="px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors cursor-pointer">
+          <div class="flex items-center gap-4">
+            <div
+              class="p-3 bg-emerald-100 rounded-2xl group-hover/acc:scale-110 transition-transform duration-500">
+              <lucide-icon
+                name="activity"
+                class="size-6 text-emerald-600"></lucide-icon>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+                {{
+                  currentLanguageSet?.historyData?.ancHistory
+                    ?.combordityANC_OPD_NCD_PNC?.comorbidityConditions
+                }}
+              </h3>
+              <p
+                class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                Concurrent Pathologies
+              </p>
+            </div>
+          </div>
+          <lucide-icon
+            name="chevron-down"
+            class="size-5 text-gray-300 group-data-[state=open]/acc:rotate-180 transition-transform duration-500"></lucide-icon>
+        </div>
+        <div zAccordionContent class="p-8 border-t border-gray-50">
+          <app-general-comorbidity-concurrent-conditions
+            [mode]="mode"
+            [visitCategory]="visitCategory"
+            [comorbidityConcurrentConditionsForm]="comorbidityHistory">
+          </app-general-comorbidity-concurrent-conditions>
+        </div>
+      </z-accordion-item>
 
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <h5>
-          {{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.medicationANC_OPD_NCD_PNC?.medicationHistory
-          }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-medication-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [medicationHistoryForm]="
-          medicationHistory
-        "></app-general-medication-history>
-    </mat-expansion-panel>
+      <!-- Medication History -->
+      <z-accordion-item
+        zValue="medication"
+        class="border-none rounded-[2.5rem] bg-white shadow-xl shadow-gray-100/50 overflow-hidden group/acc">
+        <div
+          zAccordionTrigger
+          class="px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors cursor-pointer">
+          <div class="flex items-center gap-4">
+            <div
+              class="p-3 bg-amber-100 rounded-2xl group-hover/acc:scale-110 transition-transform duration-500">
+              <lucide-icon
+                name="pill"
+                class="size-6 text-amber-600"></lucide-icon>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+                {{
+                  currentLanguageSet?.historyData?.ancHistory
+                    ?.medicationANC_OPD_NCD_PNC?.medicationHistory
+                }}
+              </h3>
+              <p
+                class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                Pharmacological Log
+              </p>
+            </div>
+          </div>
+          <lucide-icon
+            name="chevron-down"
+            class="size-5 text-gray-300 group-data-[state=open]/acc:rotate-180 transition-transform duration-500"></lucide-icon>
+        </div>
+        <div zAccordionContent class="p-8 border-t border-gray-50">
+          <app-general-medication-history
+            [mode]="mode"
+            [visitCategory]="visitCategory"
+            [medicationHistoryForm]="medicationHistory">
+          </app-general-medication-history>
+        </div>
+      </z-accordion-item>
 
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <h5>
-          {{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.personalHistoryANC_OPD_NCD_PNC?.personalHistoryData
-          }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-personal-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [generalPersonalHistoryForm]="
-          personalHistory
-        "></app-general-personal-history>
-    </mat-expansion-panel>
+      <!-- Personal History -->
+      <z-accordion-item
+        zValue="personal"
+        class="border-none rounded-[2.5rem] bg-white shadow-xl shadow-gray-100/50 overflow-hidden group/acc">
+        <div
+          zAccordionTrigger
+          class="px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors cursor-pointer">
+          <div class="flex items-center gap-4">
+            <div
+              class="p-3 bg-violet-100 rounded-2xl group-hover/acc:scale-110 transition-transform duration-500">
+              <lucide-icon
+                name="user"
+                class="size-6 text-violet-600"></lucide-icon>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+                {{
+                  currentLanguageSet?.historyData?.ancHistory
+                    ?.personalHistoryANC_OPD_NCD_PNC?.personalHistoryData
+                }}
+              </h3>
+              <p
+                class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                Lifestyle Parameters
+              </p>
+            </div>
+          </div>
+          <lucide-icon
+            name="chevron-down"
+            class="size-5 text-gray-300 group-data-[state=open]/acc:rotate-180 transition-transform duration-500"></lucide-icon>
+        </div>
+        <div zAccordionContent class="p-8 border-t border-gray-50">
+          <app-general-personal-history
+            [mode]="mode"
+            [visitCategory]="visitCategory"
+            [generalPersonalHistoryForm]="personalHistory">
+          </app-general-personal-history>
+        </div>
+      </z-accordion-item>
 
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <h5>
-          {{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.familyHistoryDataANC_OPD_NCD_PNC?.familyHistory
-          }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-family-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [familyHistoryForm]="familyHistory"></app-general-family-history>
-    </mat-expansion-panel>
+      <!-- Family History -->
+      <z-accordion-item
+        zValue="family"
+        class="border-none rounded-[2.5rem] bg-white shadow-xl shadow-gray-100/50 overflow-hidden group/acc">
+        <div
+          zAccordionTrigger
+          class="px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors cursor-pointer">
+          <div class="flex items-center gap-4">
+            <div
+              class="p-3 bg-rose-100 rounded-2xl group-hover/acc:scale-110 transition-transform duration-500">
+              <lucide-icon
+                name="users"
+                class="size-6 text-rose-600"></lucide-icon>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+                {{
+                  currentLanguageSet?.historyData?.ancHistory
+                    ?.familyHistoryDataANC_OPD_NCD_PNC?.familyHistory
+                }}
+              </h3>
+              <p
+                class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                Hereditary Matrix
+              </p>
+            </div>
+          </div>
+          <lucide-icon
+            name="chevron-down"
+            class="size-5 text-gray-300 group-data-[state=open]/acc:rotate-180 transition-transform duration-500"></lucide-icon>
+        </div>
+        <div zAccordionContent class="p-8 border-t border-gray-50">
+          <app-general-family-history
+            [mode]="mode"
+            [visitCategory]="visitCategory"
+            [familyHistoryForm]="familyHistory">
+          </app-general-family-history>
+        </div>
+      </z-accordion-item>
 
-    <mat-expansion-panel
-      *ngIf="
-        beneficiary &&
-        beneficiary.ageVal >= 8 &&
-        beneficiary.genderName !== 'Male'
-      ">
-      <mat-expansion-panel-header>
-        <h5>
-          {{
-            currentLanguageSet?.historyData?.ancHistory?.menstrualHistoryANC
-              ?.menstrualHistory
-          }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-menstrual-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [menstrualHistoryForm]="
-          menstrualHistory
-        "></app-general-menstrual-history>
-    </mat-expansion-panel>
+      <!-- Age/Gender Restricted Sections -->
+      <div class="pt-8 flex items-center gap-4 opacity-50">
+        <div class="h-px flex-1 bg-gray-200"></div>
+        <span
+          class="text-[9px] font-black text-gray-400 uppercase tracking-[0.3em]"
+          >Lifecycle Modules</span
+        >
+        <div class="h-px flex-1 bg-gray-200"></div>
+      </div>
 
-    <mat-expansion-panel *ngIf="beneficiary?.ageVal <= 1">
-      <mat-expansion-panel-header>
-        <h5>
-          {{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
-              ?.perinatalHistory
-          }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-perinatal-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [perinatalHistoryForm]="
-          perinatalHistory
-        "></app-general-perinatal-history>
-    </mat-expansion-panel>
+      <!-- Menstrual History -->
+      <z-accordion-item
+        *ngIf="
+          beneficiary &&
+          beneficiary.ageVal >= 8 &&
+          beneficiary.genderName !== 'Male'
+        "
+        zValue="menstrual"
+        class="border-none rounded-[2.5rem] bg-white shadow-xl shadow-gray-100/50 overflow-hidden group/acc">
+        <div
+          zAccordionTrigger
+          class="px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors cursor-pointer">
+          <div class="flex items-center gap-4">
+            <div
+              class="p-3 bg-pink-100 rounded-2xl group-hover/acc:scale-110 transition-transform duration-500">
+              <lucide-icon
+                name="calendar"
+                class="size-6 text-pink-600"></lucide-icon>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+                {{
+                  currentLanguageSet?.historyData?.ancHistory
+                    ?.menstrualHistoryANC?.menstrualHistory
+                }}
+              </h3>
+              <p
+                class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                Reproductive Health
+              </p>
+            </div>
+          </div>
+          <lucide-icon
+            name="chevron-down"
+            class="size-5 text-gray-300 group-data-[state=open]/acc:rotate-180 transition-transform duration-500"></lucide-icon>
+        </div>
+        <div zAccordionContent class="p-8 border-t border-gray-50">
+          <app-general-menstrual-history
+            [mode]="mode"
+            [visitCategory]="visitCategory"
+            [menstrualHistoryForm]="menstrualHistory">
+          </app-general-menstrual-history>
+        </div>
+      </z-accordion-item>
 
-    <mat-expansion-panel *ngIf="showObstetricHistory">
-      <mat-expansion-panel-header>
-        <h5>
-          {{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-              ?.pastObstetricHistory
-          }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-past-obsteric-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [pastObstericHistoryForm]="
-          pastObstericHistory
-        "></app-general-past-obsteric-history>
-    </mat-expansion-panel>
+      <!-- Obstetric History -->
+      <z-accordion-item
+        *ngIf="showObstetricHistory"
+        zValue="obstetric"
+        class="border-none rounded-[2.5rem] bg-white shadow-xl shadow-gray-100/50 overflow-hidden group/acc">
+        <div
+          zAccordionTrigger
+          class="px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors cursor-pointer">
+          <div class="flex items-center gap-4">
+            <div
+              class="p-3 bg-purple-100 rounded-2xl group-hover/acc:scale-110 transition-transform duration-500">
+              <lucide-icon
+                name="baby"
+                class="size-6 text-purple-600"></lucide-icon>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+                {{
+                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                    ?.pastObstetricHistory
+                }}
+              </h3>
+              <p
+                class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                Obstetric Legacy
+              </p>
+            </div>
+          </div>
+          <lucide-icon
+            name="chevron-down"
+            class="size-5 text-gray-300 group-data-[state=open]/acc:rotate-180 transition-transform duration-500"></lucide-icon>
+        </div>
+        <div zAccordionContent class="p-8 border-t border-gray-50">
+          <app-general-past-obsteric-history
+            [mode]="mode"
+            [visitCategory]="visitCategory"
+            [pastObstericHistoryForm]="pastObstericHistory">
+          </app-general-past-obsteric-history>
+        </div>
+      </z-accordion-item>
 
-    <mat-expansion-panel *ngIf="beneficiary?.ageVal <= 16">
-      <mat-expansion-panel-header>
-        <h5>
-          {{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.immunization
-              ?.ImmunizationHistory
-          }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-immunization-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [immunizationHistoryForm]="
-          immunizationHistory
-        "></app-general-immunization-history>
-    </mat-expansion-panel>
+      <!-- Perinatal/Pediatric History -->
+      <z-accordion-item
+        *ngIf="beneficiary?.ageVal <= 1"
+        zValue="perinatal"
+        class="border-none rounded-[2.5rem] bg-white shadow-xl shadow-gray-100/50 overflow-hidden group/acc">
+        <div
+          zAccordionTrigger
+          class="px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors cursor-pointer">
+          <div class="flex items-center gap-4">
+            <div
+              class="p-3 bg-sky-100 rounded-2xl group-hover/acc:scale-110 transition-transform duration-500">
+              <lucide-icon
+                name="sparkles"
+                class="size-6 text-sky-600"></lucide-icon>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+                {{
+                  currentLanguageSet?.historyData?.opdNCDPNCHistory
+                    ?.perinatal_OPD?.perinatalHistory
+                }}
+              </h3>
+              <p
+                class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                Early Development
+              </p>
+            </div>
+          </div>
+          <lucide-icon
+            name="chevron-down"
+            class="size-5 text-gray-300 group-data-[state=open]/acc:rotate-180 transition-transform duration-500"></lucide-icon>
+        </div>
+        <div zAccordionContent class="p-8 border-t border-gray-50">
+          <app-general-perinatal-history
+            [mode]="mode"
+            [visitCategory]="visitCategory"
+            [perinatalHistoryForm]="perinatalHistory">
+          </app-general-perinatal-history>
+        </div>
+      </z-accordion-item>
 
-    <mat-expansion-panel *ngIf="beneficiary?.ageVal <= 16">
-      <mat-expansion-panel-header>
-        <h5>
-          {{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
-              ?.otherVaccines
-          }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-other-vaccines
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [otherVaccinesForm]="otherVaccines"></app-general-other-vaccines>
-    </mat-expansion-panel>
+      <!-- Immunization -->
+      <z-accordion-item
+        *ngIf="beneficiary?.ageVal <= 16"
+        zValue="immunization"
+        class="border-none rounded-[2.5rem] bg-white shadow-xl shadow-gray-100/50 overflow-hidden group/acc">
+        <div
+          zAccordionTrigger
+          class="px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors cursor-pointer">
+          <div class="flex items-center gap-4">
+            <div
+              class="p-3 bg-emerald-100 rounded-2xl group-hover/acc:scale-110 transition-transform duration-500">
+              <lucide-icon
+                name="shield-check"
+                class="size-6 text-emerald-600"></lucide-icon>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+                {{
+                  currentLanguageSet?.historyData?.opdNCDPNCHistory
+                    ?.immunization?.ImmunizationHistory
+                }}
+              </h3>
+              <p
+                class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                Vaccination Coverage
+              </p>
+            </div>
+          </div>
+          <lucide-icon
+            name="chevron-down"
+            class="size-5 text-gray-300 group-data-[state=open]/acc:rotate-180 transition-transform duration-500"></lucide-icon>
+        </div>
+        <div zAccordionContent class="p-8 border-t border-gray-50">
+          <app-general-immunization-history
+            [mode]="mode"
+            [visitCategory]="visitCategory"
+            [immunizationHistoryForm]="immunizationHistory">
+          </app-general-immunization-history>
+        </div>
+      </z-accordion-item>
 
-    <mat-expansion-panel *ngIf="beneficiary?.ageVal <= 6">
-      <mat-expansion-panel-header>
-        <h5>
-          {{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
-              ?.feedingHistory
-          }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-feeding-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [feedingHistoryForm]="feedingHistory"></app-general-feeding-history>
-    </mat-expansion-panel>
+      <!-- Other Vaccines -->
+      <z-accordion-item
+        *ngIf="beneficiary?.ageVal <= 16"
+        zValue="other-vaccines"
+        class="border-none rounded-[2.5rem] bg-white shadow-xl shadow-gray-100/50 overflow-hidden group/acc">
+        <div
+          zAccordionTrigger
+          class="px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors cursor-pointer">
+          <div class="flex items-center gap-4">
+            <div
+              class="p-3 bg-sky-100 rounded-2xl group-hover/acc:scale-110 transition-transform duration-500">
+              <lucide-icon
+                name="syringe"
+                class="size-6 text-sky-600"></lucide-icon>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+                {{
+                  currentLanguageSet?.historyData?.Othervaccineshistory
+                    ?.previousothervaccineshistory
+                }}
+              </h3>
+              <p
+                class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                Optional Immunization
+              </p>
+            </div>
+          </div>
+          <lucide-icon
+            name="chevron-down"
+            class="size-5 text-gray-300 group-data-[state=open]/acc:rotate-180 transition-transform duration-500"></lucide-icon>
+        </div>
+        <div zAccordionContent class="p-8 border-t border-gray-50">
+          <app-other-vaccines
+            [mode]="mode"
+            [visitCategory]="visitCategory"
+            [otherVaccinesForm]="otherVaccines">
+          </app-other-vaccines>
+        </div>
+      </z-accordion-item>
 
-    <mat-expansion-panel *ngIf="beneficiary?.ageVal <= 2">
-      <mat-expansion-panel-header>
-        <h5>
-          {{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-              ?.developmentHistory
-          }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-development-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [developmentHistoryForm]="
-          developmentHistory
-        "></app-general-development-history>
-    </mat-expansion-panel>
-  </div>
+      <!-- Feeding History -->
+      <z-accordion-item
+        *ngIf="beneficiary?.ageVal <= 5"
+        zValue="feeding"
+        class="border-none rounded-[2.5rem] bg-white shadow-xl shadow-gray-100/50 overflow-hidden group/acc">
+        <div
+          zAccordionTrigger
+          class="px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors cursor-pointer">
+          <div class="flex items-center gap-4">
+            <div
+              class="p-3 bg-orange-100 rounded-2xl group-hover/acc:scale-110 transition-transform duration-500">
+              <lucide-icon
+                name="utensils"
+                class="size-6 text-orange-600"></lucide-icon>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+                {{
+                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
+                    ?.feedingHistory
+                }}
+              </h3>
+              <p
+                class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                Nutritional Registry
+              </p>
+            </div>
+          </div>
+          <lucide-icon
+            name="chevron-down"
+            class="size-5 text-gray-300 group-data-[state=open]/acc:rotate-180 transition-transform duration-500"></lucide-icon>
+        </div>
+        <div zAccordionContent class="p-8 border-t border-gray-50">
+          <app-general-feeding-history
+            [mode]="mode"
+            [visitCategory]="visitCategory"
+            [feedingHistoryForm]="feedingHistory">
+          </app-general-feeding-history>
+        </div>
+      </z-accordion-item>
 
-  <div *ngIf="visitCategory === 'NCD screening'">
-    <mat-expansion-panel expanded="true">
-      <mat-expansion-panel-header>
-        <h5>
-          {{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.familyHistoryDataANC_OPD_NCD_PNC?.familyHistory
-          }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-family-history-ncdscreening
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [familyHistoryForm]="familyHistory"></app-family-history-ncdscreening>
-    </mat-expansion-panel>
+      <!-- Development History -->
+      <z-accordion-item
+        *ngIf="beneficiary?.ageVal <= 5"
+        zValue="development"
+        class="border-none rounded-[2.5rem] bg-white shadow-xl shadow-gray-100/50 overflow-hidden group/acc">
+        <div
+          zAccordionTrigger
+          class="px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors cursor-pointer">
+          <div class="flex items-center gap-4">
+            <div
+              class="p-3 bg-violet-100 rounded-2xl group-hover/acc:scale-110 transition-transform duration-500">
+              <lucide-icon
+                name="brain-circuit"
+                class="size-6 text-violet-600"></lucide-icon>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+                {{
+                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
+                    ?.developmentalHistory
+                }}
+              </h3>
+              <p
+                class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                Neuro-Motor Milestones
+              </p>
+            </div>
+          </div>
+          <lucide-icon
+            name="chevron-down"
+            class="size-5 text-gray-300 group-data-[state=open]/acc:rotate-180 transition-transform duration-500"></lucide-icon>
+        </div>
+        <div zAccordionContent class="p-8 border-t border-gray-50">
+          <app-general-development-history
+            [mode]="mode"
+            [visitCategory]="visitCategory"
+            [developmentHistoryForm]="developmentHistory">
+          </app-general-development-history>
+        </div>
+      </z-accordion-item>
+    </div>
 
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <h5>
-          {{
-            currentLanguageSet?.historyData?.ncdPhysicalActivityHistory
-              ?.physicalActivityHistory
-          }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-physical-activity-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [physicalActivityHistoryForm]="
-          physicalActivityHistory
-        "></app-physical-activity-history>
-    </mat-expansion-panel>
+    <!-- NCD Screening Specific Sections -->
+    <div *ngIf="visitCategory === 'NCD screening'" class="space-y-6">
+      <z-accordion-item
+        expanded="true"
+        zValue="ncd-family"
+        class="border-none rounded-[2.5rem] bg-white shadow-xl shadow-gray-100/50 overflow-hidden group/acc">
+        <div
+          zAccordionTrigger
+          class="px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors cursor-pointer">
+          <div class="flex items-center gap-4">
+            <div
+              class="p-3 bg-rose-100 rounded-2xl group-hover/acc:scale-110 transition-transform duration-500">
+              <lucide-icon
+                name="users"
+                class="size-6 text-rose-600"></lucide-icon>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+                {{
+                  currentLanguageSet?.historyData?.ancHistory
+                    ?.familyHistoryDataANC_OPD_NCD_PNC?.familyHistory
+                }}
+              </h3>
+              <p
+                class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                Risk Factor Mapping
+              </p>
+            </div>
+          </div>
+          <lucide-icon
+            name="chevron-down"
+            class="size-5 text-gray-300 group-data-[state=open]/acc:rotate-180 transition-transform duration-500"></lucide-icon>
+        </div>
+        <div zAccordionContent class="p-8 border-t border-gray-50">
+          <app-family-history-ncdscreening
+            [mode]="mode"
+            [visitCategory]="visitCategory"
+            [familyHistoryForm]="familyHistory">
+          </app-family-history-ncdscreening>
+        </div>
+      </z-accordion-item>
 
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <h5>
-          {{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.personalHistoryANC_OPD_NCD_PNC?.personalHistoryData
-          }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-personal-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [generalPersonalHistoryForm]="
-          personalHistory
-        "></app-general-personal-history>
-    </mat-expansion-panel>
-  </div>
-</mat-accordion>
+      <z-accordion-item
+        zValue="ncd-physical"
+        class="border-none rounded-[2.5rem] bg-white shadow-xl shadow-gray-100/50 overflow-hidden group/acc">
+        <div
+          zAccordionTrigger
+          class="px-8 py-6 flex items-center justify-between hover:bg-gray-50/50 transition-colors cursor-pointer">
+          <div class="flex items-center gap-4">
+            <div
+              class="p-3 bg-orange-100 rounded-2xl group-hover/acc:scale-110 transition-transform duration-500">
+              <lucide-icon
+                name="activity"
+                class="size-6 text-orange-600"></lucide-icon>
+            </div>
+            <div>
+              <h3
+                class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+                {{
+                  currentLanguageSet?.historyData?.ncdPhysicalActivityHistory
+                    ?.physicalActivityHistory
+                }}
+              </h3>
+              <p
+                class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                Movement Dynamics
+              </p>
+            </div>
+          </div>
+          <lucide-icon
+            name="chevron-down"
+            class="size-5 text-gray-300 group-data-[state=open]/acc:rotate-180 transition-transform duration-500"></lucide-icon>
+        </div>
+        <div zAccordionContent class="p-8 border-t border-gray-50">
+          <app-physical-activity-history
+            [mode]="mode"
+            [visitCategory]="visitCategory"
+            [physicalActivityHistoryForm]="physicalActivityHistory">
+          </app-physical-activity-history>
+        </div>
+      </z-accordion-item>
+    </div>
+  </z-accordion>
+</div>

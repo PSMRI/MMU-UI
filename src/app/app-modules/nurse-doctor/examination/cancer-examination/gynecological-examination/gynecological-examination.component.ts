@@ -44,18 +44,13 @@ import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 import { MatDialog } from '@angular/material/dialog';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
 import { NgIf, NgFor } from '@angular/common';
-import { MatInput } from '@angular/material/input';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
-import {
-  MatChipListbox,
-  MatChip,
-  MatChipRemove,
-} from '@angular/material/chips';
-import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-doctor-gynecological-examination',
@@ -63,20 +58,14 @@ import { MatIcon } from '@angular/material/icon';
   styleUrls: ['./gynecological-examination.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
-    MatRadioGroup,
-    MatRadioButton,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardButtonImports,
+    ZardLabelImports,
     NgIf,
-    MatInput,
-    StringValidatorDirective,
-    MatChipListbox,
     NgFor,
-    MatChip,
-    MatIcon,
-    MatChipRemove,
+    StringValidatorDirective,
   ],
 })
 export class GynecologicalExaminationComponent implements OnInit, DoCheck {

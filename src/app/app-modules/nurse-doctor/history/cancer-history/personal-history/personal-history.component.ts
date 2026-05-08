@@ -43,35 +43,43 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
 import { NgFor, NgIf } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory, lucidePlus, lucideX } from '@ng-icons/lucide';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { LucideAngularModule, History } from 'lucide-angular';
 
 @Component({
   selector: 'app-nurse-cancer-personal-history',
+  standalone: true,
   templateUrl: './personal-history.component.html',
   styleUrls: ['./personal-history.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatTooltip,
-    MatIcon,
-    MatFormField,
-    MatLabel,
-    MatSelect,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardRadioImports,
+    ZardLabelImports,
+    ZardSelectImports,
     NgFor,
-    MatOption,
     NgIf,
-    MatInput,
+    LucideAngularModule,
     NullDefaultValueDirective,
     StringValidatorDirective,
-    MatRadioGroup,
-    MatRadioButton,
+  ],
+  providers: [
+    LucideAngularModule.pick({
+      History,
+    }).providers,
   ],
 })
 export class PersonalHistoryComponent implements OnInit, OnDestroy, DoCheck {

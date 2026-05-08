@@ -1,67 +1,145 @@
-<div class="row title">
-  <h4>{{ current_language_set?.common?.mctcalldetails }}</h4>
-  <button class="pull-right exit" [matDialogClose]="false" mat-icon-button>
-    <mat-icon class="md-24">close</mat-icon>
+<div
+  class="flex items-center justify-between p-6 border-b border-gray-100 bg-gray-50/50">
+  <div class="flex items-center gap-3">
+    <div class="p-2 bg-blue-100 rounded-lg">
+      <ng-icon name="lucidePhoneCall" class="text-blue-600"></ng-icon>
+    </div>
+    <h4 class="text-xl font-bold text-gray-900">
+      {{ current_language_set?.common?.mctcalldetails }}
+    </h4>
+  </div>
+  <button
+    z-button
+    variant="ghost"
+    size="icon"
+    [matDialogClose]="false"
+    class="rounded-full hover:bg-gray-200 transition-colors">
+    <ng-icon name="lucideX" class="text-gray-500"></ng-icon>
   </button>
 </div>
-<section class="row message modal_Scroll">
-  <mat-dialog-content>
-    <div *ngIf="callDetails?.length > 0" class="m-t-20">
-      <mat-form-field id="filterbox" class="pull-right">
-        <mat-label>{{ current_language_set?.common?.question }}</mat-label>
-        <input
-          autocomplete="off"
-          matInput
-          #filterCall
-          (keyup)="filterCallHistory(filterCall.value)" />
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
+
+<mat-dialog-content class="!p-0">
+  <div class="p-8 space-y-6">
+    <!-- Filter Section -->
+    <div *ngIf="callDetails?.length > 0" class="flex justify-end">
+      <z-form-field class="w-full md:w-80">
+        <div class="relative group">
+          <ng-icon
+            name="lucideSearch"
+            class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors"></ng-icon>
+          <input
+            z-input
+            class="pl-10 shadow-sm"
+            autocomplete="off"
+            #filterCall
+            (keyup)="filterCallHistory(filterCall.value)"
+            [placeholder]="current_language_set?.common?.question" />
+        </div>
+      </z-form-field>
     </div>
 
-    <table
-      class="table table-responsive table-bordered"
-      aria-describedby="questionarie">
-      <thead>
-        <tr>
-          <th style="width: 70%" id="question">
-            {{ current_language_set?.common?.question }}
-          </th>
-          <th style="width: 30%" id="answer">
-            {{ current_language_set?.common?.answer }}
-          </th>
-        </tr>
-      </thead>
-      <tbody *ngIf="callDetails?.length === 0">
-        <tr>
-          <td colspan="2">
-            <h4 class="norecord">
-              {{ current_language_set?.common?.noCallDetailsFound }}
-            </h4>
-          </td>
-        </tr>
-      </tbody>
-      <tbody *ngIf="callDetails.length > 0"></tbody>
-      <tfoot>
-        <tr *ngIf="callDetails.length > 0">
-          <td colspan="1">
-            <div class="totalCount">
-              {{ current_language_set?.common?.totalCount }} :
-              {{ callDetails.length }}
-            </div>
-          </td>
-          <td colspan="1">
-            <pagination-controls
-              class="pull-right"
-              (pageChanged)="callDetailsPageChanged($event)"
-              *ngIf="filteredCallDetails.length"
-              [maxSize]="callDetailsRowsPerPage"
-              previousText="&lsaquo;"
-              nextText="&rsaquo;"
-              firstText="&laquo;"
-              lastText="&raquo;"></pagination-controls>
-          </td>
-        </tr>
-      </tfoot>
-    </table>
-  </mat-dialog-content>
-</section>
+    <!-- Q&A List -->
+    <div
+      class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50 border-b border-gray-100">
+              <th
+                class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-2/3">
+                {{ current_language_set?.common?.question }}
+              </th>
+              <th
+                class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-1/3">
+                {{ current_language_set?.common?.answer }}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-50">
+            <!-- No Records -->
+            <tr *ngIf="callDetails?.length === 0">
+              <td colspan="2" class="px-6 py-20 text-center">
+                <div
+                  class="flex flex-col items-center justify-center text-gray-300">
+                  <ng-icon
+                    name="lucideInbox"
+                    size="48"
+                    class="opacity-20 mb-2"></ng-icon>
+                  <p class="font-medium">
+                    {{ current_language_set?.common?.noCallDetailsFound }}
+                  </p>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Records List -->
+            <tr
+              *ngFor="let item of callDetailsPagedList"
+              class="hover:bg-blue-50/30 transition-colors group">
+              <td class="px-6 py-4 text-gray-700 leading-relaxed font-medium">
+                {{ item?.questionnaireDetail?.question }}
+              </td>
+              <td class="px-6 py-4">
+                <span
+                  class="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-bold border border-emerald-100">
+                  {{ item?.responseDetail?.answer || '--' }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer / Summary -->
+      <div
+        *ngIf="callDetails?.length > 0"
+        class="p-4 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between">
+        <div class="flex items-center gap-2 text-sm text-gray-500">
+          <span class="font-bold text-gray-700">{{
+            current_language_set?.common?.totalCount
+          }}</span>
+          <span
+            class="px-2 py-0.5 bg-gray-200 text-gray-700 rounded-md font-bold"
+            >{{ callDetails.length }}</span
+          >
+        </div>
+
+        <!-- Pagination - Simulating for now since custom pagination is used -->
+        <div class="flex items-center gap-2">
+          <button
+            z-button
+            size="sm"
+            variant="ghost"
+            [disabled]="callDetailsActivePage === 1"
+            (click)="
+              callDetailsPageChanged({
+                page: callDetailsActivePage - 1,
+                itemsPerPage: callDetailsRowsPerPage,
+              })
+            ">
+            <ng-icon name="lucideChevronLeft"></ng-icon>
+          </button>
+          <span class="text-xs font-bold text-gray-600"
+            >Page {{ callDetailsActivePage }}</span
+          >
+          <button
+            z-button
+            size="sm"
+            variant="ghost"
+            [disabled]="
+              callDetailsActivePage * callDetailsRowsPerPage >=
+              filteredCallDetails.length
+            "
+            (click)="
+              callDetailsPageChanged({
+                page: callDetailsActivePage + 1,
+                itemsPerPage: callDetailsRowsPerPage,
+              })
+            ">
+            <ng-icon name="lucideChevronRight"></ng-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

@@ -47,7 +47,7 @@ import { DoctorService } from '../../../shared/services';
 import { DoctorServiceStub } from '../../../shared/mocks/doctor-service-stub';
 
 import * as data from '../../../shared/mocks/mock-data';
-import { Observable, of, BehaviorSubject, Subject } from "rxjs";
+import { Observable, of, BehaviorSubject, Subject } from 'rxjs';
 
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';

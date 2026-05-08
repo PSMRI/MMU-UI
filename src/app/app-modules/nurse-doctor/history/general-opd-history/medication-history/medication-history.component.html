@@ -1,110 +1,160 @@
-<div [formGroup]="medicationHistoryForm">
-  <div class="col-xs-12" formArrayName="medicationHistoryList">
-    <div class="col-12" style="text-align: end">
-      <span class="font-history-label">{{
-        currentLanguageSet?.historyData?.ancHistory?.medicationANC_OPD_NCD_PNC
-          ?.PreviousHistory
-      }}</span>
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        id="previousANCMedicationHistory"
-        class="mat_icon_blue"
-        color="primary"
-        (click)="getPreviousMedicationHistory()">
-        <mat-icon class="md-18">history</mat-icon>
-      </button>
+<div
+  [formGroup]="medicationHistoryForm"
+  class="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+  <!-- Section Header -->
+  <div class="flex items-center justify-between px-2">
+    <div class="flex items-center gap-3">
+      <div class="p-2.5 bg-emerald-100 rounded-2xl">
+        <lucide-icon name="pill" class="size-5 text-emerald-600"></lucide-icon>
+      </div>
+      <div>
+        <h4
+          class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+          {{
+            currentLanguageSet?.historyData?.ancHistory
+              ?.medicationANC_OPD_NCD_PNC?.medicationHistory
+          }}
+        </h4>
+        <p
+          class="text-[10px] text-gray-400 font-bold uppercase tracking-widest italic">
+          Pharmacological Intervention Registry
+        </p>
+      </div>
     </div>
 
+    <z-button
+      variant="outline"
+      class="rounded-2xl border-emerald-200 bg-emerald-50/30 text-emerald-600 hover:bg-emerald-50 px-6 py-2 shadow-sm font-black text-[10px] uppercase tracking-widest transition-all"
+      (click)="getPreviousMedicationHistory()">
+      <lucide-icon name="history" class="size-3 mr-2"></lucide-icon>
+      {{
+        currentLanguageSet?.historyData?.ancHistory?.medicationANC_OPD_NCD_PNC
+          ?.PreviousHistory
+      }}
+    </z-button>
+  </div>
+
+  <!-- Dynamic Medication Grid -->
+  <div formArrayName="medicationHistoryList" class="grid grid-cols-1 gap-4">
     <div
-      class="col-12 row multi_row_select"
-      style="margin: 15px 0px 15px 0px; background-color: #f0f5f5"
       *ngFor="
-        let medicationHistory of getMedicationHistory();
+        let medication of getMedicationHistory();
         let i = index;
-        let isLast = last;
-        let isOdd = odd
+        let isLast = last
       "
-      [ngClass]="{ odd: !isOdd }">
-      <ng-container [formGroupName]="i">
-        <div class="col-3">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.historyData?.ancHistory
-                ?.medicationANC_OPD_NCD_PNC?.currentMedication
-            }}</mat-label>
+      [formGroupName]="i"
+      class="group relative grid grid-cols-1 md:grid-cols-12 gap-8 p-10 rounded-[3rem] border border-gray-100 bg-white transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-100/50 hover:border-emerald-100 animate-in zoom-in-95 duration-500">
+      <!-- Index Badge -->
+      <div
+        class="hidden md:flex absolute -left-3 top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center bg-gray-50 border border-gray-100 rounded-2xl text-[11px] font-black text-gray-400 group-hover:bg-emerald-600 group-hover:text-white group-hover:border-emerald-500 transition-all duration-500 z-10 shadow-sm">
+        {{ i + 1 }}
+      </div>
+
+      <!-- Medication Modality -->
+      <div class="md:col-span-5">
+        <z-form-field>
+          <z-form-label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+            >Pharmaceutical Agent</z-form-label
+          >
+          <div class="relative group/input">
             <input
-              autocomplete="off"
-              matInput
-              appDefaultNull
-              allowText="inputFieldValidator"
-              maxlength="50"
+              z-input
               formControlName="currentMedication"
-              name="currentMedication"
-              (input)="enableDuration(medicationHistory)" />
-          </mat-form-field>
-        </div>
+              [placeholder]="
+                currentLanguageSet?.historyData?.ancHistory
+                  ?.medicationANC_OPD_NCD_PNC?.currentMedication
+              "
+              maxlength="50"
+              (input)="enableDuration(medication)"
+              class="rounded-2xl bg-gray-50/50 border-gray-100 hover:bg-white transition-all pl-12 h-14 font-bold text-gray-700" />
+            <lucide-icon
+              name="beaker"
+              class="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-gray-300 group-focus-within/input:text-emerald-600 transition-all"></lucide-icon>
+          </div>
+        </z-form-field>
+      </div>
 
-        <div class="col-3">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
-            }}</mat-label>
+      <!-- Chronicity Group -->
+      <div class="md:col-span-6 grid grid-cols-2 gap-4">
+        <z-form-field>
+          <z-form-label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+            >Dosing Magnitude</z-form-label
+          >
+          <div class="relative group/input">
             <input
-              autocomplete="off"
-              matInput
-              appDefaultNull
-              allowText="number"
-              maxlength="2"
+              z-input
               formControlName="timePeriodAgo"
-              name="timePeriodAgo"
-              (change)="validateDuration(medicationHistory)" />
-          </mat-form-field>
-        </div>
+              type="number"
+              min="0"
+              (change)="validateDuration(medication)"
+              class="rounded-2xl bg-gray-50/50 border-gray-100 text-lg font-black text-emerald-600 focus:bg-white transition-all pl-12 h-14" />
+            <lucide-icon
+              name="timer"
+              class="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-gray-300 group-focus-within/input:text-emerald-600 transition-all"></lucide-icon>
+          </div>
+        </z-form-field>
 
-        <div class="col-3">
-          <mat-form-field class="select-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.DurationData?.durationUnit
-            }}</mat-label>
-            <mat-select
-              formControlName="timePeriodUnit"
-              name="timePeriodAgoUnit"
-              (selectionChange)="validateDuration(medicationHistory)">
-              <mat-option value="Days">Day(s)</mat-option>
-              <mat-option value="Weeks">Week(s)</mat-option>
-              <mat-option value="Months">Month(s)</mat-option>
-              <mat-option value="Years">Year(s)</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+        <z-form-field>
+          <z-form-label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+            >Timeline Axis</z-form-label
+          >
+          <z-select
+            formControlName="timePeriodUnit"
+            (selectionChange)="validateDuration(medication)"
+            class="rounded-2xl bg-gray-50/50 border-gray-100 hover:bg-white transition-all h-14">
+            <z-option zValue="Days">Diurnal (Days)</z-option>
+            <z-option zValue="Weeks">Septenary (Weeks)</z-option>
+            <z-option zValue="Months">Lunar (Months)</z-option>
+            <z-option zValue="Years">Solar (Years)</z-option>
+          </z-select>
+        </z-form-field>
+      </div>
 
-        <div class="col-sm-3 box action-btn-container" style="text-align: end">
-          <button
-            mat-mini-fab
-            color="warn"
-            class="mat_warn_circle"
-            style="margin-right: 5px"
-            *ngIf="
-              i !== 0 ||
-              (i === 0 &&
-                (medicationHistory.touched || medicationHistory.dirty))
-            "
-            (click)="removeMedicationHistory(i, medicationHistory)">
-            <mat-icon class="md-18">close</mat-icon>
-          </button>
-          <button
-            md-mini-fab
-            color="primary"
-            class="mat_blue_circle"
-            *ngIf="isLast"
-            [disabled]="checkValidity(medicationHistory)"
-            (click)="addMedicationHistory()">
-            <mat-icon class="md-18">add</mat-icon>
-          </button>
-        </div>
-      </ng-container>
+      <!-- Action Cluster -->
+      <div class="md:col-span-1 flex items-end justify-end gap-3 pb-2">
+        <button
+          *ngIf="
+            i !== 0 || (i === 0 && (medication.touched || medication.dirty))
+          "
+          (click)="removeMedicationHistory(i, medication)"
+          class="p-2.5 hover:bg-rose-50 rounded-xl text-rose-400 hover:text-rose-500 transition-all duration-300">
+          <lucide-icon name="trash-2" class="size-4"></lucide-icon>
+        </button>
+
+        <z-button
+          *ngIf="isLast"
+          [disabled]="checkValidity(medication)"
+          (click)="addMedicationHistory()"
+          variant="default"
+          class="rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white size-12 p-0 shadow-lg shadow-emerald-200 transition-all">
+          <lucide-icon name="plus" class="size-5"></lucide-icon>
+        </z-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Diagnostic Context -->
+  <div
+    class="p-8 rounded-[3rem] bg-emerald-50/50 border border-emerald-100/50 animate-in fade-in duration-1000">
+    <div class="flex items-start gap-6">
+      <div class="p-3 bg-white rounded-2xl shadow-sm">
+        <lucide-icon name="info" class="size-5 text-emerald-600"></lucide-icon>
+      </div>
+      <div class="space-y-2">
+        <h6
+          class="text-[11px] font-black text-emerald-900 uppercase tracking-widest italic">
+          Pharmacological Surveillance Protocol
+        </h6>
+        <p
+          class="text-xs text-emerald-700/80 font-medium leading-relaxed max-w-3xl">
+          Medication history is critical for preventing adverse drug reactions
+          and ensuring therapeutic compliance. Precisely record all current
+          pharmaceuticals, including dosages and chronicity timelines.
+        </p>
+      </div>
     </div>
   </div>
 </div>

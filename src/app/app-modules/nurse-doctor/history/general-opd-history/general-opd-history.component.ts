@@ -35,12 +35,8 @@ import { DoctorService } from '../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
 import { NgIf } from '@angular/common';
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
 import { PastHistoryComponent } from './past-history/past-history.component';
 import { ComorbidityConcurrentConditionsComponent } from './comorbidity-concurrent-conditions/comorbidity-concurrent-conditions.component';
 import { MedicationHistoryComponent } from './medication-history/medication-history.component';
@@ -58,13 +54,12 @@ import { PhysicalActivityHistoryComponent } from './physical-activity-history/ph
 
 @Component({
   selector: 'app-nurse-general-opd-history',
+  standalone: true,
   templateUrl: './general-opd-history.component.html',
   styleUrls: ['./general-opd-history.component.css'],
   imports: [
-    MatAccordion,
+    ZardAccordionImports,
     NgIf,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
     PastHistoryComponent,
     ComorbidityConcurrentConditionsComponent,
     MedicationHistoryComponent,

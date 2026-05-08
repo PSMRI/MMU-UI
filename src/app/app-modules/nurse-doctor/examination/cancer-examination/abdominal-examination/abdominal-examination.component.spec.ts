@@ -26,7 +26,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-
 import { CameraService } from '../../../../core/services/camera.service';
 import { CameraServiceStub } from '../../../../core/mocks/camera-service-stub';
 import { CancerUtils } from '../../../shared/utility';
@@ -78,7 +77,7 @@ describe('AbdominalExaminationComponent', () => {
     });
     fixture.detectChanges();
     debugElement = fixture.debugElement.query(By.css('#lymphNodesTable'));
-    expect(debugElement).toBeTruthy;
+    expect(debugElement).toBeTruthy();
   });
 
   it('should call annotateImage when image is clicked', () => {

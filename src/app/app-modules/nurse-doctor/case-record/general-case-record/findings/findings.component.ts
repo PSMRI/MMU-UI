@@ -35,6 +35,7 @@ import {
   AbstractControl,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { CommonModule, NgIf, NgFor, NgClass } from '@angular/common';
 
 import {
   MasterdataService,
@@ -49,62 +50,48 @@ import { ConfirmationService } from '../../../../core/services/confirmation.serv
 import { GeneralUtils } from '../../../shared/utility/general-utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { environment } from 'src/environments/environment';
-import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
-import { NgIf, NgFor, NgClass } from '@angular/common';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { StringValidatorDirective } from '@/app-modules/core/directives/stringValidator.directive';
+import { environment } from 'src/environments/environment';
 import {
-  MatAutocompleteTrigger,
-  MatAutocomplete,
-  MatOption,
-} from '@angular/material/autocomplete';
-import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
-import { MatCheckbox } from '@angular/material/checkbox';
+  ZardFormImports,
+  ZardRadioImports,
+  ZardSelectImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+  ZardAccordionImports,
+  ZardDatePickerImports,
+} from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-findings',
   templateUrl: './findings.component.html',
   styleUrls: ['./findings.component.css'],
+  standalone: true,
   imports: [
+    CommonModule,
     NgIf,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
-    ReactiveFormsModule,
     NgFor,
     NgClass,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatAutocompleteTrigger,
-    MatAutocomplete,
-    MatOption,
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    ZardAccordionImports,
+    ZardDatePickerImports,
+    LucideAngularModule,
     StringValidatorDirective,
-    MatSelect,
-    MatCheckbox,
+    MatPaginator,
   ],
 })
 export class FindingsComponent implements OnInit, DoCheck, OnDestroy {

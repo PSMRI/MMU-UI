@@ -1,22 +1,36 @@
-<mat-accordion [formGroup]="patientVisitForm">
-  <mat-expansion-panel expanded="true">
-    <mat-expansion-panel-header>
-      <h5>{{ currentLanguageSet?.nurseData?.visitDetails }}</h5>
-    </mat-expansion-panel-header>
-    <app-patient-visit-details
-      [mode]="mode"
-      [patientVisitDetailsForm]="
-        patientVisitDetailsForm
-      "></app-patient-visit-details>
-  </mat-expansion-panel>
+<z-accordion [formGroup]="patientVisitForm" multiple class="modern-accordion">
+  <z-accordion-item [expanded]="true">
+    <z-accordion-trigger>
+      <div class="flex items-center gap-3">
+        <span class="text-lg font-bold text-gray-900">{{
+          currentLanguageSet?.nurseData?.visitDetails
+        }}</span>
+      </div>
+    </z-accordion-trigger>
+    <div class="p-6">
+      <app-patient-visit-details
+        [mode]="mode"
+        [patientVisitDetailsForm]="
+          patientVisitDetailsForm
+        "></app-patient-visit-details>
+    </div>
+  </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>{{ currentLanguageSet?.tmcConfirmation }}</h5>
-    </mat-expansion-panel-header>
-    <app-tmcconfirmation
-      [mode]="mode"
-      [tmcConfirmationFormsGroup]="tmcConfirmationForm"
-      [patientVisitDetailsForm]="patientVisitDetailsForm"></app-tmcconfirmation>
-  </mat-expansion-panel>
-</mat-accordion>
+  <z-accordion-item>
+    <z-accordion-trigger>
+      <div class="flex items-center gap-3">
+        <span class="text-lg font-bold text-gray-900">{{
+          currentLanguageSet?.tmcConfirmation
+        }}</span>
+      </div>
+    </z-accordion-trigger>
+    <div class="p-6">
+      <app-tmcconfirmation
+        [mode]="mode"
+        [tmcConfirmationFormsGroup]="tmcConfirmationForm"
+        [patientVisitDetailsForm]="
+          patientVisitDetailsForm
+        "></app-tmcconfirmation>
+    </div>
+  </z-accordion-item>
+</z-accordion>

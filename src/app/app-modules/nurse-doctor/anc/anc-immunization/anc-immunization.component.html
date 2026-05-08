@@ -1,184 +1,136 @@
-<div [formGroup]="patientANCImmunizationForm" class="m-t-20">
-  <div class="row">
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      *ngIf="enableTTStatus_1_2 || enableTTStatus_1_2_b">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{
-          current_language_set?.ancData?.ancImmune?.tt1Status
-        }}</mat-label>
-        <mat-select
-          name="tT_1Status"
-          formControlName="tT_1Status"
-          (selectionChange)="checkTT_1Status(tT_1Status)">
-          <mat-option
-            *ngFor="let immunizationStatus_1 of selectImmunizationStatus"
-            [value]="immunizationStatus_1">
-            {{ immunizationStatus_1 }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      *ngIf="tT_1Status === 'Received'">
-      <mat-form-field class="fieldAlignment fontStyle">
-        <mat-label class="mat-label-text" class="fontStyle">{{
-          current_language_set?.ancData?.ancImmune?.dateReceived
-        }}</mat-label>
-        <input
-          matInput
-          style="width: 100%"
-          name="dateReceivedForTT_1"
-          formControlName="dateReceivedForTT_1"
-          [min]="dob"
-          [max]="today"
-          [matDatepicker]="dateReceivedForTT_1Picker"
-          (dateChange)="checkTT_1Date(dateReceivedForTT_1)" />
-        <mat-datepicker-toggle
-          matSuffix
-          [for]="dateReceivedForTT_1Picker"></mat-datepicker-toggle>
-        <mat-datepicker #dateReceivedForTT_1Picker></mat-datepicker>
-      </mat-form-field>
-    </div>
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      *ngIf="tT_1Status === 'Received'">
-      <label class="control-label" for="facilityName">{{
-        current_language_set?.ancData?.ancImmune?.facilityName
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
-        name="facilityNameOfTT_1"
-        formControlName="facilityNameOfTT_1">
-        <mat-radio-button
-          color="primary"
-          class="radio-btn"
-          value="Govt Facility"
-          >{{
-            current_language_set?.ancData?.ancImmune?.govtFacility
-          }}</mat-radio-button
-        >
-        <mat-radio-button
-          color="primary"
-          class="radio-btn"
-          value="Pvt Facility">
-          {{
-            current_language_set?.ancData?.ancImmune?.pvtFacility
-          }}</mat-radio-button
-        >
-      </mat-radio-group>
+<div [formGroup]="patientANCImmunizationForm" class="space-y-8 pt-4">
+  <!-- TT1 Section -->
+  <div
+    class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end"
+    *ngIf="enableTTStatus_1_2 || enableTTStatus_1_2_b">
+    <z-form-field>
+      <z-label>{{
+        current_language_set?.ancData?.ancImmune?.tt1Status
+      }}</z-label>
+      <z-select
+        formControlName="tT_1Status"
+        (selectionChange)="checkTT_1Status(tT_1Status)"
+        zPlaceholder="Select status">
+        <z-option
+          *ngFor="let status of selectImmunizationStatus"
+          [zValue]="status">
+          {{ status }}
+        </z-option>
+      </z-select>
+    </z-form-field>
+
+    <z-form-field *ngIf="tT_1Status === 'Received'">
+      <z-label>{{
+        current_language_set?.ancData?.ancImmune?.dateReceived
+      }}</z-label>
+      <z-date-picker
+        formControlName="dateReceivedForTT_1"
+        [minDate]="dob"
+        [maxDate]="today"
+        (dateChange)="checkTT_1Date($event)"
+        zPlaceholder="DD/MM/YYYY">
+      </z-date-picker>
+    </z-form-field>
+
+    <div class="space-y-3" *ngIf="tT_1Status === 'Received'">
+      <z-label class="text-sm font-medium text-zinc-700">
+        {{ current_language_set?.ancData?.ancImmune?.facilityName }}
+      </z-label>
+      <z-radio-group formControlName="facilityNameOfTT_1" class="flex gap-4">
+        <z-radio zValue="Govt Facility">
+          {{ current_language_set?.ancData?.ancImmune?.govtFacility }}
+        </z-radio>
+        <z-radio zValue="Pvt Facility">
+          {{ current_language_set?.ancData?.ancImmune?.pvtFacility }}
+        </z-radio>
+      </z-radio-group>
     </div>
   </div>
 
-  <div class="row">
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      *ngIf="
-        (enableTTStatus_1_2 && tT_1Status !== null) ||
-        (enableTTStatus_1_2_b && tT_1Status !== null)
-      ">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{
-          current_language_set?.ancData?.ancImmune?.tt2Status
-        }}</mat-label>
-        <mat-select
-          name="tT_2Status"
-          formControlName="tT_2Status"
-          (selectionChange)="checkTT_2Status(tT_2Status)">
-          <mat-option
-            *ngFor="let immunizationStatus_2 of selectImmunizationStatus"
-            [value]="immunizationStatus_2">
-            {{ immunizationStatus_2 }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+  <!-- TT2 Section -->
+  <div
+    class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end"
+    *ngIf="
+      (enableTTStatus_1_2 && tT_1Status !== null) ||
+      (enableTTStatus_1_2_b && tT_1Status !== null)
+    ">
+    <z-form-field>
+      <z-label>{{
+        current_language_set?.ancData?.ancImmune?.tt2Status
+      }}</z-label>
+      <z-select
+        formControlName="tT_2Status"
+        (selectionChange)="checkTT_2Status(tT_2Status)"
+        zPlaceholder="Select status">
+        <z-option
+          *ngFor="let status of selectImmunizationStatus"
+          [zValue]="status">
+          {{ status }}
+        </z-option>
+      </z-select>
+    </z-form-field>
+
+    <z-form-field
       *ngIf="
         (tT_2Status === 'Received' && enableTTStatus_1_2) ||
         (tT_2Status === 'Received' && enableTTStatus_1_2_b)
       ">
-      <mat-form-field class="fieldAlignment fontStyle input-full-width">
-        <mat-label class="mat-label-text">{{
-          current_language_set?.ancData?.ancImmune?.dateReceived
-        }}</mat-label>
-        <input
-          matInput
-          style="width: 100%"
-          name="dateReceivedForTT_2"
-          formControlName="dateReceivedForTT_2"
-          [min]="tT_1Date"
-          [max]="today"
-          [matDatepicker]="dateReceivedForTT_2Picker"
-          (dateChange)="checkTT_2Date(dateReceivedForTT_2)" />
-        <mat-datepicker-toggle
-          matSuffix
-          [for]="dateReceivedForTT_2Picker"></mat-datepicker-toggle>
-        <mat-datepicker #dateReceivedForTT_2Picker></mat-datepicker>
-      </mat-form-field>
-    </div>
+      <z-label>{{
+        current_language_set?.ancData?.ancImmune?.dateReceived
+      }}</z-label>
+      <z-date-picker
+        formControlName="dateReceivedForTT_2"
+        [minDate]="tT_1Date"
+        [maxDate]="today"
+        (dateChange)="checkTT_2Date($event)"
+        zPlaceholder="DD/MM/YYYY">
+      </z-date-picker>
+    </z-form-field>
+
     <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      class="space-y-3"
       *ngIf="
         (tT_2Status === 'Received' && enableTTStatus_1_2) ||
         (tT_2Status === 'Received' && enableTTStatus_1_2_b)
       ">
-      <label class="control-label" for="facilityName">{{
-        current_language_set?.ancData?.ancImmune?.facilityName
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
-        name="facilityNameOfTT_2"
-        formControlName="facilityNameOfTT_2">
-        <mat-radio-button
-          color="primary"
-          class="radio-btn"
-          value="Govt Facility"
-          >{{
-            current_language_set?.ancData?.ancImmune?.govtFacility
-          }}</mat-radio-button
-        >
-        <mat-radio-button
-          color="primary"
-          class="radio-btn"
-          value="Pvt Facility">
-          {{
-            current_language_set?.ancData?.ancImmune?.pvtFacility
-          }}</mat-radio-button
-        >
-      </mat-radio-group>
+      <z-label class="text-sm font-medium text-zinc-700">
+        {{ current_language_set?.ancData?.ancImmune?.facilityName }}
+      </z-label>
+      <z-radio-group formControlName="facilityNameOfTT_2" class="flex gap-4">
+        <z-radio zValue="Govt Facility">
+          {{ current_language_set?.ancData?.ancImmune?.govtFacility }}
+        </z-radio>
+        <z-radio zValue="Pvt Facility">
+          {{ current_language_set?.ancData?.ancImmune?.pvtFacility }}
+        </z-radio>
+      </z-radio-group>
     </div>
   </div>
 
-  <div class="row">
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      *ngIf="
-        (enableTTStatus_1_2_b && tT_1Status !== null && tT_2Status !== null) ||
-        (enableTTStatus_1_2 && tT_1Status === 'NA' && tT_2Status !== null)
-      ">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{
-          current_language_set?.ancData?.ancImmune?.ttBoosterStatus
-        }}</mat-label>
-        <mat-select
-          name="tT_3Status"
-          formControlName="tT_3Status"
-          (selectionChange)="checkTT_3Status(tT_3Status)">
-          <mat-option
-            *ngFor="let immunizationStatus_3 of selectImmunizationStatus"
-            [value]="immunizationStatus_3">
-            {{ immunizationStatus_3 }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+  <!-- Booster Section -->
+  <div
+    class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end"
+    *ngIf="
+      (enableTTStatus_1_2_b && tT_1Status !== null && tT_2Status !== null) ||
+      (enableTTStatus_1_2 && tT_1Status === 'NA' && tT_2Status !== null)
+    ">
+    <z-form-field>
+      <z-label>{{
+        current_language_set?.ancData?.ancImmune?.ttBoosterStatus
+      }}</z-label>
+      <z-select
+        formControlName="tT_3Status"
+        (selectionChange)="checkTT_3Status(tT_3Status)"
+        zPlaceholder="Select status">
+        <z-option
+          *ngFor="let status of selectImmunizationStatus"
+          [zValue]="status">
+          {{ status }}
+        </z-option>
+      </z-select>
+    </z-form-field>
+
+    <z-form-field
       *ngIf="
         (tT_3Status === 'Received' && enableTTStatus_1_2_b) ||
         (tT_3Status === 'Received' &&
@@ -186,26 +138,19 @@
           tT_1Status === 'NA' &&
           tT_2Status !== null)
       ">
-      <mat-form-field class="fieldAlignment fontStyle">
-        <mat-label class="mat-label-text" class="fontStyle">{{
-          current_language_set?.ancData?.ancImmune?.dateReceived
-        }}</mat-label>
-        <input
-          matInput
-          style="width: 100%"
-          name="dateReceivedForTT_3"
-          formControlName="dateReceivedForTT_3"
-          [min]="tT_3Date"
-          [max]="today"
-          [matDatepicker]="dateReceivedForTT_3Picker" />
-        <mat-datepicker-toggle
-          matSuffix
-          [for]="dateReceivedForTT_3Picker"></mat-datepicker-toggle>
-        <mat-datepicker #dateReceivedForTT_3Picker></mat-datepicker>
-      </mat-form-field>
-    </div>
+      <z-label>{{
+        current_language_set?.ancData?.ancImmune?.dateReceived
+      }}</z-label>
+      <z-date-picker
+        formControlName="dateReceivedForTT_3"
+        [minDate]="tT_3Date"
+        [maxDate]="today"
+        zPlaceholder="DD/MM/YYYY">
+      </z-date-picker>
+    </z-form-field>
+
     <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+      class="space-y-3"
       *ngIf="
         (tT_3Status === 'Received' && enableTTStatus_1_2_b) ||
         (tT_3Status === 'Received' &&
@@ -213,31 +158,17 @@
           tT_1Status === 'NA' &&
           tT_2Status !== null)
       ">
-      <label class="control-label" for="facilityName">{{
-        current_language_set?.ancData?.ancImmune?.facilityName
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
-        name="facilityNameOfTT_3"
-        formControlName="facilityNameOfTT_3">
-        <mat-radio-button
-          color="primary"
-          class="radio-btn"
-          value="Govt Facility"
-          >{{
-            current_language_set?.ancData?.ancImmune?.govtFacility
-          }}</mat-radio-button
-        >
-        <mat-radio-button
-          color="primary"
-          class="radio-btn"
-          value="Pvt Facility">
-          {{
-            current_language_set?.ancData?.ancImmune?.pvtFacility
-          }}</mat-radio-button
-        >
-      </mat-radio-group>
+      <z-label class="text-sm font-medium text-zinc-700">
+        {{ current_language_set?.ancData?.ancImmune?.facilityName }}
+      </z-label>
+      <z-radio-group formControlName="facilityNameOfTT_3" class="flex gap-4">
+        <z-radio zValue="Govt Facility">
+          {{ current_language_set?.ancData?.ancImmune?.govtFacility }}
+        </z-radio>
+        <z-radio zValue="Pvt Facility">
+          {{ current_language_set?.ancData?.ancImmune?.pvtFacility }}
+        </z-radio>
+      </z-radio-group>
     </div>
   </div>
 </div>

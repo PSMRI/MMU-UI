@@ -1,124 +1,199 @@
-<div class="" [formGroup]="developmentHistoryForm">
-  <div class="col-12" style="text-align: end">
-    <span class="font-history-label">{{
-      currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-        ?.previousDevelopmentalHistory
-    }}</span>
-    <button
-      type="button"
-      mat-icon-button
-      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-      id="previousDevelopmentalHistory"
-      class="mat_icon_blue"
-      color="primary"
+<div
+  [formGroup]="developmentHistoryForm"
+  class="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+  <!-- Section Header -->
+  <div class="flex items-center justify-between px-2">
+    <div class="flex items-center gap-3">
+      <div class="p-2.5 bg-violet-100 rounded-2xl">
+        <lucide-icon
+          name="brain-circuit"
+          class="size-5 text-violet-600"></lucide-icon>
+      </div>
+      <div>
+        <h4
+          class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+          {{
+            currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
+              ?.developmentalHistory
+          }}
+        </h4>
+        <p
+          class="text-[10px] text-gray-400 font-bold uppercase tracking-widest italic">
+          Neuro-Motor Milestone Registry
+        </p>
+      </div>
+    </div>
+
+    <z-button
+      variant="outline"
+      class="rounded-2xl border-violet-200 bg-violet-50/30 text-violet-600 hover:bg-violet-50 px-6 py-2 shadow-sm font-black text-[10px] uppercase tracking-widest transition-all"
       (click)="getPreviousDevelopmentalHistory()">
-      <mat-icon class="md-18">history</mat-icon>
-    </button>
+      <lucide-icon name="history" class="size-3 mr-2"></lucide-icon>
+      {{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
+          ?.previousDevelopmentalHistory
+      }}
+    </z-button>
   </div>
-  <div>
-    <div class="col-12 row">
-      <div class="col-6 box">
-        <mat-form-field>
-          <mat-label class="mat-label-text">{{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-              ?.grossMotorMilestone
-          }}</mat-label>
-          <mat-select
-            multiple
-            class="select-full-width"
-            name="grossMotorMilestone"
-            formControlName="grossMotorMilestones">
-            <mat-option
-              *ngFor="
-                let grossMotorMilestone of masterData?.grossMotorMilestones
-              "
-              [value]="grossMotorMilestone.gMMilestone"
-              >{{ grossMotorMilestone.gMMilestone }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-      </div>
 
-      <div class="col-6 box">
-        <mat-form-field>
-          <mat-label class="mat-label-text">{{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-              ?.fineMotorMilestone
-          }}</mat-label>
-          <mat-select
-            multiple
-            class="select-full-width"
-            name="fineMotorMilestone"
-            formControlName="fineMotorMilestones">
-            <mat-option value="Changes object from one to another hand"
-              >Changes object from one to another hand</mat-option
-            >
-            <mat-option value="Holding object with Palm"
-              >Holding object with Palm</mat-option
-            >
-            <mat-option value="Pincer's Grasp">Pincer's Grasp</mat-option>
-          </mat-select>
-        </mat-form-field>
+  <!-- Milestone Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+    <!-- Gross Motor Card -->
+    <div
+      class="p-8 rounded-[3rem] border border-gray-100 bg-white shadow-sm space-y-6 hover:shadow-xl hover:shadow-violet-50 transition-all duration-500">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-violet-50 rounded-xl">
+          <lucide-icon name="move" class="size-4 text-violet-600"></lucide-icon>
+        </div>
+        <label
+          class="text-[11px] font-black text-gray-900 uppercase tracking-widest italic"
+          >Gross Motor Milestones</label
+        >
       </div>
-    </div>
-
-    <div class="col-12 row">
-      <div class="col-6 box">
-        <mat-form-field>
-          <mat-label class="mat-label-text">{{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-              ?.socialMilestone
-          }}</mat-label>
-          <mat-select
-            multiple
-            class="select-full-width"
-            name="socialMilestone"
-            formControlName="socialMilestones">
-            <mat-option value="Social smile">Social smile</mat-option>
-            <mat-option value="Cooing">Cooing</mat-option>
-            <mat-option value="Stranger Anxiety">Stranger Anxiety</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <div class="col-6 box">
-        <mat-form-field>
-          <mat-label class="mat-label-text">{{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-              ?.languageMilestone
-          }}</mat-label>
-          <mat-select
-            multiple
-            class="select-full-width"
-            name="languageMilestone"
-            formControlName="languageMilestones">
-            <mat-option value="Monosyllables">Monosyllables</mat-option>
-            <mat-option value="Bi syllables">Bi syllables</mat-option>
-            <mat-option value="Words">Words</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="col-12 row"></div>
-    <div class="col-6 box">
-      <mat-form-field>
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-            ?.developmentalProblems
-        }}</mat-label>
-        <mat-select
+      <z-form-field>
+        <z-select
           multiple
-          class="select-full-width"
-          name="developmentalProblems"
-          formControlName="developmentProblems">
-          <mat-option value="Nil">Nil</mat-option>
-          <mat-option value="Cerebral Palsy">Cerebral Palsy</mat-option>
-          <mat-option value="ADHD">ADHD</mat-option>
-          <mat-option value="Autism">Autism</mat-option>
-          <mat-option value="Learning Disorders">Learning Disorders</mat-option>
-        </mat-select>
-      </mat-form-field>
+          formControlName="grossMotorMilestones"
+          class="rounded-2xl bg-gray-50/50 border-gray-100 hover:bg-white transition-all h-14">
+          <z-option
+            *ngFor="let m of masterData?.grossMotorMilestones"
+            [zValue]="m.gMMilestone">
+            {{ m.gMMilestone }}
+          </z-option>
+        </z-select>
+      </z-form-field>
+    </div>
+
+    <!-- Fine Motor Card -->
+    <div
+      class="p-8 rounded-[3rem] border border-gray-100 bg-white shadow-sm space-y-6 hover:shadow-xl hover:shadow-violet-50 transition-all duration-500">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-indigo-50 rounded-xl">
+          <lucide-icon name="hand" class="size-4 text-indigo-600"></lucide-icon>
+        </div>
+        <label
+          class="text-[11px] font-black text-gray-900 uppercase tracking-widest italic"
+          >Fine Motor Milestones</label
+        >
+      </div>
+      <z-form-field>
+        <z-select
+          multiple
+          formControlName="fineMotorMilestones"
+          class="rounded-2xl bg-gray-50/50 border-gray-100 hover:bg-white transition-all h-14">
+          <z-option zValue="Changes object from one to another hand"
+            >Object Transfer (Bimanual)</z-option
+          >
+          <z-option zValue="Holding object with Palm">Palmar Grasp</z-option>
+          <z-option zValue="Pincer's Grasp">Pincer Grasp (Superior)</z-option>
+        </z-select>
+      </z-form-field>
+    </div>
+
+    <!-- Social Milestone Card -->
+    <div
+      class="p-8 rounded-[3rem] border border-gray-100 bg-white shadow-sm space-y-6 hover:shadow-xl hover:shadow-violet-50 transition-all duration-500">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-pink-50 rounded-xl">
+          <lucide-icon name="smile" class="size-4 text-pink-600"></lucide-icon>
+        </div>
+        <label
+          class="text-[11px] font-black text-gray-900 uppercase tracking-widest italic"
+          >Social Interaction</label
+        >
+      </div>
+      <z-form-field>
+        <z-select
+          multiple
+          formControlName="socialMilestones"
+          class="rounded-2xl bg-gray-50/50 border-gray-100 hover:bg-white transition-all h-14">
+          <z-option zValue="Social smile">Social Smile</z-option>
+          <z-option zValue="Cooing">Vocal Play (Cooing)</z-option>
+          <z-option zValue="Stranger Anxiety">Stranger Anxiety (8-mo)</z-option>
+        </z-select>
+      </z-form-field>
+    </div>
+
+    <!-- Language Milestone Card -->
+    <div
+      class="p-8 rounded-[3rem] border border-gray-100 bg-white shadow-sm space-y-6 hover:shadow-xl hover:shadow-violet-50 transition-all duration-500">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-sky-50 rounded-xl">
+          <lucide-icon
+            name="message-square"
+            class="size-4 text-sky-600"></lucide-icon>
+        </div>
+        <label
+          class="text-[11px] font-black text-gray-900 uppercase tracking-widest italic"
+          >Language Acquisition</label
+        >
+      </div>
+      <z-form-field>
+        <z-select
+          multiple
+          formControlName="languageMilestones"
+          class="rounded-2xl bg-gray-50/50 border-gray-100 hover:bg-white transition-all h-14">
+          <z-option zValue="Monosyllables">Monosyllables</z-option>
+          <z-option zValue="Bi syllables">Bisyllables (Mama/Dada)</z-option>
+          <z-option zValue="Words">Canonical Babbling / Words</z-option>
+        </z-select>
+      </z-form-field>
+    </div>
+
+    <!-- Pathological Problems Card -->
+    <div
+      class="md:col-span-2 p-10 rounded-[3rem] border border-rose-100 bg-rose-50/20 space-y-8 animate-in zoom-in-95 duration-500 shadow-sm">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-white rounded-xl shadow-sm">
+          <lucide-icon
+            name="alert-triangle"
+            class="size-4 text-rose-600"></lucide-icon>
+        </div>
+        <label
+          class="text-[11px] font-black text-gray-900 uppercase tracking-widest italic"
+          >Developmental Pathologies (Surveillance)</label
+        >
+      </div>
+      <z-form-field>
+        <z-select
+          multiple
+          formControlName="developmentProblems"
+          class="rounded-3xl bg-white border-rose-100 hover:border-rose-200 transition-all h-16 px-6">
+          <z-option zValue="Nil"
+            >No Clinical Abnormalities Detected (Nil)</z-option
+          >
+          <z-option zValue="Cerebral Palsy">Cerebral Palsy (CP)</z-option>
+          <z-option zValue="ADHD">ADHD / Neuro-divergence</z-option>
+          <z-option zValue="Autism">Autism Spectrum (ASD)</z-option>
+          <z-option zValue="Learning Disorders"
+            >Specific Learning Disorders</z-option
+          >
+        </z-select>
+      </z-form-field>
+    </div>
+  </div>
+
+  <!-- Diagnostic Context -->
+  <div
+    class="p-8 rounded-[3rem] bg-violet-50/50 border border-violet-100/50 animate-in fade-in duration-1000">
+    <div class="flex items-start gap-6">
+      <div class="p-3 bg-white rounded-2xl shadow-sm">
+        <lucide-icon name="info" class="size-5 text-violet-600"></lucide-icon>
+      </div>
+      <div class="space-y-2">
+        <h6
+          class="text-[11px] font-black text-violet-900 uppercase tracking-widest italic">
+          Neuro-Motor Surveillance Protocol
+        </h6>
+        <p
+          class="text-xs text-violet-700/80 font-medium leading-relaxed max-w-3xl">
+          Early identification of developmental delays is crucial for
+          therapeutic intervention. Systematically document milestones across
+          Gross Motor, Fine Motor, Social, and Language domains. Screen for
+          specific neuro-developmental pathologies during every pediatric
+          encounter.
+        </p>
+      </div>
     </div>
   </div>
 </div>

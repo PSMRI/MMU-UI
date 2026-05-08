@@ -1,10 +1,15 @@
-<div class="m-t-10" [formGroup]="generalDiagnosisForm">
-  <section>
-    <div class="row">
-      <div class="col-xs-12 col-sm-6">
-        <header class="mat-expansion-panel-header m-t-5">
-          <h4>{{ current_language_set?.casesheet?.provisionalDiag }}</h4>
-        </header>
+<div class="space-y-8" [formGroup]="generalDiagnosisForm">
+  <section
+    class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 space-y-12">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <!-- Provisional Diagnosis Column -->
+      <div class="space-y-6">
+        <h4
+          class="text-xl font-bold text-gray-900 border-l-4 border-blue-500 pl-4 flex items-center gap-2">
+          <ng-icon name="lucideClipboardList" class="text-blue-500"></ng-icon>
+          {{ current_language_set?.casesheet?.provisionalDiag }}
+        </h4>
+
         <ng-container formArrayName="provisionalDiagnosisList">
           <div
             *ngFor="
@@ -12,59 +17,83 @@
               let i = index;
               let isLast = last
             "
-            class="row m-t-20">
+            class="p-6 rounded-2xl bg-gray-50/50 border border-gray-100 hover:border-blue-200 transition-all group">
             <ng-container [formGroupName]="i">
+              <div class="flex items-start gap-4">
+                <div class="flex-grow space-y-4">
+                  <z-form-field>
+                    <z-label>{{
+                      current_language_set?.casesheet?.provisionalDiag
+                    }}</z-label>
+                    <div class="relative">
+                      <input
+                        z-input
+                        formControlName="viewProvisionalDiagnosisProvided"
+                        #diagnosisInput
+                        (keyup)="onDiagnosisInputKeyup(diagnosisInput.value, i)"
+                        placeholder="Search diagnosis..." />
 
-              <div class="col-xs-12 col-sm-8 col-md-9">
-                <mat-form-field class="input-full-width" appearance="fill">
-                  <mat-label>{{ current_language_set?.casesheet?.provisionalDiag }}</mat-label>
-                  <input matInput type="text" autocomplete="off" name="viewProvisionalDiagnosisProvided"
-                    formControlName="viewProvisionalDiagnosisProvided" minlength="3" maxlength="100" required #diagnosisInput
-                    [matAutocomplete]="autoDiagnosis" (keyup)="onDiagnosisInputKeyup(diagnosisInput.value, i)" />
-                </mat-form-field>
-              
-                <mat-autocomplete #autoDiagnosis="matAutocomplete" autoActiveFirstOption [displayWith]="displayDiagnosis"
-                  (optionSelected)="onDiagnosisSelected($event.option.value, i)">
-                  <mat-option *ngFor="let diag of suggestedDiagnosisList[i]" [value]="diag">
-                    {{ diag.term }}
-                  </mat-option>
-                </mat-autocomplete>
-              </div>
-              <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2 box pull-right m-t-10">
-                <button
-                  mat-mini-fab
-                  type="button"
-                  color="warn"
-                  class="mat_warn_circle"
-                  *ngIf="
-                    i !== 0 ||
-                    (i === 0 &&
-                      (diagnosis.touched ||
-                        diagnosis.get('viewProvisionalDiagnosisProvided')?.disabled))
-                  "
-                  (click)="removeProvisionalDiagnosis(i, diagnosis)">
-                  <mat-icon>close</mat-icon>
-                </button>
-                <button
-                  mat-mini-fab
-                  type="button"
-                  class="mat_blue_circle"
-                  color="primary"
-                  *ngIf="isLast"
-                  [disabled]="checkProvisionalDiagnosisValidity(diagnosis)"
-                  (click)="addProvisionalDiagnosis()">
-                  <mat-icon>add</mat-icon>
-                </button>
+                      <!-- Custom Autocomplete Dropdown -->
+                      <div
+                        *ngIf="suggestedDiagnosisList[i]?.length > 0"
+                        class="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden max-h-60 overflow-y-auto">
+                        <button
+                          *ngFor="let diag of suggestedDiagnosisList[i]"
+                          type="button"
+                          class="w-full px-4 py-3 text-left hover:bg-blue-50 text-sm border-b border-gray-50 last:border-none transition-colors"
+                          (click)="onDiagnosisSelected(diag, i)">
+                          {{ diag.term }}
+                        </button>
+                      </div>
+                    </div>
+                  </z-form-field>
+                </div>
+
+                <div class="flex flex-col gap-2 mt-7">
+                  <button
+                    z-button
+                    variant="ghost"
+                    size="icon"
+                    type="button"
+                    class="text-red-500 hover:bg-red-50"
+                    *ngIf="
+                      i !== 0 ||
+                      (i === 0 &&
+                        (diagnosis.touched ||
+                          diagnosis.get('viewProvisionalDiagnosisProvided')
+                            ?.disabled))
+                    "
+                    (click)="removeProvisionalDiagnosis(i, diagnosis)"
+                    zTooltip="Remove">
+                    <ng-icon name="lucideTrash2" class="text-lg"></ng-icon>
+                  </button>
+                  <button
+                    z-button
+                    variant="ghost"
+                    size="icon"
+                    type="button"
+                    class="text-blue-600 hover:bg-blue-50"
+                    *ngIf="isLast"
+                    [disabled]="checkProvisionalDiagnosisValidity(diagnosis)"
+                    (click)="addProvisionalDiagnosis()"
+                    zTooltip="Add New">
+                    <ng-icon name="lucidePlusCircle" class="text-lg"></ng-icon>
+                  </button>
+                </div>
               </div>
             </ng-container>
           </div>
         </ng-container>
       </div>
 
-      <div class="col-xs-12 col-sm-6">
-        <header class="mat-expansion-panel-header m-t-5">
-          <h4>{{ current_language_set?.common?.confirmDiagnosis }}</h4>
-        </header>
+      <!-- Confirmatory Diagnosis Column -->
+      <div class="space-y-6">
+        <h4
+          class="text-xl font-bold text-gray-900 border-l-4 border-green-500 pl-4 flex items-center gap-2">
+          <ng-icon name="lucideCheckCircle" class="text-green-500"></ng-icon>
+          {{ current_language_set?.common?.confirmDiagnosis }}
+        </h4>
+
         <ng-container formArrayName="confirmatoryDiagnosisList">
           <div
             *ngFor="
@@ -72,53 +101,82 @@
               let i = index;
               let isLast = last
             "
-            class="row m-t-20">
+            class="p-6 rounded-2xl bg-gray-50/50 border border-gray-100 hover:border-green-200 transition-all group">
             <ng-container [formGroupName]="i">
-              <div class="col-xs-12 col-sm-8 col-md-9">
-                <mat-form-field class="input-full-width" appearance="fill">
-                  <mat-label>{{ current_language_set?.common?.confirmDiagnosis }}</mat-label>
-                  <input matInput type="text" autocomplete="off" name="confirmatoryDiagnosis"
-                    formControlName="confirmatoryDiagnosis" minlength="3" maxlength="100" required #confirmDiagnosisInput
-                    [matAutocomplete]="autoConfirmDiagnosis" (keyup)="onConfirmatoryDiagnosisInputKeyup(confirmDiagnosisInput.value, i)" />
-                </mat-form-field>
-              
-                <mat-autocomplete #autoConfirmDiagnosis="matAutocomplete" autoActiveFirstOption [displayWith]="displayConfirmatoryDiagnosis"
-                  (optionSelected)="onConfirmatoryDiagnosisSelected($event.option.value, i)">
-                  <mat-option *ngFor="let diag of suggestedConfirmatoryDiagnosisList[i]" [value]="diag">
-                    {{ diag.term }}
-                  </mat-option>
-                </mat-autocomplete>
-              </div>
-              <div class="col-xs-12 col-sm-3 col-md-2 col-lg-2 box pull-right m-t-10">
-                <button
-                  mat-mini-fab
-                  type="button"
-                  class="mat_warn_circle"
-                  color="warn"
-                  *ngIf="
-                    i !== 0 ||
-                    (i === 0 &&
-                      (confirmatoryDiagnosis.touched ||
-                        confirmatoryDiagnosis.get('confirmatoryDiagnosis')
-                          ?.disabled))
-                  "
-                  (click)="
-                    removeConfirmatoryDiagnosis(i, confirmatoryDiagnosis)
-                  ">
-                  <mat-icon>close</mat-icon>
-                </button>
-                <button
-                  mat-mini-fab
-                  type="button"
-                  class="mat_blue_circle"
-                  color="primary"
-                  *ngIf="isLast"
-                  [disabled]="
-                    checkConfirmatoryDiagnosisValidity(confirmatoryDiagnosis)
-                  "
-                  (click)="addConfirmatoryDiagnosis()">
-                  <mat-icon>add</mat-icon>
-                </button>
+              <div class="flex items-start gap-4">
+                <div class="flex-grow space-y-4">
+                  <z-form-field>
+                    <z-label>{{
+                      current_language_set?.common?.confirmDiagnosis
+                    }}</z-label>
+                    <div class="relative">
+                      <input
+                        z-input
+                        formControlName="confirmatoryDiagnosis"
+                        #confirmDiagnosisInput
+                        (keyup)="
+                          onConfirmatoryDiagnosisInputKeyup(
+                            confirmDiagnosisInput.value,
+                            i
+                          )
+                        "
+                        placeholder="Search confirmatory diagnosis..." />
+
+                      <!-- Custom Autocomplete Dropdown -->
+                      <div
+                        *ngIf="
+                          suggestedConfirmatoryDiagnosisList[i]?.length > 0
+                        "
+                        class="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden max-h-60 overflow-y-auto">
+                        <button
+                          *ngFor="
+                            let diag of suggestedConfirmatoryDiagnosisList[i]
+                          "
+                          type="button"
+                          class="w-full px-4 py-3 text-left hover:bg-green-50 text-sm border-b border-gray-50 last:border-none transition-colors"
+                          (click)="onConfirmatoryDiagnosisSelected(diag, i)">
+                          {{ diag.term }}
+                        </button>
+                      </div>
+                    </div>
+                  </z-form-field>
+                </div>
+
+                <div class="flex flex-col gap-2 mt-7">
+                  <button
+                    z-button
+                    variant="ghost"
+                    size="icon"
+                    type="button"
+                    class="text-red-500 hover:bg-red-50"
+                    *ngIf="
+                      i !== 0 ||
+                      (i === 0 &&
+                        (confirmatoryDiagnosis.touched ||
+                          confirmatoryDiagnosis.get('confirmatoryDiagnosis')
+                            ?.disabled))
+                    "
+                    (click)="
+                      removeConfirmatoryDiagnosis(i, confirmatoryDiagnosis)
+                    "
+                    zTooltip="Remove">
+                    <ng-icon name="lucideTrash2" class="text-lg"></ng-icon>
+                  </button>
+                  <button
+                    z-button
+                    variant="ghost"
+                    size="icon"
+                    type="button"
+                    class="text-green-600 hover:bg-green-50"
+                    *ngIf="isLast"
+                    [disabled]="
+                      checkConfirmatoryDiagnosisValidity(confirmatoryDiagnosis)
+                    "
+                    (click)="addConfirmatoryDiagnosis()"
+                    zTooltip="Add New">
+                    <ng-icon name="lucidePlusCircle" class="text-lg"></ng-icon>
+                  </button>
+                </div>
               </div>
             </ng-container>
           </div>
@@ -126,83 +184,52 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 box">
-        <div class="form-group">
-          <mat-label
-            class="mat-label-text"
-            class="control-label"
-            for="deathDuringPNCCaseRecord"
-            >{{ current_language_set?.casesheet?.matDeath }}</mat-label
-          >
-          <div class="clearfix"></div>
-          <mat-radio-group
-            name="isMaternalDeath"
-            id-="isMaternalDeath"
-            formControlName="isMaternalDeath"
-            (change)="checkWithDeathDetails()">
-            <mat-radio-button color="primary" [value]="true">{{
-              current_language_set?.common?.yes
-            }}</mat-radio-button>
-            <mat-radio-button color="primary" [value]="false">{{
-              current_language_set?.common?.no
-            }}</mat-radio-button>
-          </mat-radio-group>
+    <!-- Maternal Death Info -->
+    <div class="pt-10 border-t border-gray-100 space-y-8">
+      <div
+        class="flex flex-col md:flex-row md:items-center justify-between gap-6 p-6 rounded-2xl bg-gray-50/50">
+        <div class="space-y-1">
+          <z-label class="text-base font-bold text-gray-900">{{
+            current_language_set?.casesheet?.matDeath
+          }}</z-label>
+          <p class="text-sm text-gray-500">
+            Record if maternal death has occurred during this visit
+          </p>
         </div>
-      </div>
-    </div>
-
-    <div class="row" *ngIf="isMaternalDeath">
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            current_language_set?.casesheet?.placeOfDeath
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            defaultNull
-            allowText="alphaspace"
-            name="placeOfDeath"
-            id="placeOfDeath"
-            formControlName="placeOfDeath"
-            maxlength="50" />
-        </mat-form-field>
+        <z-radio-group
+          formControlName="isMaternalDeath"
+          (selectionChange)="checkWithDeathDetails()"
+          class="flex items-center gap-8">
+          <z-radio [zValue]="true" class="font-medium">{{
+            current_language_set?.common?.yes
+          }}</z-radio>
+          <z-radio [zValue]="false" class="font-medium">{{
+            current_language_set?.common?.no
+          }}</z-radio>
+        </z-radio-group>
       </div>
 
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            current_language_set?.casesheet?.causeOfDeath
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            defaultNull
-            allowText="alphaspace"
-            name="causeOfDeath"
-            id="causeOfDeath"
-            formControlName="causeOfDeath"
-            maxlength="50" />
-        </mat-form-field>
-      </div>
+      <div
+        class="grid grid-cols-1 md:grid-cols-3 gap-8 p-6 rounded-2xl border-2 border-dashed border-gray-100 bg-white"
+        *ngIf="isMaternalDeath">
+        <z-form-field>
+          <z-label>{{ current_language_set?.casesheet?.placeOfDeath }}</z-label>
+          <input z-input formControlName="placeOfDeath" maxlength="50" />
+        </z-form-field>
 
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            current_language_set?.casesheet?.dateOfDeath
-          }}</mat-label>
-          <input
-            matInput
-            [max]="today"
-            [matDatepicker]="picker"
+        <z-form-field>
+          <z-label>{{ current_language_set?.casesheet?.causeOfDeath }}</z-label>
+          <input z-input formControlName="causeOfDeath" maxlength="50" />
+        </z-form-field>
+
+        <z-form-field>
+          <z-label>{{ current_language_set?.casesheet?.dateOfDeath }}</z-label>
+          <z-date-picker
             formControlName="dateOfDeath"
-            [min]="minimumDeathDate" />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
+            [maxDate]="today"
+            [minDate]="minimumDeathDate">
+          </z-date-picker>
+        </z-form-field>
       </div>
     </div>
   </section>

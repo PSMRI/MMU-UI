@@ -1,47 +1,72 @@
-<mat-accordion>
-  <mat-expansion-panel expanded="true">
-    <mat-expansion-panel-header>
-      <h5>
-        {{
-          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-            ?.genExamination?.generalExamination
-        }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-nurse-general-examination
-      [generalExaminationDataForm]="
-        generalExaminationForm
-      "></app-nurse-general-examination>
-  </mat-expansion-panel>
+<z-accordion
+  zType="multiple"
+  [zDefaultValue]="['general-examination']"
+  class="w-full space-y-4">
+  <!-- General Examination Section -->
+  <z-accordion-item
+    zValue="general-examination"
+    class="border rounded-xl bg-white shadow-sm overflow-hidden">
+    <z-accordion-trigger
+      class="px-6 py-4 hover:bg-zinc-50/50 transition-colors">
+      <div class="flex items-center gap-3">
+        <h5 class="text-base font-semibold text-zinc-900">
+          {{
+            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+              ?.genExamination?.generalExamination
+          }}
+        </h5>
+      </div>
+    </z-accordion-trigger>
+    <z-accordion-content class="px-6 pb-6 pt-2 border-t border-zinc-100">
+      <app-nurse-general-examination
+        [generalExaminationDataForm]="generalExaminationForm">
+      </app-nurse-general-examination>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>
-        {{
-          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
-            ?.headexamination
-        }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-nurse-head-to-toe-examination
-      [headToToeExaminationDataForm]="
-        headToToeExaminationForm
-      "></app-nurse-head-to-toe-examination>
-  </mat-expansion-panel>
+  <!-- Head to Toe Examination Section -->
+  <z-accordion-item
+    zValue="head-to-toe"
+    class="border rounded-xl bg-white shadow-sm overflow-hidden">
+    <z-accordion-trigger
+      class="px-6 py-4 hover:bg-zinc-50/50 transition-colors">
+      <div class="flex items-center gap-3">
+        <h5 class="text-base font-semibold text-zinc-900">
+          {{
+            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+              ?.headToToe?.headexamination
+          }}
+        </h5>
+      </div>
+    </z-accordion-trigger>
+    <z-accordion-content class="px-6 pb-6 pt-2 border-t border-zinc-100">
+      <app-nurse-head-to-toe-examination
+        [headToToeExaminationDataForm]="headToToeExaminationForm">
+      </app-nurse-head-to-toe-examination>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel *ngIf="visitCategory !== 'NCD Care'">
-    <mat-expansion-panel-header>
-      <h5>
-        {{
-          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-            ?.systemicExamination
-        }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-nurse-systemic-examination
-      [visitCategory]="visitCategory"
-      [systemicExaminationDataForm]="
-        systemicExaminationForm
-      "></app-nurse-systemic-examination>
-  </mat-expansion-panel>
-</mat-accordion>
+  <!-- Systemic Examination Section -->
+  <z-accordion-item
+    *ngIf="visitCategory !== 'NCD Care'"
+    zValue="systemic-examination"
+    class="border rounded-xl bg-white shadow-sm overflow-hidden">
+    <z-accordion-trigger
+      class="px-6 py-4 hover:bg-zinc-50/50 transition-colors">
+      <div class="flex items-center gap-3">
+        <h5 class="text-base font-semibold text-zinc-900">
+          {{
+            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+              ?.systemic?.systemicExamination
+          }}
+        </h5>
+      </div>
+    </z-accordion-trigger>
+    <z-accordion-content class="px-6 pb-6 pt-2 border-t border-zinc-100">
+      <app-nurse-systemic-examination
+        [visitCategory]="visitCategory"
+        [systemicExaminationDataForm]="systemicExaminationForm">
+      </app-nurse-systemic-examination>
+    </z-accordion-content>
+  </z-accordion-item>
+</z-accordion>

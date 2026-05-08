@@ -1,6 +1,11 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { HttpClient, HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  HttpClient,
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { ServicePointResolve } from './app/app-modules/service-point/service-point-resolve.service';
 import { ServicePointService } from './app/app-modules/service-point/service-point.service';
 import { RegistrarService } from './app/app-modules/registrar/shared/services/registrar.service';
@@ -23,22 +28,54 @@ import { MatChipsModule } from '@angular/material/chips';
 import { TrackingModule } from 'Common-UI/src/tracking';
 import { AppComponent } from './app/app.component';
 import { importProvidersFrom } from '@angular/core';
+import {
+  LucideAngularModule,
+  Heart,
+  UserCircle,
+  ClipboardList,
+  Loader2,
+  Baby,
+  Syringe,
+} from 'lucide-angular';
 
 bootstrapApplication(AppComponent, {
-    providers: [
-        importProvidersFrom(CommonModule, BrowserModule, FormsModule, MatIconModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, AppRoutingModule, MatGridListModule, WebcamModule, NgxPaginationModule, CoreModule.forRoot(), MatChipsModule, TrackingModule.forRoot()),
-        HttpClient,
-        ServicePointResolve,
-        ServicePointService,
-        RegistrarService,
-        AudioRecordingService,
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: HttpInterceptorService,
-            multi: true,
-        },
-        provideHttpClient(withInterceptorsFromDi()),
-        provideAnimations(),
-    ]
-})
-  .catch(err => console.error(err));
+  providers: [
+    importProvidersFrom(
+      CommonModule,
+      BrowserModule,
+      FormsModule,
+      MatIconModule,
+      ReactiveFormsModule,
+      MatFormFieldModule,
+      MatInputModule,
+      MatSelectModule,
+      AppRoutingModule,
+      MatGridListModule,
+      WebcamModule,
+      NgxPaginationModule,
+      CoreModule.forRoot(),
+      MatChipsModule,
+      TrackingModule.forRoot(),
+      LucideAngularModule.pick({
+        Heart,
+        UserCircle,
+        ClipboardList,
+        Loader2,
+        Baby,
+        Syringe,
+      })
+    ),
+    HttpClient,
+    ServicePointResolve,
+    ServicePointService,
+    RegistrarService,
+    AudioRecordingService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorService,
+      multi: true,
+    },
+    provideHttpClient(withInterceptorsFromDi()),
+    provideAnimations(),
+  ],
+}).catch(err => console.error(err));

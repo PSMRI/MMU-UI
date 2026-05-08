@@ -75,11 +75,7 @@ import {
   MatRow,
 } from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
 import { NgIf, NgFor, NgClass, SlicePipe } from '@angular/common';
 import {
   MatFormField,
@@ -126,9 +122,7 @@ interface prescribe {
   styleUrls: ['./quick-consult.component.css'],
   encapsulation: ViewEncapsulation.None,
   imports: [
-    MatAccordion,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
+    ZardAccordionImports,
     ReactiveFormsModule,
     NgIf,
     MatTable,

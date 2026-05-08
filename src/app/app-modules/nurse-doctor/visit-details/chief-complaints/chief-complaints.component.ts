@@ -45,64 +45,61 @@ import { ValidationUtils } from '../../shared/utility/validation-utility';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 
 import { VisitDetailUtils } from '../../shared/utility/visit-detail-utility';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SetLanguageComponent } from '@/app-modules/core/components/set-language.component';
+import { HttpServiceService } from '@/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
-import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTableImports } from '@/components/ui/table/table.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { LucideAngularModule } from 'lucide-angular';
+
 import { AmritTrackingService } from 'Common-UI/src/tracking';
 import { NgIf, NgFor, NgClass } from '@angular/common';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import {
-  MatAutocompleteTrigger,
-  MatAutocomplete,
-  MatOption,
-} from '@angular/material/autocomplete';
 import { NullDefaultValueDirective } from '../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
+
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatOptionModule } from '@angular/material/core';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { ZardAutocompleteImports } from '@/components/ui/autocomplete/autocomplete.imports';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideTrash2,
+  lucidePlus,
+  lucideClipboardList,
+} from '@ng-icons/lucide';
+import { ZardInputDirective } from '@/components/ui/input/input.directive';
+import { ZardButtonComponent } from '@/components/ui/button/button.component';
 
 @Component({
   selector: 'app-patient-chief-complaints',
   templateUrl: './chief-complaints.component.html',
   styleUrls: ['./chief-complaints.component.css'],
+  standalone: true,
   imports: [
     NgIf,
     ReactiveFormsModule,
     NgFor,
     NgClass,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatAutocompleteTrigger,
-    MatAutocomplete,
-    MatOption,
+    ZardFormImports,
+    ZardTableImports,
+    ZardSelectImports,
+    MatAutocompleteModule,
+    MatOptionModule,
+    ZardAutocompleteImports,
     NullDefaultValueDirective,
     StringValidatorDirective,
-    MatSelect,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
+    MatPaginatorModule,
+    MatTableModule,
+    NgIcon,
+    ZardInputDirective,
+    ZardButtonComponent,
+    LucideAngularModule,
+  ],
+  viewProviders: [
+    provideIcons({ lucideTrash2, lucidePlus, lucideClipboardList }),
   ],
 })
 export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {

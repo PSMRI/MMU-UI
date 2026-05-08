@@ -31,42 +31,83 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NgIf, NgFor, NgClass, SlicePipe } from '@angular/common';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { DoctorService } from '../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { CameraService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
+import { BeneficiaryPlatformHistoryComponent } from '../beneficiary-platform-history/beneficiary-platform-history.component';
+import { NgChartsModule } from 'ng2-charts';
+import {
+  ZardFormImports,
+  ZardRadioImports,
+  ZardSelectImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+  ZardAccordionImports,
+  ZardDatePickerImports,
+} from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideHistory,
+  lucideActivity,
+  lucideTrendingUp,
+  lucideHeartPulse,
+  lucideDroplets,
+  lucideEye,
+  lucideScanLine,
+  lucideFileText,
+  lucideStethoscope,
+  lucideBarChart3,
+} from '@ng-icons/lucide';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
-import { BeneficiaryPlatformHistoryComponent } from '../beneficiary-platform-history/beneficiary-platform-history.component';
-import { NgClass, NgIf } from '@angular/common';
-import { NgChartsModule } from 'ng2-charts';
-import { MatFormField, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
+
 @Component({
   selector: 'app-cancer-case-record',
   templateUrl: './cancer-case-record.component.html',
   styleUrls: ['./cancer-case-record.component.css'],
   imports: [
-    MatAccordion,
-    ReactiveFormsModule,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
-    BeneficiaryPlatformHistoryComponent,
-    NgClass,
     NgIf,
+    NgFor,
+    NgClass,
+    SlicePipe,
+    ReactiveFormsModule,
     NgChartsModule,
-    MatFormField,
-    MatInput,
+    BeneficiaryPlatformHistoryComponent,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    ZardAccordionImports,
+    ZardDatePickerImports,
+    LucideAngularModule,
+    NgIcon,
     StringValidatorDirective,
-    MatLabel,
+    MatPaginator,
+  ],
+  providers: [
+    provideIcons({
+      lucideHistory,
+      lucideActivity,
+      lucideTrendingUp,
+      lucideHeartPulse,
+      lucideDroplets,
+      lucideEye,
+      lucideScanLine,
+      lucideFileText,
+      lucideStethoscope,
+      lucideBarChart3,
+    }),
   ],
 })
 export class CancerCaseRecordComponent

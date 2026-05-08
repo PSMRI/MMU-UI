@@ -1,20 +1,19 @@
-<div class="row m-t-10">
-  <div class="col-xs-12">
+<div class="mt-4">
+  <div class="w-full">
     <app-nurse-cancer-history
       *ngIf="showCancer"
       [mode]="mode"
       [pregnancyStatus]="pregnancyStatus"
-      [nurseCancerHistoryForm]="
-        patientHistoryDataForm
-      "></app-nurse-cancer-history>
+      [nurseCancerHistoryForm]="patientHistoryDataForm">
+    </app-nurse-cancer-history>
+
     <app-nurse-general-opd-history
       *ngIf="showGeneralOPD"
       [mode]="mode"
       [visitCategory]="visitCategory"
       [primiGravida]="primeGravidaStatus"
       [pregnancyStatus]="pregnancyStatus"
-      [nurseGeneralHistoryForm]="
-        patientHistoryDataForm
-      "></app-nurse-general-opd-history>
+      [nurseGeneralHistoryForm]="patientHistoryDataForm">
+    </app-nurse-general-opd-history>
   </div>
 </div>

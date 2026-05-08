@@ -1,67 +1,104 @@
-<mat-accordion [formGroup]="cancerForm">
-  <mat-expansion-panel expanded="true">
-    <mat-expansion-panel-header>
-      <h5>
+<z-accordion
+  zType="multiple"
+  [zDefaultValue]="['symptoms']"
+  class="w-full space-y-4"
+  [formGroup]="cancerForm">
+  <!-- Signs & Symptoms Section -->
+  <z-accordion-item
+    zValue="symptoms"
+    class="border rounded-xl bg-white shadow-sm overflow-hidden">
+    <z-accordion-trigger
+      class="px-6 py-4 hover:bg-zinc-50/50 transition-colors">
+      <h5 class="text-base font-semibold text-zinc-900">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.symptoms?.symptoms
         }}
       </h5>
-    </mat-expansion-panel-header>
-    <app-doctor-signs-and-symptoms
-      [signsForm]="signsForm"></app-doctor-signs-and-symptoms>
-  </mat-expansion-panel>
+    </z-accordion-trigger>
+    <z-accordion-content class="px-6 pb-6 pt-2 border-t border-zinc-100">
+      <app-doctor-signs-and-symptoms [signsForm]="signsForm">
+      </app-doctor-signs-and-symptoms>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>{{ currentLanguageSet?.casesheet?.oralExamination }}</h5>
-    </mat-expansion-panel-header>
-    <app-cancer-oral-examination
-      [oralExaminationForm]="oralExaminationForm"></app-cancer-oral-examination>
-  </mat-expansion-panel>
+  <!-- Oral Examination Section -->
+  <z-accordion-item
+    zValue="oral"
+    class="border rounded-xl bg-white shadow-sm overflow-hidden">
+    <z-accordion-trigger
+      class="px-6 py-4 hover:bg-zinc-50/50 transition-colors">
+      <h5 class="text-base font-semibold text-zinc-900">
+        {{ currentLanguageSet?.casesheet?.oralExamination }}
+      </h5>
+    </z-accordion-trigger>
+    <z-accordion-content class="px-6 pb-6 pt-2 border-t border-zinc-100">
+      <app-cancer-oral-examination [oralExaminationForm]="oralExaminationForm">
+      </app-cancer-oral-examination>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel *ngIf="showBreastExamination || female">
-    <mat-expansion-panel-header>
-      <h5>
+  <!-- Breast Examination Section (Conditional) -->
+  <z-accordion-item
+    *ngIf="showBreastExamination || female"
+    zValue="breast"
+    class="border rounded-xl bg-white shadow-sm overflow-hidden">
+    <z-accordion-trigger
+      class="px-6 py-4 hover:bg-zinc-50/50 transition-colors">
+      <h5 class="text-base font-semibold text-zinc-900">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.breast?.breastExamination
         }}
       </h5>
-    </mat-expansion-panel-header>
-    <app-doctor-breast-examination
-      [breastExaminationForm]="breastExaminationForm"
-      id="breastExamination"></app-doctor-breast-examination>
-  </mat-expansion-panel>
+    </z-accordion-trigger>
+    <z-accordion-content class="px-6 pb-6 pt-2 border-t border-zinc-100">
+      <app-doctor-breast-examination
+        [breastExaminationForm]="breastExaminationForm"
+        id="breastExamination">
+      </app-doctor-breast-examination>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>
+  <!-- Abdominal Examination Section -->
+  <z-accordion-item
+    zValue="abdominal"
+    class="border rounded-xl bg-white shadow-sm overflow-hidden">
+    <z-accordion-trigger
+      class="px-6 py-4 hover:bg-zinc-50/50 transition-colors">
+      <h5 class="text-base font-semibold text-zinc-900">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.abdominal?.abdominalExamination
         }}
       </h5>
-    </mat-expansion-panel-header>
-    <app-doctor-abdominal-examination
-      [abdominalExaminationForm]="
-        abdominalExaminationForm
-      "></app-doctor-abdominal-examination>
-  </mat-expansion-panel>
+    </z-accordion-trigger>
+    <z-accordion-content class="px-6 pb-6 pt-2 border-t border-zinc-100">
+      <app-doctor-abdominal-examination
+        [abdominalExaminationForm]="abdominalExaminationForm">
+      </app-doctor-abdominal-examination>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel *ngIf="female">
-    <mat-expansion-panel-header>
-      <h5>
+  <!-- Gynecological Examination Section (Conditional) -->
+  <z-accordion-item
+    *ngIf="female"
+    zValue="gynecological"
+    class="border rounded-xl bg-white shadow-sm overflow-hidden">
+    <z-accordion-trigger
+      class="px-6 py-4 hover:bg-zinc-50/50 transition-colors">
+      <h5 class="text-base font-semibold text-zinc-900">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.gynecological?.gynecologicalExamination
         }}
       </h5>
-    </mat-expansion-panel-header>
-    <app-doctor-gynecological-examination
-      [viewFiles]="doctorService.gynecologicalFiles"
-      [gynecologicalExaminationForm]="
-        gynecologicalExaminationForm
-      "></app-doctor-gynecological-examination>
-  </mat-expansion-panel>
-</mat-accordion>
+    </z-accordion-trigger>
+    <z-accordion-content class="px-6 pb-6 pt-2 border-t border-zinc-100">
+      <app-doctor-gynecological-examination
+        [viewFiles]="doctorService.gynecologicalFiles"
+        [gynecologicalExaminationForm]="gynecologicalExaminationForm">
+      </app-doctor-gynecological-examination>
+    </z-accordion-content>
+  </z-accordion-item>
+</z-accordion>

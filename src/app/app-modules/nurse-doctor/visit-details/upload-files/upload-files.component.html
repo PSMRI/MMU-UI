@@ -1,65 +1,137 @@
-<div class="row m-t-10">
-  <div class="col-xs-12">
-    <label for="upload-file" style="color: gray" *ngIf="!disableFileSelection">
-      {{ currentLanguageSet?.uploadFileSizeLimit }} :{{ maxFileSize }}
-      {{ currentLanguageSet?.mb }} ,
-      {{ currentLanguageSet?.supportedFileFormats }} )</label
-    >
-    <br />
-    <section style="margin-top: 30px">
-      <button
-        class="mat_blue"
-        [disabled]="disableFileSelection"
-        (click)="
-          triggerLog($event); trackFieldInteraction('Select File Button')
-        ">
-        {{ currentLanguageSet?.nurseData?.visitDetailsForm?.selectFile }}
-      </button>
-      <span class="span-style">
-        <input
-          autocomplete="off"
-          type="file"
-          id="fileUpload"
-          #filelist
-          style="display: inline-block"
-          (change)="uploadFile($event); trackFieldInteraction('File Input')" />
-      </span>
-      <button
-        *ngIf="!disableFileSelection"
-        class="mat_blue pull-right"
-        mat-raised-button
-        (click)="
-          checkForDuplicateUpload();
-          trackFieldInteraction('Upload Files Button')
-        ">
-        {{ currentLanguageSet?.nurseData?.visitDetailsForm?.uploadFiles }}
-      </button>
-      <button
-        style="margin-left: 10px"
-        *ngIf="disableFileSelection || enableForNCDScreening"
-        class="mat_blue"
-        (click)="
-          viewNurseSelectedFiles(); trackFieldInteraction('View Files Button')
-        ">
-        {{ currentLanguageSet?.nurseData?.visitDetailsForm?.viewFiles }}
-      </button>
-      <div style="margin: 20px 0px 0px 0px">
-        <mat-chip-listbox *ngIf="fileObj.length > 0">
-          <mat-chip
-            *ngFor="let file of fileObj"
-            [ngClass]="{ chipEdit: file.isUploaded }"
-            >{{ file.fileName }}
-            <mat-icon
-              matChipRemove
-              *ngIf="!file.isUploaded"
-              (click)="
-                remove(file); trackFieldInteraction('Remove File Button')
-              "
-              >cancel</mat-icon
-            >
-          </mat-chip>
-        </mat-chip-listbox>
+<div class="pt-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+  <div class="max-w-4xl space-y-10">
+    <!-- Header & Info -->
+    <div class="flex items-start justify-between gap-6">
+      <div class="flex items-center gap-4">
+        <div class="p-3 bg-violet-100 rounded-2xl">
+          <lucide-icon
+            name="upload-cloud"
+            class="size-6 text-violet-600"></lucide-icon>
+        </div>
+        <div>
+          <h4 class="text-lg font-black text-gray-900 tracking-tight uppercase">
+            Document Repository
+          </h4>
+          <p
+            class="text-[10px] text-gray-400 font-bold uppercase tracking-widest"
+            *ngIf="!disableFileSelection">
+            {{ currentLanguageSet?.uploadFileSizeLimit }}: {{ maxFileSize
+            }}{{ currentLanguageSet?.mb }} ({{
+              currentLanguageSet?.supportedFileFormats
+            }})
+          </p>
+        </div>
       </div>
-    </section>
+    </div>
+
+    <!-- Upload Controls -->
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center p-8 rounded-[2.5rem] bg-gray-50/50 border border-dashed border-gray-200 transition-all duration-500 hover:border-violet-300 hover:bg-violet-50/10 group">
+      <div class="space-y-4">
+        <p class="text-xs font-bold text-gray-500 leading-relaxed">
+          Select clinical reports, diagnostic images, or relevant medical
+          documentation for the patient record.
+        </p>
+        <div class="flex gap-3">
+          <z-button
+            [zDisabled]="disableFileSelection"
+            (click)="
+              triggerLog($event); trackFieldInteraction('Select File Button')
+            "
+            variant="outline"
+            class="rounded-2xl border-gray-200 bg-white text-violet-600 hover:bg-violet-50 hover:border-violet-200 px-6 py-2 shadow-sm font-black text-[10px] uppercase tracking-widest transition-all">
+            <lucide-icon name="file-plus" class="size-3 mr-2"></lucide-icon>
+            {{ currentLanguageSet?.nurseData?.visitDetailsForm?.selectFile }}
+          </z-button>
+
+          <input
+            autocomplete="off"
+            type="file"
+            id="fileUpload"
+            #filelist
+            class="hidden"
+            (change)="
+              uploadFile($event); trackFieldInteraction('File Input')
+            " />
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3">
+        <z-button
+          *ngIf="!disableFileSelection"
+          [zDisabled]="fileObj.length === 0"
+          (click)="
+            checkForDuplicateUpload();
+            trackFieldInteraction('Upload Files Button')
+          "
+          variant="default"
+          class="rounded-2xl bg-violet-600 hover:bg-violet-700 text-white px-8 py-2 shadow-lg shadow-violet-200 font-black text-[10px] uppercase tracking-widest transition-all">
+          <lucide-icon name="upload" class="size-3 mr-2"></lucide-icon>
+          {{ currentLanguageSet?.nurseData?.visitDetailsForm?.uploadFiles }}
+        </z-button>
+
+        <z-button
+          *ngIf="disableFileSelection || enableForNCDScreening"
+          (click)="
+            viewNurseSelectedFiles(); trackFieldInteraction('View Files Button')
+          "
+          variant="ghost"
+          class="rounded-2xl text-violet-600 hover:bg-violet-50 px-6 py-2 font-black text-[10px] uppercase tracking-widest transition-all">
+          <lucide-icon name="eye" class="size-3 mr-2"></lucide-icon>
+          {{ currentLanguageSet?.nurseData?.visitDetailsForm?.viewFiles }}
+        </z-button>
+      </div>
+    </div>
+
+    <!-- File Queue / Uploaded Files -->
+    <div class="space-y-4" *ngIf="fileObj.length > 0">
+      <div class="flex items-center gap-2 px-2">
+        <div class="h-1 w-4 bg-violet-400 rounded-full"></div>
+        <h5
+          class="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+          Document Queue
+        </h5>
+      </div>
+
+      <div class="flex flex-wrap gap-3">
+        <div
+          *ngFor="let file of fileObj"
+          [ngClass]="
+            file.isUploaded
+              ? 'bg-emerald-50 border-emerald-100 text-emerald-700'
+              : 'bg-white border-gray-100 text-gray-700 shadow-sm'
+          "
+          class="flex items-center gap-3 px-5 py-3 rounded-2xl border transition-all duration-300 animate-in zoom-in duration-500">
+          <lucide-icon
+            [name]="file.isUploaded ? 'check-circle' : 'file'"
+            class="size-4"
+            [ngClass]="
+              file.isUploaded ? 'text-emerald-500' : 'text-gray-400'
+            "></lucide-icon>
+          <span class="text-xs font-bold tracking-tight">{{
+            file.fileName
+          }}</span>
+          <button
+            *ngIf="!file.isUploaded"
+            (click)="remove(file); trackFieldInteraction('Remove File Button')"
+            class="ml-2 p-1 hover:bg-rose-50 rounded-lg text-rose-400 hover:text-rose-500 transition-colors">
+            <lucide-icon name="x" class="size-3"></lucide-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div
+      *ngIf="fileObj.length === 0"
+      class="flex flex-col items-center justify-center py-16 opacity-30">
+      <lucide-icon
+        name="folder-open"
+        class="size-12 text-gray-300 mb-4"></lucide-icon>
+      <p
+        class="text-[10px] font-black text-gray-400 uppercase tracking-widest italic">
+        No documents attached to this visit
+      </p>
+    </div>
   </div>
 </div>

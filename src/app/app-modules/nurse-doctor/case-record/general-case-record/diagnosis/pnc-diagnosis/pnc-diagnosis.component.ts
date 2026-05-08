@@ -35,86 +35,63 @@ import {
   AbstractControl,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { NgIf, NgFor } from '@angular/common';
 import { BeneficiaryDetailsService } from '../../../../../core/services/beneficiary-details.service';
 import { ConfirmationService } from './../../../../../core/services/confirmation.service';
 import { DoctorService, MasterdataService } from '../../../../shared/services';
 import { GeneralUtils } from '../../../../shared/utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
-import {
-  MomentDateAdapter,
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-} from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { NgFor, NgIf } from '@angular/common';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '@/app-modules/core/directives/stringValidator.directive';
 import {
-  MatAutocompleteTrigger,
-  MatAutocomplete,
-  MatOption,
-} from '@angular/material/autocomplete';
-import { MatIcon } from '@angular/material/icon';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
-import { StringValidatorDirective } from '../../../../../core/directives/stringValidator.directive';
+  ZardFormImports,
+  ZardRadioImports,
+  ZardSelectImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+  ZardAccordionImports,
+  ZardDatePickerImports,
+} from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  MatDatepickerInput,
-  MatDatepickerToggle,
-  MatDatepicker,
-} from '@angular/material/datepicker';
+  lucideClipboardList,
+  lucideCheckCircle,
+  lucidePlusCircle,
+  lucideTrash2,
+} from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-pnc-diagnosis',
   templateUrl: './pnc-diagnosis.component.html',
   styleUrls: ['./pnc-diagnosis.component.css'],
-  providers: [
-    {
-      provide: MAT_DATE_LOCALE,
-      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
-    },
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    },
-    {
-      provide: MAT_DATE_FORMATS,
-      useValue: {
-        parse: {
-          dateInput: 'LL',
-        },
-        display: {
-          dateInput: 'DD/MM/YYYY', // Set the desired display format
-          monthYearLabel: 'MMM YYYY',
-          dateA11yLabel: 'LL',
-          monthYearA11yLabel: 'MMMM YYYY',
-        },
-      },
-    },
-  ],
   imports: [
     ReactiveFormsModule,
     NgFor,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatAutocompleteTrigger,
-    MatAutocomplete,
-    MatOption,
     NgIf,
-    MatIcon,
-    MatRadioGroup,
-    MatRadioButton,
     StringValidatorDirective,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-    MatSuffix,
-    MatDatepicker,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    ZardAccordionImports,
+    ZardDatePickerImports,
+    LucideAngularModule,
+    NgIcon,
+  ],
+  providers: [
+    provideIcons({
+      lucideClipboardList,
+      lucideCheckCircle,
+      lucidePlusCircle,
+      lucideTrash2,
+    }),
   ],
 })
 export class PncDiagnosisComponent

@@ -40,7 +40,9 @@
           <mat-datepicker-toggle
             matSuffix
             [for]="picker"
-            (click)="trackFieldInteraction('Date Picker Button')"></mat-datepicker-toggle>
+            (click)="
+              trackFieldInteraction('Date Picker Button')
+            "></mat-datepicker-toggle>
           <mat-date-range-picker #picker></mat-date-range-picker>
         </mat-form-field>
       </div>

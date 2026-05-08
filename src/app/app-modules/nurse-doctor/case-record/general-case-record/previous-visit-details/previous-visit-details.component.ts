@@ -20,21 +20,60 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Input, DoCheck } from '@angular/core';
-import { DoctorService } from '../../../shared/services';
-import { CameraService } from '../../../../core/services/camera.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { Component, OnInit, DoCheck, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { BeneficiaryPlatformHistoryComponent } from '../../beneficiary-platform-history/beneficiary-platform-history.component';
-import { NgClass, NgIf } from '@angular/common';
+import { CommonModule, NgClass, NgIf } from '@angular/common';
 import { NgChartsModule } from 'ng2-charts';
+import { DoctorService } from '../../../shared/services';
+import { SetLanguageComponent } from '@/app-modules/core/components/set-language.component';
+import { HttpServiceService } from '@/app-modules/core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { CameraService } from '@/app-modules/core/services/camera.service';
+import { BeneficiaryPlatformHistoryComponent } from '../../beneficiary-platform-history/beneficiary-platform-history.component';
+import {
+  ZardFormImports,
+  ZardRadioImports,
+  ZardSelectImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+  ZardAccordionImports,
+  ZardDatePickerImports,
+} from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideTrendingUp,
+  lucideActivity,
+  lucideDroplets,
+} from '@ng-icons/lucide';
+
 @Component({
   selector: 'app-previous-visit-details',
   templateUrl: './previous-visit-details.component.html',
   styleUrls: ['./previous-visit-details.component.css'],
-  imports: [BeneficiaryPlatformHistoryComponent, NgClass, NgIf, NgChartsModule],
+  standalone: true,
+  imports: [
+    BeneficiaryPlatformHistoryComponent,
+    NgClass,
+    NgIf,
+    NgChartsModule,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    ZardAccordionImports,
+    ZardDatePickerImports,
+    LucideAngularModule,
+    NgIcon,
+  ],
+  providers: [
+    provideIcons({ lucideTrendingUp, lucideActivity, lucideDroplets }),
+  ],
 })
 export class PreviousVisitDetailsComponent implements OnInit, DoCheck {
   @Input()

@@ -36,7 +36,6 @@ import {
 } from '@angular/forms';
 import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
 
-
 import { VisitDetailUtils } from '../../shared/utility';
 
 import { DoctorService } from '../../shared/services';

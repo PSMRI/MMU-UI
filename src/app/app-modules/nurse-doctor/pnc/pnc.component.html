@@ -1,228 +1,194 @@
-<mat-expansion-panel expanded="true">
-  <mat-expansion-panel-header>
-    <h5>{{ currentLanguageSet?.pncData?.pnc }}</h5>
-  </mat-expansion-panel-header>
-  <div [formGroup]="patientPNCDataForm" class="row m-t-20">
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.pncData?.placeofDelivery
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          name="placeOfDelivery"
-          formControlName="deliveryPlace"
-          (selectionChange)="resetOtherPlaceOfDelivery()"
-          required>
-          <mat-option
-            *ngFor="let place of masterData?.deliveryPlaces"
-            [value]="place"
-            >{{ place.deliveryPlace }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
+<z-accordion
+  zType="single"
+  zCollapsible
+  class="w-full"
+  [formGroup]="patientPNCDataForm">
+  <z-accordion-item zValue="pnc" [expanded]="true">
+    <z-accordion-trigger>
+      <div class="flex items-center gap-3">
+        <lucide-icon name="heart" class="size-5 text-rose-500"></lucide-icon>
+        <span class="font-semibold text-zinc-900">{{
+          currentLanguageSet?.pncData?.pnc
+        }}</span>
+      </div>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+        <!-- Place of Delivery -->
+        <z-form-field>
+          <z-label>{{ currentLanguageSet?.pncData?.placeofDelivery }}*</z-label>
+          <z-select
+            formControlName="deliveryPlace"
+            (selectionChange)="resetOtherPlaceOfDelivery()"
+            placeholder="Select place of delivery">
+            <z-option
+              *ngFor="let place of masterData?.deliveryPlaces"
+              [zValue]="place">
+              {{ place.deliveryPlace }}
+            </z-option>
+          </z-select>
+        </z-form-field>
 
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      *ngIf="deliveryPlace?.deliveryPlace === 'Other'">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.pncData?.others
-        }}</mat-label>
-        <input
-          autocomplete="off"
-          matInput
-          appDefaultNull
-          maxlength="50"
-          formControlName="otherDeliveryPlace"
-          name="otherPlaceOfDelivery" />
-      </mat-form-field>
-    </div>
+        <!-- Other Place of Delivery -->
+        <z-form-field *ngIf="deliveryPlace?.deliveryPlace === 'Other'">
+          <z-label>{{ currentLanguageSet?.pncData?.others }}</z-label>
+          <z-input
+            formControlName="otherDeliveryPlace"
+            maxlength="50"
+            placeholder="Specify other place">
+          </z-input>
+        </z-form-field>
 
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.pncData?.typeofDelivery
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          name="typeOfDelivery"
-          formControlName="deliveryType"
-          [disabled]="!patientPNCDataForm.value.deliveryPlace"
-          [required]="patientPNCDataForm.value.deliveryPlace">
-          <mat-option *ngFor="let type of selectDeliveryTypes" [value]="type">
-            {{ type.deliveryType }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+        <!-- Type of Delivery -->
+        <z-form-field>
+          <z-label>{{ currentLanguageSet?.pncData?.typeofDelivery }}*</z-label>
+          <z-select
+            formControlName="deliveryType"
+            [disabled]="!patientPNCDataForm.value.deliveryPlace"
+            placeholder="Select type of delivery">
+            <z-option *ngFor="let type of selectDeliveryTypes" [zValue]="type">
+              {{ type.deliveryType }}
+            </z-option>
+          </z-select>
+        </z-form-field>
 
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="fieldAlignment fontStyle">
-        <mat-label class="mat-label-text" class="fontStyle">{{
-          currentLanguageSet?.pncData?.dateofDelivery
-        }}</mat-label>
-        <input
-          matInput
-          style="width: 100%"
-          name="dateOfDelivery"
-          formControlName="dDate"
-          [max]="today"
-          [min]="minimumDeliveryDate"
-          [matDatepicker]="dodicker" />
-        <mat-datepicker-toggle
-          matSuffix
-          [for]="dodicker"></mat-datepicker-toggle>
-        <mat-datepicker #dodicker></mat-datepicker>
-      </mat-form-field>
-    </div>
+        <!-- Date of Delivery -->
+        <z-form-field>
+          <z-label>{{ currentLanguageSet?.pncData?.dateofDelivery }}</z-label>
+          <div class="relative">
+            <input
+              matInput
+              [matDatepicker]="dodicker"
+              formControlName="dDate"
+              [max]="today"
+              [min]="minimumDeliveryDate"
+              class="w-full h-10 px-3 rounded-xl border border-zinc-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all disabled:bg-zinc-50 disabled:text-zinc-500"
+              placeholder="DD/MM/YYYY" />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="dodicker"
+              class="absolute right-2 top-1/2 -translate-y-1/2 scale-90">
+            </mat-datepicker-toggle>
+            <mat-datepicker #dodicker></mat-datepicker>
+          </div>
+        </z-form-field>
 
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.historyData?.obstetrichistory
-            ?.deliverycomplicationtype
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          name="deliveryComplication"
-          formControlName="deliveryComplication"
-          (selectionChange)="resetOtherDeliveryComplication()">
-          <mat-option
-            *ngFor="let complication of masterData?.deliveryComplicationTypes"
-            [value]="complication">
-            {{ complication.deliveryComplicationType }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+        <!-- Delivery Complication Type -->
+        <z-form-field>
+          <z-label>{{
+            currentLanguageSet?.historyData?.obstetrichistory
+              ?.deliverycomplicationtype
+          }}</z-label>
+          <z-select
+            formControlName="deliveryComplication"
+            (selectionChange)="resetOtherDeliveryComplication()"
+            placeholder="Select complication type">
+            <z-option
+              *ngFor="let complication of masterData?.deliveryComplicationTypes"
+              [zValue]="complication">
+              {{ complication.deliveryComplicationType }}
+            </z-option>
+          </z-select>
+        </z-form-field>
 
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      *ngIf="deliveryComplication?.deliveryComplicationType === 'Other'">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.pncData?.others
-        }}</mat-label>
-        <input
-          autocomplete="off"
-          matInput
-          appDefaultNull
-          maxlength="50"
-          name="othersDeliveryComplication"
-          formControlName="otherDeliveryComplication" />
-      </mat-form-field>
-    </div>
+        <!-- Others Delivery Complication -->
+        <z-form-field
+          *ngIf="deliveryComplication?.deliveryComplicationType === 'Other'">
+          <z-label>{{ currentLanguageSet?.pncData?.others }}</z-label>
+          <z-input
+            formControlName="otherDeliveryComplication"
+            maxlength="50"
+            placeholder="Specify other complication">
+          </z-input>
+        </z-form-field>
 
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.pncData?.outcomeofpregnancy
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          name="outcomeOfPregnancy"
-          formControlName="pregOutcome">
-          <mat-option
-            *ngFor="let outcome of masterData?.pregOutcomes"
-            [value]="outcome">
-            {{ outcome.pregOutcome }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+        <!-- Outcome of Pregnancy -->
+        <z-form-field>
+          <z-label>{{
+            currentLanguageSet?.pncData?.outcomeofpregnancy
+          }}</z-label>
+          <z-select formControlName="pregOutcome" placeholder="Select outcome">
+            <z-option
+              *ngFor="let outcome of masterData?.pregOutcomes"
+              [zValue]="outcome">
+              {{ outcome.pregOutcome }}
+            </z-option>
+          </z-select>
+        </z-form-field>
 
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.pncData?.postNatalComplication
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          name="postNatalComplication"
-          formControlName="postNatalComplication"
-          (selectionChange)="resetOtherPostNatalComplication()">
-          <mat-option
-            *ngFor="let complication of masterData?.postNatalComplications"
-            [value]="complication">
-            {{ complication.complicationValue }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+        <!-- Post Natal Complication -->
+        <z-form-field>
+          <z-label>{{
+            currentLanguageSet?.pncData?.postNatalComplication
+          }}</z-label>
+          <z-select
+            formControlName="postNatalComplication"
+            (selectionChange)="resetOtherPostNatalComplication()"
+            placeholder="Select postnatal complication">
+            <z-option
+              *ngFor="let complication of masterData?.postNatalComplications"
+              [zValue]="complication">
+              {{ complication.complicationValue }}
+            </z-option>
+          </z-select>
+        </z-form-field>
 
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      *ngIf="postNatalComplication?.complicationValue === 'Other'">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.pncData?.others
-        }}</mat-label>
-        <input
-          autocomplete="off"
-          matInput
-          appDefaultNull
-          maxlength="50"
-          name="otherPostNatalComplication"
-          formControlName="otherPostNatalComplication" />
-      </mat-form-field>
-    </div>
+        <!-- Others Post Natal Complication -->
+        <z-form-field
+          *ngIf="postNatalComplication?.complicationValue === 'Other'">
+          <z-label>{{ currentLanguageSet?.pncData?.others }}</z-label>
+          <z-input
+            formControlName="otherPostNatalComplication"
+            maxlength="50"
+            placeholder="Specify other complication">
+          </z-input>
+        </z-form-field>
 
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.pncData?.gestationalAgeofNewborn
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          name="gestation"
-          formControlName="gestationName">
-          <mat-option
-            *ngFor="let gestation of masterData?.gestation"
-            [value]="gestation"
-            >{{ gestation.name }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
+        <!-- Gestational Age of Newborn -->
+        <z-form-field>
+          <z-label>{{
+            currentLanguageSet?.pncData?.gestationalAgeofNewborn
+          }}</z-label>
+          <z-select
+            formControlName="gestationName"
+            placeholder="Select gestational age">
+            <z-option
+              *ngFor="let gestation of masterData?.gestation"
+              [zValue]="gestation">
+              {{ gestation.name }}
+            </z-option>
+          </z-select>
+        </z-form-field>
 
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.pncData?.birthWeight
-        }}</mat-label>
-        <input
-          autocomplete="off"
-          matInput
-          appDefaultNull
-          maxlength="4"
-          allowText="decimal"
-          name="birthWeight_kg"
-          formControlName="birthWeightOfNewborn"
-          allowMax="6"
-          (keypress)="checkWeight()" />
-      </mat-form-field>
-    </div>
+        <!-- Birth Weight -->
+        <z-form-field>
+          <z-label>{{ currentLanguageSet?.pncData?.birthWeight }} (kg)</z-label>
+          <z-input
+            formControlName="birthWeightOfNewborn"
+            maxlength="4"
+            allowText="decimal"
+            allowMax="6"
+            (keypress)="checkWeight()"
+            placeholder="e.g. 3.2">
+          </z-input>
+        </z-form-field>
 
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="input-full-width">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.pncData?.newBornHealthStatus
-        }}</mat-label>
-        <mat-select
-          class="input-full-width"
-          name="newBornHealthStatus"
-          formControlName="newBornHealthStatus">
-          <mat-option
-            *ngFor="
-              let newBornHealthStatus of masterData?.newbornHealthStatuses
-            "
-            [value]="newBornHealthStatus">
-            {{ newBornHealthStatus.newBornHealthStatus }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </div>
-</mat-expansion-panel>
+        <!-- New Born Health Status -->
+        <z-form-field>
+          <z-label>{{
+            currentLanguageSet?.pncData?.newBornHealthStatus
+          }}</z-label>
+          <z-select
+            formControlName="newBornHealthStatus"
+            placeholder="Select health status">
+            <z-option
+              *ngFor="let status of masterData?.newbornHealthStatuses"
+              [zValue]="status">
+              {{ status.newBornHealthStatus }}
+            </z-option>
+          </z-select>
+        </z-form-field>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
+</z-accordion>

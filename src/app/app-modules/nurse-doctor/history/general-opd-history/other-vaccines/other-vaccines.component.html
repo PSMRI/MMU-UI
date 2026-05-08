@@ -1,153 +1,133 @@
-<div class="" [formGroup]="otherVaccinesForm">
-  <div class="" formArrayName="otherVaccines">
-    <div class="col-12" style="text-align: end">
-      <span class="font-history-label">{{
+<div [formGroup]="otherVaccinesForm" class="space-y-6 mt-4">
+  <div class="flex justify-between items-center mb-4">
+    <h4 class="text-lg font-semibold text-gray-800">
+      {{
         currentLanguageSet?.historyData?.Othervaccineshistory
           ?.previousothervaccineshistory
-      }}</span>
+      }}
+    </h4>
+    <div class="flex items-center gap-2 text-right">
+      <span class="text-sm font-medium text-gray-500">
+        {{
+          currentLanguageSet?.historyData?.Othervaccineshistory
+            ?.previousothervaccineshistory
+        }}
+      </span>
       <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{
-          this.currentLanguageSet?.DurationData?.previousDetails
-        }}"
+        z-button
+        variant="ghost"
+        size="icon"
+        [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
         id="previousANCOtherVaccines"
-        class="mat_icon_blue"
-        color="primary"
+        class="text-primary hover:bg-primary/10 transition-colors"
         (click)="getPreviousOtherVaccineDetails()">
-        <mat-icon class="md-18">history</mat-icon>
+        <ng-icon name="lucideHistory" class="text-xl"></ng-icon>
       </button>
     </div>
+  </div>
+
+  <div formArrayName="otherVaccines" class="space-y-4">
     <div
-      class="col-12 row multi_row_select"
-      style="margin: 15px 0px 15px 0px; background-color: #f0f5f5"
       *ngFor="
         let vaccine of getOtherVaccines();
         let i = index;
         let isLast = last;
         let isOdd = odd
       "
-      [ngClass]="{ odd: !isOdd }">
+      [ngClass]="{ 'bg-gray-50/50': !isOdd, 'bg-white': isOdd }"
+      class="p-4 rounded-xl border border-gray-100 transition-colors shadow-sm">
       <ng-container [formGroupName]="i">
-        <div class="col-3 box">
-          <mat-form-field>
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
-                ?.nameofVaccine
-            }}</mat-label>
-            <mat-select
-              class="select-full-width"
-              name="vaccineName"
-              formControlName="vaccineName"
-              (change)="filterOtherVaccineList($event, i, vaccine)">
-              <mat-option
-                *ngFor="let vaccine of vaccineSelectList[i]"
-                [value]="vaccine">
-                {{ vaccine.vaccineName }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-
         <div
-          class="col-3 box"
-          *ngIf="vaccine.value.vaccineName?.vaccineName !== 'Other'"
-          [hidden]="true">
-          <mat-form-field>
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
-                ?.vaccineSctCode
-            }}</mat-label>
-            <input matInput name="sctCode" formControlName="sctCode" readonly />
-          </mat-form-field>
-        </div>
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
+          <!-- Name of Vaccine -->
+          <div class="box">
+            <z-form-field>
+              <z-label>{{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
+                  ?.nameofVaccine
+              }}</z-label>
+              <z-select
+                formControlName="vaccineName"
+                (selectionChange)="filterOtherVaccineList($event, i, vaccine)">
+                <z-option *ngFor="let v of vaccineSelectList[i]" [zValue]="v">
+                  {{ v.vaccineName }}
+                </z-option>
+              </z-select>
+            </z-form-field>
+          </div>
 
-        <div
-          class="col-3 box"
-          *ngIf="vaccine.value.vaccineName?.vaccineName === 'Other'">
-          <mat-form-field>
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                ?.others
-            }}</mat-label>
-            <input
-              autocomplete="off"
-              matInput
-              appDefaultNull
-              maxlength="50"
-              allowText="alphaspace"
-              name="otherVaccineName"
-              formControlName="otherVaccineName" />
-          </mat-form-field>
-        </div>
+          <!-- Other Vaccine Name -->
+          <div
+            class="box"
+            *ngIf="vaccine.value.vaccineName?.vaccineName === 'Other'">
+            <z-form-field>
+              <z-label>{{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                  ?.others
+              }}</z-label>
+              <input
+                z-input
+                formControlName="otherVaccineName"
+                appDefaultNull
+                maxlength="50" />
+            </z-form-field>
+          </div>
 
-        <div
-          class="col-3 box"
-          *ngIf="
-            vaccine.value.vaccineName !== null &&
-            vaccine.value.vaccineName !== ''
-          ">
-          <mat-form-field>
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
-                ?.ageatReceived
-            }}</mat-label>
-            <input
-              autocomplete="off"
-              matInput
-              appDefaultNull
-              maxlength="2"
-              allowText="number"
-              name="actualReceivingAge"
-              formControlName="actualReceivingAge"
-              (change)="validateAge(vaccine)" />
-          </mat-form-field>
-        </div>
+          <!-- Age at Received -->
+          <div class="box" *ngIf="vaccine.value.vaccineName">
+            <z-form-field>
+              <z-label>{{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
+                  ?.ageatReceived
+              }}</z-label>
+              <input
+                z-input
+                formControlName="actualReceivingAge"
+                appDefaultNull
+                maxlength="2"
+                (change)="validateAge(vaccine)" />
+            </z-form-field>
+          </div>
 
-        <div
-          class="col-3 box"
-          *ngIf="
-            vaccine?.value?.actualReceivingAge !== null &&
-            vaccine?.value?.actualReceivingAge !== '' &&
-            vaccine.value.actualReceivingAge > 0
-          ">
-          <mat-form-field>
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
-                ?.facilityName
-            }}</mat-label>
-            <mat-select
-              class="select-full-width"
-              name="receivedFacilityName"
-              formControlName="receivedFacilityName">
-              <mat-option value="Govt Facility">Govt Facility</mat-option>
-              <mat-option value="Pvt Facility">Pvt Facility</mat-option>
-              <mat-option value="Other">Other</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+          <!-- Facility Name -->
+          <div class="box" *ngIf="vaccine?.value?.actualReceivingAge > 0">
+            <z-form-field>
+              <z-label>{{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
+                  ?.facilityName
+              }}</z-label>
+              <z-select formControlName="receivedFacilityName">
+                <z-option zValue="Govt Facility">Govt Facility</z-option>
+                <z-option zValue="Pvt Facility">Pvt Facility</z-option>
+                <z-option zValue="Other">Other</z-option>
+              </z-select>
+            </z-form-field>
+          </div>
 
-        <div class="col-3 box action-btn-container" style="text-align: end">
-          <button
-            md-mini-fab
-            color="warn"
-            class="mat_warn_circle"
-            style="margin-right: 5px"
-            id="removeOtherVaccine"
-            *ngIf="i !== 0 || (i === 0 && vaccine.touched)"
-            (click)="removeOtherVaccine(i, vaccine)">
-            <mat-icon class="md-18">close</mat-icon>
-          </button>
-          <button
-            md-mini-fab
-            color="primary"
-            class="mat_blue_circle"
-            *ngIf="isLast"
-            [disabled]="checkValidity(vaccine)"
-            id="addOtherVaccine"
-            (click)="addOtherVaccine()">
-            <mat-icon class="md-18">add</mat-icon>
-          </button>
+          <!-- Actions -->
+          <div class="flex items-center gap-2 lg:justify-end">
+            <button
+              *ngIf="i !== 0 || (i === 0 && vaccine.touched)"
+              z-button
+              variant="destructive"
+              size="icon"
+              class="rounded-full shadow-sm"
+              id="removeOtherVaccine"
+              (click)="removeOtherVaccine(i, vaccine)">
+              <ng-icon name="lucideX" class="text-lg"></ng-icon>
+            </button>
+            <button
+              *ngIf="isLast"
+              z-button
+              variant="primary"
+              size="icon"
+              class="rounded-full shadow-sm"
+              [disabled]="checkValidity(vaccine)"
+              id="addOtherVaccine"
+              (click)="addOtherVaccine()">
+              <ng-icon name="lucidePlus" class="text-lg"></ng-icon>
+            </button>
+          </div>
         </div>
       </ng-container>
     </div>

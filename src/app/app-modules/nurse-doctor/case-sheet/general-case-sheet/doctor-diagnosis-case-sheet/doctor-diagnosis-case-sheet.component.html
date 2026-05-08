@@ -1,1453 +1,662 @@
-<div class="container">
-  <div class="row m-t-10">
-    <div class="col-xs-12 text-right">
-      <p>
-        <strong> {{ currentLanguageSet?.casesheet?.date }}: </strong> {{ date }}
-      </p>
-    </div>
-    <div class="col-xs-12 text-center">
-      <img id="logo" src="assets/images/Swasthya.png" alt="Piramal" />
-    </div>
-  </div>
-
-  <div class="row m-t-20">
-    <div class="col-xs-6 text-left">
-      <p>
-        <strong>
-          {{ currentLanguageSet?.nurseData?.visitDetailsForm?.visitCategory }}:
-        </strong>
-        {{ beneficiaryDetails?.VisitCategory }}
-      </p>
-    </div>
-    <div class="col-xs-6 text-right" *ngIf="caseSheetData?.serviceID === 2">
-      <p>
-        <strong> {{ currentLanguageSet?.casesheet?.servicePoint }}: </strong>
-        {{ beneficiaryDetails?.servicePointName }}
-      </p>
-    </div>
-  </div>
-
-  <!-- Beneficiary Details -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <fieldset>
-        <legend>
-          {{ currentLanguageSet?.casesheet?.beneficiaryDetails }}:
-        </legend>
-        <table
-          class="table table-no-border casesheet-table"
-          aria-describedby="bendetails">
-          <tr>
-            <th id="beneficiaryID">
-              {{ currentLanguageSet?.casesheet?.beniId }}:
-            </th>
-            <td>
-              {{ beneficiaryDetails && beneficiaryDetails.beneficiaryID }}
-            </td>
-            <th id="visitcodemmu">
-              {{ currentLanguageSet?.previousvisit?.visitcodemmu }}:
-            </th>
-            <td>{{ beneficiaryDetails && beneficiaryDetails.visitCode }}</td>
-          </tr>
-          <tr>
-            <th id="name">{{ currentLanguageSet?.previousvisit?.name104 }}:</th>
-            <td colspan="3">
-              {{ beneficiaryDetails && beneficiaryDetails.beneficiaryName }}
-            </td>
-          </tr>
-          <tr>
-            <th id="gender">{{ currentLanguageSet?.bendetails?.gender }}:</th>
-            <td>{{ beneficiaryDetails && beneficiaryDetails.genderName }}</td>
-            <th id="visitDate">
-              {{ currentLanguageSet?.bendetails?.visitDate }}:
-            </th>
-            <td>{{ beneficiaryDetails && beneficiaryDetails.serviceDate }}</td>
-          </tr>
-          <tr>
-            <th id="age">{{ currentLanguageSet?.bendetails?.age }}:</th>
-            <td>{{ beneficiaryDetails && beneficiaryDetails.age }}</td>
-            <th id="consultDate">
-              {{ currentLanguageSet?.casesheet?.consultDate }}:
-            </th>
-            <td>
-              {{ beneficiaryDetails && beneficiaryDetails.consultationDate }}
-            </td>
-          </tr>
-        </table>
-      </fieldset>
-      <fieldset *ngIf="visitCategory === 'COVID-19 Screening'">
-        <legend></legend>
-        <!--Added legend tag to resolve sonarqube error-->
-        <table
-          id="covid-19"
-          *ngIf="visitCategory === 'COVID-19 Screening'"
-          aria-describedby="covidDetails">
-          <th id=""></th>
-          <!--Added <th> tag to resolve sonarqube error-->
-          <tr *ngIf="visitCategory === 'COVID-19 Screening'">
-            <br />
-            <h3 id="heading">
-              <strong> {{ currentLanguageSet?.covidNineteen }} </strong>
-            </h3>
-          </tr>
-          <tr *ngIf="visitCategory === 'COVID-19 Screening'">
-            <td id="covid">
-              <h4>
-                {{
-                  currentLanguageSet?.ExaminationData
-                    ?.cancerScreeningExamination?.symptoms?.symptoms
-                }}:
-              </h4>
-              <div class="well" *ngIf="symptomFlag">
-                <span *ngFor="let symptoms of symptomsList">
-                  <input
-                    type="checkbox"
-                    class="custom-control-input"
-                    id="symptom"
-                    (click)="$event.preventDefault()"
-                    checked />{{ symptoms }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                </span>
-              </div>
-            </td>
-          </tr>
-          <tr *ngIf="visitCategory === 'COVID-19 Screening'">
-            <td id="covid">
-              <h4>{{ currentLanguageSet?.contactStatus }} :</h4>
-              <div class="well" *ngIf="contactFlag">
-                <span *ngFor="let contact of contactList">
-                  <input
-                    type="checkbox"
-                    class="custom-control-input"
-                    id="contactStatus"
-                    (click)="$event.preventDefault()"
-                    checked />{{ contact }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                </span>
-              </div>
-            </td>
-          </tr>
-          <tr *ngIf="visitCategory === 'COVID-19 Screening'">
-            <td>
-              <h4>{{ currentLanguageSet?.travelStatus }}:</h4>
-              <div class="well" *ngIf="travelFlag">
-                <span>
-                  <input
-                    type="checkbox"
-                    class="custom-control-input"
-                    id="travelStatus"
-                    (click)="$event.preventDefault()"
-                    checked />{{ travelStatus }}
-                </span>
-              </div>
-            </td>
-          </tr>
-          <tr *ngIf="visitCategory === 'COVID-19 Screening'">
-            <td *ngIf="suspectedFlag">
-              <mat-form-field>
-                <h4>{{ currentLanguageSet?.travel?.suspectedCOVID }}:</h4>
-                <input
-                  matInput
-                  class="test"
-                  value="{{ suspected }}"
-                  id="suspected"
-                  readonly />
-              </mat-form-field>
-            </td>
-          </tr>
-          <tr *ngIf="visitCategory === 'COVID-19 Screening'">
-            <td id="covid">
-              <h4>{{ currentLanguageSet?.travel?.recommendation }}:</h4>
-              <div class="well" *ngIf="recFlag">
-                <span *ngFor="let travel of temp">
-                  {{ travel }}
-                  <br />
-                </span>
-              </div>
-            </td>
-          </tr>
-        </table>
-      </fieldset>
-    </div>
-  </div>
-  <!-- End of Beneficiary Details -->
-
-  <!-- Current Vitals -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <fieldset>
-        <legend>{{ currentLanguageSet?.previousvisit?.currentvitals }}:</legend>
-        <table
-          class="table table-no-border casesheet-table"
-          aria-describedby="vitals">
-          <tr>
-            <th id="height">{{ currentLanguageSet?.casesheet?.height }}:</th>
-            <td>{{ currentVitals && currentVitals.height_cm }}</td>
-            <th id="temp">{{ currentLanguageSet?.casesheet?.temp }}:</th>
-            <td>{{ currentVitals && currentVitals.temperature }}</td>
-          </tr>
-          <tr>
-            <th id="weight">{{ currentLanguageSet?.casesheet?.weight }}:</th>
-            <td>{{ currentVitals && currentVitals.weight_Kg }}</td>
-            <th id="pulseRate">
-              {{ currentLanguageSet?.casesheet?.pulseRate }}:
-            </th>
-            <td>{{ currentVitals && currentVitals.pulseRate }}</td>
-          </tr>
-          <tr>
-            <th id="spo2">{{ currentLanguageSet?.sPOTwoWithUnit }}:</th>
-            <td>{{ currentVitals && currentVitals.sPO2 }}</td>
-            <th id="bpSystolic">
-              {{ currentLanguageSet?.casesheet?.bpSystolic }}:
-            </th>
-            <td>{{ currentVitals && currentVitals.systolicBP_1stReading }}</td>
-          </tr>
-          <tr>
-            <th id="bpDiastolic">
-              {{ currentLanguageSet?.casesheet?.bpDiastolic }}:
-            </th>
-            <td>{{ currentVitals && currentVitals.diastolicBP_1stReading }}</td>
-            <th id="sugarFasting">
-              {{ currentLanguageSet?.casesheet?.sugarFasting }}:
-            </th>
-            <td>{{ currentVitals && currentVitals.bloodGlucose_Fasting }}</td>
-          </tr>
-          <tr>
-            <th id="sugarRandom">
-              {{ currentLanguageSet?.casesheet?.bloodSugar }}:
-            </th>
-            <td>{{ currentVitals && currentVitals.bloodGlucose_Random }}</td>
-            <th id="sugarPp">{{ currentLanguageSet?.casesheet?.sugarPp }}:</th>
-            <td>{{ currentVitals && currentVitals.bloodGlucose_2hr_PP }}</td>
-            <td colspan="2"></td>
-          </tr>
-
-          <tr *ngIf="beneficiaryDetails && beneficiaryDetails.ageVal >= 18">
-            <th id="lungAssessment" style="text-decoration: underline">
-              <em>Lung Assessment:</em>
-            </th>
-          </tr>
-          <tr *ngIf="beneficiaryDetails && beneficiaryDetails.ageVal >= 18">
-            <th id="severity">Severity:</th>
-            <td>
-              {{
-                severity !== null && severity !== undefined ? severity : 'NA'
-              }}
-            </td>
-            <th id="coughSeverityScore">Cough Severity Score:</th>
-            <td>
-              {{
-                cough_severity_score !== null &&
-                cough_severity_score !== undefined
-                  ? cough_severity_score
-                  : 'NA'
-              }}
-            </td>
-          </tr>
-          <tr *ngIf="beneficiaryDetails && beneficiaryDetails.ageVal >= 18">
-            <th id="coughPattern">Cough Pattern:</th>
-            <td>
-              {{
-                cough_pattern !== null && cough_pattern !== undefined
-                  ? cough_pattern
-                  : 'NA'
-              }}
-            </td>
-            <th id="recordTime">Record Time:</th>
-            <td>
-              {{
-                record_duration !== null && record_duration !== undefined
-                  ? record_duration + 'sec'
-                  : 'NA'
-              }}
-            </td>
-          </tr>
-        </table>
-      </fieldset>
-    </div>
-  </div>
-  <!-- End of Current Vitals -->
-
-  <!-- Covid Vaccination Details -->
-  <div class="row m-t-10" *ngIf="isCovidVaccinationStatusVisible">
-    <div class="col-xs-12">
-      <fieldset>
-        <legend>{{ currentLanguageSet?.covidVaccinationStatus }}:</legend>
-        <table
-          class="table table-no-border casesheet-table"
-          aria-describedby="CovidVaccinationDetails">
-          <tr>
-            <th id="ageGroup">{{ currentLanguageSet?.ageGroup }}:</th>
-            <td>
-              {{
-                beneficiaryDetails && beneficiaryDetails.ageVal >= 12
-                  ? '>=12 years'
-                  : ageValidationForVaccination
-              }}
-            </td>
-            <th id="isApplicableForVaccine">
-              {{ currentLanguageSet?.isApplicableForVaccine }}:
-            </th>
-            <td>
-              {{
-                beneficiaryDetails && beneficiaryDetails.ageVal >= 12
-                  ? 'Applicable for Vaccination'
-                  : 'Not Applicable for Vaccination'
-              }}
-            </td>
-          </tr>
-          <tr>
-            <th id="vaccineStatus">{{ currentLanguageSet?.vaccineStatus }}:</th>
-            <td>
-              {{ covidVaccineDetails && covidVaccineDetails.vaccineStatus }}
-            </td>
-            <th id="vaccineTypes">{{ currentLanguageSet?.vaccineTypes }}:</th>
-            <td>
-              {{
-                covidVaccineDetails &&
-                  covidVaccineDetails.covidVaccineTypeID &&
-                  covidVaccineDetails.covidVaccineTypeID[0].vaccineType
-              }}
-            </td>
-          </tr>
-          <tr>
-            <th id="doseTaken">{{ currentLanguageSet?.doseTaken }}:</th>
-            <td>
-              {{
-                covidVaccineDetails &&
-                  covidVaccineDetails.doseTypeID &&
-                  covidVaccineDetails.doseTypeID[0].doseType
-              }}
-            </td>
-          </tr>
-        </table>
-      </fieldset>
-    </div>
-  </div>
-  <!-- End of Covid Vaccination details -->
-
-  <!--IDRS-->
-  <fieldset *ngIf="visitCategory === 'NCD screening'">
-    <legend>{{ currentLanguageSet?.screening }}</legend>
-
-    <div>
-      <strong> {{ currentLanguageSet?.idrs?.iDRSScore }}:</strong>
-      {{ idrsScore?.idrsScore }}
-    </div>
-    <div>
-      <th id="confirmedDisease">
-        <strong> {{ currentLanguageSet?.confirmedDisease }}:</strong>&nbsp;
-      </th>
-      <div class="btn-group" *ngFor="let i of suspectt">
-        <button mat-raised-button disabled>{{ i }}</button>
+<div class="max-w-7xl mx-auto p-8 space-y-12 animate-in fade-in duration-1000">
+  <!-- Header Section -->
+  <div
+    class="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-gray-100">
+    <div class="flex items-center gap-6">
+      <img
+        id="logo"
+        src="assets/images/Swasthya.png"
+        alt="Piramal"
+        class="h-16 object-contain" />
+      <div class="h-12 w-px bg-gray-100 hidden md:block"></div>
+      <div>
+        <h1 class="text-2xl font-black text-gray-900 tracking-tight uppercase">
+          Clinical Case Record
+        </h1>
+        <p class="text-xs text-gray-500 font-bold uppercase tracking-widest">
+          {{ currentLanguageSet?.casesheet?.date }}: {{ date }}
+        </p>
       </div>
     </div>
-    <div>
-      <th id="suspectedDisease">
-        <strong> {{ currentLanguageSet?.suspectedDisease }}:</strong>&nbsp;
-      </th>
-      <div class="btn-group1" *ngFor="let i of suspect">
-        <button mat-raised-button disabled>{{ i }}</button>
+
+    <div class="flex items-center gap-4">
+      <div class="text-right">
+        <p
+          class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">
+          {{ currentLanguageSet?.nurseData?.visitDetailsForm?.visitCategory }}
+        </p>
+        <p class="text-lg font-black text-indigo-600">
+          {{ beneficiaryDetails?.VisitCategory }}
+        </p>
       </div>
-    </div>
-    <div class="col-xs-12" style="margin-top: 2%">
-      <table
-        class="table table-bordered table-striped casesheet-table"
-        aria-describedby="questions">
-        <thead>
-          <tr>
-            <th id="sno">{{ currentLanguageSet?.casesheet?.serialNo }}</th>
-            <th id="Question">{{ currentLanguageSet?.common?.question }}</th>
-            <th id="Answer">{{ currentLanguageSet?.common?.answer }}</th>
-            <th id="DType">
-              {{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.familyHistoryDataANC_OPD_NCD_PNC?.diseaseType
-              }}
-            </th>
-          </tr>
-        </thead>
-        <tbody *ngIf="!temp1 || temp1.length === 0">
-          <tr>
-            <td class="text-center" colspan="4">
-              {{ currentLanguageSet?.casesheet?.noRecordFound }}
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="temp1">
-          <ng-container *ngFor="let pastIdrs of temp1; let i = index">
-            <tr *ngIf="pastIdrs.answer === 'yes'">
-              <td>{{ i + 1 }}</td>
-              <td>{{ pastIdrs.question }}</td>
-              <td>{{ pastIdrs.answer }}</td>
-              <td>{{ pastIdrs.suspectDisease }}</td>
-            </tr>
-          </ng-container>
-        </tbody>
-      </table>
-    </div>
-  </fieldset>
-  <!--End of IDRS-->
-
-  <!-- Chief complaints and description -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.chiefComplaint }}:</h4>
-    </div>
-    <!-- General visit type -->
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered table-striped"
-        aria-describedby="chiefComplaint">
-        <thead>
-          <tr>
-            <th style="width: 5%" id="serialNo">
-              {{ currentLanguageSet?.casesheet?.serialNo }}
-            </th>
-            <th style="width: 25%" id="chiefComplaints">
-              {{
-                currentLanguageSet?.nurseData?.chiefComplaintsDetails
-                  ?.chiefComplaints
-              }}
-            </th>
-            <th
-              style="width: 10%"
-              *ngIf="visitCategory !== 'General OPD (QC)'"
-              id="duration">
-              {{
-                currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
-              }}
-            </th>
-            <th
-              style="width: 10%"
-              *ngIf="visitCategory !== 'General OPD (QC)'"
-              id="unitOfDuration">
-              {{ currentLanguageSet?.DurationData?.durationUnit }}
-            </th>
-            <th style="width: 40%" id="description">
-              {{
-                currentLanguageSet?.nurseData?.chiefComplaintsDetails
-                  ?.description
-              }}
-            </th>
-          </tr>
-        </thead>
-        <tbody
-          *ngIf="
-            !caseRecords ||
-            !caseRecords.findings ||
-            !caseRecords.findings.complaints ||
-            caseRecords.findings.complaints.length === 0
-          ">
-          <tr>
-            <td
-              [attr.colspan]="visitCategory !== 'General OPD (QC)' ? 7 : 5"
-              class="text-center">
-              {{ currentLanguageSet?.casesheet?.noRecordFound }}
-            </td>
-          </tr>
-        </tbody>
-        <tbody
-          *ngIf="
-            caseRecords &&
-            caseRecords.findings &&
-            caseRecords.findings.complaints
-          ">
-          <tr
-            *ngFor="
-              let complaints of caseRecords.findings.complaints;
-              let i = index
-            ">
-            <td>{{ i + 1 }}</td>
-            <td>{{ complaints.chiefComplaint }}</td>
-            <td *ngIf="visitCategory !== 'General OPD (QC)'">
-              {{ complaints.duration }}
-            </td>
-            <td *ngIf="visitCategory !== 'General OPD (QC)'">
-              {{
-                complaints.unitOfDuration === 'Hours'
-                  ? 'Hour(s)'
-                  : complaints.unitOfDuration === 'Days'
-                    ? 'Day(s)'
-                    : complaints.unitOfDuration === 'Weeks'
-                      ? 'Week(s)'
-                      : complaints.unitOfDuration === 'Months'
-                        ? 'Month(s)'
-                        : complaints.unitOfDuration === 'Years'
-                          ? 'Year(s)'
-                          : complaints.unitOfDuration
-              }}
-            </td>
-            <td>{{ complaints.description }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <!-- End of Chief complaints and description -->
-
-  <!-- Clinical Observations -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.clinicalObs }}:</h4>
-      <div class="textarea">
-        {{
-          caseRecords &&
-            caseRecords.findings &&
-            caseRecords.findings.clinicalObservation
-        }}
+      <div
+        *ngIf="caseSheetData?.serviceID === 2"
+        class="pl-4 border-l border-gray-100 text-right">
+        <p
+          class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">
+          {{ currentLanguageSet?.casesheet?.servicePoint }}
+        </p>
+        <p class="text-sm font-bold text-gray-700">
+          {{ beneficiaryDetails?.servicePointName }}
+        </p>
       </div>
     </div>
   </div>
-  <!-- End of Clinical Observations -->
 
-  <!-- Significant Findings -->
-  <div *ngIf="visitCategory !== 'General OPD (QC)'" class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.significantFind }}:</h4>
-      <div class="textarea">
-        {{
-          caseRecords &&
-            caseRecords.findings &&
-            caseRecords.findings.significantFindings
-        }}
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <!-- Beneficiary Details Card -->
+    <z-card variant="outline" class="overflow-hidden border-gray-100 shadow-sm">
+      <div
+        class="bg-gray-50/50 p-4 border-b border-gray-100 flex items-center gap-2">
+        <ng-icon name="lucideUser" class="text-indigo-500"></ng-icon>
+        <h3 class="font-black text-gray-800 uppercase tracking-widest text-xs">
+          {{ currentLanguageSet?.casesheet?.beneficiaryDetails }}
+        </h3>
       </div>
-    </div>
-  </div>
-  <!-- End of Significant Findings -->
-
-  <!-- Investigations -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.nurseData?.investigationsDetails?.investigations
-        }}:
-      </h4>
-    </div>
-    <!-- {{caseRecords| json}} -->
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered table-striped"
-        aria-describedby="investigations">
-        <thead>
-          <tr>
-            <th style="width: 5%" id="serialNo">
-              {{ currentLanguageSet?.casesheet?.serialNo }}
-            </th>
-            <th style="width: 15%" id="procedureName">
-              {{ currentLanguageSet?.casesheet?.procedureName }}
-            </th>
-            <th style="width: 15%" id="componentName">
-              {{ currentLanguageSet?.casesheet?.componentName }}
-            </th>
-            <th style="width: 10%" id="LCode">
-              {{ currentLanguageSet?.loincCode }}
-            </th>
-            <th style="width: 10%" id="LTerm">
-              {{ currentLanguageSet?.loincTerm }}
-            </th>
-            <th style="width: 20%" id="testResult">
-              {{ currentLanguageSet?.Reports?.testresult }}
-            </th>
-            <th style="width: 10%" id="unit">
-              {{ currentLanguageSet?.casesheet?.unit }}
-            </th>
-            <th style="width: 25%" id="remarks">
-              {{ currentLanguageSet?.common?.remarks }}
-            </th>
-          </tr>
-        </thead>
-        <tbody
-          *ngIf="
-            !caseRecords ||
-            !caseRecords.LabReport ||
-            caseRecords.LabReport.length === 0
-          ">
-          <tr>
-            <td class="text-center" colspan="8">
-              {{ currentLanguageSet?.casesheet?.noRecordFound }}
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="caseRecords && caseRecords.LabReport">
-          <ng-container
-            *ngFor="let procedure of caseRecords.LabReport; let i = index">
-            <tr>
-              <td [rowSpan]="procedure.componentList.length + 1">
-                {{ i + 1 }}
-              </td>
-              <th
-                id="procedureName"
-                [rowSpan]="procedure.componentList.length + 1">
-                {{ procedure?.procedureName }}
-              </th>
-            </tr>
-            <tr *ngFor="let report of procedure.componentList">
-              <td>{{ report?.componentName }}</td>
-              <td>{{ report?.loincName }}</td>
-              <td>{{ report?.loincTerm }}</td>
-              <td
-                *ngIf="!report?.componentName?.includes('ECG')"
-                style="
-                  width: 110px;
-                  word-break: normal;
-                  vertical-align: middle;
-                ">
-                {{ report?.testResultValue }}
-              </td>
-              <td
-                *ngIf="
-                  report?.componentName?.includes('ECG') &&
-                  report?.testResultValue !== 'Abnormal'
-                "
-                style="
-                  width: 110px;
-                  word-break: normal;
-                  vertical-align: middle;
-                ">
-                {{ report?.testResultValue }}
-              </td>
-              <td
-                *ngIf="
-                  report?.componentName?.includes('ECG') &&
-                  report?.testResultValue === 'Abnormal'
-                "
-                style="
-                  width: 110px;
-                  word-break: normal;
-                  vertical-align: middle;
-                ">
-                {{ report?.testResultValue }} -
-                {{ report?.ecgAbnormalities.join(',') }}
-              </td>
-              <td>{{ report?.testResultUnit }}</td>
-              <td>{{ report?.remarks }}</td>
-            </tr>
-          </ng-container>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <!-- End of Investigations -->
-
-  <!--MMU-WDF-Investigations -->
-  <div class="row m-t-10" *ngIf="enableTCReferredMMUData === true">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.mmuInvestigation }}:</h4>
-    </div>
-
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered table-striped"
-        aria-describedby="LabTest">
-        <thead>
-          <tr>
-            <th style="width: 5%" id="serialNo">
-              {{ currentLanguageSet?.casesheet?.serialNo }}
-            </th>
-            <th style="width: 15%" id="procedureName">
-              {{ currentLanguageSet?.casesheet?.procedureName }}
-            </th>
-            <th style="width: 15%" id="componentName">
-              {{ currentLanguageSet?.casesheet?.componentName }}
-            </th>
-            <th style="width: 10%" id="loincode">
-              {{ currentLanguageSet?.loincCode }}
-            </th>
-            <th style="width: 10%" id="loincTerm">
-              {{ currentLanguageSet?.loincTerm }}
-            </th>
-            <th style="width: 10%" id="testresult">
-              {{ currentLanguageSet?.Reports?.testresult }}
-            </th>
-            <th style="width: 10%" id="unit">
-              {{ currentLanguageSet?.Reports?.unit }}
-            </th>
-            <th style="width: 25%" id="remarks">
-              {{ currentLanguageSet?.common?.remarks }}
-            </th>
-          </tr>
-        </thead>
-        <tbody
-          *ngIf="
-            !MMUcaseRecords ||
-            !MMUcaseRecords.LabReport ||
-            MMUcaseRecords.LabReport.length === 0
-          ">
-          <tr>
-            <td class="text-center" colspan="8">
-              {{ currentLanguageSet?.casesheet?.noRecordFound }}
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="MMUcaseRecords && MMUcaseRecords.LabReport">
-          <ng-container
-            *ngFor="let procedure of MMUcaseRecords.LabReport; let i = index">
-            <tr>
-              <td [rowSpan]="procedure.componentList.length + 1">
-                {{ i + 1 }}
-              </td>
-              <th
-                id="procedureName"
-                [rowSpan]="procedure.componentList.length + 1">
-                {{ procedure?.procedureName }}
-              </th>
-            </tr>
-            <tr *ngFor="let report of procedure.componentList">
-              <td>{{ report?.componentName }}</td>
-              <td>{{ report?.loincName }}</td>
-              <td>{{ report?.loincTerm }}</td>
-              <td>{{ report?.testResultValue }}</td>
-              <td>{{ report?.testResultUnit }}</td>
-              <td>{{ report?.remarks }}</td>
-            </tr>
-          </ng-container>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <!-- End of MMU-WDF-Investigations -->
-
-  <!--External investigation-->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.externalInvest }}:</h4>
-      <div class="textarea">
-        {{
-          caseRecords &&
-            caseRecords.diagnosis &&
-            caseRecords.diagnosis.externalInvestigation
-        }}
+      <div class="p-8">
+        <div class="grid grid-cols-2 gap-y-6 gap-x-12">
+          <div class="space-y-1">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.casesheet?.beniId }}</label
+            >
+            <p class="text-sm font-black text-gray-900">
+              {{ beneficiaryDetails?.beneficiaryID }}
+            </p>
+          </div>
+          <div class="space-y-1">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.previousvisit?.visitcodemmu }}</label
+            >
+            <p class="text-sm font-black text-gray-900">
+              {{ beneficiaryDetails?.visitCode }}
+            </p>
+          </div>
+          <div class="col-span-2 space-y-1 border-t border-gray-50 pt-4">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.previousvisit?.name104 }}</label
+            >
+            <p class="text-xl font-black text-indigo-900 tracking-tight">
+              {{ beneficiaryDetails?.beneficiaryName }}
+            </p>
+          </div>
+          <div class="space-y-1 border-t border-gray-50 pt-4">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.bendetails?.gender }}</label
+            >
+            <p class="text-sm font-bold text-gray-700">
+              {{ beneficiaryDetails?.genderName }}
+            </p>
+          </div>
+          <div class="space-y-1 border-t border-gray-50 pt-4 text-right">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.bendetails?.visitDate }}</label
+            >
+            <p class="text-sm font-bold text-gray-700">
+              {{ beneficiaryDetails?.serviceDate }}
+            </p>
+          </div>
+          <div class="space-y-1 border-t border-gray-50 pt-4">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.bendetails?.age }}</label
+            >
+            <p class="text-sm font-bold text-gray-700">
+              {{ beneficiaryDetails?.age }}
+            </p>
+          </div>
+          <div class="space-y-1 border-t border-gray-50 pt-4 text-right">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.casesheet?.consultDate }}</label
+            >
+            <p class="text-sm font-bold text-gray-700">
+              {{ beneficiaryDetails?.consultationDate }}
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <!--End of external investigation-->
+    </z-card>
 
-  <!--MMU-WDF-External investigation-->
-  <div class="row m-t-10" *ngIf="enableTCReferredMMUData === true">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.mmuExternalInvestigation }}:</h4>
-      <div class="textarea">
-        {{
-          MMUcaseRecords &&
-            MMUcaseRecords.diagnosis &&
-            MMUcaseRecords.diagnosis.externalInvestigation
-        }}
+    <!-- Current Vitals Card -->
+    <z-card variant="outline" class="overflow-hidden border-gray-100 shadow-sm">
+      <div
+        class="bg-gray-50/50 p-4 border-b border-gray-100 flex items-center gap-2">
+        <ng-icon name="lucideActivity" class="text-rose-500"></ng-icon>
+        <h3 class="font-black text-gray-800 uppercase tracking-widest text-xs">
+          {{ currentLanguageSet?.previousvisit?.currentvitals }}
+        </h3>
       </div>
-    </div>
-  </div>
-  <!--End of MMU-WDF-external investigation-->
+      <div class="p-8">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-8">
+          <div
+            class="p-4 bg-indigo-50/50 rounded-3xl text-center ring-1 ring-indigo-100/50">
+            <p
+              class="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-1">
+              Height
+            </p>
+            <p class="text-xl font-black text-indigo-900">
+              {{ currentVitals?.height_cm || '--' }}
+              <span class="text-[10px] font-normal lowercase tracking-normal"
+                >cm</span
+              >
+            </p>
+          </div>
+          <div
+            class="p-4 bg-amber-50/50 rounded-3xl text-center ring-1 ring-amber-100/50">
+            <p
+              class="text-[10px] font-black text-amber-400 uppercase tracking-widest mb-1">
+              Temp
+            </p>
+            <p class="text-xl font-black text-amber-900">
+              {{ currentVitals?.temperature || '--' }}
+              <span class="text-[10px] font-normal">°F</span>
+            </p>
+          </div>
+          <div
+            class="p-4 bg-emerald-50/50 rounded-3xl text-center ring-1 ring-emerald-100/50">
+            <p
+              class="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-1">
+              Weight
+            </p>
+            <p class="text-xl font-black text-emerald-900">
+              {{ currentVitals?.weight_Kg || '--' }}
+              <span class="text-[10px] font-normal lowercase tracking-normal"
+                >kg</span
+              >
+            </p>
+          </div>
+          <div
+            class="p-4 bg-rose-50/50 rounded-3xl text-center ring-1 ring-rose-100/50">
+            <p
+              class="text-[10px] font-black text-rose-400 uppercase tracking-widest mb-1">
+              Pulse
+            </p>
+            <p class="text-xl font-black text-rose-900">
+              {{ currentVitals?.pulseRate || '--' }}
+              <span class="text-[10px] font-normal lowercase tracking-normal"
+                >bpm</span
+              >
+            </p>
+          </div>
 
-  <!-- Diagnosis -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.DiagnosisDetails?.diagnosis }}:</h4>
-    </div>
-
-    <!-- ANC Diagnosis -->
-    <div *ngIf="visitCategory === 'ANC'" class="col-xs-12">
-      <div class="col-xs-12 text-right">
-        <mat-label
-          class="mat-label-text"
-          *ngIf="showHRP === 'true'"
-          style="color: red"
-          ><h5>
-            <strong>** {{ currentLanguageSet?.highRiskPregnancy }} **</strong>
-          </h5></mat-label
-        ><br />
-      </div>
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="HighRiskPregnancy">
-        <tr>
-          <th id="gravida">{{ currentLanguageSet?.casesheet?.gravida }}:</th>
-          <td>
-            {{
-              ancDetails &&
-                ancDetails.ANCCareDetail &&
-                ancDetails.ANCCareDetail.gravida_G
-            }}
-          </td>
-          <th id="periodofPregnancy">
-            {{ currentLanguageSet?.casesheet?.periodPreg }}:
-          </th>
-          <td>
-            {{
-              ancDetails &&
-                ancDetails.ANCCareDetail &&
-                ancDetails.ANCCareDetail.duration
-            }}
-          </td>
-        </tr>
-
-        <tr>
-          <th id="complications">
-            {{ currentLanguageSet?.casesheet?.complications }}:
-          </th>
-          <td>
-            {{
-              tempComplication === true
-                ? newComp
-                : caseRecords &&
-                  caseRecords.diagnosis &&
-                  caseRecords.diagnosis.complicationOfCurrentPregnancy
-            }}
-          </td>
-          <th id="highStatus">
-            {{ currentLanguageSet?.casesheet?.highStatus }}:
-          </th>
-          <td>
-            {{
-              caseRecords &&
-                caseRecords.diagnosis &&
-                caseRecords.diagnosis.highRiskStatus
-            }}
-          </td>
-        </tr>
-
-        <tr>
-          <th id="highCondition" colspan="4">
-            {{ currentLanguageSet?.casesheet?.highCondition }}:
-          </th>
-        </tr>
-        <tr>
-          <td colspan="4">
-            <div class="textarea">
-              {{
-                caseRecords &&
-                  caseRecords.diagnosis &&
-                  caseRecords.diagnosis.highRiskCondition
-              }}
-            </div>
-          </td>
-        </tr>
-
-        <tr>
-          <th id="maternalDeath">
-            {{ currentLanguageSet?.casesheet?.maternalDeath }}:
-          </th>
-          <td *ngIf="caseRecords?.diagnosis?.isMaternalDeath === true">
-            {{ 'Yes' }}
-          </td>
-          <td *ngIf="caseRecords?.diagnosis?.isMaternalDeath === false">
-            {{ 'No' }}
-          </td>
-          <td colspan="2"></td>
-        </tr>
-
-        <ng-container *ngIf="caseRecords?.diagnosis?.isMaternalDeath">
-          <tr>
-            <th id="dateOfDeath">
-              {{ currentLanguageSet?.casesheet?.dateOfDeath }}:
-            </th>
-            <td>
-              {{
-                caseRecords &&
-                  caseRecords.diagnosis &&
-                  caseRecords.diagnosis.dateOfDeath
-              }}
-            </td>
-            <th id="placeOfDeath">
-              {{ currentLanguageSet?.casesheet?.placeOfDeath }}:
-            </th>
-            <td>
-              {{
-                caseRecords &&
-                  caseRecords.diagnosis &&
-                  caseRecords.diagnosis.placeOfDeath
-              }}
-            </td>
-          </tr>
-
-          <tr>
-            <th id="causeOfDeath" colspan="4">
-              {{ currentLanguageSet?.casesheet?.causeOfDeath }}:
-            </th>
-          </tr>
-
-          <tr>
-            <td colspan="4">
-              <div class="textarea">
-                {{
-                  caseRecords &&
-                    caseRecords.diagnosis &&
-                    caseRecords.diagnosis.causeOfDeath
+          <!-- BP Section -->
+          <div
+            class="col-span-2 p-6 bg-slate-50 rounded-[2.5rem] flex items-center justify-between shadow-inner">
+            <div class="space-y-1">
+              <p
+                class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                Blood Pressure
+              </p>
+              <p class="text-2xl font-black text-slate-900">
+                {{ currentVitals?.systolicBP_1stReading || '--' }}/{{
+                  currentVitals?.diastolicBP_1stReading || '--'
                 }}
-              </div>
-            </td>
-          </tr>
-        </ng-container>
-      </table>
-    </div>
-
-    <!-- PNC Diagnosis -->
-    <div *ngIf="visitCategory === 'PNC'" class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="PNCDiagnosisTbl">
-        <tr>
-          <th colspan="4" id="provisionalDiag">
-            {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
-          </th>
-        </tr>
-        <tr>
-          <td colspan="4">
-            <div class="textarea">
-              {{
-                caseRecords &&
-                  caseRecords.diagnosis &&
-                  caseRecords.diagnosis.provisionalDiagnosis
-              }}
+                <span class="text-[10px] font-normal text-slate-400">mmHg</span>
+              </p>
             </div>
-          </td>
-        </tr>
-        <tr>
-          <th id="matDeath">{{ currentLanguageSet?.casesheet?.matDeath }}:</th>
-          <td *ngIf="caseRecords?.diagnosis?.isMaternalDeath === true">
-            {{ 'Yes' }}
-          </td>
-          <td *ngIf="caseRecords?.diagnosis?.isMaternalDeath === false">
-            {{ 'No' }}
-          </td>
-          <td colspan="2"></td>
-        </tr>
-        <ng-container *ngIf="caseRecords?.diagnosis?.isMaternalDeath">
-          <tr>
-            <th id="dateOfDeath">
-              {{ currentLanguageSet?.casesheet?.dateOfDeath }}:
-            </th>
-            <td>
-              {{
-                caseRecords &&
-                  caseRecords.diagnosis &&
-                  caseRecords.diagnosis.dateOfDeath
-              }}
-            </td>
-            <th id="placeOfDeath">
-              {{ currentLanguageSet?.casesheet?.placeOfDeath }}:
-            </th>
-            <td>
-              {{
-                caseRecords &&
-                  caseRecords.diagnosis &&
-                  caseRecords.diagnosis.placeOfDeath
-              }}
-            </td>
-          </tr>
-          <tr>
-            <th colspan="4" id="causeOfDeath">
-              {{ currentLanguageSet?.casesheet?.causeOfDeath }}:
-            </th>
-          </tr>
-          <tr>
-            <td colspan="4">
-              <div class="textarea">
-                {{
-                  caseRecords &&
-                    caseRecords.diagnosis &&
-                    caseRecords.diagnosis.causeOfDeath
-                }}
-              </div>
-            </td>
-          </tr>
-        </ng-container>
-      </table>
-    </div>
-
-    <!-- NCD Care Diagnosis -->
-    <div *ngIf="visitCategory === 'NCD care'" class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="ndcCareCondition">
-        <tr
-          *ngIf="
-            caseRecords &&
-            caseRecords.diagnosis &&
-            caseRecords.diagnosis.ncdScreeningConditionOther &&
-            caseRecords.diagnosis.ncdScreeningConditionOther !== null
-          ">
-          <th id="ncdCondition">
-            {{ currentLanguageSet?.casesheet?.ncdCondition }}:
-          </th>
-          <td *ngIf="ncdScreeningCondition !== null">
-            {{ ncdScreeningCondition }}
-          </td>
-          <th
-            id="OtherNCDCondition"
-            *ngIf="
-              caseRecords &&
-              caseRecords.diagnosis &&
-              caseRecords.diagnosis.ncdScreeningConditionOther
-            ">
-            NCD Condition Other:
-          </th>
-          <td
-            *ngIf="
-              caseRecords &&
-              caseRecords.diagnosis &&
-              caseRecords.diagnosis.ncdScreeningConditionOther
-            ">
-            {{
-              caseRecords &&
-                caseRecords.diagnosis &&
-                caseRecords.diagnosis.ncdScreeningConditionOther
-            }}
-          </td>
-        </tr>
-        <tr
-          *ngIf="
-            caseRecords &&
-            caseRecords.diagnosis &&
-            caseRecords.diagnosis.ncdScreeningConditionOther &&
-            caseRecords.diagnosis.ncdScreeningConditionOther !== null
-          ">
-          <th id="typeOfNcd">
-            {{ currentLanguageSet?.casesheet?.typeOfNcd }}:
-          </th>
-          <td>
-            {{
-              caseRecords &&
-                caseRecords.diagnosis &&
-                caseRecords.diagnosis.ncdCareType
-            }}
-          </td>
-        </tr>
-        <tr
-          *ngIf="
-            caseRecords &&
-            caseRecords.diagnosis &&
-            (caseRecords.diagnosis.ncdScreeningConditionOther === undefined ||
-              caseRecords.diagnosis.ncdScreeningConditionOther === null)
-          ">
-          <th id="nCDCareCondition">
-            {{ currentLanguageSet?.casesheet?.ncdCondition }}:
-          </th>
-          <td *ngIf="ncdScreeningCondition !== null">
-            {{ ncdScreeningCondition }}
-          </td>
-          <th
-            id="nCDCareConditionOther"
-            *ngIf="
-              caseRecords &&
-              caseRecords.diagnosis &&
-              caseRecords.diagnosis.ncdScreeningConditionOther
-            ">
-            NCD Condition Other:
-          </th>
-          <td
-            *ngIf="
-              caseRecords &&
-              caseRecords.diagnosis &&
-              caseRecords.diagnosis.ncdScreeningConditionOther
-            ">
-            {{
-              caseRecords &&
-                caseRecords.diagnosis &&
-                caseRecords.diagnosis.ncdScreeningConditionOther
-            }}
-          </td>
-          <th id="nCDCareConditionTypeOfNCD">
-            {{ currentLanguageSet?.casesheet?.typeOfNcd }}
-          </th>
-          <td>
-            {{
-              caseRecords &&
-                caseRecords.diagnosis &&
-                caseRecords.diagnosis.ncdCareType
-            }}
-          </td>
-        </tr>
-
-        <th colspan="4" id="provisionalDiag1">
-          {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
-        </th>
-        <tr>
-          <td colspan="4">
-            <div class="textarea">
-              {{
-                caseRecords &&
-                  caseRecords.diagnosis &&
-                  caseRecords.diagnosis.diagnosisProvided
-              }}
+            <div class="h-12 w-px bg-slate-200"></div>
+            <div class="text-right space-y-1">
+              <p
+                class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                SpO2
+              </p>
+              <p class="text-2xl font-black text-slate-900">
+                {{ currentVitals?.sPO2 || '--'
+                }}<span class="text-[10px] font-normal text-slate-400">%</span>
+              </p>
             </div>
-          </td>
-        </tr>
+          </div>
 
-        <tr></tr>
-        <tr style="display: none">
-          <th id="typeOfComplication" colspan="4">
-            {{ currentLanguageSet?.casesheet?.typeOfComplication }}
-          </th>
-        </tr>
-        <tr>
-          <td colspan="4" style="display: none">
-            <div class="textarea">
-              {{
-                caseRecords &&
-                  caseRecords.diagnosis &&
-                  caseRecords.diagnosis.ncdComplication
-              }}
+          <!-- Glucose Section -->
+          <div
+            class="col-span-2 p-6 bg-slate-50 rounded-[2.5rem] grid grid-cols-3 gap-4 shadow-inner">
+            <div class="text-center space-y-1">
+              <p
+                class="text-[8px] font-black text-slate-400 uppercase tracking-widest">
+                Fasting
+              </p>
+              <p class="text-base font-black text-slate-900">
+                {{ currentVitals?.bloodGlucose_Fasting || '--' }}
+              </p>
             </div>
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <!-- General OPD Diagnosis -->
-    <div *ngIf="visitCategory === 'General OPD'" class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="GeneralOPDDiagnosisTbl">
-        <tr>
-          <th colspan="4" id="provisionalDiag1">
-            {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
-          </th>
-        </tr>
-        <tr>
-          <td colspan="4">
-            <div class="textarea">
-              {{
-                caseRecords &&
-                  caseRecords.diagnosis &&
-                  caseRecords.diagnosis.diagnosisProvided
-              }}
+            <div
+              class="text-center border-l border-r border-slate-200 space-y-1">
+              <p
+                class="text-[8px] font-black text-slate-400 uppercase tracking-widest">
+                Random
+              </p>
+              <p class="text-base font-black text-slate-900">
+                {{ currentVitals?.bloodGlucose_Random || '--' }}
+              </p>
             </div>
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <!-- NCD screening Diagnosis -->
-
-    <div *ngIf="visitCategory === 'NCD screening'" class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="FinalDiagnosisTbl">
-        <tr>
-          <th colspan="4" id="provisionalDiag">
-            {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
-          </th>
-        </tr>
-        <tr>
-          <td colspan="4">
-            <div class="textarea">
-              {{
-                caseRecords &&
-                  caseRecords.diagnosis &&
-                  caseRecords.diagnosis.diagnosisProvided
-              }}
+            <div class="text-center space-y-1">
+              <p
+                class="text-[8px] font-black text-slate-400 uppercase tracking-widest">
+                PP
+              </p>
+              <p class="text-base font-black text-slate-900">
+                {{ currentVitals?.bloodGlucose_2hr_PP || '--' }}
+              </p>
             </div>
-          </td>
-        </tr>
-        <tr *ngIf="tmCaseSheet === 'true'">
-          <th colspan="4" id="finalDiagnosis">
-            {{ currentLanguageSet?.finalDiagnosis }}:
-          </th>
-        </tr>
-        <tr *ngIf="tmCaseSheet === 'true'">
-          <td colspan="4">
-            <div class="textarea">
-              <div class="btn-group" *ngFor="let i of suspectt">
-                <div *ngIf="i === 'Diabetes'">Diabetes &nbsp; &nbsp;</div>
-                <div *ngIf="i === 'Hypertension'">
-                  Hypertension &nbsp; &nbsp;
-                </div>
-              </div>
+          </div>
+        </div>
+
+        <!-- Lung Assessment (Conditional) -->
+        <div
+          *ngIf="beneficiaryDetails && beneficiaryDetails.ageVal >= 18"
+          class="mt-8 pt-8 border-t border-gray-100">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="p-2 bg-indigo-50 rounded-lg">
+              <ng-icon name="lucideWind" class="text-indigo-600"></ng-icon>
             </div>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <!-- General OPD (QC) Diagnosis -->
-    <div *ngIf="visitCategory === 'General OPD (QC)'" class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="GeneralOPDQCDiagnosisTbl">
-        <tr>
-          <th colspan="4" id="provisionalDiag1">
-            {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
-          </th>
-        </tr>
-        <tr>
-          <td colspan="4">
-            <div class="textarea">
-              {{
-                caseRecords &&
-                  caseRecords.diagnosis &&
-                  caseRecords.diagnosis.provisionalDiagnosis
-              }}
+            <h4
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+              Lung Assessment Summary
+            </h4>
+          </div>
+          <div class="grid grid-cols-2 gap-6">
+            <div
+              class="p-4 bg-gray-50/50 rounded-2xl border border-gray-100 flex flex-col gap-1">
+              <span
+                class="text-[8px] font-black text-gray-400 uppercase tracking-widest"
+                >Severity</span
+              >
+              <span class="font-black text-indigo-900 text-sm">{{
+                severity || 'NA'
+              }}</span>
             </div>
-          </td>
-        </tr>
-      </table>
-    </div>
-  </div>
-  <!-- End of Diagnosis -->
-
-  <!-- Prescription -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.prescribe }}:</h4>
-    </div>
-
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered table-striped"
-        aria-describedby="PrescriptionTbl">
-        <thead>
-          <tr>
-            <th style="width: 5%" id="serialNo">
-              {{ currentLanguageSet?.casesheet?.serialNo }}
-            </th>
-            <th style="width: 15%" id="nameAndStrength">
-              {{ currentLanguageSet?.casesheet?.nameAndStrength }}
-            </th>
-            <th style="width: 10%" id="drugType">
-              {{ currentLanguageSet?.casesheet?.drugType }}
-            </th>
-            <th style="width: 10%" id="form">
-              {{ currentLanguageSet?.casesheet?.form }}
-            </th>
-            <th style="width: 5%" id="dose">
-              {{ currentLanguageSet?.casesheet?.dose }}
-            </th>
-            <th style="width: 5%" id="freq">
-              {{ currentLanguageSet?.casesheet?.freq }}
-            </th>
-            <th style="width: 10%" id="durValue">
-              {{ currentLanguageSet?.casesheet?.durValue }}
-            </th>
-            <th style="width: 5%" id="durUnit">
-              {{ currentLanguageSet?.casesheet?.durUnit }}
-            </th>
-            <th style="width: 10%" id="qtypresc">
-              {{ currentLanguageSet?.casesheet?.qtypresc }}
-            </th>
-            <th style="width: 10%" id="instruct">
-              {{ currentLanguageSet?.casesheet?.instruct }}
-            </th>
-          </tr>
-        </thead>
-        <tbody
-          *ngIf="
-            !caseRecords ||
-            !caseRecords.prescription ||
-            !caseRecords.prescription ||
-            caseRecords.prescription.length === 0
-          ">
-          <tr>
-            <td class="text-center" colspan="12">
-              {{ currentLanguageSet?.casesheet?.noRecordFound }}
-            </td>
-          </tr>
-        </tbody>
-        <tbody
-          *ngIf="
-            caseRecords && caseRecords.prescription && caseRecords.prescription
-          ">
-          <tr *ngFor="let drug of caseRecords.prescription; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ drug.drugName }} {{ drug.drugStrength }}</td>
-            <td>{{ drug.isEDL ? 'EDL' : 'Non-EDL' }}</td>
-            <td>{{ drug.formName }}</td>
-            <td>{{ drug.dose }}</td>
-            <td>{{ drug.frequency }}</td>
-            <td>{{ drug.duration }}</td>
-            <td>{{ drug.unit }}</td>
-            <td>{{ drug.qtyPrescribed }}</td>
-            <td>{{ drug.instructions }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- End of Prescription -->
-
-    <!-- Revisit & Refer for QC-->
-    <div
-      class="row col-xs-12 m-t-50"
-      *ngIf="visitCategory === 'General OPD (QC)'">
-      <h2 class="text-center">{{ currentLanguageSet?.revisitRefer }}</h2>
-      <hr />
-      <div class="col-xs-12">
-        <table
-          class="table table-no-border casesheet-table"
-          aria-describedby="Revisit&Refertbl">
-          <tbody>
-            <tr>
-              <th id="referredToInstituteName">
-                {{ currentLanguageSet?.Referdetails?.higherhealthcarecenter }}:
-              </th>
-              <td>{{ referDetails?.referredToInstituteName }}</td>
-            </tr>
-            <tr>
-              <th id="serviceList">
-                {{ currentLanguageSet?.Referdetails?.additionalservices }}:
-              </th>
-              <td>{{ serviceList }}</td>
-            </tr>
-            <tr>
-              <th id="referralReason">
-                {{ currentLanguageSet?.Referdetails?.referralReason }}:
-              </th>
-              <td>{{ referDetails?.referralReason }}</td>
-            </tr>
-            <tr>
-              <th id="revisitDate">
-                {{ currentLanguageSet?.Referdetails?.revisitDate }}:
-              </th>
-              <td>{{ referDetails?.revisitDate }}</td>
-            </tr>
-          </tbody>
-        </table>
+            <div
+              class="p-4 bg-gray-50/50 rounded-2xl border border-gray-100 flex flex-col gap-1">
+              <span
+                class="text-[8px] font-black text-gray-400 uppercase tracking-widest"
+                >Cough Pattern</span
+              >
+              <span class="font-black text-indigo-900 text-sm line-clamp-1">{{
+                cough_pattern || 'NA'
+              }}</span>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <!--Revisit & Refer for QC ends-->
+    </z-card>
   </div>
 
-  <!--MMU-WDF-Prescription -->
-  <div class="row m-t-10" *ngIf="enableTCReferredMMUData === true">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.mmuPrescription }}:</h4>
-    </div>
+  <!-- Main Clinical Sections -->
+  <div class="space-y-12">
+    <!-- Chief Complaints -->
+    <z-card
+      variant="outline"
+      class="overflow-hidden border-gray-100 shadow-sm border-l-4 border-l-indigo-400">
+      <div
+        class="bg-indigo-50/30 p-4 border-b border-gray-100 flex items-center gap-3">
+        <div class="p-2 bg-indigo-100 rounded-lg">
+          <ng-icon name="lucideClipboardList" class="text-indigo-600"></ng-icon>
+        </div>
+        <h3 class="font-black text-gray-800 uppercase tracking-widest text-xs">
+          {{ currentLanguageSet?.casesheet?.chiefComplaint }}
+        </h3>
+      </div>
+      <div class="p-0">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-indigo-50/20 border-b border-gray-100">
+                <th
+                  class="px-8 py-5 text-[10px] font-black text-indigo-400 uppercase tracking-widest w-16 text-center">
+                  #
+                </th>
+                <th
+                  class="px-8 py-5 text-[10px] font-black text-indigo-400 uppercase tracking-widest w-64">
+                  {{
+                    currentLanguageSet?.nurseData?.chiefComplaintsDetails
+                      ?.chiefComplaints
+                  }}
+                </th>
+                <th
+                  *ngIf="visitCategory !== 'General OPD (QC)'"
+                  class="px-8 py-5 text-[10px] font-black text-indigo-400 uppercase tracking-widest w-32">
+                  Duration
+                </th>
+                <th
+                  class="px-8 py-5 text-[10px] font-black text-indigo-400 uppercase tracking-widest">
+                  Description
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+              <tr
+                *ngFor="
+                  let complaints of caseRecords?.findings?.complaints;
+                  let i = index
+                "
+                class="hover:bg-indigo-50/30 transition-all duration-300">
+                <td class="px-8 py-5 text-center text-gray-400 font-black">
+                  {{ i + 1 }}
+                </td>
+                <td class="px-8 py-5">
+                  <div class="flex items-center gap-2">
+                    <div class="h-1.5 w-1.5 rounded-full bg-indigo-400"></div>
+                    <span class="font-black text-gray-900 text-sm">{{
+                      complaints.chiefComplaint
+                    }}</span>
+                  </div>
+                </td>
+                <td
+                  *ngIf="visitCategory !== 'General OPD (QC)'"
+                  class="px-8 py-5">
+                  <span
+                    class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-[10px] font-black tracking-wider uppercase">
+                    {{ complaints.duration }} {{ complaints.unitOfDuration }}
+                  </span>
+                </td>
+                <td
+                  class="px-8 py-5 text-sm text-gray-600 leading-relaxed font-medium">
+                  {{ complaints.description || '--' }}
+                </td>
+              </tr>
+              <tr *ngIf="!caseRecords?.findings?.complaints?.length">
+                <td
+                  [attr.colspan]="visitCategory !== 'General OPD (QC)' ? 4 : 3"
+                  class="px-8 py-16 text-center text-gray-400 italic font-medium tracking-tight">
+                  No complaints recorded for this visit
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </z-card>
 
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered table-striped"
-        aria-describedby="mmuPrescription">
-        <thead>
-          <tr>
-            <th style="width: 5%" id="sno">
-              {{ currentLanguageSet?.casesheet?.serialNo }}
-            </th>
-            <th style="width: 15%" id="mmuNameAndStrength">
-              {{ currentLanguageSet?.casesheet?.nameAndStrength }}
-            </th>
-            <th style="width: 10%" id="mmudrugType">
-              {{ currentLanguageSet?.casesheet?.drugType }}
-            </th>
-            <th style="width: 10%" id="mmuform">
-              {{ currentLanguageSet?.casesheet?.form }}
-            </th>
-            <th style="width: 5%" id="mmudose">
-              {{ currentLanguageSet?.casesheet?.dose }}
-            </th>
-            <th style="width: 5%" id="mmufreq">
-              {{ currentLanguageSet?.casesheet?.freq }}
-            </th>
-            <th style="width: 10%" id="mmudurValue">
-              {{ currentLanguageSet?.casesheet?.durValue }}
-            </th>
-            <th style="width: 5%" id="mmudurUnit">
-              {{ currentLanguageSet?.casesheet?.durValue }}
-            </th>
-            <th style="width: 10%" id="mmuqtypresc">
-              {{ currentLanguageSet?.casesheet?.qtypresc }}
-            </th>
-            <th style="width: 10%" id="mmuinstruct">
-              {{ currentLanguageSet?.casesheet?.instruct }}
-            </th>
-          </tr>
-        </thead>
-        <tbody
+    <!-- Diagnosis Section -->
+    <z-card
+      variant="outline"
+      class="overflow-hidden border-blue-100 shadow-sm border-l-4 border-l-blue-400">
+      <div
+        class="bg-blue-50/30 p-4 border-b border-blue-100 flex items-center gap-3">
+        <div class="p-2 bg-blue-100 rounded-lg">
+          <ng-icon name="lucideStethoscope" class="text-blue-600"></ng-icon>
+        </div>
+        <h3 class="font-black text-gray-800 uppercase tracking-widest text-xs">
+          {{ currentLanguageSet?.DiagnosisDetails?.diagnosis }}
+        </h3>
+      </div>
+      <div class="p-8 space-y-8">
+        <div
+          class="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 space-y-3">
+          <label
+            class="text-[10px] font-black text-slate-400 uppercase tracking-widest block"
+            >{{ currentLanguageSet?.casesheet?.provisionalDiag }}</label
+          >
+          <p class="text-xl font-black text-slate-900 leading-tight">
+            {{
+              (visitCategory === 'General OPD (QC)'
+                ? caseRecords?.diagnosis?.provisionalDiagnosis
+                : caseRecords?.diagnosis?.diagnosisProvided) || '--'
+            }}
+          </p>
+        </div>
+
+        <!-- High Risk Indicators -->
+        <div
           *ngIf="
-            !MMUcaseRecords ||
-            !MMUcaseRecords.prescription ||
-            !MMUcaseRecords.prescription ||
-            MMUcaseRecords.prescription.length === 0
-          ">
-          <tr>
-            <td class="text-center" colspan="12">
-              {{ currentLanguageSet?.casesheet?.noRecordFound }}
-            </td>
-          </tr>
-        </tbody>
-        <tbody
-          *ngIf="
-            MMUcaseRecords &&
-            MMUcaseRecords.prescription &&
-            MMUcaseRecords.prescription
-          ">
-          <tr *ngFor="let drug of MMUcaseRecords.prescription; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ drug.drugName }} {{ drug.drugStrength }}</td>
-            <td>{{ drug.isEDL ? 'EDL' : 'Non-EDL' }}</td>
-            <td>{{ drug.formName }}</td>
-            <td>{{ drug.dose }}</td>
-            <td>{{ drug.frequency }}</td>
-            <td>{{ drug.duration }}</td>
-            <td>{{ drug.unit }}</td>
-            <td>{{ drug.qtyPrescribed }}</td>
-            <td>{{ drug.instructions }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+            showHRP === 'true' ||
+            caseRecords?.diagnosis?.highRiskStatus === 'Yes'
+          "
+          class="p-6 bg-rose-50 border border-rose-100 rounded-3xl flex items-center gap-4">
+          <div class="p-3 bg-rose-600 rounded-2xl shadow-lg shadow-rose-100">
+            <ng-icon
+              name="lucideAlertOctagon"
+              class="text-white animate-pulse"
+              size="24"></ng-icon>
+          </div>
+          <div>
+            <p
+              class="text-[10px] font-black text-rose-400 uppercase tracking-widest mb-1">
+              Risk Warning
+            </p>
+            <h4
+              class="text-lg font-black text-rose-900 uppercase tracking-tighter">
+              {{
+                currentLanguageSet?.highRiskPregnancy || 'High Risk Detected'
+              }}
+            </h4>
+          </div>
+        </div>
+      </div>
+    </z-card>
 
-    <!-- End of MMU-WDF-Prescription -->
+    <!-- Prescription Section -->
+    <z-card
+      variant="outline"
+      class="overflow-hidden border-emerald-100 shadow-sm border-l-4 border-l-emerald-400">
+      <div
+        class="bg-emerald-50/30 p-4 border-b border-gray-100 flex items-center gap-3">
+        <div class="p-2 bg-emerald-100 rounded-lg">
+          <ng-icon name="lucidePill" class="text-emerald-600"></ng-icon>
+        </div>
+        <h3 class="font-black text-gray-800 uppercase tracking-widest text-xs">
+          {{ currentLanguageSet?.casesheet?.prescribe }}
+        </h3>
+      </div>
+      <div class="p-0">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-emerald-50/20 border-b border-gray-100">
+                <th
+                  class="px-8 py-5 text-[10px] font-black text-emerald-400 uppercase tracking-widest w-12 text-center">
+                  #
+                </th>
+                <th
+                  class="px-8 py-5 text-[10px] font-black text-emerald-400 uppercase tracking-widest">
+                  {{ currentLanguageSet?.casesheet?.nameAndStrength }}
+                </th>
+                <th
+                  class="px-8 py-5 text-[10px] font-black text-emerald-400 uppercase tracking-widest w-24">
+                  Form
+                </th>
+                <th
+                  class="px-8 py-5 text-[10px] font-black text-emerald-400 uppercase tracking-widest w-20 text-center">
+                  Dose
+                </th>
+                <th
+                  class="px-8 py-5 text-[10px] font-black text-emerald-400 uppercase tracking-widest w-24 text-center">
+                  Freq
+                </th>
+                <th
+                  class="px-8 py-5 text-[10px] font-black text-emerald-400 uppercase tracking-widest w-24 text-center">
+                  Dur.
+                </th>
+                <th
+                  class="px-8 py-5 text-[10px] font-black text-emerald-400 uppercase tracking-widest w-20 text-center">
+                  Qty
+                </th>
+                <th
+                  class="px-8 py-5 text-[10px] font-black text-emerald-400 uppercase tracking-widest">
+                  Instruction
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+              <tr
+                *ngFor="let drug of caseRecords?.prescription; let i = index"
+                class="hover:bg-emerald-50/30 transition-all duration-300">
+                <td class="px-8 py-5 text-center text-gray-400 font-black">
+                  {{ i + 1 }}
+                </td>
+                <td class="px-8 py-5">
+                  <p class="font-black text-gray-900 text-sm leading-tight">
+                    {{ drug.drugName }}
+                  </p>
+                  <p
+                    class="text-[10px] font-bold text-emerald-600 uppercase mt-0.5">
+                    {{ drug.drugStrength }}
+                  </p>
+                </td>
+                <td class="px-8 py-5">
+                  <span
+                    class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[9px] font-black uppercase tracking-wider"
+                    >{{ drug.formName }}</span
+                  >
+                </td>
+                <td
+                  class="px-8 py-5 text-center font-black text-gray-900 text-sm">
+                  {{ drug.dose }}
+                </td>
+                <td class="px-8 py-5 text-center">
+                  <span
+                    class="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-black"
+                    >{{ drug.frequency }}</span
+                  >
+                </td>
+                <td class="px-8 py-5 text-center">
+                  <p class="text-sm font-black text-gray-900">
+                    {{ drug.duration }}
+                  </p>
+                  <p class="text-[8px] font-black text-gray-400 uppercase">
+                    {{ drug.unit }}
+                  </p>
+                </td>
+                <td class="px-8 py-5 text-center">
+                  <div
+                    class="h-10 w-10 bg-emerald-600 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-emerald-100">
+                    <span class="text-white font-black text-sm">{{
+                      drug.qtyPrescribed
+                    }}</span>
+                  </div>
+                </td>
+                <td
+                  class="px-8 py-5 text-xs text-gray-500 italic font-medium leading-relaxed max-w-xs">
+                  {{ drug.instructions || '--' }}
+                </td>
+              </tr>
+              <tr *ngIf="!caseRecords?.prescription?.length">
+                <td
+                  colspan="8"
+                  class="px-8 py-16 text-center text-gray-400 italic font-medium tracking-tight">
+                  No medications prescribed
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </z-card>
+  </div>
 
-    <!--MMU-WDF-Revisit&Refer-->
-    <div
-      class="row col-xs-12 m-t-50"
-      *ngIf="
-        enableTCReferredMMUData === true && visitCategory === 'General OPD (QC)'
-      ">
-      <h2 class="text-center" style="margin-left: 50px">
-        {{ currentLanguageSet?.mmuRevisitRefer }}
+  <!-- Referral Section -->
+  <div class="mt-16 space-y-8 pt-8 border-t border-gray-100">
+    <div class="flex items-center gap-4">
+      <div class="h-px flex-1 bg-gray-100"></div>
+      <h2 class="text-lg font-black text-gray-900 tracking-tighter uppercase">
+        {{ currentLanguageSet?.revisitRefer }}
       </h2>
-      <hr />
-      <div class="col-xs-12">
-        <table
-          class="table table-no-border casesheet-table"
-          aria-describedby="wdfRevisit">
-          <tbody>
-            <tr>
-              <th id="mmuReferredtoinstitute">
-                {{ currentLanguageSet?.Referdetails?.referredtoinstitute }}:
-              </th>
-              <td>{{ MMUReferDetails?.referredToInstituteName }}</td>
-            </tr>
-            <tr>
-              <th id="mmuadditionalservices">
-                {{ currentLanguageSet?.Referdetails?.additionalservices }}:
-              </th>
-              <td>{{ mmuServiceList }}</td>
-            </tr>
-            <tr>
-              <th id="mmuReferralReason">
-                {{ currentLanguageSet?.Referdetails?.referralReason }}:
-              </th>
-              <td>{{ MMUReferDetails?.referralReason }}</td>
-            </tr>
-            <tr>
-              <th id="mmurevisitDate">
-                {{ currentLanguageSet?.Referdetails?.revisitDate }}:
-              </th>
-              <td>
-                {{
-                  mmuCaseSheetData?.referDetails?.revisitDate
-                    | date: 'dd/MM/yyyy'
-                }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <div class="h-px flex-1 bg-gray-100"></div>
     </div>
 
-    <!--END MMU-WDF-Revisit&Refer-->
+    <z-card
+      variant="outline"
+      class="border-amber-100 overflow-hidden shadow-sm max-w-4xl mx-auto border-l-4 border-l-amber-400">
+      <div
+        class="bg-amber-50/30 p-4 border-b border-amber-100 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <ng-icon name="lucideRedo2" class="text-amber-500"></ng-icon>
+          <h3
+            class="font-black text-amber-900 uppercase tracking-widest text-xs">
+            Standard Referral
+          </h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <ng-icon
+            name="lucideCalendar"
+            class="text-amber-400"
+            size="14"></ng-icon>
+          <span class="text-xs font-black text-amber-700">{{
+            referDetails?.revisitDate || 'No Revisit Date'
+          }}</span>
+        </div>
+      </div>
+      <div class="p-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div class="space-y-1">
+            <label
+              class="text-[10px] font-black text-amber-400 uppercase tracking-widest"
+              >{{
+                currentLanguageSet?.Referdetails?.higherhealthcarecenter
+              }}</label
+            >
+            <p class="text-sm font-black text-gray-900 leading-snug">
+              {{ referDetails?.referredToInstituteName || 'Not Referred' }}
+            </p>
+          </div>
+          <div class="space-y-1">
+            <label
+              class="text-[10px] font-black text-amber-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.Referdetails?.additionalservices }}</label
+            >
+            <p class="text-sm font-medium text-gray-700 leading-relaxed">
+              {{ serviceList || '--' }}
+            </p>
+          </div>
+          <div class="col-span-full space-y-1 border-t border-amber-50 pt-6">
+            <label
+              class="text-[10px] font-black text-amber-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.Referdetails?.referralReason }}</label
+            >
+            <p
+              class="text-sm italic text-gray-500 leading-relaxed bg-gray-50/50 p-6 rounded-[2rem] border border-gray-100">
+              {{ referDetails?.referralReason || '--' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </z-card>
   </div>
 
-  <!-- Doctor's Sign -->
-  <div class="row m-t-50">
-    <div class="col-xs-6">&nbsp;</div>
-    <div class="col-xs-6">
-      <p>
-        <strong> {{ currentLanguageSet?.casesheet?.docSign }}:</strong
-        >&nbsp;&nbsp;
-        <img [src]="imgUrl" alt="sign" *ngIf="imgUrl" />
+  <!-- Signatures Section -->
+  <div
+    class="mt-20 pt-12 border-t border-gray-100 flex flex-col md:flex-row justify-between items-end gap-12 px-8">
+    <div class="text-center space-y-4">
+      <div
+        class="h-16 w-48 flex items-center justify-center border-b border-gray-200">
+        <p
+          class="text-[10px] font-black text-gray-300 uppercase tracking-[0.3em]">
+          Nurse Signature
+        </p>
+      </div>
+      <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+        Medical Staff
       </p>
     </div>
+
+    <div class="text-center space-y-4">
+      <div
+        class="h-24 w-64 flex flex-col items-center justify-end gap-2 border-b border-indigo-200 pb-2 bg-indigo-50/30 rounded-t-[2rem]">
+        <img
+          *ngIf="imgUrl"
+          [src]="imgUrl"
+          alt="Doctor Signature"
+          class="h-16 object-contain mix-blend-multiply opacity-90" />
+        <p
+          *ngIf="!imgUrl"
+          class="text-[10px] font-black text-indigo-300 uppercase tracking-[0.3em] mb-4">
+          Pending Sign
+        </p>
+      </div>
+      <div class="space-y-1">
+        <p class="text-xs font-black text-indigo-900 uppercase tracking-widest">
+          {{ currentLanguageSet?.casesheet?.docSign }}
+        </p>
+        <p
+          class="text-[8px] font-bold text-indigo-400 uppercase tracking-tighter">
+          Certified Practitioner
+        </p>
+      </div>
+    </div>
   </div>
-  <!-- End of Doctor's Sign -->
 </div>

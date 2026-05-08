@@ -27,15 +27,22 @@ import {
   EventEmitter,
   DoCheck,
 } from '@angular/core';
-import { MatDialogRef, MatDialogClose } from '@angular/material/dialog';
+import { ZardDialogImports } from '@/components/ui/dialog/dialog.imports';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import {
+  LucideAngularModule,
+  AlertCircle,
+  CheckCircle,
+  Info,
+  HelpCircle,
+} from 'lucide-angular';
+import { NgIf, NgClass, NgFor, TitleCasePipe } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
-import { NgIf, NgClass, NgFor, TitleCasePipe } from '@angular/common';
-import { MatFormField, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StringValidatorDirective } from '../../directives/stringValidator.directive';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
   selector: 'app-common-dialog',
@@ -44,17 +51,15 @@ import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
   imports: [
     NgIf,
     NgClass,
-    MatDialogClose,
-    MatFormField,
-    MatLabel,
-    MatInput,
+    ZardDialogImports,
+    ZardFormImports,
+    ZardRadioImports,
     ReactiveFormsModule,
     StringValidatorDirective,
     FormsModule,
     NgFor,
-    MatRadioGroup,
-    MatRadioButton,
     TitleCasePipe,
+    LucideAngularModule,
   ],
 })
 export class CommonDialogComponent implements OnInit, DoCheck {

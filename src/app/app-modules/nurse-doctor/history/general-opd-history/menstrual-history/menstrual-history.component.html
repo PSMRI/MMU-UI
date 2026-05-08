@@ -1,97 +1,105 @@
-<div class="col-12" style="text-align: end">
-  <span class="font-history-label">{{
-    currentLanguageSet?.historyData?.Previousmenstrualhistory
-      ?.previousmenstrualhistory
-  }}</span>
-  <button
-    type="button"
-    mat-icon-button
-    matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-    id="previousANCMenstrualHistory"
-    class="mat_icon_blue"
-    color="primary"
-    (click)="getPreviousMenstrualHistory()">
-    <mat-icon class="md-18">history</mat-icon>
-  </button>
+<div class="flex justify-between items-center mb-6">
+  <h4 class="text-lg font-semibold text-gray-800">
+    {{
+      currentLanguageSet?.historyData?.Previousmenstrualhistory
+        ?.previousmenstrualhistory
+    }}
+  </h4>
+  <div class="flex items-center gap-2 text-right">
+    <span class="text-sm font-medium text-gray-500">
+      {{
+        currentLanguageSet?.historyData?.Previousmenstrualhistory
+          ?.previousmenstrualhistory
+      }}
+    </span>
+    <button
+      z-button
+      variant="ghost"
+      size="icon"
+      [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
+      id="previousANCMenstrualHistory"
+      class="text-primary hover:bg-primary/10 transition-colors"
+      (click)="getPreviousMenstrualHistory()">
+      <ng-icon name="lucideHistory" class="text-xl"></ng-icon>
+    </button>
+  </div>
 </div>
-<div class="row m-t-10" [formGroup]="menstrualHistoryForm">
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field class="select-full-width">
-      <mat-label class="mat-label-text">{{
+
+<div
+  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+  [formGroup]="menstrualHistoryForm">
+  <!-- Cycle Status -->
+  <div class="box">
+    <z-form-field>
+      <z-label>{{
         currentLanguageSet?.historyData?.ancHistory?.menstrualHistoryANC
           ?.menstrualCycleStatus
-      }}</mat-label>
-      <mat-select
-        name="menstrualCycleStatus"
+      }}</z-label>
+      <z-select
         formControlName="menstrualCycleStatus"
         (selectionChange)="checkMenstrualCycleStatus()">
-        <mat-option
+        <z-option
           *ngFor="let status of masterData?.menstrualCycleStatus"
-          [value]="status"
-          >{{ status.name }}</mat-option
-        >
-      </mat-select>
-    </mat-form-field>
+          [zValue]="status">
+          {{ status.name }}
+        </z-option>
+      </z-select>
+    </z-form-field>
   </div>
 
   <ng-template [ngIf]="menstrualCycleStatus?.name === 'Active'">
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <label class="control-label" for="regularityOfMenstrualCycles">{{
-        currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-          ?.regularityofMenstrualCycles
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        name="regularity"
-        formControlName="regularity"
-        style="margin-left: -9px">
-        <mat-radio-button color="primary" value="Regular">{{
+    <!-- Regularity -->
+    <div class="space-y-3 pt-2">
+      <label class="text-sm font-bold text-gray-700 block">
+        {{
+          currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
+            ?.regularityofMenstrualCycles
+        }}
+      </label>
+      <z-radio-group formControlName="regularity" class="flex gap-6">
+        <z-radio zValue="Regular" class="text-sm">{{
           currentLanguageSet?.common?.regular
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" value="Irregular">{{
+        }}</z-radio>
+        <z-radio zValue="Irregular" class="text-sm">{{
           currentLanguageSet?.common?.irregular
-        }}</mat-radio-button>
-      </mat-radio-group>
+        }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="select-full-width">
-        <mat-label class="mat-label-text">{{
+    <!-- Cycle Length -->
+    <div class="box">
+      <z-form-field>
+        <z-label>{{
           currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
             ?.lengthofMenstrualCycle
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          name="cycleLength"
-          formControlName="cycleLength">
-          <mat-option
+        }}</z-label>
+        <z-select formControlName="cycleLength">
+          <z-option
             *ngFor="let cycleLength of masterData?.menstrualCycleLengths"
-            [value]="cycleLength"
-            >{{ cycleLength.menstrualCycleRange }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
+            [zValue]="cycleLength">
+            {{ cycleLength.menstrualCycleRange }}
+          </z-option>
+        </z-select>
+      </z-form-field>
     </div>
 
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="select-full-width">
-        <mat-label class="mat-label-text">{{
+    <!-- Blood Flow Duration -->
+    <div class="box">
+      <z-form-field>
+        <z-label>{{
           currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
             ?.menstrualBloodFlowDuration
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          name="bloodFlowDuration"
-          formControlName="bloodFlowDuration">
-          <mat-option
+        }}</z-label>
+        <z-select formControlName="bloodFlowDuration">
+          <z-option
             *ngFor="
               let cycleDuration of masterData?.menstrualCycleBloodFlowDuration
             "
-            [value]="cycleDuration"
-            >{{ cycleDuration.menstrualCycleRange }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
+            [zValue]="cycleDuration">
+            {{ cycleDuration.menstrualCycleRange }}
+          </z-option>
+        </z-select>
+      </z-form-field>
     </div>
   </ng-template>
 
@@ -100,50 +108,47 @@
       menstrualCycleStatus?.name === 'Active' ||
       menstrualCycleStatus?.name === 'Amenorrhea'
     ">
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="select-full-width">
-        <mat-label class="mat-label-text">{{
+    <!-- Menstrual Problems -->
+    <div class="box">
+      <z-form-field>
+        <z-label>{{
           currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
             ?.menstrualProblems
-        }}</mat-label>
-        <mat-select
+        }}</z-label>
+        <z-select
           multiple
-          class="select-full-width"
-          name="problemName"
           formControlName="menstrualProblemList"
           (selectionChange)="resetOtherMenstrualProblems()">
-          <mat-option
+          <z-option
             *ngFor="let problem of masterData?.menstrualProblem"
-            [value]="problem"
+            [zValue]="problem"
             [disabled]="
               (isNoneSelected && problem.problemName !== 'None') ||
               (isOtherSelected && problem.problemName === 'None')
             ">
             {{ problem.problemName }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+          </z-option>
+        </z-select>
+      </z-form-field>
     </div>
   </ng-template>
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field class="select-full-width">
-      <mat-label class="mat-label-text"
-        >{{
+
+  <!-- LMP Date -->
+  <div class="box">
+    <z-form-field>
+      <z-label>{{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
+          ?.lastMenstrualPeriod
+      }}</z-label>
+      <z-date-picker
+        formControlName="lMPDate"
+        [minDate]="minimumLMPDate"
+        [maxDate]="today"
+        [placeholder]="
           currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
             ?.lastMenstrualPeriod
-        }}
-      </mat-label>
-      <input
-        matInput
-        name="lMPDate"
-        formControlName="lMPDate"
-        [min]="minimumLMPDate"
-        [max]="today"
-        [matDatepicker]="lmpPicker" />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="lmpPicker"></mat-datepicker-toggle>
-      <mat-datepicker #lmpPicker></mat-datepicker>
-    </mat-form-field>
+        ">
+      </z-date-picker>
+    </z-form-field>
   </div>
 </div>

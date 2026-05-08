@@ -24,6 +24,7 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 @Directive({
   selector:
     '[app-allowText][formControlName],[allowText][formControl],[allowText][ngModel],[allowText]',
+  standalone: true,
 })
 export class StringValidatorDirective {
   @Input()

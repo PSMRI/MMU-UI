@@ -21,6 +21,7 @@
  */
 
 import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import {
   DoctorService,
@@ -30,17 +31,41 @@ import {
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import moment from 'moment';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { get } from 'jquery';
 import { map, Observable } from 'rxjs';
-import { NgIf, NgFor, DatePipe } from '@angular/common';
-import { MatFormField, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
+import { ZardFormImports, ZardLabelImports, ZardCardImports } from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideCalendar,
+  lucideUser,
+  lucideHistory,
+  lucideClipboardList,
+  lucideActivity,
+} from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-doctor-diagnosis-case-sheet',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ZardFormImports,
+    ZardLabelImports,
+    ZardCardImports,
+    LucideAngularModule,
+    NgIcon,
+  ],
   templateUrl: './doctor-diagnosis-case-sheet.component.html',
   styleUrls: ['./doctor-diagnosis-case-sheet.component.css'],
-  imports: [NgIf, NgFor, MatFormField, MatInput, MatLabel, DatePipe],
+  providers: [
+    DatePipe,
+    provideIcons({
+      lucideCalendar,
+      lucideUser,
+      lucideHistory,
+      lucideClipboardList,
+      lucideActivity,
+    }),
+  ],
 })
 export class DoctorDiagnosisCaseSheetComponent
   implements OnInit, OnChanges, DoCheck

@@ -1,15 +1,15 @@
 .checkbox-group {
-    display: flex;
-    flex-wrap: wrap;
-    align-content: center;
-    align-items: center;
-    height: fit-content;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: center;
+  height: fit-content;
 }
 
 .checkbox-group md-checkbox {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 .checkbox {
-    margin: 0 10px;
+  margin: 0 10px;
 }

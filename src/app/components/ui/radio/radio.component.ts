@@ -37,12 +37,12 @@ type OnChangeType = (value: unknown) => void;
       <input
         #input
         type="radio"
-        [value]="value()"
+        [value]="zValue()"
         [class]="classes()"
         [checked]="checked"
         [disabled]="disabledState()"
         (blur)="onRadioBlur()"
-        [name]="name()"
+        [name]="zName()"
         [id]="zId() || z.id()"
       />
       <span
@@ -70,8 +70,8 @@ export class ZardRadioComponent implements ControlValueAccessor {
   readonly radioChange = output<boolean>();
   readonly class = input<ClassValue>('');
   readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly name = input<string>('radio');
-  readonly value = input<unknown>(null);
+  readonly zName = input<string>('radio');
+  readonly zValue = input<unknown>(null);
   readonly zId = input<string>('');
 
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
@@ -86,7 +86,7 @@ export class ZardRadioComponent implements ControlValueAccessor {
   checked = false;
 
   writeValue(val: unknown): void {
-    this.checked = val === this.value();
+    this.checked = val === this.zValue();
     this.cdr.markForCheck();
   }
 
@@ -112,7 +112,7 @@ export class ZardRadioComponent implements ControlValueAccessor {
     }
 
     this.checked = true;
-    this.onChange(this.value());
+    this.onChange(this.zValue());
     this.radioChange.emit(this.checked);
   }
 }

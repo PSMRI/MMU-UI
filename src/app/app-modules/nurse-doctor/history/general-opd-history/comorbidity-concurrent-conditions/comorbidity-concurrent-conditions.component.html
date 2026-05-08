@@ -1,144 +1,182 @@
-<div [formGroup]="comorbidityConcurrentConditionsForm">
-  <div class="col-xs-12" formArrayName="comorbidityConcurrentConditionsList">
-    <div class="col-12" style="text-align: end">
-      <span class="font-history-label">{{
+<div
+  [formGroup]="comorbidityConcurrentConditionsForm"
+  class="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+  <!-- Section Header -->
+  <div class="flex items-center justify-between px-2">
+    <div class="flex items-center gap-3">
+      <div class="p-2.5 bg-amber-100 rounded-2xl">
+        <lucide-icon name="layers" class="size-5 text-amber-600"></lucide-icon>
+      </div>
+      <div>
+        <h4
+          class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+          {{
+            currentLanguageSet?.historyData?.ancHistory
+              ?.combordityANC_OPD_NCD_PNC?.comorbidityConditions
+          }}
+        </h4>
+        <p
+          class="text-[10px] text-gray-400 font-bold uppercase tracking-widest italic">
+          Concurrent Clinical Burden Registry
+        </p>
+      </div>
+    </div>
+
+    <z-button
+      variant="outline"
+      class="rounded-2xl border-amber-200 bg-amber-50/30 text-amber-600 hover:bg-amber-50 px-6 py-2 shadow-sm font-black text-[10px] uppercase tracking-widest transition-all"
+      (click)="getPreviousComorbidityHistory()">
+      <lucide-icon name="history" class="size-3 mr-2"></lucide-icon>
+      {{
         currentLanguageSet?.historyData?.ancHistory?.combordityANC_OPD_NCD_PNC
           ?.PreviousDetails
-      }}</span>
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        id="previousANCComorbidityHistory"
-        class="mat_icon_blue"
-        color="primary"
-        (click)="getPreviousComorbidityHistory()">
-        <mat-icon class="md-18">history</mat-icon>
-      </button>
-    </div>
+      }}
+    </z-button>
+  </div>
+
+  <!-- Dynamic Comorbidity Grid -->
+  <div
+    formArrayName="comorbidityConcurrentConditionsList"
+    class="grid grid-cols-1 gap-4">
     <div
-      class="col-12 row multi_row_select"
-      style="margin: 15px 0px 15px 0px; background-color: #f0f5f5"
       *ngFor="
-        let comorbidityConcurrentConditions of getcomorbidityConcurrentConditions();
+        let comorbidity of getcomorbidityConcurrentConditions();
         let i = index;
-        let isLast = last;
-        let isOdd = odd
+        let isLast = last
       "
-      [ngClass]="{ odd: !isOdd }">
-      <ng-container [formGroupName]="i">
-        <div class="col-3 box">
-          <mat-form-field class="select-full-width">
-            <mat-label>{{
-              currentLanguageSet?.historyData?.ancHistory
-                ?.combordityANC_OPD_NCD_PNC?.comorbidConditions
-            }}</mat-label>
-            <mat-select
-              formControlName="comorbidConditions"
-              name="comorbidConditions"
-              (selectionChange)="
-                filterComorbidityConcurrentConditionsType(
-                  $event.value,
-                  i,
-                  comorbidityConcurrentConditions
-                )
-              "
-              required="{{ ComorbidStatus }}">
-              <mat-option
-                *ngFor="let comorbidCondition of comorbiditySelectList[i]"
-                [value]="comorbidCondition"
-                >{{ comorbidCondition.comorbidCondition }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-        </div>
+      [formGroupName]="i"
+      class="group relative grid grid-cols-1 md:grid-cols-12 gap-8 p-10 rounded-[3rem] border border-gray-100 bg-white transition-all duration-500 hover:shadow-2xl hover:shadow-amber-100/50 hover:border-amber-100 animate-in zoom-in-95 duration-500">
+      <!-- Index Badge -->
+      <div
+        class="hidden md:flex absolute -left-3 top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center bg-gray-50 border border-gray-100 rounded-2xl text-[11px] font-black text-gray-400 group-hover:bg-amber-600 group-hover:text-white group-hover:border-amber-500 transition-all duration-500 z-10 shadow-sm">
+        {{ i + 1 }}
+      </div>
 
-        <div
-          class="col-3 box"
-          *ngIf="
-            comorbidityConcurrentConditions.value.comorbidConditions
-              ?.comorbidCondition === 'Other'
-          ">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                ?.others
-            }}</mat-label>
-            <input
-              autocomplete="off"
-              matInput
-              appDefaultNull
-              maxlength="50"
-              allowText="alphaspace"
-              name="otherComorbidCondition"
-              formControlName="otherComorbidCondition" />
-          </mat-form-field>
-        </div>
-
-        <div class="col-3 box">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.DurationData?.duration
-            }}</mat-label>
-            <input
-              autocomplete="off"
-              matInput
-              appDefaultNull
-              maxlength="2"
-              allowText="number"
-              name="timePeriodAgo"
-              formControlName="timePeriodAgo"
-              (change)="validateDuration(comorbidityConcurrentConditions)" />
-          </mat-form-field>
-        </div>
-
-        <div class="col-3 box">
-          <mat-form-field class="select-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.DurationData?.durationUnit
-            }}</mat-label>
-            <mat-select
-              name="timePeriodUnit"
-              formControlName="timePeriodUnit"
-              (change)="validateDuration(comorbidityConcurrentConditions)">
-              <mat-option value="Days">Day(s)</mat-option>
-              <mat-option value="Weeks">Week(s)</mat-option>
-              <mat-option value="Months">Month(s)</mat-option>
-              <mat-option value="Years">Year(s)</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        <div class="col-3 box action-btn-container" style="text-align: end">
-          <button
-            mat-mini-fab
-            color="warn"
-            class="mat_warn_circle"
-            style="margin-right: 3px"
-            id="removeComorbidityConcurrentConditions"
-            *ngIf="
-              i !== 0 || (i === 0 && comorbidityConcurrentConditions.touched)
+      <!-- Condition Modality -->
+      <div
+        [ngClass]="
+          comorbidity.value.comorbidConditions?.comorbidCondition === 'Other'
+            ? 'md:col-span-3'
+            : 'md:col-span-4'
+        ">
+        <z-form-field>
+          <z-form-label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+            >Pathological State</z-form-label
+          >
+          <z-select
+            formControlName="comorbidConditions"
+            (selectionChange)="
+              filterComorbidityConcurrentConditionsType($event, i, comorbidity)
             "
-            (click)="
-              removeComorbidityConcurrentConditions(
-                i,
-                comorbidityConcurrentConditions
-              )
-            ">
-            <mat-icon class="md-18">close</mat-icon>
-          </button>
-          <button
-            md-mini-fab
-            color="primary"
-            class="mat_blue_circle"
-            *ngIf="isLast"
-            [disabled]="checkValidity(comorbidityConcurrentConditions)"
-            id="addComorbidityConcurrentConditions"
-            (click)="addComorbidityConcurrentConditions()">
-            <mat-icon class="md-18">add</mat-icon>
-          </button>
-        </div>
-      </ng-container>
+            class="rounded-2xl bg-gray-50/50 border-gray-100 hover:bg-white transition-all h-14">
+            <z-option
+              *ngFor="let condition of comorbiditySelectList[i]"
+              [zValue]="condition">
+              {{ condition.comorbidCondition }}
+            </z-option>
+          </z-select>
+        </z-form-field>
+      </div>
+
+      <!-- Specification (Other) -->
+      <div
+        class="md:col-span-2"
+        *ngIf="
+          comorbidity.value.comorbidConditions?.comorbidCondition === 'Other'
+        ">
+        <z-form-field>
+          <z-form-label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+            >Specify Pathology</z-form-label
+          >
+          <input
+            z-input
+            formControlName="otherComorbidCondition"
+            appDefaultNull
+            maxlength="50"
+            class="rounded-2xl border-amber-100 bg-white shadow-sm" />
+        </z-form-field>
+      </div>
+
+      <!-- Duration Group -->
+      <div class="md:col-span-5 grid grid-cols-2 gap-4">
+        <z-form-field>
+          <z-form-label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+            >Chronicity Magnitude</z-form-label
+          >
+          <div class="relative group/input">
+            <input
+              z-input
+              formControlName="timePeriodAgo"
+              type="number"
+              min="0"
+              (change)="validateDuration(comorbidity)"
+              class="rounded-2xl bg-gray-50/50 border-gray-100 text-lg font-black text-amber-600 focus:bg-white transition-all pl-12 h-14" />
+            <lucide-icon
+              name="timer"
+              class="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-gray-300 group-focus-within/input:text-amber-600 transition-all"></lucide-icon>
+          </div>
+        </z-form-field>
+
+        <z-form-field>
+          <z-form-label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+            >Timeline Axis</z-form-label
+          >
+          <z-select
+            formControlName="timePeriodUnit"
+            (selectionChange)="validateDuration(comorbidity)"
+            class="rounded-2xl bg-gray-50/50 border-gray-100 hover:bg-white transition-all h-14">
+            <z-option zValue="Days">Diurnal (Days)</z-option>
+            <z-option zValue="Weeks">Septenary (Weeks)</z-option>
+            <z-option zValue="Months">Lunar (Months)</z-option>
+            <z-option zValue="Years">Solar (Years)</z-option>
+          </z-select>
+        </z-form-field>
+      </div>
+
+      <!-- Action Cluster -->
+      <div class="md:col-span-1 flex items-end justify-end gap-3 pb-2">
+        <button
+          *ngIf="i !== 0 || (i === 0 && comorbidity.touched)"
+          (click)="removeComorbidityConcurrentConditions(i, comorbidity)"
+          class="p-2.5 hover:bg-rose-50 rounded-xl text-rose-400 hover:text-rose-500 transition-all duration-300">
+          <lucide-icon name="trash-2" class="size-4"></lucide-icon>
+        </button>
+
+        <z-button
+          *ngIf="isLast"
+          [disabled]="checkValidity(comorbidity)"
+          (click)="addComorbidityConcurrentConditions()"
+          variant="default"
+          class="rounded-xl bg-amber-600 hover:bg-amber-700 text-white size-12 p-0 shadow-lg shadow-amber-200 transition-all">
+          <lucide-icon name="plus" class="size-5"></lucide-icon>
+        </z-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Diagnostic Context -->
+  <div
+    class="p-8 rounded-[3rem] bg-amber-50/50 border border-amber-100/50 animate-in fade-in duration-1000">
+    <div class="flex items-start gap-6">
+      <div class="p-3 bg-white rounded-2xl shadow-sm">
+        <lucide-icon name="info" class="size-5 text-amber-600"></lucide-icon>
+      </div>
+      <div class="space-y-2">
+        <h6
+          class="text-[11px] font-black text-amber-900 uppercase tracking-widest italic">
+          Comorbidity Assessment Protocol
+        </h6>
+        <p
+          class="text-xs text-amber-700/80 font-medium leading-relaxed max-w-3xl">
+          Concurrent conditions significantly impact clinical management and
+          drug-drug interactions. Ensure precise recording of pathological state
+          and chronicity magnitude for optimal risk stratification.
+        </p>
+      </div>
     </div>
   </div>
 </div>

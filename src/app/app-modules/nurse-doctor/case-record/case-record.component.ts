@@ -30,6 +30,7 @@ import { GeneralCaseRecordComponent } from './general-case-record/general-case-r
   selector: 'app-case-record',
   templateUrl: './case-record.component.html',
   styleUrls: ['./case-record.component.css'],
+  standalone: true,
   imports: [NgIf, CancerCaseRecordComponent, GeneralCaseRecordComponent],
 })
 export class CaseRecordComponent implements OnInit {

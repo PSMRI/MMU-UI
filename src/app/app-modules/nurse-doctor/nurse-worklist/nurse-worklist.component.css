@@ -35,7 +35,7 @@ md-input-container {
 }
 
 .visitStatus.first-visit::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -45,7 +45,7 @@ md-input-container {
 }
 
 .visitStatus.revisit::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -88,12 +88,11 @@ ul li div {
 .description {
   padding-top: 15px;
 }
-@media screen  and (min-width:360px) and (max-width:430px) {
-  .fit_to_content{
+@media screen and (min-width: 360px) and (max-width: 430px) {
+  .fit_to_content {
     width: fit-content !important;
-
   }
-  .mat_blue{
+  .mat_blue {
     margin-top: 2px;
   }
 }

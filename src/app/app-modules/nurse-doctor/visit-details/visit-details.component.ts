@@ -29,10 +29,20 @@ import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
+  LucideAngularModule,
+  ClipboardList,
+  Syringe,
+  MessageSquare,
+  CheckCircle,
+  FlaskConical,
+  Activity,
+  Users,
+  Plane,
+  UploadCloud,
+  Stethoscope,
+  ChevronDown,
+} from 'lucide-angular';
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
 import { PatientVisitDetailsComponent } from './visit-details/visit-details.component';
 import { NgIf } from '@angular/common';
 import { CovidVaccinationStatusComponent } from './covid-vaccination-status/covid-vaccination-status.component';
@@ -47,13 +57,13 @@ import { DiseaseconfirmationComponent } from './diseaseconfirmation/diseaseconfi
 
 @Component({
   selector: 'app-visit-details',
+  standalone: true,
   templateUrl: './visit-details.component.html',
   styleUrls: ['./visit-details.component.css'],
   imports: [
-    MatAccordion,
+    ZardAccordionImports,
     ReactiveFormsModule,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
+    LucideAngularModule,
     PatientVisitDetailsComponent,
     NgIf,
     CovidVaccinationStatusComponent,

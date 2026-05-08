@@ -30,32 +30,32 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SetLanguageComponent } from '@/app-modules/core/components/set-language.component';
+import { HttpServiceService } from '@/app-modules/core/services/http-service.service';
 import {
   DoctorService,
   MasterdataService,
   NurseService,
 } from '../../shared/services';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatLabel, MatFormField, MatSelect } from '@angular/material/select';
-import { NgIf, NgFor } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
+import { ZardFormImports } from 'zard-ui';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-contact-history',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardSelectImports,
+    LucideAngularModule,
+  ],
   templateUrl: './contact-history.component.html',
   styleUrls: ['./contact-history.component.css'],
-  imports: [
-    ReactiveFormsModule,
-    MatLabel,
-    NgIf,
-    MatFormField,
-    MatSelect,
-    NgFor,
-    MatOption,
-  ],
 })
 export class ContactHistoryComponent
   implements OnInit, DoCheck, OnChanges, OnDestroy

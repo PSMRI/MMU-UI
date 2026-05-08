@@ -26,7 +26,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-
 import { VitalsComponent } from './vitals.component';
 
 describe('VitalsComponent', () => {

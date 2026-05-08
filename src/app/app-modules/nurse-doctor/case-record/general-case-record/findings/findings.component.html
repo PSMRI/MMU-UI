@@ -74,225 +74,306 @@
             current_language_set?.nurseData?.chiefComplaintsDetails?.description
           }}
         </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.description }}
-        </td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-  </div>
-</div>
-
-<div [formGroup]="generalFindingsForm">
-  <div class="row m-t-10">
-    <div class="col-xs-12" formArrayName="complaints">
-      <div
-        class="row multi-row-select"
-        style="
-          padding-bottom: 30px;
-          background-color: #f0f5f5;
-          margin: 8px 0px 0px 0px;
-        "
-        *ngFor="
-          let complaint of getComplaints();
-          let i = index;
-          let isLast = last;
-          let isOdd = odd
-        "
-        [ngClass]="{ odd: !isOdd }">
-        <ng-container [formGroupName]="i">
-          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-            <mat-form-field [style.width]="'100%'">
-              <mat-label>{{
-                current_language_set?.nurseData?.chiefComplaintsDetails
-                  ?.chiefComplaints
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                type="text"
-                matInput
-                name="chiefComplaint"
-                formControlName="chiefComplaint"
-                #complaintType
-                (keyup)="suggestChiefComplaintList(complaint, i)"
-                (focus)="trackFieldInteraction('Chief Complaint')"
-                [matAutocomplete]="auto" />
-            </mat-form-field>
-
-            <mat-autocomplete
-              #auto="matAutocomplete"
-              [displayWith]="displayChiefComplaint"
-              (optionSelected)="
-                filterComplaints($event, i); getSCTid($event, i); trackFieldInteraction('Chief Complaint Selection')
-              ">
-              <mat-option
-                *ngFor="let compl of suggestedChiefComplaintList[i]"
-                [value]="compl">
-                {{ compl.chiefComplaint }}
-              </mat-option>
-            </mat-autocomplete>
-          </div>
-          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box" [hidden]="true">
-            <mat-form-field [style.width]="'100%'">
-              <mat-label>{{
-                current_language_set?.nurseData?.chiefComplaintsDetails?.SCTID
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                defaultNull
-                readonly="true"
-                name="SCTID"
-                formControlName="conceptID" />
-            </mat-form-field>
-          </div>
-          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-            <mat-form-field [style.width]="'100%'">
-              <mat-label>{{
-                current_language_set?.nurseData?.chiefComplaintsDetails
-                  ?.duration
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                defaultNull
-                allowText="number"
-                maxlength="2"
-                name="duration"
-                formControlName="duration"
-                [disabled]="!complaint.value.chiefComplaint"
-                (change)="validateDuration(complaint)"
-                (focus)="trackFieldInteraction('Duration')" />
-            </mat-form-field>
-          </div>
-          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-            <mat-form-field [style.width]="'100%'">
-              <mat-label>{{
-                current_language_set?.nurseData?.chiefComplaintsDetails
-                  ?.selectunitOfDuration
-              }}</mat-label>
-              <mat-select
-                class="input-full-width mat_label_fix"
-                name="unitOfDuration"
-                formControlName="unitOfDuration"
-                [disabled]="!complaint.value.duration"
-                (selectionChange)="validateDuration(complaint); trackFieldInteraction('Unit Of Duration')">
-                <mat-option value="Hours">Hour(s)</mat-option>
-                <mat-option value="Days">Day(s)</mat-option>
-                <mat-option value="Weeks">Week(s)</mat-option>
-                <mat-option value="Months">Month(s)</mat-option>
-                <mat-option value="Years">Year(s)</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-            <mat-form-field [style.width]="'100%'">
-              <mat-label>{{
-                current_language_set?.nurseData?.chiefComplaintsDetails
-                  ?.description
-              }}</mat-label>
-              <textarea
-                matInput
-                defaultNull
-                allowText="textAreaValidator"
-                matTextareaAutosize
-                name="description"
-                [disabled]="!complaint.value.chiefComplaint"
-                formControlName="description"
-                (focus)="trackFieldInteraction('Description')"></textarea>
-            </mat-form-field>
-          </div>
+        <div class="space-y-8" *ngIf="complaintList.length >= 1">
           <div
-            class="col-xs-12 col-sm-6 col-md-2 col-lg-2 box"
-            style="margin-top: 20px">
-            <button
-              mat-mini-fab
-              [id]="'removeBtn' + i"
-              *ngIf="i !== 0 || (i === 0 && complaint.touched)"
-              (click)="removeCheifComplaint(i, complaint); trackFieldInteraction('Remove Complaint Button')"
-              color="warn"
-              style="margin-right: 3px"
-              class="mat_warn_circle">
-              <span class="material-icons">close</span>
-            </button>
-            <button
-              mat-mini-fab
-              [id]="'addBtn' + i"
-              *ngIf="isLast"
-              [disabled]="checkComplaintFormValidity(complaint)"
-              (click)="addCheifComplaint(); trackFieldInteraction('Add Complaint Button')"
-              color="primary"
-              class="mat_blue_circle">
-              <span class="material-icons">add</span>
-            </button>
+            class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+            <div
+              class="px-8 py-6 bg-gray-50 border-b border-gray-100 flex items-center gap-3">
+              <ng-icon
+                name="lucideClipboardList"
+                class="text-blue-500 text-xl"></ng-icon>
+              <h3 class="text-lg font-bold text-gray-900">
+                Chief Complaints Summary
+              </h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-gray-50/50">
+                    <th
+                      class="px-8 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">
+                      {{
+                        current_language_set?.nurseData?.chiefComplaintsDetails
+                          ?.chiefComplaints
+                      }}
+                    </th>
+                    <th
+                      class="px-8 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">
+                      {{
+                        current_language_set?.nurseData?.chiefComplaintsDetails
+                          ?.duration
+                      }}
+                    </th>
+                    <th
+                      class="px-8 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">
+                      {{
+                        current_language_set?.nurseData?.chiefComplaintsDetails
+                          ?.unitOfDuration
+                      }}
+                    </th>
+                    <th
+                      class="px-8 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">
+                      {{
+                        current_language_set?.nurseData?.chiefComplaintsDetails
+                          ?.description
+                      }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                  <tr
+                    *ngFor="let element of dataSource.data"
+                    class="hover:bg-blue-50/30 transition-colors">
+                    <td class="px-8 py-4 text-gray-700 font-medium">
+                      {{ element?.chiefComplaint }}
+                    </td>
+                    <td class="px-8 py-4 text-gray-600">
+                      {{ element?.duration }}
+                    </td>
+                    <td class="px-8 py-4 text-gray-600">
+                      {{
+                        element.unitOfDuration === 'Hours'
+                          ? 'Hour(s)'
+                          : element.unitOfDuration === 'Days'
+                            ? 'Day(s)'
+                            : element.unitOfDuration === 'Weeks'
+                              ? 'Week(s)'
+                              : element.unitOfDuration === 'Months'
+                                ? 'Month(s)'
+                                : element.unitOfDuration === 'Years'
+                                  ? 'Year(s)'
+                                  : element.unitOfDuration
+                      }}
+                    </td>
+                    <td class="px-8 py-4 text-gray-600">
+                      {{ element.description }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-        </ng-container>
-      </div>
-    </div>
-  </div>
+        </div>
 
-  <div class="row m-t-20">
-    <div class="col-xs-12 col-sm-6">
-      <mat-form-field [style.width]="'100%'">
-        <mat-label>{{ current_language_set?.Find?.otherSymptoms }}</mat-label>
-        <textarea
-          matInput
-          defaultNull
-          allowText="textAreaValidator"
-          matTextareaAutosize
-          maxlength="300"
-          name="otherSymptoms"
-          formControlName="otherSymptoms"
-          (focus)="trackFieldInteraction('Other Symptoms')">
-        </textarea>
-      </mat-form-field>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-      <mat-form-field [style.width]="'100%'">
-        <mat-label>{{
-          current_language_set?.casesheet?.clinicalObs
-        }}</mat-label>
-        <textarea
-          matInput
-          allowText="textAreaValidator"
-          defaultNull
-          matTextareaAutosize
-          maxlength="300"
-          name="clinicalObservation"
-          formControlName="clinicalObservation"
-          (focus)="trackFieldInteraction('Clinical Observation')">
-        </textarea>
-      </mat-form-field>
-    </div>
-    <div class="clearfix"></div>
-    <div class="col-xs-12 col-sm-6">
-      <mat-form-field [style.width]="'100%'">
-        <mat-label>{{
-          current_language_set?.casesheet?.significantFind
-        }}</mat-label>
-        <textarea
-          matInput
-          defaultNull
-          allowText="textAreaValidator"
-          matTextareaAutosize
-          maxlength="300"
-          name="significantFindings"
-          formControlName="significantFindings"
-          (focus)="trackFieldInteraction('Significant Findings')">
-        </textarea>
-      </mat-form-field>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-      <mat-checkbox
-        class="control-label"
-        checked="checked"
-        formControlName="isForHistory"
-        (change)="trackFieldInteraction('Show Findings On Next Visit Checkbox')"
-        >{{
-          current_language_set?.Find?.showThisFindingsOnNextVisit
-        }}</mat-checkbox
-      >
-    </div>
+        <div class="space-y-8 mt-10" [formGroup]="generalFindingsForm">
+          <div class="space-y-6">
+            <div class="flex items-center justify-between">
+              <h3
+                class="text-xl font-bold text-gray-900 flex items-center gap-3">
+                <ng-icon
+                  name="lucidePlusCircle"
+                  class="text-blue-500"></ng-icon>
+                Active Chief Complaints
+              </h3>
+            </div>
+
+            <div formArrayName="complaints" class="grid grid-cols-1 gap-6">
+              <div
+                *ngFor="
+                  let complaint of getComplaints();
+                  let i = index;
+                  let isLast = last
+                "
+                class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 space-y-6 transition-all hover:border-blue-200">
+                <ng-container [formGroupName]="i">
+                  <div
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Chief Complaint Search -->
+                    <z-form-field>
+                      <z-label>{{
+                        current_language_set?.nurseData?.chiefComplaintsDetails
+                          ?.chiefComplaints
+                      }}</z-label>
+                      <div class="relative">
+                        <input
+                          z-input
+                          autocomplete="off"
+                          formControlName="chiefComplaint"
+                          #complaintType
+                          (keyup)="suggestChiefComplaintList(complaint, i)"
+                          (focus)="trackFieldInteraction('Chief Complaint')"
+                          placeholder="Type to search complaints..." />
+
+                        <div
+                          *ngIf="suggestedChiefComplaintList[i]?.length > 0"
+                          class="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden max-h-60 overflow-y-auto">
+                          <button
+                            *ngFor="let compl of suggestedChiefComplaintList[i]"
+                            type="button"
+                            class="w-full px-4 py-3 text-left hover:bg-blue-50 text-sm border-b border-gray-50 last:border-none transition-colors"
+                            (click)="
+                              filterComplaints({ option: { value: compl } }, i);
+                              getSCTid({ option: { value: compl } }, i);
+                              trackFieldInteraction('Chief Complaint Selection')
+                            ">
+                            {{ compl.chiefComplaint }}
+                          </button>
+                        </div>
+                      </div>
+                    </z-form-field>
+
+                    <!-- Duration -->
+                    <z-form-field>
+                      <z-label>{{
+                        current_language_set?.nurseData?.chiefComplaintsDetails
+                          ?.duration
+                      }}</z-label>
+                      <input
+                        z-input
+                        autocomplete="off"
+                        formControlName="duration"
+                        maxlength="2"
+                        [disabled]="!complaint.value.chiefComplaint"
+                        (change)="validateDuration(complaint)"
+                        (focus)="trackFieldInteraction('Duration')"
+                        placeholder="Ex: 5" />
+                    </z-form-field>
+
+                    <!-- Unit of Duration -->
+                    <z-form-field>
+                      <z-label>{{
+                        current_language_set?.nurseData?.chiefComplaintsDetails
+                          ?.selectunitOfDuration
+                      }}</z-label>
+                      <z-select
+                        formControlName="unitOfDuration"
+                        [disabled]="!complaint.value.duration"
+                        (selectionChange)="
+                          validateDuration(complaint);
+                          trackFieldInteraction('Unit Of Duration')
+                        "
+                        placeholder="Select unit">
+                        <z-option zValue="Hours">Hour(s)</z-option>
+                        <z-option zValue="Days">Day(s)</z-option>
+                        <z-option zValue="Weeks">Week(s)</z-option>
+                        <z-option zValue="Months">Month(s)</z-option>
+                        <z-option zValue="Years">Year(s)</z-option>
+                      </z-select>
+                    </z-form-field>
+
+                    <!-- Description -->
+                    <z-form-field class="md:col-span-2 lg:col-span-2">
+                      <z-label>{{
+                        current_language_set?.nurseData?.chiefComplaintsDetails
+                          ?.description
+                      }}</z-label>
+                      <textarea
+                        z-input
+                        rows="2"
+                        formControlName="description"
+                        [disabled]="!complaint.value.chiefComplaint"
+                        (focus)="trackFieldInteraction('Description')"
+                        placeholder="Additional notes about the complaint..."></textarea>
+                    </z-form-field>
+
+                    <!-- Action Buttons -->
+                    <div class="flex items-center gap-4 pt-7 lg:justify-end">
+                      <button
+                        z-button
+                        variant="ghost"
+                        size="icon"
+                        type="button"
+                        class="text-red-500 hover:bg-red-50"
+                        *ngIf="i !== 0 || (i === 0 && complaint.touched)"
+                        (click)="
+                          removeCheifComplaint(i, complaint);
+                          trackFieldInteraction('Remove Complaint Button')
+                        "
+                        zTooltip="Remove">
+                        <ng-icon name="lucideTrash2" class="text-xl"></ng-icon>
+                      </button>
+                      <button
+                        z-button
+                        variant="ghost"
+                        size="icon"
+                        type="button"
+                        class="text-blue-600 hover:bg-blue-50"
+                        *ngIf="isLast"
+                        [disabled]="checkComplaintFormValidity(complaint)"
+                        (click)="
+                          addCheifComplaint();
+                          trackFieldInteraction('Add Complaint Button')
+                        "
+                        zTooltip="Add More">
+                        <ng-icon
+                          name="lucidePlusCircle"
+                          class="text-xl"></ng-icon>
+                      </button>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Observations Section -->
+          <section
+            class="bg-gray-50/50 rounded-3xl p-8 border border-gray-100 space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <z-form-field>
+                <z-label>{{
+                  current_language_set?.Find?.otherSymptoms
+                }}</z-label>
+                <textarea
+                  z-input
+                  rows="4"
+                  formControlName="otherSymptoms"
+                  maxlength="300"
+                  (focus)="trackFieldInteraction('Other Symptoms')"
+                  placeholder="Describe other symptoms..."></textarea>
+              </z-form-field>
+
+              <z-form-field>
+                <z-label>{{
+                  current_language_set?.casesheet?.clinicalObs
+                }}</z-label>
+                <textarea
+                  z-input
+                  rows="4"
+                  formControlName="clinicalObservation"
+                  maxlength="300"
+                  (focus)="trackFieldInteraction('Clinical Observation')"
+                  placeholder="Clinical observations..."></textarea>
+              </z-form-field>
+
+              <z-form-field>
+                <z-label>{{
+                  current_language_set?.casesheet?.significantFind
+                }}</z-label>
+                <textarea
+                  z-input
+                  rows="4"
+                  formControlName="significantFindings"
+                  maxlength="300"
+                  (focus)="trackFieldInteraction('Significant Findings')"
+                  placeholder="Key findings..."></textarea>
+              </z-form-field>
+
+              <div class="flex items-end pb-4">
+                <div class="flex items-center gap-3 group cursor-pointer">
+                  <input
+                    type="checkbox"
+                    id="isForHistory"
+                    formControlName="isForHistory"
+                    (change)="
+                      trackFieldInteraction(
+                        'Show Findings On Next Visit Checkbox'
+                      )
+                    "
+                    class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer" />
+                  <label
+                    for="isForHistory"
+                    class="text-sm font-medium text-gray-700 cursor-pointer group-hover:text-blue-600 transition-colors">
+                    {{
+                      current_language_set?.Find?.showThisFindingsOnNextVisit
+                    }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </ng-container>
+    </table>
   </div>
 </div>

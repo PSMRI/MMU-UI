@@ -32,11 +32,11 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CameraService } from '../../../../core/services/camera.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
 import { NgIf } from '@angular/common';
-import { MatInput } from '@angular/material/input';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
@@ -45,14 +45,11 @@ import { StringValidatorDirective } from '../../../../core/directives/stringVali
   styleUrls: ['./oral-examination.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
-    MatRadioGroup,
-    MatRadioButton,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
     NgIf,
-    MatInput,
     StringValidatorDirective,
   ],
 })

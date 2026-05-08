@@ -25,10 +25,11 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { ZardInputImports } from '@/components/ui/input/input.imports';
 import { NgIf } from '@angular/common';
-import { MatFormField, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
@@ -37,12 +38,11 @@ import { StringValidatorDirective } from '../../../../core/directives/stringVali
   styleUrls: ['./head-to-toe-examination.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatRadioGroup,
-    MatRadioButton,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardLabelImports,
+    ZardInputImports,
     NgIf,
-    MatFormField,
-    MatLabel,
-    MatInput,
     StringValidatorDirective,
   ],
 })

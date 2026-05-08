@@ -42,33 +42,42 @@ import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { NgFor, NgClass, NgIf } from '@angular/common';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory, lucidePlus, lucideX } from '@ng-icons/lucide';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-general-other-vaccines',
+  standalone: true,
   templateUrl: './other-vaccines.component.html',
   styleUrls: ['./other-vaccines.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatTooltip,
-    MatIcon,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardLabelImports,
+    ZardSelectImports,
+    NgIf,
     NgFor,
     NgClass,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
-    NgIf,
-    MatInput,
+    NgIcon,
     NullDefaultValueDirective,
     StringValidatorDirective,
+  ],
+  providers: [
+    provideIcons({
+      lucideHistory,
+      lucidePlus,
+      lucideX,
+    }),
   ],
 })
 export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {

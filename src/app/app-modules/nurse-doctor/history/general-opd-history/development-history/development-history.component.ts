@@ -33,25 +33,52 @@ import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { NgFor } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import {
+  LucideAngularModule,
+  BrainCircuit,
+  History,
+  Move,
+  Hand,
+  Smile,
+  MessageSquare,
+  AlertTriangle,
+  Info,
+} from 'lucide-angular';
 
 @Component({
   selector: 'app-general-development-history',
+  standalone: true,
   templateUrl: './development-history.component.html',
   styleUrls: ['./development-history.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatTooltip,
-    MatIcon,
-    MatFormField,
-    MatLabel,
-    MatSelect,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardLabelImports,
+    ZardSelectImports,
+    NgIf,
     NgFor,
-    MatOption,
+    NgClass,
+    LucideAngularModule,
+  ],
+  providers: [
+    LucideAngularModule.pick({
+      BrainCircuit,
+      History,
+      Move,
+      Hand,
+      Smile,
+      MessageSquare,
+      AlertTriangle,
+      Info,
+    }).providers,
   ],
 })
 export class DevelopmentHistoryComponent implements OnInit, DoCheck, OnDestroy {

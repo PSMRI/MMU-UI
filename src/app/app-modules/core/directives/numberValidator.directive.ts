@@ -24,6 +24,7 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 @Directive({
   selector:
     '[app-allowMax][formControlName],[allowMax][formControl],[allowMax][ngModel],[allowMax]',
+  standalone: true,
 })
 export class NumberValidatorDirective {
   @Input()

@@ -37,27 +37,41 @@ import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { NgFor } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import {
+  LucideAngularModule,
+  Activity,
+  History,
+  Armchair,
+  Info,
+} from 'lucide-angular';
+
 @Component({
   selector: 'app-physical-activity-history',
+  standalone: true,
   templateUrl: './physical-activity-history.component.html',
   styleUrls: ['./physical-activity-history.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatTooltip,
-    MatIcon,
-    MatRadioGroup,
-    MatRadioButton,
-    MatFormField,
-    MatLabel,
-    MatSelect,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardRadioImports,
+    ZardLabelImports,
+    ZardSelectImports,
+    NgIf,
     NgFor,
-    MatOption,
+    NgClass,
+    LucideAngularModule,
+  ],
+  providers: [
+    LucideAngularModule.pick({ Activity, History, Armchair, Info }).providers,
   ],
 })
 export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {

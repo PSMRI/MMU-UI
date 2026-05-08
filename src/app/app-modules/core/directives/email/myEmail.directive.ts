@@ -24,6 +24,7 @@ import { Directive, forwardRef, HostListener } from '@angular/core';
 import { NG_VALIDATORS, Validator, AbstractControl } from '@angular/forms';
 
 @Directive({
+  standalone: true,
   selector: '[appValidateEmail]',
   providers: [
     {

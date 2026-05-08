@@ -1,143 +1,125 @@
-<div [formGroup]="obstetricFormulaForm" class="row m-t-20">
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    *ngIf="
-      (gravidaStatus !== null &&
-        gravidaStatus !== undefined &&
-        gravidaStatus) ||
-      (gravidaStatus !== null && gravidaStatus !== undefined && !gravidaStatus)
-    ">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
-        current_language_set?.casesheet?.gravida
-      }}</mat-label>
-      <input
-        autocomplete="off"
-        matInput
-        appDefaultNull
-        allowText="number"
-        maxlength="2"
-        name="gravida_G"
-        formControlName="gravida_G"
-        readonly />
-    </mat-form-field>
+<div
+  [formGroup]="obstetricFormulaForm"
+  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pt-4">
+  <!-- Gravida (G) -->
+  <div *ngIf="gravidaStatus !== null && gravidaStatus !== undefined">
+    <z-form-field>
+      <z-label>{{ current_language_set?.casesheet?.gravida }}</z-label>
+      <z-input formControlName="gravida_G" [disabled]="true" placeholder="G">
+      </z-input>
+    </z-form-field>
   </div>
+
+  <!-- Term Deliveries (T) -->
   <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     *ngIf="
       gravidaStatus !== null && gravidaStatus !== undefined && !gravidaStatus
     ">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
+    <z-form-field>
+      <z-label>{{
         current_language_set?.ancData?.obstetricDeatils?.termDeliveries
-      }}</mat-label>
-      <input
-        autocomplete="off"
-        matInput
-        appDefaultNull
-        allowText="number"
-        maxlength="1"
-        name="termDeliveries_T"
+      }}</z-label>
+      <z-input
         formControlName="termDeliveries_T"
-        (input)="calculateGravida('termDeliveries_T')" />
-    </mat-form-field>
+        allowText="number"
+        maxlength="1"
+        (input)="calculateGravida('termDeliveries_T')"
+        placeholder="Enter term deliveries">
+      </z-input>
+    </z-form-field>
   </div>
+
+  <!-- Preterm Deliveries (P) -->
   <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     *ngIf="
       gravidaStatus !== null && gravidaStatus !== undefined && !gravidaStatus
     ">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
+    <z-form-field>
+      <z-label>{{
         current_language_set?.ancData?.obstetricDeatils?.pretermDeliveries
-      }}</mat-label>
-      <input
-        autocomplete="off"
-        matInput
-        appDefaultNull
-        allowText="number"
-        maxlength="1"
-        name="pretermDeliveries_P"
+      }}</z-label>
+      <z-input
         formControlName="pretermDeliveries_P"
-        (input)="calculateGravida('pretermDeliveries_P')" />
-    </mat-form-field>
+        allowText="number"
+        maxlength="1"
+        (input)="calculateGravida('pretermDeliveries_P')"
+        placeholder="Enter preterm deliveries">
+      </z-input>
+    </z-form-field>
   </div>
+
+  <!-- Abortions (A) -->
   <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     *ngIf="
       gravidaStatus !== null && gravidaStatus !== undefined && !gravidaStatus
     ">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
+    <z-form-field>
+      <z-label>{{
         current_language_set?.ancData?.obstetricDeatils?.abortions
-      }}</mat-label>
-      <input
-        autocomplete="off"
-        matInput
-        appDefaultNull
-        allowText="number"
-        maxlength="1"
-        name="abortions_A"
+      }}</z-label>
+      <z-input
         formControlName="abortions_A"
-        (input)="calculateGravida('abortions_A')" />
-    </mat-form-field>
-  </div>
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    *ngIf="
-      gravidaStatus !== null && gravidaStatus !== undefined && !gravidaStatus
-    ">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
-        current_language_set?.stillBirth
-      }}</mat-label>
-      <input
-        autocomplete="off"
-        matInput
-        appDefaultNull
         allowText="number"
         maxlength="1"
-        name="stillBirth"
-        formControlName="stillBirth"
-        (input)="calculateGravida('stillBirth')" />
-    </mat-form-field>
+        (input)="calculateGravida('abortions_A')"
+        placeholder="Enter abortions">
+      </z-input>
+    </z-form-field>
   </div>
+
+  <!-- Still Birth (S) -->
   <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     *ngIf="
       gravidaStatus !== null && gravidaStatus !== undefined && !gravidaStatus
     ">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
+    <z-form-field>
+      <z-label>{{ current_language_set?.stillBirth }}</z-label>
+      <z-input
+        formControlName="stillBirth"
+        allowText="number"
+        maxlength="1"
+        (input)="calculateGravida('stillBirth')"
+        placeholder="Enter still births">
+      </z-input>
+    </z-form-field>
+  </div>
+
+  <!-- Living Children (L) -->
+  <div
+    *ngIf="
+      gravidaStatus !== null && gravidaStatus !== undefined && !gravidaStatus
+    ">
+    <z-form-field>
+      <z-label>{{
         current_language_set?.ancData?.obstetricDeatils?.livingChildren
-      }}</mat-label>
-      <input
-        autocomplete="off"
-        matInput
-        appDefaultNull
+      }}</z-label>
+      <z-input
+        formControlName="livebirths_L"
         allowText="number"
         maxlength="2"
         allowMax="18"
-        name="livebirths_L"
-        formControlName="livebirths_L"
-        (input)="checkLivingChildren(livebirths_L)" />
-    </mat-form-field>
+        (input)="checkLivingChildren(livebirths_L)"
+        placeholder="Enter living children">
+      </z-input>
+    </z-form-field>
   </div>
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
+
+  <!-- Blood Group -->
+  <div>
+    <z-form-field>
+      <z-label>{{
         current_language_set?.ancData?.obstetricDeatils?.bloodGroupType
-      }}</mat-label>
-      <mat-select
-        name="bloodGroup"
+      }}</z-label>
+      <z-select
         formControlName="bloodGroup"
-        [disabled]="disableBloodGroup">
-        <mat-option
+        [disabled]="disableBloodGroup"
+        placeholder="Select blood group">
+        <z-option
           *ngFor="let bloodGroups of selectBloodGroupType"
-          [value]="bloodGroups.bloodGroup">
+          [zValue]="bloodGroups.bloodGroup">
           {{ bloodGroups.bloodGroup }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        </z-option>
+      </z-select>
+    </z-form-field>
   </div>
 </div>

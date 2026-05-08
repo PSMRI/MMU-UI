@@ -35,35 +35,46 @@ import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { NgFor, NgIf } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
-import { MatInput } from '@angular/material/input';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import {
+  LucideAngularModule,
+  Utensils,
+  History,
+  AlertTriangle,
+  Info,
+} from 'lucide-angular';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-general-feeding-history',
+  standalone: true,
   templateUrl: './feeding-history.component.html',
   styleUrls: ['./feeding-history.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatTooltip,
-    MatIcon,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    NgFor,
-    MatOption,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardLabelImports,
+    ZardSelectImports,
+    ZardRadioImports,
     NgIf,
-    MatRadioGroup,
-    MatRadioButton,
-    MatInput,
+    NgFor,
+    NgClass,
+    LucideAngularModule,
     NullDefaultValueDirective,
     StringValidatorDirective,
+  ],
+  providers: [
+    LucideAngularModule.pick({ Utensils, History, AlertTriangle, Info })
+      .providers,
   ],
 })
 export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {

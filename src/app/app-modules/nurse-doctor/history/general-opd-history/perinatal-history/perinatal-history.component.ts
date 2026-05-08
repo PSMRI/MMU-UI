@@ -33,33 +33,44 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { NgFor, NgIf } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory, lucidePlus, lucideX } from '@ng-icons/lucide';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 import { NumberValidatorDirective } from '../../../../core/directives/numberValidator.directive';
+
 @Component({
   selector: 'app-general-perinatal-history',
+  standalone: true,
   templateUrl: './perinatal-history.component.html',
   styleUrls: ['./perinatal-history.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatTooltip,
-    MatIcon,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    NgFor,
-    MatOption,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardLabelImports,
+    ZardSelectImports,
     NgIf,
-    MatInput,
+    NgFor,
+    NgClass,
+    NgIcon,
     NullDefaultValueDirective,
     StringValidatorDirective,
     NumberValidatorDirective,
+  ],
+  providers: [
+    provideIcons({
+      lucideHistory,
+      lucidePlus,
+      lucideX,
+    }),
   ],
 })
 export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {

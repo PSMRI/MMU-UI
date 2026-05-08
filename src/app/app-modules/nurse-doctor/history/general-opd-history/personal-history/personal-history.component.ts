@@ -52,51 +52,54 @@ import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/pr
 import { AllergenSearchComponent } from 'src/app/app-modules/core/components/allergen-search/allergen-search.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { NgIf, NgFor, NgClass } from '@angular/common';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardCardImports } from '@/components/ui/card/card.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { MatRadioModule } from '@angular/material/radio';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  MatFormField,
-  MatLabel,
-  MatSelect,
-  MatSuffix,
-} from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import {
-  MatCard,
-  MatCardHeader,
-  MatCardTitle,
-  MatCardContent,
-} from '@angular/material/card';
-import { MatInput } from '@angular/material/input';
+  lucideHistory,
+  lucidePlus,
+  lucideX,
+  lucideSearch,
+} from '@ng-icons/lucide';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-general-personal-history',
+  standalone: true,
   templateUrl: './personal-history.component.html',
   styleUrls: ['./personal-history.component.css'],
   imports: [
     ReactiveFormsModule,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardCardImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
     NgIf,
-    MatTooltip,
-    MatIcon,
-    MatRadioGroup,
-    MatRadioButton,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
-    MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatCardContent,
     NgFor,
     NgClass,
-    MatInput,
+    NgIcon,
+    LucideAngularModule,
     NullDefaultValueDirective,
     StringValidatorDirective,
-    MatSuffix,
+  ],
+  providers: [
+    provideIcons({
+      lucideHistory,
+      lucidePlus,
+      lucideX,
+      lucideSearch,
+    }),
   ],
 })
 export class GeneralPersonalHistoryComponent
@@ -248,7 +251,7 @@ export class GeneralPersonalHistoryComponent
             this.personalHistoryData.riskySexualPracticesStatus !== null
           ) {
             this.personalHistoryData.riskySexualPracticesStatus =
-              this.personalHistoryData.riskySexualPracticesStatus == '1'
+              this.personalHistoryData.riskySexualPracticesStatus === '1'
                 ? true
                 : false;
           }

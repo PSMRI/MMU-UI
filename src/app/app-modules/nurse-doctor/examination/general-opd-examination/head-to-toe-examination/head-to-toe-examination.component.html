@@ -1,335 +1,240 @@
-<div class="row m-t-20" [formGroup]="headToToeExaminationDataForm">
-  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 box">
-    <div class="form-group">
-      <label class="control-label" for="headToToeExamination">{{
-        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
-          ?.headexamination
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -8px"
+<div class="space-y-6" [formGroup]="headToToeExaminationDataForm">
+  <!-- Main Exam Status -->
+  <div class="bg-zinc-50 p-6 rounded-xl border border-zinc-200 shadow-sm">
+    <div class="space-y-2">
+      <label class="text-sm font-medium text-zinc-700">
+        {{
+          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
+            ?.headexamination
+        }}
+      </label>
+      <z-radio-group
         id="headtoToeExam"
-        name="headtoToeExam"
         formControlName="headtoToeExam"
-        (change)="checkWithHeadToToe(); trackFieldInteraction('Head To Toe Exam')">
-        <mat-radio-button color="primary" value="Normal">{{
+        (change)="
+          checkWithHeadToToe(); trackFieldInteraction('Head To Toe Exam')
+        "
+        class="flex gap-4">
+        <z-radio zValue="Normal">{{
           currentLanguageSet?.common?.normal
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" value="Abnormal">{{
+        }}</z-radio>
+        <z-radio zValue="Abnormal">{{
           currentLanguageSet?.common?.abnormal
-        }}</mat-radio-button>
-      </mat-radio-group>
+        }}</z-radio>
+      </z-radio-group>
     </div>
   </div>
-  <div class="row" style="display: flex">
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'">
-      <div class="form-group">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-              ?.headToToe?.head
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            allowText="textAreaValidator"
-            matInput
-            defaultNull
-            matTextareaAutosize
-            id="head"
-            name="head"
-            formControlName="head"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Head')" />
-        </mat-form-field>
-      </div>
-    </div>
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'">
-      <div class="form-group">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-              ?.headToToe?.eyes
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            allowText="textAreaValidator"
-            matInput
-            defaultNull
-            matTextareaAutosize
-            id="eyes"
-            name="eyes"
-            formControlName="eyes"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Eyes')" />
-        </mat-form-field>
-      </div>
-    </div>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'">
-      <div class="form-group">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-              ?.headToToe?.ears
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            allowText="textAreaValidator"
-            matInput
-            defaultNull
-            matTextareaAutosize
-            id="ears"
-            name="ears"
-            formControlName="ears"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Ears')" />
-        </mat-form-field>
-      </div>
-    </div>
+  <!-- Abnormal Findings Grid -->
+  <div
+    *ngIf="headtoToeExam === 'Abnormal'"
+    class="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in slide-in-from-top-2 duration-300">
+    <!-- Head -->
+    <z-form-field>
+      <z-label>{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
+          ?.head
+      }}</z-label>
+      <input
+        z-input
+        autocomplete="off"
+        allowText="textAreaValidator"
+        id="head"
+        formControlName="head"
+        maxlength="50"
+        (focus)="trackFieldInteraction('Head')" />
+    </z-form-field>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'">
-      <div class="form-group">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-              ?.headToToe?.nose
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            allowText="textAreaValidator"
-            matInput
-            defaultNull
-            matTextareaAutosize
-            id="nose"
-            name="nose"
-            formControlName="nose"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Nose')" />
-        </mat-form-field>
-      </div>
-    </div>
+    <!-- Eyes -->
+    <z-form-field>
+      <z-label>{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
+          ?.eyes
+      }}</z-label>
+      <input
+        z-input
+        autocomplete="off"
+        allowText="textAreaValidator"
+        id="eyes"
+        formControlName="eyes"
+        maxlength="50"
+        (focus)="trackFieldInteraction('Eyes')" />
+    </z-form-field>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'">
-      <div class="form-group">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-              ?.headToToe?.oralcavity
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            allowText="textAreaValidator"
-            matInput
-            defaultNull
-            matTextareaAutosize
-            id="oralCavity"
-            name="oralCavity"
-            formControlName="oralCavity"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Oral Cavity')" />
-        </mat-form-field>
-      </div>
-    </div>
+    <!-- Ears -->
+    <z-form-field>
+      <z-label>{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
+          ?.ears
+      }}</z-label>
+      <input
+        z-input
+        autocomplete="off"
+        allowText="textAreaValidator"
+        id="ears"
+        formControlName="ears"
+        maxlength="50"
+        (focus)="trackFieldInteraction('Ears')" />
+    </z-form-field>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'">
-      <div class="form-group">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-              ?.headToToe?.throat
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            allowText="textAreaValidator"
-            matInput
-            defaultNull
-            matTextareaAutosize
-            id="throat"
-            name="throat"
-            formControlName="throat"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Throat')" />
-        </mat-form-field>
-      </div>
-    </div>
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'">
-      <div class="form-group">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-              ?.headToToe?.breast
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            allowText="textAreaValidator"
-            matInput
-            defaultNull
-            matTextareaAutosize
-            id="breastAndNipples"
-            name="breastAndNipples"
-            formControlName="breastAndNipples"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Breast And Nipples')" />
-        </mat-form-field>
-      </div>
-    </div>
+    <!-- Nose -->
+    <z-form-field>
+      <z-label>{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
+          ?.nose
+      }}</z-label>
+      <input
+        z-input
+        autocomplete="off"
+        allowText="textAreaValidator"
+        id="nose"
+        formControlName="nose"
+        maxlength="50"
+        (focus)="trackFieldInteraction('Nose')" />
+    </z-form-field>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'">
-      <div class="form-group">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-              ?.headToToe?.trunk
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            allowText="textAreaValidator"
-            matInput
-            defaultNull
-            matTextareaAutosize
-            id="trunk"
-            name="trunk"
-            formControlName="trunk"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Trunk')" />
-        </mat-form-field>
-      </div>
-    </div>
+    <!-- Oral Cavity -->
+    <z-form-field>
+      <z-label>{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
+          ?.oralcavity
+      }}</z-label>
+      <input
+        z-input
+        autocomplete="off"
+        allowText="textAreaValidator"
+        id="oralCavity"
+        formControlName="oralCavity"
+        maxlength="50"
+        (focus)="trackFieldInteraction('Oral Cavity')" />
+    </z-form-field>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'">
-      <div class="form-group">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-              ?.headToToe?.upperlimbs
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            allowText="textAreaValidator"
-            matInput
-            defaultNull
-            matTextareaAutosize
-            id="upperLimbs"
-            name="upperLimbs"
-            formControlName="upperLimbs"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Upper Limbs')" />
-        </mat-form-field>
-      </div>
-    </div>
+    <!-- Throat -->
+    <z-form-field>
+      <z-label>{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
+          ?.throat
+      }}</z-label>
+      <input
+        z-input
+        autocomplete="off"
+        allowText="textAreaValidator"
+        id="throat"
+        formControlName="throat"
+        maxlength="50"
+        (focus)="trackFieldInteraction('Throat')" />
+    </z-form-field>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'">
-      <div class="form-group">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-              ?.headToToe?.lowerlimbs
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            allowText="textAreaValidator"
-            matInput
-            defaultNull
-            matTextareaAutosize
-            id="lowerLimbs"
-            name="lowerLimbs"
-            formControlName="lowerLimbs"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Lower Limbs')" />
-        </mat-form-field>
-      </div>
-    </div>
+    <!-- Breast -->
+    <z-form-field>
+      <z-label>{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
+          ?.breast
+      }}</z-label>
+      <input
+        z-input
+        autocomplete="off"
+        allowText="textAreaValidator"
+        id="breastAndNipples"
+        formControlName="breastAndNipples"
+        maxlength="50"
+        (focus)="trackFieldInteraction('Breast And Nipples')" />
+    </z-form-field>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'">
-      <div class="form-group">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-              ?.headToToe?.skin
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            allowText="textAreaValidator"
-            matInput
-            defaultNull
-            matTextareaAutosize
-            id="skin"
-            name="skin"
-            formControlName="skin"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Skin')" />
-        </mat-form-field>
-      </div>
-    </div>
+    <!-- Trunk -->
+    <z-form-field>
+      <z-label>{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
+          ?.trunk
+      }}</z-label>
+      <input
+        z-input
+        autocomplete="off"
+        allowText="textAreaValidator"
+        id="trunk"
+        formControlName="trunk"
+        maxlength="50"
+        (focus)="trackFieldInteraction('Trunk')" />
+    </z-form-field>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'">
-      <div class="form-group">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-              ?.headToToe?.hairs
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            allowText="textAreaValidator"
-            matInput
-            defaultNull
-            matTextareaAutosize
-            id="hair"
-            name="hair"
-            formControlName="hair"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Hair')" />
-        </mat-form-field>
-      </div>
-    </div>
+    <!-- Upper Limbs -->
+    <z-form-field>
+      <z-label>{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
+          ?.upperlimbs
+      }}</z-label>
+      <input
+        z-input
+        autocomplete="off"
+        allowText="textAreaValidator"
+        id="upperLimbs"
+        formControlName="upperLimbs"
+        maxlength="50"
+        (focus)="trackFieldInteraction('Upper Limbs')" />
+    </z-form-field>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-6 col-lg-6 box"
-      *ngIf="headtoToeExam === 'Abnormal'">
-      <div class="form-group">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-              ?.headToToe?.nails
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            allowText="textAreaValidator"
-            matInput
-            defaultNull
-            matTextareaAutosize
-            id="nails"
-            name="nails"
-            formControlName="nails"
-            maxlength="50"
-            (focus)="trackFieldInteraction('Nails')" />
-        </mat-form-field>
-      </div>
-    </div>
+    <!-- Lower Limbs -->
+    <z-form-field>
+      <z-label>{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
+          ?.lowerlimbs
+      }}</z-label>
+      <input
+        z-input
+        autocomplete="off"
+        allowText="textAreaValidator"
+        id="lowerLimbs"
+        formControlName="lowerLimbs"
+        maxlength="50"
+        (focus)="trackFieldInteraction('Lower Limbs')" />
+    </z-form-field>
+
+    <!-- Skin -->
+    <z-form-field>
+      <z-label>{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
+          ?.skin
+      }}</z-label>
+      <input
+        z-input
+        autocomplete="off"
+        allowText="textAreaValidator"
+        id="skin"
+        formControlName="skin"
+        maxlength="50"
+        (focus)="trackFieldInteraction('Skin')" />
+    </z-form-field>
+
+    <!-- Hair -->
+    <z-form-field>
+      <z-label>{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
+          ?.hairs
+      }}</z-label>
+      <input
+        z-input
+        autocomplete="off"
+        allowText="textAreaValidator"
+        id="hair"
+        formControlName="hair"
+        maxlength="50"
+        (focus)="trackFieldInteraction('Hair')" />
+    </z-form-field>
+
+    <!-- Nails -->
+    <z-form-field>
+      <z-label>{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
+          ?.nails
+      }}</z-label>
+      <input
+        z-input
+        autocomplete="off"
+        allowText="textAreaValidator"
+        id="nails"
+        formControlName="nails"
+        maxlength="50"
+        (focus)="trackFieldInteraction('Nails')" />
+    </z-form-field>
   </div>
 </div>

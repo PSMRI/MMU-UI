@@ -27,11 +27,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
 import { NgIf } from '@angular/common';
 import { GastroIntestinalSystemComponent } from './gastro-intestinal-system/gastro-intestinal-system.component';
 import { CardioVascularSystemComponent } from './cardio-vascular-system/cardio-vascular-system.component';
@@ -46,10 +42,8 @@ import { ObstetricExaminationComponent } from './obstetric-examination/obstetric
   templateUrl: './systemic-examination.component.html',
   styleUrls: ['./systemic-examination.component.css'],
   imports: [
-    MatAccordion,
+    ZardAccordionImports,
     NgIf,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
     GastroIntestinalSystemComponent,
     CardioVascularSystemComponent,
     RespiratorySystemComponent,

@@ -24,11 +24,17 @@ import { Component, Input, DoCheck } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { ZardAccordionImports } from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
+  lucidePill,
+  lucideFileText,
+  lucideStethoscope,
+  lucideFlaskConical,
+  lucideClipboardList,
+  lucideHistory,
+} from '@ng-icons/lucide';
 import { PreviousSignificiantFindingsComponent } from './previous-significiant-findings/previous-significiant-findings.component';
 import { PreviousVisitDetailsComponent } from './previous-visit-details/previous-visit-details.component';
 import { FindingsComponent } from './findings/findings.component';
@@ -36,15 +42,17 @@ import { DiagnosisComponent } from './diagnosis/diagnosis.component';
 import { DoctorInvestigationsComponent } from './doctor-investigations/doctor-investigations.component';
 import { PrescriptionComponent } from './prescription/prescription.component';
 import { TestAndRadiologyComponent } from './test-and-radiology/test-and-radiology.component';
+
 @Component({
   selector: 'app-general-case-record',
   templateUrl: './general-case-record.component.html',
   styleUrls: ['./general-case-record.component.css'],
+  standalone: true,
   imports: [
-    MatAccordion,
     ReactiveFormsModule,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
+    ZardAccordionImports,
+    LucideAngularModule,
+    NgIcon,
     PreviousSignificiantFindingsComponent,
     PreviousVisitDetailsComponent,
     FindingsComponent,
@@ -52,6 +60,16 @@ import { TestAndRadiologyComponent } from './test-and-radiology/test-and-radiolo
     DoctorInvestigationsComponent,
     PrescriptionComponent,
     TestAndRadiologyComponent,
+  ],
+  providers: [
+    provideIcons({
+      lucidePill,
+      lucideFileText,
+      lucideStethoscope,
+      lucideFlaskConical,
+      lucideClipboardList,
+      lucideHistory,
+    }),
   ],
 })
 export class GeneralCaseRecordComponent implements DoCheck {

@@ -1,73 +1,143 @@
-<mat-accordion [formGroup]="generalCaseRecordForm">
-  <mat-expansion-panel expanded="true">
-    <mat-expansion-panel-header>
-      <h5>
-        {{
-          current_language_set?.Significantfindingsdetails
-            ?.previoussignificantfindings
-        }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-previous-significiant-findings></app-previous-significiant-findings>
-  </mat-expansion-panel>
+<div class="space-y-6" [formGroup]="generalCaseRecordForm">
+  <z-accordion multiple class="modern-accordion">
+    <!-- Previous Significant Findings -->
+    <z-accordion-item [expanded]="true">
+      <z-accordion-trigger>
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-blue-100 rounded-lg">
+            <ng-icon name="lucideClipboardList" class="text-blue-600"></ng-icon>
+          </div>
+          <span class="text-lg font-bold text-gray-900">
+            {{
+              current_language_set?.Significantfindingsdetails
+                ?.previoussignificantfindings
+            }}
+          </span>
+        </div>
+      </z-accordion-trigger>
+      <div class="p-6">
+        <app-previous-significiant-findings></app-previous-significiant-findings>
+      </div>
+    </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.previousvisit?.Previousvisitdetails }}</h5>
-    </mat-expansion-panel-header>
-    <app-previous-visit-details
-      [currentVitals]="currentVitals"></app-previous-visit-details>
-  </mat-expansion-panel>
+    <!-- Previous Visit Details -->
+    <z-accordion-item>
+      <z-accordion-trigger>
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-purple-100 rounded-lg">
+            <ng-icon name="lucideHistory" class="text-purple-600"></ng-icon>
+          </div>
+          <span class="text-lg font-bold text-gray-900">
+            {{ current_language_set?.previousvisit?.Previousvisitdetails }}
+          </span>
+        </div>
+      </z-accordion-trigger>
+      <div class="p-6">
+        <app-previous-visit-details
+          [currentVitals]="currentVitals"></app-previous-visit-details>
+      </div>
+    </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.Find?.findings }}</h5>
-    </mat-expansion-panel-header>
-    <app-findings
-      [caseRecordMode]="caseRecordMode"
-      [generalFindingsForm]="generalFindingsForm">
-    </app-findings>
-  </mat-expansion-panel>
+    <!-- Findings -->
+    <z-accordion-item>
+      <z-accordion-trigger>
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-amber-100 rounded-lg">
+            <ng-icon name="lucideSearch" class="text-amber-600"></ng-icon>
+          </div>
+          <span class="text-lg font-bold text-gray-900">
+            {{ current_language_set?.Find?.findings }}
+          </span>
+        </div>
+      </z-accordion-trigger>
+      <div class="p-6">
+        <app-findings
+          [caseRecordMode]="caseRecordMode"
+          [generalFindingsForm]="generalFindingsForm">
+        </app-findings>
+      </div>
+    </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.casesheet?.diagnosis }}</h5>
-    </mat-expansion-panel-header>
-    <app-diagnosis
-      [caseRecordMode]="caseRecordMode"
-      [generalDiagnosisForm]="generalDiagnosisForm"
-      [visitCategory]="visitCategory"></app-diagnosis>
-  </mat-expansion-panel>
+    <!-- Diagnosis -->
+    <z-accordion-item>
+      <z-accordion-trigger>
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-emerald-100 rounded-lg">
+            <ng-icon
+              name="lucideStethoscope"
+              class="text-emerald-600"></ng-icon>
+          </div>
+          <span class="text-lg font-bold text-gray-900">
+            {{ current_language_set?.casesheet?.diagnosis }}
+          </span>
+        </div>
+      </z-accordion-trigger>
+      <div class="p-6">
+        <app-diagnosis
+          [caseRecordMode]="caseRecordMode"
+          [generalDiagnosisForm]="generalDiagnosisForm"
+          [visitCategory]="visitCategory"></app-diagnosis>
+      </div>
+    </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>
-        {{
-          current_language_set?.nurseData?.investigationsDetails?.investigations
-        }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-doctor-investigations
-      [caseRecordMode]="caseRecordMode"
-      [visit]="visitCategory"
-      [generalDoctorInvestigationForm]="
-        generalDoctorInvestigationForm
-      "></app-doctor-investigations>
-  </mat-expansion-panel>
+    <!-- Investigations -->
+    <z-accordion-item>
+      <z-accordion-trigger>
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-rose-100 rounded-lg">
+            <ng-icon name="lucideFlaskConical" class="text-rose-600"></ng-icon>
+          </div>
+          <span class="text-lg font-bold text-gray-900">
+            {{
+              current_language_set?.nurseData?.investigationsDetails
+                ?.investigations
+            }}
+          </span>
+        </div>
+      </z-accordion-trigger>
+      <div class="p-6">
+        <app-doctor-investigations
+          [caseRecordMode]="caseRecordMode"
+          [visit]="visitCategory"
+          [generalDoctorInvestigationForm]="generalDoctorInvestigationForm">
+        </app-doctor-investigations>
+      </div>
+    </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.casesheet?.prescribe }}</h5>
-    </mat-expansion-panel-header>
-    <app-prescription
-      [caseRecordMode]="caseRecordMode"
-      [drugPrescriptionForm]="drugPrescriptionForm"></app-prescription>
-  </mat-expansion-panel>
+    <!-- Prescription -->
+    <z-accordion-item>
+      <z-accordion-trigger>
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-indigo-100 rounded-lg">
+            <ng-icon name="lucidePill" class="text-indigo-600"></ng-icon>
+          </div>
+          <span class="text-lg font-bold text-gray-900">
+            {{ current_language_set?.casesheet?.prescribe }}
+          </span>
+        </div>
+      </z-accordion-trigger>
+      <div class="p-6">
+        <app-prescription
+          [caseRecordMode]="caseRecordMode"
+          [drugPrescriptionForm]="drugPrescriptionForm"></app-prescription>
+      </div>
+    </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.common?.report }}</h5>
-    </mat-expansion-panel-header>
-    <app-test-and-radiology></app-test-and-radiology>
-  </mat-expansion-panel>
-</mat-accordion>
+    <!-- Reports -->
+    <z-accordion-item>
+      <z-accordion-trigger>
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-slate-100 rounded-lg">
+            <ng-icon name="lucideFileText" class="text-slate-600"></ng-icon>
+          </div>
+          <span class="text-lg font-bold text-gray-900">
+            {{ current_language_set?.common?.report }}
+          </span>
+        </div>
+      </z-accordion-trigger>
+      <div class="p-6">
+        <app-test-and-radiology></app-test-and-radiology>
+      </div>
+    </z-accordion-item>
+  </z-accordion>
+</div>

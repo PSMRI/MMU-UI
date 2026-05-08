@@ -30,7 +30,7 @@ interface SelectHost {
 }
 
 @Component({
-  selector: 'z-select-item, [z-select-item]',
+  selector: 'z-select-item, [z-select-item], z-option, z-select-option',
   imports: [NgIcon],
   template: `
     @if (isSelected()) {

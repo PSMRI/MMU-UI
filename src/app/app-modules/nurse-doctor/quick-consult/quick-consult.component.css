@@ -1,41 +1,40 @@
 h5 {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .mat-expansion-panel-header {
-    background: rgba(37, 55, 70, 0.2);
-    padding: 0 15px;
+  background: rgba(37, 55, 70, 0.2);
+  padding: 0 15px;
 }
 
 .abnormal {
-    color: red !important;
+  color: red !important;
 }
 
 .cdk-overlay-container .cdk-overlay-pane .mat-autocomplete-panel {
-    min-width: 500px;
-    max-width: 500px;
+  min-width: 500px;
+  max-width: 500px;
 }
 
 .input-full-width {
-    width: 100%;
+  width: 100%;
 }
 
 .input-half-width {
-    width: 50%;
+  width: 50%;
 }
 
 #textArea {
-    line-height: 11px;
+  line-height: 11px;
 }
 
 mat-expansion-panel {
-    margin: 0.5%;
+  margin: 0.5%;
 }
 
-.btn{
-    background: #0277bd !important;
+.btn {
+  background: #0277bd !important;
 }
-
 
 .prescription {
   overflow: scroll;
@@ -72,11 +71,10 @@ legend {
   background-color: rgba(240, 245, 245, 0.5);
 }
 
-@media only screen and (min-width: 980px){
+@media only screen and (min-width: 980px) {
   .right-padding-remove-desktop {
     padding-right: 0 !important;
   }
-
 }
 
 .input-full-width-select {

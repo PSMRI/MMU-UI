@@ -46,35 +46,43 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
 import { NgFor, NgIf } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
-import { MatInput } from '@angular/material/input';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory } from '@ng-icons/lucide';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { LucideAngularModule, History } from 'lucide-angular';
+
 @Component({
   selector: 'app-nurse-cancer-obstetric-history',
+  standalone: true,
   templateUrl: './obstetric-history.component.html',
   styleUrls: ['./obstetric-history.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatTooltip,
-    MatIcon,
-    MatFormField,
-    MatLabel,
-    MatSelect,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardLabelImports,
+    ZardRadioImports,
+    ZardSelectImports,
     NgFor,
-    MatOption,
     NgIf,
-    MatRadioGroup,
-    MatRadioButton,
-    MatInput,
+    LucideAngularModule,
     NullDefaultValueDirective,
     StringValidatorDirective,
+  ],
+  providers: [
+    LucideAngularModule.pick({
+      History,
+    }).providers,
   ],
 })
 export class ObstetricHistoryComponent

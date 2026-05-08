@@ -22,7 +22,10 @@
 
 import { Directive, ElementRef, HostListener } from '@angular/core';
 
-@Directive({ selector: '[appMyMobileNumber]' })
+@Directive({
+  selector: '[appMyMobileNumber]',
+  standalone: true,
+})
 export class MyMobileNumberDirective {
   constructor(element: ElementRef) {}
 

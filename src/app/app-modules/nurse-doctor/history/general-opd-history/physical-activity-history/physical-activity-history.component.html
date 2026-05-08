@@ -1,56 +1,155 @@
 <ng-container [formGroup]="physicalActivityHistoryForm">
-  <div class="col-12" style="text-align: end">
-    <span class="font-history-label">{{
-      currentLanguageSet?.historyData?.ncdPhysicalActivityHistory
-        ?.previousPhysicalActivityHistory
-    }}</span>
-    <button
-      type="button"
-      mat-icon-button
-      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-      id="previousANCFamilyHistory"
-      class="mat_icon_blue hbx"
-      color="primary"
-      (click)="getPreviousPhysicalActivityHistory()">
-      <mat-icon class="md-18">history</mat-icon>
-    </button>
-  </div>
-  <div class="row">
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box hbx">
-      <label class="control-label" for="physicalActivityType">{{
-        currentLanguageSet?.historyData?.ncdPhysicalActivityHistory
-          ?.physicalActivityType
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group formControlName="physicalActivityType">
-        <mat-radio-button color="primary" value="Sedentary">{{
-          currentLanguageSet?.historyData?.ncdPhysicalActivityHistory?.sedentary
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" class="radio-button" value="Active">{{
-          currentLanguageSet?.historyData?.ncdPhysicalActivityHistory?.active
-        }}</mat-radio-button>
-      </mat-radio-group>
+  <div
+    class="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <!-- Section Header -->
+    <div class="flex items-center justify-between px-2">
+      <div class="flex items-center gap-3">
+        <div class="p-2.5 bg-emerald-100 rounded-2xl">
+          <lucide-icon
+            name="activity"
+            class="size-5 text-emerald-600"></lucide-icon>
+        </div>
+        <div>
+          <h4
+            class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+            {{
+              currentLanguageSet?.historyData?.ncdPhysicalActivityHistory
+                ?.previousPhysicalActivityHistory
+            }}
+          </h4>
+          <p
+            class="text-[10px] text-gray-400 font-bold uppercase tracking-widest italic">
+            Metabolic Kinetic Registry
+          </p>
+        </div>
+      </div>
+
+      <z-button
+        variant="outline"
+        class="rounded-2xl border-emerald-200 bg-emerald-50/30 text-emerald-600 hover:bg-emerald-50 px-6 py-2 shadow-sm font-black text-[10px] uppercase tracking-widest transition-all"
+        (click)="getPreviousPhysicalActivityHistory()">
+        <lucide-icon name="history" class="size-3 mr-2"></lucide-icon>
+        {{ currentLanguageSet?.DurationData?.previousDetails }}
+      </z-button>
     </div>
-    <div class="box col-xs-12 col-sm-6 col-md-6 col-lg-6">
-      <mat-form-field style="width: 600px">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.historyData?.ncdPhysicalActivityHistory
-            ?.physcialActivityQuestions
-        }}</mat-label>
-        <mat-select
-          name="physicalActivitQuestions"
-          formControlName="activityType"
-          (selectionChange)="
-            calculateIDRSScore($event, physicalActivityHistoryForm)
-          "
-          [required]="age >= 30">
-          <mat-option
-            *ngFor="let questions of physicalActivityQuestions"
-            [value]="questions.activityType">
-            {{ questions.activityType }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
+
+    <!-- Activity Profiling -->
+    <div
+      class="grid grid-cols-1 lg:grid-cols-12 gap-10 bg-white p-10 rounded-[3rem] border border-gray-100 shadow-sm items-start">
+      <!-- Kinetic State Selector -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="space-y-4">
+          <label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 block">
+            {{
+              currentLanguageSet?.historyData?.ncdPhysicalActivityHistory
+                ?.physicalActivityType
+            }}
+          </label>
+          <div class="grid grid-cols-2 gap-4">
+            <z-radio-group
+              formControlName="physicalActivityType"
+              class="contents">
+              <label class="cursor-pointer group relative">
+                <input
+                  type="radio"
+                  formControlName="physicalActivityType"
+                  value="Sedentary"
+                  class="sr-only peer" />
+                <div
+                  class="p-6 rounded-[2rem] border-2 border-gray-100 bg-gray-50/50 flex flex-col items-center gap-3 transition-all duration-300 peer-checked:border-emerald-600 peer-checked:bg-white peer-checked:shadow-xl peer-checked:shadow-emerald-100/50 hover:border-emerald-200">
+                  <div
+                    class="p-2.5 bg-white rounded-xl shadow-sm group-hover:scale-110 transition-all duration-500">
+                    <lucide-icon
+                      name="armchair"
+                      class="size-5 text-gray-400 peer-checked:text-emerald-600 transition-all"></lucide-icon>
+                  </div>
+                  <span
+                    class="text-[11px] font-black text-gray-600 uppercase tracking-wider group-hover:text-emerald-600 transition-all">
+                    {{
+                      currentLanguageSet?.historyData
+                        ?.ncdPhysicalActivityHistory?.sedentary
+                    }}
+                  </span>
+                </div>
+              </label>
+
+              <label class="cursor-pointer group relative">
+                <input
+                  type="radio"
+                  formControlName="physicalActivityType"
+                  value="Active"
+                  class="sr-only peer" />
+                <div
+                  class="p-6 rounded-[2rem] border-2 border-gray-100 bg-gray-50/50 flex flex-col items-center gap-3 transition-all duration-300 peer-checked:border-emerald-600 peer-checked:bg-white peer-checked:shadow-xl peer-checked:shadow-emerald-100/50 hover:border-emerald-200">
+                  <div
+                    class="p-2.5 bg-white rounded-xl shadow-sm group-hover:scale-110 transition-all duration-500">
+                    <lucide-icon
+                      name="activity"
+                      class="size-5 text-gray-400 peer-checked:text-emerald-600 transition-all"></lucide-icon>
+                  </div>
+                  <span
+                    class="text-[11px] font-black text-gray-600 uppercase tracking-wider group-hover:text-emerald-600 transition-all">
+                    {{
+                      currentLanguageSet?.historyData
+                        ?.ncdPhysicalActivityHistory?.active
+                    }}
+                  </span>
+                </div>
+              </label>
+            </z-radio-group>
+          </div>
+        </div>
+      </div>
+
+      <!-- Functional Assessment Questions -->
+      <div
+        class="lg:col-span-7 space-y-6 lg:border-l lg:border-gray-100 lg:pl-10">
+        <z-form-field class="w-full">
+          <z-form-label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-3 block">
+            {{
+              currentLanguageSet?.historyData?.ncdPhysicalActivityHistory
+                ?.physcialActivityQuestions
+            }}
+          </z-form-label>
+          <z-select
+            formControlName="activityType"
+            (selectionChange)="
+              calculateIDRSScore($event, physicalActivityHistoryForm)
+            "
+            class="rounded-3xl border-gray-100 bg-gray-50/50 hover:bg-white transition-all h-16 px-6">
+            <z-option
+              *ngFor="let questions of physicalActivityQuestions"
+              [zValue]="questions.activityType">
+              {{ questions.activityType }}
+            </z-option>
+          </z-select>
+        </z-form-field>
+
+        <div
+          class="p-6 rounded-3xl bg-emerald-50/50 border border-emerald-100/50 animate-in fade-in duration-1000">
+          <div class="flex items-start gap-4">
+            <div class="p-2 bg-white rounded-xl shadow-sm">
+              <lucide-icon
+                name="info"
+                class="size-4 text-emerald-600"></lucide-icon>
+            </div>
+            <div>
+              <h6
+                class="text-[10px] font-black text-emerald-900 uppercase tracking-widest mb-1 italic">
+                Diagnostic Insight
+              </h6>
+              <p
+                class="text-[11px] text-emerald-700/80 font-medium leading-relaxed">
+                Activity profiling contributes directly to the IDRS Metabolic
+                Risk Score. Accurate assessment of kinetic state is essential
+                for diabetic risk stratification.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </ng-container>

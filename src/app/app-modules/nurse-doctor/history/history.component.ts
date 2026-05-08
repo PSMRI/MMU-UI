@@ -33,6 +33,7 @@ import { GeneralOpdHistoryComponent } from './general-opd-history/general-opd-hi
   selector: 'app-nurse-history',
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.css'],
+  standalone: true,
   imports: [NgIf, CancerHistoryComponent, GeneralOpdHistoryComponent],
 })
 export class HistoryComponent implements OnInit, OnChanges {

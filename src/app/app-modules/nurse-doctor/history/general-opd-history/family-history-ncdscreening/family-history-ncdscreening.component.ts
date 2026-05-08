@@ -43,36 +43,58 @@ import {
 } from '../../../shared/services';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
 import { NgIf, NgFor, NgClass } from '@angular/common';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import {
+  LucideAngularModule,
+  Microscope,
+  History,
+  AlertCircle,
+  Trash2,
+  Plus,
+  Dna,
+  Link2,
+  Info,
+} from 'lucide-angular';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
   selector: 'app-family-history-ncdscreening',
+  standalone: true,
   templateUrl: './family-history-ncdscreening.component.html',
   styleUrls: ['./family-history-ncdscreening.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatTooltip,
-    MatIcon,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardLabelImports,
+    ZardSelectImports,
+    ZardRadioImports,
     NgIf,
     NgFor,
     NgClass,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
-    MatInput,
+    LucideAngularModule,
     NullDefaultValueDirective,
     StringValidatorDirective,
-    MatRadioGroup,
-    MatRadioButton,
+  ],
+  providers: [
+    LucideAngularModule.pick({
+      Microscope,
+      History,
+      AlertCircle,
+      Trash2,
+      Plus,
+      Dna,
+      Link2,
+      Info,
+    }).providers,
   ],
 })
 export class FamilyHistoryNcdscreeningComponent

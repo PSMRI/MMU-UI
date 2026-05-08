@@ -70,14 +70,16 @@ img {
 mat-form-field ::ng-deep .mat-mdc-text-field-wrapper {
   width: 30% !important;
 }
-table, th, td {
+table,
+th,
+td {
   border: 1px solid;
-  }
+}
 
-  tr ::ng-deep .mat-mdc-row:hover {
-    color:unset !important;
-  }
-   table ::ng-deep .mdc-data-table__table {
-    min-width: 98% !important;
-    margin-left: 13px !important;
+tr ::ng-deep .mat-mdc-row:hover {
+  color: unset !important;
+}
+table ::ng-deep .mdc-data-table__table {
+  min-width: 98% !important;
+  margin-left: 13px !important;
 }

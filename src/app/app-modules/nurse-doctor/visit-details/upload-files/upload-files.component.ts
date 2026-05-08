@@ -34,34 +34,32 @@ import { NurseService } from '../../shared/services/nurse.service';
 import { DoctorService } from '../../shared/services/doctor.service';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SetLanguageComponent } from '@/app-modules/core/components/set-language.component';
+import { HttpServiceService } from '@/app-modules/core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
-import { LabService } from 'src/app/app-modules/lab/shared/services';
-import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
+import { LabService } from '@/app-modules/lab/shared/services';
+import { ViewRadiologyUploadedFilesComponent } from '@/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
-import { NgIf, NgFor, NgClass } from '@angular/common';
-import {
-  MatChipListbox,
-  MatChip,
-  MatChipRemove,
-} from '@angular/material/chips';
-import { MatIcon } from '@angular/material/icon';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { LucideAngularModule } from 'lucide-angular';
+import { CommonModule, NgIf, NgFor, NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-patient-upload-files',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ZardFormImports,
+    ZardButtonImports,
+    LucideAngularModule,
+    NgIf,
+    NgFor,
+    NgClass,
+  ],
   templateUrl: './upload-files.component.html',
   styleUrls: ['./upload-files.component.css'],
-  imports: [
-    NgIf,
-    MatChipListbox,
-    NgFor,
-    MatChip,
-    NgClass,
-    MatIcon,
-    MatChipRemove,
-  ],
 })
 export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
   fileList!: FileList;
