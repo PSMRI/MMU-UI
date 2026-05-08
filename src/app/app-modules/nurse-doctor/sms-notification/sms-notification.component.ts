@@ -91,7 +91,7 @@ export class SmsNotificationComponent implements OnInit, DoCheck {
   validNumber: any = false;
 
   mobileNum(value: any) {
-    if (value.length == 10) {
+    if (value.length === 10) {
       this.validNumber = true;
     } else {
       this.validNumber = false;
@@ -100,7 +100,7 @@ export class SmsNotificationComponent implements OnInit, DoCheck {
 
   sendSMS() {
     const currentServiceID = this.sessionstorage.getItem('currentServiceID');
-    if (currentServiceID != undefined) {
+    if (currentServiceID !== undefined) {
       this._smsService
         .getSMStypes(currentServiceID)
         .pipe(
@@ -129,7 +129,7 @@ export class SmsNotificationComponent implements OnInit, DoCheck {
             const req_arr = [];
             const preferredPhoneNum = this.sessionstorage.getItem('phnum');
             const phoneNumber =
-              preferredPhoneNum == 'Not Available'
+              preferredPhoneNum === 'Not Available'
                 ? this.mobileNumber
                 : preferredPhoneNum;
             for (let i = 0; i < this.data.prescribedDrugs.length; i++) {
