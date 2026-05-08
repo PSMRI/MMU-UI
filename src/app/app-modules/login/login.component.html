@@ -1,28 +1,47 @@
 <!-- Login Page — Modernized with Tailwind CSS v4 & Zard UI -->
-<div class="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-900 flex items-center justify-center p-4">
+<div
+  class="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-900 flex items-center justify-center p-4">
   <!-- Background pattern -->
-  <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"></div>
+  <div
+    class="absolute inset-0 opacity-10"
+    style="
+      background-image: radial-gradient(
+        circle at 2px 2px,
+        white 1px,
+        transparent 0
+      );
+      background-size: 40px 40px;
+    "></div>
 
   <div class="relative w-full max-w-md">
     <!-- Card -->
     <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
-
       <!-- Header band -->
-      <div class="bg-gradient-to-r from-blue-700 to-blue-900 px-8 py-6 text-center">
-        <img src="assets/images/Swasthya.png" alt="AMRIT Logo" class="h-16 mx-auto mb-3 object-contain" />
-        <h1 class="text-white text-xl font-semibold tracking-wide">MMU — Mobile Medical Unit</h1>
+      <div
+        class="bg-gradient-to-r from-blue-700 to-blue-900 px-8 py-6 text-center">
+        <img
+          src="assets/images/Swasthya.png"
+          alt="AMRIT Logo"
+          class="h-16 mx-auto mb-3 object-contain" />
+        <h1 class="text-white text-xl font-semibold tracking-wide">
+          MMU — Mobile Medical Unit
+        </h1>
         <p class="text-blue-200 text-sm mt-1">AMRIT Healthcare Platform</p>
       </div>
 
       <!-- Form body -->
       <div class="px-8 py-8">
         <form [formGroup]="loginForm" (ngSubmit)="loginForm.valid && login()">
-
           <!-- Username field -->
           <div class="mb-5">
-            <label class="block text-sm font-medium text-gray-700 mb-1" for="userID">Username</label>
+            <label
+              class="block text-sm font-medium text-gray-700 mb-1"
+              for="userID"
+              >Username</label
+            >
             <div class="relative">
-              <span class="absolute inset-y-0 left-3 flex items-center text-gray-400">
+              <span
+                class="absolute inset-y-0 left-3 flex items-center text-gray-400">
                 <mat-icon class="text-xl leading-none">account_box</mat-icon>
               </span>
               <input
@@ -39,9 +58,14 @@
 
           <!-- Password field -->
           <div class="mb-5">
-            <label class="block text-sm font-medium text-gray-700 mb-1" for="password">Password</label>
+            <label
+              class="block text-sm font-medium text-gray-700 mb-1"
+              for="password"
+              >Password</label
+            >
             <div class="relative">
-              <span class="absolute inset-y-0 left-3 flex items-center text-gray-400">
+              <span
+                class="absolute inset-y-0 left-3 flex items-center text-gray-400">
                 <mat-icon class="text-xl leading-none">lock</mat-icon>
               </span>
               <input
@@ -64,15 +88,24 @@
           </div>
 
           <!-- Captcha -->
-          <div *ngIf="enableCaptcha" class="mb-5 flex justify-center" role="group" aria-labelledby="captcha-label">
+          <div
+            *ngIf="enableCaptcha"
+            class="mb-5 flex justify-center"
+            role="group"
+            aria-labelledby="captcha-label">
             <label id="captcha-label" class="sr-only">Security check</label>
-            <app-captcha #captchaCmp (tokenResolved)="onCaptchaResolved($event)"></app-captcha>
+            <app-captcha
+              #captchaCmp
+              (tokenResolved)="onCaptchaResolved($event)"></app-captcha>
           </div>
 
           <!-- Submit Button -->
           <button
             type="submit"
-            [disabled]="(enableCaptcha && (!captchaToken || loginForm.invalid)) || (!enableCaptcha && loginForm.invalid)"
+            [disabled]="
+              (enableCaptcha && (!captchaToken || loginForm.invalid)) ||
+              (!enableCaptcha && loginForm.invalid)
+            "
             class="w-full py-3 px-4 bg-blue-700 hover:bg-blue-800 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold rounded-lg text-sm transition-all duration-200 shadow-md hover:shadow-lg">
             Sign In
           </button>

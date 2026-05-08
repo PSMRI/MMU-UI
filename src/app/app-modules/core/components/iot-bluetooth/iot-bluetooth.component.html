@@ -2,7 +2,7 @@
   class="row title"
   [ngClass]="{
     warn: errMsg !== undefined,
-    connected: deviceConnected !== false
+    connected: deviceConnected !== false,
   }">
   <h4>{{ current_language_set?.bluetooth }}</h4>
   <button class="pull-right exit" [matDialogClose]="true" mat-icon-button>

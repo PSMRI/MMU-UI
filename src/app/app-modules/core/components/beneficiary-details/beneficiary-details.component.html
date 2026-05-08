@@ -1,10 +1,13 @@
 <!-- Beneficiary Details — Modernized with Tailwind CSS v4 & Lucide Icons -->
-<div class="w-full bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden">
+<div
+  class="w-full bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden">
   <!-- Profile Header -->
-  <div class="p-4 bg-gradient-to-br from-blue-50 to-white border-b border-zinc-100">
+  <div
+    class="p-4 bg-gradient-to-br from-blue-50 to-white border-b border-zinc-100">
     <div class="flex items-center gap-4">
       <div class="relative">
-        <div class="h-16 w-16 rounded-2xl overflow-hidden border-2 border-white shadow-md bg-zinc-100 flex items-center justify-center">
+        <div
+          class="h-16 w-16 rounded-2xl overflow-hidden border-2 border-white shadow-md bg-zinc-100 flex items-center justify-center">
           <img
             *ngIf="!beneficiary?.benImage"
             src="assets/images/default-avatar.gif"
@@ -16,16 +19,20 @@
             alt="Patient"
             class="h-full w-full object-cover" />
         </div>
-        <div class="absolute -bottom-1 -right-1 bg-blue-500 text-white p-1 rounded-lg border-2 border-white shadow-sm">
+        <div
+          class="absolute -bottom-1 -right-1 bg-blue-500 text-white p-1 rounded-lg border-2 border-white shadow-sm">
           <lucide-icon name="user" class="size-3"></lucide-icon>
         </div>
       </div>
       <div>
         <h3 class="text-sm font-bold text-zinc-900 m-0 leading-tight">
-          {{ beneficiary?.beneficiaryName }} <span *ngIf="beneficiary?.lastName">{{ beneficiary?.lastName }}</span>
+          {{ beneficiary?.beneficiaryName }}
+          <span *ngIf="beneficiary?.lastName">{{ beneficiary?.lastName }}</span>
         </h3>
-        <p class="text-[11px] text-zinc-500 m-0 font-medium tracking-wide uppercase mt-1">
-          {{ beneficiary?.genderName }} / {{ beneficiary?.age }} {{ beneficiary?.ageUnit }}
+        <p
+          class="text-[11px] text-zinc-500 m-0 font-medium tracking-wide uppercase mt-1">
+          {{ beneficiary?.genderName }} / {{ beneficiary?.age }}
+          {{ beneficiary?.ageUnit }}
         </p>
       </div>
     </div>
@@ -39,10 +46,13 @@
         <lucide-icon name="info" class="size-4"></lucide-icon>
       </div>
       <div>
-        <span class="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+        <span
+          class="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
           {{ current_language_set?.bendetails?.beneficiaryID }}
         </span>
-        <span class="text-xs font-bold text-zinc-800 tracking-tight">{{ beneficiary?.beneficiaryID }}</span>
+        <span class="text-xs font-bold text-zinc-800 tracking-tight">{{
+          beneficiary?.beneficiaryID
+        }}</span>
       </div>
     </div>
 
@@ -52,10 +62,13 @@
         <lucide-icon name="phone" class="size-4"></lucide-icon>
       </div>
       <div>
-        <span class="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+        <span
+          class="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
           {{ current_language_set?.bendetails?.phoneNo }}
         </span>
-        <span class="text-xs font-bold text-zinc-800 tracking-tight">{{ beneficiary?.preferredPhoneNum }}</span>
+        <span class="text-xs font-bold text-zinc-800 tracking-tight">{{
+          beneficiary?.preferredPhoneNum
+        }}</span>
       </div>
     </div>
 
@@ -65,8 +78,10 @@
         <lucide-icon name="map-pin" class="size-4"></lucide-icon>
       </div>
       <div>
-        <span class="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
-          {{ current_language_set?.bendetails?.district }} / {{ current_language_set?.bendetails?.village }}
+        <span
+          class="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+          {{ current_language_set?.bendetails?.district }} /
+          {{ current_language_set?.bendetails?.village }}
         </span>
         <span class="text-xs font-bold text-zinc-800 tracking-tight">
           {{ beneficiary?.districtName }} / {{ beneficiary?.villageName }}
@@ -77,33 +92,44 @@
     <!-- Dates Section -->
     <div class="grid grid-cols-2 gap-4 pt-2 border-t border-zinc-100">
       <div class="flex flex-col gap-1">
-        <span class="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">
+        <span
+          class="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">
           {{ current_language_set?.bendetails?.registrationDate }}
         </span>
         <div class="flex items-center gap-1.5 text-zinc-600">
           <lucide-icon name="calendar" class="size-3"></lucide-icon>
-          <span class="text-[10px] font-bold">{{ beneficiary?.createdDate | date: 'dd/MM/yyyy' }}</span>
+          <span class="text-[10px] font-bold">{{
+            beneficiary?.createdDate | date: 'dd/MM/yyyy'
+          }}</span>
         </div>
       </div>
       <div class="flex flex-col gap-1">
-        <span class="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">
+        <span
+          class="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">
           {{ current_language_set?.bendetails?.visitDate }}
         </span>
         <div class="flex items-center gap-1.5 text-blue-600">
           <lucide-icon name="calendar" class="size-3"></lucide-icon>
-          <span class="text-[10px] font-bold">{{ today | date: 'dd/MM/yyyy' }}</span>
+          <span class="text-[10px] font-bold">{{
+            today | date: 'dd/MM/yyyy'
+          }}</span>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Additional Info (Father's Name) -->
-  <div *ngIf="beneficiary?.fatherName" class="px-4 py-3 bg-zinc-50 border-t border-zinc-100">
+  <div
+    *ngIf="beneficiary?.fatherName"
+    class="px-4 py-3 bg-zinc-50 border-t border-zinc-100">
     <div class="flex items-center justify-between">
-      <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+      <span
+        class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
         {{ current_language_set?.bendetails?.fatherName }}
       </span>
-      <span class="text-[11px] font-bold text-zinc-700">{{ beneficiary?.fatherName }}</span>
+      <span class="text-[11px] font-bold text-zinc-700">{{
+        beneficiary?.fatherName
+      }}</span>
     </div>
   </div>
 </div>

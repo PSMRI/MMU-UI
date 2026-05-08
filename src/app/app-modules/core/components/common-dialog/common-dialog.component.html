@@ -1,38 +1,70 @@
 <!-- Common Dialog — Modernized with Tailwind CSS v4 & Zard UI -->
-<div class="p-6 max-w-lg w-full bg-white rounded-2xl shadow-2xl overflow-hidden border border-zinc-200">
-  
+<div
+  class="p-6 max-w-lg w-full bg-white rounded-2xl shadow-2xl overflow-hidden border border-zinc-200">
   <!-- Overlay (Calibration) -->
-  <div class="absolute inset-0 bg-white/60 backdrop-blur-sm z-50 flex items-center justify-center" *ngIf="confirmcalibration">
+  <div
+    class="absolute inset-0 bg-white/60 backdrop-blur-sm z-50 flex items-center justify-center"
+    *ngIf="confirmcalibration">
     <div class="flex flex-col items-center gap-3">
-      <div class="h-10 w-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-      <span class="text-xs font-bold text-blue-600 uppercase tracking-widest">Processing...</span>
+      <div
+        class="h-10 w-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      <span class="text-xs font-bold text-blue-600 uppercase tracking-widest"
+        >Processing...</span
+      >
     </div>
   </div>
 
   <!-- Header -->
   <div class="flex items-center gap-4 mb-6">
-    <div class="p-3 rounded-2xl" [ngClass]="{
-      'bg-blue-100 text-blue-600': status === 'info' || notify || choice || choiceSelect,
-      'bg-rose-100 text-rose-600': status === 'warn' || status === 'error' || alertError || sessionTimeout,
-      'bg-amber-100 text-amber-600': status === 'confirm' || confirmAlert || confirmcalibration || confirmCareContext,
-      'bg-zinc-100 text-zinc-600': !status
-    }">
-      <lucide-icon [name]="(status === 'info' || notify || choice || choiceSelect) ? 'info' : 
-                          ((status === 'confirm' || confirmAlert || confirmcalibration) ? 'help-circle' : 'alert-circle')" class="size-6"></lucide-icon>
+    <div
+      class="p-3 rounded-2xl"
+      [ngClass]="{
+        'bg-blue-100 text-blue-600':
+          status === 'info' || notify || choice || choiceSelect,
+        'bg-rose-100 text-rose-600':
+          status === 'warn' ||
+          status === 'error' ||
+          alertError ||
+          sessionTimeout,
+        'bg-amber-100 text-amber-600':
+          status === 'confirm' ||
+          confirmAlert ||
+          confirmcalibration ||
+          confirmCareContext,
+        'bg-zinc-100 text-zinc-600': !status,
+      }">
+      <lucide-icon
+        [name]="
+          status === 'info' || notify || choice || choiceSelect
+            ? 'info'
+            : status === 'confirm' || confirmAlert || confirmcalibration
+              ? 'help-circle'
+              : 'alert-circle'
+        "
+        class="size-6"></lucide-icon>
     </div>
     <h2 class="text-xl font-bold text-zinc-900 m-0 tracking-tight">
-      {{ (status === 'warn' ? 'Warning' : (status || title || 'Notification')) | titlecase }}
+      {{
+        (status === 'warn' ? 'Warning' : status || title || 'Notification')
+          | titlecase
+      }}
     </h2>
   </div>
 
   <!-- Content -->
   <div class="space-y-4">
-    <div class="text-zinc-600 leading-relaxed m-0 text-sm font-medium" [innerHTML]="message"></div>
+    <div
+      class="text-zinc-600 leading-relaxed m-0 text-sm font-medium"
+      [innerHTML]="message"></div>
 
     <!-- Mandatory Fields List (Notify) -->
-    <div *ngIf="notify && mandatories?.length" class="bg-rose-50 rounded-xl p-4 border border-rose-100/50">
+    <div
+      *ngIf="notify && mandatories?.length"
+      class="bg-rose-50 rounded-xl p-4 border border-rose-100/50">
       <ul class="space-y-2 m-0 p-0 list-none">
-        <li *ngFor="let item of mandatories" class="flex items-center gap-3 text-rose-700 text-xs font-semibold">
+        <li
+          *ngFor="let item of mandatories"
+          class="flex items-center gap-3 text-rose-700 text-xs font-semibold">
           <lucide-icon name="alert-triangle" class="size-3.5"></lucide-icon>
           <span>{{ item }}</span>
         </li>
@@ -42,9 +74,15 @@
     <!-- Choice (Radio Group) -->
     <div *ngIf="choice" class="py-2">
       <z-radio-group [(ngModel)]="selectedValue" class="space-y-2">
-        <div *ngFor="let option of values" class="flex items-center gap-3 p-3 rounded-xl border border-zinc-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all cursor-pointer">
+        <div
+          *ngFor="let option of values"
+          class="flex items-center gap-3 p-3 rounded-xl border border-zinc-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all cursor-pointer">
           <z-radio [zValue]="option.id" [zId]="option.id"></z-radio>
-          <z-label [for]="option.id" class="text-sm font-semibold text-zinc-700 cursor-pointer">{{ option.name }}</z-label>
+          <z-label
+            [for]="option.id"
+            class="text-sm font-semibold text-zinc-700 cursor-pointer"
+            >{{ option.name }}</z-label
+          >
         </div>
       </z-radio-group>
     </div>
@@ -52,9 +90,15 @@
     <!-- ChoiceSelect (Radio Group) -->
     <div *ngIf="choiceSelect" class="py-2">
       <z-radio-group [(ngModel)]="selectedOption" class="space-y-2">
-        <div *ngFor="let option of options" class="flex items-center gap-3 p-3 rounded-xl border border-zinc-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all cursor-pointer">
+        <div
+          *ngFor="let option of options"
+          class="flex items-center gap-3 p-3 rounded-xl border border-zinc-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all cursor-pointer">
           <z-radio [zValue]="option.id" [zId]="option.id"></z-radio>
-          <z-label [for]="option.id" class="text-sm font-semibold text-zinc-700 cursor-pointer">{{ option.name }}</z-label>
+          <z-label
+            [for]="option.id"
+            class="text-sm font-semibold text-zinc-700 cursor-pointer"
+            >{{ option.name }}</z-label
+          >
         </div>
       </z-radio-group>
     </div>
@@ -62,7 +106,10 @@
     <!-- Remarks / Edit Remarks -->
     <div *ngIf="remarks || editRemarks" class="space-y-3">
       <z-form-field>
-        <z-label class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Remarks / Observation</z-label>
+        <z-label
+          class="text-[10px] font-bold uppercase tracking-wider text-zinc-400"
+          >Remarks / Observation</z-label
+        >
         <textarea
           zInput
           rows="3"
@@ -75,11 +122,17 @@
     </div>
 
     <!-- Session Timeout Timer -->
-    <div *ngIf="sessionTimeout" class="flex flex-col items-center justify-center p-6 bg-rose-50 rounded-2xl border border-rose-100 shadow-inner">
-      <span class="text-[10px] font-bold text-rose-400 uppercase tracking-widest mb-1">Session Timeout In</span>
+    <div
+      *ngIf="sessionTimeout"
+      class="flex flex-col items-center justify-center p-6 bg-rose-50 rounded-2xl border border-rose-100 shadow-inner">
+      <span
+        class="text-[10px] font-bold text-rose-400 uppercase tracking-widest mb-1"
+        >Session Timeout In</span
+      >
       <div class="flex items-center gap-2">
         <lucide-icon name="timer" class="size-5 text-rose-600"></lucide-icon>
-        <span class="text-4xl font-black text-rose-600 tracking-tighter tabular-nums">
+        <span
+          class="text-4xl font-black text-rose-600 tracking-tighter tabular-nums">
           {{ minutes.toFixed(0) | number: '2.0' }}:{{ seconds | number: '2.0' }}
         </span>
       </div>
@@ -87,7 +140,8 @@
   </div>
 
   <!-- Footer Actions -->
-  <div class="flex items-center justify-end gap-3 mt-8 pt-6 border-t border-zinc-100">
+  <div
+    class="flex items-center justify-end gap-3 mt-8 pt-6 border-t border-zinc-100">
     <!-- Cancel / Close Button -->
     <button
       *ngIf="!alert && !alertError && !notify && !confirmcalibration"
@@ -103,7 +157,17 @@
       *ngIf="!sessionTimeout"
       zButton
       class="px-8 rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/25 text-sm font-bold tracking-wide"
-      (click)="dialogRef.close(remarks || editRemarks ? (remarksRef.value + (editRemarks ? '.' : '')) : (choice ? selectedValue : (choiceSelect ? selectedOption : true)))">
+      (click)="
+        dialogRef.close(
+          remarks || editRemarks
+            ? remarksRef.value + (editRemarks ? '.' : '')
+            : choice
+              ? selectedValue
+              : choiceSelect
+                ? selectedOption
+                : true
+        )
+      ">
       {{ btnOkText || current_language_set?.common?.ok || 'OK' }}
     </button>
 

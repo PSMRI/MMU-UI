@@ -58,6 +58,7 @@ import {
 import { NgFor, NgIf } from '@angular/common';
 import { MatLabel } from '@angular/material/select';
 import { MatTooltip } from '@angular/material/tooltip';
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
 import { MatIcon } from '@angular/material/icon';
 import {
   MatCard,
@@ -73,8 +74,7 @@ import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
   styleUrls: ['./idrs.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
+    ZardAccordionImports,
     NgFor,
     MatLabel,
     MatTooltip,
@@ -196,9 +196,7 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   idrsWaistScore() {
     this.idrsWaistSubscription =
       this.idrsScoreService.IDRSWaistScore$.subscribe(response => {
-        response === undefined
-          ? (this.idrsScoreWaist = 0)
-          : (this.idrsScoreWaist = response);
+        this.idrsScoreWaist = response === undefined ? 0 : response;
         this.patchIdrsScoreValue();
       });
   }
@@ -206,9 +204,7 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   idrsFamilyHistoryScore() {
     this.IdrsFamilyScoreSubscription =
       this.idrsScoreService.IDRSFamilyScore$.subscribe(response => {
-        response === undefined
-          ? (this.idrsScoreFamily = 0)
-          : (this.idrsScoreFamily = response);
+        this.idrsScoreFamily = response === undefined ? 0 : response;
         this.patchIdrsScoreValue();
       });
   }
@@ -216,9 +212,7 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   idrsPhysicalScoreActivity() {
     this.idrsPhysicalScoreSubscription =
       this.idrsScoreService.IDRSPhysicalActivityScore$.subscribe(response => {
-        response === undefined
-          ? (this.IRDSscorePhysicalActivity = 0)
-          : (this.IRDSscorePhysicalActivity = response);
+        this.IRDSscorePhysicalActivity = response === undefined ? 0 : response;
         this.patchIdrsScoreValue();
       });
   }

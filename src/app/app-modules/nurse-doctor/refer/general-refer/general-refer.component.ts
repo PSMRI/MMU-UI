@@ -50,10 +50,7 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import {
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
 import {
   MatLabel,
   MatFormField,
@@ -103,9 +100,8 @@ import {
     },
   ],
   imports: [
-    MatExpansionPanel,
+    ZardAccordionImports,
     ReactiveFormsModule,
-    MatExpansionPanelHeader,
     NgIf,
     MatLabel,
     MatTooltip,
