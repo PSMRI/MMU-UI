@@ -56,8 +56,8 @@ export class PreviousVisitDetailsComponent implements OnInit, DoCheck {
       pointHoverBorderColor: 'maroon',
     },
   ];
-  weightChartLegend: boolean = true;
-  weightChartType: string = 'line';
+  weightChartLegend = true;
+  weightChartType = 'line';
   // Ends Weight Graph
 
   // Bp Graph
@@ -83,8 +83,8 @@ export class PreviousVisitDetailsComponent implements OnInit, DoCheck {
       pointHoverBorderColor: 'rgba(222,92,132,1)',
     },
   ];
-  bpChartLegend: boolean = true;
-  bpChartType: string = 'line';
+  bpChartLegend = true;
+  bpChartType = 'line';
   // Ends Bp Graph
 
   // Bg Chart
@@ -120,8 +120,8 @@ export class PreviousVisitDetailsComponent implements OnInit, DoCheck {
       pointHoverBorderColor: 'rgba(222,92,132,1)',
     },
   ];
-  bgChartLegend: boolean = true;
-  bgChartType: string = 'line';
+  bgChartLegend = true;
+  bgChartType = 'line';
 
   //Ends Bg Chart
 

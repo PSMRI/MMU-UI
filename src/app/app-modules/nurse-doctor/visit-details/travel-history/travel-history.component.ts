@@ -54,12 +54,12 @@ export class TravelHistoryComponent
   travelTypeList: string[] = ['Domestic', 'International'];
   domestictype: any = [];
   internationaltype: any = [];
-  disableTravelButton: boolean = true;
+  disableTravelButton = true;
   travelSelected!: boolean;
   question1!: string;
-  istravelStatus: boolean = false;
-  istravelModeDomestic: boolean = false;
-  istravelModeInternatinal: boolean = false;
+  istravelStatus = false;
+  istravelModeDomestic = false;
+  istravelModeInternatinal = false;
   countries: any = [];
   citiesFromInter: any = [];
   citiesToInter: any = [];
@@ -84,8 +84,8 @@ export class TravelHistoryComponent
   recomArray: any;
   statesAPI: any;
   readTravel: any = false;
-  domtravel: boolean = false;
-  intertravel: boolean = false;
+  domtravel = false;
+  intertravel = false;
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
 

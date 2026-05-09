@@ -52,7 +52,7 @@ export class DiseaseconfirmationComponent implements OnInit {
   revisit: any;
   diseaseArray: any = [];
   attendantType: any;
-  isDoctor: boolean = true;
+  isDoctor = true;
   currentLanguageSet: any;
   constructor(
     private fb: FormBuilder,

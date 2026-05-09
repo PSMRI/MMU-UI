@@ -65,7 +65,7 @@ export class ContactHistoryComponent
   allSymp: any;
   contactReqiured!: string;
   contactResponseList: any;
-  contactFlag: boolean = false;
+  contactFlag = false;
   currentLanguageSet: any;
   constructor(
     private doctorService: DoctorService,

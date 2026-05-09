@@ -42,12 +42,12 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
 export class CovidVaccinationStatusComponent implements OnInit, DoCheck {
   currentLanguageSet: any;
   beneficiaryAge: any;
-  enableVaccinationStatusFields: boolean = false;
-  enableVaccineTypeAndDoseTakenFlag: boolean = false;
+  enableVaccinationStatusFields = false;
+  enableVaccineTypeAndDoseTakenFlag = false;
   doseTypeList: any = [];
   vaccineTypeList: any = [];
   today: Date = new Date();
-  enableSaveButton: boolean = true;
+  enableSaveButton = true;
 
   constructor(
     private httpService: HttpServiceService,

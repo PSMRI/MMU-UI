@@ -243,9 +243,7 @@
         </mat-form-field>
       </div>
 
-      <div
-        class="col-4 box"
-        *ngIf="alcoholUse && alcoholUse !== 'Never Used'">
+      <div class="col-4 box" *ngIf="alcoholUse && alcoholUse !== 'Never Used'">
         <label class="control-label" for="drug">{{
           currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
             ?.alcoholconsumed

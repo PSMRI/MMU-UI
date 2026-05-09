@@ -51,7 +51,7 @@ export class SymptomsComponent
   @Input()
   patientCovidForm!: FormGroup;
   symptomsList: any = [];
-  sympFlag: boolean = false;
+  sympFlag = false;
   @Input()
   mode!: string;
 

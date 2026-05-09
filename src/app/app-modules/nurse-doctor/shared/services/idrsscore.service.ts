@@ -135,7 +135,7 @@ export class IdrsscoreService {
   visitDiseases$ = this.visitDiseases.asObservable();
   uncheckedDiseases = new BehaviorSubject(null);
   uncheckedDiseases$ = this.uncheckedDiseases.asObservable();
-  tmc: boolean = true;
+  tmc = true;
   tmcSubmitDisable = new BehaviorSubject(this.tmc);
   tmcSubmitDisable$ = this.tmcSubmitDisable.asObservable();
   constructor(private http: HttpClient) {}

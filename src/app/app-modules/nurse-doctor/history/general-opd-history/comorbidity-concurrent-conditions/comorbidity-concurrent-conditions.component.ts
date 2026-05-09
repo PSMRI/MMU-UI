@@ -64,7 +64,7 @@ export class ComorbidityConcurrentConditionsComponent
   comorbidityFilteredMasterData: any;
   previousSelectedComorbidity: any = [];
   comorbiditySelectList: any = [];
-  ComorbidStatus: string = 'false';
+  ComorbidStatus = 'false';
   currentLanguageSet: any;
   constructor(
     private fb: FormBuilder,

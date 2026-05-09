@@ -33,10 +33,10 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   styleUrls: ['./case-sheet.component.css'],
 })
 export class CaseSheetComponent implements OnInit, DoCheck {
-  QC: boolean = false;
-  General: boolean = false;
-  NCDScreening: boolean = false;
-  CancerScreening: boolean = false;
+  QC = false;
+  General = false;
+  NCDScreening = false;
+  CancerScreening = false;
 
   preview: any;
   previous: any;

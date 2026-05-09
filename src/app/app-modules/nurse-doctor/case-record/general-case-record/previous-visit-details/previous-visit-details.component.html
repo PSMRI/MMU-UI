@@ -27,7 +27,7 @@
           }}(Kg/m<sup>2</sup>):
           <span
             [ngClass]="{
-              abnormal: calculateBMI() < 18.5 || calculateBMI() > 24.9
+              abnormal: calculateBMI() < 18.5 || calculateBMI() > 24.9,
             }"
             >{{ calculateBMI() }}</span
           >
@@ -43,7 +43,7 @@
             [ngClass]="{
               abnormal:
                 +currentVitals?.temperature < 96 ||
-                +currentVitals?.temperature > 100
+                +currentVitals?.temperature > 100,
             }"
             >{{ currentVitals?.temperature }}</span
           >
@@ -54,7 +54,7 @@
             [ngClass]="{
               abnormal:
                 +currentVitals?.pulseRate < 49 ||
-                +currentVitals?.pulseRate > 101
+                +currentVitals?.pulseRate > 101,
             }"
             >{{ currentVitals?.pulseRate }}</span
           >
@@ -65,7 +65,7 @@
             [ngClass]="{
               abnormal:
                 +currentVitals?.respiratoryRate < 11 ||
-                +currentVitals?.respiratoryRate > 19
+                +currentVitals?.respiratoryRate > 19,
             }"
             >{{ currentVitals?.respiratoryRate }}</span
           >
@@ -76,7 +76,7 @@
           {{ current_language_set?.sPOTwoWithUnit }}:
           <span
             [ngClass]="{
-              abnormal: currentVitals?.sPO2 < 1 || currentVitals?.sPO2 > 100
+              abnormal: currentVitals?.sPO2 < 1 || currentVitals?.sPO2 > 100,
             }"
             >{{ currentVitals?.sPO2 }}</span
           >
@@ -95,7 +95,7 @@
               [ngClass]="{
                 abnormal:
                   +currentVitals?.systolicBP_1stReading > 80 ||
-                  +currentVitals?.systolicBP_1stReading > 100
+                  +currentVitals?.systolicBP_1stReading > 100,
               }"
               >{{ currentVitals?.systolicBP_1stReading }}</span
             >
@@ -106,7 +106,7 @@
               [ngClass]="{
                 abnormal:
                   +currentVitals?.diastolicBP_1stReading > 120 ||
-                  +currentVitals?.diastolicBP_1stReading > 140
+                  +currentVitals?.diastolicBP_1stReading > 140,
               }"
               >{{ currentVitals?.diastolicBP_1stReading }}</span
             >

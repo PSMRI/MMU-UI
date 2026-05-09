@@ -40,9 +40,9 @@ export class IotBluetoothComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService
   ) {}
 
-  apiAvailable: boolean = false;
-  deviceConnected: boolean = false;
-  deviceSearching: boolean = false;
+  apiAvailable = false;
+  deviceConnected = false;
+  deviceSearching = false;
   infoDetails!: any[];
   errMsg: any;
   bluetoothDevices!: string[];

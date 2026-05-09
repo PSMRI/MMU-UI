@@ -67,8 +67,8 @@ export class CancerCaseRecordComponent
       pointHoverBorderColor: 'maroon',
     },
   ];
-  weightChartLegend: boolean = true;
-  weightChartType: string = 'line';
+  weightChartLegend = true;
+  weightChartType = 'line';
   // Ends Weight Graph
 
   // Bp Graph
@@ -94,8 +94,8 @@ export class CancerCaseRecordComponent
       pointHoverBorderColor: 'rgba(222,92,132,1)',
     },
   ];
-  bpChartLegend: boolean = true;
-  bpChartType: string = 'line';
+  bpChartLegend = true;
+  bpChartType = 'line';
   // Ends Bp Graph
 
   // Bg Chart
@@ -131,8 +131,8 @@ export class CancerCaseRecordComponent
       pointHoverBorderColor: 'rgba(222,92,132,1)',
     },
   ];
-  bgChartLegend: boolean = true;
-  bgChartType: string = 'line';
+  bgChartLegend = true;
+  bgChartType = 'line';
 
   //Ends Bg Chart
 
@@ -447,7 +447,7 @@ export class CancerCaseRecordComponent
   rotate = true;
   historyOfMMU = [];
   filteredMMUHistory: any = [];
-  hideMMUFetch: boolean = false;
+  hideMMUFetch = false;
   getMMUHistory() {
     this.doctorService.getMMUHistory().subscribe((data: any) => {
       console.log('data', data);

@@ -11,7 +11,9 @@
         id="headtoToeExam"
         name="headtoToeExam"
         formControlName="headtoToeExam"
-        (change)="checkWithHeadToToe(); trackFieldInteraction('Head To Toe Exam')">
+        (change)="
+          checkWithHeadToToe(); trackFieldInteraction('Head To Toe Exam')
+        ">
         <mat-radio-button color="primary" value="Normal">{{
           currentLanguageSet?.common?.normal
         }}</mat-radio-button>

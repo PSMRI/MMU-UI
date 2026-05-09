@@ -60,13 +60,13 @@ export class HistoryCaseSheetComponent implements OnInit, OnChanges, DoCheck {
   generalhistory: any;
   visitCategory: any;
   blankRows = [1, 2, 3, 4];
-  serviceList: string = '';
+  serviceList = '';
   previousPhysicalList: any;
-  enableTCReferredMMUData: boolean = false;
+  enableTCReferredMMUData = false;
   mmuCaseSheetData: any;
   MMUcaseRecords: any;
   MMUReferDetails: any;
-  mmuServiceList: string = '';
+  mmuServiceList = '';
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
 

@@ -76,11 +76,11 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
 
   minimumDeathDate!: Date;
 
-  showOtherPregnancyComplication: boolean = false;
-  disableNonePregnancyComplication: boolean = false;
-  showAllPregComplication: boolean = true;
+  showOtherPregnancyComplication = false;
+  disableNonePregnancyComplication = false;
+  showAllPregComplication = true;
   showHRP: any;
-  complicationPregHRP: string = 'false';
+  complicationPregHRP = 'false';
 
   @Input()
   generalDiagnosisForm!: FormGroup;

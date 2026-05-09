@@ -38,11 +38,11 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class CalibrationComponent implements OnInit, DoCheck {
   searchTerm: any;
-  pageNo: number = 0;
-  message: string = '';
+  pageNo = 0;
+  message = '';
   pageCount: any;
   selectedComponentsList = [];
-  currentPage: number = 1;
+  currentPage = 1;
   pager: any = {
     totalItems: 0,
     currentPage: 0,

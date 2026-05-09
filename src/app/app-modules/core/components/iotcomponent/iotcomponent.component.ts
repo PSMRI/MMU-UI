@@ -47,11 +47,11 @@ export class IotcomponentComponent implements OnInit, DoCheck {
   current_language_set: any;
   procedure: any;
   stripCode: any;
-  msgCalibration: boolean = false;
-  startedCalibration: boolean = false;
-  stoppedCalibration: boolean = false;
-  statusCalibration: boolean = false;
-  stripShowMsg: boolean = false;
+  msgCalibration = false;
+  startedCalibration = false;
+  stoppedCalibration = false;
+  statusCalibration = false;
+  stripShowMsg = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public input: any,
