@@ -98,10 +98,7 @@ export class LoginComponent implements OnInit {
       this.loginForm.controls.password.value
     );
 
-    if (
-      this.loginForm.controls.userName.value &&
-      this.loginForm.controls.password.value
-    ) {
+    if (this.loginForm.valid) {
       this.authService
         .login(
           this.loginForm.controls.userName.value.trim(),
