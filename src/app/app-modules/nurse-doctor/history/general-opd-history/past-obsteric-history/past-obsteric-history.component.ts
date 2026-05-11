@@ -34,6 +34,7 @@ import {
   FormGroup,
   FormArray,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import {
   MasterdataService,
@@ -47,11 +48,49 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardCardImports } from '@/components/ui/card/card.imports';
+import { ZardCheckboxImports } from '@/components/ui/checkbox/checkbox.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory, lucidePlus, lucideX } from '@ng-icons/lucide';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { NumberValidatorDirective } from '../../../../core/directives/numberValidator.directive';
 
 @Component({
   selector: 'app-general-past-obsteric-history',
+  standalone: true,
   templateUrl: './past-obsteric-history.component.html',
   styleUrls: ['./past-obsteric-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardCardImports,
+    ZardCheckboxImports,
+    ZardLabelImports,
+    ZardSelectImports,
+    NgIf,
+    NgFor,
+    NgClass,
+    NgIcon,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+    NumberValidatorDirective,
+  ],
+  providers: [
+    provideIcons({
+      lucideHistory,
+      lucidePlus,
+      lucideX,
+    }),
+  ],
 })
 export class PastObstericHistoryComponent
   implements OnInit, DoCheck, OnChanges, OnDestroy

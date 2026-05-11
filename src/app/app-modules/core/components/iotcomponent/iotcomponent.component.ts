@@ -25,6 +25,7 @@ import {
   MAT_DIALOG_DATA,
   MatDialog,
   MatDialogRef,
+  MatDialogContent,
 } from '@angular/material/dialog';
 import { ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
@@ -32,11 +33,23 @@ import { IotService } from '../../services/iot.service';
 import { SetLanguageComponent } from '../set-language.component';
 import { CalibrationComponent } from '../calibration/calibration.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgClass, NgIf } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-iotcomponent',
   templateUrl: './iotcomponent.component.html',
   styleUrls: ['./iotcomponent.component.css'],
+  imports: [
+    NgClass,
+    MatIcon,
+    MatTooltip,
+    CdkScrollable,
+    MatDialogContent,
+    NgIf,
+  ],
 })
 export class IotcomponentComponent implements OnInit, DoCheck {
   errorMsg: any;
@@ -47,11 +60,11 @@ export class IotcomponentComponent implements OnInit, DoCheck {
   current_language_set: any;
   procedure: any;
   stripCode: any;
-  msgCalibration: boolean = false;
-  startedCalibration: boolean = false;
-  stoppedCalibration: boolean = false;
-  statusCalibration: boolean = false;
-  stripShowMsg: boolean = false;
+  msgCalibration = false;
+  startedCalibration = false;
+  stoppedCalibration = false;
+  statusCalibration = false;
+  stripShowMsg = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public input: any,

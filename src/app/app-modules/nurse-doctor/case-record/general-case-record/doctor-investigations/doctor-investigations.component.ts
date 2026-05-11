@@ -21,7 +21,8 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NgIf, NgFor } from '@angular/common';
 
 import {
   MasterdataService,
@@ -31,14 +32,44 @@ import {
 import { Subscription } from 'rxjs';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { environment } from 'src/environments/environment';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { StringValidatorDirective } from '@/app-modules/core/directives/stringValidator.directive';
+import { environment } from 'src/environments/environment';
+import {
+  ZardFormImports,
+  ZardRadioImports,
+  ZardSelectImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+  ZardAccordionImports,
+  ZardDatePickerImports,
+} from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-doctor-investigations',
   templateUrl: './doctor-investigations.component.html',
   styleUrls: ['./doctor-investigations.component.css'],
+  standalone: true,
+  imports: [
+    NgIf,
+    NgFor,
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    ZardAccordionImports,
+    ZardDatePickerImports,
+    LucideAngularModule,
+    StringValidatorDirective,
+  ],
 })
 export class DoctorInvestigationsComponent
   implements OnInit, DoCheck, OnDestroy
@@ -61,15 +92,15 @@ export class DoctorInvestigationsComponent
 
   previousLabTestList: any;
   diabetesSelected: any;
-  VisualAcuityMandatory: boolean = false;
-  RBSTestDoneInVitals: boolean = false;
-  VisualAcuityTestDone: boolean = false;
+  VisualAcuityMandatory = false;
+  RBSTestDoneInVitals = false;
+  VisualAcuityTestDone = false;
   diastolicBpValue: any;
   systolicBpValue: any;
   RBSTestScore!: number;
-  rbsPresent: boolean = false;
-  visualAcuityPresent: boolean = false;
-  RBSAndHeamoglobinSelected: boolean = false;
+  rbsPresent = false;
+  visualAcuityPresent = false;
+  RBSAndHeamoglobinSelected = false;
   confirmedDiabeticValue: any;
   hypertensionSelected: any;
   current_language_set: any;
@@ -80,7 +111,7 @@ export class DoctorInvestigationsComponent
   systolicSubscription!: Subscription;
   diastolicSubscription!: Subscription;
   rbsTestResultSubscription!: Subscription;
-  rbsSelectedInInvestigation: boolean = false;
+  rbsSelectedInInvestigation = false;
   hemoglobbinSelected!: boolean;
   RBSTestScoreInVitals!: number;
 

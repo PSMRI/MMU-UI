@@ -30,19 +30,85 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { NgIf, NgFor, NgClass, SlicePipe } from '@angular/common';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { DoctorService } from '../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { CameraService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
+import { BeneficiaryPlatformHistoryComponent } from '../beneficiary-platform-history/beneficiary-platform-history.component';
+import { NgChartsModule } from 'ng2-charts';
+import {
+  ZardFormImports,
+  ZardRadioImports,
+  ZardSelectImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+  ZardAccordionImports,
+  ZardDatePickerImports,
+} from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideHistory,
+  lucideActivity,
+  lucideTrendingUp,
+  lucideHeartPulse,
+  lucideDroplets,
+  lucideEye,
+  lucideScanLine,
+  lucideFileText,
+  lucideStethoscope,
+  lucideBarChart3,
+} from '@ng-icons/lucide';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+
 @Component({
   selector: 'app-cancer-case-record',
   templateUrl: './cancer-case-record.component.html',
   styleUrls: ['./cancer-case-record.component.css'],
+  imports: [
+    NgIf,
+    NgFor,
+    NgClass,
+    SlicePipe,
+    ReactiveFormsModule,
+    NgChartsModule,
+    BeneficiaryPlatformHistoryComponent,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    ZardAccordionImports,
+    ZardDatePickerImports,
+    LucideAngularModule,
+    NgIcon,
+    StringValidatorDirective,
+    MatPaginator,
+  ],
+  providers: [
+    provideIcons({
+      lucideHistory,
+      lucideActivity,
+      lucideTrendingUp,
+      lucideHeartPulse,
+      lucideDroplets,
+      lucideEye,
+      lucideScanLine,
+      lucideFileText,
+      lucideStethoscope,
+      lucideBarChart3,
+    }),
+  ],
 })
 export class CancerCaseRecordComponent
   implements OnInit, DoCheck, AfterViewInit, OnDestroy
@@ -67,8 +133,8 @@ export class CancerCaseRecordComponent
       pointHoverBorderColor: 'maroon',
     },
   ];
-  weightChartLegend: boolean = true;
-  weightChartType: string = 'line';
+  weightChartLegend = true;
+  weightChartType = 'line';
   // Ends Weight Graph
 
   // Bp Graph
@@ -94,8 +160,8 @@ export class CancerCaseRecordComponent
       pointHoverBorderColor: 'rgba(222,92,132,1)',
     },
   ];
-  bpChartLegend: boolean = true;
-  bpChartType: string = 'line';
+  bpChartLegend = true;
+  bpChartType = 'line';
   // Ends Bp Graph
 
   // Bg Chart
@@ -131,8 +197,8 @@ export class CancerCaseRecordComponent
       pointHoverBorderColor: 'rgba(222,92,132,1)',
     },
   ];
-  bgChartLegend: boolean = true;
-  bgChartType: string = 'line';
+  bgChartLegend = true;
+  bgChartType = 'line';
 
   //Ends Bg Chart
 
@@ -447,7 +513,7 @@ export class CancerCaseRecordComponent
   rotate = true;
   historyOfMMU = [];
   filteredMMUHistory: any = [];
-  hideMMUFetch: boolean = false;
+  hideMMUFetch = false;
   getMMUHistory() {
     this.doctorService.getMMUHistory().subscribe((data: any) => {
       console.log('data', data);

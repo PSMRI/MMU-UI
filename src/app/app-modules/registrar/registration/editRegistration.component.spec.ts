@@ -34,12 +34,12 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { CameraService } from '../../core/services/camera.service';
 import { RegistrarService } from '../../../../../Common-UI/src/registrar/services/registrar.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of, BehaviorSubject, Subject } from 'rxjs';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/empty';
 import 'rxjs/add/observable/throw';
 import { Component, Provider } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -47,7 +47,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 // import { fakeAsync, tick } from '@angular/core/testing';
 // import { RouterTestingModule } from '@angular/router/testing';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MaterialModule } from '../../core/material.module';
+
 import { element } from 'protractor';
 import { RegisterOtherDetailsComponent } from './register-other-details/register-other-details.component';
 import { RegisterPersonalDetailsComponent } from './register-personal-details/register-personal-details.component';
@@ -63,7 +63,7 @@ class RouterStub {
 
 class RegistrarServiceMock {
   // submitBeneficiary = jasmine.createSpy('submitBeneficiary() spy').andCallFake(function(){
-  //   return Observable.of(true);
+  //   return of(true);
   // });
   // updateBeneficiary = jasmine.createSpy('updateBeneficiary');
 
@@ -195,10 +195,10 @@ class RegistrarServiceMock {
   }
 
   submitBeneficiary() {
-    return Observable.of(true);
+    return of(true);
   }
   updateBeneficiary() {
-    return Observable.of(false);
+    return of(false);
   }
 }
 
@@ -210,7 +210,7 @@ describe('RegisterComponent', () => {
   let registrarService: RegistrarService;
   let spy: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
@@ -293,7 +293,7 @@ describe('RegisterComponent', () => {
   it('should call the Update Service Method', () => {
     const service = fixture.debugElement.injector.get(RegistrarService);
     spy = spyOn(service, 'updateBeneficiary').and.callFake(function () {
-      return Observable.of(true);
+      return of(true);
     });
 
     component.updateBeneficiaryDetails();

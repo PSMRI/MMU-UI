@@ -21,7 +21,7 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
 import {
@@ -43,15 +43,41 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardDatePickerImports } from '@/components/ui/date-picker/date-picker.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { MatRadioModule } from '@angular/material/radio';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory, lucidePlus, lucideX } from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-general-menstrual-history',
+  standalone: true,
   templateUrl: './menstrual-history.component.html',
   styleUrls: ['./menstrual-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardRadioImports,
+    ZardDatePickerImports,
+    ZardLabelImports,
+    ZardSelectImports,
+    NgIf,
+    NgFor,
+    NgClass,
+    NgIcon,
+  ],
   providers: [
     {
       provide: MAT_DATE_LOCALE,
-      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
+      useValue: 'en-US',
     },
     {
       provide: DateAdapter,
@@ -65,13 +91,20 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
           dateInput: 'LL',
         },
         display: {
-          dateInput: 'DD/MM/YYYY', // Set the desired display format
+          dateInput: 'DD/MM/YYYY',
           monthYearLabel: 'MMM YYYY',
           dateA11yLabel: 'LL',
           monthYearA11yLabel: 'MMMM YYYY',
+          dateMonthYearLabel: 'MMM YYYY',
+          dateMonthYearA11yLabel: 'MMMM YYYY',
         },
       },
     },
+    provideIcons({
+      lucideHistory,
+      lucidePlus,
+      lucideX,
+    }),
   ],
 })
 export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {

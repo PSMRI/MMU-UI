@@ -1,1023 +1,272 @@
-<div class="container">
-  <div class="row col-xs-12">
-    <h2 class="text-center">
-      {{ currentLanguageSet?.ExaminationData?.examination }}
+<div class="max-w-7xl mx-auto p-8 space-y-16 animate-in fade-in duration-1000">
+  <div class="flex items-center gap-4">
+    <div class="h-px flex-1 bg-gray-100"></div>
+    <h2 class="text-xl font-black text-gray-900 tracking-tighter uppercase">
+      Physical Examination Records
     </h2>
-    <hr />
-  </div>
-  <!-- Symptoms -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.symptoms?.symptoms
-        }}
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="casesheet-table">
-        <tbody>
-          <tr>
-            <th id="shortnessofbreath">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.symptoms?.shortnessofbreath
-              }}:
-            </th>
-            <td>
-              <span *ngIf="signsAndSymptoms?.shortnessOfBreath === true">
-                {{ currentLanguageSet?.covid?.yES }}
-              </span>
-              <span *ngIf="signsAndSymptoms?.shortnessOfBreath === false">
-                {{ currentLanguageSet?.common?.no }}
-              </span>
-            </td>
-            <th id="coughweeks">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.symptoms?.coughweeks
-              }}:
-            </th>
-            <td>
-              <span *ngIf="signsAndSymptoms?.coughgt2Weeks === true">
-                {{ currentLanguageSet?.covid?.yES }}
-              </span>
-              <span *ngIf="signsAndSymptoms?.coughgt2Weeks === false">
-                {{ currentLanguageSet?.common?.no }}
-              </span>
-            </td>
-          </tr>
-
-          <tr>
-            <th id="bloodinsputum">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.symptoms?.bloodinsputum
-              }}:
-            </th>
-            <td>
-              <span *ngIf="signsAndSymptoms?.bloodInSputum === true">
-                {{ currentLanguageSet?.covid?.yES }}
-              </span>
-              <span *ngIf="signsAndSymptoms?.bloodInSputum === false">
-                {{ currentLanguageSet?.common?.no }}
-              </span>
-            </td>
-            <th id="difficultyinopeningmouth">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.symptoms?.difficultyinopeningmouth
-              }}:
-            </th>
-            <td>
-              <span *ngIf="signsAndSymptoms?.difficultyInOpeningMouth === true">
-                {{ currentLanguageSet?.covid?.yES }}
-              </span>
-              <span
-                *ngIf="signsAndSymptoms?.difficultyInOpeningMouth === false">
-                {{ currentLanguageSet?.common?.no }}
-              </span>
-            </td>
-          </tr>
-
-          <tr>
-            <th id="changeInTheToneOfVoice">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.symptoms?.changeInTheToneOfVoice
-              }}:
-            </th>
-            <td>
-              <span *ngIf="signsAndSymptoms?.changeInTheToneOfVoice === true">
-                {{ currentLanguageSet?.covid?.yES }}
-              </span>
-              <span *ngIf="signsAndSymptoms?.changeInTheToneOfVoice === false">
-                {{ currentLanguageSet?.common?.no }}
-              </span>
-            </td>
-            <th id="nonhealing">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.symptoms?.nonhealing
-              }}:
-            </th>
-            <td>
-              <span
-                *ngIf="
-                  signsAndSymptoms?.nonHealingUlcerOrPatchOrGrowth === true
-                ">
-                {{ currentLanguageSet?.covid?.yES }}
-              </span>
-              <span
-                *ngIf="
-                  signsAndSymptoms?.nonHealingUlcerOrPatchOrGrowth === false
-                ">
-                {{ currentLanguageSet?.common?.no }}
-              </span>
-            </td>
-          </tr>
-
-          <tr>
-            <th id="breastEnlargement">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.symptoms?.breastEnlargement
-              }}:
-            </th>
-            <td>
-              <span *ngIf="signsAndSymptoms?.breastEnlargement === true">
-                {{ currentLanguageSet?.covid?.yES }}
-              </span>
-              <span *ngIf="signsAndSymptoms?.breastEnlargement === false">
-                {{ currentLanguageSet?.common?.no }}
-              </span>
-            </td>
-            <th id="bloodstaineddischargefromnipple">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.symptoms?.bloodstaineddischargefromnipple
-              }}:
-            </th>
-            <td>
-              <span
-                *ngIf="
-                  signsAndSymptoms?.bloodStainedDischargeFromNipple === true
-                ">
-                {{ currentLanguageSet?.covid?.yES }}
-              </span>
-              <span
-                *ngIf="
-                  signsAndSymptoms?.bloodStainedDischargeFromNipple === false
-                ">
-                {{ currentLanguageSet?.common?.no }}
-              </span>
-            </td>
-          </tr>
-
-          <tr
-            *ngIf="
-              beneficiaryDetails && beneficiaryDetails.genderName === 'Female'
-            ">
-            <th id="vaginalbleedingbetweenperiods">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.symptoms?.vaginalbleedingbetweenperiods
-              }}:
-            </th>
-            <td>
-              <span
-                *ngIf="signsAndSymptoms?.vaginalBleedingBetweenPeriods === true"
-                >>{{ currentLanguageSet?.common?.yes }}</span
-              >
-              <span
-                *ngIf="
-                  signsAndSymptoms?.vaginalBleedingBetweenPeriods === false
-                "
-                >{{ currentLanguageSet?.common?.no }}</span
-              >
-            </td>
-            <th id="foulsmellingvaginaldischarge">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.symptoms?.foulsmellingvaginaldischarge
-              }}:
-            </th>
-            <td>
-              <span
-                *ngIf="signsAndSymptoms?.foulSmellingVaginalDischarge === true"
-                >>{{ currentLanguageSet?.common?.yes }}</span
-              >
-              <span
-                *ngIf="signsAndSymptoms?.foulSmellingVaginalDischarge === false"
-                >{{ currentLanguageSet?.common?.no }}</span
-              >
-            </td>
-          </tr>
-
-          <tr>
-            <th id="changeinshapeandsizeofbreasts">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.symptoms?.changeinshapeandsizeofbreasts
-              }}:
-            </th>
-            <td>
-              <span
-                *ngIf="signsAndSymptoms?.changeInShapeAndSizeOfBreasts === true"
-                >{{ currentLanguageSet?.common?.yes }}</span
-              >
-              <span
-                *ngIf="
-                  signsAndSymptoms?.changeInShapeAndSizeOfBreasts === false
-                "
-                >{{ currentLanguageSet?.common?.no }}</span
-              >
-            </td>
-            <th id="lumpinbreast">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.symptoms?.lumpinbreast
-              }}:
-            </th>
-            <td>
-              <span *ngIf="signsAndSymptoms?.lumpInTheBreast === true">{{
-                currentLanguageSet?.common?.yes
-              }}</span>
-              <span *ngIf="signsAndSymptoms?.lumpInTheBreast === false">{{
-                currentLanguageSet?.common?.no
-              }}</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <div class="h-px flex-1 bg-gray-100"></div>
   </div>
 
-  <div class="row m-t-10" *ngIf="signsAndSymptoms?.lymphNode_Enlarged === true">
-    <div class="col-xs-12">
-      <h5>
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.symptoms?.lymphnodes
-        }}
-      </h5>
-      <div class="row m-t-10">
-        <div class="col-xs-12">
-          <table
-            class="table table-striped table-bordered"
-            aria-describedby="BenCancerLymphNodeTbl">
-            <thead>
-              <tr>
-                <th id="sizeRight">
-                  {{ currentLanguageSet?.casesheet?.sizeRight }}
-                </th>
-                <th id="mobilityRight">
-                  {{ currentLanguageSet?.casesheet?.mobilityRight }}
-                </th>
-                <th id="lymphName">
-                  {{ currentLanguageSet?.casesheet?.lymphName }}
-                </th>
-                <th id="mobiltyLeft">
-                  {{ currentLanguageSet?.casesheet?.mobiltyLeft }}
-                </th>
-                <th id="sizeLeft">
-                  {{ currentLanguageSet?.casesheet?.sizeLeft }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let lymphNodes of BenCancerLymphNodeDetails">
-                <td>{{ lymphNodes.size_Right }}</td>
-                <td>
-                  {{
-                    lymphNodes.mobility_Right === undefined
-                      ? null
-                      : lymphNodes.mobility_Right
-                        ? '+'
-                        : '-'
-                  }}
-                </td>
-                <td>{{ lymphNodes.lymphNodeName }}</td>
-                <td>
-                  {{
-                    lymphNodes.mobility_Left === undefined
-                      ? null
-                      : lymphNodes.mobility_Left
-                        ? '+'
-                        : '-'
-                  }}
-                </td>
-                <td>{{ lymphNodes.size_Left }}</td>
-              </tr>
-            </tbody>
-          </table>
+  <div class="space-y-24">
+    <!-- Oral Examination Section -->
+    <section class="space-y-8">
+      <div class="flex items-center gap-3">
+        <div class="p-3 bg-rose-600 rounded-2xl shadow-lg shadow-rose-100">
+          <ng-icon name="lucideActivity" class="text-white text-xl"></ng-icon>
+        </div>
+        <h3 class="text-2xl font-black text-gray-900 tracking-tight uppercase">
+          {{ currentLanguageSet?.casesheet?.oralExamination }}
+        </h3>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div class="space-y-6">
+          <z-card
+            variant="outline"
+            class="overflow-hidden border-gray-100 shadow-sm">
+            <div class="p-8 space-y-4">
+              <label
+                class="text-[10px] font-black text-rose-400 uppercase tracking-widest"
+                >Doctor's Observations</label
+              >
+              <p
+                class="text-sm font-medium text-gray-700 leading-relaxed bg-gray-50/50 p-6 rounded-[2rem] border border-gray-50 min-h-[100px]">
+                {{
+                  oralExamination?.observation || 'No abnormalities detected.'
+                }}
+              </p>
+            </div>
+          </z-card>
+          <!-- Lymph Node Details Table -->
+          <z-card
+            variant="outline"
+            class="overflow-hidden border-gray-100 shadow-sm">
+            <div
+              class="bg-gray-50/50 p-4 border-b border-gray-100 flex items-center gap-3">
+              <ng-icon name="lucideDna" class="text-rose-500"></ng-icon>
+              <h4
+                class="font-black text-gray-800 uppercase tracking-widest text-[10px]">
+                {{
+                  currentLanguageSet?.nurseData?.cancerLymphNodeDetails
+                    ?.cancerLymphNodeDetails
+                }}
+              </h4>
+            </div>
+            <div class="p-0 overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead class="bg-gray-50/50 border-b border-gray-100">
+                  <tr>
+                    <th
+                      class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                      Lymph Node
+                    </th>
+                    <th
+                      class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                      Findings
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50">
+                  <tr
+                    *ngFor="let node of BenCancerLymphNodeDetails"
+                    class="hover:bg-gray-50/30 transition-colors">
+                    <td
+                      class="px-6 py-4 font-black text-gray-900 text-sm italic">
+                      {{ node.lymphNodeName }}
+                    </td>
+                    <td class="px-6 py-4 font-medium text-gray-600 text-sm">
+                      {{ node.lymphNodeValue }}
+                    </td>
+                  </tr>
+                  <tr *ngIf="!BenCancerLymphNodeDetails?.length">
+                    <td
+                      colspan="2"
+                      class="px-6 py-12 text-center text-gray-400 italic text-sm font-medium">
+                      No lymph node data recorded
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </z-card>
+        </div>
+        <div class="space-y-6">
+          <app-image-to-canvas
+            [imgUrl]="oralImageUrl"
+            [annotatedMarker]="getImageAnnotation(1)">
+          </app-image-to-canvas>
         </div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- Oral Examination -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.oralExamination }}</h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="casesheetTbl">
-        <tbody>
-          <tr>
-            <th id="limitedmouthopening">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.oral?.limitedmouthopening
-              }}:
-            </th>
-            <td>
-              {{ oralExamination?.limitedMouthOpening }}
-            </td>
-            <th id="premalignantLesions">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.oral?.premalignantLesions
-              }}:
-            </th>
-            <td>
-              <span *ngIf="oralExamination?.premalignantLesions === true">{{
-                currentLanguageSet?.covid?.yES
-              }}</span>
-              <span *ngIf="oralExamination?.premalignantLesions === false">
-                {{ currentLanguageSet?.common?.no }}</span
+    <!-- Breast Examination Section -->
+    <section class="space-y-8">
+      <div class="flex items-center gap-3">
+        <div class="p-3 bg-purple-600 rounded-2xl shadow-lg shadow-purple-100">
+          <ng-icon name="lucideUser" class="text-white text-xl"></ng-icon>
+        </div>
+        <h3 class="text-2xl font-black text-gray-900 tracking-tight uppercase">
+          {{ currentLanguageSet?.casesheet?.breastExamination }}
+        </h3>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div class="space-y-6 order-2 lg:order-1">
+          <app-image-to-canvas
+            [imgUrl]="breastImageUrl"
+            [annotatedMarker]="getImageAnnotation(2)">
+          </app-image-to-canvas>
+        </div>
+        <div class="space-y-6 order-1 lg:order-2">
+          <z-card
+            variant="outline"
+            class="overflow-hidden border-gray-100 shadow-sm border-r-4 border-r-purple-400">
+            <div class="p-8 space-y-4">
+              <label
+                class="text-[10px] font-black text-purple-400 uppercase tracking-widest"
+                >Doctor's Observations</label
               >
-            </td>
-          </tr>
-
-          <tr>
-            <th id="typeofPremalignantLesions">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.oral?.typeofPremalignantLesions
-              }}:
-            </th>
-            <td>
-              {{ oralExamination?.preMalignantLesionType }}
-            </td>
-            <th id="prolongedirritation">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.oral?.prolongedirritation
-              }}:
-            </th>
-            <td>
-              <span *ngIf="oralExamination?.prolongedIrritation === true">{{
-                currentLanguageSet?.covid?.yES
-              }}</span>
-              <span *ngIf="oralExamination?.prolongedIrritation === false">
-                {{ currentLanguageSet?.common?.no }}</span
-              >
-            </td>
-          </tr>
-
-          <tr>
-            <th id="chronicburningsensation">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.oral?.chronicburningsensation
-              }}:
-            </th>
-            <td>
-              <span *ngIf="oralExamination?.chronicBurningSensation === true">{{
-                currentLanguageSet?.covid?.yES
-              }}</span>
-              <span *ngIf="oralExamination?.chronicBurningSensation === false">
-                {{ currentLanguageSet?.common?.no }}</span
-              >
-            </td>
-            <th id="emp">&nbsp;</th>
-            <td>&nbsp;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="col-xs-12">
-      <app-image-to-canvas
-        [imgUrl]="oralImageUrl"
-        [annotatedMarker]="
-          imageAnnotatedData && getImageAnnotation(3)
-        "></app-image-to-canvas>
-    </div>
-  </div>
-
-  <!-- Breast Examination -->
-  <div
-    class="row m-t-10"
-    *ngIf="
-      (beneficiaryDetails && beneficiaryDetails.genderName === 'Female') ||
-      signsAndSymptoms?.breastEnlargement === true
-    ">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.breast?.breastExamination
-        }}
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="breastexamTbl">
-        <tbody>
-          <tr
-            *ngIf="
-              beneficiaryDetails && beneficiaryDetails.genderName === 'Female'
-            ">
-            <th id="everbreastfedachild">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.breast?.everbreastfedachild
-              }}:
-            </th>
-            <td>
-              <span *ngIf="breastExamination?.everBreastFed === true">{{
-                currentLanguageSet?.covid?.yES
-              }}</span>
-              <span *ngIf="breastExamination?.everBreastFed === false">{{
-                currentLanguageSet?.common?.no
-              }}</span>
-            </td>
-            <th id="durationofbreastfeeding">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.breast?.durationofbreastfeeding
-              }}:
-            </th>
-            <td>
-              <span
-                *ngIf="
-                  breastExamination?.breastFeedingDurationGTE6months === true
-                ">
+              <p
+                class="text-sm font-medium text-gray-700 leading-relaxed bg-gray-50/50 p-6 rounded-[2rem] border border-gray-50 min-h-[150px]">
                 {{
-                  currentLanguageSet?.ExaminationData
-                    ?.cancerScreeningExamination?.breast?.less6months
+                  breastExamination?.observation || 'No abnormalities detected.'
                 }}
-              </span>
-              <span
-                *ngIf="
-                  breastExamination?.breastFeedingDurationGTE6months === false
-                ">
+              </p>
+            </div>
+          </z-card>
+        </div>
+      </div>
+    </section>
+
+    <!-- Abdominal Examination Section -->
+    <section class="space-y-8">
+      <div class="flex items-center gap-3">
+        <div class="p-3 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-100">
+          <ng-icon name="lucideClipboard" class="text-white text-xl"></ng-icon>
+        </div>
+        <h3 class="text-2xl font-black text-gray-900 tracking-tight uppercase">
+          {{
+            currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+              ?.abdominal?.abdominalExamination
+          }}
+        </h3>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div class="space-y-6">
+          <z-card
+            variant="outline"
+            class="overflow-hidden border-gray-100 shadow-sm border-l-4 border-l-indigo-400">
+            <div class="p-8 space-y-4">
+              <label
+                class="text-[10px] font-black text-indigo-400 uppercase tracking-widest"
+                >Doctor's Observations</label
+              >
+              <p
+                class="text-sm font-medium text-gray-700 leading-relaxed bg-gray-50/50 p-6 rounded-[2rem] border border-gray-50 min-h-[150px]">
                 {{
-                  currentLanguageSet?.ExaminationData
-                    ?.cancerScreeningExamination?.breast?.greater6months
-                }}</span
+                  abdominalExamination?.observation ||
+                    'No abnormalities detected.'
+                }}
+              </p>
+            </div>
+          </z-card>
+        </div>
+        <div class="space-y-6">
+          <app-image-to-canvas
+            [imgUrl]="abdominalImageUrl"
+            [annotatedMarker]="getImageAnnotation(3)">
+          </app-image-to-canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gynecological Examination Section (Conditional) -->
+    <section
+      *ngIf="beneficiaryDetails?.genderName === 'Female'"
+      class="space-y-8">
+      <div class="flex items-center gap-3">
+        <div class="p-3 bg-pink-600 rounded-2xl shadow-lg shadow-pink-100">
+          <ng-icon name="lucideUser" class="text-white text-xl"></ng-icon>
+        </div>
+        <h3 class="text-2xl font-black text-gray-900 tracking-tight uppercase">
+          {{
+            currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+              ?.gynecological?.gynecologicalExamination
+          }}
+        </h3>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div class="space-y-6 order-2 lg:order-1">
+          <app-image-to-canvas
+            [imgUrl]="gynecologicalImageUrl"
+            [annotatedMarker]="getImageAnnotation(4)">
+          </app-image-to-canvas>
+        </div>
+        <div class="space-y-6 order-1 lg:order-2">
+          <z-card
+            variant="outline"
+            class="overflow-hidden border-gray-100 shadow-sm border-r-4 border-r-pink-400">
+            <div class="p-8 space-y-4">
+              <label
+                class="text-[10px] font-black text-pink-400 uppercase tracking-widest"
+                >Doctor's Observations</label
               >
-            </td>
-          </tr>
-
-          <tr>
-            <th id="breastsappearnormal">
-              {{ currentLanguageSet?.casesheet?.brestFeed }}:
-            </th>
-            <td>
-              <span *ngIf="breastExamination?.breastsAppear_Normal === true">{{
-                currentLanguageSet?.covid?.yES
-              }}</span>
-              <span *ngIf="breastExamination?.breastsAppear_Normal === false">{{
-                currentLanguageSet?.common?.no
-              }}</span>
-            </td>
-            <th id="anyrashonthebreast">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.breast?.anyrashonthebreast
-              }}:
-            </th>
-            <td>
-              <span *ngIf="breastExamination?.rashOnBreast === true">{{
-                currentLanguageSet?.covid?.yES
-              }}</span>
-              <span *ngIf="breastExamination?.rashOnBreast === false">{{
-                currentLanguageSet?.common?.no
-              }}</span>
-            </td>
-          </tr>
-
-          <tr>
-            <th id="anydimplingofskinonthebreast">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.breast?.anydimplingofskinonthebreast
-              }}:
-            </th>
-            <td>
-              <span *ngIf="breastExamination?.dimplingSkinOnBreast === true">{{
-                currentLanguageSet?.covid?.yES
-              }}</span>
-              <span *ngIf="breastExamination?.dimplingSkinOnBreast === false">{{
-                currentLanguageSet?.common?.no
-              }}</span>
-            </td>
-            <th id="anydischargefromthenipple">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.breast?.anydischargefromthenipple
-              }}:
-            </th>
-            <td>
-              <span *ngIf="breastExamination?.dischargeFromNipple === true">{{
-                currentLanguageSet?.covid?.yES
-              }}</span>
-              <span *ngIf="breastExamination?.dischargeFromNipple === false">{{
-                currentLanguageSet?.common?.no
-              }}</span>
-            </td>
-          </tr>
-
-          <tr>
-            <th id="peaudorange">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.breast?.peaudorange
-              }}:
-            </th>
-            <td>
-              <span *ngIf="breastExamination?.peaudOrange === true">{{
-                currentLanguageSet?.covid?.yES
-              }}</span>
-              <span *ngIf="breastExamination?.peaudOrange === false">{{
-                currentLanguageSet?.common?.no
-              }}</span>
-            </td>
-            <th id="anylumpinbreast">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.breast?.anylumpinbreast
-              }}:
-            </th>
-            <td>
-              <span *ngIf="breastExamination?.lumpInBreast === true">{{
-                currentLanguageSet?.covid?.yES
-              }}</span>
-              <span *ngIf="breastExamination?.lumpInBreast === false">{{
-                currentLanguageSet?.common?.no
-              }}</span>
-            </td>
-          </tr>
-
-          <tr>
-            <th id="lumpSize">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.breast?.lumpSize
-              }}:
-            </th>
-            <td>{{ breastExamination?.lumpSize }}</td>
-            <th id="lumpTexture">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.breast?.lumpTexture
-              }}:
-            </th>
-            <td>{{ breastExamination?.lumpTexture }}</td>
-          </tr>
-
-          <tr>
-            <th id="lumpshape">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.breast?.lumpShape
-              }}:
-            </th>
-            <td>{{ breastExamination?.lumpShape }}</td>
-            <th id="empty1">&nbsp;</th>
-            <td>&nbsp;</td>
-          </tr>
-
-          <tr>
-            <th id="referredtoMammogram">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.breast?.referredtoMammogram
-              }}:
-            </th>
-            <td>
-              <span *ngIf="breastExamination?.referredToMammogram === true">{{
-                currentLanguageSet?.covid?.yES
-              }}</span>
-              <span *ngIf="breastExamination?.referredToMammogram === false">
-                {{ currentLanguageSet?.common?.no }}</span
-              >
-            </td>
-            <th id="">&nbsp;</th>
-            <td>&nbsp;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="col-xs-12">
-      <app-image-to-canvas
-        [imgUrl]="breastImageUrl"
-        [annotatedMarker]="
-          imageAnnotatedData && getImageAnnotation(2)
-        "></app-image-to-canvas>
-    </div>
+              <p
+                class="text-sm font-medium text-gray-700 leading-relaxed bg-gray-50/50 p-6 rounded-[2rem] border border-gray-50 min-h-[150px]">
+                {{
+                  gynecologicalExamination?.observation ||
+                    'No abnormalities detected.'
+                }}
+              </p>
+            </div>
+          </z-card>
+        </div>
+      </div>
+    </section>
   </div>
 
-  <!-- Abdominal Examination -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.abdominal?.abdominalExamination
-        }}
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="cancerscreenTbl">
-        <tbody>
-          <tr>
-            <th id="abdominalInspection">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.abdominal?.abdominalInspection
-              }}:
-            </th>
-            <td>
-              <span
-                *ngIf="
-                  abdominalExamination?.abdominalInspection_Normal === true
-                ">
-                {{ currentLanguageSet?.common?.normal }}
-              </span>
+  <!-- Revisit Details Section -->
+  <div class="pt-16 border-t border-gray-100">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <z-card
+        variant="outline"
+        class="bg-gray-50/30 border-gray-100 p-8 flex items-center justify-between">
+        <div class="space-y-2">
+          <p
+            class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em]">
+            Next Follow-up
+          </p>
+          <p class="text-2xl font-black text-indigo-900 tracking-tighter">
+            {{ diagnosisdetails?.revisitDate || 'Not scheduled' }}
+          </p>
+        </div>
+        <div class="p-4 bg-white rounded-2xl shadow-sm border border-gray-100">
+          <ng-icon
+            name="lucideCalendar"
+            class="text-indigo-600 text-2xl"></ng-icon>
+        </div>
+      </z-card>
 
-              <span
-                *ngIf="
-                  abdominalExamination?.abdominalInspection_Normal === false
-                "
-                >{{ currentLanguageSet?.common?.abnormal }}
-              </span>
-            </td>
-            <th id="liver">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.abdominal?.liver
-              }}:
-            </th>
-            <td>
-              {{ abdominalExamination?.liver }}
-            </td>
-          </tr>
-
-          <tr>
-            <th id="ascites">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.abdominal?.ascites
-              }}:
-            </th>
-            <td>
-              <span *ngIf="abdominalExamination?.ascites_Present === true">{{
-                currentLanguageSet?.common?.present
-              }}</span>
-              <span *ngIf="abdominalExamination?.ascites_Present === false">{{
-                currentLanguageSet?.common?.absent
-              }}</span>
-            </td>
-            <th id="anyOtherMass">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.abdominal?.anyOtherMass
-              }}:
-            </th>
-            <td>
-              <span
-                *ngIf="abdominalExamination?.anyOtherMass_Present === true"
-                >{{ currentLanguageSet?.common?.present }}</span
-              >
-              <span
-                *ngIf="abdominalExamination?.anyOtherMass_Present === false"
-                >{{ currentLanguageSet?.common?.absent }}</span
-              >
-            </td>
-          </tr>
-
-          <tr>
-            <th id="lymphnode">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.abdominal?.lymphnode
-              }}:
-            </th>
-            <td>
-              <span *ngIf="abdominalExamination?.lymphNodes_Enlarged === true">
-                {{ currentLanguageSet?.common?.enlarged }}
-              </span>
-              <span *ngIf="abdominalExamination?.lymphNodes_Enlarged === false">
-                {{ currentLanguageSet?.common?.notEnlarged }}
-              </span>
-            </td>
-            <th id="">&nbsp;</th>
-            <td>&nbsp;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-striped table-bordered"
-        aria-describedby="abdominal">
-        <thead>
-          <tr>
-            <th id="rightPalpable">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.abdominal?.rightPalpable
-              }}
-            </th>
-            <th id="lymphnode">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.abdominal?.lymphnode
-              }}
-            </th>
-            <th id="leftPalpable">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.abdominal?.leftPalpable
-              }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              {{
-                abdominalExamination?.lymphNode_Inguinal_Right === undefined
-                  ? null
-                  : abdominalExamination?.lymphNode_Inguinal_Right
-                    ? '+'
-                    : '-'
-              }}
-            </td>
-            <td>
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.abdominal?.inguinal
-              }}
-            </td>
-            <td>
-              {{
-                abdominalExamination?.lymphNode_Inguinal_Left === undefined
-                  ? null
-                  : abdominalExamination?.lymphNode_Inguinal_Left
-                    ? '+'
-                    : '-'
-              }}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {{
-                abdominalExamination?.lymphNode_ExternalIliac_Right ===
-                undefined
-                  ? null
-                  : abdominalExamination?.lymphNode_ExternalIliac_Right
-                    ? '+'
-                    : '-'
-              }}
-            </td>
-            <td>
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.abdominal?.externalIliac
-              }}
-            </td>
-            <td>
-              {{
-                abdominalExamination?.lymphNode_ExternalIliac_Left === undefined
-                  ? null
-                  : abdominalExamination?.lymphNode_ExternalIliac_Left
-                    ? '+'
-                    : '-'
-              }}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {{
-                abdominalExamination?.lymphNode_ParaAortic_Right === undefined
-                  ? null
-                  : abdominalExamination?.lymphNode_ParaAortic_Right
-                    ? '+'
-                    : '-'
-              }}
-            </td>
-            <td>
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.abdominal?.paraAortic
-              }}
-            </td>
-            <td>
-              {{
-                abdominalExamination?.lymphNode_ParaAortic_Left === undefined
-                  ? null
-                  : abdominalExamination?.lymphNode_ParaAortic_Left
-                    ? '+'
-                    : '-'
-              }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="page-break"></div>
-
-    <div class="col-xs-12">
-      <app-image-to-canvas
-        [imgUrl]="abdominalImageUrl"
-        [annotatedMarker]="
-          imageAnnotatedData && getImageAnnotation(1)
-        "></app-image-to-canvas>
-    </div>
-  </div>
-
-  <!-- Gynecological Examination -->
-  <div
-    class="row m-t-10"
-    *ngIf="beneficiaryDetails && beneficiaryDetails.genderName === 'Female'">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.gynecological?.gynecologicalExamination
-        }}
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="cancerScreeningExaminationTbl">
-        <tbody>
-          <tr>
-            <th id="appearanceunderAceticAcid">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.gynecological?.appearanceunderAceticAcid
-              }}:
-            </th>
-            <td>
-              {{ gynecologicalExamination?.appearanceOfCervix }}
-            </td>
-            <th id="typeoflesion">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.gynecological?.typeoflesion
-              }}:
-            </th>
-            <td>
-              {{ gynecologicalExamination?.typeOfLesion }}
-            </td>
-          </tr>
-
-          <tr>
-            <th id="vulvalInvolvement">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.gynecological?.vulvalInvolvement
-              }}:
-            </th>
-            <td>
-              <span
-                *ngIf="gynecologicalExamination?.vulvalInvolvement === true"
-                >{{ currentLanguageSet?.common?.involved }}</span
-              >
-              <span
-                *ngIf="gynecologicalExamination?.vulvalInvolvement === false"
-                >{{ currentLanguageSet?.common?.noInvolved }}</span
-              >
-            </td>
-            <th id="vaginalInvolvement">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.gynecological?.vaginalInvolvement
-              }}:
-            </th>
-            <td>
-              <span
-                *ngIf="gynecologicalExamination?.vaginalInvolvement === true"
-                >{{currentLanguageSet?.common?.involved}</span
-              >
-              <span
-                *ngIf="gynecologicalExamination?.vaginalInvolvement === false"
-                >{{ currentLanguageSet?.common?.noInvolved }}</span
-              >
-            </td>
-          </tr>
-
-          <tr>
-            <th id="uterus">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.gynecological?.uterus
-              }}:
-            </th>
-            <td>
-              <span *ngIf="gynecologicalExamination?.uterus_Normal === true">{{
-                currentLanguageSet?.common?.normal
-              }}</span>
-              <span *ngIf="gynecologicalExamination?.uterus_Normal === false">{{
-                currentLanguageSet?.common?.enlarged
-              }}</span>
-            </td>
-            <th id="sufferedfromanyRTI">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.gynecological?.sufferedfromanyRTI
-              }}:
-            </th>
-            <td>
-              <span
-                *ngIf="gynecologicalExamination?.sufferedFromRTIOrSTI === true"
-                >{{ currentLanguageSet?.covid?.yES }}</span
-              >
-              <span
-                *ngIf="gynecologicalExamination?.sufferedFromRTIOrSTI === false"
-                >{{ currentLanguageSet?.common?.no }}</span
-              >
-            </td>
-          </tr>
-
-          <tr>
-            <th id="specify">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.gynecological?.specify
-              }}:
-            </th>
-            <td>{{ gynecologicalExamination?.rTIOrSTIDetail }}</td>
-            <th id="experiencedPostcoitalbleeding">
-              {{
-                currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                  ?.gynecological?.experiencedPostcoitalbleeding
-              }}:
-            </th>
-            <td>
-              <span
-                *ngIf="
-                  gynecologicalExamination?.experiencedPostCoitalBleeding ===
-                  true
-                "
-                >{{ currentLanguageSet?.covid?.yES }}</span
-              >
-              <span
-                *ngIf="
-                  gynecologicalExamination?.experiencedPostCoitalBleeding ===
-                  false
-                "
-                >{{ currentLanguageSet?.common?.no }}</span
-              >
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="col-xs-12">
-      <app-image-to-canvas
-        [imgUrl]="gynecologicalImageUrl"
-        [annotatedMarker]="
-          imageAnnotatedData && getImageAnnotation(4)
-        "></app-image-to-canvas>
-    </div>
-  </div>
-</div>
-<div class="container">
-  <div class="row col-xs-12">
-    <h2 class="text-center">
-      {{ currentLanguageSet?.Referdetails?.revisitAndRefer }}
-    </h2>
-    <hr />
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="diagnosisTbl">
-        <tbody>
-          <tr>
-            <th id="hhc">
-              {{ currentLanguageSet?.Referdetails?.referredtoinstitute }}:
-            </th>
-            <td>{{ diagnosisdetails?.referredToInstituteName }}</td>
-          </tr>
-          <tr>
-            <th id="Additionalservice">
-              {{ currentLanguageSet?.Referdetails?.additionalservices }}:
-            </th>
-            <td>{{ diagnosisdetails?.refrredToAdditionalService }}</td>
-          </tr>
-          <tr>
-            <th id="Referralreason">
-              {{ currentLanguageSet?.Referdetails?.referralReason }}:
-            </th>
-            <td>{{ diagnosisdetails?.referralReason }}</td>
-          </tr>
-          <tr>
-            <th id="RevisitDate">
-              {{ currentLanguageSet?.Referdetails?.revisitAndRefer }}:
-            </th>
-            <td>{{ diagnosisdetails?.revisitDate }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <z-card
+        variant="outline"
+        class="bg-rose-50/30 border-rose-100 p-8 flex items-center justify-between">
+        <div class="space-y-2">
+          <p
+            class="text-[10px] font-black text-rose-400 uppercase tracking-[0.3em]">
+            Referral Point
+          </p>
+          <p class="text-lg font-black text-rose-900 leading-tight">
+            {{ diagnosisdetails?.referralRefferedToName || 'None' }}
+          </p>
+        </div>
+        <div class="p-4 bg-white rounded-2xl shadow-sm border border-rose-100">
+          <ng-icon
+            name="lucideArrowUpRight"
+            class="text-rose-600 text-2xl"></ng-icon>
+        </div>
+      </z-card>
     </div>
   </div>
 </div>

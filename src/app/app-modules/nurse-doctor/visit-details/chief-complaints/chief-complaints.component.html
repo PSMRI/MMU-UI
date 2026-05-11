@@ -1,234 +1,276 @@
 <div
-  class="row m-t-20"
+  class="space-y-6 pt-4 animate-in fade-in slide-in-from-bottom-4 duration-700"
   *ngIf="!benChiefComplaints"
   [formGroup]="patientChiefComplaintsForm">
-  <div class="col-xs-12" formArrayName="complaints">
+  <div formArrayName="complaints" class="space-y-6">
     <div
-      class="row multi-row-select input_style"
-      style="background-color: #f0f5f5 !important; margin-top: 10px"
       *ngFor="
         let complaint of getCheifComplaints();
         let i = index;
         let isLast = last;
         let isOdd = odd
       "
-      [ngClass]="{ odd: !isOdd }">
-      <div class="row" [formGroupName]="i">
-        <div class="col-12 row">
-          <div class="col-md-4">
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
+      [ngClass]="{ 'bg-white': isOdd, 'bg-gray-50/30': !isOdd }"
+      class="relative p-8 rounded-[2.5rem] border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-xl hover:scale-[1.005] group"
+      [formGroupName]="i">
+      <!-- Entry Number Badge -->
+      <div
+        class="absolute -left-3 top-8 w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center text-[10px] font-black shadow-lg shadow-amber-100 group-hover:scale-110 transition-transform duration-500">
+        {{ i + 1 }}
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Chief Complaint Autocomplete -->
+        <div class="lg:col-span-5">
+          <z-form-field>
+            <z-form-label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{
                 currentLanguageSet?.nurseData?.chiefComplaintsDetails
                   ?.chiefComplaints
-              }}</mat-label>
-
+              }}</z-form-label
+            >
+            <div class="relative group/input">
               <input
-                autocomplete="off"
-                type="text"
-                matInput
-                name="chiefComplaint"
+                z-input
+                [matAutocomplete]="auto"
                 formControlName="chiefComplaint"
                 (keyup)="suggestChiefComplaintList(complaint, i)"
                 (blur)="reEnterChiefComplaint(complaint)"
                 (focus)="trackFieldInteraction('Chief Complaints')"
-                #complaintType
-                [matAutocomplete]="auto" />
-            </mat-form-field>
-
+                placeholder="Search symptoms or reasons..."
+                class="bg-white border-gray-200 focus:border-amber-400 rounded-2xl h-12 text-sm font-medium transition-all duration-300" />
+              <div
+                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within/input:text-amber-500 transition-colors">
+                <lucide-icon name="search" class="size-4"></lucide-icon>
+              </div>
+            </div>
             <mat-autocomplete
               #auto="matAutocomplete"
               [displayWith]="displayChiefComplaint"
               (optionSelected)="
                 filterComplaints($event.option.value, i);
                 getSCTid($event.option.value, i)
-              ">
+              "
+              class="rounded-2xl border-none shadow-2xl">
               <mat-option
                 *ngFor="let compl of suggestedChiefComplaintList[i]"
-                [value]="compl">
+                [value]="compl"
+                class="hover:bg-amber-50 text-sm font-medium">
                 {{ compl.chiefComplaint }}
               </mat-option>
             </mat-autocomplete>
-          </div>
-          <div class="input-full-width" [hidden]="true">
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.nurseData?.chiefComplaintsDetails?.SCTID
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                readonly="true"
-                name="SCTID"
-                formControlName="conceptID" />
-            </mat-form-field>
-          </div>
-          <div class="col-md-4 box">
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                allowText="number"
-                maxlength="2"
-                formControlName="duration"
-                (input)="onInputDuration(complaint)"
-                (selectionChange)="validateDuration(complaint)"
-                (focus)="trackFieldInteraction('Duration')" />
-            </mat-form-field>
-          </div>
+          </z-form-field>
+        </div>
 
-          <div class="col-md-4 box">
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
+        <!-- Duration Group -->
+        <div class="lg:col-span-5 grid grid-cols-2 gap-4">
+          <z-form-field>
+            <z-form-label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{
+                currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
+              }}</z-form-label
+            >
+            <input
+              z-input
+              type="number"
+              formControlName="duration"
+              maxlength="2"
+              (input)="onInputDuration(complaint)"
+              (focus)="trackFieldInteraction('Duration')"
+              placeholder="Qty"
+              class="bg-white border-gray-200 focus:border-amber-400 rounded-2xl h-12 text-sm font-medium" />
+          </z-form-field>
+
+          <z-form-field>
+            <z-form-label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{
                 currentLanguageSet?.nurseData?.chiefComplaintsDetails
                   ?.unitOfDuration
-              }}</mat-label>
-              <mat-select
-                class="input-full-width"
-                name="unitOfDuration"
-                formControlName="unitOfDuration"
-                (selectionChange)="
-                  validateDuration(complaint);
-                  trackFieldInteraction('Unit Of Duration')
-                ">
-                <mat-option value="Hours">Hour(s)</mat-option>
-                <mat-option value="Days">Day(s)</mat-option>
-                <mat-option value="Weeks">Week(s)</mat-option>
-                <mat-option value="Months">Month(s)</mat-option>
-                <mat-option value="Years">Year(s)</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+              }}</z-form-label
+            >
+            <z-select
+              formControlName="unitOfDuration"
+              (zSelectionChange)="
+                validateDuration(complaint);
+                trackFieldInteraction('Unit Of Duration')
+              "
+              [zPlaceholder]="'Select unit'"
+              class="h-12 bg-white border-gray-200 rounded-2xl">
+              <z-select-item zValue="Hours">Hour(s)</z-select-item>
+              <z-select-item zValue="Days">Day(s)</z-select-item>
+              <z-select-item zValue="Weeks">Week(s)</z-select-item>
+              <z-select-item zValue="Months">Month(s)</z-select-item>
+              <z-select-item zValue="Years">Year(s)</z-select-item>
+            </z-select>
+          </z-form-field>
         </div>
-        <div class="col-12 row">
-          <div class="col-md-4">
-            <mat-form-field class="textarea-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.nurseData?.chiefComplaintsDetails
-                  ?.description
-              }}</mat-label>
-              <textarea
-                matInput
-                appDefaultNull
-                allowText="textAreaValidator"
-                mdTextareaAutosize
-                maxRows="3"
-                minRows="6"
-                name="description"
-                formControlName="description"
-                maxlength="300"
-                (focus)="trackFieldInteraction('Description')"></textarea>
-            </mat-form-field>
-          </div>
 
-          <button
-            type="button"
-            mat-mini-fab
-            [id]="'removeBtn' + i"
+        <!-- Action Buttons -->
+        <div
+          class="lg:col-span-2 flex items-center justify-end gap-3 pt-6 lg:pt-8">
+          <z-button
+            zType="ghost"
+            zSize="icon"
             *ngIf="i !== 0 || (i === 0 && complaint.touched)"
             (click)="
               removeCheifComplaint(i, complaint);
               trackFieldInteraction('Remove Complaint Button')
             "
-            color="warn"
-            style="margin-right: 3px; margin-top: 25px"
-            class="mat_warn_circle action-btn">
-            <span class="material-icons">close</span>
-          </button>
-          <button
-            color="primary"
-            class="mat_blue_circle action-btn"
-            type="button"
-            style="margin-top: 25px"
-            mat-mini-fab
-            [id]="'addBtn' + i"
+            class="text-rose-500 hover:text-rose-600 hover:bg-rose-50 rounded-2xl transition-all duration-300"
+            title="Remove Complaint">
+            <ng-icon name="lucideTrash2" class="size-5"></ng-icon>
+          </z-button>
+
+          <z-button
+            zType="outline"
+            zSize="icon"
             *ngIf="isLast"
-            [disabled]="checkComplaintFormValidity(complaint)"
+            [zDisabled]="checkComplaintFormValidity(complaint)"
             (click)="
               addCheifComplaint(); trackFieldInteraction('Add Complaint Button')
-            ">
-            <span class="material-icons">add</span>
-          </button>
+            "
+            class="border-gray-200 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 hover:border-emerald-200 rounded-2xl transition-all duration-300"
+            title="Add Complaint">
+            <ng-icon name="lucidePlus" class="size-5"></ng-icon>
+          </z-button>
         </div>
+      </div>
+
+      <!-- Description -->
+      <div class="mt-8">
+        <z-form-field>
+          <z-form-label
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+            >{{
+              currentLanguageSet?.nurseData?.chiefComplaintsDetails?.description
+            }}</z-form-label
+          >
+          <textarea
+            z-input
+            formControlName="description"
+            maxlength="300"
+            (focus)="trackFieldInteraction('Description')"
+            placeholder="Describe clinical progression or severity..."
+            class="min-h-[100px] bg-white border-gray-200 focus:border-amber-400 rounded-2xl text-sm font-medium p-4 transition-all duration-300">
+          </textarea>
+        </z-form-field>
       </div>
     </div>
   </div>
 </div>
 
-<div class="m-t-10" *ngIf="benChiefComplaints">
-  <div class="table-responsive">
-    <table
-      class=""
-      mat-table
-      [dataSource]="dataSource"
-      aria-describedby="chiefComplaints">
-      <ng-container matColumnDef="chiefComplaint">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{
-            currentLanguageSet?.nurseData?.chiefComplaintsDetails
-              ?.chiefComplaints
-          }}
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element?.chiefComplaint }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="duration">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{ currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration }}
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element?.duration }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="unitOfDuration">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{
-            currentLanguageSet?.nurseData?.chiefComplaintsDetails
-              ?.unitOfDuration
-          }}
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{
-            element.unitOfDuration === 'Hours'
-              ? 'Hour(s)'
-              : element.unitOfDuration === 'Days'
-                ? 'Day(s)'
-                : element.unitOfDuration === 'Weeks'
-                  ? 'Week(s)'
-                  : element.unitOfDuration === 'Months'
-                    ? 'Month(s)'
-                    : element.unitOfDuration === 'Years'
-                      ? 'Year(s)'
-                      : element.unitOfDuration
-          }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="description">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{
-            currentLanguageSet?.nurseData?.chiefComplaintsDetails?.description
-          }}
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.description }}
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+<!-- History Table (Read-only mode) -->
+<div
+  class="mt-12 overflow-hidden rounded-[2.5rem] border border-gray-100 bg-white shadow-xl shadow-gray-100/50 animate-in fade-in slide-in-from-bottom-8 duration-1000"
+  *ngIf="benChiefComplaints">
+  <div
+    class="bg-gray-50/50 px-8 py-6 border-b border-gray-100 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="p-2 bg-amber-500 rounded-xl shadow-lg shadow-amber-100">
+        <lucide-icon
+          name="clipboard-list"
+          class="size-4 text-white"></lucide-icon>
+      </div>
+      <h3 class="text-sm font-black text-gray-900 uppercase tracking-widest">
+        Historical Observations
+      </h3>
+    </div>
+    <span
+      class="px-4 py-1 bg-white border border-gray-200 rounded-full text-[10px] font-black text-gray-400 uppercase tracking-widest">
+      {{ benChiefComplaints?.length }} Record(s)
+    </span>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm text-left border-collapse">
+      <thead>
+        <tr class="bg-gray-50/30">
+          <th
+            class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+            {{
+              currentLanguageSet?.nurseData?.chiefComplaintsDetails
+                ?.chiefComplaints
+            }}
+          </th>
+          <th
+            class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+            {{
+              currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
+            }}
+          </th>
+          <th
+            class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+            {{
+              currentLanguageSet?.nurseData?.chiefComplaintsDetails
+                ?.unitOfDuration
+            }}
+          </th>
+          <th
+            class="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+            {{
+              currentLanguageSet?.nurseData?.chiefComplaintsDetails?.description
+            }}
+          </th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-50">
+        <tr
+          *ngFor="let element of benChiefComplaints"
+          class="hover:bg-amber-50/20 transition-all duration-300 group">
+          <td class="px-8 py-5">
+            <div class="flex items-center gap-2">
+              <div
+                class="h-1.5 w-1.5 rounded-full bg-amber-400 group-hover:scale-150 transition-transform"></div>
+              <span class="font-black text-gray-900 text-sm italic">{{
+                element?.chiefComplaint
+              }}</span>
+            </div>
+          </td>
+          <td class="px-8 py-5 font-black text-gray-600 text-sm">
+            {{ element?.duration }}
+          </td>
+          <td class="px-8 py-5">
+            <span
+              class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-[10px] font-black uppercase tracking-widest">
+              {{
+                element.unitOfDuration === 'Hours'
+                  ? 'Hour(s)'
+                  : element.unitOfDuration === 'Days'
+                    ? 'Day(s)'
+                    : element.unitOfDuration === 'Weeks'
+                      ? 'Week(s)'
+                      : element.unitOfDuration === 'Months'
+                        ? 'Month(s)'
+                        : element.unitOfDuration === 'Years'
+                          ? 'Year(s)'
+                          : element.unitOfDuration
+              }}
+            </span>
+          </td>
+          <td
+            class="px-8 py-5 text-gray-500 text-sm leading-relaxed max-w-xs truncate">
+            {{ element.description }}
+          </td>
+        </tr>
+      </tbody>
     </table>
+
     <div
-      class="pull-center"
-      style="margin-top: 5px; text-align: center"
-      *ngIf="dataSource.data.length === 0">
-      <strong>{{
-        currentLanguageSet?.nurseData?.chiefComplaintsDetails?.noCheifComplaint
-      }}</strong>
+      *ngIf="benChiefComplaints?.length === 0"
+      class="flex flex-col items-center justify-center py-24 px-4 bg-white text-gray-400">
+      <div class="p-6 bg-gray-50 rounded-[2rem] mb-4">
+        <lucide-icon
+          name="clipboard-list"
+          class="size-12 text-gray-200"></lucide-icon>
+      </div>
+      <p class="text-xs font-black uppercase tracking-[0.2em]">
+        {{
+          currentLanguageSet?.nurseData?.chiefComplaintsDetails
+            ?.noCheifComplaint
+        }}
+      </p>
     </div>
   </div>
 </div>

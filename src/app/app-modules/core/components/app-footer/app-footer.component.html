@@ -1,66 +1,80 @@
-<footer class="footer container-fluid">
-  <div class="row">
-    <div class="col-3 text-left">
-      <span
-        class="footer-text"
-        *ngIf="currentLanguageSet === null || currentLanguageSet === undefined"
-        >Powered by: WIPRO</span
-      >
-      <span
-        class="footer-text"
-        *ngIf="currentLanguageSet !== null && currentLanguageSet !== undefined"
-        >{{ currentLanguageSet?.coreComponents?.poweredByWipro }}</span
-      >
-    </div>
-    <div class="col-3 text-center">
-      <p
-        class="footer-text"
-        *ngIf="currentLanguageSet === null || currentLanguageSet === undefined">
-        {{ year }} © PSMRI
-      </p>
-      <p
-        class="footer-text"
-        *ngIf="currentLanguageSet !== null && currentLanguageSet !== undefined">
-        {{ year }} © {{ currentLanguageSet?.psmri }}
-      </p>
-    </div>
-    <div
-      class="col-3 text-end"
-      style="cursor: pointer"
-      [routerLink]="['/feedback']"
-      [queryParams]="{ sl: 'MMU' }"
-      role="link">
-      <mat-icon style="vertical-align: top; font-size: medium; margin-right: 2%"
-        >mail</mat-icon
-      >
-      <span class="footer-text"
-        >{{ currentLanguageSet?.platform_feedback?.feedback ?? 'Feedback' }}
-      </span>
-    </div>
-    <div class="col-3 text-end">
-      <p class="footer-text">
+<!-- App Footer — Modernized with Tailwind CSS v4 & Zard UI -->
+<footer
+  class="w-full bg-zinc-900 text-zinc-400 text-[11px] py-3 px-6 border-t border-zinc-800/50 backdrop-blur-md">
+  <div
+    class="max-w-screen-2xl mx-auto flex flex-wrap items-center justify-between gap-4">
+    <!-- Powered by & Copyright -->
+    <div class="flex items-center gap-6">
+      <div class="flex items-center gap-2">
         <span
-          class="footer-text"
-          *ngIf="
-            currentLanguageSet === null || currentLanguageSet === undefined
-          "
-          >{{ status ? 'Online' : 'Offline' }}</span
+          class="text-zinc-500 font-medium uppercase tracking-widest text-[9px]"
+          >Powered by</span
         >
+        <span class="text-zinc-300 font-bold tracking-tight">
+          <span *ngIf="!currentLanguageSet">WIPRO</span>
+          <span *ngIf="currentLanguageSet">{{
+            currentLanguageSet?.coreComponents?.poweredByWipro
+          }}</span>
+        </span>
+      </div>
+
+      <div class="h-3 w-px bg-zinc-800 hidden sm:block"></div>
+
+      <div class="flex items-center gap-1.5">
+        <span class="text-zinc-300 font-semibold">
+          <span *ngIf="!currentLanguageSet">{{ year }} © PSMRI</span>
+          <span *ngIf="currentLanguageSet"
+            >{{ year }} © {{ currentLanguageSet?.psmri }}</span
+          >
+        </span>
+      </div>
+    </div>
+
+    <!-- Right Side: Feedback & Status -->
+    <div class="flex items-center gap-6">
+      <!-- Feedback link -->
+      <a
+        class="flex items-center gap-2 text-zinc-400 hover:text-blue-400 transition-all duration-300 cursor-pointer no-underline group"
+        [routerLink]="['/feedback']"
+        [queryParams]="{ sl: 'MMU' }"
+        role="link">
+        <div
+          class="p-1.5 rounded-lg bg-zinc-800/50 group-hover:bg-blue-500/10 transition-colors">
+          <lucide-icon name="mail" class="size-3.5"></lucide-icon>
+        </div>
+        <span class="font-medium tracking-wide">{{
+          currentLanguageSet?.platform_feedback?.feedback ?? 'Feedback'
+        }}</span>
+      </a>
+
+      <div class="h-3 w-px bg-zinc-800 hidden sm:block"></div>
+
+      <!-- Online status -->
+      <div
+        class="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-zinc-800/30 border border-zinc-800/50">
+        <div class="relative flex items-center justify-center">
+          <lucide-icon
+            [name]="status ? 'wifi' : 'wifi-off'"
+            [class]="status ? 'text-green-500' : 'text-rose-500'"
+            class="size-3.5 transition-colors duration-500">
+          </lucide-icon>
+          <span
+            *ngIf="status"
+            class="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 bg-green-500 rounded-full animate-ping opacity-75"></span>
+        </div>
         <span
-          [style.background]="status ? 'green' : 'red'"
-          style="
-            display: inline-block;
-            height: 10px;
-            width: 10px;
-            border-radius: 50%;
-          "
-          *ngIf="
-            currentLanguageSet !== null && currentLanguageSet !== undefined
-          "></span>
-        {{
-          status ? currentLanguageSet?.online : currentLanguageSet?.offline
-        }}&nbsp;
-      </p>
+          class="font-bold tracking-tight uppercase text-[9px] min-w-[40px]"
+          [class]="status ? 'text-green-500' : 'text-rose-500'">
+          <span *ngIf="!currentLanguageSet">{{
+            status ? 'Online' : 'Offline'
+          }}</span>
+          <span *ngIf="currentLanguageSet">
+            {{
+              status ? currentLanguageSet?.online : currentLanguageSet?.offline
+            }}
+          </span>
+        </span>
+      </div>
     </div>
   </div>
 </footer>

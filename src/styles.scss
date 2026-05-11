@@ -1,9 +1,52 @@
-@import '~@angular/material/theming';
-@include mat-core();
-@import 'light-theme.scss';
-@include angular-material-theme($theme);
-.dark {
-    @import 'dark-theme.scss';
-    @include angular-material-theme($dark-theme);
+@import 'tailwindcss';
+
+/* Angular Material custom theme - kept for backwards compat with existing components */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+/* Global app styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+/* Legacy Bootstrap compatibility shims (to be fully removed in v2 of this migration) */
+.container-fluid { width: 100%; padding-right: 12px; padding-left: 12px; }
+.row { display: flex; flex-wrap: wrap; margin-right: -12px; margin-left: -12px; }
+.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 { flex: 0 0 100%; max-width: 100%; padding-right: 12px; padding-left: 12px; }
+.col-xs-6, .col-sm-6, .col-md-6, .col-lg-6 { flex: 0 0 50%; max-width: 50%; padding-right: 12px; padding-left: 12px; }
+.col-xs-4, .col-sm-4, .col-md-4, .col-lg-4 { flex: 0 0 33.3333%; max-width: 33.3333%; padding-right: 12px; padding-left: 12px; }
+.col-xs-3, .col-sm-3, .col-md-3, .col-lg-3 { flex: 0 0 25%; max-width: 25%; padding-right: 12px; padding-left: 12px; }
+.col-xs-2, .col-sm-2, .col-md-2, .col-lg-2 { flex: 0 0 16.6667%; max-width: 16.6667%; padding-right: 12px; padding-left: 12px; }
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1 { flex: 0 0 8.3333%; max-width: 8.3333%; padding-right: 12px; padding-left: 12px; }
+.col-2 { flex: 0 0 16.6667%; max-width: 16.6667%; }
+.col-10 { flex: 0 0 83.3333%; max-width: 83.3333%; }
+.pull-right { float: right; }
+.pull-left { float: left; }
+.d-flex { display: flex; }
+.m-t-25 { margin-top: 25px; }
+.m-t-10 { margin-top: 10px; }
+.m-b-10 { margin-bottom: 10px; }
+.ms-auto { margin-left: auto; }
+
+/* Clinical app utility classes */
+.full-width { width: 100%; }
+.text-center { text-align: center; }
+.cursorPointer { cursor: pointer; }
+.input-full-width { width: 100%; }
+
+/* Zard UI CSS variable overrides for clinical context */
+@layer base {
+  :root {
+    --primary: 214 89% 34%;
+    --primary-foreground: 0 0% 100%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 214 89% 34%;
+    --radius: 0.5rem;
+  }
+}

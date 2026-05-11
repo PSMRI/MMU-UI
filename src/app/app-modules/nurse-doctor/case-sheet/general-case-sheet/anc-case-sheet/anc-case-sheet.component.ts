@@ -21,11 +21,31 @@
  */
 
 import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { ZardCardImports, ZardTableImports } from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideSyringe,
+  lucideHistory,
+  lucideClipboardList,
+} from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-anc-case-sheet',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ZardCardImports,
+    ZardTableImports,
+    LucideAngularModule,
+    NgIcon,
+  ],
+  providers: [
+    provideIcons({ lucideSyringe, lucideHistory, lucideClipboardList }),
+  ],
   templateUrl: './anc-case-sheet.component.html',
   styleUrls: ['./anc-case-sheet.component.css'],
 })

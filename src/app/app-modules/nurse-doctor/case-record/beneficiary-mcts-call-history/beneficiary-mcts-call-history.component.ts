@@ -21,13 +21,44 @@
  */
 
 import { Component, OnInit, Inject, DoCheck } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { NgIf, NgFor } from '@angular/common';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogClose,
+  MatDialogContent,
+} from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import {
+  ZardFormImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+} from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+
 @Component({
   selector: 'app-beneficiary-mcts-call-history',
   templateUrl: './beneficiary-mcts-call-history.component.html',
   styleUrls: ['./beneficiary-mcts-call-history.component.css'],
+  imports: [
+    MatDialogClose,
+    MatDialogContent,
+    NgIf,
+    NgFor,
+    ZardFormImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    LucideAngularModule,
+    NgIcon,
+  ],
+  providers: [provideIcons({ lucideX })],
 })
 export class BeneficiaryMctsCallHistoryComponent implements OnInit, DoCheck {
   current_language_set: any;

@@ -28,18 +28,36 @@ import {
   OnChanges,
   DoCheck,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MasterdataService } from '../../shared/services';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { SetLanguageComponent } from '../../../core/components/set-language.component';
 import { HttpServiceService } from '../../../core/services/http-service.service';
+import { NgIf, NgFor } from '@angular/common';
+import { NullDefaultValueDirective } from '../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
+import { NumberValidatorDirective } from '../../../core/directives/numberValidator.directive';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
 
 @Component({
   selector: 'app-nurse-obstetric-formula',
   templateUrl: './obstetric-formula.component.html',
   styleUrls: ['./obstetric-formula.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    NgIf,
+    NgFor,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+    NumberValidatorDirective,
+  ],
 })
 export class ObstetricFormulaComponent implements OnInit, DoCheck, OnChanges {
   @Input()

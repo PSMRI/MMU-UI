@@ -29,7 +29,12 @@ import {
   DoCheck,
   EventEmitter,
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CameraService } from '../../../../core/services/camera.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
@@ -39,11 +44,29 @@ import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { NgIf, NgFor } from '@angular/common';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-doctor-gynecological-examination',
   templateUrl: './gynecological-examination.component.html',
   styleUrls: ['./gynecological-examination.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardButtonImports,
+    ZardLabelImports,
+    NgIf,
+    NgFor,
+    StringValidatorDirective,
+  ],
 })
 export class GynecologicalExaminationComponent implements OnInit, DoCheck {
   @Input()

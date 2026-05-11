@@ -21,18 +21,61 @@
  */
 
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { DoctorService } from '../shared/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import {
+  LucideAngularModule,
+  ClipboardList,
+  Syringe,
+  MessageSquare,
+  CheckCircle,
+  FlaskConical,
+  Activity,
+  Users,
+  Plane,
+  UploadCloud,
+  Stethoscope,
+  ChevronDown,
+} from 'lucide-angular';
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
+import { PatientVisitDetailsComponent } from './visit-details/visit-details.component';
+import { NgIf } from '@angular/common';
+import { CovidVaccinationStatusComponent } from './covid-vaccination-status/covid-vaccination-status.component';
+import { ChiefComplaintsComponent } from './chief-complaints/chief-complaints.component';
+import { AdherenceComponent } from './adherence/adherence.component';
+import { InvestigationsComponent } from './investigations/investigations.component';
+import { SymptomsComponent } from './symptoms/symptoms.component';
+import { ContactHistoryComponent } from './contact-history/contact-history.component';
+import { TravelHistoryComponent } from './travel-history/travel-history.component';
+import { UploadFilesComponent } from './upload-files/upload-files.component';
+import { DiseaseconfirmationComponent } from './diseaseconfirmation/diseaseconfirmation.component';
 
 @Component({
   selector: 'app-visit-details',
+  standalone: true,
   templateUrl: './visit-details.component.html',
   styleUrls: ['./visit-details.component.css'],
+  imports: [
+    ZardAccordionImports,
+    ReactiveFormsModule,
+    LucideAngularModule,
+    PatientVisitDetailsComponent,
+    NgIf,
+    CovidVaccinationStatusComponent,
+    ChiefComplaintsComponent,
+    AdherenceComponent,
+    InvestigationsComponent,
+    SymptomsComponent,
+    ContactHistoryComponent,
+    TravelHistoryComponent,
+    UploadFilesComponent,
+    DiseaseconfirmationComponent,
+  ],
 })
 export class VisitDetailsComponent implements OnInit, DoCheck {
   @Input()

@@ -21,6 +21,15 @@
  */
 
 import { Component, OnInit, DoCheck } from '@angular/core';
+import { NgIf } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import {
+  LucideAngularModule,
+  Mail,
+  Globe,
+  Wifi,
+  WifiOff,
+} from 'lucide-angular';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
 
@@ -28,6 +37,8 @@ import { SetLanguageComponent } from '../set-language.component';
   selector: 'app-footer',
   templateUrl: './app-footer.component.html',
   styleUrls: ['./app-footer.component.css'],
+  standalone: true,
+  imports: [LucideAngularModule, NgIf, RouterLink],
 })
 export class AppFooterComponent implements OnInit, DoCheck {
   currentLanguageSet: any;

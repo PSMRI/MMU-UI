@@ -30,22 +30,39 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  FormArray,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Subscription } from 'rxjs';
 import {
   MasterdataService,
   DoctorService,
   NurseService,
 } from '../../shared/services';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SetLanguageComponent } from '@/app-modules/core/components/set-language.component';
+import { HttpServiceService } from '@/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { CommonModule } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
+import { ZardFormImports, ZardSelectImports } from 'zard-ui';
 
 @Component({
   selector: 'app-patient-investigations',
   templateUrl: './investigations.component.html',
   styleUrls: ['./investigations.component.css'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardSelectImports,
+    LucideAngularModule,
+  ],
 })
 export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
   @Input()
@@ -59,7 +76,7 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
   currentLanguageSet: any;
   rbsTestResultSubscription!: Subscription;
   RBSTestScore!: number;
-  RBStestDone: boolean = false;
+  RBStestDone = false;
   rbsTestResultCurrent: any;
 
   constructor(

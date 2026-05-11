@@ -29,14 +29,31 @@ import {
   DoCheck,
 } from '@angular/core';
 import { CameraService } from '../../../../core/services/camera.service';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { ZardTableImports } from '@/components/ui/table/table.imports';
+import { NgIf } from '@angular/common';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-doctor-abdominal-examination',
   templateUrl: './abdominal-examination.component.html',
   styleUrls: ['./abdominal-examination.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardTableImports,
+    NgIf,
+    StringValidatorDirective,
+  ],
 })
 export class AbdominalExaminationComponent implements OnInit, DoCheck {
   @Input()

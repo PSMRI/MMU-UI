@@ -1,68 +1,154 @@
-<div class="container">
-  <div class="row col-xs-12">
-    <h2 class="text-center">{{ currentLanguageSet?.pncData?.pnc }}</h2>
-    <hr />
+<div class="p-6 space-y-8 animate-in fade-in duration-700">
+  <!-- Header -->
+  <div class="text-center space-y-2">
+    <h2 class="text-2xl font-black text-gray-900 tracking-tight">
+      {{ currentLanguageSet?.pncData?.pnc }}
+    </h2>
+    <div class="h-1 w-20 bg-emerald-600 mx-auto rounded-full"></div>
   </div>
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.pncDetails }}</h4>
+
+  <!-- PNC Details Card -->
+  <z-card variant="outline" class="overflow-hidden border-gray-100 shadow-sm">
+    <div
+      class="bg-gray-50/50 p-4 border-b border-gray-100 flex items-center gap-2">
+      <ng-icon name="lucideStethoscope" class="text-emerald-500"></ng-icon>
+      <h3 class="font-bold text-gray-800 uppercase tracking-wider text-xs">
+        {{ currentLanguageSet?.casesheet?.pncDetails }}
+      </h3>
     </div>
+    <div class="p-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Delivery Information Group -->
+        <div class="space-y-6">
+          <div class="flex items-center gap-2 text-emerald-900/50">
+            <ng-icon name="lucideTruck" size="14"></ng-icon>
+            <span class="text-[10px] font-black uppercase tracking-widest"
+              >Delivery Info</span
+            >
+          </div>
+          <div class="space-y-4">
+            <div class="space-y-1">
+              <label
+                class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+                >{{ currentLanguageSet?.pncData?.typeofDelivery }}</label
+              >
+              <p class="text-sm font-black text-gray-900">
+                {{ pNCCaseSheetData?.deliveryType || '--' }}
+              </p>
+            </div>
+            <div class="space-y-1">
+              <label
+                class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+                >{{ currentLanguageSet?.pncData?.placeofDelivery }}</label
+              >
+              <p class="text-sm font-bold text-gray-700">
+                {{ pNCCaseSheetData?.deliveryPlace || '--' }}
+              </p>
+            </div>
+            <div class="space-y-1">
+              <label
+                class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+                >{{ currentLanguageSet?.pncData?.dateofDelivery }}</label
+              >
+              <p class="text-sm font-black text-emerald-600">
+                {{ pNCCaseSheetData?.dateOfDelivery || '--' }}
+              </p>
+            </div>
+          </div>
+        </div>
 
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="pncCasesheet">
-        <tr>
-          <th id="typeofDelivery">
-            {{ currentLanguageSet?.pncData?.typeofDelivery }}:
-          </th>
-          <td>{{ pNCCaseSheetData?.deliveryType }}</td>
-          <th id="placeofDelivery">
-            {{ currentLanguageSet?.pncData?.placeofDelivery }} :
-          </th>
-          <td>{{ pNCCaseSheetData?.deliveryPlace }}</td>
-        </tr>
-        <tr>
-          <th id="dateofDelivery">
-            {{ currentLanguageSet?.pncData?.dateofDelivery }}:
-          </th>
-          <td>{{ pNCCaseSheetData?.dateOfDelivery }}</td>
-          <th id="deliveryComplication">
-            {{ currentLanguageSet?.pncData?.deliveryComplication }}:
-          </th>
-          <td>{{ pNCCaseSheetData?.deliveryComplication }}</td>
-        </tr>
+        <!-- Complications Group -->
+        <div class="space-y-6">
+          <div class="flex items-center gap-2 text-rose-900/50">
+            <ng-icon name="lucideAlertTriangle" size="14"></ng-icon>
+            <span class="text-[10px] font-black uppercase tracking-widest"
+              >Complications</span
+            >
+          </div>
+          <div class="space-y-4">
+            <div class="space-y-1">
+              <label
+                class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+                >{{ currentLanguageSet?.pncData?.deliveryComplication }}</label
+              >
+              <p
+                class="text-sm font-black"
+                [class.text-rose-600]="
+                  pNCCaseSheetData?.deliveryComplication &&
+                  pNCCaseSheetData?.deliveryComplication !== 'None'
+                ">
+                {{ pNCCaseSheetData?.deliveryComplication || 'None' }}
+              </p>
+            </div>
+            <div class="space-y-1">
+              <label
+                class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+                >{{ currentLanguageSet?.casesheet?.postNatal }}</label
+              >
+              <p
+                class="text-sm font-black"
+                [class.text-rose-600]="
+                  pNCCaseSheetData?.postNatalComplication &&
+                  pNCCaseSheetData?.postNatalComplication !== 'None'
+                ">
+                {{ pNCCaseSheetData?.postNatalComplication || 'None' }}
+              </p>
+            </div>
+          </div>
+        </div>
 
-        <tr>
-          <th id="outcomeofpregnancy">
-            {{ currentLanguageSet?.casesheet?.outcomeDelivery }}:
-          </th>
-          <td>{{ pNCCaseSheetData?.pregOutcome }}</td>
-          <th id="postNatalComplication">
-            {{ currentLanguageSet?.casesheet?.postNatal }}:
-          </th>
-          <td>{{ pNCCaseSheetData?.postNatalComplication }}</td>
-        </tr>
-
-        <tr>
-          <th id="gestationalAgeofNewborn">
-            {{ currentLanguageSet?.pncData?.gestationalAgeofNewborn }}:
-          </th>
-          <td>{{ pNCCaseSheetData?.gestationName }}</td>
-          <th id="birthWeight">
-            {{ currentLanguageSet?.casesheet?.birthWeight }}:
-          </th>
-          <td>{{ pNCCaseSheetData?.birthWeightOfNewborn }}</td>
-        </tr>
-
-        <tr>
-          <th id="newBornHealthStatus">
-            {{ currentLanguageSet?.pncData?.newBornHealthStatus }}:
-          </th>
-          <td>{{ pNCCaseSheetData?.newBornHealthStatus }}</td>
-          <td colspan="2"></td>
-        </tr>
-      </table>
+        <!-- Newborn Information Group -->
+        <div class="space-y-6">
+          <div class="flex items-center gap-2 text-blue-900/50">
+            <ng-icon name="lucideBaby" size="14"></ng-icon>
+            <span class="text-[10px] font-black uppercase tracking-widest"
+              >Newborn Info</span
+            >
+          </div>
+          <div class="space-y-4">
+            <div class="space-y-1">
+              <label
+                class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+                >{{ currentLanguageSet?.casesheet?.outcomeDelivery }}</label
+              >
+              <p class="text-sm font-black text-gray-900">
+                {{ pNCCaseSheetData?.pregOutcome || '--' }}
+              </p>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label
+                  class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+                  >{{
+                    currentLanguageSet?.pncData?.gestationalAgeofNewborn
+                  }}</label
+                >
+                <p class="text-sm font-bold text-gray-700">
+                  {{ pNCCaseSheetData?.gestationName || '--' }}
+                </p>
+              </div>
+              <div class="space-y-1">
+                <label
+                  class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+                  >{{ currentLanguageSet?.casesheet?.birthWeight }}</label
+                >
+                <p class="text-sm font-black text-blue-600">
+                  {{ pNCCaseSheetData?.birthWeightOfNewborn || '--' }}
+                </p>
+              </div>
+            </div>
+            <div class="space-y-1 border-t border-gray-50 pt-4">
+              <label
+                class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+                >{{ currentLanguageSet?.pncData?.newBornHealthStatus }}</label
+              >
+              <p class="text-sm font-black text-emerald-600">
+                {{ pNCCaseSheetData?.newBornHealthStatus || '--' }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+  </z-card>
 </div>

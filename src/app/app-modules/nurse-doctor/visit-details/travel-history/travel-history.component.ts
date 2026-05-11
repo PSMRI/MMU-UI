@@ -28,18 +28,44 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  FormControl,
+  FormArray,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import {
   MasterdataService,
   NurseService,
   DoctorService,
 } from '../../shared/services';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SetLanguageComponent } from '@/app-modules/core/components/set-language.component';
+import { HttpServiceService } from '@/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardCardImports } from '@/components/ui/card/card.imports';
+import { LucideAngularModule } from 'lucide-angular';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-travel-history',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardCardImports,
+    LucideAngularModule,
+  ],
   templateUrl: './travel-history.component.html',
   styleUrls: ['./travel-history.component.css'],
 })
@@ -54,12 +80,12 @@ export class TravelHistoryComponent
   travelTypeList: string[] = ['Domestic', 'International'];
   domestictype: any = [];
   internationaltype: any = [];
-  disableTravelButton: boolean = true;
+  disableTravelButton = true;
   travelSelected!: boolean;
   question1!: string;
-  istravelStatus: boolean = false;
-  istravelModeDomestic: boolean = false;
-  istravelModeInternatinal: boolean = false;
+  istravelStatus = false;
+  istravelModeDomestic = false;
+  istravelModeInternatinal = false;
   countries: any = [];
   citiesFromInter: any = [];
   citiesToInter: any = [];
@@ -84,8 +110,8 @@ export class TravelHistoryComponent
   recomArray: any;
   statesAPI: any;
   readTravel: any = false;
-  domtravel: boolean = false;
-  intertravel: boolean = false;
+  domtravel = false;
+  intertravel = false;
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
 

@@ -1,25 +1,25 @@
 .select-full-width {
-    width: 100%;
+  width: 100%;
 }
 
 .input-full-width {
-    width: 100%;
+  width: 100%;
 }
 
 .mat-form-field {
-    line-height: unset;
+  line-height: unset;
 }
 
 .box {
-    height: 60px;
+  height: 60px;
 }
-.multi_row_select{
-    padding: 10px 0px; 
+.multi_row_select {
+  padding: 10px 0px;
 }
 /* .input-full-width  ::ng-deep 
 .mdc-text-field--filled, .mdc-text-field--focused {
     background-color: #f0f5f5 !important;
 } */
-.input-full-width ::ng-deep  .mat-mdc-text-field-wrapper {
-    height:unset !important;
+.input-full-width ::ng-deep .mat-mdc-text-field-wrapper {
+  height: unset !important;
 }

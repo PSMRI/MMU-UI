@@ -22,15 +22,32 @@
 
 import { Component, OnInit, Input, OnDestroy, DoCheck } from '@angular/core';
 import { MasterdataService } from '../../../../shared/services';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { ZardInputImports } from '@/components/ui/input/input.imports';
+import { StringValidatorDirective } from '@/app-modules/core/directives/stringValidator.directive';
+import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-nurse-musculoskeletal-system',
   templateUrl: './musculoskeletal-system.component.html',
   styleUrls: ['./musculoskeletal-system.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardInputImports,
+    StringValidatorDirective,
+    NgFor,
+  ],
 })
 export class MusculoskeletalSystemComponent
   implements OnInit, OnDestroy, DoCheck

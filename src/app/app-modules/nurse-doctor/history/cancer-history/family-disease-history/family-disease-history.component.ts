@@ -34,6 +34,7 @@ import {
   FormControl,
   FormArray,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import {
   MasterdataService,
@@ -49,11 +50,42 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgFor, NgClass, NgIf } from '@angular/common';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { LucideAngularModule, History, Plus, Trash2 } from 'lucide-angular';
 
 @Component({
   selector: 'app-nurse-cancer-family-disease-history',
+  standalone: true,
   templateUrl: './family-disease-history.component.html',
   styleUrls: ['./family-disease-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardLabelImports,
+    ZardSelectImports,
+    NgFor,
+    NgClass,
+    NgIf,
+    LucideAngularModule,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+  ],
+  providers: [
+    LucideAngularModule.pick({
+      History,
+      Plus,
+      Trash2,
+    }).providers,
+  ],
 })
 export class FamilyDiseaseHistoryComponent
   implements OnInit, OnDestroy, DoCheck

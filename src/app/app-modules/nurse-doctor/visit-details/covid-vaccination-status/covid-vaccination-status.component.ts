@@ -21,33 +21,47 @@
  */
 
 import { Component, DoCheck, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { CommonModule } from '@angular/common';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { SetLanguageComponent } from '@/app-modules/core/components/set-language.component';
 import {
   BeneficiaryDetailsService,
   ConfirmationService,
-} from 'src/app/app-modules/core/services';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+} from '@/app-modules/core/services';
+import { HttpServiceService } from '@/app-modules/core/services/http-service.service';
 import {
   NurseService,
   MasterdataService,
   DoctorService,
 } from '../../shared/services';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+
+import { ZardFormImports } from 'zard-ui';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardButtonComponent } from '@/components/ui/button/button.component';
+
 @Component({
   selector: 'app-covid-vaccination-status',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardSelectImports,
+    ZardButtonComponent,
+  ],
   templateUrl: './covid-vaccination-status.component.html',
   styleUrls: ['./covid-vaccination-status.component.css'],
 })
 export class CovidVaccinationStatusComponent implements OnInit, DoCheck {
   currentLanguageSet: any;
   beneficiaryAge: any;
-  enableVaccinationStatusFields: boolean = false;
-  enableVaccineTypeAndDoseTakenFlag: boolean = false;
+  enableVaccinationStatusFields = false;
+  enableVaccineTypeAndDoseTakenFlag = false;
   doseTypeList: any = [];
   vaccineTypeList: any = [];
   today: Date = new Date();
-  enableSaveButton: boolean = true;
+  enableSaveButton = true;
 
   constructor(
     private httpService: HttpServiceService,

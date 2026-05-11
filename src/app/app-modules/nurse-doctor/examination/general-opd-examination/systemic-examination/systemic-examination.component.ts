@@ -27,11 +27,31 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
+import { NgIf } from '@angular/common';
+import { GastroIntestinalSystemComponent } from './gastro-intestinal-system/gastro-intestinal-system.component';
+import { CardioVascularSystemComponent } from './cardio-vascular-system/cardio-vascular-system.component';
+import { RespiratorySystemComponent } from './respiratory-system/respiratory-system.component';
+import { CentralNervousSystemComponent } from './central-nervous-system/central-nervous-system.component';
+import { MusculoskeletalSystemComponent } from './musculoskeletal-system/musculoskeletal-system.component';
+import { GenitoUrinarySystemComponent } from './genito-urinary-system/genito-urinary-system.component';
+import { ObstetricExaminationComponent } from './obstetric-examination/obstetric-examination.component';
 
 @Component({
   selector: 'app-nurse-systemic-examination',
   templateUrl: './systemic-examination.component.html',
   styleUrls: ['./systemic-examination.component.css'],
+  imports: [
+    ZardAccordionImports,
+    NgIf,
+    GastroIntestinalSystemComponent,
+    CardioVascularSystemComponent,
+    RespiratorySystemComponent,
+    CentralNervousSystemComponent,
+    MusculoskeletalSystemComponent,
+    GenitoUrinarySystemComponent,
+    ObstetricExaminationComponent,
+  ],
 })
 export class SystemicExaminationComponent
   implements OnInit, OnChanges, DoCheck

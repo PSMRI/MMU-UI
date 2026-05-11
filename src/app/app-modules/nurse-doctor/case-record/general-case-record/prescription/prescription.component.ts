@@ -35,15 +35,33 @@ import {
   FormArray,
   NgForm,
   AbstractControl,
+  ReactiveFormsModule,
+  FormsModule,
 } from '@angular/forms';
 import { MasterdataService, DoctorService } from '../../../shared/services';
 import { GeneralUtils } from '../../../shared/utility/general-utility';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
-import { PageEvent } from '@angular/material/paginator';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { HttpServiceService } from '@/app-modules/core/services/http-service.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { NgIf, NgFor, NgClass, SlicePipe } from '@angular/common';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
+import { StringValidatorDirective } from '@/app-modules/core/directives/stringValidator.directive';
+import { SetLanguageComponent } from '@/app-modules/core/components/set-language.component';
+import {
+  ZardFormImports,
+  ZardRadioImports,
+  ZardSelectImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+  ZardAccordionImports,
+  ZardDatePickerImports,
+} from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucidePlusCircle, lucideTrash2, lucidePencil } from '@ng-icons/lucide';
 
 interface prescribe {
   id: any;
@@ -65,11 +83,35 @@ interface prescribe {
   sctCode: any;
   sctTerm: any;
 }
+
 @Component({
   selector: 'app-prescription',
   templateUrl: './prescription.component.html',
   styleUrls: ['./prescription.component.css'],
+  standalone: true,
   encapsulation: ViewEncapsulation.None,
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    NgIf,
+    NgFor,
+    NgClass,
+    SlicePipe,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    ZardAccordionImports,
+    ZardDatePickerImports,
+    LucideAngularModule,
+    NgIcon,
+    StringValidatorDirective,
+    MatPaginator,
+  ],
+  providers: [provideIcons({ lucidePlusCircle, lucideTrash2, lucidePencil })],
 })
 export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
   generalUtils = new GeneralUtils(this.fb, this.sessionstorage);
@@ -541,7 +583,6 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
       this.currentPrescription['isEDL'] = option.isEDL;
     }
 
-    option.isEDL ? '' : this.current_language_set.nonEDLMedicine;
     if (option.quantityInHand === 0) {
       this.isStockAvalable = 'warn';
     } else {

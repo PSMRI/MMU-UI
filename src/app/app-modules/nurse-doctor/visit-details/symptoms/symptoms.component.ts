@@ -30,20 +30,36 @@ import {
   OnChanges,
   OnDestroy,
 } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  FormArray,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import {
   MasterdataService,
   NurseService,
   DoctorService,
 } from '../../shared/services';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SetLanguageComponent } from '@/app-modules/core/components/set-language.component';
+import { HttpServiceService } from '@/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { CommonModule } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
+import { ZardFormImports, ZardSelectImports } from 'zard-ui';
 
 @Component({
   selector: 'app-symptoms',
+  standalone: true,
   templateUrl: './symptoms.component.html',
   styleUrls: ['./symptoms.component.css'],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardSelectImports,
+    LucideAngularModule,
+  ],
 })
 export class SymptomsComponent
   implements OnInit, DoCheck, OnChanges, OnDestroy
@@ -51,7 +67,7 @@ export class SymptomsComponent
   @Input()
   patientCovidForm!: FormGroup;
   symptomsList: any = [];
-  sympFlag: boolean = false;
+  sympFlag = false;
   @Input()
   mode!: string;
 

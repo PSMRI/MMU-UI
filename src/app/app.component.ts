@@ -29,16 +29,20 @@ import {
   RouteConfigLoadEnd,
   RouteConfigLoadStart,
   Router,
+  RouterOutlet,
 } from '@angular/router';
 import { SpinnerService } from './app-modules/core/services';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { SpinnerComponent } from './app-modules/core/components/spinner/spinner.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
+  imports: [SpinnerComponent, RouterOutlet],
 })
 export class AppComponent {
+  title = 'MMU-UI';
   isAuthenticated = false;
   constructor(
     private router: Router,

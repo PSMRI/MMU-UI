@@ -1,99 +1,117 @@
-<mat-expansion-panel [formGroup]="referForm" expanded="true">
-  <mat-expansion-panel-header>
-    <h5>{{ currentLanguageSet?.Referdetails?.refer }}</h5>
-  </mat-expansion-panel-header>
+<div [formGroup]="referForm">
+  <z-accordion zType="single" zDefaultValue="cancer-refer">
+    <z-accordion-item value="cancer-refer">
+      <z-accordion-trigger>
+        <h5>{{ currentLanguageSet?.Referdetails?.refer }}</h5>
+      </z-accordion-trigger>
+      <z-accordion-content>
+        <div class="">
+          <div
+            class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+            style="display: flex">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell">
+              <mat-label>
+                {{
+                  currentLanguageSet?.Referdetails?.higherhealthcarecenter
+                }}</mat-label
+              >
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell">
+              <mat-form-field [style.width]="'50%'">
+                <mat-label>{{
+                  currentLanguageSet?.Referdetails?.referredtoinstitute
+                }}</mat-label>
+                <mat-select
+                  (ngModelChange)="higherhealthcarecenter($event)"
+                  name="referredToInstituteID"
+                  formControlName="referredToInstituteID">
+                  <mat-option
+                    *ngFor="let center of higherHealthcareCenter"
+                    [value]="center.institutionID"
+                    >{{ center.institutionName }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div
+            class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+            style="display: flex">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell">
+              <mat-label class="align-middle">{{
+                currentLanguageSet?.Referdetails?.additionalservices
+              }}</mat-label>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell">
+              <mat-form-field [style.width]="'50%'">
+                <mat-label>{{
+                  currentLanguageSet?.Referdetails?.additionalservices
+                }}</mat-label>
+                <mat-select
+                  (ngModelChange)="additionalservices($event)"
+                  multiple="true"
+                  name="refrredToAdditionalServiceList"
+                  formControlName="refrredToAdditionalServiceList">
+                  <mat-option
+                    *ngFor="let service of additionalServices"
+                    [value]="service.serviceName"
+                    [disabled]="canDisable(service)">
+                    {{ service.serviceName }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div
+            class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+            style="display: flex">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell alignment">
+              {{ currentLanguageSet?.Referdetails?.referralReason }}
+              <span *ngIf="referForm.get('referralReason')?.enabled">*</span>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+              <mat-form-field style="width: 50%">
+                <textarea
+                  matInput
+                  formControlName="referralReason"
+                  name="Remarks"
+                  maxLength="300"
+                  matTextareaAutosize>
+                </textarea>
+              </mat-form-field>
+            </div>
+          </div>
 
-  <div class="">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell">
-        <mat-label>
-          {{
-            currentLanguageSet?.Referdetails?.higherhealthcarecenter
-          }}</mat-label
-        >
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell">
-        <mat-form-field [style.width]="'50%'">
-          <mat-label>{{
-            currentLanguageSet?.Referdetails?.referredtoinstitute
-          }}</mat-label>
-          <mat-select
-            (ngModelChange)="higherhealthcarecenter($event)"
-            name="referredToInstituteID"
-            formControlName="referredToInstituteID">
-            <mat-option
-              *ngFor="let center of higherHealthcareCenter"
-              [value]="center.institutionID"
-              >{{ center.institutionName }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell">
-        <mat-label class="align-middle">{{
-          currentLanguageSet?.Referdetails?.additionalservices
-        }}</mat-label>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell">
-        <mat-form-field [style.width]="'50%'">
-          <mat-label>{{
-            currentLanguageSet?.Referdetails?.additionalservices
-          }}</mat-label>
-          <mat-select
-            (ngModelChange)="additionalservices($event)"
-            multiple="true"
-            name="refrredToAdditionalServiceList"
-            formControlName="refrredToAdditionalServiceList">
-            <mat-option
-              *ngFor="let service of additionalServices"
-              [value]="service.serviceName"
-              [disabled]="canDisable(service)">
-              {{ service.serviceName }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell alignment">
-        {{ currentLanguageSet?.Referdetails?.referralReason }}
-        <span *ngIf="referForm.get('referralReason')?.enabled">*</span>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <mat-form-field style="width: 50%">
-          <textarea matInput formControlName="referralReason" name="Remarks" maxLength="300" matTextareaAutosize>
-      </textarea>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <!--Revisit Date Added-->
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <mat-label>{{
-          currentLanguageSet?.Referdetails?.revisitDate
-        }}</mat-label>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <mat-form-field [style.width]="'50%'">
-          <mat-label>{{
-            currentLanguageSet?.Referdetails?.revisitDate
-          }}</mat-label>
-          <input
-            matInput
-            [max]="maxSchedulerDate"
-            [matDatepicker]="picker"
-            formControlName="revisitDate"
-            [min]="tomorrow"
-            (dateChange)="checkdate($event.value)" />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      </div>
-    </div>
-  </div>
-</mat-expansion-panel>
+          <!--Revisit Date Added-->
+          <div
+            class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+            style="display: flex">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+              <mat-label>{{
+                currentLanguageSet?.Referdetails?.revisitDate
+              }}</mat-label>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+              <mat-form-field [style.width]="'50%'">
+                <mat-label>{{
+                  currentLanguageSet?.Referdetails?.revisitDate
+                }}</mat-label>
+                <input
+                  matInput
+                  [max]="maxSchedulerDate"
+                  [matDatepicker]="picker"
+                  formControlName="revisitDate"
+                  [min]="tomorrow"
+                  (dateChange)="checkdate($event.value)" />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </z-accordion-content>
+    </z-accordion-item>
+  </z-accordion>
+</div>

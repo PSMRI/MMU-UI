@@ -21,15 +21,30 @@
  */
 
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { ZardInputImports } from '@/components/ui/input/input.imports';
+import { NgIf } from '@angular/common';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-nurse-head-to-toe-examination',
   templateUrl: './head-to-toe-examination.component.html',
   styleUrls: ['./head-to-toe-examination.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardLabelImports,
+    ZardInputImports,
+    NgIf,
+    StringValidatorDirective,
+  ],
 })
 export class HeadToToeExaminationComponent implements OnInit, DoCheck {
   @Input()

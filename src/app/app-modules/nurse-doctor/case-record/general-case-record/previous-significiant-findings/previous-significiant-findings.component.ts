@@ -27,16 +27,54 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { CommonModule, NgIf, NgFor, DatePipe } from '@angular/common';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { DoctorService } from '../../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import {
+  ZardFormImports,
+  ZardRadioImports,
+  ZardSelectImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+  ZardAccordionImports,
+  ZardDatePickerImports,
+} from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory } from '@ng-icons/lucide';
+
 @Component({
   selector: 'app-previous-significiant-findings',
   templateUrl: './previous-significiant-findings.component.html',
   styleUrls: ['./previous-significiant-findings.component.css'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatPaginatorModule,
+    MatTableModule,
+    NgIf,
+    NgFor,
+    DatePipe,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    ZardAccordionImports,
+    ZardDatePickerImports,
+    LucideAngularModule,
+    NgIcon,
+    MatPaginator,
+  ],
+  providers: [provideIcons({ lucideHistory })],
 })
 export class PreviousSignificiantFindingsComponent
   implements OnInit, OnDestroy, DoCheck

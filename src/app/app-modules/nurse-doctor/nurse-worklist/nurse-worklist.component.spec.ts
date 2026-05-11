@@ -20,13 +20,13 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 
 import { Md2Module } from 'md2';
-import { MaterialModule } from '../../../app-modules/core/material.module';
+
 import { NurseWorklistComponent } from './nurse-worklist.component';
 
 import {
@@ -50,10 +50,14 @@ describe('NurseWorklistComponent', () => {
   let debugElement: DebugElement;
   let nurseService: NurseService;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, Md2Module, MaterialModule],
-      declarations: [NurseWorklistComponent],
+      imports: [
+        BrowserAnimationsModule,
+        Md2Module,
+        MaterialModule,
+        NurseWorklistComponent,
+      ],
       providers: [
         {
           provide: Router,
@@ -79,9 +83,7 @@ describe('NurseWorklistComponent', () => {
     debugElement = fixture.debugElement;
     nurseService = debugElement.injector.get(NurseService);
 
-    spyOn(nurseService, 'getNurseWorklist').and.returnValue(
-      Observable.of(nurseWorklist)
-    );
+    spyOn(nurseService, 'getNurseWorklist').and.returnValue(of(nurseWorklist));
 
     fixture.detectChanges();
   });

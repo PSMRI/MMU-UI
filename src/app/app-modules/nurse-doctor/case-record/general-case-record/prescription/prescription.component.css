@@ -6,7 +6,7 @@
   line-height: unset;
 }
 .mat-radio-label-content {
-  padding-right:10px !important;
+  padding-right: 10px !important;
 }
 .cdk-overlay-container .cdk-overlay-pane .mat-autocomplete-panel {
   min-width: 500px;
@@ -16,12 +16,12 @@
 .input-full-width {
   width: 100%;
 }
-.input-full-width-one  ::ng-deep 
-.mdc-text-field--filled, .mdc-text-field--focused {
-    background-color: rgba(240, 245, 245, 0.5) !important;
+.input-full-width-one ::ng-deep .mdc-text-field--filled,
+.mdc-text-field--focused {
+  background-color: rgba(240, 245, 245, 0.5) !important;
 }
-.input-full-width-one ::ng-deep  .mat-mdc-text-field-wrapper {
-    height:unset !important;
+.input-full-width-one ::ng-deep .mat-mdc-text-field-wrapper {
+  height: unset !important;
 }
 
 fieldset {
@@ -51,15 +51,14 @@ legend {
   background-color: rgba(240, 245, 245, 0.5);
 }
 
-@media only screen and (min-width: 980px){
+@media only screen and (min-width: 980px) {
   .right-padding-remove-desktop {
     padding-right: 0 !important;
   }
-
 }
 mat-form-field ::ng-deep .mat-label-text {
   color: #999 !important;
-    font-weight: 600 !important;
-    letter-spacing: initial !important;
-    font-family: 'SF-UI-Display-Regular' !important;
+  font-weight: 600 !important;
+  letter-spacing: initial !important;
+  font-family: 'SF-UI-Display-Regular' !important;
 }

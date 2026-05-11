@@ -21,7 +21,7 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MasterdataService, DoctorService } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
@@ -35,6 +35,21 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
+import {
+  MatLabel,
+  MatFormField,
+  MatSelect,
+  MatSuffix,
+} from '@angular/material/select';
+import { NgFor, NgIf } from '@angular/common';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import {
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatDatepicker,
+} from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-cancer-refer',
@@ -64,6 +79,21 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
         },
       },
     },
+  ],
+  imports: [
+    ZardAccordionImports,
+    ReactiveFormsModule,
+    MatLabel,
+    MatFormField,
+    MatSelect,
+    NgFor,
+    MatOption,
+    NgIf,
+    MatInput,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
   ],
 })
 export class CancerReferComponent implements OnInit, DoCheck, OnDestroy {

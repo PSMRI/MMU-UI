@@ -1,41 +1,105 @@
-<div class="row m-t-20" [formGroup]="patientCovidForm">
-  <div>
-    <h5 class="hbx">
-      {{ currentLanguageSet?.covid?.cOVID19ContactHistory }}
-    </h5>
-    <br />
-    <mat-label class="mat-label-text" class="hbx">{{
-      currentLanguageSet?.covid?.historyOfContactWithAPersonwho
-    }}</mat-label>
-    <br />
-    <br />
-    <span *ngIf="!contactFlag">
-      <mat-form-field>
-        <mat-label>{{ currentLanguageSet?.covid?.historyOfContact }}</mat-label>
-        <mat-select
-          class="input-full-width vox"
-          [multiple]="true"
-          name="contactStatus"
+<div
+  class="pt-6 animate-in fade-in slide-in-from-bottom-4 duration-700"
+  [formGroup]="patientCovidForm">
+  <div class="max-w-4xl space-y-8">
+    <!-- Header with Clinical Context -->
+    <div class="flex items-center gap-3 mb-6">
+      <div class="p-2 bg-cyan-100 rounded-lg shadow-sm">
+        <lucide-icon name="users" class="size-4 text-cyan-600"></lucide-icon>
+      </div>
+      <div class="text-left">
+        <z-form-label
+          class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
+          {{ currentLanguageSet?.covid?.cOVID19ContactHistory }}
+        </z-form-label>
+        <span
+          class="text-[10px] text-gray-400 font-bold uppercase tracking-tight"
+          >{{ currentLanguageSet?.covid?.historyOfContactWithAPersonwho }}</span
+        >
+      </div>
+    </div>
+
+    <!-- Contact Selection (Editable Mode) -->
+    <div class="max-w-3xl" *ngIf="!contactFlag">
+      <z-form-field>
+        <z-form-label
+          class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block">
+          {{ currentLanguageSet?.covid?.historyOfContact }}
+        </z-form-label>
+        <z-select
+          zMultiple="true"
           formControlName="contactStatus"
-          id="contactStatus"
-          (selectionChange)="contactSelected()"
-          required="{{ contactReqiured }}">
-          <mat-option
-            *ngFor="let contactStatus of contactData"
-            [value]="contactStatus"
-            >{{ contactStatus }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </span>
-    <br />
-    <span *ngIf="contactFlag" class="box">
-      <ul>
-        <li *ngFor="let history of contactResponseList">
-          {{ history }}
-          <strong>: {{ currentLanguageSet?.covid?.yES }}. </strong>
-        </li>
-      </ul>
-    </span>
+          (zSelectionChange)="contactSelected()"
+          [zPlaceholder]="'Select all applicable contact scenarios...'"
+          class="min-h-14 bg-white border-gray-200 rounded-[1.5rem] shadow-sm font-black text-sm">
+          <z-select-item
+            *ngFor="let status of contactData"
+            [zValue]="status"
+            class="font-medium hover:bg-cyan-50 transition-colors">
+            <div class="flex items-center gap-2">
+              <div class="h-1.5 w-1.5 rounded-full bg-cyan-400"></div>
+              {{ status }}
+            </div>
+          </z-select-item>
+        </z-select>
+      </z-form-field>
+
+      <!-- Visual Feedback for Selection -->
+      <div class="mt-8 flex flex-wrap gap-2" *ngIf="contactStatus?.length > 0">
+        <span
+          *ngFor="let s of contactStatus"
+          class="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-full text-xs font-bold shadow-sm flex items-center gap-2 animate-in zoom-in duration-300">
+          <div
+            class="h-1.5 w-1.5 rounded-full bg-cyan-500"
+            [ngClass]="{ 'bg-gray-400': s === 'None of the above' }"></div>
+          {{ s }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Contact History Display (View Mode) -->
+    <div class="max-w-3xl" *ngIf="contactFlag">
+      <div
+        class="bg-gray-50/50 rounded-[2.5rem] border border-gray-100 overflow-hidden shadow-sm">
+        <div class="px-8 py-4 bg-white border-b border-gray-100">
+          <p
+            class="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+            Positive Exposure History
+          </p>
+        </div>
+        <div class="p-8">
+          <ul class="space-y-4">
+            <li
+              *ngFor="let history of contactResponseList"
+              class="flex items-start gap-3 group animate-in slide-in-from-left duration-500">
+              <div
+                class="mt-1.5 h-1.5 w-1.5 rounded-full bg-rose-500 group-hover:scale-150 transition-transform"></div>
+              <div class="flex-1">
+                <p
+                  class="text-sm font-black text-gray-900 tracking-tight leading-relaxed">
+                  {{ history }}
+                  <span
+                    class="ml-2 px-2 py-0.5 bg-rose-50 text-rose-600 rounded-md text-[10px] uppercase font-black"
+                    >Confirmed Presence</span
+                  >
+                </p>
+              </div>
+            </li>
+          </ul>
+
+          <div
+            *ngIf="contactResponseList?.length === 0"
+            class="flex flex-col items-center py-6">
+            <lucide-icon
+              name="user-check"
+              class="size-8 text-gray-200 mb-2"></lucide-icon>
+            <p
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+              No exposure recorded
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

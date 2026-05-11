@@ -1,23 +1,43 @@
-<div class="col-12 title row" *ngIf="previous">
-  <div class="col-6">
-    <h4>{{ currentLanguageSet?.nurseData?.visitDetails }}</h4>
+<div
+  class="flex items-center justify-between p-8 border-b border-gray-100 bg-indigo-50/30 backdrop-blur-sm"
+  *ngIf="previous">
+  <div class="flex items-center gap-4">
+    <div class="p-3 bg-indigo-600 rounded-2xl shadow-lg shadow-indigo-100">
+      <ng-icon name="lucideClipboardList" class="text-white text-xl"></ng-icon>
+    </div>
+    <div>
+      <h4
+        class="text-2xl font-black text-indigo-900 tracking-tighter uppercase">
+        {{ currentLanguageSet?.nurseData?.visitDetails }}
+      </h4>
+      <p
+        class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">
+        {{ currentLanguageSet?.common?.previousVisit }}
+      </p>
+    </div>
   </div>
-  <div class="col-6">
-    <mat-icon
-      class="pull-right exit md-24"
-      style="text-align: end"
-      [matDialogClose]="false"
-      >close</mat-icon
-    >
-  </div>
+  <button
+    z-button
+    variant="ghost"
+    size="icon"
+    [matDialogClose]="false"
+    class="rounded-2xl hover:bg-rose-50 hover:text-rose-600 transition-all duration-300">
+    <ng-icon name="lucideX" class="text-xl"></ng-icon>
+  </button>
 </div>
-<div [ngClass]="{ 'scrolling-content': previous }">
+
+<div
+  class="bg-white selection:bg-indigo-100"
+  [ngClass]="{ 'max-h-[90vh] overflow-y-auto p-0': previous }">
   <app-cancer-case-sheet
     *ngIf="CancerScreening"
+    class="block animate-in fade-in duration-500"
     [previous]="previous"
     [serviceType]="serviceType"></app-cancer-case-sheet>
+
   <app-general-case-sheet
     *ngIf="General"
+    class="block animate-in fade-in duration-500"
     [previous]="previous"
     [serviceType]="serviceType"></app-general-case-sheet>
 </div>

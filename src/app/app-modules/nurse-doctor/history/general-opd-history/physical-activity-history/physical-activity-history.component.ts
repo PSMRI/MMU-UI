@@ -21,7 +21,7 @@
  */
 
 import { Component, DoCheck, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import {
   ConfirmationService,
@@ -37,10 +37,42 @@ import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import {
+  LucideAngularModule,
+  Activity,
+  History,
+  Armchair,
+  Info,
+} from 'lucide-angular';
+
 @Component({
   selector: 'app-physical-activity-history',
+  standalone: true,
   templateUrl: './physical-activity-history.component.html',
   styleUrls: ['./physical-activity-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardRadioImports,
+    ZardLabelImports,
+    ZardSelectImports,
+    NgIf,
+    NgFor,
+    NgClass,
+    LucideAngularModule,
+  ],
+  providers: [
+    LucideAngularModule.pick({ Activity, History, Armchair, Info }).providers,
+  ],
 })
 export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
   @Input()

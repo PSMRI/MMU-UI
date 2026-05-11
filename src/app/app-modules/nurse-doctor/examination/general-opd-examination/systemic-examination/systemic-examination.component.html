@@ -1,129 +1,152 @@
-<div class="p-t-10">
-  <mat-accordion>
-    <mat-expansion-panel 
+<div class="mt-4">
+  <z-accordion zType="multiple" class="w-full space-y-4">
+    <!-- Gastro Intestinal System -->
+    <z-accordion-item
       *ngIf="displayGeneral"
-      (opened)="trackFieldInteraction('Gastro Intestinal System Panel')"
-      >
-      <mat-expansion-panel-header>
-        <h5>
+      zValue="gastro"
+      class="border rounded-xl bg-white shadow-sm overflow-hidden"
+      (click)="trackFieldInteraction('Gastro Intestinal System Panel')">
+      <z-accordion-trigger
+        class="px-6 py-4 hover:bg-zinc-50/50 transition-colors">
+        <h5 class="text-base font-semibold text-zinc-900">
           {{
             currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro
               ?.gastroIntestinalSystem
           }}
         </h5>
-      </mat-expansion-panel-header>
-      <app-nurse-gastro-intestinal-system
-        [gastroIntestinalSystemDataForm]="
-          gastroIntestinalSystemForm
-        "></app-nurse-gastro-intestinal-system>
-    </mat-expansion-panel>
+      </z-accordion-trigger>
+      <z-accordion-content class="px-6 pb-6 pt-2 border-t border-zinc-100">
+        <app-nurse-gastro-intestinal-system
+          [gastroIntestinalSystemDataForm]="gastroIntestinalSystemForm">
+        </app-nurse-gastro-intestinal-system>
+      </z-accordion-content>
+    </z-accordion-item>
 
-    <mat-expansion-panel
-      (opened)="trackFieldInteraction('Cardio Vascular System Panel')"
-      >
-      <mat-expansion-panel-header>
-        <h5>
+    <!-- Cardio Vascular System -->
+    <z-accordion-item
+      zValue="cardio"
+      class="border rounded-xl bg-white shadow-sm overflow-hidden"
+      (click)="trackFieldInteraction('Cardio Vascular System Panel')">
+      <z-accordion-trigger
+        class="px-6 py-4 hover:bg-zinc-50/50 transition-colors">
+        <h5 class="text-base font-semibold text-zinc-900">
           {{
             currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
               ?.systemic?.cardioForANC_OPD_PNC?.cardioSystem
           }}
         </h5>
-      </mat-expansion-panel-header>
+      </z-accordion-trigger>
+      <z-accordion-content class="px-6 pb-6 pt-2 border-t border-zinc-100">
+        <app-nurse-cardio-vascular-system
+          [cardioVascularSystemDataForm]="cardioVascularSystemForm">
+        </app-nurse-cardio-vascular-system>
+      </z-accordion-content>
+    </z-accordion-item>
 
-      <app-nurse-cardio-vascular-system
-        [cardioVascularSystemDataForm]="
-          cardioVascularSystemForm
-        "></app-nurse-cardio-vascular-system>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel
-      (opened)="trackFieldInteraction('Respiratory System Panel')"
-      >
-      <mat-expansion-panel-header>
-        <h5>
+    <!-- Respiratory System -->
+    <z-accordion-item
+      zValue="respiratory"
+      class="border rounded-xl bg-white shadow-sm overflow-hidden"
+      (click)="trackFieldInteraction('Respiratory System Panel')">
+      <z-accordion-trigger
+        class="px-6 py-4 hover:bg-zinc-50/50 transition-colors">
+        <h5 class="text-base font-semibold text-zinc-900">
           {{
             currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
               ?.systemic?.respiratoryANC_OPD_PNC?.respiratorySystem
           }}
         </h5>
-      </mat-expansion-panel-header>
+      </z-accordion-trigger>
+      <z-accordion-content class="px-6 pb-6 pt-2 border-t border-zinc-100">
+        <app-nurse-respiratory-system
+          [respiratorySystemDataForm]="respiratorySystemForm">
+        </app-nurse-respiratory-system>
+      </z-accordion-content>
+    </z-accordion-item>
 
-      <app-nurse-respiratory-system
-        [respiratorySystemDataForm]="
-          respiratorySystemForm
-        "></app-nurse-respiratory-system>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel
-      (opened)="trackFieldInteraction('Central Nervous System Panel')"
-      >
-      <mat-expansion-panel-header>
-        <h5>
+    <!-- Central Nervous System -->
+    <z-accordion-item
+      zValue="central"
+      class="border rounded-xl bg-white shadow-sm overflow-hidden"
+      (click)="trackFieldInteraction('Central Nervous System Panel')">
+      <z-accordion-trigger
+        class="px-6 py-4 hover:bg-zinc-50/50 transition-colors">
+        <h5 class="text-base font-semibold text-zinc-900">
           {{
             currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
               ?.systemic?.centralANC_OPD_PNC?.centralNervousSystem
           }}
         </h5>
-      </mat-expansion-panel-header>
+      </z-accordion-trigger>
+      <z-accordion-content class="px-6 pb-6 pt-2 border-t border-zinc-100">
+        <app-nurse-central-nervous-system
+          [centralNervousSystemDataForm]="centralNervousSystemForm">
+        </app-nurse-central-nervous-system>
+      </z-accordion-content>
+    </z-accordion-item>
 
-      <app-nurse-central-nervous-system
-        [centralNervousSystemDataForm]="
-          centralNervousSystemForm
-        "></app-nurse-central-nervous-system>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel
-      (opened)="trackFieldInteraction('Musculoskeletal System Panel')"
-      >
-      <mat-expansion-panel-header>
-        <h5>
+    <!-- Musculoskeletal System -->
+    <z-accordion-item
+      zValue="musculoskeletal"
+      class="border rounded-xl bg-white shadow-sm overflow-hidden"
+      (click)="trackFieldInteraction('Musculoskeletal System Panel')">
+      <z-accordion-trigger
+        class="px-6 py-4 hover:bg-zinc-50/50 transition-colors">
+        <h5 class="text-base font-semibold text-zinc-900">
           {{
             currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
               ?.systemic?.musculoskeletalANC_OPD_PNC?.musculoskeletalSystem
           }}
         </h5>
-      </mat-expansion-panel-header>
-      <app-nurse-musculoskeletal-system
-        [musculoSkeletalSystemDataForm]="
-          musculoSkeletalSystemForm
-        "></app-nurse-musculoskeletal-system>
-    </mat-expansion-panel>
+      </z-accordion-trigger>
+      <z-accordion-content class="px-6 pb-6 pt-2 border-t border-zinc-100">
+        <app-nurse-musculoskeletal-system
+          [musculoSkeletalSystemDataForm]="musculoSkeletalSystemForm">
+        </app-nurse-musculoskeletal-system>
+      </z-accordion-content>
+    </z-accordion-item>
 
-    <mat-expansion-panel
-      (opened)="trackFieldInteraction('Genito Urinary System Panel')"
-      >
-      <mat-expansion-panel-header>
-        <h5>
+    <!-- Genito Urinary System -->
+    <z-accordion-item
+      zValue="genito"
+      class="border rounded-xl bg-white shadow-sm overflow-hidden"
+      (click)="trackFieldInteraction('Genito Urinary System Panel')">
+      <z-accordion-trigger
+        class="px-6 py-4 hover:bg-zinc-50/50 transition-colors">
+        <h5 class="text-base font-semibold text-zinc-900">
           {{
             currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
               ?.systemic?.genitoANC_OPD_PNC?.genitoUrinarySystem
           }}
         </h5>
-      </mat-expansion-panel-header>
+      </z-accordion-trigger>
+      <z-accordion-content class="px-6 pb-6 pt-2 border-t border-zinc-100">
+        <app-nurse-genito-urinary-system
+          [genitoUrinarySystemDataForm]="genitoUrinarySystemForm">
+        </app-nurse-genito-urinary-system>
+      </z-accordion-content>
+    </z-accordion-item>
 
-      <app-nurse-genito-urinary-system
-        [genitoUrinarySystemDataForm]="
-          genitoUrinarySystemForm
-        "></app-nurse-genito-urinary-system>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel 
+    <!-- Obstetric Examination -->
+    <z-accordion-item
       *ngIf="displayANC"
-      (opened)="trackFieldInteraction('Obstetric Examination Panel')"
-      >
-      <mat-expansion-panel-header>
-        <h5>
+      zValue="obstetric"
+      class="border rounded-xl bg-white shadow-sm overflow-hidden"
+      (click)="trackFieldInteraction('Obstetric Examination Panel')">
+      <z-accordion-trigger
+        class="px-6 py-4 hover:bg-zinc-50/50 transition-colors">
+        <h5 class="text-base font-semibold text-zinc-900">
           {{
             currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
               ?.systemic?.obstetric?.obstetricExamination
           }}
         </h5>
-      </mat-expansion-panel-header>
-
-      <app-nurse-anc-obstetric-examination
-        [obstetricExaminationForANCDataForm]="
-          obstetricExaminationForANCForm
-        "></app-nurse-anc-obstetric-examination>
-    </mat-expansion-panel>
-  </mat-accordion>
+      </z-accordion-trigger>
+      <z-accordion-content class="px-6 pb-6 pt-2 border-t border-zinc-100">
+        <app-nurse-anc-obstetric-examination
+          [obstetricExaminationForANCDataForm]="obstetricExaminationForANCForm">
+        </app-nurse-anc-obstetric-examination>
+      </z-accordion-content>
+    </z-accordion-item>
+  </z-accordion>
 </div>

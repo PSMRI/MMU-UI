@@ -31,11 +31,14 @@ import { WorkareaCanActivate } from './workarea/workarea-can-activate.service';
 import { HttpServiceService } from '../core/services/http-service.service';
 import { TestInVitalsService } from './shared/services/test-in-vitals.service';
 import { IdrsscoreService } from './shared/services/idrsscore.service';
-import { HttpClientModule } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MaterialModule } from '../core/material.module';
+
 import { NurseWorklistComponent } from './nurse-worklist/nurse-worklist.component';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { NurseWorklistTabsComponent } from './nurse-worklist-tabs/nurse-worklist-tabs.component';
@@ -147,7 +150,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ReportsComponent } from './reports/reports.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { DoctorInvestigationsComponent } from './case-record/general-case-record/doctor-investigations/doctor-investigations.component';
-import { SharedModule } from '../core/components/shared/shared.module';
+
 import { SmsNotificationComponent } from './sms-notification/sms-notification.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -163,17 +166,12 @@ import { AutocompleteScrollerDirective } from './shared/utility/autocomplete-scr
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    HttpClientModule,
-    MaterialModule,
     MatTableModule,
     MatChipsModule,
     MatDatepickerModule,
     NgxPaginationModule,
-    SharedModule,
     MatChipsModule,
     MatToolbarModule,
-  ],
-  declarations: [
     NurseWorklistComponent,
     PrintPageSelectComponent,
     QuickConsultComponent,
@@ -285,7 +283,6 @@ import { AutocompleteScrollerDirective } from './shared/utility/autocomplete-scr
     SmsNotificationComponent,
     AutocompleteScrollerDirective,
   ],
-
   providers: [
     NurseService,
     DoctorService,
@@ -295,6 +292,7 @@ import { AutocompleteScrollerDirective } from './shared/utility/autocomplete-scr
     IdrsscoreService,
     TestInVitalsService,
     LabService,
+    provideHttpClient(withInterceptorsFromDi()),
   ],
 })
 export class NurseDoctorModule {}

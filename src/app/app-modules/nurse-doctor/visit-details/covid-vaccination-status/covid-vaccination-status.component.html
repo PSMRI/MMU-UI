@@ -1,114 +1,97 @@
-<div class="row m-t-20" [formGroup]="covidVaccineStatusForm">
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field [style.width]="'100%'">
-      <mat-label class="mat-label-text">{{
-        currentLanguageSet?.ageGroup
-      }}</mat-label>
-      <mat-select
-        matInput
-        class="input-full-width"
+<div
+  class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4"
+  [formGroup]="covidVaccineStatusForm">
+  <!-- Age Group -->
+  <div>
+    <z-form-field>
+      <z-form-label>{{ currentLanguageSet?.ageGroup }}</z-form-label>
+      <z-select
         formControlName="ageGroup"
-        name="ageGroup"
-        (selectionChange)="setIsApplicable()">
-        <mat-option *ngFor="let ageGroups of ageGroupsList" [value]="ageGroups">
+        (zSelectionChange)="setIsApplicable()"
+        [zPlaceholder]="'Select age group'">
+        <z-select-item
+          *ngFor="let ageGroups of ageGroupsList"
+          [zValue]="ageGroups">
           {{ ageGroups }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        </z-select-item>
+      </z-select>
+    </z-form-field>
   </div>
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field [style.width]="'100%'">
-      <mat-label class="mat-label-text">{{
+
+  <!-- Applicable For Vaccine -->
+  <div>
+    <z-form-field>
+      <z-form-label>{{
         currentLanguageSet?.isApplicableForVaccine
-      }}</mat-label>
-      <mat-select
-        matInput
-        class="input-full-width"
+      }}</z-form-label>
+      <z-select
         formControlName="isApplicableForVaccine"
-        name="isApplicableForVaccine">
-        <mat-option
-          *ngFor="
-            let applicableForVaccineStatus of applicableForVaccineStatusList
-          "
-          [value]="applicableForVaccineStatus">
-          {{ applicableForVaccineStatus }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        [zPlaceholder]="'Select applicability'">
+        <z-select-item
+          *ngFor="let status of applicableForVaccineStatusList"
+          [zValue]="status">
+          {{ status }}
+        </z-select-item>
+      </z-select>
+    </z-form-field>
   </div>
 
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    *ngIf="enableVaccinationStatusFields">
-    <mat-form-field [style.width]="'100%'">
-      <mat-label class="mat-label-text">{{
-        currentLanguageSet?.vaccineStatus
-      }}</mat-label>
-      <mat-select
-        matInput
-        class="input-full-width"
+  <!-- Vaccine Status -->
+  <div *ngIf="enableVaccinationStatusFields">
+    <z-form-field>
+      <z-form-label>{{ currentLanguageSet?.vaccineStatus }}</z-form-label>
+      <z-select
         formControlName="vaccineStatus"
-        name="vaccineStatus"
-        (selectionChange)="enableVaccineTypeAndDoseTaken()"
-        [required]="enableVaccinationStatusFields === true">
-        <mat-option value="YES">YES</mat-option>
-        <mat-option value="NO">NO</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    *ngIf="enableVaccineTypeAndDoseTakenFlag">
-    <mat-form-field [style.width]="'100%'">
-      <mat-label class="mat-label-text">{{
-        currentLanguageSet?.vaccineTypes
-      }}</mat-label>
-      <mat-select
-        matInput
-        class="input-full-width"
-        formControlName="vaccineTypes"
-        name="vaccineTypes"
-        [required]="enableVaccineTypeAndDoseTakenFlag === true"
-        (selectionChange)="enableSaveButtonInForm()">
-        <mat-option
-          *ngFor="let vaccineType of vaccineTypeList"
-          [value]="vaccineType.covidVaccineTypeID">
-          {{ vaccineType.vaccineType }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    *ngIf="enableVaccineTypeAndDoseTakenFlag">
-    <mat-form-field [style.width]="'100%'">
-      <mat-label class="mat-label-text">{{
-        currentLanguageSet?.doseTaken
-      }}</mat-label>
-      <mat-select
-        matInput
-        class="input-full-width"
-        formControlName="doseTaken"
-        name="doseTaken"
-        [required]="enableVaccineTypeAndDoseTakenFlag === true"
-        (selectionChange)="enableSaveButtonInForm()">
-        <mat-option
-          *ngFor="let doseType of doseTypeList"
-          [value]="doseType.covidDoseTypeID">
-          {{ doseType.doseType }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        (zSelectionChange)="enableVaccineTypeAndDoseTaken()"
+        [zPlaceholder]="'Select status'">
+        <z-select-item zValue="YES">YES</z-select-item>
+        <z-select-item zValue="NO">NO</z-select-item>
+      </z-select>
+    </z-form-field>
   </div>
 
-  <div class="col-xs-12">
-    <button
-      class="pull-right mat_blue"
-      style="margin-bottom: 10px !important"
+  <!-- Vaccine Types -->
+  <div *ngIf="enableVaccineTypeAndDoseTakenFlag">
+    <z-form-field>
+      <z-form-label>{{ currentLanguageSet?.vaccineTypes }}</z-form-label>
+      <z-select
+        formControlName="vaccineTypes"
+        (zSelectionChange)="enableSaveButtonInForm()"
+        [zPlaceholder]="'Select vaccine type'">
+        <z-select-item
+          *ngFor="let vaccineType of vaccineTypeList"
+          [zValue]="vaccineType.covidVaccineTypeID">
+          {{ vaccineType.vaccineType }}
+        </z-select-item>
+      </z-select>
+    </z-form-field>
+  </div>
+
+  <!-- Dose Taken -->
+  <div *ngIf="enableVaccineTypeAndDoseTakenFlag">
+    <z-form-field>
+      <z-form-label>{{ currentLanguageSet?.doseTaken }}</z-form-label>
+      <z-select
+        formControlName="doseTaken"
+        (zSelectionChange)="enableSaveButtonInForm()"
+        [zPlaceholder]="'Select dose'">
+        <z-select-item
+          *ngFor="let doseType of doseTypeList"
+          [zValue]="doseType.covidDoseTypeID">
+          {{ doseType.doseType }}
+        </z-select-item>
+      </z-select>
+    </z-form-field>
+  </div>
+
+  <!-- Save Button -->
+  <div class="col-span-full flex justify-end pt-4">
+    <z-button
+      [zDisabled]="enableSaveButton"
       (click)="saveBenCovidVaccinationDetails()"
-      [disabled]="enableSaveButton"
-      color="primary">
+      variant="default"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded-full font-black uppercase tracking-widest text-[10px] shadow-lg shadow-blue-100 transition-all duration-300">
       {{ currentLanguageSet?.coreComponents?.save }}
-    </button>
+    </z-button>
   </div>
 </div>

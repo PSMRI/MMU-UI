@@ -35,7 +35,6 @@ import {
   FormArray,
 } from '@angular/forms';
 import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
-import { MaterialModule } from '../../../../core/material.module';
 
 import { GeneralUtils } from '../../../shared/utility';
 
@@ -56,9 +55,9 @@ describe('OtherVaccinesComponent', () => {
   let component: OtherVaccinesComponent;
   let fixture: ComponentFixture<OtherVaccinesComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [OtherVaccinesComponent],
+      imports: [OtherVaccinesComponent],
     }).compileComponents();
   }));
 

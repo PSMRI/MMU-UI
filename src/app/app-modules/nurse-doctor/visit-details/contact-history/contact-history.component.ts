@@ -30,18 +30,30 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { CommonModule } from '@angular/common';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { SetLanguageComponent } from '@/app-modules/core/components/set-language.component';
+import { HttpServiceService } from '@/app-modules/core/services/http-service.service';
 import {
   DoctorService,
   MasterdataService,
   NurseService,
 } from '../../shared/services';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { ZardFormImports } from 'zard-ui';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-contact-history',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardSelectImports,
+    LucideAngularModule,
+  ],
   templateUrl: './contact-history.component.html',
   styleUrls: ['./contact-history.component.css'],
 })
@@ -65,7 +77,7 @@ export class ContactHistoryComponent
   allSymp: any;
   contactReqiured!: string;
   contactResponseList: any;
-  contactFlag: boolean = false;
+  contactFlag = false;
   currentLanguageSet: any;
   constructor(
     private doctorService: DoctorService,

@@ -41,6 +41,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProvisionalSearchComponent } from '../components/provisional-search/provisional-search.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Directive({
+  standalone: true,
   selector: '[appConfirmatoryDiagnosis]',
 })
 export class ConfirmatoryDiagnosisDirective implements OnInit, DoCheck {

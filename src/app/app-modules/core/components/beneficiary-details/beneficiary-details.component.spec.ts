@@ -20,7 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BeneficiaryDetailsComponent } from './beneficiary-details.component';
 
@@ -28,9 +28,9 @@ describe('BeneficiaryDetailsComponent', () => {
   let component: BeneficiaryDetailsComponent;
   let fixture: ComponentFixture<BeneficiaryDetailsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [BeneficiaryDetailsComponent],
+      imports: [BeneficiaryDetailsComponent],
     }).compileComponents();
   }));
 

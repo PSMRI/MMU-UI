@@ -37,6 +37,8 @@ import {
   FormArray,
   NgForm,
   AbstractControl,
+  ReactiveFormsModule,
+  FormsModule,
 } from '@angular/forms';
 import {
   Params,
@@ -54,13 +56,45 @@ import {
 import { QuickConsultUtils } from '../shared/utility';
 import { TestInVitalsService } from '../shared/services/test-in-vitals.service';
 import { environment } from 'src/environments/environment';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
+import { NgIf, NgFor, NgClass, SlicePipe } from '@angular/common';
+import {
+  MatFormField,
+  MatLabel,
+  MatSuffix,
+  MatSelect,
+} from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import {
+  MatAutocompleteTrigger,
+  MatAutocomplete,
+  MatOption,
+} from '@angular/material/autocomplete';
+import { StringValidatorDirective } from '../../core/directives/stringValidator.directive';
+import { NumberValidatorDirective } from '../../core/directives/numberValidator.directive';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AutocompleteScrollerDirective } from '../shared/utility/autocomplete-scroller.directive';
+import { MatIcon } from '@angular/material/icon';
+import { TestAndRadiologyComponent } from '../case-record/general-case-record/test-and-radiology/test-and-radiology.component';
 
 interface prescribe {
   id: any;
@@ -87,6 +121,40 @@ interface prescribe {
   templateUrl: './quick-consult.component.html',
   styleUrls: ['./quick-consult.component.css'],
   encapsulation: ViewEncapsulation.None,
+  imports: [
+    ZardAccordionImports,
+    ReactiveFormsModule,
+    NgIf,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    NgFor,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    MatOption,
+    StringValidatorDirective,
+    NgClass,
+    NumberValidatorDirective,
+    MatSuffix,
+    MatTooltip,
+    MatSelect,
+    AutocompleteScrollerDirective,
+    MatIcon,
+    FormsModule,
+    MatPaginator,
+    TestAndRadiologyComponent,
+    SlicePipe,
+  ],
 })
 export class QuickConsultComponent
   implements OnInit, OnDestroy, OnChanges, DoCheck

@@ -37,13 +37,66 @@ import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { TestInVitalsService } from '../../../shared/services/test-in-vitals.service';
 import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 import { LabService } from 'src/app/app-modules/lab/shared/services';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { CommonModule, NgIf, NgFor, DatePipe } from '@angular/common';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTabsModule, MatTabGroup, MatTab } from '@angular/material/tabs';
+import {
+  ZardFormImports,
+  ZardRadioImports,
+  ZardSelectImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+  ZardAccordionImports,
+  ZardDatePickerImports,
+} from 'zard-ui';
+import { ZardTabsImports } from '@/components/ui/tabs/tabs.imports';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideHistory,
+  lucideBeaker,
+  lucideRadiation,
+  lucideSearch,
+} from '@ng-icons/lucide';
+
 @Component({
   selector: 'app-test-and-radiology',
   templateUrl: './test-and-radiology.component.html',
   styleUrls: ['./test-and-radiology.component.css'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatTabsModule,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    ZardAccordionImports,
+    ZardDatePickerImports,
+    ZardTabsImports,
+    LucideAngularModule,
+    NgIcon,
+    MatPaginator,
+    MatTabGroup,
+    MatTab,
+  ],
+  providers: [
+    provideIcons({
+      lucideHistory,
+      lucideBeaker,
+      lucideRadiation,
+      lucideSearch,
+    }),
+  ],
 })
 export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
   current_language_set: any;
@@ -307,7 +360,7 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
       }
     });
   }
-  enableArchiveView: boolean = false;
+  enableArchiveView = false;
   archivedLabResults: any = [];
   filteredArchivedLabResults: any = [];
   archivedRadiologyResults: any = [];

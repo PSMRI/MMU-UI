@@ -30,12 +30,19 @@
               }
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.scss",
               "node_modules/font-awesome/css/font-awesome.min.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "jquery",
+              "crypto-js",
+              "file-saver",
+              "html2canvas",
+              "exceljs",
+              "moment",
+              "recordrtc"
+            ]
           },
           "configurations": {
             "production": {
@@ -111,10 +118,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "MMU-UI:build:production"
+              "buildTarget": "MMU-UI:build:production"
             },
             "development": {
-              "browserTarget": "MMU-UI:build:development"
+              "buildTarget": "MMU-UI:build:development"
             }
           },
           "defaultConfiguration": "development",
@@ -125,7 +132,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "MMU-UI:build"
+            "buildTarget": "MMU-UI:build"
           }
         },
         "test": {

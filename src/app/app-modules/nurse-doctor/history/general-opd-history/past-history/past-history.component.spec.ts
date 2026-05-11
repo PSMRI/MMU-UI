@@ -35,7 +35,6 @@ import {
   FormArray,
 } from '@angular/forms';
 import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
-import { MaterialModule } from '../../../../core/material.module';
 
 import { GeneralUtils } from '../../../shared/utility';
 
@@ -56,9 +55,9 @@ describe('PastHistoryComponent', () => {
   let component: PastHistoryComponent;
   let fixture: ComponentFixture<PastHistoryComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PastHistoryComponent],
+      imports: [PastHistoryComponent],
     }).compileComponents();
   }));
 

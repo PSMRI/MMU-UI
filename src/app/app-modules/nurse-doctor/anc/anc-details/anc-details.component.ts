@@ -21,7 +21,7 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { SetLanguageComponent } from '../../../core/components/set-language.component';
@@ -35,6 +35,15 @@ import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { ZardInputImports } from '@/components/ui/input/input.imports';
+import { ZardDatePickerImports } from '@/components/ui/date-picker/date-picker.imports';
+import { NgIf } from '@angular/common';
+import { NullDefaultValueDirective } from '../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
+import { NumberValidatorDirective } from '../../../core/directives/numberValidator.directive';
 
 @Component({
   selector: 'app-nurse-anc-details',
@@ -64,6 +73,18 @@ import {
         },
       },
     },
+  ],
+  imports: [
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardLabelImports,
+    ZardInputImports,
+    ZardDatePickerImports,
+    NgIf,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+    NumberValidatorDirective,
   ],
 })
 export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {

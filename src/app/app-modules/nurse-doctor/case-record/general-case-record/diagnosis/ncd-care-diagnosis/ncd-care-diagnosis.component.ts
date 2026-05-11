@@ -21,11 +21,14 @@
  */
 
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
+import { NgIf, NgFor } from '@angular/common';
 import {
   AbstractControl,
   FormArray,
   FormBuilder,
   FormGroup,
+  ReactiveFormsModule,
+  FormsModule,
 } from '@angular/forms';
 import { MasterdataService, DoctorService } from '../../../../shared/services';
 import { ActivatedRoute } from '@angular/router';
@@ -34,10 +37,45 @@ import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { GeneralUtils } from 'src/app/app-modules/nurse-doctor/shared/utility';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import {
+  ZardFormImports,
+  ZardRadioImports,
+  ZardSelectImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+  ZardAccordionImports,
+  ZardDatePickerImports,
+} from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucidePlusCircle, lucideTrash2, lucideInfo } from '@ng-icons/lucide';
+import { StringValidatorDirective } from '@/app-modules/core/directives/stringValidator.directive';
+
 @Component({
   selector: 'app-ncd-care-diagnosis',
   templateUrl: './ncd-care-diagnosis.component.html',
   styleUrls: ['./ncd-care-diagnosis.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    NgIf,
+    NgFor,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    ZardAccordionImports,
+    ZardDatePickerImports,
+    LucideAngularModule,
+    NgIcon,
+    StringValidatorDirective,
+  ],
+  providers: [provideIcons({ lucidePlusCircle, lucideTrash2, lucideInfo })],
 })
 export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
   utils = new GeneralUtils(this.fb, this.sessionstorage);

@@ -1,201 +1,199 @@
-<div class="row m-t-20" [formGroup]="obstetricExaminationForANCDataForm">
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field class="select-full-width">
-      <mat-label>{{
+<div class="space-y-8" [formGroup]="obstetricExaminationForANCDataForm">
+  <!-- Fundal Height & POA Status -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <z-form-field>
+      <z-label>{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.obstetric?.fundalHeight
-      }}</mat-label>
-      <mat-select
-        class="select-full-width"
+      }}</z-label>
+      <z-select
         name="fundalHeight"
-        formControlName="fundalHeight">
-        <mat-option
+        formControlName="fundalHeight"
+        [zPlaceholder]="currentLanguageSet?.common?.select">
+        <z-option
           *ngFor="let fundalHeight of selectFundalHeight"
-          [value]="fundalHeight.name">
+          [zValue]="fundalHeight.name">
           {{ fundalHeight.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+        </z-option>
+      </z-select>
+    </z-form-field>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field class="select-full-width">
-      <mat-label>{{
+    <z-form-field>
+      <z-label>{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.obstetric?.fHandPOAStatus
-      }}</mat-label>
-      <mat-select
-        class="select-full-width"
+      }}</z-label>
+      <z-select
         name="fHAndPOA_Status"
-        formControlName="fHAndPOA_Status">
-        <mat-option
+        formControlName="fHAndPOA_Status"
+        [zPlaceholder]="currentLanguageSet?.common?.select">
+        <z-option
           *ngFor="let FHPOAStatus of selectFHPOAStatus"
-          [value]="FHPOAStatus.name">
+          [zValue]="FHPOAStatus.name">
           {{ FHPOAStatus.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+        </z-option>
+      </z-select>
+    </z-form-field>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field class="select-full-width">
-      <mat-label>{{
+    <z-form-field>
+      <z-label>{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.obstetric?.interpretationFHandPOA
-      }}</mat-label>
-      <mat-select
-        class="select-full-width"
+      }}</z-label>
+      <z-select
         name="fHAndPOA_Interpretation"
-        formControlName="fHAndPOA_Interpretation">
-        <mat-option
+        formControlName="fHAndPOA_Interpretation"
+        [zPlaceholder]="currentLanguageSet?.common?.select">
+        <z-option
           *ngFor="let interpretationFHAndPOA of selectInterpretationFHAndPOA"
-          [value]="interpretationFHAndPOA.name">
+          [zValue]="interpretationFHAndPOA.name">
           {{ interpretationFHAndPOA.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        </z-option>
+      </z-select>
+    </z-form-field>
   </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <label class="control-label" for="edema">{{
-      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-        ?.obstetric?.fetalMovements
-    }}</label>
-    <div class="clearfix"></div>
-    <mat-radio-group
-      style="margin-left: -10px"
-      name="fetalMovements"
-      formControlName="fetalMovements"
-      required>
-      <mat-radio-button color="primary" class="radio-btn" value="Present">{{
-        currentLanguageSet?.common?.present
-      }}</mat-radio-button>
-      <mat-radio-button color="primary" class="radio-btn" value="Absent">{{
-        currentLanguageSet?.common?.absent
-      }}</mat-radio-button>
-    </mat-radio-group>
-  </div>
-
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <label class="control-label" for="edema">{{
-      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-        ?.obstetric?.fetalHeartsounds
-    }}</label>
-    <div class="clearfix"></div>
-    <mat-radio-group
-      style="margin-left: -10px"
-      name="fetalHeartSounds"
-      formControlName="fetalHeartSounds"
-      (change)="resetFetalHeartRate($event)">
-      <mat-radio-button color="primary" class="radio-btn" value="Audible">{{
-        currentLanguageSet?.common?.audible
-      }}</mat-radio-button>
-      <mat-radio-button color="primary" class="radio-btn" value="Not Audible">{{
-        currentLanguageSet?.common?.notAudible
-      }}</mat-radio-button>
-    </mat-radio-group>
-  </div>
-
+  <!-- Fetal Assessments -->
   <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    *ngIf="fetalHeartSounds === 'Audible'">
-    <mat-form-field class="select-full-width">
-      <mat-label>{{
+    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4 border-t border-zinc-100">
+    <div class="space-y-2 p-4 bg-zinc-50 rounded-xl border border-zinc-200">
+      <label class="text-sm font-semibold text-zinc-900">
+        {{
+          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+            ?.obstetric?.fetalMovements
+        }}
+      </label>
+      <z-radio-group formControlName="fetalMovements" class="flex gap-4">
+        <z-radio zValue="Present">{{
+          currentLanguageSet?.common?.present
+        }}</z-radio>
+        <z-radio zValue="Absent">{{
+          currentLanguageSet?.common?.absent
+        }}</z-radio>
+      </z-radio-group>
+    </div>
+
+    <div class="space-y-2 p-4 bg-zinc-50 rounded-xl border border-zinc-200">
+      <label class="text-sm font-semibold text-zinc-900">
+        {{
+          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+            ?.obstetric?.fetalHeartsounds
+        }}
+      </label>
+      <z-radio-group
+        formControlName="fetalHeartSounds"
+        (change)="resetFetalHeartRate($event)"
+        class="flex gap-4">
+        <z-radio zValue="Audible">{{
+          currentLanguageSet?.common?.audible
+        }}</z-radio>
+        <z-radio zValue="Not Audible">{{
+          currentLanguageSet?.common?.notAudible
+        }}</z-radio>
+      </z-radio-group>
+    </div>
+
+    <z-form-field *ngIf="fetalHeartSounds === 'Audible'">
+      <z-label>{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.obstetric?.fetalHeartRate
-      }}</mat-label>
-      <mat-select
-        class="select-full-width"
+      }}</z-label>
+      <z-select
         name="fetalHeartRate_BeatsPerMinute"
-        formControlName="fetalHeartRate_BeatsPerMinute">
-        <mat-option
+        formControlName="fetalHeartRate_BeatsPerMinute"
+        [zPlaceholder]="currentLanguageSet?.common?.select">
+        <z-option
           *ngFor="let fetalHeartRate of selectFetalHeartRate"
-          [value]="fetalHeartRate.name">
+          [zValue]="fetalHeartRate.name">
           {{ fetalHeartRate.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        </z-option>
+      </z-select>
+    </z-form-field>
   </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field class="select-full-width">
-      <mat-label>{{
+  <!-- Fetal Position & Presentation -->
+  <div
+    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4 border-t border-zinc-100">
+    <z-form-field>
+      <z-label>{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.obstetric?.fetalposition
-      }}</mat-label>
-      <mat-select
-        class="select-full-width"
+      }}</z-label>
+      <z-select
         name="fetalPositionOrLie"
-        formControlName="fetalPositionOrLie">
-        <mat-option
+        formControlName="fetalPositionOrLie"
+        [zPlaceholder]="currentLanguageSet?.common?.select">
+        <z-option
           *ngFor="let fetalPositionOrLie of selectFetalPositionOrLie"
-          [value]="fetalPositionOrLie.name">
+          [zValue]="fetalPositionOrLie.name">
           {{ fetalPositionOrLie.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+        </z-option>
+      </z-select>
+    </z-form-field>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field class="select-full-width" style="margin-top: 10px">
-      <mat-label>{{
+    <z-form-field>
+      <z-label>{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.obstetric?.fetalPresentation
-      }}</mat-label>
-      <mat-select
-        class="select-full-width"
+      }}</z-label>
+      <z-select
         name="fetalPresentation"
-        formControlName="fetalPresentation">
-        <mat-option
+        formControlName="fetalPresentation"
+        [zPlaceholder]="currentLanguageSet?.common?.select">
+        <z-option
           *ngFor="let fetalPresentation of selectFetalPresentation"
-          [value]="fetalPresentation.name">
+          [zValue]="fetalPresentation.name">
           {{ fetalPresentation.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+        </z-option>
+      </z-select>
+    </z-form-field>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field class="select-full-width" style="margin-top: 10px">
-      <mat-label>{{
+    <z-form-field>
+      <z-label>{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.obstetric?.abdominalScars
-      }}</mat-label>
-      <mat-select
-        class="select-full-width"
+      }}</z-label>
+      <z-select
         name="abdominalScars"
-        formControlName="abdominalScars">
-        <mat-option
+        formControlName="abdominalScars"
+        [zPlaceholder]="currentLanguageSet?.common?.select">
+        <z-option
           *ngFor="let abdominalScars of selectAbdominalScars"
-          [value]="abdominalScars.name">
+          [zValue]="abdominalScars.name">
           {{ abdominalScars.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        </z-option>
+      </z-select>
+    </z-form-field>
   </div>
 
+  <!-- Symphysio-Fundal Height -->
   <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    style="margin-top: -15px">
-    <mat-form-field class="select-full-width">
-      <mat-label>{{ currentLanguageSet?.sfhCms }}</mat-label>
+    class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-zinc-100">
+    <z-form-field>
+      <z-label>{{ currentLanguageSet?.sfhCms }}</z-label>
       <textarea
-        matInput
-        matTextareaAutosize
+        z-input
         name="sfh"
         formControlName="sfh"
         allowText="decimal"
-        allowMax="100.0"></textarea>
-    </mat-form-field>
+        allowMax="100.0"
+        class="min-h-[60px]">
+      </textarea>
+    </z-form-field>
   </div>
 
-  <div class="col-xs-12">
-    <p style="text-align: right">
-      <strong>{{ currentLanguageSet?.poa }} :</strong>
-      {{
-        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-          ?.obstetric?.periodofAmenorrhea
-      }}
-    </p>
+  <!-- Period of Amenorrhea Display -->
+  <div class="flex justify-end pt-4">
+    <div class="bg-zinc-100 px-4 py-2 rounded-lg border border-zinc-200">
+      <span class="text-sm font-bold text-zinc-900"
+        >{{ currentLanguageSet?.poa }} :</span
+      >
+      <span class="text-sm font-medium text-zinc-600 ml-2">
+        {{
+          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+            ?.obstetric?.periodofAmenorrhea
+        }}
+      </span>
+    </div>
   </div>
 </div>

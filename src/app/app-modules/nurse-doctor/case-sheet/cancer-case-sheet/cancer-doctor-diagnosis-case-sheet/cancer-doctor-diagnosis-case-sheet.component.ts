@@ -21,15 +21,44 @@
  */
 
 import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MasterdataService } from '../../../shared/services';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
+import { ZardFormImports, ZardLabelImports, ZardCardImports } from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideActivity,
+  lucideUser,
+  lucideHistory,
+  lucideClipboardList,
+} from '@ng-icons/lucide';
+
 @Component({
   selector: 'app-cancer-doctor-diagnosis-case-sheet',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ZardFormImports,
+    ZardLabelImports,
+    ZardCardImports,
+    LucideAngularModule,
+    NgIcon,
+  ],
   templateUrl: './cancer-doctor-diagnosis-case-sheet.component.html',
   styleUrls: ['./cancer-doctor-diagnosis-case-sheet.component.css'],
+  providers: [
+    DatePipe,
+    provideIcons({
+      lucideActivity,
+      lucideUser,
+      lucideHistory,
+      lucideClipboardList,
+    }),
+  ],
 })
 export class CancerDoctorDiagnosisCaseSheetComponent
   implements OnInit, OnChanges, DoCheck
@@ -44,7 +73,7 @@ export class CancerDoctorDiagnosisCaseSheetComponent
   currentVitals: any;
   caseSheetDiagnosisData: any;
   date: any;
-  enableDoctorSign: boolean = false;
+  enableDoctorSign = false;
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
   servicePointName: any;

@@ -20,7 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegistrationComponent } from './../registration.component';
 import {
   FormsModule,
@@ -33,19 +33,19 @@ import { ConfirmationService } from '../../../core/services/confirmation.service
 import { CameraService } from '../../../core/services/camera.service';
 import { RegistrarService } from '../../../../../../Common-UI/src/registrar/services/registrar.service';
 import { RegistrationUtils } from '../../shared/utility/registration-utility';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of, BehaviorSubject, Subject } from 'rxjs';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/empty';
 import 'rxjs/add/observable/throw';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import { getDOM } from '@angular/platform-browser/src/dom/dom_adapter';
+
 // import { Location } from '@angular/common';
 // import { fakeAsync, tick } from '@angular/core/testing';
 // import { RouterTestingModule } from '@angular/router/testing';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MaterialModule } from '../../../core/material.module';
+
 import { RegisterPersonalDetailsComponent } from './register-personal-details.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -61,7 +61,7 @@ class MockActivatedRoute {
 }
 class RegistrarServiceMock {
   // submitBeneficiary = jasmine.createSpy('submitBeneficiary() spy').andCallFake(function(){
-  //   return Observable.of(true);
+  //   return of(true);
   // });
   // updateBeneficiary = jasmine.createSpy('updateBeneficiary');
 
@@ -193,10 +193,10 @@ class RegistrarServiceMock {
   }
 
   submitBeneficiary() {
-    return Observable.of(true);
+    return of(true);
   }
   updateBeneficiary() {
-    return Observable.of(false);
+    return of(false);
   }
 }
 
@@ -209,7 +209,7 @@ describe('RegisterPersonalDetailsComponent', () => {
   let confirmationService: ConfirmationService;
   let spy: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
@@ -333,7 +333,7 @@ describe('RegisterPersonalDetailsComponent', () => {
 
   it('should call Camera Service to Capture Image', () => {
     spyOn(cameraService, 'capture').and.callFake(function () {
-      return Observable.of(1);
+      return of(1);
     });
     component.ngOnInit();
     component.captureImage();
@@ -358,7 +358,7 @@ describe('RegisterPersonalDetailsComponent', () => {
 
   it('should call for Confirmation if Gender is selected as Type 3, Transgender', () => {
     spy = spyOn(confirmationService, 'confirm').and.callFake(function () {
-      return Observable.of(1);
+      return of(1);
     });
     component.ngOnInit();
     const form = component.personalDetailsForm;

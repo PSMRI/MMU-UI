@@ -1,8 +1,9 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject, ViewChild, OnInit, DoCheck } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogRef,
   MatDialog,
+  MatDialogContent,
 } from '@angular/material/dialog';
 import { SmsTemplateService } from '../smsTemplate/sms-template.service';
 import { ConfirmationService } from '../../core/services';
@@ -13,13 +14,35 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIcon } from '@angular/material/icon';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { NgIf, NgFor } from '@angular/common';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatFormField, MatLabel, MatError } from '@angular/material/select';
 
 @Component({
   selector: 'app-sms-notification',
   templateUrl: './sms-notification.component.html',
   styleUrls: ['./sms-notification.component.css'],
+  imports: [
+    MatToolbar,
+    MatIcon,
+    CdkScrollable,
+    MatDialogContent,
+    NgIf,
+    NgFor,
+    MatPaginator,
+    MatCheckbox,
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormField,
+    MatLabel,
+    MatError,
+  ],
 })
-export class SmsNotificationComponent {
+export class SmsNotificationComponent implements OnInit, DoCheck {
   altNum = false;
   mobileNumber: any;
   smsFlag = false;
@@ -68,7 +91,7 @@ export class SmsNotificationComponent {
   validNumber: any = false;
 
   mobileNum(value: any) {
-    if (value.length == 10) {
+    if (value.length === 10) {
       this.validNumber = true;
     } else {
       this.validNumber = false;
@@ -77,7 +100,7 @@ export class SmsNotificationComponent {
 
   sendSMS() {
     const currentServiceID = this.sessionstorage.getItem('currentServiceID');
-    if (currentServiceID != undefined) {
+    if (currentServiceID !== undefined) {
       this._smsService
         .getSMStypes(currentServiceID)
         .pipe(
@@ -106,7 +129,7 @@ export class SmsNotificationComponent {
             const req_arr = [];
             const preferredPhoneNum = this.sessionstorage.getItem('phnum');
             const phoneNumber =
-              preferredPhoneNum == 'Not Available'
+              preferredPhoneNum === 'Not Available'
                 ? this.mobileNumber
                 : preferredPhoneNum;
             for (let i = 0; i < this.data.prescribedDrugs.length; i++) {

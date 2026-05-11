@@ -1,17 +1,16 @@
 .norecord {
-    text-align: center;
+  text-align: center;
 }
 
 md-card {
-    width: max-content;
+  width: max-content;
 }
 
 .overflow {
-    overflow-x: auto;
+  overflow-x: auto;
 }
 
 table {
-    width: 100%;
-    border: 1px solid lightgray;
-  }
-  
+  width: 100%;
+  border: 1px solid lightgray;
+}

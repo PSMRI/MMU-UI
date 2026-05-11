@@ -42,6 +42,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Directive({
+  standalone: true,
   selector: '[appOpenModal]',
 })
 export class OpenModalDirective implements OnInit, DoCheck {

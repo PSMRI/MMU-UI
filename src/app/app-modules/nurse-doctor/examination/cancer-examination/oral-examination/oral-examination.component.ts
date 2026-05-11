@@ -28,15 +28,30 @@ import {
   ElementRef,
   DoCheck,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CameraService } from '../../../../core/services/camera.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { NgIf } from '@angular/common';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-cancer-oral-examination',
   templateUrl: './oral-examination.component.html',
   styleUrls: ['./oral-examination.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    NgIf,
+    StringValidatorDirective,
+  ],
 })
 export class OralExaminationComponent implements OnInit, DoCheck {
   @Input()

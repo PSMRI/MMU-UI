@@ -30,7 +30,6 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MaterialModule } from '../../../core/material.module';
 
 import { CancerUtils } from '../../shared/utility';
 
@@ -53,10 +52,14 @@ describe('CancerExaminationComponent', () => {
   let debugElement: any;
   let fb: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
-      declarations: [CancerExaminationComponent],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        CancerExaminationComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: DoctorService, useClass: DoctorServiceStub },
@@ -133,7 +136,7 @@ describe('CancerExaminationComponent', () => {
     inject([DoctorService], doctorService => {
       spyOn(component, 'fetchCancerExaminationDetails').and.callThrough();
       spyOn(doctorService, 'getCancerExaminationDetails').and.returnValue(
-        Observable.of(data.cancerExaminationDetails)
+        of(data.cancerExaminationDetails)
       );
 
       component.mode = String('view');
@@ -148,7 +151,7 @@ describe('CancerExaminationComponent', () => {
     inject([DoctorService], doctorService => {
       spyOn(component, 'fetchCancerExaminationDetails').and.callThrough();
       spyOn(doctorService, 'getCancerExaminationDetails').and.returnValue(
-        Observable.of(data.cancerExaminationDetails)
+        of(data.cancerExaminationDetails)
       );
 
       component.mode = String('view');
@@ -176,7 +179,7 @@ describe('CancerExaminationComponent', () => {
     inject([DoctorService], doctorService => {
       spyOn(component, 'upadteCancerExaminationDetails').and.callThrough();
       spyOn(doctorService, 'updateCancerExaminationDetails').and.returnValue(
-        Observable.of(data.updateCancerExaminationSuccessResponse)
+        of(data.updateCancerExaminationSuccessResponse)
       );
 
       component.mode = String('update');

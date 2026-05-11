@@ -1,18 +1,85 @@
-<div class="row m-t-10 p-t-30" [formGroup]="diseaseFormsGroup">
-  <div class="col-xs-3 col-sm-3 col-md-12 col-lg-12">
-    <div class="checkbox-group" formArrayName="diseaseFormsArray">
+<div
+  class="pt-6 animate-in fade-in slide-in-from-bottom-4 duration-700"
+  [formGroup]="diseaseFormsGroup">
+  <div class="space-y-6">
+    <!-- Header with Clinical Context -->
+    <div class="flex items-center gap-3 mb-8">
+      <div class="p-2 bg-emerald-100 rounded-lg shadow-sm">
+        <lucide-icon
+          name="clipboard-check"
+          class="size-4 text-emerald-600"></lucide-icon>
+      </div>
+      <div class="text-left">
+        <z-form-label
+          class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
+          Confirmed Chronic Conditions
+        </z-form-label>
+        <span
+          class="text-[10px] text-gray-400 font-bold uppercase tracking-tight"
+          >Validated diagnostic profile for longitudinal care</span
+        >
+      </div>
+    </div>
+
+    <!-- Disease Grid -->
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+      formArrayName="diseaseFormsArray">
       <ng-container
         *ngFor="let item of getDiseaseFormArray(); let i = index"
         [formGroupName]="i">
-        <mat-checkbox
-          formControlName="selected"
-          class="checkbox"
-          color="primary"
-          (change)="checked($event, item)"
-          [disabled]="isDoctor">
-          {{ item.value.diseaseName }}
-        </mat-checkbox>
+        <div
+          [ngClass]="{
+            'border-emerald-200 bg-emerald-50/30': item.get('selected')?.value,
+            'border-gray-100 bg-white shadow-sm': !item.get('selected')?.value,
+            'opacity-60 cursor-not-allowed': item.get('selected')?.disabled,
+          }"
+          class="p-5 rounded-[2rem] border transition-all duration-500 hover:shadow-md group">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div
+                [ngClass]="
+                  item.get('selected')?.value ? 'bg-emerald-500' : 'bg-gray-100'
+                "
+                class="h-2 w-2 rounded-full transition-colors duration-500"></div>
+              <span
+                class="text-sm font-black text-gray-800 tracking-tight uppercase"
+                >{{ item.get('diseaseName')?.value }}</span
+              >
+            </div>
+
+            <z-checkbox
+              formControlName="selected"
+              (checkChange)="checked($event, item)"
+              [zDisabled]="item.get('selected')?.disabled"
+              class="scale-110">
+            </z-checkbox>
+          </div>
+
+          <div
+            class="mt-4 flex items-center gap-2"
+            *ngIf="item.get('selected')?.disabled">
+            <lucide-icon name="lock" class="size-3 text-gray-400"></lucide-icon>
+            <span
+              class="text-[9px] font-black text-gray-400 uppercase tracking-widest italic"
+              >Previously Validated</span
+            >
+          </div>
+        </div>
       </ng-container>
+    </div>
+
+    <!-- Empty State -->
+    <div
+      *ngIf="getDiseaseFormArray().length === 0"
+      class="flex flex-col items-center py-12 opacity-30">
+      <lucide-icon
+        name="activity"
+        class="size-12 text-gray-300 mb-4"></lucide-icon>
+      <p
+        class="text-[10px] font-black text-gray-400 uppercase tracking-widest italic">
+        No clinical conditions identified
+      </p>
     </div>
   </div>
 </div>

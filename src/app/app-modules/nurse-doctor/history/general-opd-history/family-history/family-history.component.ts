@@ -26,6 +26,7 @@ import {
   FormArray,
   FormGroup,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 
 import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
@@ -39,11 +40,57 @@ import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import {
+  LucideAngularModule,
+  Users,
+  History,
+  Trash2,
+  Plus,
+  Dna,
+  Link2,
+  Info,
+} from 'lucide-angular';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-general-family-history',
+  standalone: true,
   templateUrl: './family-history.component.html',
   styleUrls: ['./family-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardRadioImports,
+    ZardLabelImports,
+    ZardSelectImports,
+    NgIf,
+    NgFor,
+    NgClass,
+    LucideAngularModule,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+  ],
+  providers: [
+    LucideAngularModule.pick({
+      Users,
+      History,
+      Trash2,
+      Plus,
+      Dna,
+      Link2,
+      Info,
+    }).providers,
+  ],
 })
 export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

@@ -21,14 +21,34 @@
  */
 
 import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DoctorService } from '../../shared/services';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SetLanguageComponent } from '@/app-modules/core/components/set-language.component';
+import { HttpServiceService } from '@/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { CommonModule } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
+import { ZardFormImports, ZardSelectImports, ZardRadioImports } from 'zard-ui';
+import { NullDefaultValueDirective } from '@/app-modules/core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '@/app-modules/core/directives/stringValidator.directive';
+
+import { MatRadioModule } from '@angular/material/radio';
+import { ZardInputDirective } from '@/components/ui/input/input.directive';
 
 @Component({
   selector: 'app-patient-adherence',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardSelectImports,
+    ZardRadioImports,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+    ZardInputDirective,
+    LucideAngularModule,
+  ],
   templateUrl: './adherence.component.html',
   styleUrls: ['./adherence.component.css'],
 })

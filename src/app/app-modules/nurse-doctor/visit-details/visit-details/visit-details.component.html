@@ -1,123 +1,110 @@
-<div class="row m-t-20" [formGroup]="patientVisitDetailsForm">
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    *ngIf="mode?.toLowerCase() === 'view'">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
-        currentLanguageSet?.Reports?.visitcode
-      }}</mat-label>
+<div
+  class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4"
+  [formGroup]="patientVisitDetailsForm">
+  <!-- Visit Code (View Mode only) -->
+  <div *ngIf="mode?.toLowerCase() === 'view'">
+    <z-form-field>
+      <z-form-label>{{ currentLanguageSet?.Reports?.visitcode }}</z-form-label>
       <input
-        matInput
-        name="visitCode"
+        z-input
         formControlName="visitCode"
-        (focus)="trackFieldInteraction('Visit Code')" />
-    </mat-form-field>
+        (focus)="trackFieldInteraction('Visit Code')"
+        [disabled]="true"
+        placeholder="N/A" />
+    </z-form-field>
   </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
+  <!-- Reason for Visit -->
+  <div>
+    <z-form-field>
+      <z-form-label>{{
         currentLanguageSet?.nurseData?.visitDetailsForm?.reasonForVisit
-      }}</mat-label>
-      <mat-select
-        matInput
-        class="input-full-width"
-        name="visitReason"
+      }}</z-form-label>
+      <z-select
         formControlName="visitReason"
-        (selectionChange)="
-          reasonSelected(patientVisitDetailsForm.controls['visitReason'].value);
-          trackFieldInteraction('Reason For Visit')
+        (zSelectionChange)="
+          reasonSelected($event); trackFieldInteraction('Reason For Visit')
         "
-        required>
-        <mat-option
+        [zPlaceholder]="'Select reason'">
+        <z-select-item
           *ngFor="let visitReasons of templateVisitReasons"
-          [value]="visitReasons.visitReason">
+          [zValue]="visitReasons.visitReason">
           {{ visitReasons.visitReason }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        </z-select-item>
+      </z-select>
+    </z-form-field>
   </div>
 
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    *ngIf="patientVisitDetailsForm!.controls['visitReason']?.value">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
+  <!-- Visit Category -->
+  <div *ngIf="patientVisitDetailsForm!.controls['visitReason']?.value">
+    <z-form-field>
+      <z-form-label>{{
         currentLanguageSet?.nurseData?.visitDetailsForm?.visitCategory
-      }}</mat-label>
-      <mat-select
-        class="input-full-width"
-        name="visitCategory"
-        matInput
+      }}</z-form-label>
+      <z-select
         formControlName="visitCategory"
-        (selectionChange)="
-          checkCategoryDependent(
-            patientVisitDetailsForm.controls['visitCategory'].value
-          );
+        (zSelectionChange)="
+          checkCategoryDependent($event);
           trackFieldInteraction('Visit Category')
         "
-        required>
-        <mat-option
+        [zPlaceholder]="'Select category'">
+        <z-select-item
           *ngFor="let VisitCategories of templateFilterVisitCategories"
-          [value]="VisitCategories.visitCategory">
+          [zValue]="VisitCategories.visitCategory">
           {{ VisitCategories.visitCategory }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        </z-select-item>
+      </z-select>
+    </z-form-field>
   </div>
 
+  <!-- Pregnancy Status -->
   <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     *ngIf="
       showPregnancyStatus &&
       patientVisitDetailsForm!.controls['visitCategory']?.value !== null &&
       patientVisitDetailsForm!.controls['visitCategory']?.value !== undefined &&
       patientVisitDetailsForm!.controls['visitCategory']?.value !== 'PNC'
     ">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
+    <z-form-field>
+      <z-form-label>{{
         currentLanguageSet?.nurseData?.visitDetailsForm?.pregnancyStatus
-      }}</mat-label>
-      <mat-select
-        matInput
-        class="input-full-width"
+      }}</z-form-label>
+      <z-select
         id="pregnancyStatus"
-        name="pregnancyStatus"
         formControlName="pregnancyStatus"
-        [attr.readonly]="
+        [zDisabled]="
           patientVisitDetailsForm.controls['visitCategory'].value === 'ANC'
         "
-        (selectionChange)="trackFieldInteraction('Pregnancy Status')">
-        <mat-option
+        (zSelectionChange)="trackFieldInteraction('Pregnancy Status')"
+        [zPlaceholder]="'Select status'">
+        <z-select-item
           *ngFor="let pregnancyStatus of templatePregnancyStatus"
-          [value]="pregnancyStatus">
+          [zValue]="pregnancyStatus">
           {{ pregnancyStatus }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        </z-select-item>
+      </z-select>
+    </z-form-field>
   </div>
 
+  <!-- MCTS Or RCH ID -->
   <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     *ngIf="
       patientVisitDetailsForm!.controls['pregnancyStatus']?.value &&
       patientVisitDetailsForm!.controls['pregnancyStatus']?.value === 'Yes' &&
       patientVisitDetailsForm!.controls['visitCategory']?.value !== 'PNC'
     ">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
+    <z-form-field>
+      <z-form-label>{{
         currentLanguageSet?.nurseData?.visitDetailsForm?.MCTSOrRCHID
-      }}</mat-label>
+      }}</z-form-label>
       <input
-        matInput
-        autocomplete="off"
-        matInput
+        z-input
         appDefaultNull
         allowText="number"
         maxlength="20"
-        name="rCHID"
         formControlName="rCHID"
-        (focus)="trackFieldInteraction('MCTS Or RCH ID')" />
-    </mat-form-field>
+        (focus)="trackFieldInteraction('MCTS Or RCH ID')"
+        placeholder="Enter ID" />
+    </z-form-field>
   </div>
 </div>

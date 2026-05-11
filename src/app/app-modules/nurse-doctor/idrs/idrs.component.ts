@@ -31,7 +31,7 @@ import {
   DoCheck,
   OnChanges,
 } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Observable, Subscription, mergeMap, of } from 'rxjs';
 import {
   NurseService,
@@ -51,11 +51,42 @@ import { SetLanguageComponent } from '../../core/components/set-language.compone
 import { PreviousDetailsComponent } from '../../core/components/previous-details/previous-details.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import {
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
+import { NgFor, NgIf } from '@angular/common';
+import { MatLabel } from '@angular/material/select';
+import { MatTooltip } from '@angular/material/tooltip';
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
+import { MatIcon } from '@angular/material/icon';
+import {
+  MatCard,
+  MatCardHeader,
+  MatCardTitle,
+  MatCardContent,
+} from '@angular/material/card';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
   selector: 'app-idrs',
   templateUrl: './idrs.component.html',
   styleUrls: ['./idrs.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardAccordionImports,
+    NgFor,
+    MatLabel,
+    MatTooltip,
+    MatIcon,
+    NgIf,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatRadioGroup,
+    MatRadioButton,
+  ],
 })
 export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   @Input()
@@ -75,35 +106,35 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   questions: any = [];
   beneficiaryDetailSubscription: any;
   age!: number;
-  idrsScore: number = 0;
+  idrsScore = 0;
   form: any;
   questGroup!: FormGroup;
   arr: any = [];
   suspect: any = [];
   confirmDiseaseArray: any = [];
   questions1: any = [];
-  idrsScoreWaist: number = 0;
-  idrsScoreFamily: number = 0;
-  IRDSscorePhysicalActivity: number = 0;
-  doctorScreen: boolean = false;
+  idrsScoreWaist = 0;
+  idrsScoreFamily = 0;
+  IRDSscorePhysicalActivity = 0;
+  doctorScreen = false;
   @Output() IDRSChanged: EventEmitter<any> = new EventEmitter<any>();
   scoreFlag: any = 0;
   required: any = [];
-  isDiabetic: boolean = false;
-  isVision: boolean = false;
-  isEpilepsy: boolean = false;
-  chronicDisabled: boolean = false;
+  isDiabetic = false;
+  isVision = false;
+  isEpilepsy = false;
+  chronicDisabled = false;
   chronicData: any;
-  revisit: boolean = false;
+  revisit = false;
   nurse!: string;
   rev: any = [];
   confirmed: any = [];
   unchecked: any;
-  systolicValueFromVital: number = 0;
-  diastolicValueFromVital: number = 0;
+  systolicValueFromVital = 0;
+  diastolicValueFromVital = 0;
   hypertensionChecked!: boolean;
-  diastolicChange: boolean = false;
-  systolicChange: boolean = false;
+  diastolicChange = false;
+  systolicChange = false;
   currentLanguageSet: any;
   hypertensionSelectedFlagSubscription!: Subscription;
   systolicBpValueSubscription!: Subscription;
@@ -165,9 +196,7 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   idrsWaistScore() {
     this.idrsWaistSubscription =
       this.idrsScoreService.IDRSWaistScore$.subscribe(response => {
-        response === undefined
-          ? (this.idrsScoreWaist = 0)
-          : (this.idrsScoreWaist = response);
+        this.idrsScoreWaist = response === undefined ? 0 : response;
         this.patchIdrsScoreValue();
       });
   }
@@ -175,9 +204,7 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   idrsFamilyHistoryScore() {
     this.IdrsFamilyScoreSubscription =
       this.idrsScoreService.IDRSFamilyScore$.subscribe(response => {
-        response === undefined
-          ? (this.idrsScoreFamily = 0)
-          : (this.idrsScoreFamily = response);
+        this.idrsScoreFamily = response === undefined ? 0 : response;
         this.patchIdrsScoreValue();
       });
   }
@@ -185,9 +212,7 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   idrsPhysicalScoreActivity() {
     this.idrsPhysicalScoreSubscription =
       this.idrsScoreService.IDRSPhysicalActivityScore$.subscribe(response => {
-        response === undefined
-          ? (this.IRDSscorePhysicalActivity = 0)
-          : (this.IRDSscorePhysicalActivity = response);
+        this.IRDSscorePhysicalActivity = response === undefined ? 0 : response;
         this.patchIdrsScoreValue();
       });
   }

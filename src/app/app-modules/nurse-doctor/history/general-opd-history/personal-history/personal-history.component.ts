@@ -33,6 +33,7 @@ import {
   FormArray,
   FormGroup,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 
 import {
@@ -50,11 +51,56 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { AllergenSearchComponent } from 'src/app/app-modules/core/components/allergen-search/allergen-search.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardCardImports } from '@/components/ui/card/card.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { MatRadioModule } from '@angular/material/radio';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideHistory,
+  lucidePlus,
+  lucideX,
+  lucideSearch,
+} from '@ng-icons/lucide';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-general-personal-history',
+  standalone: true,
   templateUrl: './personal-history.component.html',
   styleUrls: ['./personal-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardCardImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    NgIf,
+    NgFor,
+    NgClass,
+    NgIcon,
+    LucideAngularModule,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+  ],
+  providers: [
+    provideIcons({
+      lucideHistory,
+      lucidePlus,
+      lucideX,
+      lucideSearch,
+    }),
+  ],
 })
 export class GeneralPersonalHistoryComponent
   implements OnInit, DoCheck, OnDestroy
@@ -205,7 +251,7 @@ export class GeneralPersonalHistoryComponent
             this.personalHistoryData.riskySexualPracticesStatus !== null
           ) {
             this.personalHistoryData.riskySexualPracticesStatus =
-              this.personalHistoryData.riskySexualPracticesStatus == '1'
+              this.personalHistoryData.riskySexualPracticesStatus === '1'
                 ? true
                 : false;
           }

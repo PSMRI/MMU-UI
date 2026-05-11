@@ -33,14 +33,35 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { RegisterEditLocationComponent } from '../register-edit-location/register-edit-location.component';
-import { _MatAutocompleteBase } from '@angular/material/autocomplete';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { RegistrarService } from '../../shared/services/registrar.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-register-demographic-details',
   templateUrl: './register-demographic-details.component.html',
   styleUrls: ['./register-demographic-details.component.css'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatAutocompleteModule,
+    MatIconModule,
+    MatSlideToggleModule,
+  ],
 })
 export class RegisterDemographicDetailsComponent
   implements OnInit, OnDestroy, DoCheck

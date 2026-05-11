@@ -20,7 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GeneralReferComponent } from './general-refer.component';
 
@@ -28,9 +28,9 @@ describe('GeneralReferComponent', () => {
   let component: GeneralReferComponent;
   let fixture: ComponentFixture<GeneralReferComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [GeneralReferComponent],
+      imports: [GeneralReferComponent],
     }).compileComponents();
   }));
 

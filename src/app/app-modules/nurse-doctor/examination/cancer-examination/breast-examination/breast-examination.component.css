@@ -1,24 +1,24 @@
 .form-input-text {
- width: 100%;
+  width: 100%;
 }
 
 .form-radio-btn {
-    margin-right: 15px;
+  margin-right: 15px;
 }
 
-.image-placeholder{
-    text-align: center;
+.image-placeholder {
+  text-align: center;
 }
 
 img {
-    margin-top: 5px;
-    height: 200px;
-    width: 200px;
+  margin-top: 5px;
+  height: 200px;
+  width: 200px;
 }
 
 .custom-cell {
-    height: 50px;
+  height: 50px;
 }
-.cell_postion{
-    padding-top: 8px !important;
+.cell_postion {
+  padding-top: 8px !important;
 }

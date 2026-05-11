@@ -31,14 +31,33 @@ import {
   FormArray,
   NgForm,
   AbstractControl,
+  ReactiveFormsModule,
+  FormsModule,
 } from '@angular/forms';
 import { GeneralUtils } from '../../shared/utility/general-utility';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogClose,
+  MatDialogContent,
+} from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { NgIf, NgFor, NgClass, SlicePipe } from '@angular/common';
+import { MatLabel, MatSelect, MatFormField } from '@angular/material/select';
+import {
+  MatOption,
+  MatAutocompleteTrigger,
+  MatAutocomplete,
+} from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
 interface prescribe {
   id: any;
   drugID: any;
@@ -63,6 +82,28 @@ interface prescribe {
   selector: 'app-prescribe-tm-medicine',
   templateUrl: './prescribe-tm-medicine.component.html',
   styleUrls: ['./prescribe-tm-medicine.component.css'],
+  imports: [
+    MatDialogClose,
+    MatTooltip,
+    MatIcon,
+    CdkScrollable,
+    MatDialogContent,
+    NgIf,
+    NgFor,
+    ReactiveFormsModule,
+    FormsModule,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatFormField,
+    MatInput,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    NgClass,
+    StringValidatorDirective,
+    MatPaginator,
+    SlicePipe,
+  ],
 })
 export class PrescribeTmMedicineComponent implements OnInit, DoCheck {
   generalUtils = new GeneralUtils(this.fb, this.sessionstorage);

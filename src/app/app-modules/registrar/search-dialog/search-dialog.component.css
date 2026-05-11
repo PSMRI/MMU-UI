@@ -1,46 +1,44 @@
 .mat-select {
-    padding: 0;
+  padding: 0;
 }
 
 .advanceSearch {
-    padding: 24px;
+  padding: 24px;
 }
 
 .padding15 {
-    padding: 15px;
+  padding: 15px;
 }
 
 .title_background {
-    background: #0277bd;
-    color: white;
+  background: #0277bd;
+  color: white;
 }
 
-
-
 .margin {
-    margin: 15px;
+  margin: 15px;
 }
 
 .info {
-    background: #0277bd;
+  background: #0277bd;
 }
 
 .title {
-    margin-left: -15px;
-    margin-right: -15px;
-    padding: 15px;
-    color: white;
+  margin-left: -15px;
+  margin-right: -15px;
+  padding: 15px;
+  color: white;
 }
 
 .title h4 {
-    display: inline-block;
+  display: inline-block;
 }
 
 .close-btn {
-    float: right;
-    border: none;
+  float: right;
+  border: none;
 }
 
-.box{
-    height: 60px;
+.box {
+  height: 60px;
 }

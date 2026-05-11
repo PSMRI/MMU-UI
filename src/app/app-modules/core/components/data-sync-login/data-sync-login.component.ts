@@ -24,19 +24,49 @@ import { Component, OnInit, Injector, DoCheck } from '@angular/core';
 import { Router } from '@angular/router';
 
 import * as CryptoJS from 'crypto-js';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SetLanguageComponent } from '../set-language.component';
 import { ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
 import { DataSyncService } from '../../../data-sync/shared/service/data-sync.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgClass, NgIf } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatPrefix,
+  MatFormField,
+  MatLabel,
+  MatSuffix,
+} from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../../directives/stringValidator.directive';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-data-sync-login',
   templateUrl: './data-sync-login.component.html',
   styleUrls: ['./data-sync-login.component.css'],
   providers: [DataSyncService],
+  imports: [
+    NgClass,
+    NgIf,
+    MatIcon,
+    MatCard,
+    MatCardTitle,
+    MatProgressSpinner,
+    MatCardContent,
+    ReactiveFormsModule,
+    MatPrefix,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    StringValidatorDirective,
+    MatSuffix,
+    MatTooltip,
+  ],
 })
 export class DataSyncLoginComponent implements OnInit, DoCheck {
   dynamictype = 'password';

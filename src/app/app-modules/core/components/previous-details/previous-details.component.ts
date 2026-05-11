@@ -25,12 +25,47 @@ import { HttpServiceService } from '../../services/http-service.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SetLanguageComponent } from '../set-language.component';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-previous-details',
   templateUrl: './previous-details.component.html',
   styleUrls: ['./previous-details.component.css'],
+  imports: [
+    MatIcon,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatSuffix,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    NgFor,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatPaginator,
+  ],
 })
 export class PreviousDetailsComponent implements OnInit, DoCheck {
   dataList: any = [];

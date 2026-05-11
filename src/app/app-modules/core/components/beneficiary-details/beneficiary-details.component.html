@@ -1,95 +1,135 @@
-<div class="row">
-  <div class="col-xs-12">
-    <img
-      *ngIf="!beneficiary?.benImage"
-      src="assets/images/default-avatar.gif"
-      alt="DefaultPatient" />
-    <img
-      *ngIf="beneficiary?.benImage"
-      [src]="beneficiary?.benImage"
-      alt="Patient" />
-    <table class="table profileData" aria-describedby="benDetails">
-      <tr style="font-size: 14px; color: #000000">
-        <th id="beneficiaryName">
-          {{ current_language_set?.bendetails?.beneficiaryName }}:
-        </th>
-      </tr>
-      <tr style="color: #595959; font-size: 14px">
-        <td>{{ beneficiary?.beneficiaryName }}</td>
-      </tr>
-      <ng-container *ngIf="beneficiary?.fatherName">
-        <tr style="font-size: 14px; color: #000000">
-          <th id="fatherName">
-            {{ current_language_set?.bendetails?.fatherName }}:
-          </th>
-        </tr>
-        <tr style="color: #595959; font-size: 14px">
-          <td>{{ beneficiary?.fatherName }}</td>
-        </tr>
-      </ng-container>
-      <ng-container *ngIf="beneficiary?.lastName">
-        <tr style="font-size: 14px; color: #000000">
-          <th id="lastName">
-            {{ current_language_set?.bendetails?.lastName }}:
-          </th>
-        </tr>
-        <tr style="color: #595959; font-size: 14px">
-          <td>{{ beneficiary?.lastName }}</td>
-        </tr>
-      </ng-container>
-      <ng-container *ngIf="beneficiary?.preferredPhoneNum">
-        <tr style="font-size: 14px; color: #000000">
-          <th id="phoneNo">{{ current_language_set?.bendetails?.phoneNo }}:</th>
-        </tr>
-        <tr style="color: #595959; font-size: 14px">
-          <td>{{ beneficiary?.preferredPhoneNum }}</td>
-        </tr>
-      </ng-container>
-      <tr style="font-size: 14px; color: #000000">
-        <th id="gender">
-          {{ current_language_set?.bendetails?.gender }} /
-          {{ current_language_set?.bendetails?.age }}:
-        </th>
-      </tr>
-      <tr style="color: #595959; font-size: 14px">
-        <td>
-          {{ beneficiary?.genderName }} / {{ beneficiary?.age }} &nbsp;{{
-            beneficiary?.ageUnit
-          }}
-        </td>
-      </tr>
-      <tr style="font-size: 14px; color: #000000">
-        <th id="beneficiaryID">
-          {{ current_language_set?.bendetails?.beneficiaryID }}:
-        </th>
-      </tr>
-      <tr style="color: #595959; font-size: 14px">
-        <td>{{ beneficiary?.beneficiaryID }}</td>
-      </tr>
-      <tr style="font-size: 14px; color: #000000">
-        <th id="registrationDate">
-          {{ current_language_set?.bendetails?.registrationDate }}:
-        </th>
-      </tr>
-      <tr style="color: #595959; font-size: 14px">
-        <td>{{ beneficiary?.createdDate | date: 'dd/MM/yyyy, h:mm a' }}</td>
-      </tr>
-      <tr style="font-size: 14px; color: #000000">
-        <th id="visitDate">
-          {{ current_language_set?.bendetails?.visitDate }}:
-        </th>
-      </tr>
-      <tr style="color: #595959; font-size: 14px">
-        <td>{{ today | date: 'dd/MM/yyyy, h:mm a' }}</td>
-      </tr>
-      <tr style="font-size: 14px; color: #000000">
-        <th id="district">{{ current_language_set?.bendetails?.district }}:</th>
-      </tr>
-      <tr style="color: #595959; font-size: 14px">
-        <td>
+<!-- Beneficiary Details — Modernized with Tailwind CSS v4 & Lucide Icons -->
+<div
+  class="w-full bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden">
+  <!-- Profile Header -->
+  <div
+    class="p-4 bg-gradient-to-br from-blue-50 to-white border-b border-zinc-100">
+    <div class="flex items-center gap-4">
+      <div class="relative">
+        <div
+          class="h-16 w-16 rounded-2xl overflow-hidden border-2 border-white shadow-md bg-zinc-100 flex items-center justify-center">
+          <img
+            *ngIf="!beneficiary?.benImage"
+            src="assets/images/default-avatar.gif"
+            alt="DefaultPatient"
+            class="h-full w-full object-cover" />
+          <img
+            *ngIf="beneficiary?.benImage"
+            [src]="beneficiary?.benImage"
+            alt="Patient"
+            class="h-full w-full object-cover" />
+        </div>
+        <div
+          class="absolute -bottom-1 -right-1 bg-blue-500 text-white p-1 rounded-lg border-2 border-white shadow-sm">
+          <lucide-icon name="user" class="size-3"></lucide-icon>
+        </div>
+      </div>
+      <div>
+        <h3 class="text-sm font-bold text-zinc-900 m-0 leading-tight">
+          {{ beneficiary?.beneficiaryName }}
+          <span *ngIf="beneficiary?.lastName">{{ beneficiary?.lastName }}</span>
+        </h3>
+        <p
+          class="text-[11px] text-zinc-500 m-0 font-medium tracking-wide uppercase mt-1">
+          {{ beneficiary?.genderName }} / {{ beneficiary?.age }}
+          {{ beneficiary?.ageUnit }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Details -->
+  <div class="p-4 space-y-4">
+    <!-- ID Section -->
+    <div class="flex items-start gap-3">
+      <div class="p-2 rounded-xl bg-blue-50 text-blue-600">
+        <lucide-icon name="info" class="size-4"></lucide-icon>
+      </div>
+      <div>
+        <span
+          class="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+          {{ current_language_set?.bendetails?.beneficiaryID }}
+        </span>
+        <span class="text-xs font-bold text-zinc-800 tracking-tight">{{
+          beneficiary?.beneficiaryID
+        }}</span>
+      </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div *ngIf="beneficiary?.preferredPhoneNum" class="flex items-start gap-3">
+      <div class="p-2 rounded-xl bg-green-50 text-green-600">
+        <lucide-icon name="phone" class="size-4"></lucide-icon>
+      </div>
+      <div>
+        <span
+          class="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+          {{ current_language_set?.bendetails?.phoneNo }}
+        </span>
+        <span class="text-xs font-bold text-zinc-800 tracking-tight">{{
+          beneficiary?.preferredPhoneNum
+        }}</span>
+      </div>
+    </div>
+
+    <!-- Location Section -->
+    <div class="flex items-start gap-3">
+      <div class="p-2 rounded-xl bg-rose-50 text-rose-600">
+        <lucide-icon name="map-pin" class="size-4"></lucide-icon>
+      </div>
+      <div>
+        <span
+          class="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+          {{ current_language_set?.bendetails?.district }} /
+          {{ current_language_set?.bendetails?.village }}
+        </span>
+        <span class="text-xs font-bold text-zinc-800 tracking-tight">
           {{ beneficiary?.districtName }} / {{ beneficiary?.villageName }}
-        </td>
-      </tr>
-    </table>
+        </span>
+      </div>
+    </div>
+
+    <!-- Dates Section -->
+    <div class="grid grid-cols-2 gap-4 pt-2 border-t border-zinc-100">
+      <div class="flex flex-col gap-1">
+        <span
+          class="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">
+          {{ current_language_set?.bendetails?.registrationDate }}
+        </span>
+        <div class="flex items-center gap-1.5 text-zinc-600">
+          <lucide-icon name="calendar" class="size-3"></lucide-icon>
+          <span class="text-[10px] font-bold">{{
+            beneficiary?.createdDate | date: 'dd/MM/yyyy'
+          }}</span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-1">
+        <span
+          class="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">
+          {{ current_language_set?.bendetails?.visitDate }}
+        </span>
+        <div class="flex items-center gap-1.5 text-blue-600">
+          <lucide-icon name="calendar" class="size-3"></lucide-icon>
+          <span class="text-[10px] font-bold">{{
+            today | date: 'dd/MM/yyyy'
+          }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Additional Info (Father's Name) -->
+  <div
+    *ngIf="beneficiary?.fatherName"
+    class="px-4 py-3 bg-zinc-50 border-t border-zinc-100">
+    <div class="flex items-center justify-between">
+      <span
+        class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+        {{ current_language_set?.bendetails?.fatherName }}
+      </span>
+      <span class="text-[11px] font-bold text-zinc-700">{{
+        beneficiary?.fatherName
+      }}</span>
+    </div>
   </div>
 </div>

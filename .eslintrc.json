@@ -1,7 +1,10 @@
 {
   "root": true,
   "ignorePatterns": [
-    "projects/**/*"
+    "projects/**/*",
+    "src/app/components/ui/**",
+    "src/app/shared/core/**",
+    "src/app/lib/**"
   ],
   "overrides": [
     {

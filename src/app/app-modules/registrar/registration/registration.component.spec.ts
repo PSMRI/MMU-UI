@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   ComponentFixture,
   tick,
   inject,
@@ -34,19 +34,11 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { CameraService } from '../../core/services/camera.service';
 import { RegistrarService } from '../../../../../Common-UI/src/registrar/services/registrar.service';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/from';
-import 'rxjs/add/observable/empty';
-import 'rxjs/add/observable/throw';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable, of, BehaviorSubject, Subject } from 'rxjs';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-// import { Location } from '@angular/common';
-// import { fakeAsync, tick } from '@angular/core/testing';
-// import { RouterTestingModule } from '@angular/router/testing';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MaterialModule } from '../../core/material.module';
 
 class RouterStub {
   navigateByUrl(url: string) {
@@ -60,13 +52,6 @@ class MockActivatedRoute {
 }
 
 class RegistrarServiceMock {
-  // submitBeneficiary = jasmine.createSpy('submitBeneficiary').andCallFake(function () {
-  //   return Observable.of(true);
-  // });
-  // updateBeneficiary = jasmine.createSpy('updateBeneficiary').andCallFake(function () {
-  //   return Observable.of(true);
-  // });
-
   registrationMaster = {
     occupationMaster: [
       { occupationID: 2, occupationType: 'Agricultural labour' },
@@ -160,10 +145,10 @@ class RegistrarServiceMock {
   }
 
   submitBeneficiary() {
-    return Observable.of(true);
+    return of(true);
   }
   updateBeneficiary() {
-    return Observable.of(false);
+    return of(false);
   }
 }
 
@@ -174,15 +159,10 @@ describe('RegisterComponent', () => {
   let el: HTMLElement;
   let spy: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MaterialModule,
-        NoopAnimationsModule,
-      ],
+      imports: [ReactiveFormsModule, FormsModule, NoopAnimationsModule],
       declarations: [RegistrationComponent],
       providers: [
         { provide: RegistrarService, useClass: RegistrarServiceMock },
@@ -200,7 +180,7 @@ describe('RegisterComponent', () => {
     registrarService = TestBed.get(RegistrarService);
     // component.ngOnInit();
 
-    spyOn(component, 'dateFormatChange').and.returnValue(1);
+    spyOn(component as any, 'dateFormatChange').and.returnValue(1 as any);
 
     fixture.detectChanges();
   });
@@ -230,7 +210,7 @@ describe('RegisterComponent', () => {
   it('should call the submit Service Method', () => {
     const service = fixture.debugElement.injector.get(RegistrarService);
     spy = spyOn(service, 'submitBeneficiary').and.callFake(function () {
-      return Observable.of(true);
+      return of(true) as any;
     });
     component.submitBeneficiaryDetails();
     expect(service.submitBeneficiary).toHaveBeenCalled();

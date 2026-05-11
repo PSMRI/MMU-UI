@@ -35,7 +35,7 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../../../core/material.module';
+
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { GeneralExaminationComponent } from './general-examination.component';
@@ -48,7 +48,7 @@ import { DoctorService } from '../../../shared/services';
 import { DoctorServiceStub } from '../../../shared/mocks/doctor-service-stub';
 
 import * as data from '../../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of, BehaviorSubject, Subject } from 'rxjs';
 
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
@@ -63,15 +63,15 @@ describe('GeneralExaminationComponent', () => {
   let el: HTMLElement;
   let spy: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [GeneralExaminationComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
         ReactiveFormsModule,
         FormsModule,
         MaterialModule,
         NoopAnimationsModule,
+        GeneralExaminationComponent,
       ],
       providers: [
         ConfirmationService,
@@ -101,7 +101,7 @@ describe('GeneralExaminationComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should check value of danger sign and make null to dependent fields', async(() => {
+  it('should check value of danger sign and make null to dependent fields', waitForAsync(() => {
     spyOn(component, 'checkWithDangerSign').and.callThrough();
     component.generalExaminationForm.patchValue({ dangerSigns: 'Yes' });
     component.generalExaminationForm.patchValue({
@@ -119,7 +119,7 @@ describe('GeneralExaminationComponent', () => {
     expect(component.typeOfDangerSigns).toEqual(null);
   }));
 
-  it('should check value of lymphadenopathy and make null to dependent fields', async(() => {
+  it('should check value of lymphadenopathy and make null to dependent fields', waitForAsync(() => {
     spyOn(component, 'checkWithLymphadenopathy').and.callThrough();
     component.generalExaminationForm.patchValue({ lymphadenopathy: 'Present' });
     component.generalExaminationForm.patchValue({
@@ -141,7 +141,7 @@ describe('GeneralExaminationComponent', () => {
     expect(component.typeOfLymphadenopathy).toEqual(null);
   }));
 
-  it('should check value of edema and make null to dependent fields', async(() => {
+  it('should check value of edema and make null to dependent fields', waitForAsync(() => {
     spyOn(component, 'checkWithEdema').and.callThrough();
     component.generalExaminationForm.patchValue({ edema: 'Present' });
     component.generalExaminationForm.patchValue({ extentOfEdema: 'Foot' });

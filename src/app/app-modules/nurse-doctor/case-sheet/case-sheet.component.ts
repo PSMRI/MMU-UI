@@ -21,22 +21,37 @@
  */
 
 import { Component, OnInit, Injector, DoCheck } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { CancerCaseSheetComponent } from './cancer-case-sheet/cancer-case-sheet.component';
+import { GeneralCaseSheetComponent } from './general-case-sheet/general-case-sheet.component';
+
+import { ZardButtonImports } from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-case-sheet',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatDialogClose,
+    CancerCaseSheetComponent,
+    GeneralCaseSheetComponent,
+    ZardButtonImports,
+    LucideAngularModule,
+  ],
   templateUrl: './case-sheet.component.html',
   styleUrls: ['./case-sheet.component.css'],
 })
 export class CaseSheetComponent implements OnInit, DoCheck {
-  QC: boolean = false;
-  General: boolean = false;
-  NCDScreening: boolean = false;
-  CancerScreening: boolean = false;
+  QC = false;
+  General = false;
+  NCDScreening = false;
+  CancerScreening = false;
 
   preview: any;
   previous: any;

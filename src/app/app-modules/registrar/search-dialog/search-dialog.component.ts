@@ -35,7 +35,13 @@ import { environment } from 'src/environments/environment';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import {
   DateAdapter,
   MAT_DATE_FORMATS,
@@ -46,6 +52,14 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
 
 interface Beneficary {
   firstName: string;
@@ -88,6 +102,19 @@ interface Beneficary {
         },
       },
     },
+  ],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatIconModule,
   ],
 })
 export class SearchDialogComponent implements OnInit, DoCheck {

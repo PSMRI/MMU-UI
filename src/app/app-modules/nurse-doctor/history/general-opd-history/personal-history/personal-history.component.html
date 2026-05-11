@@ -1,660 +1,623 @@
 <ng-container [formGroup]="generalPersonalHistoryForm">
-  <div class="col-12 row">
-    <div
-      class="previous-history col-4"
-      style="text-align: center"
-      *ngIf="beneficiary?.ageVal >= 13">
-      <span class="font-history-label">{{
-        currentLanguageSet?.historyData?.ancHistory
-          ?.personalHistoryANC_OPD_NCD_PNC?.previousTobaccohistory
-      }}</span>
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        id="previousTobaccoHistory"
-        class="mat_icon_blue"
-        color="primary"
-        (click)="getPreviousTobaccoHistory()">
-        <mat-icon class="md-24">history</mat-icon>
-      </button>
-    </div>
-    <div
-      class="col-4 previous-history"
-      style="text-align: center"
-      *ngIf="beneficiary?.ageVal >= 13">
-      <span class="font-history-label">{{
-        currentLanguageSet?.historyData?.ancHistory
-          ?.personalHistoryANC_OPD_NCD_PNC?.previousAlcoholhistory
-      }}</span>
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        id="previousAlcoholHistory"
-        class="mat_icon_blue"
-        color="primary"
-        (click)="getPreviousAlcoholHistory()">
-        <mat-icon class="md-18">history</mat-icon>
-      </button>
-    </div>
-    <div class="col-4 previous-history" style="text-align: center">
-      <span class="font-history-label">{{
-        currentLanguageSet?.historyData?.ancHistory
-          ?.personalHistoryANC_OPD_NCD_PNC?.previousAllergyhistory
-      }}</span>
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        id="previousAllergyHistory"
-        class="mat_icon_blue"
-        color="primary"
-        (click)="getPreviousAllergyHistory()">
-        <mat-icon class="md-18">history</mat-icon>
-      </button>
-    </div>
-  </div>
-  <div class="row m-t-10">
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <label class="control-label" for="dietaryType">{{
-        currentLanguageSet?.historyData?.ancHistory
-          ?.personalHistoryANC_OPD_NCD_PNC?.dietaryType
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group formControlName="dietaryType" style="margin-left: -10px">
-        <mat-radio-button color="primary" value="Vegetarian">{{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.personalHistoryANC_OPD_NCD_PNC?.vegetarian
-        }}</mat-radio-button>
-        <mat-radio-button
-          color="primary"
-          class="radio-button"
-          value="Non-Vegetarian"
-          >{{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.personalHistoryANC_OPD_NCD_PNC?.nonVegetarian
-          }}</mat-radio-button
-        >
-      </mat-radio-group>
-    </div>
-
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      style="margin-left: -8px">
-      <label class="control-label" for="physicalActivityType">{{
-        currentLanguageSet?.historyData?.ancHistory
-          ?.personalHistoryANC_OPD_NCD_PNC?.physicalActivityType
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        formControlName="physicalActivityType"
-        style="margin-left: -10px">
-        <mat-radio-button color="primary" value="Sedentary">{{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.personalHistoryANC_OPD_NCD_PNC?.sedentary
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" class="radio-button" value="Active">{{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.personalHistoryANC_OPD_NCD_PNC?.active
-        }}</mat-radio-button>
-      </mat-radio-group>
-    </div>
-
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      style="margin-left: -8px"
-      *ngIf="beneficiary?.ageVal >= 18">
-      <label class="control-label" for="riskySexualPracticesStatus">{{
-        currentLanguageSet?.historyData?.ancHistory
-          ?.personalHistoryANC_OPD_NCD_PNC?.riskySexualPracticesStatus
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        formControlName="riskySexualPracticesStatus"
-        style="margin-left: -10px">
-        <mat-radio-button color="primary" [value]="true">Yes</mat-radio-button>
-        <mat-radio-button color="primary" class="radio-button" [value]="false"
-          >No</mat-radio-button
-        >
-      </mat-radio-group>
-    </div>
-
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      *ngIf="beneficiary?.ageVal >= 13">
-      <mat-form-field class="mat_form_field" [style.width]="'85%'">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData?.tobaccoUseStatus
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          formControlName="tobaccoUseStatus"
-          (selectionChange)="checkTobaccoStatus()">
-          <mat-option value="Yes">Yes</mat-option>
-          <mat-option value="No">No</mat-option>
-          <mat-option value="Discontinued">Discontinued</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      style="margin-left: -8px"
-      *ngIf="beneficiary?.ageVal >= 13">
-      <mat-form-field class="mat_form_field" [style.width]="'85%'">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.alcoholUseStatus
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          formControlName="alcoholIntakeStatus"
-          (selectionChange)="checkAlcoholStatus()">
-          <mat-option value="Yes">Yes</mat-option>
-          <mat-option value="No">No</mat-option>
-          <mat-option value="Discontinued">Discontinued</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      style="margin-left: -8px">
-      <mat-form-field class="mat_form_field" [style.width]="'85%'">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus?.allergicStatus
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          formControlName="allergyStatus"
-          (selectionChange)="checkAllergicStatus()">
-          <mat-option value="Yes">Yes</mat-option>
-          <mat-option value="No">No</mat-option>
-          <mat-option value="Discontinued">Don't Know</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </div>
-
-  <mat-card
-    class="row m-t-10"
-    style="margin-bottom: 15px"
-    *ngIf="
-      (tobaccoUseStatus === 'Yes' || tobaccoUseStatus === 'Discontinued') &&
-      beneficiary?.ageVal >= 13
-    ">
-    <mat-card-header>
-      <mat-card-title>
-        <h4>
-          <strong>{{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData?.tobacco
-          }}</strong>
-        </h4>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content formArrayName="tobaccoList">
-      <div
-        class="row multi-row-select col-12"
-        style="background-color: #f0f5f5; margin: 8px 0px 0px 0px"
-        *ngFor="
-          let tobacco of getTobaccoList();
-          let i = index;
-          let isLast = last;
-          let isOdd = odd
-        "
-        [ngClass]="{ odd: !isOdd }">
-        <ng-container [formGroupName]="i">
-          <div class="col-3 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData
-                  ?.typeofTobaccoUse
-              }}</mat-label>
-              <mat-select
-                class="select-full-width"
-                formControlName="tobaccoUseType"
-                (selectionChange)="filterTobaccoList($event, i, tobacco)">
-                <mat-option
-                  *ngFor="let tobacco of tobaccoSelectList[i]"
-                  [value]="tobacco">
-                  {{ tobacco.habitValue }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-
+  <div
+    class="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <!-- Top Action Grid: Previous Histories & Core Attributes -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <!-- Previous History Quick-Links -->
+      <div class="lg:col-span-4 space-y-4">
+        <h5
+          class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2 italic">
+          Historical Archives
+        </h5>
+        <div class="grid grid-cols-1 gap-3">
+          <!-- Tobacco History -->
           <div
-            class="col-2 box"
-            *ngIf="tobacco.value.tobaccoUseType?.habitValue === 'Other'">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                  ?.others
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                maxlength="50"
-                allowText="alphabet"
-                formControlName="otherTobaccoUseType" />
-            </mat-form-field>
+            *ngIf="beneficiary?.ageVal >= 13"
+            (click)="getPreviousTobaccoHistory()"
+            class="group flex items-center justify-between p-4 rounded-2xl border border-gray-100 bg-white hover:border-blue-200 hover:shadow-xl hover:shadow-blue-100/50 transition-all cursor-pointer">
+            <div class="flex items-center gap-3">
+              <div
+                class="p-2 bg-blue-50 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-all">
+                <lucide-icon name="history" class="size-4"></lucide-icon>
+              </div>
+              <span
+                class="text-[10px] font-black text-gray-600 uppercase tracking-tight italic group-hover:text-blue-600 transition-all">
+                {{
+                  currentLanguageSet?.historyData?.ancHistory
+                    ?.personalHistoryANC_OPD_NCD_PNC?.previousTobaccohistory
+                }}
+              </span>
+            </div>
+            <lucide-icon
+              name="chevron-right"
+              class="size-3 text-gray-300 group-hover:text-blue-600 group-hover:translate-x-1 transition-all"></lucide-icon>
           </div>
 
-          <div class="col-2 box">
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData?.number
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                maxlength="2"
-                allowText="number"
-                formControlName="number"
-                (blur)="perDayChange()"
-                (input)="enableFields(tobacco)" />
-            </mat-form-field>
-          </div>
-
-          <div class="col-xs-12 col-sm-6 col-md-2 box">
-            <mat-radio-group formControlName="perDay" (change)="perDayChange()">
-              <mat-radio-button
-                color="primary"
-                class="radio-button"
-                [value]="true">
-                per day</mat-radio-button
-              >
-              <mat-radio-button
-                color="primary"
-                class="radio-button"
-                [value]="false">
-                per week</mat-radio-button
-              >
-            </mat-radio-group>
-          </div>
-
-          <div class="col-2 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                maxlength="2"
-                allowText="number"
-                formControlName="duration"
-                (change)="validateDuration(tobacco)" />
-            </mat-form-field>
-          </div>
-
-          <div class="col-3 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.DurationData?.durationUnit
-              }}</mat-label>
-              <mat-select
-                class="select-full-width"
-                formControlName="durationUnit"
-                (selectionChange)="validateDuration(tobacco)">
-                <mat-option value="Days">Day(s)</mat-option>
-                <mat-option value="Weeks">Week(s)</mat-option>
-                <mat-option value="Months">Month(s)</mat-option>
-                <mat-option value="Years">Year(s)</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-
+          <!-- Alcohol History -->
           <div
-            class="ccol-12 box action-btn-container -al"
-            style="text-align: end; margin-top: 5px">
-            <button
-              md-mini-fab
-              color="warn"
-              class="mat_warn_circle"
-              style="margin-right: 3px"
-              *ngIf="i !== 0 || (i === 0 && (tobacco.touched || tobacco.dirty))"
-              (click)="removeTobacco(i, tobacco)">
-              <mat-icon class="md-18">close</mat-icon>
-            </button>
-            <button
-              md-mini-fab
-              color="primary"
-              *ngIf="isLast"
-              class="mat_blue_circle"
-              [disabled]="checkTobaccoValidity(tobacco)"
-              (click)="addTobacco()">
-              <mat-icon class="md-18">add</mat-icon>
-            </button>
+            *ngIf="beneficiary?.ageVal >= 13"
+            (click)="getPreviousAlcoholHistory()"
+            class="group flex items-center justify-between p-4 rounded-2xl border border-gray-100 bg-white hover:border-amber-200 hover:shadow-xl hover:shadow-amber-100/50 transition-all cursor-pointer">
+            <div class="flex items-center gap-3">
+              <div
+                class="p-2 bg-amber-50 rounded-xl group-hover:bg-amber-600 group-hover:text-white transition-all">
+                <lucide-icon name="history" class="size-4"></lucide-icon>
+              </div>
+              <span
+                class="text-[10px] font-black text-gray-600 uppercase tracking-tight italic group-hover:text-amber-600 transition-all">
+                {{
+                  currentLanguageSet?.historyData?.ancHistory
+                    ?.personalHistoryANC_OPD_NCD_PNC?.previousAlcoholhistory
+                }}
+              </span>
+            </div>
+            <lucide-icon
+              name="chevron-right"
+              class="size-3 text-gray-300 group-hover:text-amber-600 group-hover:translate-x-1 transition-all"></lucide-icon>
           </div>
-        </ng-container>
+
+          <!-- Allergy History -->
+          <div
+            (click)="getPreviousAllergyHistory()"
+            class="group flex items-center justify-between p-4 rounded-2xl border border-gray-100 bg-white hover:border-rose-200 hover:shadow-xl hover:shadow-rose-100/50 transition-all cursor-pointer">
+            <div class="flex items-center gap-3">
+              <div
+                class="p-2 bg-rose-50 rounded-xl group-hover:bg-rose-600 group-hover:text-white transition-all">
+                <lucide-icon name="history" class="size-4"></lucide-icon>
+              </div>
+              <span
+                class="text-[10px] font-black text-gray-600 uppercase tracking-tight italic group-hover:text-rose-600 transition-all">
+                {{
+                  currentLanguageSet?.historyData?.ancHistory
+                    ?.personalHistoryANC_OPD_NCD_PNC?.previousAllergyhistory
+                }}
+              </span>
+            </div>
+            <lucide-icon
+              name="chevron-right"
+              class="size-3 text-gray-300 group-hover:text-rose-600 group-hover:translate-x-1 transition-all"></lucide-icon>
+          </div>
+        </div>
       </div>
-    </mat-card-content>
-  </mat-card>
 
-  <mat-card
-    class="row m-t-10"
-    *ngIf="alcoholIntakeStatus === 'Yes' && beneficiary?.ageVal >= 13"
-    style="margin-bottom: 15px">
-    <mat-card-header>
-      <mat-card-title>
-        <h4>
-          <strong>{{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.alcohol
-          }}</strong>
-        </h4>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content formArrayName="alcoholList">
-      <div
-        class="row multi-row-select"
-        style="background-color: #f0f5f5; margin: 8px 0px 0px 0px"
-        *ngFor="
-          let alcohol of getAlcoholList();
-          let i = index;
-          let isLast = last;
-          let isOdd = odd
-        "
-        [ngClass]="{ odd: !isOdd }">
-        <ng-container [formGroupName]="i">
-          <div class="col-2 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.typeofAlcohol
-              }}</mat-label>
-              <mat-select
-                class="select-full-width"
-                formControlName="typeOfAlcohol"
-                (selectionChange)="filterAlcoholList($event, i, alcohol)">
-                <mat-option
-                  *ngFor="let alcohol of alcoholSelectList[i]"
-                  [value]="alcohol"
-                  >{{ alcohol.habitValue }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+      <!-- Lifestyle & Biological Status -->
+      <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Dietary & Physical -->
+        <div
+          class="p-8 rounded-[2.5rem] border border-gray-100 bg-gray-50/30 space-y-6">
+          <div class="space-y-4">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 block">
+              Nutritional Archetype
+            </label>
+            <z-radio-group formControlName="dietaryType" class="flex gap-4">
+              <z-radio
+                zValue="Vegetarian"
+                class="text-[11px] font-bold text-gray-700">
+                {{
+                  currentLanguageSet?.historyData?.ancHistory
+                    ?.personalHistoryANC_OPD_NCD_PNC?.vegetarian
+                }}
+              </z-radio>
+              <z-radio
+                zValue="Non-Vegetarian"
+                class="text-[11px] font-bold text-gray-700">
+                {{
+                  currentLanguageSet?.historyData?.ancHistory
+                    ?.personalHistoryANC_OPD_NCD_PNC?.nonVegetarian
+                }}
+              </z-radio>
+            </z-radio-group>
+          </div>
+
+          <div class="h-px bg-gray-200/50"></div>
+
+          <div class="space-y-4">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 block">
+              Physical Kinetic State
+            </label>
+            <z-radio-group
+              formControlName="physicalActivityType"
+              class="flex gap-4">
+              <z-radio
+                zValue="Sedentary"
+                class="text-[11px] font-bold text-gray-700">
+                {{
+                  currentLanguageSet?.historyData?.ancHistory
+                    ?.personalHistoryANC_OPD_NCD_PNC?.sedentary
+                }}
+              </z-radio>
+              <z-radio
+                zValue="Active"
+                class="text-[11px] font-bold text-gray-700">
+                {{
+                  currentLanguageSet?.historyData?.ancHistory
+                    ?.personalHistoryANC_OPD_NCD_PNC?.active
+                }}
+              </z-radio>
+            </z-radio-group>
+          </div>
+        </div>
+
+        <!-- Risk Factors -->
+        <div
+          class="p-8 rounded-[2.5rem] border border-gray-100 bg-gray-50/30 space-y-6">
+          <div class="space-y-4" *ngIf="beneficiary?.ageVal >= 18">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 block">
+              High-Risk Biological Practices
+            </label>
+            <z-radio-group
+              formControlName="riskySexualPracticesStatus"
+              class="flex gap-8">
+              <z-radio
+                [zValue]="true"
+                class="text-[11px] font-bold text-rose-600"
+                >YES (Critical)</z-radio
+              >
+              <z-radio
+                [zValue]="false"
+                class="text-[11px] font-bold text-gray-700"
+                >NO</z-radio
+              >
+            </z-radio-group>
           </div>
 
           <div
-            class="col-4 box"
-            *ngIf="alcohol.value.typeOfAlcohol === 'Other'">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                  ?.others
-              }}</mat-label>
+            class="h-px bg-gray-200/50"
+            *ngIf="beneficiary?.ageVal >= 18"></div>
+
+          <div class="grid grid-cols-1 gap-4">
+            <z-form-field *ngIf="beneficiary?.ageVal >= 13">
+              <z-form-label
+                class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+                >Tobacco Status</z-form-label
+              >
+              <z-select
+                formControlName="tobaccoUseStatus"
+                (selectionChange)="checkTobaccoStatus()"
+                class="rounded-2xl bg-white border-gray-100">
+                <z-option zValue="Yes">Active User</z-option>
+                <z-option zValue="No">Non-User</z-option>
+                <z-option zValue="Discontinued">History of Use</z-option>
+              </z-select>
+            </z-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Secondary Status Selectors -->
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+      <z-form-field *ngIf="beneficiary?.ageVal >= 13">
+        <z-form-label
+          class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">
+          {{
+            currentLanguageSet?.historyData?.ancHistory
+              ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.alcoholUseStatus
+          }}
+        </z-form-label>
+        <z-select
+          formControlName="alcoholIntakeStatus"
+          (selectionChange)="checkAlcoholStatus()"
+          class="rounded-2xl bg-gray-50/50 border-gray-100">
+          <z-option zValue="Yes">Active Consumption</z-option>
+          <z-option zValue="No">Abstinent</z-option>
+          <z-option zValue="Discontinued">Former User</z-option>
+        </z-select>
+      </z-form-field>
+
+      <z-form-field>
+        <z-form-label
+          class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">
+          {{
+            currentLanguageSet?.historyData?.ancHistory
+              ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus?.allergicStatus
+          }}
+        </z-form-label>
+        <z-select
+          formControlName="allergyStatus"
+          (selectionChange)="checkAllergicStatus()"
+          class="rounded-2xl bg-gray-50/50 border-gray-100">
+          <z-option zValue="Yes">Allergies Present</z-option>
+          <z-option zValue="No">No Known Allergies</z-option>
+          <z-option zValue="Discontinued">Undetermined</z-option>
+        </z-select>
+      </z-form-field>
+    </div>
+
+    <!-- Tobacco Detailed Section -->
+    <div
+      *ngIf="
+        (tobaccoUseStatus === 'Yes' || tobaccoUseStatus === 'Discontinued') &&
+        beneficiary?.ageVal >= 13
+      "
+      class="space-y-6 animate-in slide-in-from-left-4 duration-500">
+      <div class="flex items-center gap-3 px-2">
+        <div class="p-2.5 bg-blue-100 rounded-2xl">
+          <lucide-icon name="flame" class="size-5 text-blue-600"></lucide-icon>
+        </div>
+        <div>
+          <h4
+            class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+            {{
+              currentLanguageSet?.historyData?.ancHistory
+                ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData?.tobacco
+            }}
+          </h4>
+          <p
+            class="text-[10px] text-gray-400 font-bold uppercase tracking-widest italic">
+            Consumption Analysis
+          </p>
+        </div>
+      </div>
+
+      <div formArrayName="tobaccoList" class="grid grid-cols-1 gap-4">
+        <div
+          *ngFor="
+            let tobacco of getTobaccoList();
+            let i = index;
+            let isLast = last
+          "
+          [formGroupName]="i"
+          class="group relative grid grid-cols-1 lg:grid-cols-12 gap-6 p-8 rounded-[2.5rem] border border-gray-100 bg-white transition-all duration-500 hover:shadow-2xl hover:shadow-blue-100/50 hover:border-blue-100">
+          <div class="lg:col-span-3">
+            <z-form-field>
+              <z-form-label
+                class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+                >Product Type</z-form-label
+              >
+              <z-select
+                formControlName="tobaccoUseType"
+                (selectionChange)="filterTobaccoList($event, i, tobacco)"
+                class="rounded-2xl bg-gray-50/50">
+                <z-option
+                  *ngFor="let tobaccoOption of tobaccoSelectList[i]"
+                  [zValue]="tobaccoOption">
+                  {{ tobaccoOption.habitValue }}
+                </z-option>
+              </z-select>
+            </z-form-field>
+          </div>
+
+          <div
+            class="lg:col-span-2"
+            *ngIf="tobacco.value.tobaccoUseType?.habitValue === 'Other'">
+            <z-form-field>
+              <z-form-label
+                class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+                >Specify</z-form-label
+              >
               <input
-                autocomplete="off"
-                matInput
+                z-input
+                formControlName="otherTobaccoUseType"
                 appDefaultNull
                 maxlength="50"
-                allowText="alphabet"
-                formControlName="otherAlcoholType" />
-            </mat-form-field>
+                class="rounded-2xl bg-gray-50/50" />
+            </z-form-field>
           </div>
 
-          <div class="col-4 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.freqofAlcohol
-              }}</mat-label>
-              <mat-select
-                id="frequencyIntake"
-                class="select-full-width"
-                formControlName="alcoholIntakeFrequency"
-                (selectionChange)="onChangeAlcIntakFreq(alcohol)">
-                <mat-option
-                  *ngFor="let frequency of masterData?.frequencyOfAlcoholIntake"
-                  [value]="frequency.habitValue">
-                  {{ frequency.habitValue }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-
-          <div class="col-4 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData
-                  ?.qtyofAlcoholintake
-              }}</mat-label>
-              <mat-select
-                formControlName="avgAlcoholConsumption"
-                (selectionChange)="onChangeAvgAlcoholConsumption(alcohol)">
-                <mat-option
-                  *ngFor="let quantity of masterData?.quantityOfAlcoholIntake"
-                  [value]="quantity">
-                  {{ quantity.habitValue }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-
-          <div class="col-2 box">
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
-              }}</mat-label>
+          <div class="lg:col-span-4 grid grid-cols-2 gap-4">
+            <z-form-field>
+              <z-form-label
+                class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+                >Intensity</z-form-label
+              >
               <input
-                autocomplete="off"
-                matInput
+                z-input
+                formControlName="number"
                 appDefaultNull
                 maxlength="2"
-                allowText="number"
+                placeholder="Qty"
+                class="rounded-2xl bg-gray-50/50" />
+            </z-form-field>
+            <div class="flex items-center pt-8">
+              <z-radio-group
+                formControlName="perDay"
+                class="flex flex-col gap-1">
+                <z-radio [zValue]="true" class="text-[10px] font-bold"
+                  >Daily</z-radio
+                >
+                <z-radio [zValue]="false" class="text-[10px] font-bold"
+                  >Weekly</z-radio
+                >
+              </z-radio-group>
+            </div>
+          </div>
+
+          <div class="lg:col-span-2">
+            <z-form-field>
+              <z-form-label
+                class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+                >Duration</z-form-label
+              >
+              <input
+                z-input
                 formControlName="duration"
-                (change)="validateDuration(alcohol)" />
-            </mat-form-field>
+                appDefaultNull
+                maxlength="2"
+                placeholder="Time"
+                class="rounded-2xl bg-gray-50/50" />
+            </z-form-field>
           </div>
 
-          <div class="col-4 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.DurationData?.durationUnit
-              }}</mat-label>
-              <mat-select
-                formControlName="durationUnit"
-                (selectionChange)="validateDuration(alcohol)">
-                <mat-option value="Days">Day(s)</mat-option>
-                <mat-option value="Weeks">Week(s)</mat-option>
-                <mat-option value="Months">Month(s)</mat-option>
-                <mat-option value="Years">Year(s)</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-
-          <div
-            class="col-8 box action-btn-container -al"
-            style="text-align: end">
+          <div class="lg:col-span-1 flex items-end justify-end gap-3 pb-1">
             <button
-              md-mini-fab
-              color="warn"
-              class="mat_warn_circle"
-              style="margin-right: 3px"
-              *ngIf="i !== 0 || (i === 0 && (alcohol.touched || alcohol.dirty))"
-              (click)="removeAlcohol(i, alcohol)">
-              <mat-icon class="md-18">close</mat-icon>
+              *ngIf="i !== 0 || (i === 0 && (tobacco.touched || tobacco.dirty))"
+              (click)="removeTobacco(i, tobacco)"
+              class="p-2 hover:bg-rose-50 rounded-xl text-rose-400 hover:text-rose-500 transition-all">
+              <lucide-icon name="trash-2" class="size-4"></lucide-icon>
             </button>
+            <z-button
+              *ngIf="isLast"
+              [disabled]="checkTobaccoValidity(tobacco)"
+              (click)="addTobacco()"
+              variant="default"
+              class="rounded-xl bg-blue-600 hover:bg-blue-700 text-white size-10 p-0 shadow-lg shadow-blue-200">
+              <lucide-icon name="plus" class="size-4"></lucide-icon>
+            </z-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alcohol Detailed Section -->
+    <div
+      *ngIf="alcoholIntakeStatus === 'Yes' && beneficiary?.ageVal >= 13"
+      class="space-y-6 animate-in slide-in-from-right-4 duration-500">
+      <div class="flex items-center gap-3 px-2">
+        <div class="p-2.5 bg-amber-100 rounded-2xl">
+          <lucide-icon
+            name="glass-water"
+            class="size-5 text-amber-600"></lucide-icon>
+        </div>
+        <div>
+          <h4
+            class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+            {{
+              currentLanguageSet?.historyData?.ancHistory
+                ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.alcohol
+            }}
+          </h4>
+          <p
+            class="text-[10px] text-gray-400 font-bold uppercase tracking-widest italic">
+            Intake Profiling
+          </p>
+        </div>
+      </div>
+
+      <div formArrayName="alcoholList" class="grid grid-cols-1 gap-4">
+        <div
+          *ngFor="
+            let alcohol of getAlcoholList();
+            let i = index;
+            let isLast = last
+          "
+          [formGroupName]="i"
+          class="group relative grid grid-cols-1 lg:grid-cols-12 gap-6 p-8 rounded-[2.5rem] border border-gray-100 bg-white transition-all duration-500 hover:shadow-2xl hover:shadow-amber-100/50 hover:border-amber-100">
+          <div class="lg:col-span-3">
+            <z-form-field>
+              <z-form-label
+                class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+                >Beverage Type</z-form-label
+              >
+              <z-select
+                formControlName="typeOfAlcohol"
+                (selectionChange)="filterAlcoholList($event, i, alcohol)"
+                class="rounded-2xl bg-gray-50/50">
+                <z-option
+                  *ngFor="let alcOption of alcoholSelectList[i]"
+                  [zValue]="alcOption">
+                  {{ alcOption.habitValue }}
+                </z-option>
+              </z-select>
+            </z-form-field>
+          </div>
+
+          <div class="lg:col-span-3">
+            <z-form-field>
+              <z-form-label
+                class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+                >Frequency</z-form-label
+              >
+              <z-select
+                formControlName="alcoholIntakeFrequency"
+                class="rounded-2xl bg-gray-50/50">
+                <z-option
+                  *ngFor="let frequency of masterData?.frequencyOfAlcoholIntake"
+                  [zValue]="frequency.habitValue">
+                  {{ frequency.habitValue }}
+                </z-option>
+              </z-select>
+            </z-form-field>
+          </div>
+
+          <div class="lg:col-span-3">
+            <z-form-field>
+              <z-form-label
+                class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+                >Volume (Avg)</z-form-label
+              >
+              <z-select
+                formControlName="avgAlcoholConsumption"
+                class="rounded-2xl bg-gray-50/50">
+                <z-option
+                  *ngFor="let quantity of masterData?.quantityOfAlcoholIntake"
+                  [zValue]="quantity">
+                  {{ quantity.habitValue }}
+                </z-option>
+              </z-select>
+            </z-form-field>
+          </div>
+
+          <div class="lg:col-span-2">
+            <z-form-field>
+              <z-form-label
+                class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+                >Longevity</z-form-label
+              >
+              <input
+                z-input
+                formControlName="duration"
+                appDefaultNull
+                maxlength="2"
+                placeholder="Time"
+                class="rounded-2xl bg-gray-50/50" />
+            </z-form-field>
+          </div>
+
+          <div class="lg:col-span-1 flex items-end justify-end gap-3 pb-1">
             <button
-              md-mini-fab
-              color="primary"
-              class="mat_blue_circle"
+              *ngIf="i !== 0 || (i === 0 && (alcohol.touched || alcohol.dirty))"
+              (click)="removeAlcohol(i, alcohol)"
+              class="p-2 hover:bg-rose-50 rounded-xl text-rose-400 hover:text-rose-500 transition-all">
+              <lucide-icon name="trash-2" class="size-4"></lucide-icon>
+            </button>
+            <z-button
               *ngIf="isLast"
               [disabled]="checkAlcoholValidity(alcohol)"
-              (click)="addAlcohol()">
-              <mat-icon class="md-18">add</mat-icon>
-            </button>
+              (click)="addAlcohol()"
+              variant="default"
+              class="rounded-xl bg-amber-600 hover:bg-amber-700 text-white size-10 p-0 shadow-lg shadow-amber-200">
+              <lucide-icon name="plus" class="size-4"></lucide-icon>
+            </z-button>
           </div>
-        </ng-container>
+        </div>
       </div>
-    </mat-card-content>
-  </mat-card>
+    </div>
 
-  <mat-card
-    class="row m-t-10"
-    style="margin-bottom: 15px"
-    *ngIf="allergyStatus === 'Yes'"
-    tyle="margin-bottom: 15px;">
-    <mat-card-header>
-      <mat-card-title>
-        <h4>
-          <strong>{{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus?.allergy
-          }}</strong>
-        </h4>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content formArrayName="allergicList">
-      <div
-        class="row multi-row-select col-12"
-        style="background-color: #f0f5f5; margin: 8px 0px 0px 0px"
-        *ngFor="
-          let allergy of getAllergyList();
-          let i = index;
-          let isLast = last;
-          let isOdd = odd
-        "
-        [ngClass]="{ odd: !isOdd }">
-        <ng-container [formGroupName]="i">
-          <div class="col-4 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus?.allergyType
-              }}</mat-label>
-              <mat-select
-                class="select-full-width"
-                formControlName="allergyType"
-                (selectionChange)="filterAlleryList($event, i, allergy)">
-                <mat-option
-                  *ngFor="let allergy of allerySelectList[i]"
-                  [value]="allergy"
-                  >{{ allergy.allergyType }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="col-4 row box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus?.allergenName
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                allowText="inputFieldValidator"
-                matInput
-                appDefaultNull
-                maxlength="200"
-                formControlName="snomedTerm"
-                (change)="removeSnomedCode(allergy, i)"
-                (keyup.enter)="
-                  searchComponents(allergy.value.snomedTerm, i, allergy)
-                " />
-              <mat-icon
-                matSuffix
-                (click)="searchComponents(allergy, i, allergy)"
-                [class.toolbar-icon-disabled]="componentFlag"
-                >search</mat-icon
+    <!-- Allergy Detailed Section -->
+    <div
+      *ngIf="allergyStatus === 'Yes'"
+      class="space-y-6 animate-in slide-in-from-bottom-4 duration-500">
+      <div class="flex items-center gap-3 px-2">
+        <div class="p-2.5 bg-rose-100 rounded-2xl">
+          <lucide-icon
+            name="shield-alert"
+            class="size-5 text-rose-600"></lucide-icon>
+        </div>
+        <div>
+          <h4
+            class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+            {{
+              currentLanguageSet?.historyData?.ancHistory
+                ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus?.allergy
+            }}
+          </h4>
+          <p
+            class="text-[10px] text-gray-400 font-bold uppercase tracking-widest italic">
+            Hypersensitivity Mapping
+          </p>
+        </div>
+      </div>
+
+      <div formArrayName="allergicList" class="grid grid-cols-1 gap-4">
+        <div
+          *ngFor="
+            let allergy of getAllergyList();
+            let i = index;
+            let isLast = last
+          "
+          [formGroupName]="i"
+          class="group relative grid grid-cols-1 lg:grid-cols-12 gap-6 p-8 rounded-[2.5rem] border border-gray-100 bg-white transition-all duration-500 hover:shadow-2xl hover:shadow-rose-100/50 hover:border-rose-100">
+          <div class="lg:col-span-4">
+            <z-form-field>
+              <z-form-label
+                class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+                >Category</z-form-label
               >
-            </mat-form-field>
+              <z-select
+                formControlName="allergyType"
+                (selectionChange)="filterAlleryList($event, i, allergy)"
+                class="rounded-2xl bg-gray-50/50">
+                <z-option
+                  *ngFor="let allergyOption of allerySelectList[i]"
+                  [zValue]="allergyOption">
+                  {{ allergyOption.allergyType }}
+                </z-option>
+              </z-select>
+            </z-form-field>
           </div>
 
-          <div class="clearfix"></div>
-          <div class="col-4 box" [hidden]="true">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
-                  ?.sctCode
-              }}</mat-label>
-              <input
-                maxlength="100"
-                matInput
-                formControlName="snomedCode"
-                readonly />
-            </mat-form-field>
+          <div class="lg:col-span-4">
+            <z-form-field>
+              <z-form-label
+                class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+                >Allergen Registry</z-form-label
+              >
+              <div class="relative group/search">
+                <input
+                  z-input
+                  formControlName="snomedTerm"
+                  [placeholder]="
+                    currentLanguageSet?.historyData?.ancHistory
+                      ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus
+                      ?.allergenName
+                  "
+                  class="rounded-2xl bg-gray-50/50 pr-12 group-hover/search:bg-white transition-all"
+                  (change)="removeSnomedCode(allergy, i)"
+                  (keyup.enter)="
+                    searchComponents(allergy.value.snomedTerm, i, allergy)
+                  " />
+                <button
+                  type="button"
+                  class="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-300 hover:text-rose-600 transition-all"
+                  (click)="
+                    searchComponents(allergy.value.snomedTerm, i, allergy)
+                  "
+                  [disabled]="componentFlag">
+                  <lucide-icon name="search" class="size-4"></lucide-icon>
+                </button>
+              </div>
+            </z-form-field>
           </div>
 
-          <div class="col-4 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus
-                  ?.typeofReaction
-              }}</mat-label>
-              <mat-select
-                class="select-full-width"
+          <div class="lg:col-span-4">
+            <z-form-field>
+              <z-form-label
+                class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block"
+                >Clinical Manifestations</z-form-label
+              >
+              <z-select
                 multiple
                 formControlName="typeOfAllergicReactions"
-                (change)="canEnableOtherAllergy(allergy)">
-                <mat-option
+                class="rounded-2xl bg-gray-50/50">
+                <z-option
                   *ngFor="
                     let allergicReaction of masterData?.AllergicReactionTypes
                   "
-                  [value]="allergicReaction">
+                  [zValue]="allergicReaction">
                   {{ allergicReaction.name }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-
-          <div class="col-4 box" *ngIf="allergy.value.enableOtherAllergy">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                  ?.others
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                maxlength="50"
-                allowText="alphaspace"
-                formControlName="otherAllergicReaction" />
-            </mat-form-field>
+                </z-option>
+              </z-select>
+            </z-form-field>
           </div>
 
           <div
-            class="col-4 box action-btn-container -al"
-            style="text-align: center">
+            class="lg:col-span-12 flex justify-end gap-3 pt-4 border-t border-gray-50">
             <button
-              md-mini-fab
-              color="warn"
-              class="mat_warn_circle"
-              style="margin-right: 3px"
               *ngIf="i !== 0 || (i === 0 && (allergy.touched || allergy.dirty))"
-              (click)="removeAllergy(i, allergy)">
-              <mat-icon class="md-18">close</mat-icon>
+              (click)="removeAllergy(i, allergy)"
+              class="p-2 hover:bg-rose-50 rounded-xl text-rose-400 hover:text-rose-500 transition-all">
+              <lucide-icon name="trash-2" class="size-4"></lucide-icon>
             </button>
-            <button
-              md-mini-fab
-              color="primary"
-              class="mat_blue_circle"
+            <z-button
               *ngIf="
                 isLast &&
                 generalPersonalHistoryForm.get('allergicList')?.value?.length <
                   allergyMasterData.length
               "
               [disabled]="checkAllergyValidity(allergy)"
-              (click)="addAllergy()">
-              <mat-icon class="md-18">add</mat-icon>
-            </button>
+              (click)="addAllergy()"
+              variant="default"
+              class="rounded-xl bg-rose-600 hover:bg-rose-700 text-white size-10 p-0 shadow-lg shadow-rose-200">
+              <lucide-icon name="plus" class="size-4"></lucide-icon>
+            </z-button>
           </div>
-        </ng-container>
+        </div>
       </div>
-    </mat-card-content>
-  </mat-card>
+    </div>
+  </div>
 </ng-container>

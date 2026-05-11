@@ -26,6 +26,7 @@ import {
   FormGroup,
   FormArray,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
@@ -37,10 +38,43 @@ import {
   MasterdataService,
 } from 'src/app/app-modules/nurse-doctor/shared/services';
 import { GeneralUtils } from 'src/app/app-modules/nurse-doctor/shared/utility';
+import {
+  ZardFormImports,
+  ZardRadioImports,
+  ZardSelectImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+  ZardAccordionImports,
+  ZardDatePickerImports,
+} from 'zard-ui';
+import { NgIf, NgFor } from '@angular/common';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucidePlusCircle, lucideTrash2, lucideInfo } from '@ng-icons/lucide';
+
 @Component({
   selector: 'app-ncd-screening-diagnosis',
   templateUrl: './ncd-screening-diagnosis.component.html',
   styleUrls: ['./ncd-screening-diagnosis.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    NgFor,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    ZardAccordionImports,
+    ZardDatePickerImports,
+    LucideAngularModule,
+    NgIcon,
+  ],
+  providers: [provideIcons({ lucidePlusCircle, lucideTrash2, lucideInfo })],
 })
 export class NcdScreeningDiagnosisComponent
   implements OnInit, OnChanges, DoCheck

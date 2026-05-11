@@ -28,17 +28,37 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DoctorService } from '../shared/services';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { BeneficiaryDetailsService } from '../../core/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
+import { AncDetailsComponent } from './anc-details/anc-details.component';
+import { ObstetricFormulaComponent } from './obstetric-formula/obstetric-formula.component';
+import { NgIf } from '@angular/common';
+import { AncImmunizationComponent } from './anc-immunization/anc-immunization.component';
+import {
+  LucideAngularModule,
+  Baby,
+  ClipboardList,
+  Syringe,
+} from 'lucide-angular';
 @Component({
   selector: 'app-nurse-anc',
   templateUrl: './anc.component.html',
   styleUrls: ['./anc.component.css'],
+  imports: [
+    ZardAccordionImports,
+    ReactiveFormsModule,
+    AncDetailsComponent,
+    ObstetricFormulaComponent,
+    NgIf,
+    AncImmunizationComponent,
+    LucideAngularModule,
+  ],
 })
 export class AncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
   @Input()

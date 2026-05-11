@@ -28,19 +28,44 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  FormArray,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 import { MasterdataService, DoctorService } from '../../shared/services';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SetLanguageComponent } from '@/app-modules/core/components/set-language.component';
+import { HttpServiceService } from '@/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+
+import { NgIf, NgFor } from '@angular/common';
+import { NullDefaultValueDirective } from '../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
+
+import { ZardInputDirective } from '@/components/ui/input/input.directive';
 
 @Component({
   selector: 'app-patient-visit-details',
   templateUrl: './visit-details.component.html',
   styleUrls: ['./visit-details.component.css'],
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    NgFor,
+    ZardFormImports,
+    ZardSelectImports,
+    ZardInputDirective,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+  ],
 })
 export class PatientVisitDetailsComponent
   implements OnInit, DoCheck, OnChanges, OnDestroy

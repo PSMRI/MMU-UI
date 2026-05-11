@@ -1,31 +1,78 @@
-<div class="row m-t-20" [formGroup]="patientCovidForm">
-  <div class="col-xs-12 col-sm-8 col-md-6 col-lg-5 box" *ngIf="!sympFlag">
-    <mat-form-field>
-      <mat-label>{{
-        currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-          ?.symptoms?.symptoms
-      }}</mat-label>
-      <mat-select
-        multiple
-        (selectionChange)="symptomSelected()"
-        id="symptom"
-        name="symptom"
-        formControlName="symptom"
-        required="true">
-        <mat-option *ngFor="let symp of symptomsList" [value]="symp">
-          {{ symp }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+<div
+  class="pt-6 animate-in fade-in slide-in-from-bottom-4 duration-700"
+  [formGroup]="patientCovidForm">
+  <!-- Header with Clinical Context -->
+  <div class="flex items-center gap-3 mb-6">
+    <div class="p-2 bg-orange-100 rounded-lg shadow-sm">
+      <lucide-icon name="activity" class="size-4 text-orange-600"></lucide-icon>
+    </div>
+    <div class="text-left">
+      <z-form-label
+        class="text-[10px] font-black text-gray-400 uppercase tracking-widest block">
+        {{
+          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+            ?.symptoms?.symptoms
+        }}
+      </z-form-label>
+      <span class="text-[10px] text-gray-400 font-bold uppercase tracking-tight"
+        >Systemic and localized manifestations</span
+      >
+    </div>
   </div>
 
-  <div class="col-xs-12 col-sm-8 col-md-6 col-lg-5 box" *ngIf="sympFlag">
-    <mat-form-field>
-      <mat-label>{{
-        currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-          ?.symptoms?.symptoms
-      }}</mat-label>
-      <input autocomplete="off" matInput value="{{ covidSymptoms }}" disabled />
-    </mat-form-field>
+  <!-- Symptom Selection (Editable Mode) -->
+  <div class="max-w-3xl" *ngIf="!sympFlag">
+    <z-form-field>
+      <z-select
+        zMultiple="true"
+        (zSelectionChange)="symptomSelected()"
+        id="symptom"
+        formControlName="symptom"
+        [zPlaceholder]="'Select all applicable symptoms...'"
+        class="min-h-14 bg-white border-gray-200 rounded-[1.5rem] shadow-sm font-black text-sm">
+        <z-select-item
+          *ngFor="let symp of symptomsList"
+          [zValue]="symp"
+          class="font-medium hover:bg-orange-50 transition-colors">
+          <div class="flex items-center gap-2">
+            <div class="h-1.5 w-1.5 rounded-full bg-orange-400"></div>
+            {{ symp }}
+          </div>
+        </z-select-item>
+      </z-select>
+    </z-form-field>
+
+    <!-- Visual Feedback for Selection -->
+    <div class="mt-8 flex flex-wrap gap-2" *ngIf="symptom?.length > 0">
+      <span
+        *ngFor="let s of symptom"
+        class="px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-full text-xs font-bold shadow-sm flex items-center gap-2 animate-in zoom-in duration-300">
+        <div
+          class="h-1.5 w-1.5 rounded-full bg-orange-500"
+          [ngClass]="{ 'bg-gray-400': s === 'No Symptoms' }"></div>
+        {{ s }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Symptoms Display (View Mode) -->
+  <div class="max-w-3xl" *ngIf="sympFlag">
+    <div
+      class="p-8 bg-gray-50/50 rounded-[2.5rem] border border-gray-100 flex items-center gap-4">
+      <div class="p-4 bg-white rounded-2xl shadow-sm">
+        <lucide-icon
+          name="clipboard-check"
+          class="size-6 text-gray-400"></lucide-icon>
+      </div>
+      <div class="space-y-1">
+        <p
+          class="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+          Recorded Symptoms
+        </p>
+        <p class="text-sm font-black text-gray-900 tracking-tight">
+          {{ covidSymptoms || 'No symptoms recorded' }}
+        </p>
+      </div>
+    </div>
   </div>
 </div>

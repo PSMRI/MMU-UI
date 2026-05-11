@@ -35,12 +35,12 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../../../../core/material.module';
+
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { GeneralUtils } from '../../../../shared/utility';
 
 import * as data from '../../../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of, BehaviorSubject, Subject } from 'rxjs';
 
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
@@ -55,15 +55,15 @@ describe('RespiratorySystemComponent', () => {
   let el: HTMLElement;
   let spy: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [RespiratorySystemComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
         ReactiveFormsModule,
         FormsModule,
         MaterialModule,
         NoopAnimationsModule,
+        RespiratorySystemComponent,
       ],
     }).compileComponents();
   }));

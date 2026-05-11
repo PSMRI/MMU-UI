@@ -43,11 +43,31 @@ import { Observable } from 'rxjs/internal/Observable';
 import { of } from 'rxjs';
 import { RegistrarService } from '../shared/services/registrar.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { RegisterEditLocationComponent } from './register-edit-location/register-edit-location.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RegisterPersonalDetailsComponent,
+    RegisterDemographicDetailsComponent,
+    RegisterOtherDetailsComponent,
+    MatStepperModule,
+    MatIconModule,
+    MatButtonModule,
+    MatExpansionModule,
+  ],
 })
 export class RegistrationComponent
   implements

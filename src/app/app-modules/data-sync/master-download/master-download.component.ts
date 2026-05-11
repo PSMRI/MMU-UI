@@ -26,12 +26,15 @@ import { ConfirmationService } from '../../core/services/confirmation.service';
 import { DataSyncService } from './../shared/service/data-sync.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgIf, NgStyle, NgFor } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-master-download',
   templateUrl: './master-download.component.html',
   styleUrls: ['./master-download.component.css'],
   providers: [DataSyncService],
+  imports: [NgIf, MatIcon, NgStyle, NgFor],
 })
 export class MasterDownloadComponent implements OnInit {
   constructor(
@@ -54,7 +57,7 @@ export class MasterDownloadComponent implements OnInit {
   vanID: any;
   vehicalNo: any;
 
-  showVanDetails: boolean = false;
+  showVanDetails = false;
 
   getVanDetails() {
     this.dataSyncService.getVanDetailsForMasterDownload().subscribe(

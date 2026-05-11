@@ -1,5 +1,5 @@
-<div class="row m-t-10">
-  <div class="col-xs-12">
+<div class="max-w-7xl mx-auto p-6 animate-in fade-in duration-700">
+  <div class="space-y-6">
     <app-cancer-case-record
       *ngIf="showCancer"
       [caseRecordMode]="caseRecordMode"
@@ -7,6 +7,7 @@
       [currentVitals]="currentVitals"
       [pregnancyStatus]="pregnancyStatus"
       [diagnosisForm]="patientCaseRecordForm"></app-cancer-case-record>
+
     <app-general-case-record
       *ngIf="showGeneralOPD"
       [caseRecordMode]="caseRecordMode"

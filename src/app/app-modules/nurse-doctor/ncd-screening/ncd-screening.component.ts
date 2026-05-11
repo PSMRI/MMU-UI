@@ -29,7 +29,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
 import {
@@ -38,6 +38,18 @@ import {
   DoctorService,
 } from '../shared/services';
 import { NCDScreeningUtils } from '../shared/utility';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideHistory,
+  lucideSearch,
+  lucideScale,
+  lucideShieldAlert,
+  lucideHeart,
+  lucideActivity,
+  lucideClipboardList,
+  lucideTrash2,
+  lucidePlus,
+} from '@ng-icons/lucide';
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
@@ -54,11 +66,46 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import {
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
+import {
+  MatFormField,
+  MatLabel,
+  MatSelect,
+  MatSuffix,
+} from '@angular/material/select';
+import { NgFor, NgIf, NgClass } from '@angular/common';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../../core/directives/stringValidator.directive';
+import { NumberValidatorDirective } from '../../core/directives/numberValidator.directive';
+import { MatTooltip } from '@angular/material/tooltip';
+import {
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatDatepicker,
+} from '@angular/material/datepicker';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import {
+  ZardFormImports,
+  ZardRadioImports,
+  ZardSelectImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+  ZardAccordionImports,
+  ZardDatePickerImports,
+} from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-nurse-ncd-screening',
   templateUrl: './ncd-screening.component.html',
   styleUrls: ['./ncd-screening.component.css'],
+  standalone: true,
   providers: [
     {
       provide: MAT_DATE_LOCALE,
@@ -83,6 +130,36 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
         },
       },
     },
+    provideIcons({
+      lucideHistory,
+      lucideSearch,
+      lucideScale,
+      lucideShieldAlert,
+      lucideHeart,
+      lucideActivity,
+      lucideClipboardList,
+      lucideTrash2,
+      lucidePlus,
+    }),
+  ],
+  imports: [
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    ZardAccordionImports,
+    ZardDatePickerImports,
+    NgIf,
+    NgFor,
+    NgClass,
+    StringValidatorDirective,
+    NumberValidatorDirective,
+    NgIcon,
+    LucideAngularModule,
   ],
 })
 export class NcdScreeningComponent

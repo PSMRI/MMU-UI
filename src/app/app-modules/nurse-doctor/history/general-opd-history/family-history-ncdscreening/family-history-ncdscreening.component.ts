@@ -26,6 +26,7 @@ import {
   FormArray,
   FormGroup,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -42,11 +43,59 @@ import {
 } from '../../../shared/services';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import {
+  LucideAngularModule,
+  Microscope,
+  History,
+  AlertCircle,
+  Trash2,
+  Plus,
+  Dna,
+  Link2,
+  Info,
+} from 'lucide-angular';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-family-history-ncdscreening',
+  standalone: true,
   templateUrl: './family-history-ncdscreening.component.html',
   styleUrls: ['./family-history-ncdscreening.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardLabelImports,
+    ZardSelectImports,
+    ZardRadioImports,
+    NgIf,
+    NgFor,
+    NgClass,
+    LucideAngularModule,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+  ],
+  providers: [
+    LucideAngularModule.pick({
+      Microscope,
+      History,
+      AlertCircle,
+      Trash2,
+      Plus,
+      Dna,
+      Link2,
+      Info,
+    }).providers,
+  ],
 })
 export class FamilyHistoryNcdscreeningComponent
   implements OnInit, DoCheck, OnDestroy
@@ -71,11 +120,11 @@ export class FamilyHistoryNcdscreeningComponent
   IDRSScoreForFamilyMembes: any = 0;
   dummyValue: any;
   idrsscoredummy: any;
-  diabetesMellitusSelected: boolean = false;
+  diabetesMellitusSelected = false;
   beneficiaryDetailSubscription: any;
   age: any;
   currentLanguageSet: any;
-  diabetesPresent: boolean = false;
+  diabetesPresent = false;
 
   constructor(
     private fb: FormBuilder,

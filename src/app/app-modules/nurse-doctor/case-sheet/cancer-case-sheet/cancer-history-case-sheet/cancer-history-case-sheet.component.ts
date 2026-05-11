@@ -21,12 +21,32 @@
  */
 
 import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 
+import { ZardCardImports } from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideUsers,
+  lucideUser,
+  lucideHistory,
+  lucideClipboardList,
+} from '@ng-icons/lucide';
+
 @Component({
   selector: 'app-cancer-history-case-sheet',
+  standalone: true,
+  imports: [CommonModule, ZardCardImports, LucideAngularModule, NgIcon],
+  providers: [
+    provideIcons({
+      lucideUsers,
+      lucideUser,
+      lucideHistory,
+      lucideClipboardList,
+    }),
+  ],
   templateUrl: './cancer-history-case-sheet.component.html',
   styleUrls: ['./cancer-history-case-sheet.component.css'],
 })

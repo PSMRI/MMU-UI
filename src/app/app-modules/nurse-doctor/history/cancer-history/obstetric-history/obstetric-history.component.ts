@@ -28,7 +28,12 @@ import {
   OnDestroy,
   DoCheck,
 } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import {
   MasterdataService,
@@ -41,11 +46,44 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgFor, NgIf } from '@angular/common';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory } from '@ng-icons/lucide';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { LucideAngularModule, History } from 'lucide-angular';
 
 @Component({
   selector: 'app-nurse-cancer-obstetric-history',
+  standalone: true,
   templateUrl: './obstetric-history.component.html',
   styleUrls: ['./obstetric-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardLabelImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    NgFor,
+    NgIf,
+    LucideAngularModule,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+  ],
+  providers: [
+    LucideAngularModule.pick({
+      History,
+    }).providers,
+  ],
 })
 export class ObstetricHistoryComponent
   implements OnInit, OnChanges, OnDestroy, DoCheck

@@ -33,7 +33,9 @@ import {
   FormGroup,
   FormArray,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
+import { CommonModule, NgIf, NgFor, NgClass } from '@angular/common';
 
 import {
   MasterdataService,
@@ -48,16 +50,49 @@ import { ConfirmationService } from '../../../../core/services/confirmation.serv
 import { GeneralUtils } from '../../../shared/utility/general-utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { StringValidatorDirective } from '@/app-modules/core/directives/stringValidator.directive';
 import { environment } from 'src/environments/environment';
+import {
+  ZardFormImports,
+  ZardRadioImports,
+  ZardSelectImports,
+  ZardLabelImports,
+  ZardButtonImports,
+  ZardTooltipImports,
+  ZardCardImports,
+  ZardAccordionImports,
+  ZardDatePickerImports,
+} from 'zard-ui';
+import { LucideAngularModule } from 'lucide-angular';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-findings',
   templateUrl: './findings.component.html',
   styleUrls: ['./findings.component.css'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    NgIf,
+    NgFor,
+    NgClass,
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardSelectImports,
+    ZardLabelImports,
+    ZardButtonImports,
+    ZardTooltipImports,
+    ZardCardImports,
+    ZardAccordionImports,
+    ZardDatePickerImports,
+    LucideAngularModule,
+    StringValidatorDirective,
+    MatPaginator,
+  ],
 })
 export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

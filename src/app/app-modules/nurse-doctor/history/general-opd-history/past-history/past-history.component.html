@@ -1,296 +1,340 @@
-<div [formGroup]="pastHistoryForm">
-  <div>
-    <div class="col-12" style="float: right; text-align: end">
-      <span class="font-history-label">{{
-        currentLanguageSet?.historyData?.Previousillness
-          ?.previousillnessandsurgery
-      }}</span>
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        id="previousANCPastHistory"
-        class="mat_icon_blue"
-        color="primary"
+<div
+  [formGroup]="pastHistoryForm"
+  class="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+  <!-- Past Illness Section -->
+  <div class="space-y-6">
+    <div class="flex items-center justify-between px-2">
+      <div class="flex items-center gap-3">
+        <div class="p-2.5 bg-blue-100 rounded-2xl">
+          <lucide-icon
+            name="history"
+            class="size-5 text-blue-600"></lucide-icon>
+        </div>
+        <div>
+          <h4
+            class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+            {{
+              currentLanguageSet?.historyData?.ancHistory
+                ?.pastIllnessDataANC_OPD_NCD_PNC?.pastIllness
+            }}
+          </h4>
+          <p
+            class="text-[10px] text-gray-400 font-bold uppercase tracking-widest italic">
+            Clinical Disease Registry
+          </p>
+        </div>
+      </div>
+
+      <z-button
+        variant="outline"
+        class="rounded-2xl border-blue-200 bg-blue-50/30 text-blue-600 hover:bg-blue-50 px-6 py-2 shadow-sm font-black text-[10px] uppercase tracking-widest transition-all"
         (click)="
           getPreviousPastHistory();
           trackFieldInteraction('Previous Past History Button')
         ">
-        <mat-icon class="md-18">history</mat-icon>
-      </button>
+        <lucide-icon name="history" class="size-3 mr-2"></lucide-icon>
+        {{ currentLanguageSet?.DurationData?.previousDetails }}
+      </z-button>
     </div>
-    <div class="col-xs-12" formArrayName="pastIllness">
-      <header class="description">
-        <h4 style="font-size: 18px">
-          <strong>{{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.pastIllnessDataANC_OPD_NCD_PNC?.pastIllness
-          }}</strong>
-        </h4>
-      </header>
+
+    <div formArrayName="pastIllness" class="grid grid-cols-1 gap-4">
       <div
-        class="row multi_row_select col-12"
-        style="margin: 65px 0px 15px 0px; background-color: #f0f5f5"
         *ngFor="
           let pastIllness of getPastIllness();
           let i = index;
-          let isLast = last;
-          let isOdd = odd
+          let isLast = last
         "
-        [ngClass]="{ odd: !isOdd }">
-        <ng-container [formGroupName]="i">
-          <div class="col-md-3 box">
-            <mat-form-field [style.width]="'100%'">
-              <mat-label class="mat-label-text">{{
+        [formGroupName]="i"
+        class="group relative grid grid-cols-1 md:grid-cols-12 gap-6 p-8 rounded-[2.5rem] border border-gray-100 bg-white transition-all duration-500 hover:shadow-2xl hover:shadow-blue-100/50 hover:border-blue-100 animate-in zoom-in-95 duration-500">
+        <!-- Index Badge -->
+        <div
+          class="hidden md:flex absolute -left-3 top-1/2 -translate-y-1/2 h-8 w-8 items-center justify-center bg-gray-50 border border-gray-100 rounded-full text-[10px] font-black text-gray-400 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-500 transition-all duration-500 z-10">
+          {{ i + 1 }}
+        </div>
+
+        <!-- Illness Selection -->
+        <div
+          [ngClass]="
+            pastIllness.value.illnessType?.illnessType === 'Other'
+              ? 'md:col-span-4'
+              : 'md:col-span-6'
+          ">
+          <z-form-field>
+            <z-form-label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">
+              Condition Type
+            </z-form-label>
+            <z-select
+              formControlName="illnessType"
+              [placeholder]="
                 currentLanguageSet?.historyData?.ancHistory
                   ?.pastIllnessDataANC_OPD_NCD_PNC?.illness
-              }}</mat-label>
-              <mat-select
-                class="select-full-width"
-                name="pastAcuteIllness"
-                formControlName="illnessType"
-                (selectionChange)="
-                  filterPastIllnessType($event.value, i, pastIllness);
-                  trackFieldInteraction('Illness')
-                ">
-                <mat-option
-                  *ngFor="let illness of pastIllnessSelectList[i]"
-                  [value]="illness">
-                  {{ illness.illnessType }}</mat-option
-                >
-              </mat-select>
-            </mat-form-field>
-          </div>
+              "
+              (selectionChange)="
+                filterPastIllnessType($event, i, pastIllness);
+                trackFieldInteraction('Illness')
+              "
+              class="rounded-2xl border-gray-100 bg-gray-50/50 hover:bg-white transition-all">
+              <z-option
+                *ngFor="let illness of pastIllnessSelectList[i]"
+                [zValue]="illness">
+                {{ illness.illnessType }}
+              </z-option>
+            </z-select>
+          </z-form-field>
+        </div>
 
-          <div
-            class="col-2 box"
-            *ngIf="pastIllness.value.illnessType?.illnessType === 'Other'">
-            <mat-form-field [style.width]="'100%'" class="input-full-width">
-              <mat-label class="mat-label-text">{{
+        <!-- Other Illness (Conditional) -->
+        <div
+          class="md:col-span-2"
+          *ngIf="pastIllness.value.illnessType?.illnessType === 'Other'">
+          <z-form-field>
+            <z-form-label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">
+              Specify
+            </z-form-label>
+            <input
+              z-input
+              formControlName="otherIllnessType"
+              [placeholder]="
                 currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
                   ?.others
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                maxlength="50"
-                allowText="alphaspace"
-                name="otherIllnessType"
-                formControlName="otherIllnessType"
-                (focus)="trackFieldInteraction('Other Illness Type')" />
-            </mat-form-field>
-          </div>
-
-          <div class="col-2 box">
-            <mat-form-field [style.width]="'100%'" class="input-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                class="mat_border_style"
-                matInput
-                appDefaultNull
-                allowText="number"
-                maxlength="2"
-                name="timePeriodAgo"
-                formControlName="timePeriodAgo"
-                (change)="validateDuration(pastIllness)"
-                (focus)="trackFieldInteraction('Duration')" />
-            </mat-form-field>
-          </div>
-
-          <div class="col-3 box">
-            <mat-form-field [style.width]="'100%'" style="width: 100%">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.DurationData?.timeperiodAgo
-              }}</mat-label>
-              <mat-select
-                class="select-full-width mat_border_style"
-                name="timePeriodUnit"
-                formControlName="timePeriodUnit"
-                (selectionChange)="
-                  validateDuration(pastIllness);
-                  trackFieldInteraction('Time Period Unit')
-                ">
-                <mat-option value="Days">Day(s)</mat-option>
-                <mat-option value="Weeks">Week(s)</mat-option>
-                <mat-option value="Months">Month(s)</mat-option>
-                <mat-option value="Years">Year(s)</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-
-          <div class="col-2 box" style="margin-top: 10px">
-            <button
-              style="margin-right: 5px"
-              mat-mini-fab
-              color="warn"
-              class="mat_warn_circle"
-              *ngIf="
-                i !== 0 ||
-                (i === 0 && (pastIllness.touched || pastIllness.dirty))
               "
-              (click)="
-                removePastIllness(i, pastIllness);
-                trackFieldInteraction('Remove Past Illness Button')
-              ">
-              <mat-icon class="md-18">close</mat-icon>
-            </button>
-            <button
-              mat-mini-fab
-              color="primary"
-              class="mat_blue_circle"
-              *ngIf="isLast"
-              [disabled]="checkIllnessValidity(pastIllness)"
-              (click)="
-                addPastIllness();
-                trackFieldInteraction('Add Past Illness Button')
-              ">
-              <mat-icon class="md-18">add</mat-icon>
-            </button>
-          </div>
-        </ng-container>
+              appDefaultNull
+              maxlength="50"
+              class="rounded-2xl border-gray-100 bg-gray-50/50 hover:bg-white transition-all"
+              (focus)="trackFieldInteraction('Other Illness Type')" />
+          </z-form-field>
+        </div>
+
+        <!-- Duration Group -->
+        <div class="md:col-span-5 grid grid-cols-2 gap-4">
+          <z-form-field>
+            <z-form-label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">
+              Magnitude
+            </z-form-label>
+            <input
+              z-input
+              formControlName="timePeriodAgo"
+              placeholder="Qty"
+              appDefaultNull
+              maxlength="2"
+              class="rounded-2xl border-gray-100 bg-gray-50/50 hover:bg-white transition-all"
+              (change)="validateDuration(pastIllness)"
+              (focus)="trackFieldInteraction('Duration')" />
+          </z-form-field>
+
+          <z-form-field>
+            <z-form-label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">
+              Timeline
+            </z-form-label>
+            <z-select
+              formControlName="timePeriodUnit"
+              [placeholder]="currentLanguageSet?.DurationData?.timeperiodAgo"
+              (selectionChange)="
+                validateDuration(pastIllness);
+                trackFieldInteraction('Time Period Unit')
+              "
+              class="rounded-2xl border-gray-100 bg-gray-50/50 hover:bg-white transition-all">
+              <z-option zValue="Days">Day(s)</z-option>
+              <z-option zValue="Weeks">Week(s)</z-option>
+              <z-option zValue="Months">Month(s)</z-option>
+              <z-option zValue="Years">Year(s)</z-option>
+            </z-select>
+          </z-form-field>
+        </div>
+
+        <!-- Actions -->
+        <div class="md:col-span-1 flex items-end justify-end gap-3 pb-1">
+          <button
+            *ngIf="
+              i !== 0 || (i === 0 && (pastIllness.touched || pastIllness.dirty))
+            "
+            (click)="
+              removePastIllness(i, pastIllness);
+              trackFieldInteraction('Remove Past Illness Button')
+            "
+            class="p-2 hover:bg-rose-50 rounded-xl text-rose-400 hover:text-rose-500 transition-all duration-300">
+            <lucide-icon name="trash-2" class="size-4"></lucide-icon>
+          </button>
+
+          <z-button
+            *ngIf="isLast"
+            [disabled]="checkIllnessValidity(pastIllness)"
+            (click)="
+              addPastIllness(); trackFieldInteraction('Add Past Illness Button')
+            "
+            variant="default"
+            class="rounded-xl bg-blue-600 hover:bg-blue-700 text-white size-10 p-0 shadow-lg shadow-blue-200 transition-all">
+            <lucide-icon name="plus" class="size-4"></lucide-icon>
+          </z-button>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="col-xs-12" formArrayName="pastSurgery">
-    <header class="description">
-      <h4 style="font-size: 18px">
-        <strong
-          >{{
+  <div class="h-px bg-gray-100 mx-12"></div>
+
+  <!-- Past Surgery Section -->
+  <div class="space-y-6">
+    <div class="flex items-center gap-3 px-2">
+      <div class="p-2.5 bg-purple-100 rounded-2xl">
+        <lucide-icon
+          name="scissors"
+          class="size-5 text-purple-600"></lucide-icon>
+      </div>
+      <div>
+        <h4
+          class="text-lg font-black text-gray-900 tracking-tight uppercase italic">
+          {{
             currentLanguageSet?.historyData?.ancHistory
               ?.pastHOSurgeryANC_OPD_NCD_PNC?.pastSurgery
           }}
-        </strong>
-      </h4>
-    </header>
-    <div
-      class="row multi_row_select col-12"
-      style="margin: 65px 0px 15px 0px; background-color: #f0f5f5"
-      *ngFor="
-        let pastSurgery of getPastSurgery();
-        let i = index;
-        let isLast = last;
-        let isOdd = odd
-      "
-      [ngClass]="{ odd: !isOdd }">
-      <ng-container [formGroupName]="i">
-        <div class="col-3 box">
-          <mat-form-field [style.width]="'100%'">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.historyData?.ancHistory
-                ?.pastHOSurgeryANC_OPD_NCD_PNC?.hoSurgery
-            }}</mat-label>
-            <mat-select
-              class="select-full-width"
-              formControlName="surgeryType"
-              name="surgeryType"
-              (selectionChange)="
-                filterPastSurgeryType($event.value, i, pastSurgery);
-                trackFieldInteraction('Surgery Type')
-              ">
-              <mat-option
-                *ngFor="let surgery of pastSurgerySelectList[i]"
-                [value]="surgery"
-                >{{ surgery.surgeryType }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
+        </h4>
+        <p
+          class="text-[10px] text-gray-400 font-bold uppercase tracking-widest italic">
+          Surgical Intervention Log
+        </p>
+      </div>
+    </div>
+
+    <div formArrayName="pastSurgery" class="grid grid-cols-1 gap-4">
+      <div
+        *ngFor="
+          let pastSurgery of getPastSurgery();
+          let i = index;
+          let isLast = last
+        "
+        [formGroupName]="i"
+        class="group relative grid grid-cols-1 md:grid-cols-12 gap-6 p-8 rounded-[2.5rem] border border-gray-100 bg-white transition-all duration-500 hover:shadow-2xl hover:shadow-purple-100/50 hover:border-purple-100 animate-in zoom-in-95 duration-500">
+        <!-- Index Badge -->
+        <div
+          class="hidden md:flex absolute -left-3 top-1/2 -translate-y-1/2 h-8 w-8 items-center justify-center bg-gray-50 border border-gray-100 rounded-full text-[10px] font-black text-gray-400 group-hover:bg-purple-600 group-hover:text-white group-hover:border-purple-500 transition-all duration-500 z-10">
+          {{ i + 1 }}
         </div>
 
+        <!-- Surgery Type Selection -->
         <div
-          class="col-2 box"
+          [ngClass]="
+            pastSurgery.value.surgeryType?.surgeryType === 'Other'
+              ? 'md:col-span-4'
+              : 'md:col-span-6'
+          ">
+          <z-form-field>
+            <z-form-label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">
+              Procedure
+            </z-form-label>
+            <z-select
+              formControlName="surgeryType"
+              [placeholder]="
+                currentLanguageSet?.historyData?.ancHistory
+                  ?.pastHOSurgeryANC_OPD_NCD_PNC?.hoSurgery
+              "
+              (selectionChange)="
+                filterPastSurgeryType($event, i, pastSurgery);
+                trackFieldInteraction('Surgery Type')
+              "
+              class="rounded-2xl border-gray-100 bg-gray-50/50 hover:bg-white transition-all">
+              <z-option
+                *ngFor="let surgery of pastSurgerySelectList[i]"
+                [zValue]="surgery">
+                {{ surgery.surgeryType }}
+              </z-option>
+            </z-select>
+          </z-form-field>
+        </div>
+
+        <!-- Other Surgery (Conditional) -->
+        <div
+          class="md:col-span-2"
           *ngIf="pastSurgery.value.surgeryType?.surgeryType === 'Other'">
-          <mat-form-field [style.width]="'100%'" class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                ?.others
-            }}</mat-label>
+          <z-form-field>
+            <z-form-label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">
+              Specify
+            </z-form-label>
             <input
-              autocomplete="off"
-              matInput
+              z-input
+              formControlName="otherSurgeryType"
+              [placeholder]="
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                  ?.others
+              "
               appDefaultNull
               maxlength="50"
-              allowText="alphaspace"
-              name="otherSurgeryType"
-              formControlName="otherSurgeryType"
+              class="rounded-2xl border-gray-100 bg-gray-50/50 hover:bg-white transition-all"
               (focus)="trackFieldInteraction('Other Surgery Type')" />
-          </mat-form-field>
+          </z-form-field>
         </div>
 
-        <div class="col-2 box">
-          <mat-form-field [style.width]="'100%'" class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
-            }}</mat-label>
+        <!-- Duration Group -->
+        <div class="md:col-span-5 grid grid-cols-2 gap-4">
+          <z-form-field>
+            <z-form-label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">
+              Magnitude
+            </z-form-label>
             <input
-              autocomplete="off"
-              class="mat_border_style"
-              matInput
-              appDefaultNull
-              allowText="number"
-              maxlength="2"
-              name="timePeriodAgo"
+              z-input
               formControlName="timePeriodAgo"
+              placeholder="Qty"
+              appDefaultNull
+              maxlength="2"
+              class="rounded-2xl border-gray-100 bg-gray-50/50 hover:bg-white transition-all"
               (change)="validateDuration(pastSurgery)"
               (focus)="trackFieldInteraction('Duration')" />
-          </mat-form-field>
-        </div>
+          </z-form-field>
 
-        <div class="col-3 box">
-          <mat-form-field [style.width]="'100%'">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.DurationData?.timeperiodAgo
-            }}</mat-label>
-            <mat-select
-              class="select-full-width"
+          <z-form-field>
+            <z-form-label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block">
+              Timeline
+            </z-form-label>
+            <z-select
               formControlName="timePeriodUnit"
-              name="timePeriodUnit"
+              [placeholder]="currentLanguageSet?.DurationData?.timeperiodAgo"
               (selectionChange)="
                 validateDuration(pastSurgery);
                 trackFieldInteraction('Time Period Unit')
-              ">
-              <mat-option value="Days">Day(s)</mat-option>
-              <mat-option value="Weeks">Week(s)</mat-option>
-              <mat-option value="Months">Month(s)</mat-option>
-              <mat-option value="Years">Year(s)</mat-option>
-            </mat-select>
-          </mat-form-field>
+              "
+              class="rounded-2xl border-gray-100 bg-gray-50/50 hover:bg-white transition-all">
+              <z-option zValue="Days">Day(s)</z-option>
+              <z-option zValue="Weeks">Week(s)</z-option>
+              <z-option zValue="Months">Month(s)</z-option>
+              <z-option zValue="Years">Year(s)</z-option>
+            </z-select>
+          </z-form-field>
         </div>
 
-        <div class="col-2 box" style="margin-top: 10px">
+        <!-- Actions -->
+        <div class="md:col-span-1 flex items-end justify-end gap-3 pb-1">
           <button
-            md-mini-fab
-            color="warn"
-            style="margin-right: 5px"
-            class="mat_warn_circle"
-            id="removePastSurgery"
             *ngIf="
               i !== 0 || (i === 0 && (pastSurgery.touched || pastSurgery.dirty))
             "
             (click)="
               removePastSurgery(i, pastSurgery);
               trackFieldInteraction('Remove Past Surgery Button')
-            ">
-            <mat-icon class="md-18">close</mat-icon>
+            "
+            class="p-2 hover:bg-rose-50 rounded-xl text-rose-400 hover:text-rose-500 transition-all duration-300">
+            <lucide-icon name="trash-2" class="size-4"></lucide-icon>
           </button>
-          <button
-            md-mini-fab
-            color="primary"
-            class="mat_blue_circle"
+
+          <z-button
             *ngIf="isLast"
             [disabled]="checkSurgeryValidity(pastSurgery)"
-            id="addPastSurgery"
             (click)="
               addPastSurgery(); trackFieldInteraction('Add Past Surgery Button')
-            ">
-            <mat-icon class="md-18">add</mat-icon>
-          </button>
+            "
+            variant="default"
+            class="rounded-xl bg-purple-600 hover:bg-purple-700 text-white size-10 p-0 shadow-lg shadow-purple-200 transition-all">
+            <lucide-icon name="plus" class="size-4"></lucide-icon>
+          </z-button>
         </div>
-      </ng-container>
+      </div>
     </div>
   </div>
 </div>

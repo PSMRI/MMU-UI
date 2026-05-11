@@ -1,11 +1,11 @@
 .box {
-    height: 60px;
+  height: 60px;
 }
 
 .mat-form-field {
-    line-height: unset;
+  line-height: unset;
 }
 
 .input-full-width {
-    width: 100%;
+  width: 100%;
 }

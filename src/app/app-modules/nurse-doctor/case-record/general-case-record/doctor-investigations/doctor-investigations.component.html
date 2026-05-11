@@ -1,86 +1,96 @@
-<div *ngIf="visit === 'NCD screening'">
-  <mat-label
-    class="mat-label-text"
-    *ngIf="
-      diabetesSelected > 0 &&
-      RBSTestDoneInVitals === false &&
-      !rbsSelectedInInvestigation
-    "
-    style="color: red">
-    * {{ current_language_set?.pleaseSelectRBSTest }}</mat-label
-  ><br />
-  <mat-label
-    class="mat-label-text"
-    *ngIf="VisualAcuityMandatory && !VisualAcuityTestDone"
-    style="color: red">
-    * {{ current_language_set?.pleaseSelectVisualAcuityTest }}</mat-label
-  >
-</div>
-<div *ngIf="visit === 'ANC'">
-  <mat-label
-    class="mat-label-text"
-    *ngIf="
-      (!RBSTestDoneInVitals && !rbsSelectedInInvestigation) ||
-      !hemoglobbinSelected
-    "
-    style="color: red">
-    * {{ current_language_set?.pleaseSelectRBSTestAndHaemoglobinTest }}
-  </mat-label>
+<div class="space-y-4 mb-6">
+  <div *ngIf="visit === 'NCD screening'" class="space-y-2">
+    <div
+      *ngIf="
+        diabetesSelected > 0 &&
+        RBSTestDoneInVitals === false &&
+        !rbsSelectedInInvestigation
+      "
+      class="flex items-center gap-2 text-red-500 text-sm font-medium animate-pulse">
+      <ng-icon name="lucideAlertCircle" class="text-lg"></ng-icon>
+      <span>* {{ current_language_set?.pleaseSelectRBSTest }}</span>
+    </div>
+    <div
+      *ngIf="VisualAcuityMandatory && !VisualAcuityTestDone"
+      class="flex items-center gap-2 text-red-500 text-sm font-medium animate-pulse">
+      <ng-icon name="lucideAlertCircle" class="text-lg"></ng-icon>
+      <span>* {{ current_language_set?.pleaseSelectVisualAcuityTest }}</span>
+    </div>
+  </div>
+
+  <div *ngIf="visit === 'ANC'" class="space-y-2">
+    <div
+      *ngIf="
+        (!RBSTestDoneInVitals && !rbsSelectedInInvestigation) ||
+        !hemoglobbinSelected
+      "
+      class="flex items-center gap-2 text-red-500 text-sm font-medium animate-pulse">
+      <ng-icon name="lucideAlertCircle" class="text-lg"></ng-icon>
+      <span
+        >*
+        {{ current_language_set?.pleaseSelectRBSTestAndHaemoglobinTest }}</span
+      >
+    </div>
+  </div>
 </div>
 
-<div class="row" [formGroup]="generalDoctorInvestigationForm">
-  <div class="col-xs-12 col-sm-6">
-    <mat-form-field [style.width]="'100%'">
-      <mat-label>{{
-        current_language_set?.labTechnicianData?.testName
-      }}</mat-label>
-      <mat-select
-        class="input-full-width"
+<div
+  class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8"
+  [formGroup]="generalDoctorInvestigationForm">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Lab Tests -->
+    <z-form-field>
+      <z-label>{{ current_language_set?.labTechnicianData?.testName }}</z-label>
+      <z-select
         multiple
-        name="labTest"
         formControlName="labTest"
+        placeholder="Select Laboratory Tests"
         (selectionChange)="checkTestName($event)">
-        <mat-option
+        <z-option
           *ngFor="let nonRadiology of nonRadiologyMaster"
-          [value]="nonRadiology"
+          [zValue]="nonRadiology"
           [disabled]="canDisable(nonRadiology)">
           {{ nonRadiology.procedureName }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div class="col-xs-12 col-sm-6">
-    <mat-form-field [style.width]="'100%'">
-      <mat-label>{{
+        </z-option>
+      </z-select>
+    </z-form-field>
+
+    <!-- Radiology Tests -->
+    <z-form-field>
+      <z-label>{{
         current_language_set?.labTechnicianData?.radiologyimaging
-      }}</mat-label>
-      <mat-select
-        class="input-full-width"
+      }}</z-label>
+      <z-select
         multiple
-        name="radiologyTest"
-        formControlName="radiologyTest">
-        <mat-option
+        formControlName="radiologyTest"
+        placeholder="Select Radiology/Imaging">
+        <z-option
           *ngFor="let radiology of radiologyMaster"
-          [value]="radiology"
+          [zValue]="radiology"
           [disabled]="canDisable(radiology)">
           {{ radiology.procedureName }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div class="col-xs-12 m-t-10">
-    <mat-form-field [style.width]="'100%'">
-      <mat-label>{{
+        </z-option>
+      </z-select>
+    </z-form-field>
+
+    <!-- External Investigations -->
+    <z-form-field class="md:col-span-2">
+      <z-label>{{
         current_language_set?.Investigationdetails?.externalinvestigations
-      }}</mat-label>
+      }}</z-label>
       <textarea
-        matInput
-        allowText="textAreaValidator"
-        defaultNull
-        name="externalInvestigation"
+        z-input
+        rows="4"
         formControlName="externalInvestigations"
-        maxlength="300">
+        maxlength="300"
+        placeholder="Enter details for any external investigations performed...">
       </textarea>
-    </mat-form-field>
+      <p class="text-xs text-gray-400 mt-2 flex justify-end">
+        {{
+          generalDoctorInvestigationForm.get('externalInvestigations')?.value
+            ?.length || 0
+        }}/300 characters
+      </p>
+    </z-form-field>
   </div>
 </div>

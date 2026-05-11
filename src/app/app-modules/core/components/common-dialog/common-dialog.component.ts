@@ -27,14 +27,40 @@ import {
   EventEmitter,
   DoCheck,
 } from '@angular/core';
+import { ZardDialogImports } from '@/components/ui/dialog/dialog.imports';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import {
+  LucideAngularModule,
+  AlertCircle,
+  CheckCircle,
+  Info,
+  HelpCircle,
+} from 'lucide-angular';
+import { NgIf, NgClass, NgFor, TitleCasePipe } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
+import { StringValidatorDirective } from '../../directives/stringValidator.directive';
 
 @Component({
   selector: 'app-common-dialog',
   templateUrl: './common-dialog.component.html',
   styleUrls: ['./common-dialog.component.css'],
+  imports: [
+    NgIf,
+    NgClass,
+    ZardDialogImports,
+    ZardFormImports,
+    ZardRadioImports,
+    ReactiveFormsModule,
+    StringValidatorDirective,
+    FormsModule,
+    NgFor,
+    TitleCasePipe,
+    LucideAngularModule,
+  ],
 })
 export class CommonDialogComponent implements OnInit, DoCheck {
   @Output() cancelEvent = new EventEmitter();

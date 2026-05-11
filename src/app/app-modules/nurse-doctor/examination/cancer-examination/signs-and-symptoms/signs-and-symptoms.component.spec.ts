@@ -30,7 +30,6 @@ import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MaterialModule } from '../../../../core/material.module';
 
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 import { BeneficiaryDetailsServiceStub } from '../../../../core/mocks/beneficiary-details-service-stub';
@@ -45,10 +44,14 @@ describe('SignsAndSymptomsComponent', () => {
   let debugElement: any;
   let fb: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
-      declarations: [SignsAndSymptomsComponent],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        SignsAndSymptomsComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {

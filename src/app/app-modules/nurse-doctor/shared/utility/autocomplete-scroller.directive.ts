@@ -31,9 +31,7 @@ import {
 import { MatAutocomplete } from '@angular/material/autocomplete';
 import { Subscription } from 'rxjs';
 
-@Directive({
-  selector: '[appAutocompleteScroller]',
-})
+@Directive({ selector: '[appAutocompleteScroller]' })
 export class AutocompleteScrollerDirective implements AfterViewInit, OnDestroy {
   @Input() threshold = 0.6; // 60% down
   @Output() nearEnd = new EventEmitter<void>();

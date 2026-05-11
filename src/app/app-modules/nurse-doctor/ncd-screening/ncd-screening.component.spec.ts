@@ -20,7 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NcdScreeningComponent } from './ncd-screening.component';
 
@@ -28,9 +28,9 @@ describe('NcdScreeningComponent', () => {
   let component: NcdScreeningComponent;
   let fixture: ComponentFixture<NcdScreeningComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [NcdScreeningComponent],
+      imports: [NcdScreeningComponent],
     }).compileComponents();
   }));
 

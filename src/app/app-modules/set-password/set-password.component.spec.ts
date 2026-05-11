@@ -20,7 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SetPasswordComponent } from './set-password.component';
 
@@ -28,9 +28,9 @@ describe('SetPasswordComponent', () => {
   let component: SetPasswordComponent;
   let fixture: ComponentFixture<SetPasswordComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [SetPasswordComponent],
+      imports: [SetPasswordComponent],
     }).compileComponents();
   }));
 

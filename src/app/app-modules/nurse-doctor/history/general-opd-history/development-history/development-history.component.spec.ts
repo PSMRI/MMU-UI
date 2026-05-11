@@ -35,7 +35,6 @@ import {
   FormArray,
 } from '@angular/forms';
 import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
-import { MaterialModule } from '../../../../core/material.module';
 
 import { GeneralUtils } from '../../../shared/utility';
 
@@ -61,11 +60,15 @@ describe('DevelopmentHistoryComponent', () => {
   let debugElement: DebugElement;
   let fb: FormBuilder;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        DevelopmentHistoryComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
-      declarations: [DevelopmentHistoryComponent],
       providers: [
         ConfirmationService,
         { provide: MasterdataService, useClass: MasterdataServiceStub },

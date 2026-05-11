@@ -1,31 +1,76 @@
-<div class="row m-t-10">
-  <div class="col-xs-12">
-    <h5>{{ currentLanguageSet?.common?.annotatedimagereport }}</h5>
+<div class="space-y-6">
+  <div class="flex items-center gap-3 border-b border-gray-100 pb-4">
+    <ng-icon name="lucideImage" class="text-rose-500 text-lg"></ng-icon>
+    <h5 class="text-xs font-black text-gray-800 uppercase tracking-widest">
+      {{ currentLanguageSet?.common?.annotatedimagereport }}
+    </h5>
   </div>
-  <div class="col-xs-12">
-    <table
-      class="table table-bordered"
-      aria-describedby="annotatedimagereportTbl">
-      <tr>
-        <td rowspan="6">
-          <canvas width="250" height="250" #canvas></canvas>
-        </td>
-        <th id="description">
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+    <!-- Canvas Card -->
+    <div class="relative group">
+      <div
+        class="absolute -inset-1 bg-gradient-to-r from-rose-100 to-indigo-100 rounded-[2.5rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+      <div
+        class="relative bg-white p-4 rounded-[2rem] border border-gray-100 shadow-sm flex justify-center overflow-hidden">
+        <canvas
+          width="250"
+          height="250"
+          #canvas
+          class="rounded-xl shadow-inner bg-gray-50"></canvas>
+      </div>
+      <p
+        class="mt-4 text-[10px] text-center text-gray-400 font-bold uppercase tracking-widest">
+        Annotated Visualization
+      </p>
+    </div>
+
+    <!-- Observations Table Card -->
+    <z-card
+      variant="outline"
+      class="overflow-hidden border-gray-100 bg-gray-50/30">
+      <div class="bg-gray-100/50 p-4 border-b border-gray-100">
+        <h6
+          class="text-[10px] font-black text-gray-500 uppercase tracking-widest text-center">
           {{
             currentLanguageSet?.nurseData?.chiefComplaintsDetails?.description
           }}
-        </th>
-      </tr>
-      <ng-container *ngIf="!this.annotatedMarker?.markers">
-        <tr *ngFor="let row of blankRows">
-          <td>&nbsp;</td>
-        </tr>
-      </ng-container>
-      <ng-container *ngIf="this.annotatedMarker?.markers">
-        <tr *ngFor="let mark of this.annotatedMarker?.markers">
-          <td>{{ mark?.description }}</td>
-        </tr>
-      </ng-container>
-    </table>
+        </h6>
+      </div>
+      <div class="p-0">
+        <table class="w-full text-left border-collapse">
+          <tbody class="divide-y divide-gray-100">
+            <!-- No Markers Fallback -->
+            <ng-container *ngIf="!this.annotatedMarker?.markers">
+              <tr *ngFor="let row of blankRows" class="bg-white/50">
+                <td class="px-6 py-4">&nbsp;</td>
+              </tr>
+            </ng-container>
+
+            <!-- Render Markers -->
+            <ng-container *ngIf="this.annotatedMarker?.markers">
+              <tr
+                *ngFor="
+                  let mark of this.annotatedMarker?.markers;
+                  let i = index
+                "
+                class="hover:bg-white transition-colors">
+                <td class="px-6 py-4 flex items-center gap-3">
+                  <span
+                    class="flex items-center justify-center w-6 h-6 rounded-full bg-rose-600 text-white text-[10px] font-black"
+                    >{{ i + 1 }}</span
+                  >
+                  <span
+                    class="text-sm font-medium text-gray-700 leading-tight"
+                    >{{ mark?.description }}</span
+                  >
+                </td>
+              </tr>
+              <!-- Fill up remaining rows for consistent height if needed, or just let it be -->
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </z-card>
   </div>
 </div>

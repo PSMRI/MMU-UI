@@ -20,7 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ImageToCanvasComponent } from './image-to-canvas.component';
 
@@ -28,9 +28,9 @@ describe('ImageToCanvasComponent', () => {
   let component: ImageToCanvasComponent;
   let fixture: ComponentFixture<ImageToCanvasComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ImageToCanvasComponent],
+      imports: [ImageToCanvasComponent],
     }).compileComponents();
   }));
 

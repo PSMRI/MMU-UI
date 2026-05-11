@@ -21,18 +21,45 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormArray,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 import { MasterdataService, DoctorService } from '../../../shared/services';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { ZardCheckboxImports } from '@/components/ui/checkbox/checkbox.imports';
+import { ZardCardImports } from '@/components/ui/card/card.imports';
+import {
+  LucideAngularModule,
+  ShieldCheck,
+  Calendar,
+  Info,
+} from 'lucide-angular';
 
 @Component({
   selector: 'app-general-immunization-history',
+  standalone: true,
   templateUrl: './immunization-history.component.html',
   styleUrls: ['./immunization-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardCheckboxImports,
+    ZardCardImports,
+    NgIf,
+    NgFor,
+    NgClass,
+    LucideAngularModule,
+  ],
+  providers: [
+    LucideAngularModule.pick({ ShieldCheck, Calendar, Info }).providers,
+  ],
 })
 export class ImmunizationHistoryComponent
   implements OnInit, DoCheck, OnDestroy

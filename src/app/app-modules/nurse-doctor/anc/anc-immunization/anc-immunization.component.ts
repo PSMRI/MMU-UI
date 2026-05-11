@@ -28,7 +28,7 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { SetLanguageComponent } from '../../../core/components/set-language.component';
@@ -41,8 +41,15 @@ import {
 import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+  MatMomentDateModule,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { NgIf, NgFor } from '@angular/common';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { ZardDatePickerImports } from '@/components/ui/date-picker/date-picker.imports';
 
 @Component({
   selector: 'app-nurse-anc-immunization',
@@ -72,6 +79,16 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
         },
       },
     },
+  ],
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    NgFor,
+    ZardFormImports,
+    ZardSelectImports,
+    ZardRadioImports,
+    ZardLabelImports,
+    ZardDatePickerImports,
   ],
 })
 export class AncImmunizationComponent

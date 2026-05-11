@@ -1,306 +1,493 @@
-<div class="container">
-  <div class="row m-t-10">
-    <div class="col-xs-12 text-right">
-      <p>
-        <strong> {{ currentLanguageSet?.common?.date }}: </strong> {{ date }}
-      </p>
+<div class="max-w-7xl mx-auto p-8 space-y-12 animate-in fade-in duration-1000">
+  <!-- Header Section -->
+  <div
+    class="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-gray-100">
+    <div class="flex items-center gap-6">
+      <img
+        id="logo"
+        src="assets/images/Swasthya.png"
+        alt="Piramal"
+        class="h-16 object-contain" />
+      <div class="h-12 w-px bg-gray-100 hidden md:block"></div>
+      <div>
+        <h1 class="text-2xl font-black text-gray-900 tracking-tight uppercase">
+          Cancer Screening Record
+        </h1>
+        <p class="text-xs text-gray-500 font-bold uppercase tracking-widest">
+          {{ currentLanguageSet?.common?.date }}: {{ date }}
+        </p>
+      </div>
     </div>
-    <div class="col-xs-12 text-center">
-      <img id="logo" src="assets/images/Swasthya.png" alt="Piramal" />
+
+    <div class="flex items-center gap-4">
+      <div class="text-right">
+        <p
+          class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">
+          {{ currentLanguageSet?.bendetails?.visitCategory }}
+        </p>
+        <p class="text-lg font-black text-rose-600">
+          {{ beneficiaryDetails?.VisitCategory }}
+        </p>
+      </div>
+      <div
+        *ngIf="caseSheetData?.serviceID === 2"
+        class="pl-4 border-l border-gray-100 text-right">
+        <p
+          class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">
+          {{ currentLanguageSet?.casesheet?.servicePoint }}
+        </p>
+        <p class="text-sm font-bold text-gray-700">{{ servicePointName }}</p>
+      </div>
     </div>
   </div>
 
-  <div class="row m-t-20">
-    <div class="col-xs-6 text-left">
-      <p>
-        <strong> {{ currentLanguageSet?.bendetails?.visitCategory }}: </strong>
-        {{ beneficiaryDetails?.VisitCategory }}
-      </p>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <!-- Beneficiary Details Card -->
+    <z-card variant="outline" class="overflow-hidden border-gray-100 shadow-sm">
+      <div
+        class="bg-gray-50/50 p-4 border-b border-gray-100 flex items-center gap-2">
+        <ng-icon name="lucideUser" class="text-rose-500"></ng-icon>
+        <h3 class="font-black text-gray-800 uppercase tracking-widest text-xs">
+          {{ currentLanguageSet?.casesheet?.beneficiaryDetails }}
+        </h3>
+      </div>
+      <div class="p-8">
+        <div class="grid grid-cols-2 gap-y-6 gap-x-12">
+          <div class="space-y-1">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.bendetails?.beneficiaryID }}</label
+            >
+            <p class="text-sm font-black text-gray-900">
+              {{ beneficiaryDetails?.beneficiaryID }}
+            </p>
+          </div>
+          <div class="space-y-1">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.casesheet?.visitCode }}</label
+            >
+            <p class="text-sm font-black text-gray-900">
+              {{ beneficiaryDetails?.visitCode }}
+            </p>
+          </div>
+          <div class="col-span-2 space-y-1 border-t border-gray-50 pt-4">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.casesheet?.name }}</label
+            >
+            <p class="text-xl font-black text-rose-900 tracking-tight">
+              {{ beneficiaryDetails?.beneficiaryName }}
+            </p>
+          </div>
+          <div class="space-y-1 border-t border-gray-50 pt-4">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.bendetails?.gender }}</label
+            >
+            <p class="text-sm font-bold text-gray-700">
+              {{ beneficiaryDetails?.genderName }}
+            </p>
+          </div>
+          <div class="space-y-1 border-t border-gray-50 pt-4 text-right">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.bendetails?.visitDate }}</label
+            >
+            <p class="text-sm font-bold text-gray-700">
+              {{ beneficiaryDetails?.serviceDate }}
+            </p>
+          </div>
+          <div class="space-y-1 border-t border-gray-50 pt-4">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.bendetails?.age }}</label
+            >
+            <p class="text-sm font-bold text-gray-700">
+              {{ beneficiaryDetails?.age }}
+            </p>
+          </div>
+          <div class="space-y-1 border-t border-gray-50 pt-4 text-right">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.casesheet?.consultDate }}</label
+            >
+            <p class="text-sm font-bold text-gray-700">
+              {{ beneficiaryDetails?.consultationDate }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </z-card>
+
+    <!-- Current Vitals Card -->
+    <z-card variant="outline" class="overflow-hidden border-gray-100 shadow-sm">
+      <div
+        class="bg-gray-50/50 p-4 border-b border-gray-100 flex items-center gap-2">
+        <ng-icon name="lucideActivity" class="text-rose-500"></ng-icon>
+        <h3 class="font-black text-gray-800 uppercase tracking-widest text-xs">
+          {{ currentLanguageSet?.casesheet?.currentVitals }}
+        </h3>
+      </div>
+      <div class="p-8">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-8">
+          <div
+            class="p-4 bg-rose-50/50 rounded-3xl text-center ring-1 ring-rose-100/50">
+            <p
+              class="text-[10px] font-black text-rose-400 uppercase tracking-widest mb-1">
+              Height
+            </p>
+            <p class="text-xl font-black text-rose-900">
+              {{ currentVitals?.height_cm || '--' }}
+              <span class="text-[10px] font-normal tracking-normal lowercase"
+                >cm</span
+              >
+            </p>
+          </div>
+          <div
+            class="p-4 bg-orange-50/50 rounded-3xl text-center ring-1 ring-orange-100/50">
+            <p
+              class="text-[10px] font-black text-orange-400 uppercase tracking-widest mb-1">
+              Weight
+            </p>
+            <p class="text-xl font-black text-orange-900">
+              {{ currentVitals?.weight_Kg || '--' }}
+              <span class="text-[10px] font-normal tracking-normal lowercase"
+                >kg</span
+              >
+            </p>
+          </div>
+          <div
+            class="p-4 bg-blue-50/50 rounded-3xl text-center ring-1 ring-blue-100/50">
+            <p
+              class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">
+              BMI
+            </p>
+            <p class="text-xl font-black text-blue-900">
+              {{ currentVitals?.bmi || '--' }}
+            </p>
+          </div>
+          <div
+            class="p-4 bg-emerald-50/50 rounded-3xl text-center ring-1 ring-emerald-100/50">
+            <p
+              class="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-1">
+              SPO2
+            </p>
+            <p class="text-xl font-black text-emerald-900">
+              {{ currentVitals?.sPO2 || '--' }}%
+            </p>
+          </div>
+
+          <!-- BP Section -->
+          <div
+            class="col-span-2 p-6 bg-slate-50 rounded-[2.5rem] flex items-center justify-between shadow-inner">
+            <div class="space-y-1">
+              <p
+                class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                Blood Pressure
+              </p>
+              <p class="text-2xl font-black text-slate-900">
+                {{ currentVitals?.systolicBP_1stReading || '--' }}/{{
+                  currentVitals?.diastolicBP_1stReading || '--'
+                }}
+                <span class="text-[10px] font-normal text-slate-400 uppercase"
+                  >mmHg</span
+                >
+              </p>
+            </div>
+            <div class="h-12 w-px bg-slate-200"></div>
+            <div class="text-right space-y-1">
+              <p
+                class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                Hemoglobin
+              </p>
+              <p class="text-2xl font-black text-slate-900">
+                {{ currentVitals?.hemoglobin || '--'
+                }}<span
+                  class="text-[10px] font-normal text-slate-400 tracking-normal lowercase">
+                  g/dL</span
+                >
+              </p>
+            </div>
+          </div>
+
+          <!-- Glucose Section -->
+          <div
+            class="col-span-2 p-6 bg-slate-50 rounded-[2.5rem] grid grid-cols-2 gap-4 shadow-inner">
+            <div class="text-center space-y-1">
+              <p
+                class="text-[8px] font-black text-slate-400 uppercase tracking-widest">
+                RBS
+              </p>
+              <p class="text-lg font-black text-rose-600">
+                {{ currentVitals?.rbsTestResult || '--' }}
+              </p>
+            </div>
+            <div class="text-center border-l border-slate-200 space-y-1">
+              <p
+                class="text-[8px] font-black text-slate-400 uppercase tracking-widest">
+                HbA1c
+              </p>
+              <p class="text-lg font-black text-indigo-600">
+                {{ currentVitals?.hbA1C || '--' }}%
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </z-card>
+  </div>
+
+  <!-- Covid Vaccination Status (Conditional) -->
+  <z-card
+    *ngIf="isCovidVaccinationStatusVisible"
+    variant="outline"
+    class="overflow-hidden border-emerald-100/50 bg-emerald-50/10">
+    <div
+      class="bg-emerald-50/50 p-4 border-b border-emerald-100 flex items-center gap-3">
+      <ng-icon name="lucideSyringe" class="text-emerald-600"></ng-icon>
+      <h3 class="font-black text-emerald-900 uppercase tracking-widest text-xs">
+        {{ currentLanguageSet?.covidVaccinationStatus }}
+      </h3>
     </div>
-    <div class="col-xs-6 text-right" *ngIf="caseSheetData?.serviceID === 2">
-      <p>
-        <strong> {{ currentLanguageSet?.casesheet?.servicePoint }}: </strong>
-        {{ servicePointName }}
-      </p>
+    <div class="p-8 grid grid-cols-1 md:grid-cols-3 gap-12">
+      <div class="space-y-1">
+        <p
+          class="text-[10px] font-black text-emerald-400 uppercase tracking-widest">
+          Applicability
+        </p>
+        <p class="text-sm font-black text-emerald-900">
+          {{
+            beneficiaryDetails?.ageVal >= 12
+              ? 'Applicable'
+              : ageValidationForVaccination
+          }}
+        </p>
+      </div>
+      <div class="space-y-1 border-l border-emerald-100/50 pl-12">
+        <p
+          class="text-[10px] font-black text-emerald-400 uppercase tracking-widest">
+          Vaccine Status / Type
+        </p>
+        <p class="text-sm font-black text-emerald-900">
+          {{ covidVaccineDetails?.vaccineStatus || '--' }} /
+          {{
+            covidVaccineDetails?.covidVaccineTypeID?.[0]?.vaccineType || '--'
+          }}
+        </p>
+      </div>
+      <div class="space-y-1 border-l border-emerald-100/50 pl-12">
+        <p
+          class="text-[10px] font-black text-emerald-400 uppercase tracking-widest">
+          Dose Taken
+        </p>
+        <p class="text-sm font-black text-emerald-600 uppercase">
+          {{ covidVaccineDetails?.doseTypeID?.[0]?.doseType || '--' }}
+        </p>
+      </div>
+    </div>
+  </z-card>
+
+  <!-- Clinical Observations -->
+  <div class="space-y-12">
+    <div class="flex items-center gap-4">
+      <div class="h-px flex-1 bg-gray-100"></div>
+      <h2 class="text-lg font-black text-gray-900 tracking-tighter uppercase">
+        Clinical Observations
+      </h2>
+      <div class="h-px flex-1 bg-gray-100"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Oral Examination -->
+      <z-card
+        variant="outline"
+        class="overflow-hidden border-gray-100 shadow-sm border-l-4 border-l-rose-400">
+        <div
+          class="bg-gray-50/50 p-4 border-b border-gray-100 flex items-center gap-3">
+          <ng-icon name="lucideStethoscope" class="text-rose-500"></ng-icon>
+          <h3
+            class="font-black text-gray-800 uppercase tracking-widest text-xs">
+            {{ currentLanguageSet?.casesheet?.oralExamination }}
+          </h3>
+        </div>
+        <div class="p-8">
+          <p
+            class="text-sm text-gray-700 leading-relaxed font-medium bg-gray-50/50 p-6 rounded-[2rem] min-h-[120px] border border-gray-50">
+            {{
+              caseSheetData?.nurseData?.oralExamination?.observation ||
+                'No abnormalities detected.'
+            }}
+          </p>
+        </div>
+      </z-card>
+
+      <!-- Abdominal Examination -->
+      <z-card
+        variant="outline"
+        class="overflow-hidden border-gray-100 shadow-sm border-l-4 border-l-indigo-400">
+        <div
+          class="bg-gray-50/50 p-4 border-b border-gray-100 flex items-center gap-3">
+          <ng-icon name="lucideClipboard" class="text-indigo-500"></ng-icon>
+          <h3
+            class="font-black text-gray-800 uppercase tracking-widest text-xs">
+            {{
+              currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+                ?.abdominal?.abdominalExamination
+            }}
+          </h3>
+        </div>
+        <div class="p-8">
+          <p
+            class="text-sm text-gray-700 leading-relaxed font-medium bg-gray-50/50 p-6 rounded-[2rem] min-h-[120px] border border-gray-50">
+            {{
+              caseSheetData?.nurseData?.abdominalExamination?.observation ||
+                'No abnormalities detected.'
+            }}
+          </p>
+        </div>
+      </z-card>
+
+      <!-- Gynecological Examination (Conditional) -->
+      <z-card
+        *ngIf="beneficiaryDetails?.genderName === 'Female'"
+        variant="outline"
+        class="overflow-hidden border-gray-100 shadow-sm border-l-4 border-l-purple-400">
+        <div
+          class="bg-gray-50/50 p-4 border-b border-gray-100 flex items-center gap-3">
+          <ng-icon name="lucideUser" class="text-purple-500"></ng-icon>
+          <h3
+            class="font-black text-gray-800 uppercase tracking-widest text-xs">
+            {{
+              currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+                ?.gynecological?.gynecologicalExamination
+            }}
+          </h3>
+        </div>
+        <div class="p-8">
+          <p
+            class="text-sm text-gray-700 leading-relaxed font-medium bg-gray-50/50 p-6 rounded-[2rem] min-h-[120px] border border-gray-50">
+            {{
+              caseSheetData?.nurseData?.gynecologicalExamination?.observation ||
+                'No abnormalities detected.'
+            }}
+          </p>
+        </div>
+      </z-card>
+
+      <!-- Brief History -->
+      <z-card
+        variant="outline"
+        class="overflow-hidden border-gray-100 shadow-sm border-l-4 border-l-amber-400">
+        <div
+          class="bg-gray-50/50 p-4 border-b border-gray-100 flex items-center gap-3">
+          <ng-icon name="lucideHistory" class="text-amber-500"></ng-icon>
+          <h3
+            class="font-black text-gray-800 uppercase tracking-widest text-xs">
+            {{
+              currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+                ?.symptoms?.briefHistory
+            }}
+          </h3>
+        </div>
+        <div class="p-8">
+          <p
+            class="text-sm text-gray-700 leading-relaxed font-medium bg-gray-50/50 p-6 rounded-[2rem] min-h-[120px] border border-gray-50">
+            {{
+              caseSheetData?.nurseData?.signsAndSymptoms?.observation ||
+                'No specific history recorded.'
+            }}
+          </p>
+        </div>
+      </z-card>
     </div>
   </div>
 
-  <!-- Beneficiary Details -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <fieldset>
-        <legend>{{ currentLanguageSet?.casesheet?.beneficiaryDetails }}</legend>
-        <table
-          class="table table-no-border casesheet-table"
-          aria-describedby="benDetails">
-          <tr>
-            <th id="beneficiaryID">
-              {{ currentLanguageSet?.bendetails?.beneficiaryID }}:
-            </th>
-            <td>
-              {{ beneficiaryDetails && beneficiaryDetails.beneficiaryID }}
-            </td>
-            <th id="visitCode">
-              {{ currentLanguageSet?.casesheet?.visitCode }}:
-            </th>
-            <td>{{ beneficiaryDetails && beneficiaryDetails.visitCode }}</td>
-          </tr>
-          <tr>
-            <th id="name">{{ currentLanguageSet?.casesheet?.name }}:</th>
-            <td colspan="3">
-              {{ beneficiaryDetails && beneficiaryDetails.beneficiaryName }}
-            </td>
-          </tr>
-          <tr>
-            <th id="gender">{{ currentLanguageSet?.bendetails?.gender }}:</th>
-            <td>{{ beneficiaryDetails && beneficiaryDetails.genderName }}</td>
-            <th id="visitDate">
-              {{ currentLanguageSet?.bendetails?.visitDate }}:
-            </th>
-            <td>{{ beneficiaryDetails && beneficiaryDetails.serviceDate }}</td>
-          </tr>
-          <tr>
-            <th id="age">{{ currentLanguageSet?.bendetails?.age }}:</th>
-            <td>{{ beneficiaryDetails && beneficiaryDetails.age }}</td>
-            <th id="consultDate">
-              {{ currentLanguageSet?.casesheet?.consultDate }}:
-            </th>
-            <td>
-              {{ beneficiaryDetails && beneficiaryDetails.consultationDate }}
-            </td>
-          </tr>
-        </table>
-      </fieldset>
+  <!-- Diagnosis Section -->
+  <div class="space-y-12">
+    <div class="flex items-center gap-4">
+      <div class="h-px flex-1 bg-gray-100"></div>
+      <h2 class="text-lg font-black text-gray-900 tracking-tighter uppercase">
+        Diagnosis & Remarks
+      </h2>
+      <div class="h-px flex-1 bg-gray-100"></div>
     </div>
-  </div>
-  <!-- End of Beneficiary Details -->
 
-  <!-- Current Vitals -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <fieldset>
-        <legend>{{ currentLanguageSet?.casesheet?.currentVitals }}</legend>
-        <table
-          class="table table-no-border casesheet-table"
-          aria-describedby="printPagePreviewTbl">
-          <tr>
-            <th id="height">{{ currentLanguageSet?.casesheet?.height }}:</th>
-            <td>{{ currentVitals && currentVitals.height_cm }}</td>
-            <th id="weight">{{ currentLanguageSet?.casesheet?.weight }}:</th>
-            <td>{{ currentVitals && currentVitals.weight_Kg }}</td>
-          </tr>
-          <tr>
-            <th id="weightCircumference">
-              {{ currentLanguageSet?.casesheet?.weightCircumference }}:
-            </th>
-            <td>{{ currentVitals && currentVitals.waistCircumference_cm }}</td>
-            <th id="empty">&nbsp;</th>
-            <td>&nbsp;</td>
-          </tr>
-          <tr>
-            <th id="spo2">{{ currentLanguageSet?.sPOTwoWithUnit }}:</th>
-            <td>{{ currentVitals && currentVitals.sPO2 }}</td>
-            <th id="rbs">{{ currentLanguageSet?.rbs }}:</th>
-            <td>{{ currentVitals && currentVitals.rbsTestResult }}</td>
-          </tr>
-          <tr>
-            <td colspan="4">
-              <h5>{{ currentLanguageSet?.rbsRemarks }}:</h5>
-              <div class="textarea">
-                {{ currentVitals && currentVitals.rbsTestRemarks }}
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th id="bpSystolic">
-              {{ currentLanguageSet?.casesheet?.bpSystolic }}:
-            </th>
-            <td>{{ currentVitals && currentVitals.systolicBP_1stReading }}</td>
-            <th id="bpDiastolic">
-              {{ currentLanguageSet?.casesheet?.bpDiastolic }}:
-            </th>
-            <td>{{ currentVitals && currentVitals.diastolicBP_1stReading }}</td>
-          </tr>
-          <tr>
-            <th id="sugarFasting">
-              {{ currentLanguageSet?.casesheet?.sugarFasting }}:
-            </th>
-            <td>{{ currentVitals && currentVitals.bloodGlucose_Fasting }}</td>
-            <th id="sugarRandom">
-              {{ currentLanguageSet?.casesheet?.sugarRandom }}:
-            </th>
-            <td>{{ currentVitals && currentVitals.bloodGlucose_Random }}</td>
-          </tr>
-          <tr>
-            <th id="sugarPp">{{ currentLanguageSet?.casesheet?.sugarPp }}:</th>
-            <td>
-              {{ currentVitals && currentVitals.bloodGlucose_2HrPostPrandial }}
-            </td>
-            <td colspan="2"></td>
-          </tr>
-          <tr>
-            <th id="hba1c">{{ currentLanguageSet?.casesheet?.hba1c }}:</th>
-            <td>{{ currentVitals && currentVitals.hbA1C }}</td>
-            <th id="hb">{{ currentLanguageSet?.casesheet?.hb }}:</th>
-            <td>{{ currentVitals && currentVitals.hemoglobin }}</td>
-          </tr>
-        </table>
-      </fieldset>
-    </div>
-  </div>
-  <!-- End of Current Vitals -->
-
-  <!-- Covid Vaccination Details -->
-  <div class="row m-t-10" *ngIf="isCovidVaccinationStatusVisible">
-    <div class="col-xs-12">
-      <fieldset>
-        <legend>{{ currentLanguageSet?.covidVaccinationStatus }}:</legend>
-        <table
-          class="table table-no-border casesheet-table"
-          aria-describedby="CovidVaccinationDetails">
-          <tr>
-            <th id="ageGroup">{{ currentLanguageSet?.ageGroup }}:</th>
-            <td>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <z-card
+        variant="outline"
+        class="lg:col-span-1 border-gray-100 shadow-sm bg-slate-50/30">
+        <div class="p-8 space-y-6">
+          <div class="space-y-2">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.casesheet?.provisionalDiagnosis }}</label
+            >
+            <p class="text-lg font-black text-slate-900 leading-tight">
               {{
-                beneficiaryDetails && beneficiaryDetails.ageVal >= 12
-                  ? '>=12 years'
-                  : ageValidationForVaccination
+                caseSheetDiagnosisData?.provisionalDiagnosisPrimaryDoctor ||
+                  '--'
               }}
-            </td>
-            <th id="isApplicableForVaccine">
-              {{ currentLanguageSet?.isApplicableForVaccine }}:
-            </th>
-            <td>
-              {{
-                beneficiaryDetails && beneficiaryDetails.ageVal >= 12
-                  ? 'Applicable for Vaccination'
-                  : 'Not Applicable for Vaccination'
-              }}
-            </td>
-          </tr>
-          <tr>
-            <th id="vaccineStatus">{{ currentLanguageSet?.vaccineStatus }}:</th>
-            <td>
-              {{ covidVaccineDetails && covidVaccineDetails.vaccineStatus }}
-            </td>
-            <th id="vaccineTypes">{{ currentLanguageSet?.vaccineTypes }}:</th>
-            <td>
-              {{
-                covidVaccineDetails &&
-                  covidVaccineDetails.covidVaccineTypeID &&
-                  covidVaccineDetails.covidVaccineTypeID[0].vaccineType
-              }}
-            </td>
-          </tr>
-          <tr>
-            <th id="doseTaken">{{ currentLanguageSet?.doseTaken }}:</th>
-            <td>
-              {{
-                covidVaccineDetails &&
-                  covidVaccineDetails.doseTypeID &&
-                  covidVaccineDetails.doseTypeID[0].doseType
-              }}
-            </td>
-          </tr>
-        </table>
-      </fieldset>
+            </p>
+          </div>
+          <div class="space-y-2 border-t border-slate-100 pt-6">
+            <label
+              class="text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.casesheet?.remarksPrimaryDoctor }}</label
+            >
+            <p
+              class="text-sm font-medium text-slate-600 leading-relaxed italic">
+              "{{ caseSheetDiagnosisData?.remarks || 'No remarks provided.' }}"
+            </p>
+          </div>
+        </div>
+      </z-card>
+
+      <z-card
+        variant="outline"
+        class="lg:col-span-2 border-rose-100 shadow-xl shadow-rose-50/50 bg-rose-50/10">
+        <div
+          class="bg-rose-50/50 p-4 border-b border-rose-100 flex items-center gap-3">
+          <ng-icon name="lucideActivity" class="text-rose-600"></ng-icon>
+          <h3
+            class="font-black text-rose-900 uppercase tracking-widest text-xs">
+            {{ currentLanguageSet?.casesheet?.oncologistObservation }}
+          </h3>
+        </div>
+        <div class="p-8">
+          <p
+            class="text-xl font-black text-rose-950 leading-relaxed bg-white/80 p-10 rounded-[3rem] border border-rose-100 shadow-inner min-h-[180px]">
+            {{
+              caseSheetDiagnosisData?.provisionalDiagnosisOncologist ||
+                'Awaiting specialist observation...'
+            }}
+          </p>
+        </div>
+      </z-card>
     </div>
   </div>
-  <!-- End of Covid Vaccination details -->
 
-  <h4>
-    {{
-      currentLanguageSet?.ExaminationData?.cancerScreeningExamination?.oral
-        ?.observations
-    }}
-  </h4>
-
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h5>
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.symptoms?.briefHistory
-        }}:
-      </h5>
-      <div class="textarea">
-        {{ caseSheetData?.nurseData?.signsAndSymptoms?.observation }}
+  <!-- Signature Section -->
+  <div
+    class="mt-20 pt-12 border-t border-gray-100 flex justify-end px-8"
+    *ngIf="enableDoctorSign">
+    <div class="text-center space-y-4">
+      <div
+        class="h-20 w-64 flex items-center justify-center border-b border-rose-200 bg-rose-50/20 rounded-t-[2rem]">
+        <p
+          class="text-[10px] font-black text-rose-300 uppercase tracking-[0.3em]">
+          Doctor's Signature
+        </p>
+      </div>
+      <div class="space-y-1">
+        <p class="text-xs font-black text-rose-900 uppercase tracking-widest">
+          {{ currentLanguageSet?.casesheet?.docSign }}
+        </p>
+        <p
+          class="text-[8px] font-bold text-rose-400 uppercase tracking-tighter">
+          Verified Clinical Lead
+        </p>
       </div>
     </div>
   </div>
-
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h5>{{ currentLanguageSet?.casesheet?.oralExamination }}:</h5>
-      <div class="textarea">
-        {{ caseSheetData?.nurseData?.oralExamination?.observation }}
-      </div>
-    </div>
-  </div>
-
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h5>
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.abdominal?.abdominalExamination
-        }}:
-      </h5>
-      <div class="textarea">
-        {{ caseSheetData?.nurseData?.abdominalExamination?.observation }}
-      </div>
-    </div>
-  </div>
-
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h5>
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.gynecological?.gynecologicalExamination
-        }}:
-      </h5>
-      <div class="textarea">
-        {{ caseSheetData?.nurseData?.gynecologicalExamination?.observation }}
-      </div>
-    </div>
-  </div>
-
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.provisionalDiagnosis }}</h4>
-      <div class="textarea">
-        {{ caseSheetDiagnosisData?.provisionalDiagnosisPrimaryDoctor }}
-      </div>
-    </div>
-  </div>
-
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.remarksPrimaryDoctor }}</h4>
-      <div class="textarea">
-        {{ caseSheetDiagnosisData?.remarks }}
-      </div>
-    </div>
-  </div>
-
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.oncologistObservation }}</h4>
-      <div class="textarea">
-        {{ caseSheetDiagnosisData?.provisionalDiagnosisOncologist }}
-      </div>
-    </div>
-  </div>
-
-  <!-- Doctor's Sign -->
-  <div class="row m-t-50" *ngIf="enableDoctorSign === true">
-    <div class="col-xs-6">&nbsp;</div>
-    <div class="col-xs-6">
-      <p>
-        <strong> {{ currentLanguageSet?.casesheet?.docSign }}: </strong>
-      </p>
-    </div>
-  </div>
-  <!-- End of Doctor's Sign -->
 </div>

@@ -33,6 +33,7 @@ import {
   FormGroup,
   FormBuilder,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
@@ -48,11 +49,45 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { NgFor, NgClass, NgIf } from '@angular/common';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardButtonImports } from '@/components/ui/button/button.imports';
+import { ZardSelectImports } from '@/components/ui/select/select.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory, lucidePlus, lucideX } from '@ng-icons/lucide';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-general-past-history',
+  standalone: true,
   templateUrl: './past-history.component.html',
   styleUrls: ['./past-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardFormImports,
+    ZardTooltipImports,
+    ZardButtonImports,
+    ZardLabelImports,
+    ZardSelectImports,
+    NgFor,
+    NgClass,
+    NgIf,
+    NgIcon,
+    LucideAngularModule,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+  ],
+  providers: [
+    provideIcons({
+      lucideHistory,
+      lucidePlus,
+      lucideX,
+    }),
+  ],
 })
 export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

@@ -29,16 +29,29 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CameraService } from '../../../../core/services/camera.service';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardRadioImports } from '@/components/ui/radio/radio.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { NgIf } from '@angular/common';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-doctor-breast-examination',
   templateUrl: './breast-examination.component.html',
   styleUrls: ['./breast-examination.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    ZardFormImports,
+    ZardRadioImports,
+    ZardLabelImports,
+    StringValidatorDirective,
+  ],
 })
 export class BreastExaminationComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

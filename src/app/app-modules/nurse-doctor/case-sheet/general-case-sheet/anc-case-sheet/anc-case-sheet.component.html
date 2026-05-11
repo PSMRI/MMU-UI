@@ -1,163 +1,291 @@
-<div class="container">
-  <div class="row col-xs-12">
-    <h2 class="text-center">{{ currentLanguageSet?.ancData?.anc }}</h2>
-    <hr />
+<div class="p-6 space-y-8 animate-in fade-in duration-700">
+  <!-- Header -->
+  <div class="text-center space-y-2">
+    <h2 class="text-2xl font-black text-gray-900 tracking-tight">
+      {{ currentLanguageSet?.ancData?.anc }}
+    </h2>
+    <div class="h-1 w-20 bg-blue-600 mx-auto rounded-full"></div>
   </div>
 
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.ancData?.ancDetails }}</h4>
-    </div>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- ANC Details Card -->
+    <z-card variant="outline" class="overflow-hidden border-gray-100 shadow-sm">
+      <div
+        class="bg-gray-50/50 p-4 border-b border-gray-100 flex items-center gap-2">
+        <ng-icon name="lucideBaby" class="text-blue-500"></ng-icon>
+        <h3 class="font-bold text-gray-800 uppercase tracking-wider text-xs">
+          {{ currentLanguageSet?.ancData?.ancDetails }}
+        </h3>
+      </div>
+      <div class="p-6">
+        <div class="grid grid-cols-2 gap-y-6 gap-x-4">
+          <div class="space-y-1">
+            <label
+              class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+              >{{
+                currentLanguageSet?.ancData?.ancDataDetails?.primiGravida
+              }}</label
+            >
+            <p class="text-sm font-black text-gray-900">
+              {{
+                aNCDetailsAndFormula?.primiGravida === undefined
+                  ? '--'
+                  : aNCDetailsAndFormula?.primiGravida
+                    ? 'Yes'
+                    : 'No'
+              }}
+            </p>
+          </div>
+          <div class="space-y-1">
+            <label
+              class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+              >{{
+                currentLanguageSet?.ancData?.ancDataDetails?.lastMenstrualPeriod
+              }}</label
+            >
+            <p class="text-sm font-black text-blue-600">
+              {{ aNCDetailsAndFormula?.lastMenstrualPeriod_LMP || '--' }}
+            </p>
+          </div>
+          <div class="space-y-1 border-t border-gray-50 pt-4">
+            <label
+              class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.casesheet?.gestationalAge }}</label
+            >
+            <p class="text-sm font-bold text-gray-700">
+              {{
+                aNCDetailsAndFormula?.gestationalAgeOrPeriodofAmenorrhea_POA ||
+                  '--'
+              }}
+            </p>
+          </div>
+          <div class="space-y-1 border-t border-gray-50 pt-4">
+            <label
+              class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.casesheet?.expectedDate }}</label
+            >
+            <p class="text-sm font-black text-rose-600">
+              {{ aNCDetailsAndFormula?.expectedDateofDelivery || '--' }}
+            </p>
+          </div>
+          <div class="space-y-1 border-t border-gray-50 pt-4">
+            <label
+              class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.casesheet?.periodOfPregnancy }}</label
+            >
+            <p class="text-sm font-bold text-gray-700">
+              {{ aNCDetailsAndFormula?.duration || '--' }}
+            </p>
+          </div>
+          <div class="space-y-1 border-t border-gray-50 pt-4">
+            <label
+              class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.casesheet?.trimesterNo }}</label
+            >
+            <span
+              class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-black bg-blue-100 text-blue-800"
+              >{{ aNCDetailsAndFormula?.trimesterNumber || '--' }}</span
+            >
+          </div>
+        </div>
+      </div>
+    </z-card>
 
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="ancDetails">
-        <tr>
-          <th id="primiGravida">
-            {{ currentLanguageSet?.ancData?.ancDataDetails?.primiGravida }}:
-          </th>
-          <td>
-            {{
-              aNCDetailsAndFormula?.primiGravida === undefined
-                ? null
-                : aNCDetailsAndFormula?.primiGravida
-                  ? 'Yes'
-                  : 'No'
-            }}
-          </td>
-          <th id="lastMenstrualPeriod">
-            {{
-              currentLanguageSet?.ancData?.ancDataDetails?.lastMenstrualPeriod
-            }}:
-          </th>
-          <td>{{ aNCDetailsAndFormula?.lastMenstrualPeriod_LMP }}</td>
-        </tr>
-
-        <tr>
-          <th id="gestationalAge">
-            {{ currentLanguageSet?.casesheet?.gestationalAge }}:
-          </th>
-          <td>
-            {{ aNCDetailsAndFormula?.gestationalAgeOrPeriodofAmenorrhea_POA }}
-          </td>
-          <th id="expectedDate">
-            {{ currentLanguageSet?.casesheet?.expectedDate }}:
-          </th>
-          <td>{{ aNCDetailsAndFormula?.expectedDateofDelivery }}</td>
-        </tr>
-
-        <tr>
-          <th id="periodOfPregnancy">
-            {{ currentLanguageSet?.casesheet?.periodOfPregnancy }}:
-          </th>
-          <td>{{ aNCDetailsAndFormula?.duration }}</td>
-          <th id="trimesterNo">
-            {{ currentLanguageSet?.casesheet?.trimesterNo }}:
-          </th>
-          <td>{{ aNCDetailsAndFormula?.trimesterNumber }}</td>
-        </tr>
-      </table>
-    </div>
+    <!-- Obstetric Formula Card -->
+    <z-card variant="outline" class="overflow-hidden border-gray-100 shadow-sm">
+      <div
+        class="bg-gray-50/50 p-4 border-b border-gray-100 flex items-center gap-2">
+        <ng-icon name="lucideClipboard" class="text-emerald-500"></ng-icon>
+        <h3 class="font-bold text-gray-800 uppercase tracking-wider text-xs">
+          {{ currentLanguageSet?.casesheet?.obstetricFormula }}
+        </h3>
+      </div>
+      <div class="p-6">
+        <div class="grid grid-cols-2 gap-y-6 gap-x-4">
+          <div class="space-y-1">
+            <label
+              class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.casesheet?.gravida }}</label
+            >
+            <p class="text-xl font-black text-gray-900">
+              {{ aNCDetailsAndFormula?.gravida_G || '0' }}
+            </p>
+          </div>
+          <div class="space-y-1">
+            <label
+              class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.casesheet?.termDeliveries }}</label
+            >
+            <p class="text-xl font-black text-gray-900">
+              {{ aNCDetailsAndFormula?.termDeliveries_T || '0' }}
+            </p>
+          </div>
+          <div class="space-y-1 border-t border-gray-50 pt-4">
+            <label
+              class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.casesheet?.preTermDeliveries }}</label
+            >
+            <p class="text-xl font-black text-gray-900">
+              {{ aNCDetailsAndFormula?.pretermDeliveries_P || '0' }}
+            </p>
+          </div>
+          <div class="space-y-1 border-t border-gray-50 pt-4">
+            <label
+              class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.casesheet?.abortion }}</label
+            >
+            <p class="text-xl font-black text-gray-900">
+              {{ aNCDetailsAndFormula?.abortions_A || '0' }}
+            </p>
+          </div>
+          <div class="space-y-1 border-t border-gray-50 pt-4">
+            <label
+              class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.stillBirth }}</label
+            >
+            <p class="text-xl font-black text-gray-900">
+              {{ aNCDetailsAndFormula?.stillBirth || '0' }}
+            </p>
+          </div>
+          <div class="space-y-1 border-t border-gray-50 pt-4">
+            <label
+              class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+              >{{ currentLanguageSet?.casesheet?.liveBirths }}</label
+            >
+            <p class="text-xl font-black text-emerald-600">
+              {{ aNCDetailsAndFormula?.livebirths_L || '0' }}
+            </p>
+          </div>
+          <div
+            class="col-span-2 p-4 bg-blue-50 rounded-2xl flex items-center justify-between border border-blue-100">
+            <label
+              class="text-[10px] font-black text-blue-900 uppercase tracking-widest"
+              >{{
+                currentLanguageSet?.ancData?.obstetricDeatils?.bloodGroupType
+              }}</label
+            >
+            <span class="text-lg font-black text-blue-600">{{
+              aNCDetailsAndFormula?.bloodGroup || '--'
+            }}</span>
+          </div>
+        </div>
+      </div>
+    </z-card>
   </div>
 
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.obstetricFormula }}</h4>
+  <!-- Immunization Card -->
+  <z-card variant="outline" class="overflow-hidden border-gray-100 shadow-sm">
+    <div
+      class="bg-gray-50/50 p-4 border-b border-gray-100 flex items-center gap-2">
+      <ng-icon name="lucideSyringe" class="text-rose-500"></ng-icon>
+      <h3 class="font-bold text-gray-800 uppercase tracking-wider text-xs">
+        {{ currentLanguageSet?.ancData?.ancImmune?.ancImmunization }}
+      </h3>
     </div>
-
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="gravida">
-        <tr>
-          <th id="gravida">{{ currentLanguageSet?.casesheet?.gravida }}:</th>
-          <td>{{ aNCDetailsAndFormula?.gravida_G }}</td>
-          <th id="termDeliveries">
-            {{ currentLanguageSet?.casesheet?.termDeliveries }}:
-          </th>
-          <td>{{ aNCDetailsAndFormula?.termDeliveries_T }}</td>
-        </tr>
-
-        <tr>
-          <th id="preTermDeliveries">
-            {{ currentLanguageSet?.casesheet?.preTermDeliveries }}:
-          </th>
-          <td>{{ aNCDetailsAndFormula?.pretermDeliveries_P }}</td>
-          <th id="abortion">{{ currentLanguageSet?.casesheet?.abortion }}:</th>
-          <td>{{ aNCDetailsAndFormula?.abortions_A }}</td>
-        </tr>
-        <tr>
-          <th id="stillbirth">{{ currentLanguageSet?.stillBirth }}:</th>
-          <td>{{ aNCDetailsAndFormula?.stillBirth }}</td>
-        </tr>
-        <tr>
-          <th id="liveBirths">
-            {{ currentLanguageSet?.casesheet?.liveBirths }}:
-          </th>
-          <td>{{ aNCDetailsAndFormula?.livebirths_L }}</td>
-          <th id="bloodGroupType">
-            {{ currentLanguageSet?.ancData?.obstetricDeatils?.bloodGroupType }}:
-          </th>
-          <td>{{ aNCDetailsAndFormula?.bloodGroup }}</td>
-        </tr>
-      </table>
-    </div>
-  </div>
-
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.ancData?.ancImmune?.ancImmunization }}</h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered table-striped"
-        aria-describedby="facility">
-        <thead>
-          <tr>
-            <th id="serialNo">{{ currentLanguageSet?.casesheet?.serialNo }}</th>
-            <th id="ttName">{{ currentLanguageSet?.casesheet?.ttName }}</th>
-            <th id="ttStatus">{{ currentLanguageSet?.casesheet?.ttStatus }}</th>
-            <th id="dateOfRecieved">
-              {{ currentLanguageSet?.casesheet?.dateOfRecieved }}
-            </th>
-            <th id="facilityName">
-              {{ currentLanguageSet?.ancData?.ancImmune?.facilityName }}
-            </th>
-          </tr>
-        </thead>
-        <ng-container>
-          <tbody>
-            <tr>
-              <th id="1">1</th>
-              <th id="tt1Status">
+    <div class="p-6">
+      <div
+        class="bg-white rounded-3xl border border-gray-100 overflow-hidden overflow-x-auto shadow-sm">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50 border-b border-gray-100">
+              <th
+                class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest w-16 text-center">
+                S.No
+              </th>
+              <th
+                class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                Dose Type
+              </th>
+              <th
+                class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest w-32 text-center">
+                Status
+              </th>
+              <th
+                class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest w-40">
+                Date Received
+              </th>
+              <th
+                class="px-6 py-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                Facility Name
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-50">
+            <!-- TT1 -->
+            <tr class="hover:bg-rose-50/20 transition-colors">
+              <td class="px-6 py-4 text-center font-bold text-gray-400">1</td>
+              <td class="px-6 py-4 font-black text-gray-900">
                 {{ currentLanguageSet?.ancData?.ancImmune?.tt1Status }}
-              </th>
-              <td>{{ aNCImmunization?.tT_1Status }}</td>
-              <td>{{ aNCImmunization?.dateReceivedForTT_1 }}</td>
-              <td>{{ aNCImmunization?.facilityNameOfTT_1 }}</td>
+              </td>
+              <td class="px-6 py-4 text-center">
+                <span
+                  class="px-3 py-1 rounded-full text-[10px] font-black uppercase"
+                  [class]="
+                    aNCImmunization?.tT_1Status === 'Given'
+                      ? 'bg-emerald-100 text-emerald-800'
+                      : 'bg-gray-100 text-gray-600'
+                  ">
+                  {{ aNCImmunization?.tT_1Status || '--' }}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-sm font-bold text-gray-700">
+                {{ aNCImmunization?.dateReceivedForTT_1 || '--' }}
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-500 italic">
+                {{ aNCImmunization?.facilityNameOfTT_1 || '--' }}
+              </td>
             </tr>
-            <tr>
-              <th id="2">2</th>
-              <th id="tt2Status">
+            <!-- TT2 -->
+            <tr class="hover:bg-rose-50/20 transition-colors">
+              <td class="px-6 py-4 text-center font-bold text-gray-400">2</td>
+              <td class="px-6 py-4 font-black text-gray-900">
                 {{ currentLanguageSet?.ancData?.ancImmune?.tt2Status }}
-              </th>
-              <td>{{ aNCImmunization?.tT_2Status }}</td>
-              <td>{{ aNCImmunization?.dateReceivedForTT_2 }}</td>
-              <td>{{ aNCImmunization?.facilityNameOfTT_2 }}</td>
+              </td>
+              <td class="px-6 py-4 text-center">
+                <span
+                  class="px-3 py-1 rounded-full text-[10px] font-black uppercase"
+                  [class]="
+                    aNCImmunization?.tT_2Status === 'Given'
+                      ? 'bg-emerald-100 text-emerald-800'
+                      : 'bg-gray-100 text-gray-600'
+                  ">
+                  {{ aNCImmunization?.tT_2Status || '--' }}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-sm font-bold text-gray-700">
+                {{ aNCImmunization?.dateReceivedForTT_2 || '--' }}
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-500 italic">
+                {{ aNCImmunization?.facilityNameOfTT_2 || '--' }}
+              </td>
             </tr>
-            <tr>
-              <th id="3">3</th>
-              <th id="ttBoster">
+            <!-- Booster -->
+            <tr class="hover:bg-rose-50/20 transition-colors">
+              <td class="px-6 py-4 text-center font-bold text-gray-400">3</td>
+              <td class="px-6 py-4 font-black text-gray-900">
                 {{ currentLanguageSet?.casesheet?.ttBoster }}
-              </th>
-              <td>{{ aNCImmunization?.tT_3Status }}</td>
-              <td>{{ aNCImmunization?.dateReceivedForTT_3 }}</td>
-              <td>{{ aNCImmunization?.facilityNameOfTT_3 }}</td>
+              </td>
+              <td class="px-6 py-4 text-center">
+                <span
+                  class="px-3 py-1 rounded-full text-[10px] font-black uppercase"
+                  [class]="
+                    aNCImmunization?.tT_3Status === 'Given'
+                      ? 'bg-emerald-100 text-emerald-800'
+                      : 'bg-gray-100 text-gray-600'
+                  ">
+                  {{ aNCImmunization?.tT_3Status || '--' }}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-sm font-bold text-gray-700">
+                {{ aNCImmunization?.dateReceivedForTT_3 || '--' }}
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-500 italic">
+                {{ aNCImmunization?.facilityNameOfTT_3 || '--' }}
+              </td>
             </tr>
           </tbody>
-        </ng-container>
-      </table>
+        </table>
+      </div>
     </div>
-  </div>
+  </z-card>
 </div>

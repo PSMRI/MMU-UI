@@ -1,299 +1,259 @@
-<div class="row m-t-10" [formGroup]="gynecologicalExaminationForm">
-  <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
-    <div class="col-12 row">
-      <div class="col-6 box cell_postion">
-        {{
+<div class="space-y-8" [formGroup]="gynecologicalExaminationForm">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Left Column: Findings -->
+    <div class="lg:col-span-7 space-y-6">
+      <!-- Appearance under Acetic Acid -->
+      <z-form-field>
+        <z-label>{{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.gynecological?.appearanceunderAceticAcid
-        }}
-      </div>
-      <div class="col-6 box">
-        <mat-form-field>
-          <mat-label>{{ currentLanguageSet?.common?.select }}</mat-label>
-          <mat-select
-            name="appearanceOfCervix"
-            formControlName="appearanceOfCervix">
-            <mat-option value="Negative"> Negative </mat-option>
-            <mat-option value="Positive"> Positive </mat-option>
-            <mat-option value="Suspect"> Suspect </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="col-12 row">
-      <div class="col-6 box cell_postion">
-        {{
+        }}</z-label>
+        <z-select
+          name="appearanceOfCervix"
+          formControlName="appearanceOfCervix"
+          zPlaceholder="{{ currentLanguageSet?.common?.select }}">
+          <z-option zValue="Negative">Negative</z-option>
+          <z-option zValue="Positive">Positive</z-option>
+          <z-option zValue="Suspect">Suspect</z-option>
+        </z-select>
+      </z-form-field>
+
+      <!-- Type of Lesion -->
+      <z-form-field>
+        <z-label>{{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.gynecological?.typeoflesion
-        }}
-      </div>
-      <div class="col-6 box">
-        <mat-form-field>
-          <mat-label>{{ currentLanguageSet?.common?.select }}</mat-label>
-          <mat-select
-            multiple
-            name="typeOfLesionList"
-            formControlName="typeOfLesionList">
-            <mat-option value="Proliferative"> Proliferative </mat-option>
-            <mat-option value="Ulcerative"> Ulcerative </mat-option>
-            <mat-option value="Infiltrative"> Infiltrative </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="col-12 row">
-      <div class="col-6 box cell_postion">
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.gynecological?.vulvalInvolvement
-        }}
-      </div>
-      <div class="col-6 box">
-        <mat-radio-group
-          name="vulvalInvolvement"
-          formControlName="vulvalInvolvement">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.involved }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.notInvolved }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
-    </div>
+        }}</z-label>
+        <z-select
+          multiple
+          name="typeOfLesionList"
+          formControlName="typeOfLesionList"
+          zPlaceholder="{{ currentLanguageSet?.common?.select }}">
+          <z-option zValue="Proliferative">Proliferative</z-option>
+          <z-option zValue="Ulcerative">Ulcerative</z-option>
+          <z-option zValue="Infiltrative">Infiltrative</z-option>
+        </z-select>
+      </z-form-field>
 
-    <div class="col-12 row">
-      <div class="col-6 box cell_postion">
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.gynecological?.vaginalInvolvement
-        }}
-      </div>
-      <div class="col-6 box">
-        <mat-radio-group
-          name="vaginalInvolvement"
-          formControlName="vaginalInvolvement">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.involved }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.notInvolved }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
-    </div>
-
-    <div class="col-12 row">
-      <div class="col-6 box cell_postion">
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.gynecological?.uterus
-        }}
-      </div>
-      <div class="col-6 box">
-        <mat-radio-group name="uterus_Normal" formControlName="uterus_Normal">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.normal }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.enlarged }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
-    </div>
-
-    <div class="col-12 row">
-      <div class="col-6 box cell_postion">
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.gynecological?.sufferedfromanyRTI
-        }}
-      </div>
-      <div class="col-6 box">
-        <mat-radio-group
-          name="sufferedFromRTIOrSTI"
-          formControlName="sufferedFromRTIOrSTI"
-          (change)="checkWithRTIOrSTI()">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
-    </div>
-    <div class="col-12 row">
-      <div
-        class="col-6 box cell_postion"
-        *ngIf="sufferedFromRTIOrSTI && sufferedFromRTIOrSTI.value">
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.gynecological?.rTISuffered
-        }}
-      </div>
-      <div
-        class="col-6 box"
-        *ngIf="sufferedFromRTIOrSTI && sufferedFromRTIOrSTI.value">
-        <mat-form-field>
-          <mat-label>{{
+      <!-- Anatomical Involvement Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Vulval Involvement -->
+        <div class="space-y-2">
+          <label class="text-sm font-medium text-zinc-700">{{
             currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-              ?.gynecological?.specify
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            allowText="textAreaValidator"
-            matInput
-            defaultNull
-            maxlength="100"
-            name="rTIOrSTIDetail"
-            id="rTIOrSTIDetail"
-            formControlName="rTIOrSTIDetail" />
-        </mat-form-field>
+              ?.gynecological?.vulvalInvolvement
+          }}</label>
+          <z-radio-group formControlName="vulvalInvolvement" class="flex gap-4">
+            <z-radio [zValue]="true">{{
+              currentLanguageSet?.common?.yes
+            }}</z-radio>
+            <z-radio [zValue]="false">{{
+              currentLanguageSet?.common?.no
+            }}</z-radio>
+          </z-radio-group>
+        </div>
+
+        <!-- Vaginal Involvement -->
+        <div class="space-y-2">
+          <label class="text-sm font-medium text-zinc-700">{{
+            currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+              ?.gynecological?.vaginalInvolvement
+          }}</label>
+          <z-radio-group
+            formControlName="vaginalInvolvement"
+            class="flex gap-4">
+            <z-radio [zValue]="true">{{
+              currentLanguageSet?.common?.yes
+            }}</z-radio>
+            <z-radio [zValue]="false">{{
+              currentLanguageSet?.common?.no
+            }}</z-radio>
+          </z-radio-group>
+        </div>
+
+        <!-- Uterus Status -->
+        <div class="space-y-2">
+          <label class="text-sm font-medium text-zinc-700">{{
+            currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+              ?.gynecological?.uterus
+          }}</label>
+          <z-radio-group formControlName="uterus_Normal" class="flex gap-4">
+            <z-radio [zValue]="true">{{
+              currentLanguageSet?.common?.normal
+            }}</z-radio>
+            <z-radio [zValue]="false">{{
+              currentLanguageSet?.common?.enlarged
+            }}</z-radio>
+          </z-radio-group>
+        </div>
+
+        <!-- Post-coital Bleeding -->
+        <div class="space-y-2">
+          <label class="text-sm font-medium text-zinc-700">{{
+            currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+              ?.gynecological?.experiencedPostcoitalbleeding
+          }}</label>
+          <z-radio-group
+            formControlName="experiencedPostCoitalBleeding"
+            class="flex gap-4">
+            <z-radio [zValue]="true">{{
+              currentLanguageSet?.common?.yes
+            }}</z-radio>
+            <z-radio [zValue]="false">{{
+              currentLanguageSet?.common?.no
+            }}</z-radio>
+          </z-radio-group>
+        </div>
+      </div>
+
+      <!-- RTI/STI Status -->
+      <div class="space-y-4 pt-4 border-t border-zinc-100">
+        <div class="space-y-2">
+          <label class="text-sm font-semibold text-zinc-900">
+            {{
+              currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+                ?.gynecological?.sufferedfromanyRTI
+            }}
+          </label>
+          <z-radio-group
+            formControlName="sufferedFromRTIOrSTI"
+            (change)="checkWithRTIOrSTI()"
+            class="flex gap-4">
+            <z-radio [zValue]="true">{{
+              currentLanguageSet?.common?.yes
+            }}</z-radio>
+            <z-radio [zValue]="false">{{
+              currentLanguageSet?.common?.no
+            }}</z-radio>
+          </z-radio-group>
+        </div>
+
+        <!-- RTI Details & File Upload (Conditional) -->
+        <div
+          *ngIf="sufferedFromRTIOrSTI?.value"
+          class="space-y-6 p-4 bg-zinc-50 rounded-2xl border border-zinc-200 animate-in fade-in slide-in-from-top-4 duration-500">
+          <z-form-field>
+            <z-label>{{
+              currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+                ?.gynecological?.rTISuffered
+            }}</z-label>
+            <z-input
+              formControlName="rTIOrSTIDetail"
+              id="rTIOrSTIDetail"
+              maxlength="100"></z-input>
+          </z-form-field>
+
+          <!-- File Upload Section -->
+          <div class="space-y-4">
+            <div class="flex flex-wrap items-center gap-3">
+              <input
+                autocomplete="off"
+                type="file"
+                id="files"
+                multiple
+                class="hidden"
+                (change)="uploadFile($event)" />
+
+              <button
+                z-button
+                variant="outline"
+                (click)="triggerLog($event)"
+                class="flex items-center gap-2">
+                <span class="text-lg">📁</span>
+                {{
+                  currentLanguageSet?.nurseData?.visitDetailsForm?.selectFile
+                }}
+              </button>
+
+              <button
+                z-button
+                variant="secondary"
+                [disabled]="!viewFiles.length"
+                (click)="viewNurseSelectedFiles()">
+                {{ currentLanguageSet?.nurseData?.visitDetailsForm?.viewFiles }}
+              </button>
+
+              <button
+                z-button
+                variant="primary"
+                (click)="checkForDuplicateUpload()"
+                [disabled]="!fileData.length"
+                class="ml-auto">
+                {{ currentLanguageSet?.common?.upload || 'Upload' }}
+              </button>
+            </div>
+
+            <!-- Modern File List -->
+            <div *ngIf="fileData?.length" class="flex flex-wrap gap-2">
+              <div
+                *ngFor="let file of fileData; let i = index"
+                class="flex items-center gap-2 px-3 py-1.5 bg-white border border-zinc-200 rounded-full text-sm font-medium text-zinc-700 shadow-sm transition-all hover:border-rose-300">
+                <span class="max-w-[150px] truncate">{{ file.fileName }}</span>
+                <button
+                  (click)="removeFile(i)"
+                  class="text-zinc-400 hover:text-rose-500 transition-colors">
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="col-xs-6 col-sm-offset-6"></div>
-   <div
-  class="col-xs-6 col-lg-12 col-md-12 col-sm-6"
-  *ngIf="sufferedFromRTIOrSTI && sufferedFromRTIOrSTI.value"
->
-  <!-- Row for file input and upload button -->
-  <div class="row">
-    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6 box cell_postion">
+    <!-- Right Column: Image Annotation -->
+    <div
+      class="lg:col-span-5 flex flex-col items-center justify-center p-8 bg-zinc-50 rounded-2xl border border-zinc-200 self-start">
+      <div class="text-center mb-6">
+        <p class="text-sm font-medium text-zinc-600">
+          {{ currentLanguageSet?.common?.kindlyMark }}
+        </p>
+      </div>
       <button
-        class="mat_blue"
-        (click)="triggerLog($event)">
-        {{ currentLanguageSet?.nurseData?.visitDetailsForm?.selectFile }}
-      </button>
-      <span class="span-style">
-      <input
-        autocomplete="off"
-        type="file"
-        id="files"
-        multiple
-        (change)="uploadFile($event)"
-      />
-      </span>
-
-       <button
-        style="margin-left: 30px"
-        class="mat_blue"
-        [disabled]="!viewFiles?.length"
-        (click)="viewNurseSelectedFiles()"
-        >
-        {{ currentLanguageSet?.nurseData?.visitDetailsForm?.viewFiles }}
-      </button>
-    </div>
-
-    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6 box">
-      <button
-        mat-flat-button
-        color="primary"
-        class="mat_blue pull-right"
-        (click)="checkForDuplicateUpload()"
-        [disabled]="!fileData?.length"
-      >
-        {{ currentLanguageSet?.common?.upload || 'Upload' }}
-      </button>
-    </div>
-  </div>
-  <!-- Chips shown below the row -->
-  <div class="row m-t-10" *ngIf="fileData?.length">
-    <div class="col-12">
-      <mat-chip-listbox>
-        <mat-chip *ngFor="let file of fileData; let i = index">
-          {{ file.fileName }}
-          <mat-icon matChipRemove (click)="removeFile(i)">cancel</mat-icon>
-        </mat-chip>
-      </mat-chip-listbox>
-    </div>
-  </div>
-</div>
-
-    
-
-    <div class="clearfix"></div>
-    <div class="col-12 row">
-      <div class="col-6 box">
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.gynecological?.experiencedPostcoitalbleeding
-        }}
-      </div>
-      <div class="col-6 box">
-        <mat-radio-group
-          name="experiencedPostCoitalBleeding"
-          formControlName="experiencedPostCoitalBleeding">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-    <div class="image-placeholder">
-      <small>{{ currentLanguageSet?.common?.kindlyMark }}</small>
-      <br />
-      <!-- eslint-disable-next-line  @angular-eslint/template/click-events-have-key-events -->
-      <a (click)="annotateImage()" tabindex="{0}" id="annotateGynecologicalImg"
-        ><img
+        type="button"
+        (click)="annotateImage()"
+        class="group relative block rounded-2xl overflow-hidden ring-offset-4 focus:outline-none focus:ring-2 focus:ring-zinc-400 transition-all active:scale-95 shadow-xl bg-white border border-zinc-200"
+        id="annotateGynecologicalImg">
+        <img
           #gynaecologicalImage
           src="assets/images/gynecologicalExamination.png"
           alt="Gynaecological Examination"
-      /></a>
+          class="w-full h-auto max-w-sm group-hover:opacity-90 transition-opacity" />
+        <div
+          class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-zinc-900/10">
+          <div
+            class="bg-white/95 px-4 py-2 rounded-full text-sm font-semibold text-zinc-900 shadow-md border border-zinc-200 flex items-center gap-2">
+            <span
+              class="w-2 h-2 rounded-full bg-violet-500 animate-pulse"></span>
+            Click to Annotate
+          </div>
+        </div>
+      </button>
     </div>
   </div>
 
-  <div class="col-xs-12">
-    <mat-form-field class="form-textarea">
-      <mat-label>{{
-        currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-          ?.abdominal?.observation
-      }}</mat-label>
-      <textarea
-        matInput
-        allowText="textAreaValidator"
-        defaultNull
-        matTextareaAutosize
-        maxlength="500"
-        name="observation"
-        formControlName="observation"></textarea>
-    </mat-form-field>
-  </div>
+  <!-- Observation -->
+  <z-form-field class="w-full pt-4 border-t border-zinc-100">
+    <z-label>{{
+      currentLanguageSet?.ExaminationData?.cancerScreeningExamination?.abdominal
+        ?.observation
+    }}</z-label>
+    <z-textarea
+      allowText="textAreaValidator"
+      formControlName="observation"
+      maxlength="500"
+      placeholder="Enter detailed gynecological examination observations..."
+      class="min-h-[120px]">
+    </z-textarea>
+  </z-form-field>
 </div>

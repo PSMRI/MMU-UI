@@ -93,7 +93,7 @@ ul li div {
   margin-right: 5px;
 }
 
-.color-rows>td {
+.color-rows > td {
   padding: 0;
   border: 0;
 }
@@ -117,7 +117,7 @@ ul li div {
 }
 
 .visitStatus.p-f-c::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -127,7 +127,7 @@ ul li div {
 }
 
 .visitStatus.p-f-t-c::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -137,7 +137,7 @@ ul li div {
 }
 
 .visitStatus.t-c-c::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -147,7 +147,7 @@ ul li div {
 }
 
 .visitStatus.p-f-t::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -157,7 +157,7 @@ ul li div {
 }
 
 .visitStatus.t-d::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -167,7 +167,7 @@ ul li div {
 }
 
 .visitStatus.c-d::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -177,28 +177,27 @@ ul li div {
 }
 
 .visitStatus.dark-green::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
   bottom: 1px;
   width: 4px;
-  background: #00cc00
+  background: #00cc00;
 }
 
 .totalCount,
 .description {
   padding-top: 15px;
 }
-.table>thead {
+.table > thead {
   border-bottom: 2px solid #ddd !important;
 }
-@media screen  and (min-width:360px) and (max-width:430px) {
-  .fit_to_content{
+@media screen and (min-width: 360px) and (max-width: 430px) {
+  .fit_to_content {
     width: fit-content !important;
-
   }
-.mat_blue{
-  margin-top: 2px;
-}
+  .mat_blue {
+    margin-top: 2px;
+  }
 }

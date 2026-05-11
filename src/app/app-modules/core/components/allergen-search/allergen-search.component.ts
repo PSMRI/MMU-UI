@@ -21,17 +21,62 @@
  */
 
 import { Component, Inject, OnInit, DoCheck, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogClose,
+  MatDialogContent,
+} from '@angular/material/dialog';
 import { MasterdataService } from 'src/app/app-modules/nurse-doctor/shared/services';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { NgIf } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
   selector: 'app-allergen-search',
   templateUrl: './allergen-search.component.html',
   styleUrls: ['./allergen-search.component.css'],
+  imports: [
+    MatIcon,
+    MatDialogClose,
+    MatTooltip,
+    NgIf,
+    MatProgressSpinner,
+    CdkScrollable,
+    MatDialogContent,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatRadioGroup,
+    MatRadioButton,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatPaginator,
+  ],
 })
 export class AllergenSearchComponent implements OnInit, DoCheck {
   searchTerm!: string;
@@ -42,7 +87,7 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
 
   selectedComponent: any = null;
   selectedComponentNo: any;
-  message: string = '';
+  message = '';
   selectedItem: any;
   displayedColumns: any = ['ConceptID', 'term', 'empty'];
 
@@ -84,7 +129,7 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
     };
     this.dialogRef.close(reqObj);
   }
-  showProgressBar: boolean = false;
+  showProgressBar = false;
   search(term: string, pageNo: any): void {
     if (term.length > 2) {
       this.showProgressBar = true;

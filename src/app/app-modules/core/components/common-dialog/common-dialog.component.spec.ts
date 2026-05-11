@@ -20,7 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CommonDialogComponent } from './common-dialog.component';
 
@@ -28,9 +28,9 @@ describe('CommonDialogComponent', () => {
   let component: CommonDialogComponent;
   let fixture: ComponentFixture<CommonDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [CommonDialogComponent],
+      imports: [CommonDialogComponent],
     }).compileComponents();
   }));
 

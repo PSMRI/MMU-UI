@@ -28,7 +28,7 @@ import {
   OnDestroy,
   DoCheck,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { DoctorService, NurseService } from '../../shared/services';
 
@@ -41,15 +41,69 @@ import { IotcomponentComponent } from 'src/app/app-modules/core/components/iotco
 import { ActivatedRoute } from '@angular/router';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { NgClass, NgIf } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideSearch,
+  lucideRefreshCcw,
+  lucideInbox,
+  lucideInfo,
+  lucideStethoscope,
+  lucideThermometer,
+  lucideActivity,
+  lucideDroplet,
+  lucideScale,
+} from '@ng-icons/lucide';
+
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { ZardInputDirective } from '@/components/ui/input/input.directive';
+import { ZardTooltipImports } from '@/components/ui/tooltip/tooltip.imports';
+import { ZardCheckboxComponent } from '@/components/ui/checkbox/checkbox.component';
+import { NullDefaultValueDirective } from '../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
+import { NumberValidatorDirective } from '../../../core/directives/numberValidator.directive';
+
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-nurse-cancer-patient-vitals',
   templateUrl: './cancer-patient-vitals.component.html',
   styleUrls: ['./cancer-patient-vitals.component.css'],
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    ZardAccordionImports,
+    ZardFormImports,
+    ZardInputDirective,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+    NumberValidatorDirective,
+    ZardTooltipImports,
+    NgIf,
+    NgClass,
+    ZardCheckboxComponent,
+    NgIcon,
+    MatExpansionModule,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideSearch,
+      lucideRefreshCcw,
+      lucideInbox,
+      lucideInfo,
+      lucideStethoscope,
+      lucideThermometer,
+      lucideActivity,
+      lucideDroplet,
+      lucideScale,
+    }),
+  ],
 })
 export class CancerPatientVitalsComponent
   implements OnInit, OnChanges, OnDestroy, DoCheck
 {
+  protected readonly Math = Math;
   @Input()
   patientVitalsForm!: FormGroup;
 

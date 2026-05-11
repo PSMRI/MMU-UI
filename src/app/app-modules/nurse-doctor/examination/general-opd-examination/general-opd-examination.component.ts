@@ -34,11 +34,27 @@ import { DoctorService } from '../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { ZardAccordionImports } from '@/components/ui/accordion/accordion.imports';
+import { ZardLabelImports } from '@/components/ui/label/label.imports';
+import { ZardFormImports } from '@/components/ui/form/form.imports';
+import { GeneralExaminationComponent } from './general-examination/general-examination.component';
+import { HeadToToeExaminationComponent } from './head-to-toe-examination/head-to-toe-examination.component';
+import { SystemicExaminationComponent } from './systemic-examination/systemic-examination.component';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-nurse-general-opd-examination',
   templateUrl: './general-opd-examination.component.html',
   styleUrls: ['./general-opd-examination.component.css'],
+  imports: [
+    ZardAccordionImports,
+    ZardLabelImports,
+    ZardFormImports,
+    GeneralExaminationComponent,
+    HeadToToeExaminationComponent,
+    SystemicExaminationComponent,
+    NgIf,
+  ],
 })
 export class GeneralOpdExaminationComponent
   implements OnInit, DoCheck, OnDestroy, OnChanges
