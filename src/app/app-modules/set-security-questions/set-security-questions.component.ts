@@ -77,11 +77,9 @@ export class SetSecurityQuestionsComponent implements OnInit {
 
     this.Q_array_one = response.data;
     this.Q_array_two = response.data;
-    console.log(this.questions);
   }
 
   handleError(response: any) {
-    console.log('error', this.questions);
   }
 
   switch() {
@@ -115,11 +113,6 @@ export class SetSecurityQuestionsComponent implements OnInit {
   selectedQuestions: any = [];
 
   updateQuestions(selectedques: any, position: any) {
-    console.log('position', position, 'Selected Question', selectedques);
-    console.log(
-      'before if else block, selected questions',
-      this.selectedQuestions
-    );
 
     if (this.selectedQuestions.indexOf(selectedques) === -1) {
       this.selectedQuestions[position] = selectedques;
@@ -132,7 +125,6 @@ export class SetSecurityQuestionsComponent implements OnInit {
       if (position === 2) {
         this.answer3 = '';
       }
-      console.log('if block, selected questions', this.selectedQuestions);
     } else {
       if (this.selectedQuestions.indexOf(selectedques) !== position) {
         this.confirmationService.alert(
@@ -198,9 +190,6 @@ export class SetSecurityQuestionsComponent implements OnInit {
           createdBy: this.uname,
         },
       ];
-
-      console.log('Request Array', this.dataArray);
-      console.log('selected questions', this.selectedQuestions);
 
       this.switch();
     } else {
