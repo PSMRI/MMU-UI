@@ -22,7 +22,10 @@
 
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from './material.module';
@@ -63,7 +66,11 @@ import { NumberValidatorDirective } from './directives/numberValidator.directive
 import { OpenPreviousVisitDetailsComponent } from './components/open-previous-visit-details/open-previous-visit-details.component';
 import { ShowCommitAndVersionDetailsComponent } from './components/show-commit-and-version-details/show-commit-and-version-details.component';
 import { IotBluetoothComponent } from './components/iot-bluetooth/iot-bluetooth.component';
-import { NgChartsModule } from 'ng2-charts';
+import {
+  BaseChartDirective,
+  provideCharts,
+  withDefaultRegisterables,
+} from 'ng2-charts';
 import { MyEmailDirective } from './directives/email/myEmail.directive';
 import { MyMobileNumberDirective } from './directives/MobileNumber/myMobileNumber.directive';
 import { MyNameDirective } from './directives/name/myName.directive';
@@ -71,17 +78,6 @@ import { MyPasswordDirective } from './directives/password/myPassword.directive'
 import { SharedModule } from './components/shared/shared.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MaterialModule,
-    HttpClientModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgChartsModule,
-    WebcamModule,
-    MatTableModule,
-  ],
   declarations: [
     CommonDialogComponent,
     CameraDialogComponent,
@@ -131,7 +127,21 @@ import { SharedModule } from './components/shared/shared.module';
     CalibrationComponent,
     OpenPreviousVisitDetailsComponent,
     WebcamModule,
-    NgChartsModule,
+    BaseChartDirective,
+  ],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BaseChartDirective,
+    WebcamModule,
+    MatTableModule,
+  ],
+  providers: [
+    provideHttpClient(withInterceptorsFromDi()),
+    provideCharts(withDefaultRegisterables()),
   ],
 })
 export class CoreModule {

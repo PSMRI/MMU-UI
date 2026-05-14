@@ -30,13 +30,14 @@ import {
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import * as moment from 'moment';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { get } from 'jquery';
 import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-doctor-diagnosis-case-sheet',
   templateUrl: './doctor-diagnosis-case-sheet.component.html',
   styleUrls: ['./doctor-diagnosis-case-sheet.component.css'],
+
+  standalone: false,
 })
 export class DoctorDiagnosisCaseSheetComponent
   implements OnInit, OnChanges, DoCheck

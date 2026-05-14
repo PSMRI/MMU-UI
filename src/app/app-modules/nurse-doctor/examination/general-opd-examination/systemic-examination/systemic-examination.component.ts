@@ -32,6 +32,8 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-nurse-systemic-examination',
   templateUrl: './systemic-examination.component.html',
   styleUrls: ['./systemic-examination.component.css'],
+
+  standalone: false,
 })
 export class SystemicExaminationComponent
   implements OnInit, OnChanges, DoCheck

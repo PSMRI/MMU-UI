@@ -75,6 +75,8 @@ declare global {
       },
     },
   ],
+
+  standalone: false,
 })
 export class ReportsComponent implements OnInit, DoCheck {
   reportForm!: FormGroup;

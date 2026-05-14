@@ -111,10 +111,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "MMU-UI:build:production"
+              "buildTarget": "MMU-UI:build:production"
             },
             "development": {
-              "browserTarget": "MMU-UI:build:development"
+              "buildTarget": "MMU-UI:build:development"
             }
           },
           "defaultConfiguration": "development",
@@ -125,7 +125,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "MMU-UI:build"
+            "buildTarget": "MMU-UI:build"
           }
         },
         "test": {

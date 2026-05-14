@@ -78,6 +78,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
       },
     },
   ],
+
+  standalone: false,
 })
 export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
   @Input()

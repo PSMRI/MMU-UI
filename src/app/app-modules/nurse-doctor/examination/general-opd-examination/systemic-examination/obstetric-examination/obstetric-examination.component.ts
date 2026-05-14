@@ -29,6 +29,8 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   selector: 'app-nurse-anc-obstetric-examination',
   templateUrl: './obstetric-examination.component.html',
   styleUrls: ['./obstetric-examination.component.css'],
+
+  standalone: false,
 })
 export class ObstetricExaminationComponent implements OnInit, DoCheck {
   @Input()

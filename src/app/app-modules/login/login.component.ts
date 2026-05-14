@@ -20,7 +20,13 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import {Component,OnInit,AfterViewInit,ViewChild,ElementRef} from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
@@ -40,6 +46,8 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-login-cmp',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
+
+  standalone: false,
 })
 export class LoginComponent implements OnInit, AfterViewInit {
   @ViewChild('captchaCmp') captchaCmp: CaptchaComponent | undefined;
@@ -93,6 +101,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   login() {
+    const userName = this.loginForm.controls.userName.value ?? '';
     const encryptPassword = this.encrypt(
       this.Key_IV,
       this.loginForm.controls.password.value
@@ -101,7 +110,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     if (this.loginForm.valid) {
       this.authService
         .login(
-          this.loginForm.controls.userName.value.trim(),
+          userName.trim(),
           encryptPassword,
           false,
           this.enableCaptcha ? this.captchaToken : undefined

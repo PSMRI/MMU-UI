@@ -34,6 +34,8 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-register-edit-location',
   templateUrl: './register-edit-location.component.html',
   styleUrls: ['./register-edit-location.component.css'],
+
+  standalone: false,
 })
 export class RegisterEditLocationComponent implements OnInit, DoCheck {
   statesList: any;

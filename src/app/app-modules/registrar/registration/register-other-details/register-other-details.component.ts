@@ -39,6 +39,8 @@ import { RegistrarService } from '../../shared/services/registrar.service';
   selector: 'app-register-other-details',
   templateUrl: './register-other-details.component.html',
   styleUrls: ['./register-other-details.component.css'],
+
+  standalone: false,
 })
 export class RegisterOtherDetailsComponent
   implements OnInit, DoCheck, OnDestroy

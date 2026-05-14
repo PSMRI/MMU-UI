@@ -89,6 +89,8 @@ interface Beneficary {
       },
     },
   ],
+
+  standalone: false,
 })
 export class SearchDialogComponent implements OnInit, DoCheck {
   // for ID Manpulation
