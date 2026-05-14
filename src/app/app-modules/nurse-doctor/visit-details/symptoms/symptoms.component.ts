@@ -44,6 +44,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-symptoms',
   templateUrl: './symptoms.component.html',
   styleUrls: ['./symptoms.component.css'],
+
+  standalone: false,
 })
 export class SymptomsComponent
   implements OnInit, DoCheck, OnChanges, OnDestroy

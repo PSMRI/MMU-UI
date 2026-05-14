@@ -68,7 +68,7 @@ import { SharedModule } from '../core/components/shared/shared.module';
     RegistrarRoutingModule,
     ReactiveFormsModule,
     SharedModule,
-    BsDatepickerModule.forRoot(),
+    BsDatepickerModule,
   ],
   providers: [RegistrarService],
   declarations: [

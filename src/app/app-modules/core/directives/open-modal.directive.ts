@@ -43,6 +43,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
 
 @Directive({
   selector: '[appOpenModal]',
+
+  standalone: false,
 })
 export class OpenModalDirective implements OnInit, DoCheck {
   @Input()

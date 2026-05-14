@@ -6,7 +6,8 @@ import { AppComponent } from './app.component';
 import {
   HTTP_INTERCEPTORS,
   HttpClient,
-  HttpClientModule,
+  provideHttpClient,
+  withInterceptorsFromDi,
 } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -52,6 +53,8 @@ import { TrackingModule } from 'Common-UI/src/tracking';
     CaptchaComponent,
     CampHubQrCodeComponent,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  bootstrap: [AppComponent],
   imports: [
     CommonModule,
     BrowserModule,
@@ -61,7 +64,6 @@ import { TrackingModule } from 'Common-UI/src/tracking';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    HttpClientModule,
     MaterialModule,
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -73,7 +75,6 @@ import { TrackingModule } from 'Common-UI/src/tracking';
     MatChipsModule,
     TrackingModule.forRoot(),
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     HttpClient,
     ServicePointResolve,
@@ -85,7 +86,7 @@ import { TrackingModule } from 'Common-UI/src/tracking';
       useClass: HttpInterceptorService,
       multi: true,
     },
+    provideHttpClient(withInterceptorsFromDi()),
   ],
-  bootstrap: [AppComponent],
 })
 export class AppModule {}

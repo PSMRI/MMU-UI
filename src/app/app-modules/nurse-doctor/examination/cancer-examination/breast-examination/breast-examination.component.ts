@@ -39,6 +39,8 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   selector: 'app-doctor-breast-examination',
   templateUrl: './breast-examination.component.html',
   styleUrls: ['./breast-examination.component.css'],
+
+  standalone: false,
 })
 export class BreastExaminationComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

@@ -37,6 +37,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   templateUrl: './data-sync-login.component.html',
   styleUrls: ['./data-sync-login.component.css'],
   providers: [DataSyncService],
+
+  standalone: false,
 })
 export class DataSyncLoginComponent implements OnInit, DoCheck {
   dynamictype = 'password';

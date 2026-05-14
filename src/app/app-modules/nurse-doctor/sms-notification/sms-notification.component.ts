@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject, ViewChild, OnInit, DoCheck } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogRef,
@@ -18,8 +18,10 @@ import { MatPaginator } from '@angular/material/paginator';
   selector: 'app-sms-notification',
   templateUrl: './sms-notification.component.html',
   styleUrls: ['./sms-notification.component.css'],
+
+  standalone: false,
 })
-export class SmsNotificationComponent {
+export class SmsNotificationComponent implements OnInit, DoCheck {
   altNum = false;
   mobileNumber: any;
   smsFlag = false;

@@ -29,6 +29,8 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   selector: 'app-cancer-history-case-sheet',
   templateUrl: './cancer-history-case-sheet.component.html',
   styleUrls: ['./cancer-history-case-sheet.component.css'],
+
+  standalone: false,
 })
 export class CancerHistoryCaseSheetComponent
   implements OnInit, OnChanges, DoCheck

@@ -80,6 +80,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
       },
     },
   ],
+
+  standalone: false,
 })
 export class PncDiagnosisComponent
   implements OnInit, DoCheck, OnDestroy, OnChanges

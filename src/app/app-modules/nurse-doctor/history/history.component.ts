@@ -30,6 +30,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-nurse-history',
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.css'],
+
+  standalone: false,
 })
 export class HistoryComponent implements OnInit, OnChanges {
   @Input()

@@ -83,6 +83,8 @@ import * as moment from 'moment';
       },
     },
   ],
+
+  standalone: false,
 })
 export class RegisterPersonalDetailsComponent
   implements OnInit, DoCheck, OnDestroy
