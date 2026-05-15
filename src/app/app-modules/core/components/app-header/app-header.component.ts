@@ -141,14 +141,18 @@ export class AppHeaderComponent implements OnInit {
           if (response !== undefined && response !== null) {
             this.languageSuccessHandler(response, language);
           } else {
-            alert(this.currentLanguageSet.alerts.info.langNotDefinesd);
+            this.confirmationService.alert(
+              this.currentLanguageSet.alerts.info.langNotDefinesd,
+              'info'
+            );
           }
         },
         error => {
-          alert(
+          this.confirmationService.alert(
             this.currentLanguageSet.alerts.info.comingUpWithThisLang +
               ' ' +
-              language
+              language,
+            'info'
           );
         }
       );
@@ -162,9 +166,12 @@ export class AppHeaderComponent implements OnInit {
   }
 
   languageSuccessHandler(response: any, language: any) {
-    console.log('language is ', response);
     if (response === undefined) {
-      alert(this.currentLanguageSet.alerts.info.langNotDefinesd);
+      this.confirmationService.alert(
+        this.currentLanguageSet.alerts.info.langNotDefinesd,
+        'info'
+      );
+      return;
     }
 
     if (response[language] !== undefined) {
@@ -183,10 +190,11 @@ export class AppHeaderComponent implements OnInit {
       this.http_service.getCurrentLanguage(response[language]);
       this.rolenavigation();
     } else {
-      alert(
+      this.confirmationService.alert(
         this.currentLanguageSet.alerts.info.comingUpWithThisLang +
           ' ' +
-          language
+          language,
+        'info'
       );
     }
   }
