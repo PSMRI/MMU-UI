@@ -10,9 +10,8 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { catchError, tap, finalize } from 'rxjs/operators';
-import { Observable, of, Subject, EMPTY } from 'rxjs';
+import { Observable, of, Subject, EMPTY, throwError } from 'rxjs';
 import { Router } from '@angular/router';
-import { throwError } from 'rxjs/internal/observable/throwError';
 import { SpinnerService } from './spinner.service';
 import { ConfirmationService } from './confirmation.service';
 import { environment } from 'src/environments/environment';
