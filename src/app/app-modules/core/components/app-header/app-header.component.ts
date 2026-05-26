@@ -113,7 +113,6 @@ export class AppHeaderComponent implements OnInit {
     if (this.isAuthenticated) {
       this.fetchLanguageSet();
     }
-    console.log(this.filteredNavigation, 'filter');
     this.status = this.sessionstorage.getItem('providerServiceID');
   }
 
@@ -131,7 +130,6 @@ export class AppHeaderComponent implements OnInit {
         this.getLanguage();
       }
     });
-    console.log('language array' + this.languageArray);
   }
   changeLanguage(language: any) {
     this.http_service
@@ -162,7 +160,6 @@ export class AppHeaderComponent implements OnInit {
   }
 
   languageSuccessHandler(response: any, language: any) {
-    console.log('language is ', response);
     if (response === undefined) {
       alert(this.currentLanguageSet.alerts.info.langNotDefinesd);
     }
@@ -271,13 +268,10 @@ export class AppHeaderComponent implements OnInit {
     const commitDetailsPath: any = 'assets/git-version.json';
     this.auth.getUIVersionAndCommitDetails(commitDetailsPath).subscribe(
       res => {
-        console.log('res', res);
         this.commitDetailsUI = res;
         this.versionUI = this.commitDetailsUI['version'];
       },
-      err => {
-        console.log('err', err);
-      }
+      err => {}
     );
   }
   showVersionAndCommitDetails() {
