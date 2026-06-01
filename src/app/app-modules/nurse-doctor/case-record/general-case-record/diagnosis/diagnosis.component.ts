@@ -26,6 +26,8 @@ import { FormGroup } from '@angular/forms';
   selector: 'app-diagnosis',
   templateUrl: './diagnosis.component.html',
   styleUrls: ['./diagnosis.component.css'],
+
+  standalone: false,
 })
 export class DiagnosisComponent {
   @Input()

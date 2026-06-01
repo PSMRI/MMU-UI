@@ -70,6 +70,8 @@ interface prescribe {
   templateUrl: './prescription.component.html',
   styleUrls: ['./prescription.component.css'],
   encapsulation: ViewEncapsulation.None,
+
+  standalone: false,
 })
 export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
   generalUtils = new GeneralUtils(this.fb, this.sessionstorage);

@@ -56,6 +56,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-idrs',
   templateUrl: './idrs.component.html',
   styleUrls: ['./idrs.component.css'],
+
+  standalone: false,
 })
 export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   @Input()

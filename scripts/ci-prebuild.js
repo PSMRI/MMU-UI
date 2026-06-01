@@ -47,6 +47,7 @@ const defaultEnvValues = {
   MMU_UI_BASE: '',
   SCHEDULER_API_BASE: '',
   SCHEDULER_UI_BASE: '',
+  INVENTORY_UI: '',
   ADMIN_API_BASE: '',
   SERVER_IP: '',
   SWYMED_IP: '',

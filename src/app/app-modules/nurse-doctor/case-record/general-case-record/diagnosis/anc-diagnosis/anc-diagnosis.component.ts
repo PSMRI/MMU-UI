@@ -66,6 +66,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
       },
     },
   ],
+
+  standalone: false,
 })
 export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
   masterData: any;

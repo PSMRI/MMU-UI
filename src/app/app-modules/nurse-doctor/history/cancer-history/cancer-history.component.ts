@@ -41,6 +41,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-nurse-cancer-history',
   templateUrl: './cancer-history.component.html',
   styleUrls: ['./cancer-history.component.css'],
+
+  standalone: false,
 })
 export class CancerHistoryComponent
   implements OnInit, OnChanges, OnDestroy, DoCheck

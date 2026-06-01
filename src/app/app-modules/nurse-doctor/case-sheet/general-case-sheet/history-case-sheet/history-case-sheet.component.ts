@@ -33,6 +33,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   templateUrl: './history-case-sheet.component.html',
   styleUrls: ['./history-case-sheet.component.css'],
   providers: [DatePipe],
+
+  standalone: false,
 })
 export class HistoryCaseSheetComponent implements OnInit, OnChanges, DoCheck {
   @Input()

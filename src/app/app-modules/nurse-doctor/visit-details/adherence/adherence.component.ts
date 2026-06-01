@@ -31,6 +31,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-patient-adherence',
   templateUrl: './adherence.component.html',
   styleUrls: ['./adherence.component.css'],
+
+  standalone: false,
 })
 export class AdherenceComponent implements OnInit, DoCheck, OnChanges {
   @Input()

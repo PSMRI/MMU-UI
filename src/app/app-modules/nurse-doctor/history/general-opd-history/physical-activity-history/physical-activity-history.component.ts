@@ -41,6 +41,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-physical-activity-history',
   templateUrl: './physical-activity-history.component.html',
   styleUrls: ['./physical-activity-history.component.css'],
+
+  standalone: false,
 })
 export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
   @Input()

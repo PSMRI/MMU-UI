@@ -63,6 +63,8 @@ interface prescribe {
   selector: 'app-prescribe-tm-medicine',
   templateUrl: './prescribe-tm-medicine.component.html',
   styleUrls: ['./prescribe-tm-medicine.component.css'],
+
+  standalone: false,
 })
 export class PrescribeTmMedicineComponent implements OnInit, DoCheck {
   generalUtils = new GeneralUtils(this.fb, this.sessionstorage);

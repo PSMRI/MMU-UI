@@ -43,6 +43,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-cancer-case-record',
   templateUrl: './cancer-case-record.component.html',
   styleUrls: ['./cancer-case-record.component.css'],
+
+  standalone: false,
 })
 export class CancerCaseRecordComponent
   implements OnInit, DoCheck, AfterViewInit, OnDestroy

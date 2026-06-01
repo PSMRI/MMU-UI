@@ -35,6 +35,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-cancer-case-sheet',
   templateUrl: './cancer-case-sheet.component.html',
   styleUrls: ['./cancer-case-sheet.component.css'],
+
+  standalone: false,
 })
 export class CancerCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
   @Input()

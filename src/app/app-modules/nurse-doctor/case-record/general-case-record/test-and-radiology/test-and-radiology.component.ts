@@ -44,6 +44,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-test-and-radiology',
   templateUrl: './test-and-radiology.component.html',
   styleUrls: ['./test-and-radiology.component.css'],
+
+  standalone: false,
 })
 export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
   current_language_set: any;
