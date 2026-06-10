@@ -309,8 +309,6 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
     ) {
       if (this.data.provideAuthorizationToViewTmCS) {
         sessionStorage.setItem('authorizeToViewTMcasesheet', 'Authorized');
-      } else {
-        console.log('normal flow');
       }
       this.dialogRef.close(true);
     } else {

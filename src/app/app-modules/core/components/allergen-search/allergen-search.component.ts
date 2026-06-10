@@ -42,7 +42,7 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
 
   selectedComponent: any = null;
   selectedComponentNo: any;
-  message: string = '';
+  message = '';
   selectedItem: any;
   displayedColumns: any = ['ConceptID', 'term', 'empty'];
 
@@ -74,7 +74,6 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
     this.selectedComponent = null;
     this.selectedComponentNo = item;
     this.selectedComponent = component;
-    console.log('selectedComponent', this.selectedComponent);
     this.selectedItem = component;
   }
   submitComponentList() {
@@ -84,7 +83,7 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
     };
     this.dialogRef.close(reqObj);
   }
-  showProgressBar: boolean = false;
+  showProgressBar = false;
   search(term: string, pageNo: any): void {
     if (term.length > 2) {
       this.showProgressBar = true;

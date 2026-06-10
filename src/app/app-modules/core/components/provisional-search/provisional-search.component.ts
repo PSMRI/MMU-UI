@@ -125,9 +125,8 @@ export class ProvisionalSearchComponent implements OnInit, DoCheck {
   submitDiagnosisList() {
     this.dialogRef.close(this.selectedDiagnosisList);
   }
-  showProgressBar: boolean = false;
+  showProgressBar = false;
   search(term: string, pageNo: any): void {
-    console.log(term);
     if (term.length > 2) {
       this.showProgressBar = true;
       this.masterdataService

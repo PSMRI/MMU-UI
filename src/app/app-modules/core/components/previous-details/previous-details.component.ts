@@ -79,7 +79,6 @@ export class PreviousDetailsComponent implements OnInit, DoCheck {
   }
 
   filterPreviousData(searchTerm: any) {
-    console.log('searchTerm', searchTerm);
     if (!searchTerm) {
       this.filteredDataList.data = this.dataList;
       this.filteredDataList.paginator = this.paginator;

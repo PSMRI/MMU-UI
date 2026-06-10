@@ -91,11 +91,8 @@ export class WorkareaComponent
 
   getDataSYNCGroup() {
     this.dataSyncService.getDataSYNCGroup().subscribe((res: any) => {
-      console.clear();
-      console.log(res);
       if (res.statusCode === 200) {
         this.syncTableGroupList = this.createSyncActivity(res.data);
-        console.log('syncTableGroupList', this.syncTableGroupList);
       }
     });
   }
@@ -225,7 +222,6 @@ export class WorkareaComponent
   syncGroups() {
     this.dataSyncService.syncAllGroups().subscribe(
       (res: any) => {
-        console.log(res);
         if (res.statusCode === 200) {
           if (res.data.groupsProgress) {
             this.updateGroupStatus(res.data.groupsProgress);
@@ -353,7 +349,6 @@ export class WorkareaComponent
             .inventorySyncDownloadData(vanID)
             .subscribe((res: any) => {
               if (res.statusCode === 200) {
-                console.log('Downloaded response');
               } else {
                 this.confirmationService.alert(res.errorMessage, 'error');
               }

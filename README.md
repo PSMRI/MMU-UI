@@ -46,7 +46,7 @@ To install the MMU module, please follow these steps:
    - Run the command `npm run build`.
    - Run the command `mvn clean install`.
    - Run the command `npm start`.
-3. Open your browser and access `http://localhost:4200/#/login` to view the login page of module.
+3. Open your browser and access `http://localhost:4202/#/login` to view the login page of module.
 
 ### Building from source
 
@@ -56,7 +56,7 @@ mvn -B package --file pom.xml -P <profile_name>
 ```
 
 The available profiles include dev, local, test, and ci.
-Refer to `src/environments/environment.ci.template` file and ensure that the right environment variables are set for the build.
+Refer to `src/environments/environment.ci.ts.template` file and ensure that the right environment variables are set for the build.
 
 Packing with `ci` profile calls `build-ci` script in `package.json`.
 It creates a `environment.ci.ts` file with all environment variables used in the generated build.
