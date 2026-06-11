@@ -1,0 +1,85 @@
+.qr-page-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 40px 16px;
+}
+
+.qr-card {
+  width: 100%;
+  max-width: 500px;
+}
+
+/* ── Detection status row ── */
+
+.detect-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.detect-row.warn {
+  background: #fff8e1;
+  color: #6d4c00;
+}
+
+.detect-row.ok {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
+.detect-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* ── QR result ── */
+
+.qr-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 0 8px;
+  gap: 16px;
+}
+
+.url-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #e3f2fd;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0b69b2;
+  word-break: break-all;
+}
+
+.url-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.url-text {
+  font-family: monospace;
+}
+
+.qr-image {
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  padding: 8px;
+  background: #fff;
+}
+
+/* ── Shared ── */
+
+.btn-icon {
+  vertical-align: middle;
+  font-size: 18px;
+  margin-right: 4px;
+}

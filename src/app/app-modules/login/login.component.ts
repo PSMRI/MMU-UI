@@ -20,7 +20,13 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import {Component,OnInit,AfterViewInit,ViewChild,ElementRef} from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
@@ -101,7 +107,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     if (this.loginForm.valid) {
       this.authService
         .login(
-          this.loginForm.controls.userName.value.trim(),
+          (this.loginForm.controls.userName.value ?? '').trim(),
           encryptPassword,
           false,
           this.enableCaptcha ? this.captchaToken : undefined

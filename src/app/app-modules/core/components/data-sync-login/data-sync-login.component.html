@@ -1,6 +1,7 @@
 <div
   class="login-form-container"
-  [ngClass]="{ stretch: data && data.masterDowloadFirstTime }">
+  [ngClass]="{ stretch: data && data.masterDowloadFirstTime }"
+  *ngIf="data">
   <mat-icon
     *ngIf="data?.masterDowloadFirstTime || data?.provideAuthorizationToViewTmCS"
     (click)="closeDialog()"
@@ -106,3 +107,112 @@
     </mat-card-content>
   </mat-card>
 </div>
+
+<!-- Standalone mode: 2 tabs -->
+<mat-tab-group *ngIf="!data" class="sync-tabs">
+
+  <mat-tab label="Data Sync Login">
+    <div class="login-form-container">
+      <mat-card class="m-t-40">
+        <mat-card-title class="sync-login-title">
+          <h4>
+            {{
+              current_language_set?.common?.confirmYourIdentityToPerformThisAction
+                ? current_language_set?.common
+                    ?.confirmYourIdentityToPerformThisAction
+                : 'Confirm your identity to perform this action'
+            }}
+          </h4>
+        </mat-card-title>
+        <div class="overlay" *ngIf="showProgressBar">
+          <div class="overlay-content">
+            <mat-spinner></mat-spinner>
+          </div>
+        </div>
+        <mat-card-content class="m-t-30">
+          <form
+            [formGroup]="loginForm"
+            (ngSubmit)="loginForm.valid && dataSyncLogin()">
+            <div class="container-fluid">
+              <div class="row no-gutters">
+                <div class="col-xs-11 col-md-11 col-sm-11 box row">
+                  <div
+                    class="col-2"
+                    style="margin-top: 18px; padding-right: unset; width: 14%">
+                    <mat-icon matPrefix>account_box</mat-icon>
+                  </div>
+                  <div class="col-10" style="padding: unset">
+                    <mat-form-field [style.width]="'115%'">
+                      <mat-label>Enter User Name</mat-label>
+                      <input
+                        matInput
+                        allowText="usernameValidator"
+                        type="text"
+                        formControlName="userName"
+                        name="userName" />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="row no-gutters">
+                <div class="col-xs-11 col-md-11 col-sm-11 box row">
+                  <div
+                    class="col-2"
+                    style="margin-top: 18px; padding-right: unset; width: 14%">
+                    <mat-icon matPrefix>lock</mat-icon>
+                  </div>
+                  <div class="col-10" style="padding: unset">
+                    <mat-form-field [style.width]="'115%'">
+                      <mat-label>Enter Password</mat-label>
+                      <input
+                        matInput
+                        [type]="dynamictype"
+                        autocomplete="off"
+                        formControlName="password"
+                        name="password" />
+                      <mat-icon
+                        matSuffix
+                        class="material-icons cursorPointer"
+                        matTooltip="{{
+                          current_language_set?.common?.showPassword
+                            ? current_language_set?.common?.showPassword
+                            : 'Show Password'
+                        }}"
+                        (mousedown)="showPWD()"
+                        (mouseup)="hidePWD()"
+                        style="color: gray"
+                        >visibility</mat-icon
+                      >
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div
+                  class="col-xs-12 col-md-12 col-sm-12"
+                  style="height: 55px !important; padding: unset">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    type="submit"
+                    class="full-width-login submit">
+                    {{
+                      current_language_set?.common?.proceed
+                        ? current_language_set?.common?.proceed
+                        : 'Proceed'
+                    }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Camp Hub QR Code">
+    <app-camp-hub-qr-code></app-camp-hub-qr-code>
+  </mat-tab>
+
+</mat-tab-group>
