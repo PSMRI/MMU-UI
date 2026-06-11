@@ -101,7 +101,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     if (this.loginForm.valid) {
       this.authService
         .login(
-          this.loginForm.controls.userName.value.trim(),
+          this.loginForm.controls.userName.value?.trim() ?? '',
           encryptPassword,
           false,
           this.enableCaptcha ? this.captchaToken : undefined
