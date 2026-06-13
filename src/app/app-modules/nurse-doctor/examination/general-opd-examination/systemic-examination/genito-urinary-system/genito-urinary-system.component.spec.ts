@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   ComponentFixture,
   tick,
   inject,
@@ -55,7 +55,7 @@ describe('GenitoUrinarySystemComponent', () => {
   let el: HTMLElement;
   let spy: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [GenitoUrinarySystemComponent],
       schemas: [NO_ERRORS_SCHEMA],

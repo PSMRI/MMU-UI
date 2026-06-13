@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   inject,
   ComponentFixture,
   TestBed,
@@ -56,7 +56,7 @@ describe('MedicationHistoryComponent', () => {
   let component: MedicationHistoryComponent;
   let fixture: ComponentFixture<MedicationHistoryComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [MedicationHistoryComponent],
     }).compileComponents();

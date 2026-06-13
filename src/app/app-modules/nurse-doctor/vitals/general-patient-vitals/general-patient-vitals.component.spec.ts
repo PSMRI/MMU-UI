@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   ComponentFixture,
   tick,
   inject,
@@ -67,7 +67,7 @@ describe('GeneralPatientVitalsComponent', () => {
   let el: HTMLElement;
   let spy: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [GeneralPatientVitalsComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],

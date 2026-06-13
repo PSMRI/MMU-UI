@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   ComponentFixture,
   tick,
   inject,
@@ -56,7 +56,7 @@ describe('SystemicExaminationComponent', () => {
   let el: HTMLElement;
   let spy: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SystemicExaminationComponent],
       schemas: [NO_ERRORS_SCHEMA],

@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   inject,
   ComponentFixture,
   TestBed,
@@ -56,7 +56,7 @@ describe('GeneralOpdHistoryComponent', () => {
   let component: GeneralOpdHistoryComponent;
   let fixture: ComponentFixture<GeneralOpdHistoryComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [GeneralOpdHistoryComponent],
     }).compileComponents();

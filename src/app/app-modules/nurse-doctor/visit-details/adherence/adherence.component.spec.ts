@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   inject,
   ComponentFixture,
   TestBed,
@@ -53,7 +53,7 @@ describe('AdherenceComponent', () => {
   let debugElement: DebugElement;
   let fb: FormBuilder;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
       declarations: [AdherenceComponent],

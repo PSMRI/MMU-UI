@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   inject,
   ComponentFixture,
   TestBed,
@@ -53,7 +53,7 @@ describe('VisitDetailsComponent', () => {
   let debugElement: any;
   let fb: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
       declarations: [VisitDetailsComponent],
