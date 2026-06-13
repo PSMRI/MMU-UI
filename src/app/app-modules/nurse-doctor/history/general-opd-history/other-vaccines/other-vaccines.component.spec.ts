@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   inject,
   ComponentFixture,
   TestBed,
@@ -56,7 +56,7 @@ describe('OtherVaccinesComponent', () => {
   let component: OtherVaccinesComponent;
   let fixture: ComponentFixture<OtherVaccinesComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [OtherVaccinesComponent],
     }).compileComponents();

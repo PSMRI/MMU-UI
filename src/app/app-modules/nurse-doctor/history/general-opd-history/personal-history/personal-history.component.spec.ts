@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   inject,
   ComponentFixture,
   TestBed,
@@ -56,7 +56,7 @@ describe('GeneralPersonalHistoryComponent', () => {
   let component: GeneralPersonalHistoryComponent;
   let fixture: ComponentFixture<GeneralPersonalHistoryComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [GeneralPersonalHistoryComponent],
     }).compileComponents();

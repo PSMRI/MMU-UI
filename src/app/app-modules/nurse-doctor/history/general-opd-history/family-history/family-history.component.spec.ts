@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   inject,
   ComponentFixture,
   TestBed,
@@ -61,7 +61,7 @@ describe('FamilyHistoryComponent', () => {
   let debugElement: DebugElement;
   let fb: FormBuilder;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
       schemas: [NO_ERRORS_SCHEMA],

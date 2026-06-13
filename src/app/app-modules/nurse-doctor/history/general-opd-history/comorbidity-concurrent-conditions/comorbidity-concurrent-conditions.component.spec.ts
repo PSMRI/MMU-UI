@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   inject,
   ComponentFixture,
   TestBed,
@@ -63,7 +63,7 @@ describe('ComorbidityConcurrentConditionsComponent', () => {
   let debugElement: DebugElement;
   let fb: FormBuilder;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
       schemas: [NO_ERRORS_SCHEMA],
@@ -135,7 +135,7 @@ describe('ComorbidityConcurrentConditionsComponent', () => {
   //   expect((<FormArray>component.comorbidityConcurrentConditionsForm.controls.comorbidityConcurrentConditionsList).controls.length).toBe(1);
   // }));
 
-  // it('should call getGeneralHistory when mode is view', async(inject([MasterdataService], (masterdataService) => {
+  // it('should call getGeneralHistory when mode is view', waitForAsync(inject([MasterdataService], (masterdataService) => {
   //   masterdataService.nurseMasterDataSource.next(data.generalOPDNurseMasterdata.data);
   //   spyOn(component, 'getMasterData').and.callThrough();
   //   spyOn(component, 'getGeneralHistory');

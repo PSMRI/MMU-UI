@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   ComponentFixture,
   tick,
   inject,
@@ -62,7 +62,7 @@ describe('HeadToToeExaminationComponent', () => {
   let el: HTMLElement;
   let spy: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [HeadToToeExaminationComponent],
       schemas: [NO_ERRORS_SCHEMA],
@@ -99,7 +99,7 @@ describe('HeadToToeExaminationComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should check head to toe examination and make dependentfield null', async(() => {
+  it('should check head to toe examination and make dependentfield null', waitForAsync(() => {
     spyOn(component, 'checkWithHeadToToe').and.callThrough();
     component.headToToeExaminationForm.patchValue({
       headtoToeExam: 'Abnormal',

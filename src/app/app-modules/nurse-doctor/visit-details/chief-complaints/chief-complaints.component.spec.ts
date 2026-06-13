@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   inject,
   ComponentFixture,
   TestBed,
@@ -58,7 +58,7 @@ describe('ChiefComplaintsComponent', () => {
   let debugElement: DebugElement;
   let fb: FormBuilder;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
       declarations: [ChiefComplaintsComponent],
@@ -178,7 +178,7 @@ describe('ChiefComplaintsComponent', () => {
     }
   ));
 
-  it('should get ChiefComplaintsDetails when mode is view', async(
+  it('should get ChiefComplaintsDetails when mode is view', waitForAsync(
     inject(
       [DoctorService, MasterdataService],
       (doctorService, masterdataService) => {
@@ -196,7 +196,7 @@ describe('ChiefComplaintsComponent', () => {
     )
   ));
 
-  it('should patch ChiefComplaintsDetails to form when mode is view', async(
+  it('should patch ChiefComplaintsDetails to form when mode is view', waitForAsync(
     inject(
       [DoctorService, MasterdataService],
       (doctorService, masterdataService) => {

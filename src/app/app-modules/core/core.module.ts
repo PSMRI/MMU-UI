@@ -22,7 +22,10 @@
 
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from './material.module';
@@ -71,17 +74,6 @@ import { MyPasswordDirective } from './directives/password/myPassword.directive'
 import { SharedModule } from './components/shared/shared.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MaterialModule,
-    HttpClientModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgChartsModule,
-    WebcamModule,
-    MatTableModule,
-  ],
   declarations: [
     CommonDialogComponent,
     CameraDialogComponent,
@@ -133,6 +125,17 @@ import { SharedModule } from './components/shared/shared.module';
     WebcamModule,
     NgChartsModule,
   ],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgChartsModule,
+    WebcamModule,
+    MatTableModule,
+  ],
+  providers: [provideHttpClient(withInterceptorsFromDi())],
 })
 export class CoreModule {
   static forRoot(): ModuleWithProviders<CoreModule> {

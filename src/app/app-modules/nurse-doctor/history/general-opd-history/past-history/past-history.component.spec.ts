@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   inject,
   ComponentFixture,
   TestBed,
@@ -56,7 +56,7 @@ describe('PastHistoryComponent', () => {
   let component: PastHistoryComponent;
   let fixture: ComponentFixture<PastHistoryComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [PastHistoryComponent],
     }).compileComponents();

@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   inject,
   ComponentFixture,
   TestBed,
@@ -56,7 +56,7 @@ describe('MenstrualHistoryComponent', () => {
   let component: MenstrualHistoryComponent;
   let fixture: ComponentFixture<MenstrualHistoryComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [MenstrualHistoryComponent],
     }).compileComponents();

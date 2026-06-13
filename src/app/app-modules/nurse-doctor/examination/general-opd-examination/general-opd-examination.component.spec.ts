@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   ComponentFixture,
   tick,
   inject,
@@ -62,7 +62,7 @@ describe('GeneralOpdExaminationComponent', () => {
   let el: HTMLElement;
   let spy: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [GeneralOpdExaminationComponent],
       schemas: [NO_ERRORS_SCHEMA],
@@ -117,7 +117,7 @@ describe('GeneralOpdExaminationComponent', () => {
     expect(component.getAncExaminationData).toHaveBeenCalled();
   });
 
-  it('should get GeneralExaminationData when mode is view and patch data to fields', async(
+  it('should get GeneralExaminationData when mode is view and patch data to fields', waitForAsync(
     inject([DoctorService], doctorService => {
       localStorage.setItem('visitID', '932');
       localStorage.setItem('beneficiaryRegID', '7397');

@@ -21,7 +21,7 @@
  */
 
 import {
-  async,
+  waitForAsync,
   ComponentFixture,
   tick,
   inject,
@@ -58,7 +58,7 @@ describe('MusculoskeletalSystemComponent', () => {
   let el: HTMLElement;
   let spy: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [MusculoskeletalSystemComponent],
       schemas: [NO_ERRORS_SCHEMA],
@@ -101,7 +101,7 @@ describe('MusculoskeletalSystemComponent', () => {
     expect(component.getMasterData).toHaveBeenCalled();
   });
 
-  it('Should call getMasterData and get master Data ', async(
+  it('Should call getMasterData and get master Data ', waitForAsync(
     inject([MasterdataService], masterdataService => {
       spyOn(component, 'getMasterData').and.callThrough();
       spyOn(masterdataService, 'getNurseMasterData')
