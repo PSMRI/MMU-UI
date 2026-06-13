@@ -37,6 +37,7 @@ import { map, Observable } from 'rxjs';
   selector: 'app-doctor-diagnosis-case-sheet',
   templateUrl: './doctor-diagnosis-case-sheet.component.html',
   styleUrls: ['./doctor-diagnosis-case-sheet.component.css'],
+  standalone: false,
 })
 export class DoctorDiagnosisCaseSheetComponent
   implements OnInit, OnChanges, DoCheck

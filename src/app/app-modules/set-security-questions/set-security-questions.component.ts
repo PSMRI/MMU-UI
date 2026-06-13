@@ -30,6 +30,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-set-security-questions',
   templateUrl: './set-security-questions.component.html',
   styleUrls: ['./set-security-questions.component.css'],
+  standalone: false,
 })
 export class SetSecurityQuestionsComponent implements OnInit {
   passwordPattern =
@@ -77,8 +78,7 @@ export class SetSecurityQuestionsComponent implements OnInit {
     this.Q_array_two = response.data;
   }
 
-  handleError(response: any) {
-  }
+  handleError(response: any) {}
 
   switch() {
     this.passwordSection = true;
@@ -111,7 +111,6 @@ export class SetSecurityQuestionsComponent implements OnInit {
   selectedQuestions: any = [];
 
   updateQuestions(selectedques: any, position: any) {
-
     if (this.selectedQuestions.indexOf(selectedques) === -1) {
       this.selectedQuestions[position] = selectedques;
       if (position === 0) {

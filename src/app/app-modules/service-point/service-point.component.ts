@@ -35,6 +35,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-service-point',
   templateUrl: './service-point.component.html',
   styleUrls: ['./service-point.component.css'],
+  standalone: false,
 })
 export class ServicePointComponent implements OnInit, DoCheck {
   designation: any;

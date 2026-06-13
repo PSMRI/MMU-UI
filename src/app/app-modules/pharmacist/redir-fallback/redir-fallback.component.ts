@@ -33,6 +33,7 @@ import { Router, Route } from '@angular/router';
   selector: 'app-redir-fallback',
   templateUrl: './redir-fallback.component.html',
   styleUrls: ['./redir-fallback.component.css'],
+  standalone: false,
 })
 export class RedirFallbackComponent implements AfterViewInit {
   constructor(

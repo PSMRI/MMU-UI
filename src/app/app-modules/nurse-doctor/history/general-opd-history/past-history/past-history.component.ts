@@ -53,6 +53,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-general-past-history',
   templateUrl: './past-history.component.html',
   styleUrls: ['./past-history.component.css'],
+  standalone: false,
 })
 export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

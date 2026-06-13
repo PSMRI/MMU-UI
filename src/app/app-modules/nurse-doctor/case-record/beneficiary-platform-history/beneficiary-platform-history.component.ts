@@ -37,6 +37,7 @@ import { Router } from '@angular/router';
   selector: 'app-beneficiary-platform-history',
   templateUrl: './beneficiary-platform-history.component.html',
   styleUrls: ['./beneficiary-platform-history.component.css'],
+  standalone: false,
 })
 export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   current_language_set: any;

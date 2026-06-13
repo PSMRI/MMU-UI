@@ -36,6 +36,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   selector: 'app-image-to-canvas',
   templateUrl: './image-to-canvas.component.html',
   styleUrls: ['./image-to-canvas.component.css'],
+  standalone: false,
 })
 export class ImageToCanvasComponent implements OnInit, OnChanges, DoCheck {
   @Input()

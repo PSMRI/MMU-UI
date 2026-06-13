@@ -61,6 +61,7 @@ import { SmsNotificationComponent } from '../sms-notification/sms-notification.c
   selector: 'app-workarea',
   templateUrl: './workarea.component.html',
   styleUrls: ['./workarea.component.css'],
+  standalone: false,
 })
 export class WorkareaComponent
   implements

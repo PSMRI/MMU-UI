@@ -24,6 +24,7 @@ import { Directive, ElementRef, HostListener } from '@angular/core';
 
 @Directive({
   selector: '[appMyName]',
+  standalone: false,
 })
 export class MyNameDirective {
   constructor(element: ElementRef) {}

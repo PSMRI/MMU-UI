@@ -28,6 +28,7 @@ import { HttpServiceService } from '../../core/services/http-service.service';
   selector: 'app-nurse-vitals',
   templateUrl: './vitals.component.html',
   styleUrls: ['./vitals.component.css'],
+  standalone: false,
 })
 export class VitalsComponent implements OnInit, OnChanges, DoCheck {
   @Input()

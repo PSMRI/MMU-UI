@@ -46,6 +46,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-nurse-cancer-obstetric-history',
   templateUrl: './obstetric-history.component.html',
   styleUrls: ['./obstetric-history.component.css'],
+  standalone: false,
 })
 export class ObstetricHistoryComponent
   implements OnInit, OnChanges, OnDestroy, DoCheck

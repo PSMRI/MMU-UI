@@ -30,6 +30,7 @@ import { SetLanguageComponent } from '../../core/components/set-language.compone
   selector: 'app-view-file',
   templateUrl: './view-file.component.html',
   styleUrls: ['./view-file.component.css'],
+  standalone: false,
 })
 export class ViewFileComponent implements OnInit, DoCheck {
   fileObj: any;

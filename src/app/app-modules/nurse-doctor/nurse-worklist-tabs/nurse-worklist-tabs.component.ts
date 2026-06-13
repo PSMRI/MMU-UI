@@ -28,6 +28,7 @@ import { HttpServiceService } from '../../core/services/http-service.service';
   selector: 'app-nurse-worklist-tabs',
   templateUrl: './nurse-worklist-tabs.component.html',
   styleUrls: ['./nurse-worklist-tabs.component.css'],
+  standalone: false,
 })
 export class NurseWorklistTabsComponent implements OnInit, DoCheck {
   currentLanguageSet: any;
