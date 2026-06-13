@@ -89,7 +89,7 @@ describe('CancerExaminationComponent', () => {
     expect(component.getBeneficiaryDetails).toHaveBeenCalled();
   });
 
-  it('should show breast examination tab for female beneficiary', async(
+  it('should show breast examination tab for female beneficiary', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
       fixture.detectChanges();
@@ -99,7 +99,7 @@ describe('CancerExaminationComponent', () => {
     })
   ));
 
-  it('should not show breast examination tab for male beneficiary by deafult', async(
+  it('should not show breast examination tab for male beneficiary by deafult', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.maleBeneficiary);
       fixture.detectChanges();
@@ -109,7 +109,7 @@ describe('CancerExaminationComponent', () => {
     })
   ));
 
-  it('should show breast examination tab for male beneficiary if selected breast enlargement', async(
+  it('should show breast examination tab for male beneficiary if selected breast enlargement', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.maleBeneficiary);
       component.cancerForm.controls['signsForm'].patchValue({
@@ -129,7 +129,7 @@ describe('CancerExaminationComponent', () => {
     expect(component.fetchCancerExaminationDetails).toHaveBeenCalled();
   });
 
-  it('should get Cancer Examination Details when mode is view', async(
+  it('should get Cancer Examination Details when mode is view', waitForAsync(
     inject([DoctorService], doctorService => {
       spyOn(component, 'fetchCancerExaminationDetails').and.callThrough();
       spyOn(doctorService, 'getCancerExaminationDetails').and.returnValue(
@@ -144,7 +144,7 @@ describe('CancerExaminationComponent', () => {
     })
   ));
 
-  it('should patch examionationDetails to form when mode is view', async(
+  it('should patch examionationDetails to form when mode is view', waitForAsync(
     inject([DoctorService], doctorService => {
       spyOn(component, 'fetchCancerExaminationDetails').and.callThrough();
       spyOn(doctorService, 'getCancerExaminationDetails').and.returnValue(
@@ -172,7 +172,7 @@ describe('CancerExaminationComponent', () => {
     expect(component.upadteCancerExaminationDetails).toHaveBeenCalled();
   });
 
-  it('should get upadte Cancer Examination Details when mode is update', async(
+  it('should get upadte Cancer Examination Details when mode is update', waitForAsync(
     inject([DoctorService], doctorService => {
       spyOn(component, 'upadteCancerExaminationDetails').and.callThrough();
       spyOn(doctorService, 'updateCancerExaminationDetails').and.returnValue(

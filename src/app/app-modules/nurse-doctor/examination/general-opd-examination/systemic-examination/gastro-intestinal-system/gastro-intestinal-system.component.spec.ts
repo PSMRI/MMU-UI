@@ -110,7 +110,7 @@ describe('GastroIntestinalSystemComponent', () => {
     expect(debugElement).not.toBeTruthy();
   });
 
-  it('should check Tenderness and make dependentfield null', async(() => {
+  it('should check Tenderness and make dependentfield null', waitForAsync(() => {
     spyOn(component, 'checkWithTenderness').and.callThrough();
     component.gastroIntestinalSystemForm.patchValue({
       palpation_Tenderness: 'Present',

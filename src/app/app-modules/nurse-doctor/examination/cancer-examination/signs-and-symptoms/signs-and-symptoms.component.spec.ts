@@ -79,7 +79,7 @@ describe('SignsAndSymptomsComponent', () => {
     expect(component.getBeneficiaryDetails).toHaveBeenCalled();
   });
 
-  it('should hide lumpInTheBreast symptom for male beneficiary', async(
+  it('should hide lumpInTheBreast symptom for male beneficiary', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.maleBeneficiary);
       fixture.detectChanges();
@@ -88,7 +88,7 @@ describe('SignsAndSymptomsComponent', () => {
     })
   ));
 
-  it('should hide bloodStainedDischargeFromNipple symptom for male beneficiary', async(
+  it('should hide bloodStainedDischargeFromNipple symptom for male beneficiary', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.maleBeneficiary);
       fixture.detectChanges();
@@ -99,7 +99,7 @@ describe('SignsAndSymptomsComponent', () => {
     })
   ));
 
-  it('should hide changeInShapeAndSizeOfBreasts symptom for male beneficiary', async(
+  it('should hide changeInShapeAndSizeOfBreasts symptom for male beneficiary', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.maleBeneficiary);
       fixture.detectChanges();
@@ -110,7 +110,7 @@ describe('SignsAndSymptomsComponent', () => {
     })
   ));
 
-  it('should hide vaginalBleedingBetweenPeriods symptom for male beneficiary', async(
+  it('should hide vaginalBleedingBetweenPeriods symptom for male beneficiary', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.maleBeneficiary);
       fixture.detectChanges();
@@ -121,7 +121,7 @@ describe('SignsAndSymptomsComponent', () => {
     })
   ));
 
-  it('should hide vaginalBleedingAfterMenopause symptom for male beneficiary', async(
+  it('should hide vaginalBleedingAfterMenopause symptom for male beneficiary', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.maleBeneficiary);
       fixture.detectChanges();
@@ -132,7 +132,7 @@ describe('SignsAndSymptomsComponent', () => {
     })
   ));
 
-  it('should hide foulSmellingVaginalDischarge symptom for male beneficiary', async(
+  it('should hide foulSmellingVaginalDischarge symptom for male beneficiary', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.maleBeneficiary);
       fixture.detectChanges();
@@ -143,7 +143,7 @@ describe('SignsAndSymptomsComponent', () => {
     })
   ));
 
-  it('should show lumpInTheBreast symptom for female beneficiary', async(
+  it('should show lumpInTheBreast symptom for female beneficiary', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
       fixture.detectChanges();
@@ -152,7 +152,7 @@ describe('SignsAndSymptomsComponent', () => {
     })
   ));
 
-  it('should show bloodStainedDischargeFromNipple symptom for female beneficiary', async(
+  it('should show bloodStainedDischargeFromNipple symptom for female beneficiary', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
       fixture.detectChanges();
@@ -163,7 +163,7 @@ describe('SignsAndSymptomsComponent', () => {
     })
   ));
 
-  it('should show changeInShapeAndSizeOfBreasts symptom for female beneficiary', async(
+  it('should show changeInShapeAndSizeOfBreasts symptom for female beneficiary', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
       fixture.detectChanges();
@@ -174,7 +174,7 @@ describe('SignsAndSymptomsComponent', () => {
     })
   ));
 
-  it('should show vaginalBleedingBetweenPeriods symptom for female beneficiary', async(
+  it('should show vaginalBleedingBetweenPeriods symptom for female beneficiary', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
       fixture.detectChanges();
@@ -185,7 +185,7 @@ describe('SignsAndSymptomsComponent', () => {
     })
   ));
 
-  it('should not show vaginalBleedingAfterMenopause symptom for female beneficiary less than 30 years', async(
+  it('should not show vaginalBleedingAfterMenopause symptom for female beneficiary less than 30 years', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
       fixture.detectChanges();
@@ -196,7 +196,7 @@ describe('SignsAndSymptomsComponent', () => {
     })
   ));
 
-  it('should show foulSmellingVaginalDischarge symptom for female beneficiary', async(
+  it('should show foulSmellingVaginalDischarge symptom for female beneficiary', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
       fixture.detectChanges();

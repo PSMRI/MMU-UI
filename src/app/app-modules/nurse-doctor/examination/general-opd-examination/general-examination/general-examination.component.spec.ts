@@ -101,7 +101,7 @@ describe('GeneralExaminationComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should check value of danger sign and make null to dependent fields', async(() => {
+  it('should check value of danger sign and make null to dependent fields', waitForAsync(() => {
     spyOn(component, 'checkWithDangerSign').and.callThrough();
     component.generalExaminationForm.patchValue({ dangerSigns: 'Yes' });
     component.generalExaminationForm.patchValue({
@@ -119,7 +119,7 @@ describe('GeneralExaminationComponent', () => {
     expect(component.typeOfDangerSigns).toEqual(null);
   }));
 
-  it('should check value of lymphadenopathy and make null to dependent fields', async(() => {
+  it('should check value of lymphadenopathy and make null to dependent fields', waitForAsync(() => {
     spyOn(component, 'checkWithLymphadenopathy').and.callThrough();
     component.generalExaminationForm.patchValue({ lymphadenopathy: 'Present' });
     component.generalExaminationForm.patchValue({
@@ -141,7 +141,7 @@ describe('GeneralExaminationComponent', () => {
     expect(component.typeOfLymphadenopathy).toEqual(null);
   }));
 
-  it('should check value of edema and make null to dependent fields', async(() => {
+  it('should check value of edema and make null to dependent fields', waitForAsync(() => {
     spyOn(component, 'checkWithEdema').and.callThrough();
     component.generalExaminationForm.patchValue({ edema: 'Present' });
     component.generalExaminationForm.patchValue({ extentOfEdema: 'Foot' });

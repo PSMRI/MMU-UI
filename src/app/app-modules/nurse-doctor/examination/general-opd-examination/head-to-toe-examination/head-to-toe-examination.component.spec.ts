@@ -99,7 +99,7 @@ describe('HeadToToeExaminationComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should check head to toe examination and make dependentfield null', async(() => {
+  it('should check head to toe examination and make dependentfield null', waitForAsync(() => {
     spyOn(component, 'checkWithHeadToToe').and.callThrough();
     component.headToToeExaminationForm.patchValue({
       headtoToeExam: 'Abnormal',

@@ -97,7 +97,7 @@ describe('VisitDetailsComponent', () => {
     expect(component.getBenificiaryDetails).toHaveBeenCalled();
   });
 
-  it('should show pregnancyStatus for female beneficiary', async(
+  it('should show pregnancyStatus for female beneficiary', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
       component.patientVisitDetailsForm.patchValue({
@@ -111,7 +111,7 @@ describe('VisitDetailsComponent', () => {
     })
   ));
 
-  it('should not show pregnancyStatus for male beneficiary', async(
+  it('should not show pregnancyStatus for male beneficiary', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.maleBeneficiary);
       component.patientVisitDetailsForm.patchValue({

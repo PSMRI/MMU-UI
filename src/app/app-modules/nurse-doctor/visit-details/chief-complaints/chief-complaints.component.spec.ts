@@ -178,7 +178,7 @@ describe('ChiefComplaintsComponent', () => {
     }
   ));
 
-  it('should get ChiefComplaintsDetails when mode is view', async(
+  it('should get ChiefComplaintsDetails when mode is view', waitForAsync(
     inject(
       [DoctorService, MasterdataService],
       (doctorService, masterdataService) => {
@@ -196,7 +196,7 @@ describe('ChiefComplaintsComponent', () => {
     )
   ));
 
-  it('should patch ChiefComplaintsDetails to form when mode is view', async(
+  it('should patch ChiefComplaintsDetails to form when mode is view', waitForAsync(
     inject(
       [DoctorService, MasterdataService],
       (doctorService, masterdataService) => {

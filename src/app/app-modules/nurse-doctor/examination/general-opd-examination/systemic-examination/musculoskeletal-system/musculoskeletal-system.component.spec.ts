@@ -101,7 +101,7 @@ describe('MusculoskeletalSystemComponent', () => {
     expect(component.getMasterData).toHaveBeenCalled();
   });
 
-  it('Should call getMasterData and get master Data ', async(
+  it('Should call getMasterData and get master Data ', waitForAsync(
     inject([MasterdataService], masterdataService => {
       spyOn(component, 'getMasterData').and.callThrough();
       spyOn(masterdataService, 'getNurseMasterData')

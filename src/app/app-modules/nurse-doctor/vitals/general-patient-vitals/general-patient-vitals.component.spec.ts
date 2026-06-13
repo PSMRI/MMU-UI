@@ -171,7 +171,7 @@ describe('GeneralPatientVitalsComponent', () => {
     expect(component.showGlucoseQC).toEqual(false);
   });
 
-  it('should not show mid upper arm circumference', async(
+  it('should not show mid upper arm circumference', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
       spyOn(component, 'getBeneficiaryDetails');
@@ -188,7 +188,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should not show head circumference', async(
+  it('should not show head circumference', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
       spyOn(component, 'getBeneficiaryDetails');
@@ -205,7 +205,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should show head circumference', async(
+  it('should show head circumference', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -225,7 +225,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should show mid upper arm circumference', async(
+  it('should show mid upper arm circumference', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -245,7 +245,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should not show mid upper arm circumference for ANC', async(
+  it('should not show mid upper arm circumference for ANC', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -265,7 +265,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should not show head circumference for ANC', async(
+  it('should not show head circumference for ANC', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -285,7 +285,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should not show waistCircumference_cm for ANC', async(
+  it('should not show waistCircumference_cm for ANC', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -305,7 +305,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should not show hipCircumference_cm for ANC', async(
+  it('should not show hipCircumference_cm for ANC', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -323,7 +323,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should not show waistHipRatio for ANC', async(
+  it('should not show waistHipRatio for ANC', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -341,7 +341,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should not show mid upper arm circumference for GOPD (QC)', async(
+  it('should not show mid upper arm circumference for GOPD (QC)', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -361,7 +361,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should not show head circumference for GOPD (QC)', async(
+  it('should not show head circumference for GOPD (QC)', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -381,7 +381,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should not show waistCircumference_cm for GOPD (QC)', async(
+  it('should not show waistCircumference_cm for GOPD (QC)', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -401,7 +401,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should not show hipCircumference_cm for GOPD (QC)', async(
+  it('should not show hipCircumference_cm for GOPD (QC)', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -419,7 +419,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should not show waistHipRatio for GOPD (QC)', async(
+  it('should not show waistHipRatio for GOPD (QC)', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -437,7 +437,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should show bloodGlucose_Fasting for GOPD (QC)', async(
+  it('should show bloodGlucose_Fasting for GOPD (QC)', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -457,7 +457,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should show bloodGlucose_Random for GOPD (QC)', async(
+  it('should show bloodGlucose_Random for GOPD (QC)', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -475,7 +475,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should show bloodGlucose_2hr_PP for GOPD (QC)', async(
+  it('should show bloodGlucose_2hr_PP for GOPD (QC)', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -493,7 +493,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should show bloodGlucose_Fasting for ANC', async(
+  it('should show bloodGlucose_Fasting for ANC', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -513,7 +513,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should show bloodGlucose_Random for ANC', async(
+  it('should show bloodGlucose_Random for ANC', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -531,7 +531,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should show bloodGlucose_2hr_PP for ANC', async(
+  it('should show bloodGlucose_2hr_PP for ANC', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -549,7 +549,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should hide  bloodGlucose_Fasting for General OPD', async(
+  it('should hide  bloodGlucose_Fasting for General OPD', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -569,7 +569,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should show bloodGlucose_Random for General OPD', async(
+  it('should show bloodGlucose_Random for General OPD', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -587,7 +587,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('should show bloodGlucose_2hr_PP for General OPD', async(
+  it('should show bloodGlucose_2hr_PP for General OPD', waitForAsync(
     inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
       beneficiaryDetailsService.beneficiaryDetails.next(
         data.femaleChildBeneficiary_2
@@ -605,7 +605,7 @@ describe('GeneralPatientVitalsComponent', () => {
     })
   ));
 
-  it('Check normal value of height', async(
+  it('Check normal value of height', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -639,7 +639,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check Abnormal value of height', async(
+  it('Check Abnormal value of height', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -673,7 +673,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check Abnormal value of weight_Kg', async(
+  it('Check Abnormal value of weight_Kg', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -707,7 +707,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check Normal value of weight_Kg', async(
+  it('Check Normal value of weight_Kg', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -741,7 +741,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check hip of female patient hipCircumference_cm', async(
+  it('Check hip of female patient hipCircumference_cm', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -786,7 +786,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check hip of female patient hipCircumference_cm normal', async(
+  it('Check hip of female patient hipCircumference_cm normal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -829,7 +829,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check hip of male patient hipCircumference_cm normal', async(
+  it('Check hip of male patient hipCircumference_cm normal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -871,7 +871,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check hip of male patient hipCircumference_cm abnormal', async(
+  it('Check hip of male patient hipCircumference_cm abnormal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -913,7 +913,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check headCircumference_cm for child Abnormal ', async(
+  it('Check headCircumference_cm for child Abnormal ', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -955,7 +955,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check midUpperArmCircumference_MUAC_cm for child Abnormal', async(
+  it('Check midUpperArmCircumference_MUAC_cm for child Abnormal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1001,7 +1001,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check headCircumference_cm for child Normal', async(
+  it('Check headCircumference_cm for child Normal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1043,7 +1043,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check midUpperArmCircumference_MUAC_cm for child Normal', async(
+  it('Check midUpperArmCircumference_MUAC_cm for child Normal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1089,7 +1089,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check midUpperArmCircumference_MUAC_cm for child Normal', async(
+  it('Check midUpperArmCircumference_MUAC_cm for child Normal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1135,7 +1135,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check temperature for child Abnormal', async(
+  it('Check temperature for child Abnormal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1175,7 +1175,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check temperature for child Normal', async(
+  it('Check temperature for child Normal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1215,7 +1215,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check pulseRate Abnormal', async(
+  it('Check pulseRate Abnormal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1253,7 +1253,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check pulseRate Normal', async(
+  it('Check pulseRate Normal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1291,7 +1291,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check respiratoryRate Normal', async(
+  it('Check respiratoryRate Normal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1331,7 +1331,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check respiratoryRate Abnormal', async(
+  it('Check respiratoryRate Abnormal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1371,7 +1371,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check systolicBP_1stReading Abnormal', async(
+  it('Check systolicBP_1stReading Abnormal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1413,7 +1413,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check systolicBP_1stReading normal', async(
+  it('Check systolicBP_1stReading normal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1455,7 +1455,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check diastolicBP_1stReading normal', async(
+  it('Check diastolicBP_1stReading normal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1499,7 +1499,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check diastolicBP_1stReading Abnormal', async(
+  it('Check diastolicBP_1stReading Abnormal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1541,7 +1541,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check bloodGlucose_Fasting Abnormal', async(
+  it('Check bloodGlucose_Fasting Abnormal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1583,7 +1583,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check bloodGlucose_Random Abnormal', async(
+  it('Check bloodGlucose_Random Abnormal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1625,7 +1625,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check bloodGlucose_Random Abnormal', async(
+  it('Check bloodGlucose_Random Abnormal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1667,7 +1667,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check bloodGlucose_Fasting Normal', async(
+  it('Check bloodGlucose_Fasting Normal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1709,7 +1709,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check bloodGlucose_Random Normal', async(
+  it('Check bloodGlucose_Random Normal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1751,7 +1751,7 @@ describe('GeneralPatientVitalsComponent', () => {
     )
   ));
 
-  it('Check bloodGlucose_Random Normal', async(
+  it('Check bloodGlucose_Random Normal', waitForAsync(
     inject(
       [BeneficiaryDetailsService, ConfirmationService],
       (beneficiaryDetailsService, confirmationService) => {
@@ -1823,7 +1823,7 @@ describe('GeneralPatientVitalsComponent', () => {
       expect(component.getGeneralVitalsData).toHaveBeenCalled();
     });
 
-    it('should get GeneralVitalsData when mode is view and patch height_cm', async(
+    it('should get GeneralVitalsData when mode is view and patch height_cm', waitForAsync(
       inject([DoctorService], doctorService => {
         localStorage.setItem('visitID', '66');
         localStorage.setItem('beneficiaryRegID', '7416');
@@ -1844,7 +1844,7 @@ describe('GeneralPatientVitalsComponent', () => {
       })
     ));
 
-    it('should get GeneralVitalsData when mode is view and patch weight_Kg', async(
+    it('should get GeneralVitalsData when mode is view and patch weight_Kg', waitForAsync(
       inject([DoctorService], doctorService => {
         localStorage.setItem('visitID', '66');
         localStorage.setItem('beneficiaryRegID', '7416');
@@ -1865,7 +1865,7 @@ describe('GeneralPatientVitalsComponent', () => {
       })
     ));
 
-    it('should get GeneralVitalsData when mode is view and patch bMI', async(
+    it('should get GeneralVitalsData when mode is view and patch bMI', waitForAsync(
       inject([DoctorService], doctorService => {
         localStorage.setItem('visitID', '66');
         localStorage.setItem('beneficiaryRegID', '7416');
@@ -1886,7 +1886,7 @@ describe('GeneralPatientVitalsComponent', () => {
       })
     ));
 
-    it('should get GeneralVitalsData when mode is view and patch waistCircumference_cm', async(
+    it('should get GeneralVitalsData when mode is view and patch waistCircumference_cm', waitForAsync(
       inject([DoctorService], doctorService => {
         localStorage.setItem('visitID', '66');
         localStorage.setItem('beneficiaryRegID', '7416');
@@ -1908,7 +1908,7 @@ describe('GeneralPatientVitalsComponent', () => {
       })
     ));
 
-    it('should get GeneralVitalsData when mode is view and patch hipCircumference_cm', async(
+    it('should get GeneralVitalsData when mode is view and patch hipCircumference_cm', waitForAsync(
       inject([DoctorService], doctorService => {
         localStorage.setItem('visitID', '66');
         localStorage.setItem('beneficiaryRegID', '7416');
@@ -1930,7 +1930,7 @@ describe('GeneralPatientVitalsComponent', () => {
       })
     ));
 
-    it('should get GeneralVitalsData when mode is view and patch waistHipRatio', async(
+    it('should get GeneralVitalsData when mode is view and patch waistHipRatio', waitForAsync(
       inject([DoctorService], doctorService => {
         localStorage.setItem('visitID', '66');
         localStorage.setItem('beneficiaryRegID', '7416');
@@ -1951,7 +1951,7 @@ describe('GeneralPatientVitalsComponent', () => {
       })
     ));
 
-    it('should get GeneralVitalsData when mode is view and patch temperature', async(
+    it('should get GeneralVitalsData when mode is view and patch temperature', waitForAsync(
       inject([DoctorService], doctorService => {
         localStorage.setItem('visitID', '66');
         localStorage.setItem('beneficiaryRegID', '7416');
@@ -1972,7 +1972,7 @@ describe('GeneralPatientVitalsComponent', () => {
       })
     ));
 
-    it('should get GeneralVitalsData when mode is view and pulseRate', async(
+    it('should get GeneralVitalsData when mode is view and pulseRate', waitForAsync(
       inject([DoctorService], doctorService => {
         localStorage.setItem('visitID', '66');
         localStorage.setItem('beneficiaryRegID', '7416');
@@ -1993,7 +1993,7 @@ describe('GeneralPatientVitalsComponent', () => {
       })
     ));
 
-    it('should get GeneralVitalsData when mode is view and patch systolicBP_1stReading', async(
+    it('should get GeneralVitalsData when mode is view and patch systolicBP_1stReading', waitForAsync(
       inject([DoctorService], doctorService => {
         localStorage.setItem('visitID', '66');
         localStorage.setItem('beneficiaryRegID', '7416');
@@ -2015,7 +2015,7 @@ describe('GeneralPatientVitalsComponent', () => {
       })
     ));
 
-    it('should get GeneralVitalsData when mode is view and patch diastolicBP_1stReading', async(
+    it('should get GeneralVitalsData when mode is view and patch diastolicBP_1stReading', waitForAsync(
       inject([DoctorService], doctorService => {
         localStorage.setItem('visitID', '66');
         localStorage.setItem('beneficiaryRegID', '7416');
@@ -2039,7 +2039,7 @@ describe('GeneralPatientVitalsComponent', () => {
       })
     ));
 
-    it('should get GeneralVitalsData when mode is view and patch respiratoryRate', async(
+    it('should get GeneralVitalsData when mode is view and patch respiratoryRate', waitForAsync(
       inject([DoctorService], doctorService => {
         localStorage.setItem('visitID', '66');
         localStorage.setItem('beneficiaryRegID', '7416');
@@ -2060,7 +2060,7 @@ describe('GeneralPatientVitalsComponent', () => {
       })
     ));
 
-    it('should get GeneralVitalsData when mode is view and patch all fields', async(
+    it('should get GeneralVitalsData when mode is view and patch all fields', waitForAsync(
       inject([DoctorService], doctorService => {
         localStorage.setItem('visitID', '66');
         localStorage.setItem('beneficiaryRegID', '7416');
