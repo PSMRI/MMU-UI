@@ -137,8 +137,8 @@ text-align: center;
 margin-top: 30px;
 }
 .mat-mdc-tab-group.mat-background-primary, .mat-mdc-tab-nav-bar.mat-background-primary {
-  --mat-tab-header-with-background-background-color: rgba(37, 55, 70, 0.2) !important;
-  --mat-tab-header-with-background-foreground-color: black !important;
+  --mat-tab-with-background-background-color: rgba(37, 55, 70, 0.2) !important;
+  --mat-tab-with-background-foreground-color: black !important;
   
 }
 .tabs_css ::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {

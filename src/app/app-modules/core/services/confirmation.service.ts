@@ -1,10 +1,10 @@
-import { Injectable, ViewContainerRef, Inject } from '@angular/core';
+import { Injectable, ViewContainerRef, Inject, DOCUMENT } from '@angular/core';
 import {
   MatDialog,
   MatDialogConfig,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { DOCUMENT } from '@angular/common';
+
 import { Observable } from 'rxjs';
 import { CommonDialogComponent } from '../components/common-dialog/common-dialog.component';
 

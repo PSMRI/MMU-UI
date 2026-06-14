@@ -14,8 +14,8 @@
     font-family:inherit !important;
     font-size: 16px !important;
     letter-spacing: unset !important;
-    line-height: var(--mat-tab-header-label-text-line-height);
-    font-weight: var(--mat-tab-header-label-text-weight);
+    line-height: var(--mat-tab-label-text-line-height);
+    font-weight: var(--mat-tab-label-text-weight);
 }
 
 .tabs_css ::ng-deep  .mat-tab-group.mat-primary .mat-tab-label:focus, .mat-tab-group.mat-primary .mat-tab-link:focus, .mat-tab-nav-bar.mat-primary .mat-tab-label:focus, .mat-tab-nav-bar.mat-primary .mat-tab-link:focus {

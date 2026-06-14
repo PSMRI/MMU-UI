@@ -232,9 +232,9 @@ describe('RegisterPersonalDetailsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RegisterPersonalDetailsComponent);
     component = fixture.componentInstance;
-    registrarService = TestBed.get(RegistrarService);
-    cameraService = TestBed.get(CameraService);
-    confirmationService = TestBed.get(ConfirmationService);
+    registrarService = TestBed.inject(RegistrarService);
+    cameraService = TestBed.inject(CameraService);
+    confirmationService = TestBed.inject(ConfirmationService);
     // fixture.detectChanges()
     component.personalDetailsForm = fb.group({
       firstName: null,
