@@ -35,6 +35,7 @@ import { MatTableDataSource } from '@angular/material/table';
   selector: 'app-calibration',
   templateUrl: './calibration.component.html',
   styleUrls: ['./calibration.component.css'],
+  standalone: false,
 })
 export class CalibrationComponent implements OnInit, DoCheck {
   searchTerm: any;

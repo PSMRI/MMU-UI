@@ -31,6 +31,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-case-sheet',
   templateUrl: './case-sheet.component.html',
   styleUrls: ['./case-sheet.component.css'],
+  standalone: false,
 })
 export class CaseSheetComponent implements OnInit, DoCheck {
   QC: boolean = false;

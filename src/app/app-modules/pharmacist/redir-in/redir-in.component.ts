@@ -28,6 +28,7 @@ import { ConfirmationService } from './../../core/services/confirmation.service'
   selector: 'app-redir-in',
   templateUrl: './redir-in.component.html',
   styleUrls: ['./redir-in.component.css'],
+  standalone: false,
 })
 export class RedirInComponent implements OnInit {
   constructor(

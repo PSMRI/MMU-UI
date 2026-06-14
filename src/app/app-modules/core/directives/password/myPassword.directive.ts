@@ -24,6 +24,7 @@ import { Directive, ElementRef, HostListener } from '@angular/core';
 
 @Directive({
   selector: '[appMyPassword]',
+  standalone: false,
 })
 export class MyPasswordDirective {
   constructor(element: ElementRef) {}

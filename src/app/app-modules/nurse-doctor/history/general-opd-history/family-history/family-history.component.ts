@@ -44,6 +44,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-general-family-history',
   templateUrl: './family-history.component.html',
   styleUrls: ['./family-history.component.css'],
+  standalone: false,
 })
 export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

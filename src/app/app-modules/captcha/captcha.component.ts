@@ -16,6 +16,7 @@ declare const turnstile: any;
 @Component({
   selector: 'app-captcha',
   templateUrl: './captcha.component.html',
+  standalone: false,
 })
 export class CaptchaComponent implements AfterViewInit, OnDestroy {
   @Output() tokenResolved = new EventEmitter<string>();
@@ -44,6 +45,7 @@ export class CaptchaComponent implements AfterViewInit, OnDestroy {
         });
       }
     } catch (error) {
+      // Ignore Turnstile render errors; the widget retries on its own.
     }
   }
 

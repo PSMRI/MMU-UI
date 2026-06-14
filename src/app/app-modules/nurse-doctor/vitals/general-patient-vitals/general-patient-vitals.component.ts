@@ -49,6 +49,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-nurse-general-patient-vitals',
   templateUrl: './general-patient-vitals.component.html',
   styleUrls: ['./general-patient-vitals.component.css'],
+  standalone: false,
 })
 export class GeneralPatientVitalsComponent
   implements OnInit, OnChanges, OnDestroy, DoCheck

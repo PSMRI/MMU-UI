@@ -44,6 +44,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-tmcconfirmation',
   templateUrl: './tmcconfirmation.component.html',
   styleUrls: ['./tmcconfirmation.component.css'],
+  standalone: false,
 })
 export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

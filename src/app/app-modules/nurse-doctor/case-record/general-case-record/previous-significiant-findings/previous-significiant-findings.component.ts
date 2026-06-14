@@ -37,6 +37,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-previous-significiant-findings',
   templateUrl: './previous-significiant-findings.component.html',
   styleUrls: ['./previous-significiant-findings.component.css'],
+  standalone: false,
 })
 export class PreviousSignificiantFindingsComponent
   implements OnInit, OnDestroy, DoCheck

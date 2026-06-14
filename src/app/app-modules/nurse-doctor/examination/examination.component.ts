@@ -29,6 +29,7 @@ import { HttpServiceService } from '../../core/services/http-service.service';
   selector: 'app-nurse-examination',
   templateUrl: './examination.component.html',
   styleUrls: ['./examination.component.css'],
+  standalone: false,
 })
 export class ExaminationComponent implements OnInit, DoCheck, OnChanges {
   @Input()

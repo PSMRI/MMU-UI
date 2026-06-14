@@ -42,6 +42,7 @@ import { ProvisionalSearchComponent } from '../components/provisional-search/pro
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Directive({
   selector: '[appConfirmatoryDiagnosis]',
+  standalone: false,
 })
 export class ConfirmatoryDiagnosisDirective implements OnInit, DoCheck {
   @Input()

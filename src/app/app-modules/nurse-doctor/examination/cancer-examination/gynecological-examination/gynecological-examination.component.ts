@@ -44,6 +44,7 @@ import { MatDialog } from '@angular/material/dialog';
   selector: 'app-doctor-gynecological-examination',
   templateUrl: './gynecological-examination.component.html',
   styleUrls: ['./gynecological-examination.component.css'],
+  standalone: false,
 })
 export class GynecologicalExaminationComponent implements OnInit, DoCheck {
   @Input()

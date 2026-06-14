@@ -46,6 +46,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-doctor-signs-and-symptoms',
   templateUrl: './signs-and-symptoms.component.html',
   styleUrls: ['./signs-and-symptoms.component.css'],
+  standalone: false,
 })
 export class SignsAndSymptomsComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

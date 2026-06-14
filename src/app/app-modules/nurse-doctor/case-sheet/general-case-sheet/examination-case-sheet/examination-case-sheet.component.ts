@@ -31,6 +31,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   templateUrl: './examination-case-sheet.component.html',
   styleUrls: ['./examination-case-sheet.component.css'],
   providers: [DatePipe],
+  standalone: false,
 })
 export class ExaminationCaseSheetComponent
   implements OnInit, OnChanges, DoCheck

@@ -25,6 +25,7 @@ import { NgControl } from '@angular/forms';
 
 @Directive({
   selector: '[appDefaultNull]',
+  standalone: false,
 })
 export class NullDefaultValueDirective {
   constructor(
