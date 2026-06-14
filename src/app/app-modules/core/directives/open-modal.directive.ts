@@ -39,7 +39,7 @@ import { GeneralUtils } from '../../nurse-doctor/shared/utility/general-utility'
 import { SetLanguageComponent } from '../components/set-language.component';
 import { HttpServiceService } from '../services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 
 @Directive({
   selector: '[appOpenModal]',

@@ -36,7 +36,7 @@ import {
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 @Component({
   selector: 'app-physical-activity-history',
   templateUrl: './physical-activity-history.component.html',

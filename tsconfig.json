@@ -24,7 +24,7 @@
       "dom"
     ],
     "paths": {
-      "Common-UI/src/*": ["Common-UI/src/*"]
+      "Common-UI/v2/*": ["Common-UI/v2/*"]
     }
   },
   "angularCompilerOptions": {

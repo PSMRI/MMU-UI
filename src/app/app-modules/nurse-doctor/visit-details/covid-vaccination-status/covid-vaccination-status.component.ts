@@ -33,7 +33,7 @@ import {
   MasterdataService,
   DoctorService,
 } from '../../shared/services';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 @Component({
   selector: 'app-covid-vaccination-status',
   templateUrl: './covid-vaccination-status.component.html',

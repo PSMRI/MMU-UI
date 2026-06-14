@@ -42,7 +42,7 @@ import { SetLanguageComponent } from '../../core/components/set-language.compone
 import { Observable } from 'rxjs/internal/Observable';
 import { of } from 'rxjs';
 import { RegistrarService } from '../shared/services/registrar.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-registration',

@@ -31,7 +31,7 @@ import { BeneficiaryMctsCallHistoryComponent } from '../beneficiary-mcts-call-hi
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { CaseSheetComponent } from '../../case-sheet/case-sheet.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-beneficiary-platform-history',

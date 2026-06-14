@@ -24,7 +24,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService } from '../core/services/confirmation.service';
 import { AuthService } from '../core/services';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-reset-password',
