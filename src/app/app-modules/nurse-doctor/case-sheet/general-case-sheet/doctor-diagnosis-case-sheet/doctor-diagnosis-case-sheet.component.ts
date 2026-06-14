@@ -29,7 +29,7 @@ import {
 } from '../../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import * as moment from 'moment';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { get } from 'jquery';
 import { map, Observable } from 'rxjs';
 

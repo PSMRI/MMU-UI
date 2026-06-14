@@ -36,7 +36,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { DoctorService, NurseService } from '../../../shared/services';
 import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 import { MatDialog } from '@angular/material/dialog';
 

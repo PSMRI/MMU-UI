@@ -24,7 +24,7 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DoctorService } from '../shared/services/doctor.service';
 import { ActivatedRoute } from '@angular/router';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-history',

@@ -39,7 +39,7 @@ import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/co
 import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 @Component({
   selector: 'app-test-and-radiology',
   templateUrl: './test-and-radiology.component.html',

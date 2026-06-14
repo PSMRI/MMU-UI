@@ -25,7 +25,7 @@ import { Router, Resolve, ActivatedRouteSnapshot } from '@angular/router';
 
 import { ServicePointService } from './service-point.service';
 import { map } from 'rxjs';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 
 @Injectable()
 export class ServicePointResolve implements Resolve<any> {

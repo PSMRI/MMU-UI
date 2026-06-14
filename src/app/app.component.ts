@@ -31,7 +31,7 @@ import {
   Router,
 } from '@angular/router';
 import { SpinnerService } from './app-modules/core/services';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { AmritTrackingService } from 'Common-UI/v2/tracking';
 
 @Component({
   selector: 'app-root',

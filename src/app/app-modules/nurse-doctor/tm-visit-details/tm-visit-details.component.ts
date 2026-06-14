@@ -26,7 +26,7 @@ import { Router } from '@angular/router';
 import { DoctorService, MasterdataService } from '../shared/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-tm-visit-details',

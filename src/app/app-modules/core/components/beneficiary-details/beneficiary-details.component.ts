@@ -25,7 +25,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { BeneficiaryDetailsService } from '../../services/beneficiary-details.service';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-beneficiary-details',

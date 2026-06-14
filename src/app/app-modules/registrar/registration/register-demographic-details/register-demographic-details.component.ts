@@ -35,7 +35,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { RegisterEditLocationComponent } from '../register-edit-location/register-edit-location.component';
 import { _MatAutocompleteBase } from '@angular/material/autocomplete';
 import { RegistrarService } from '../../shared/services/registrar.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-register-demographic-details',

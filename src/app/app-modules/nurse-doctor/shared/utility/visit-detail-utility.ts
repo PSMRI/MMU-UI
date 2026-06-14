@@ -21,7 +21,7 @@
  */
 
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 
 export class VisitDetailUtils {
   constructor(

@@ -75,7 +75,7 @@ const routes: Routes = [
     path: 'registrar',
     canActivate: [AuthGuard],
     loadChildren: () =>
-      import('Common-UI/src/registrar/registration.module').then(
+      import('Common-UI/v2/registrar/registration.module').then(
         module => module.RegistrationModule
       ),
   },
@@ -112,7 +112,7 @@ const routes: Routes = [
   {
     path: 'feedback',
     loadChildren: () =>
-      import('Common-UI/src/feedback/feedback.module').then(
+      import('Common-UI/v2/feedback/feedback.module').then(
         m => m.FeedbackModule
       ),
   },

@@ -38,7 +38,7 @@ import { SharedModule } from './app-modules/core/components/shared/shared.module
 import { CommonModule } from '@angular/common';
 import { CaptchaComponent } from './app-modules/captcha/captcha.component';
 import { MatChipsModule } from '@angular/material/chips';
-import { TrackingModule } from 'Common-UI/src/tracking';
+import { TrackingModule } from 'Common-UI/v2/tracking';
 
 @NgModule({
   declarations: [
