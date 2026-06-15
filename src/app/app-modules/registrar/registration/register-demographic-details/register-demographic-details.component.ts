@@ -36,12 +36,16 @@ import { RegisterEditLocationComponent } from '../register-edit-location/registe
 import { _MatAutocompleteBase } from '@angular/material/autocomplete';
 import { RegistrarService } from '../../shared/services/registrar.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '../../../core/material.module';
 
 @Component({
   selector: 'app-register-demographic-details',
   templateUrl: './register-demographic-details.component.html',
   styleUrls: ['./register-demographic-details.component.css'],
-  standalone: false,
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MaterialModule],
 })
 export class RegisterDemographicDetailsComponent
   implements OnInit, OnDestroy, DoCheck

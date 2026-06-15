@@ -34,12 +34,16 @@ import {
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { RegistrarService } from '../../shared/services/registrar.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '../../../core/material.module';
 
 @Component({
   selector: 'app-register-other-details',
   templateUrl: './register-other-details.component.html',
   styleUrls: ['./register-other-details.component.css'],
-  standalone: false,
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MaterialModule],
 })
 export class RegisterOtherDetailsComponent
   implements OnInit, DoCheck, OnDestroy

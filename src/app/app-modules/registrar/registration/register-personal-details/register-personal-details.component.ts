@@ -53,6 +53,10 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import * as moment from 'moment';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '../../../core/material.module';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @Component({
   selector: 'app-register-personal-details',
@@ -83,7 +87,14 @@ import * as moment from 'moment';
       },
     },
   ],
-  standalone: false,
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MaterialModule,
+    BsDatepickerModule,
+  ],
 })
 export class RegisterPersonalDetailsComponent
   implements OnInit, DoCheck, OnDestroy

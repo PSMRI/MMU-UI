@@ -46,6 +46,9 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '../../core/material.module';
 
 interface Beneficary {
   firstName: string;
@@ -89,7 +92,8 @@ interface Beneficary {
       },
     },
   ],
-  standalone: false,
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
 })
 export class SearchDialogComponent implements OnInit, DoCheck {
   // for ID Manpulation

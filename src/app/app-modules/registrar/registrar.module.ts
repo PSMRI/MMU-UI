@@ -69,9 +69,6 @@ import { SharedModule } from '../core/components/shared/shared.module';
     ReactiveFormsModule,
     SharedModule,
     BsDatepickerModule.forRoot(),
-  ],
-  providers: [RegistrarService],
-  declarations: [
     RegistrationComponent,
     RegisterPersonalDetailsComponent,
     RegisterDemographicDetailsComponent,
@@ -81,5 +78,7 @@ import { SharedModule } from '../core/components/shared/shared.module';
     SearchDialogComponent,
     DashboardComponent,
   ],
+  providers: [RegistrarService],
+  declarations: [],
 })
 export class RegistrarModule {}
