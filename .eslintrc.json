@@ -36,7 +36,8 @@
         "@typescript-eslint/no-empty-function": 0,
         "@typescript-eslint/no-unused-vars": 0,
         "eqeqeq": 1,
-        "@angular-eslint/prefer-standalone": 0
+        "@angular-eslint/prefer-standalone": 0,
+        "@angular-eslint/prefer-inject": 0
       }
     },
     {

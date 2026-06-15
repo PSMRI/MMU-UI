@@ -69,8 +69,8 @@ describe('AppHeaderComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
     component.showRoles = false;
-    authService = TestBed.get(AuthService);
-    router = TestBed.get(Router);
+    authService = TestBed.inject(AuthService);
+    router = TestBed.inject(Router);
     window.localStorage.setItem('servicePointName', 'Barpeta SP');
     window.localStorage.setItem('userName', 'Prabhsimran Singh');
     window.sessionStorage.setItem('isAuthenticated', 'true');

@@ -20,10 +20,10 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, DOCUMENT } from '@angular/core';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { environment } from 'src/environments/environment';
-import { DOCUMENT } from '@angular/common';
+
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 @Injectable()
 export class InventoryService {

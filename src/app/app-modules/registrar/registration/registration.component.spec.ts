@@ -197,7 +197,7 @@ describe('RegisterComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(RegistrationComponent);
     component = fixture.componentInstance;
-    registrarService = TestBed.get(RegistrarService);
+    registrarService = TestBed.inject(RegistrarService);
     // component.ngOnInit();
 
     spyOn(component, 'dateFormatChange').and.returnValue(1);

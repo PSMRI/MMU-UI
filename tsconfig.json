@@ -14,7 +14,7 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "es5",
     "module": "ES2022",
@@ -24,7 +24,9 @@
       "dom"
     ],
     "paths": {
-      "Common-UI/v2/*": ["Common-UI/v2/*"]
+      "Common-UI/v2/*": [
+        "Common-UI/v2/*"
+      ]
     }
   },
   "angularCompilerOptions": {

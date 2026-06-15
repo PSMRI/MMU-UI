@@ -20,8 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { DOCUMENT } from '@angular/common';
-import { Injectable, ViewContainerRef, Inject } from '@angular/core';
+import { Injectable, ViewContainerRef, Inject, DOCUMENT } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { CameraDialogComponent } from '../components/camera-dialog/camera-dialog.component';
