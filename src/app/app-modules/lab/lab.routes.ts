@@ -20,16 +20,18 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 import { WorklistComponent } from './worklist/worklist.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { WorkareaComponent } from './workarea/workarea.component';
 import { CanDeactivateGuardService } from '../core/services/can-deactivate-guard.service';
-const routes: Routes = [
+import { LabService, MasterDataService } from './shared/services';
+
+export const LAB_ROUTES: Routes = [
   {
     path: '',
     component: DashboardComponent,
+    providers: [LabService, MasterDataService],
     children: [
       {
         path: '',
@@ -48,9 +50,3 @@ const routes: Routes = [
     ],
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class LabRoutingModule {}

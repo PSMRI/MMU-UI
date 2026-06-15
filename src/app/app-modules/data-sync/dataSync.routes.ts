@@ -20,41 +20,34 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { WorklistComponent } from './worklist/worklist.component';
-import { RedirInComponent } from './redir-in/redir-in.component';
-import { RedirFallbackComponent } from './redir-fallback/redir-fallback.component';
+import { WorkareaComponent } from './workarea/workarea.component';
+import { CanDeactivateGuardService } from '../core/services/can-deactivate-guard.service';
+import { DataSyncLoginComponent } from '../core/components/data-sync-login/data-sync-login.component';
+import { DataSyncService } from './shared/service/data-sync.service';
+import { MasterDownloadComponent } from './master-download/master-download.component';
 
-const routes: Routes = [
+export const DATA_SYNC_ROUTES: Routes = [
   {
     path: '',
     component: DashboardComponent,
+    providers: [DataSyncService, MasterDownloadComponent],
     children: [
       {
         path: '',
-        redirectTo: 'pharmacist-worklist',
+        redirectTo: 'sync-login',
         pathMatch: 'full',
       },
       {
-        path: 'pharmacist-worklist',
-        component: WorklistComponent,
+        path: 'workarea',
+        component: WorkareaComponent,
+        canDeactivate: [CanDeactivateGuardService],
       },
       {
-        path: 'redirin',
-        component: RedirInComponent,
-      },
-      {
-        path: 'redirfallback',
-        component: RedirFallbackComponent,
+        path: 'sync-login',
+        component: DataSyncLoginComponent,
       },
     ],
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class PharmacistRoutingModule {}
