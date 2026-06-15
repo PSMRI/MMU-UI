@@ -23,12 +23,20 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { NurseWorklistComponent } from '../nurse-worklist/nurse-worklist.component';
+import { NurseRefferedWorklistComponent } from './nurse-reffered-worklist/nurse-reffered-worklist.component';
 
 @Component({
   selector: 'app-nurse-worklist-tabs',
   templateUrl: './nurse-worklist-tabs.component.html',
   styleUrls: ['./nurse-worklist-tabs.component.css'],
-  standalone: false,
+  imports: [
+    MatTabGroup,
+    MatTab,
+    NurseWorklistComponent,
+    NurseRefferedWorklistComponent,
+  ],
 })
 export class NurseWorklistTabsComponent implements OnInit, DoCheck {
   currentLanguageSet: any;

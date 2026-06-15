@@ -38,19 +38,12 @@ import {
   provideHttpClient,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import { MaterialModule } from '../core/material.module';
+
 import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { SharedModule } from '../core/components/shared/shared.module';
 
 @NgModule({
-  declarations: [
-    WorkareaComponent,
-    WorklistComponent,
-    DashboardComponent,
-    ViewFileComponent,
-  ],
   imports: [
     CommonModule,
     LabRoutingModule,
@@ -60,12 +53,14 @@ import { SharedModule } from '../core/components/shared/shared.module';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MaterialModule,
     MatTableModule,
     MatChipsModule,
     MatDatepickerModule,
     MatTooltipModule,
-    SharedModule,
+    WorkareaComponent,
+    WorklistComponent,
+    DashboardComponent,
+    ViewFileComponent,
   ],
   providers: [
     LabService,

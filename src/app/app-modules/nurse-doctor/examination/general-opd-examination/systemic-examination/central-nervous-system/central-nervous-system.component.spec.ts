@@ -57,13 +57,13 @@ describe('CentralNervousSystemComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [CentralNervousSystemComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
         ReactiveFormsModule,
         FormsModule,
         MaterialModule,
         NoopAnimationsModule,
+        CentralNervousSystemComponent,
       ],
     }).compileComponents();
   }));

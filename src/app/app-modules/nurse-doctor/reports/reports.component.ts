@@ -23,7 +23,7 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
 import { MasterdataService } from '../shared/services';
 import { ConfirmationService } from '../../core/services/confirmation.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import * as ExcelJS from 'exceljs';
@@ -39,6 +39,22 @@ import {
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
+import {
+  MatFormField,
+  MatLabel,
+  MatSelect,
+  MatHint,
+  MatSuffix,
+} from '@angular/material/select';
+import { NgFor } from '@angular/common';
+import { MatOption } from '@angular/material/autocomplete';
+import {
+  MatDateRangeInput,
+  MatStartDate,
+  MatEndDate,
+  MatDatepickerToggle,
+  MatDateRangePicker,
+} from '@angular/material/datepicker';
 
 declare global {
   interface Navigator {
@@ -75,7 +91,21 @@ declare global {
       },
     },
   ],
-  standalone: false,
+  imports: [
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    NgFor,
+    MatOption,
+    MatDateRangeInput,
+    MatStartDate,
+    MatEndDate,
+    MatHint,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDateRangePicker,
+  ],
 })
 export class ReportsComponent implements OnInit, DoCheck {
   reportForm!: FormGroup;

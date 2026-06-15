@@ -3,6 +3,7 @@ import {
   MAT_DIALOG_DATA,
   MatDialogRef,
   MatDialog,
+  MatDialogContent,
 } from '@angular/material/dialog';
 import { SmsTemplateService } from '../smsTemplate/sms-template.service';
 import { ConfirmationService } from '../../core/services';
@@ -13,12 +14,33 @@ import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-s
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIcon } from '@angular/material/icon';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { NgIf, NgFor } from '@angular/common';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatFormField, MatLabel, MatError } from '@angular/material/select';
 
 @Component({
   selector: 'app-sms-notification',
   templateUrl: './sms-notification.component.html',
   styleUrls: ['./sms-notification.component.css'],
-  standalone: false,
+  imports: [
+    MatToolbar,
+    MatIcon,
+    CdkScrollable,
+    MatDialogContent,
+    NgIf,
+    NgFor,
+    MatPaginator,
+    MatCheckbox,
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormField,
+    MatLabel,
+    MatError,
+  ],
 })
 export class SmsNotificationComponent implements OnInit, DoCheck {
   altNum = false;

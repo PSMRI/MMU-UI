@@ -57,13 +57,13 @@ describe('GenitoUrinarySystemComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [GenitoUrinarySystemComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
         ReactiveFormsModule,
         FormsModule,
         MaterialModule,
         NoopAnimationsModule,
+        GenitoUrinarySystemComponent,
       ],
     }).compileComponents();
   }));

@@ -30,7 +30,7 @@ describe('ViewTestReportComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ViewTestReportComponent],
+      imports: [ViewTestReportComponent],
     }).compileComponents();
   }));
 

@@ -28,7 +28,7 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NurseService, DoctorService } from '../../shared/services';
 import { MasterdataService } from '../../shared/services/masterdata.service';
@@ -39,12 +39,26 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { DataSyncLoginComponent } from 'src/app/app-modules/core/components/data-sync-login/data-sync-login.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { MatLabel, MatFormField, MatSelect } from '@angular/material/select';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { NgIf, NgFor } from '@angular/common';
+import { MatOption } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-tmcconfirmation',
   templateUrl: './tmcconfirmation.component.html',
   styleUrls: ['./tmcconfirmation.component.css'],
-  standalone: false,
+  imports: [
+    ReactiveFormsModule,
+    MatLabel,
+    MatRadioGroup,
+    MatRadioButton,
+    NgIf,
+    MatFormField,
+    MatSelect,
+    NgFor,
+    MatOption,
+  ],
 })
 export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

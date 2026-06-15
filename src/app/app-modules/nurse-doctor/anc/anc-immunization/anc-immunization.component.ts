@@ -28,7 +28,7 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { SetLanguageComponent } from '../../../core/components/set-language.component';
@@ -43,6 +43,21 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf, NgFor } from '@angular/common';
+import {
+  MatFormField,
+  MatLabel,
+  MatSelect,
+  MatSuffix,
+} from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import {
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatDatepicker,
+} from '@angular/material/datepicker';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
   selector: 'app-nurse-anc-immunization',
@@ -73,7 +88,22 @@ import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-s
       },
     },
   ],
-  standalone: false,
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    NgFor,
+    MatOption,
+    MatInput,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+    MatRadioGroup,
+    MatRadioButton,
+  ],
 })
 export class AncImmunizationComponent
   implements OnInit, OnChanges, DoCheck, OnDestroy

@@ -30,7 +30,7 @@ describe('BeneficiaryPlatformHistoryComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [BeneficiaryPlatformHistoryComponent],
+      imports: [BeneficiaryPlatformHistoryComponent],
     }).compileComponents();
   }));
 

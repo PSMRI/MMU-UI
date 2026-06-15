@@ -28,19 +28,38 @@ import {
   OnChanges,
   DoCheck,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MasterdataService } from '../../shared/services';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { SetLanguageComponent } from '../../../core/components/set-language.component';
 import { HttpServiceService } from '../../../core/services/http-service.service';
+import { NgIf, NgFor } from '@angular/common';
+import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { NullDefaultValueDirective } from '../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
+import { NumberValidatorDirective } from '../../../core/directives/numberValidator.directive';
+import { MatOption } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-nurse-obstetric-formula',
   templateUrl: './obstetric-formula.component.html',
   styleUrls: ['./obstetric-formula.component.css'],
-  standalone: false,
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+    NumberValidatorDirective,
+    MatSelect,
+    NgFor,
+    MatOption,
+  ],
 })
 export class ObstetricFormulaComponent implements OnInit, DoCheck, OnChanges {
   @Input()

@@ -43,8 +43,12 @@ describe('BreastExaminationComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
-      declarations: [BreastExaminationComponent],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        BreastExaminationComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: CameraService, useClass: CameraServiceStub },

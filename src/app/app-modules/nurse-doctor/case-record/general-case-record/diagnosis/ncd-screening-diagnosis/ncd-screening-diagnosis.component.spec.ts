@@ -30,7 +30,7 @@ describe('NcdScreeningDiagnosisComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [NcdScreeningDiagnosisComponent],
+      imports: [NcdScreeningDiagnosisComponent],
     }).compileComponents();
   }));
 

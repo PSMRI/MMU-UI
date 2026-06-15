@@ -31,7 +31,7 @@ import {
   DoCheck,
   OnChanges,
 } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Observable, Subscription, mergeMap, of } from 'rxjs';
 import {
   NurseService,
@@ -51,12 +51,42 @@ import { SetLanguageComponent } from '../../core/components/set-language.compone
 import { PreviousDetailsComponent } from '../../core/components/previous-details/previous-details.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import {
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
+import { NgFor, NgIf } from '@angular/common';
+import { MatLabel } from '@angular/material/select';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import {
+  MatCard,
+  MatCardHeader,
+  MatCardTitle,
+  MatCardContent,
+} from '@angular/material/card';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
   selector: 'app-idrs',
   templateUrl: './idrs.component.html',
   styleUrls: ['./idrs.component.css'],
-  standalone: false,
+  imports: [
+    ReactiveFormsModule,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    NgFor,
+    MatLabel,
+    MatTooltip,
+    MatIcon,
+    NgIf,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatRadioGroup,
+    MatRadioButton,
+  ],
 })
 export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   @Input()

@@ -30,7 +30,7 @@ describe('WorkareaComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [WorkareaComponent],
+      imports: [WorkareaComponent],
     }).compileComponents();
   }));
 

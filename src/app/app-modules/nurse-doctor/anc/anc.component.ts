@@ -28,18 +28,36 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DoctorService } from '../shared/services';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { BeneficiaryDetailsService } from '../../core/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
+import { AncDetailsComponent } from './anc-details/anc-details.component';
+import { ObstetricFormulaComponent } from './obstetric-formula/obstetric-formula.component';
+import { NgIf } from '@angular/common';
+import { AncImmunizationComponent } from './anc-immunization/anc-immunization.component';
 @Component({
   selector: 'app-nurse-anc',
   templateUrl: './anc.component.html',
   styleUrls: ['./anc.component.css'],
-  standalone: false,
+  imports: [
+    MatAccordion,
+    ReactiveFormsModule,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    AncDetailsComponent,
+    ObstetricFormulaComponent,
+    NgIf,
+    AncImmunizationComponent,
+  ],
 })
 export class AncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
   @Input()

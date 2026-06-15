@@ -58,7 +58,7 @@ describe('PerinatalHistoryComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PerinatalHistoryComponent],
+      imports: [PerinatalHistoryComponent],
     }).compileComponents();
   }));
 

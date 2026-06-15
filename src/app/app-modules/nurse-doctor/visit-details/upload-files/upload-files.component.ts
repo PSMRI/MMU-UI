@@ -41,12 +41,27 @@ import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import {
+  MatChipListbox,
+  MatChip,
+  MatChipRemove,
+} from '@angular/material/chips';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-patient-upload-files',
   templateUrl: './upload-files.component.html',
   styleUrls: ['./upload-files.component.css'],
-  standalone: false,
+  imports: [
+    NgIf,
+    MatChipListbox,
+    NgFor,
+    MatChip,
+    NgClass,
+    MatIcon,
+    MatChipRemove,
+  ],
 })
 export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
   fileList!: FileList;

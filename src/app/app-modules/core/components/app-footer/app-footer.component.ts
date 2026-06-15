@@ -23,12 +23,15 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
+import { NgIf } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './app-footer.component.html',
   styleUrls: ['./app-footer.component.css'],
-  standalone: false,
+  imports: [NgIf, RouterLink, MatIcon],
 })
 export class AppFooterComponent implements OnInit, DoCheck {
   currentLanguageSet: any;

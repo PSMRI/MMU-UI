@@ -30,7 +30,7 @@ describe('GeneralCaseRecordComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [GeneralCaseRecordComponent],
+      imports: [GeneralCaseRecordComponent],
     }).compileComponents();
   }));
 

@@ -21,15 +21,22 @@
  */
 
 import { Component, OnInit, Inject, DoCheck } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogClose,
+  MatDialogContent,
+} from '@angular/material/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
+import { MatIcon } from '@angular/material/icon';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-show-commit-and-version-details',
   templateUrl: './show-commit-and-version-details.component.html',
   styleUrls: ['./show-commit-and-version-details.component.css'],
-  standalone: false,
+  imports: [MatDialogClose, MatIcon, CdkScrollable, MatDialogContent],
 })
 export class ShowCommitAndVersionDetailsComponent implements OnInit, DoCheck {
   current_language_set: any;

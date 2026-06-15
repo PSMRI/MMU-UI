@@ -30,7 +30,7 @@ describe('TestAndRadiologyComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [TestAndRadiologyComponent],
+      imports: [TestAndRadiologyComponent],
     }).compileComponents();
   }));
 

@@ -30,7 +30,7 @@ describe('CaseSheetComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [CaseSheetComponent],
+      imports: [CaseSheetComponent],
     }).compileComponents();
   }));
 

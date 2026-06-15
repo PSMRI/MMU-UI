@@ -21,19 +21,26 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormArray,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 import { MasterdataService, DoctorService } from '../../../shared/services';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgFor } from '@angular/common';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-general-immunization-history',
   templateUrl: './immunization-history.component.html',
   styleUrls: ['./immunization-history.component.css'],
-  standalone: false,
+  imports: [ReactiveFormsModule, NgFor, MatCheckbox],
 })
 export class ImmunizationHistoryComponent
   implements OnInit, DoCheck, OnDestroy

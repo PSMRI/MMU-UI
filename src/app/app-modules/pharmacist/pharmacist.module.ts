@@ -42,17 +42,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
-import { MaterialModule } from '../core/material.module';
+
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { SharedModule } from '../core/components/shared/shared.module';
 
 @NgModule({
-  declarations: [
-    DashboardComponent,
-    WorklistComponent,
-    RedirInComponent,
-    RedirFallbackComponent,
-  ],
   imports: [
     CommonModule,
     PharmacistRoutingModule,
@@ -62,12 +55,14 @@ import { SharedModule } from '../core/components/shared/shared.module';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MaterialModule,
     MatTableModule,
     MatChipsModule,
     MatDatepickerModule,
     MatTooltipModule,
-    SharedModule,
+    DashboardComponent,
+    WorklistComponent,
+    RedirInComponent,
+    RedirFallbackComponent,
   ],
   providers: [PharmacistService, provideHttpClient(withInterceptorsFromDi())],
 })

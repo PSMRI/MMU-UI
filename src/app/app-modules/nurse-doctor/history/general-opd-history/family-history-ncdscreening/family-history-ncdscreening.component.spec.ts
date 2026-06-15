@@ -30,7 +30,7 @@ describe('FamilyHistoryNcdscreeningComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [FamilyHistoryNcdscreeningComponent],
+      imports: [FamilyHistoryNcdscreeningComponent],
     }).compileComponents();
   }));
 

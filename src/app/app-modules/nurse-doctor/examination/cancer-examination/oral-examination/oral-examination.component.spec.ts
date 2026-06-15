@@ -42,8 +42,12 @@ describe('OralExaminationComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
-      declarations: [OralExaminationComponent],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        OralExaminationComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [{ provide: CameraService, useClass: CameraServiceStub }],
     }).compileComponents();

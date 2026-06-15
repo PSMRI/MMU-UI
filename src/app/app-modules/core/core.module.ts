@@ -28,7 +28,7 @@ import {
 } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MaterialModule } from './material.module';
+
 import { AppFooterComponent } from './components/app-footer/app-footer.component';
 import { AppHeaderComponent } from './components/app-header/app-header.component';
 import { CommonDialogComponent } from './components/common-dialog/common-dialog.component';
@@ -71,36 +71,9 @@ import { MyEmailDirective } from './directives/email/myEmail.directive';
 import { MyMobileNumberDirective } from './directives/MobileNumber/myMobileNumber.directive';
 import { MyNameDirective } from './directives/name/myName.directive';
 import { MyPasswordDirective } from './directives/password/myPassword.directive';
-import { SharedModule } from './components/shared/shared.module';
 
 @NgModule({
-  declarations: [
-    CommonDialogComponent,
-    CameraDialogComponent,
-    ProvisionalSearchComponent,
-    SpinnerComponent,
-    BeneficiaryDetailsComponent,
-    ViewRadiologyUploadedFilesComponent,
-    PreviousDetailsComponent,
-    ShowCommitAndVersionDetailsComponent,
-    CalibrationComponent,
-    MyEmailDirective,
-    MyMobileNumberDirective,
-    OpenModalDirective,
-    ConfirmatoryDiagnosisDirective,
-    MyNameDirective,
-    MyPasswordDirective,
-    StringValidatorDirective,
-    NullDefaultValueDirective,
-    NumberValidatorDirective,
-    DisableFormControlDirective,
-    IotcomponentComponent,
-    IotBluetoothComponent,
-    AllergenSearchComponent,
-    OpenPreviousVisitDetailsComponent,
-  ],
   exports: [
-    MaterialModule,
     CommonDialogComponent,
     IotBluetoothComponent,
     ShowCommitAndVersionDetailsComponent,
@@ -127,13 +100,35 @@ import { SharedModule } from './components/shared/shared.module';
   ],
   imports: [
     CommonModule,
-    MaterialModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
     NgChartsModule,
     WebcamModule,
     MatTableModule,
+    CommonDialogComponent,
+    CameraDialogComponent,
+    ProvisionalSearchComponent,
+    SpinnerComponent,
+    BeneficiaryDetailsComponent,
+    ViewRadiologyUploadedFilesComponent,
+    PreviousDetailsComponent,
+    ShowCommitAndVersionDetailsComponent,
+    CalibrationComponent,
+    MyEmailDirective,
+    MyMobileNumberDirective,
+    OpenModalDirective,
+    ConfirmatoryDiagnosisDirective,
+    MyNameDirective,
+    MyPasswordDirective,
+    StringValidatorDirective,
+    NullDefaultValueDirective,
+    NumberValidatorDirective,
+    DisableFormControlDirective,
+    IotcomponentComponent,
+    IotBluetoothComponent,
+    AllergenSearchComponent,
+    OpenPreviousVisitDetailsComponent,
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],
 })

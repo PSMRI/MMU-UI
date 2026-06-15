@@ -65,9 +65,13 @@ describe('FeedingHistoryComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        FeedingHistoryComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
-      declarations: [FeedingHistoryComponent],
       providers: [
         ConfirmationService,
         { provide: MasterdataService, useClass: MasterdataServiceStub },

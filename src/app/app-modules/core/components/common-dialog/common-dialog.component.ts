@@ -27,15 +27,35 @@ import {
   EventEmitter,
   DoCheck,
 } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MatDialogClose } from '@angular/material/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
+import { NgIf, NgClass, NgFor, TitleCasePipe } from '@angular/common';
+import { MatFormField, MatLabel } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { StringValidatorDirective } from '../../directives/stringValidator.directive';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
   selector: 'app-common-dialog',
   templateUrl: './common-dialog.component.html',
   styleUrls: ['./common-dialog.component.css'],
-  standalone: false,
+  imports: [
+    NgIf,
+    NgClass,
+    MatDialogClose,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    ReactiveFormsModule,
+    StringValidatorDirective,
+    FormsModule,
+    NgFor,
+    MatRadioGroup,
+    MatRadioButton,
+    TitleCasePipe,
+  ],
 })
 export class CommonDialogComponent implements OnInit, DoCheck {
   @Output() cancelEvent = new EventEmitter();

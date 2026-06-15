@@ -58,7 +58,7 @@ describe('MedicationHistoryComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [MedicationHistoryComponent],
+      imports: [MedicationHistoryComponent],
     }).compileComponents();
   }));
 

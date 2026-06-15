@@ -26,6 +26,7 @@ import {
   FormArray,
   FormGroup,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -42,12 +43,37 @@ import {
 } from '../../../shared/services';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
   selector: 'app-family-history-ncdscreening',
   templateUrl: './family-history-ncdscreening.component.html',
   styleUrls: ['./family-history-ncdscreening.component.css'],
-  standalone: false,
+  imports: [
+    ReactiveFormsModule,
+    MatTooltip,
+    MatIcon,
+    NgIf,
+    NgFor,
+    NgClass,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatInput,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+    MatRadioGroup,
+    MatRadioButton,
+  ],
 })
 export class FamilyHistoryNcdscreeningComponent
   implements OnInit, DoCheck, OnDestroy

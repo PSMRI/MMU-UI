@@ -28,25 +28,56 @@ import {
   ElementRef,
 } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
 import {
   AuthService,
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { DataSyncLoginComponent } from '../core/components/data-sync-login/data-sync-login.component';
 import { MasterDownloadComponent } from '../data-sync/master-download/master-download.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { environment } from 'src/environments/environment';
 import { CaptchaComponent } from '../captcha/captcha.component';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
+import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import {
+  MatPrefix,
+  MatFormField,
+  MatLabel,
+  MatSuffix,
+} from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../core/directives/stringValidator.directive';
+import { MatTooltip } from '@angular/material/tooltip';
+import { NgIf, NgClass } from '@angular/common';
+import { AppFooterComponent } from '../core/components/app-footer/app-footer.component';
 
 @Component({
   selector: 'app-login-cmp',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  standalone: false,
+  imports: [
+    MatCard,
+    MatCardTitle,
+    MatCardContent,
+    ReactiveFormsModule,
+    MatIcon,
+    MatPrefix,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    StringValidatorDirective,
+    MatSuffix,
+    MatTooltip,
+    NgIf,
+    CaptchaComponent,
+    NgClass,
+    RouterLink,
+    AppFooterComponent,
+  ],
 })
 export class LoginComponent implements OnInit, AfterViewInit {
   @ViewChild('captchaCmp') captchaCmp: CaptchaComponent | undefined;

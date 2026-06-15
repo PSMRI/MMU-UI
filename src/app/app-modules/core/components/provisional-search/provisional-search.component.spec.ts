@@ -30,7 +30,7 @@ describe('ProvisionalSearchComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ProvisionalSearchComponent],
+      imports: [ProvisionalSearchComponent],
     }).compileComponents();
   }));
 

@@ -30,7 +30,7 @@ describe('ImageToCanvasComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ImageToCanvasComponent],
+      imports: [ImageToCanvasComponent],
     }).compileComponents();
   }));
 

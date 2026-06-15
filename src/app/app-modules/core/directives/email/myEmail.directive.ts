@@ -32,7 +32,6 @@ import { NG_VALIDATORS, Validator, AbstractControl } from '@angular/forms';
       multi: true,
     },
   ],
-  standalone: false,
 })
 export class MyEmailDirective implements Validator {
   pattern =

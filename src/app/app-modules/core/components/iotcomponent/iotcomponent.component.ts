@@ -25,6 +25,7 @@ import {
   MAT_DIALOG_DATA,
   MatDialog,
   MatDialogRef,
+  MatDialogContent,
 } from '@angular/material/dialog';
 import { ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
@@ -32,12 +33,23 @@ import { IotService } from '../../services/iot.service';
 import { SetLanguageComponent } from '../set-language.component';
 import { CalibrationComponent } from '../calibration/calibration.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgClass, NgIf } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-iotcomponent',
   templateUrl: './iotcomponent.component.html',
   styleUrls: ['./iotcomponent.component.css'],
-  standalone: false,
+  imports: [
+    NgClass,
+    MatIcon,
+    MatTooltip,
+    CdkScrollable,
+    MatDialogContent,
+    NgIf,
+  ],
 })
 export class IotcomponentComponent implements OnInit, DoCheck {
   errorMsg: any;

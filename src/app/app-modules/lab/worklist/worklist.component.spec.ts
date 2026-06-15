@@ -30,7 +30,7 @@ describe('WorklistComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [WorklistComponent],
+      imports: [WorklistComponent],
     }).compileComponents();
   }));
 

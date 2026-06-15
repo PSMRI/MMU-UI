@@ -30,7 +30,13 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  FormArray,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Subscription } from 'rxjs';
 import {
   MasterdataService,
@@ -41,12 +47,22 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import { NgFor } from '@angular/common';
+import { MatOption } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-patient-investigations',
   templateUrl: './investigations.component.html',
   styleUrls: ['./investigations.component.css'],
-  standalone: false,
+  imports: [
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    NgFor,
+    MatOption,
+  ],
 })
 export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

@@ -22,12 +22,15 @@
 
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { NgIf } from '@angular/common';
+import { CancerCaseRecordComponent } from './cancer-case-record/cancer-case-record.component';
+import { GeneralCaseRecordComponent } from './general-case-record/general-case-record.component';
 
 @Component({
   selector: 'app-case-record',
   templateUrl: './case-record.component.html',
   styleUrls: ['./case-record.component.css'],
-  standalone: false,
+  imports: [NgIf, CancerCaseRecordComponent, GeneralCaseRecordComponent],
 })
 export class CaseRecordComponent implements OnInit {
   @Input()

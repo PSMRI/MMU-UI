@@ -24,12 +24,15 @@ import { Component, OnInit, Inject, DoCheck } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
+import { NgIf } from '@angular/common';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-case-sheet-print-page-select',
   templateUrl: './print-page-select.component.html',
   styleUrls: ['./print-page-select.component.css'],
-  standalone: false,
+  imports: [NgIf, MatCheckbox, ReactiveFormsModule, FormsModule],
 })
 export class PrintPageSelectComponent implements OnInit, DoCheck {
   printPagePreviewSelect = {
