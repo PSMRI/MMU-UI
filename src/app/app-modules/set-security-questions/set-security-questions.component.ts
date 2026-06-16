@@ -25,12 +25,42 @@ import { Router } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
 import { AuthService, ConfirmationService } from '../core/services';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf, NgFor } from '@angular/common';
+import { MatCard, MatCardTitle } from '@angular/material/card';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import {
+  MatFormField,
+  MatLabel,
+  MatSelect,
+  MatPrefix,
+  MatSuffix,
+  MatHint,
+} from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-set-security-questions',
   templateUrl: './set-security-questions.component.html',
   styleUrls: ['./set-security-questions.component.css'],
-  standalone: false,
+  imports: [
+    NgIf,
+    MatCard,
+    MatCardTitle,
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    NgFor,
+    MatOption,
+    MatInput,
+    MatIcon,
+    MatPrefix,
+    MatSuffix,
+    MatHint,
+  ],
 })
 export class SetSecurityQuestionsComponent implements OnInit {
   passwordPattern =

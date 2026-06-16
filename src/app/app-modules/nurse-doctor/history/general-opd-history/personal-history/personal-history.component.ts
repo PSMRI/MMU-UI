@@ -33,6 +33,7 @@ import {
   FormArray,
   FormGroup,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 
 import {
@@ -50,12 +51,53 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { AllergenSearchComponent } from 'src/app/app-modules/core/components/allergen-search/allergen-search.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import {
+  MatFormField,
+  MatLabel,
+  MatSelect,
+  MatSuffix,
+} from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import {
+  MatCard,
+  MatCardHeader,
+  MatCardTitle,
+  MatCardContent,
+} from '@angular/material/card';
+import { MatInput } from '@angular/material/input';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-general-personal-history',
   templateUrl: './personal-history.component.html',
   styleUrls: ['./personal-history.component.css'],
-  standalone: false,
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    MatTooltip,
+    MatIcon,
+    MatRadioGroup,
+    MatRadioButton,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    NgFor,
+    NgClass,
+    MatInput,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+    MatSuffix,
+  ],
 })
 export class GeneralPersonalHistoryComponent
   implements OnInit, DoCheck, OnDestroy

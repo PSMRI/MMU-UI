@@ -30,7 +30,7 @@ describe('AncImmunizationComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [AncImmunizationComponent],
+      imports: [AncImmunizationComponent],
     }).compileComponents();
   }));
 

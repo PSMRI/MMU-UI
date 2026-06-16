@@ -20,17 +20,18 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { WorklistComponent } from './worklist/worklist.component';
 import { RedirInComponent } from './redir-in/redir-in.component';
 import { RedirFallbackComponent } from './redir-fallback/redir-fallback.component';
+import { PharmacistService } from './shared/services/pharmacist.service';
 
-const routes: Routes = [
+export const PHARMACIST_ROUTES: Routes = [
   {
     path: '',
     component: DashboardComponent,
+    providers: [PharmacistService],
     children: [
       {
         path: '',
@@ -52,9 +53,3 @@ const routes: Routes = [
     ],
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class PharmacistRoutingModule {}

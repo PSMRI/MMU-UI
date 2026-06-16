@@ -30,7 +30,7 @@ describe('SetSecurityQuestionsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [SetSecurityQuestionsComponent],
+      imports: [SetSecurityQuestionsComponent],
     }).compileComponents();
   }));
 

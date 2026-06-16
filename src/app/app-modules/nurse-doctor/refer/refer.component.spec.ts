@@ -30,7 +30,7 @@ describe('ReferComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ReferComponent],
+      imports: [ReferComponent],
     }).compileComponents();
   }));
 

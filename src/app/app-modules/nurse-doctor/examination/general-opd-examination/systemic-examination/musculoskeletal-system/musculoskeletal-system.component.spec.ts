@@ -60,13 +60,13 @@ describe('MusculoskeletalSystemComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [MusculoskeletalSystemComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
         ReactiveFormsModule,
         FormsModule,
         MaterialModule,
         NoopAnimationsModule,
+        MusculoskeletalSystemComponent,
       ],
       providers: [
         { provide: MasterdataService, useClass: MasterdataServiceStub },

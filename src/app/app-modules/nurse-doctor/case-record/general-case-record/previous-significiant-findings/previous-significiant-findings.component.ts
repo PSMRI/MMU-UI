@@ -31,13 +31,48 @@ import { DoctorService } from '../../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf, DatePipe } from '@angular/common';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-previous-significiant-findings',
   templateUrl: './previous-significiant-findings.component.html',
   styleUrls: ['./previous-significiant-findings.component.css'],
-  standalone: false,
+  imports: [
+    NgIf,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatIcon,
+    MatSuffix,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatPaginator,
+    DatePipe,
+  ],
 })
 export class PreviousSignificiantFindingsComponent
   implements OnInit, OnDestroy, DoCheck

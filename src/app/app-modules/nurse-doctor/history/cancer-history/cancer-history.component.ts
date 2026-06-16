@@ -28,7 +28,12 @@ import {
   OnDestroy,
   DoCheck,
 } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormArray,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 
 import { ConfirmationService } from '../../../core/services/confirmation.service';
@@ -36,12 +41,30 @@ import { DoctorService } from '../../shared/services/doctor.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
+import { FamilyDiseaseHistoryComponent } from './family-disease-history/family-disease-history.component';
+import { PersonalHistoryComponent } from './personal-history/personal-history.component';
+import { NgIf } from '@angular/common';
+import { ObstetricHistoryComponent } from './obstetric-history/obstetric-history.component';
 
 @Component({
   selector: 'app-nurse-cancer-history',
   templateUrl: './cancer-history.component.html',
   styleUrls: ['./cancer-history.component.css'],
-  standalone: false,
+  imports: [
+    MatAccordion,
+    ReactiveFormsModule,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    FamilyDiseaseHistoryComponent,
+    PersonalHistoryComponent,
+    NgIf,
+    ObstetricHistoryComponent,
+  ],
 })
 export class CancerHistoryComponent
   implements OnInit, OnChanges, OnDestroy, DoCheck

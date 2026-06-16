@@ -30,7 +30,7 @@ describe('CovidDiagnosisComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [CovidDiagnosisComponent],
+      imports: [CovidDiagnosisComponent],
     }).compileComponents();
   }));
 

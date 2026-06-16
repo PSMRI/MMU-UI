@@ -30,7 +30,7 @@ describe('RedirInComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [RedirInComponent],
+      imports: [RedirInComponent],
     }).compileComponents();
   }));
 

@@ -30,7 +30,7 @@ describe('PhysicalActivityHistoryComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PhysicalActivityHistoryComponent],
+      imports: [PhysicalActivityHistoryComponent],
     }).compileComponents();
   }));
 

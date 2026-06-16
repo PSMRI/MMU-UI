@@ -28,7 +28,7 @@ import {
   OnDestroy,
   DoCheck,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { DoctorService, NurseService } from '../../shared/services';
 
@@ -41,12 +41,37 @@ import { IotcomponentComponent } from 'src/app/app-modules/core/components/iotco
 import { ActivatedRoute } from '@angular/router';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
+import {
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { NullDefaultValueDirective } from '../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
+import { NumberValidatorDirective } from '../../../core/directives/numberValidator.directive';
+import { MatTooltip } from '@angular/material/tooltip';
+import { NgIf, NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-nurse-cancer-patient-vitals',
   templateUrl: './cancer-patient-vitals.component.html',
   styleUrls: ['./cancer-patient-vitals.component.css'],
-  standalone: false,
+  imports: [
+    ReactiveFormsModule,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+    NumberValidatorDirective,
+    MatSuffix,
+    MatTooltip,
+    NgIf,
+    NgClass,
+  ],
 })
 export class CancerPatientVitalsComponent
   implements OnInit, OnChanges, OnDestroy, DoCheck

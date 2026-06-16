@@ -21,16 +21,48 @@
  */
 
 import { Component, OnInit, Inject, ViewChild, DoCheck } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialogClose,
+} from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { NgIf } from '@angular/common';
 @Component({
   selector: 'app-view-test-report',
   templateUrl: './view-test-report.component.html',
   styleUrls: ['./view-test-report.component.css'],
-  standalone: false,
+  imports: [
+    NgIf,
+    MatDialogTitle,
+    MatDialogClose,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+  ],
 })
 export class ViewTestReportComponent implements OnInit, DoCheck {
   current_language_set: any;

@@ -52,8 +52,12 @@ describe('NurseWorklistComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, Md2Module, MaterialModule],
-      declarations: [NurseWorklistComponent],
+      imports: [
+        BrowserAnimationsModule,
+        Md2Module,
+        MaterialModule,
+        NurseWorklistComponent,
+      ],
       providers: [
         {
           provide: Router,

@@ -27,11 +27,14 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { Router } from '@angular/router';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { BeneficiaryPlatformHistoryComponent } from '../../beneficiary-platform-history/beneficiary-platform-history.component';
+import { NgClass, NgIf } from '@angular/common';
+import { NgChartsModule } from 'ng2-charts';
 @Component({
   selector: 'app-previous-visit-details',
   templateUrl: './previous-visit-details.component.html',
   styleUrls: ['./previous-visit-details.component.css'],
-  standalone: false,
+  imports: [BeneficiaryPlatformHistoryComponent, NgClass, NgIf, NgChartsModule],
 })
 export class PreviousVisitDetailsComponent implements OnInit, DoCheck {
   @Input()

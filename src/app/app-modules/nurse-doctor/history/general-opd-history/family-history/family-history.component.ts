@@ -26,6 +26,7 @@ import {
   FormArray,
   FormGroup,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 
 import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
@@ -39,12 +40,37 @@ import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { NgFor, NgClass, NgIf } from '@angular/common';
+import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
   selector: 'app-general-family-history',
   templateUrl: './family-history.component.html',
   styleUrls: ['./family-history.component.css'],
-  standalone: false,
+  imports: [
+    ReactiveFormsModule,
+    MatTooltip,
+    MatIcon,
+    NgFor,
+    NgClass,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    NgIf,
+    MatInput,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+    MatRadioGroup,
+    MatRadioButton,
+  ],
 })
 export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

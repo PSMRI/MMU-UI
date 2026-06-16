@@ -22,10 +22,7 @@
 
 import { Directive, ElementRef, HostListener } from '@angular/core';
 
-@Directive({
-  selector: '[appMyPassword]',
-  standalone: false,
-})
+@Directive({ selector: '[appMyPassword]' })
 export class MyPasswordDirective {
   constructor(element: ElementRef) {}
 

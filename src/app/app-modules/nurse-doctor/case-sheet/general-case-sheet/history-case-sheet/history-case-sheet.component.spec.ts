@@ -30,7 +30,7 @@ describe('HistoryCaseSheetComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [HistoryCaseSheetComponent],
+      imports: [HistoryCaseSheetComponent],
     }).compileComponents();
   }));
 

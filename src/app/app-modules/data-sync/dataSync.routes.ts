@@ -20,37 +20,34 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { CoreModule } from '../core/core.module';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-
-import { DataSYNCRoutingModule } from './dataSync-routing.module';
-import { WorkareaComponent } from './workarea/workarea.component';
+import { Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
-
+import { WorkareaComponent } from './workarea/workarea.component';
+import { CanDeactivateGuardService } from '../core/services/can-deactivate-guard.service';
+import { DataSyncLoginComponent } from '../core/components/data-sync-login/data-sync-login.component';
 import { DataSyncService } from './shared/service/data-sync.service';
 import { MasterDownloadComponent } from './master-download/master-download.component';
-// import { SharedModule } from '../core/shared/shared/shared.module';
-import { DataSyncLoginComponent } from '../core/components/data-sync-login/data-sync-login.component';
-import { SharedModule } from '../core/components/shared/shared.module';
 
-@NgModule({
-  imports: [
-    CommonModule,
-    DataSYNCRoutingModule,
-    CoreModule,
-    ReactiveFormsModule,
-    FormsModule,
-    SharedModule,
-  ],
-  declarations: [
-    WorkareaComponent,
-    DashboardComponent,
-    MasterDownloadComponent,
-    DataSyncLoginComponent,
-  ],
-  exports: [],
-  providers: [DataSyncService, MasterDownloadComponent],
-})
-export class DataSYNCModule {}
+export const DATA_SYNC_ROUTES: Routes = [
+  {
+    path: '',
+    component: DashboardComponent,
+    providers: [DataSyncService, MasterDownloadComponent],
+    children: [
+      {
+        path: '',
+        redirectTo: 'sync-login',
+        pathMatch: 'full',
+      },
+      {
+        path: 'workarea',
+        component: WorkareaComponent,
+        canDeactivate: [CanDeactivateGuardService],
+      },
+      {
+        path: 'sync-login',
+        component: DataSyncLoginComponent,
+      },
+    ],
+  },
+];

@@ -21,16 +21,34 @@
  */
 
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
+import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../../../../../core/directives/stringValidator.directive';
+import { NgFor, NgIf } from '@angular/common';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 
 @Component({
   selector: 'app-nurse-gastro-intestinal-system',
   templateUrl: './gastro-intestinal-system.component.html',
   styleUrls: ['./gastro-intestinal-system.component.css'],
-  standalone: false,
+  imports: [
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    StringValidatorDirective,
+    MatSelect,
+    NgFor,
+    MatOption,
+    MatRadioGroup,
+    MatRadioButton,
+    NgIf,
+  ],
 })
 export class GastroIntestinalSystemComponent implements OnInit, DoCheck {
   @Input()

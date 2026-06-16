@@ -34,6 +34,7 @@ import {
   FormControl,
   FormArray,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import {
   MasterdataService,
@@ -49,12 +50,34 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { NgFor, NgClass, NgIf } from '@angular/common';
+import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-nurse-cancer-family-disease-history',
   templateUrl: './family-disease-history.component.html',
   styleUrls: ['./family-disease-history.component.css'],
-  standalone: false,
+  imports: [
+    ReactiveFormsModule,
+    MatTooltip,
+    MatIcon,
+    NgFor,
+    NgClass,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    NgIf,
+    MatInput,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+  ],
 })
 export class FamilyDiseaseHistoryComponent
   implements OnInit, OnDestroy, DoCheck

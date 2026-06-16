@@ -20,8 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 import { AuthGuard } from './app-modules/core/services/auth-guard.service';
 import { LoginComponent } from './app-modules/login/login.component';
 import { ServiceComponent } from './app-modules/service/service.component';
@@ -32,7 +31,7 @@ import { ServicePointComponent } from './app-modules/service-point/service-point
 import { ServicePointResolve } from './app-modules/service-point/service-point-resolve.service';
 import { ResetPasswordComponent } from './app-modules/reset-password/reset-password.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     redirectTo: 'login',
@@ -83,30 +82,30 @@ const routes: Routes = [
     path: 'nurse-doctor',
     canActivate: [AuthGuard],
     loadChildren: () =>
-      import('./app-modules/nurse-doctor/nurse-doctor.module').then(
-        module => module.NurseDoctorModule
+      import('./app-modules/nurse-doctor/nurse-doctor.routes').then(
+        m => m.NURSE_DOCTOR_ROUTES
       ),
   },
   {
     path: 'lab',
     canActivate: [AuthGuard],
     loadChildren: () =>
-      import('./app-modules/lab/lab.module').then(module => module.LabModule),
+      import('./app-modules/lab/lab.routes').then(m => m.LAB_ROUTES),
   },
   {
     path: 'pharmacist',
     canActivate: [AuthGuard],
     loadChildren: () =>
-      import('./app-modules/pharmacist/pharmacist.module').then(
-        module => module.PharmacistModule
+      import('./app-modules/pharmacist/pharmacist.routes').then(
+        m => m.PHARMACIST_ROUTES
       ),
   },
   {
     path: 'datasync',
     canActivate: [AuthGuard],
     loadChildren: () =>
-      import('./app-modules/data-sync/dataSync.module').then(
-        module => module.DataSYNCModule
+      import('./app-modules/data-sync/dataSync.routes').then(
+        m => m.DATA_SYNC_ROUTES
       ),
   },
   {
@@ -117,9 +116,3 @@ const routes: Routes = [
       ),
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}

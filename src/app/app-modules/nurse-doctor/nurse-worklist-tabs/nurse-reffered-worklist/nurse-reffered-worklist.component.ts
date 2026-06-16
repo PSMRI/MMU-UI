@@ -32,14 +32,49 @@ import {
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import * as moment from 'moment';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import {
+  MatTableDataSource,
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+} from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatCard } from '@angular/material/card';
+import { NgClass, NgIf, TitleCasePipe } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-nurse-reffered-worklist',
   templateUrl: './nurse-reffered-worklist.component.html',
   styleUrls: ['./nurse-reffered-worklist.component.css'],
-  standalone: false,
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    MatCard,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    NgClass,
+    MatTooltip,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    NgIf,
+    MatPaginator,
+    TitleCasePipe,
+  ],
 })
 export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
   currentLanguageSet: any;

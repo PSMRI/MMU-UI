@@ -55,8 +55,12 @@ describe('CancerExaminationComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
-      declarations: [CancerExaminationComponent],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        CancerExaminationComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: DoctorService, useClass: DoctorServiceStub },

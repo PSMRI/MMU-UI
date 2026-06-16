@@ -26,6 +26,7 @@ import {
   FormGroup,
   FormArray,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
@@ -37,11 +38,33 @@ import {
   MasterdataService,
 } from 'src/app/app-modules/nurse-doctor/shared/services';
 import { GeneralUtils } from 'src/app/app-modules/nurse-doctor/shared/utility';
+import { NgIf, NgFor } from '@angular/common';
+import { MatFormField, MatLabel } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import {
+  MatAutocompleteTrigger,
+  MatAutocomplete,
+  MatOption,
+} from '@angular/material/autocomplete';
+import { AutocompleteScrollerDirective } from '../../../../shared/utility/autocomplete-scroller.directive';
+import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-ncd-screening-diagnosis',
   templateUrl: './ncd-screening-diagnosis.component.html',
   styleUrls: ['./ncd-screening-diagnosis.component.css'],
-  standalone: false,
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    NgFor,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    AutocompleteScrollerDirective,
+    MatOption,
+    MatIcon,
+  ],
 })
 export class NcdScreeningDiagnosisComponent
   implements OnInit, OnChanges, DoCheck

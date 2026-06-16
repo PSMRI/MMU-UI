@@ -30,7 +30,7 @@ describe('OpenPreviousVisitDetailsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [OpenPreviousVisitDetailsComponent],
+      imports: [OpenPreviousVisitDetailsComponent],
     }).compileComponents();
   }));
 

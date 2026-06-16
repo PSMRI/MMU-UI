@@ -21,7 +21,7 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
 import {
@@ -43,6 +43,23 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import {
+  MatFormField,
+  MatLabel,
+  MatSelect,
+  MatSuffix,
+} from '@angular/material/select';
+import { NgFor, NgIf } from '@angular/common';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatInput } from '@angular/material/input';
+import {
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatDatepicker,
+} from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-general-menstrual-history',
@@ -73,7 +90,24 @@ import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-s
       },
     },
   ],
-  standalone: false,
+  imports: [
+    MatTooltip,
+    MatIcon,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    NgFor,
+    MatOption,
+    NgIf,
+    MatRadioGroup,
+    MatRadioButton,
+    MatInput,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+  ],
 })
 export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

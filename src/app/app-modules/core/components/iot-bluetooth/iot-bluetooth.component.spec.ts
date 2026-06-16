@@ -30,7 +30,7 @@ describe('IotBluetoothComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [IotBluetoothComponent],
+      imports: [IotBluetoothComponent],
     }).compileComponents();
   }));
 

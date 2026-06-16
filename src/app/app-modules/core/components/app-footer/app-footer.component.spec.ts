@@ -30,7 +30,7 @@ describe('AppFooterComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [AppFooterComponent],
+      imports: [AppFooterComponent],
     }).compileComponents();
   }));
 

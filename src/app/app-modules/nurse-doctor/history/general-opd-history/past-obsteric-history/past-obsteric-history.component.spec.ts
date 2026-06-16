@@ -58,7 +58,7 @@ describe('PastObstericHistoryComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PastObstericHistoryComponent],
+      imports: [PastObstericHistoryComponent],
     }).compileComponents();
   }));
 

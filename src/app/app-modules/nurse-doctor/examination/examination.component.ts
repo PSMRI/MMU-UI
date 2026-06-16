@@ -24,12 +24,15 @@ import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
+import { NgIf } from '@angular/common';
+import { GeneralOpdExaminationComponent } from './general-opd-examination/general-opd-examination.component';
+import { CancerExaminationComponent } from './cancer-examination/cancer-examination.component';
 
 @Component({
   selector: 'app-nurse-examination',
   templateUrl: './examination.component.html',
   styleUrls: ['./examination.component.css'],
-  standalone: false,
+  imports: [NgIf, GeneralOpdExaminationComponent, CancerExaminationComponent],
 })
 export class ExaminationComponent implements OnInit, DoCheck, OnChanges {
   @Input()

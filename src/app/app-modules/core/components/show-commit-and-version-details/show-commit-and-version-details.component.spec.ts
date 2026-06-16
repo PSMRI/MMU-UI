@@ -30,7 +30,7 @@ describe('ShowCommitAndVersionDetailsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ShowCommitAndVersionDetailsComponent],
+      imports: [ShowCommitAndVersionDetailsComponent],
     }).compileComponents();
   }));
 

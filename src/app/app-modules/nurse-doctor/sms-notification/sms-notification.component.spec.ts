@@ -8,7 +8,7 @@ describe('SmsNotificationComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SmsNotificationComponent],
+      imports: [SmsNotificationComponent],
     });
     fixture = TestBed.createComponent(SmsNotificationComponent);
     component = fixture.componentInstance;

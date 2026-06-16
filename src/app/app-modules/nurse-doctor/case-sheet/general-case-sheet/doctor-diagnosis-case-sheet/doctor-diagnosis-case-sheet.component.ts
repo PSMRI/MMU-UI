@@ -32,12 +32,15 @@ import * as moment from 'moment';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { get } from 'jquery';
 import { map, Observable } from 'rxjs';
+import { NgIf, NgFor, DatePipe } from '@angular/common';
+import { MatFormField, MatLabel } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-doctor-diagnosis-case-sheet',
   templateUrl: './doctor-diagnosis-case-sheet.component.html',
   styleUrls: ['./doctor-diagnosis-case-sheet.component.css'],
-  standalone: false,
+  imports: [NgIf, NgFor, MatFormField, MatInput, MatLabel, DatePipe],
 })
 export class DoctorDiagnosisCaseSheetComponent
   implements OnInit, OnChanges, DoCheck

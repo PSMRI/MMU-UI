@@ -30,7 +30,7 @@ describe('CommonDialogComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [CommonDialogComponent],
+      imports: [CommonDialogComponent],
     }).compileComponents();
   }));
 

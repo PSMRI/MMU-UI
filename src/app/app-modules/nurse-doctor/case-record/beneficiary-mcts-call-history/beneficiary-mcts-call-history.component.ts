@@ -21,14 +21,36 @@
  */
 
 import { Component, OnInit, Inject, DoCheck } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogClose,
+  MatDialogContent,
+} from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { MatIcon } from '@angular/material/icon';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { NgIf } from '@angular/common';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { NgxPaginationModule } from 'ngx-pagination';
 @Component({
   selector: 'app-beneficiary-mcts-call-history',
   templateUrl: './beneficiary-mcts-call-history.component.html',
   styleUrls: ['./beneficiary-mcts-call-history.component.css'],
-  standalone: false,
+  imports: [
+    MatDialogClose,
+    MatIcon,
+    CdkScrollable,
+    MatDialogContent,
+    NgIf,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatSuffix,
+    NgxPaginationModule,
+  ],
 })
 export class BeneficiaryMctsCallHistoryComponent implements OnInit, DoCheck {
   current_language_set: any;

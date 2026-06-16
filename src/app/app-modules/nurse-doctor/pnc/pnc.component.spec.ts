@@ -30,7 +30,7 @@ describe('PncComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PncComponent],
+      imports: [PncComponent],
     }).compileComponents();
   }));
 

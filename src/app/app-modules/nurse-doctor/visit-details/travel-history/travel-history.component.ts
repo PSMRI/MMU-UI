@@ -28,7 +28,13 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  FormControl,
+  FormArray,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import {
   MasterdataService,
   NurseService,
@@ -37,12 +43,28 @@ import {
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { MatLabel, MatFormField, MatSelect } from '@angular/material/select';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { NgIf, NgFor } from '@angular/common';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-travel-history',
   templateUrl: './travel-history.component.html',
   styleUrls: ['./travel-history.component.css'],
-  standalone: false,
+  imports: [
+    ReactiveFormsModule,
+    MatLabel,
+    MatRadioGroup,
+    MatRadioButton,
+    NgIf,
+    NgFor,
+    MatFormField,
+    MatSelect,
+    MatOption,
+    MatInput,
+  ],
 })
 export class TravelHistoryComponent
   implements OnInit, OnChanges, DoCheck, OnDestroy

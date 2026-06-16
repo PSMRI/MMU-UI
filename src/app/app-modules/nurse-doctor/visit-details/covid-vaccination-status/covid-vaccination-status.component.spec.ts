@@ -30,7 +30,7 @@ describe('CovidVaccinationStatusComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [CovidVaccinationStatusComponent],
+      imports: [CovidVaccinationStatusComponent],
     }).compileComponents();
   }));
 

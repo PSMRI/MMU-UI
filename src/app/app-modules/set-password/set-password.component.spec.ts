@@ -30,7 +30,7 @@ describe('SetPasswordComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [SetPasswordComponent],
+      imports: [SetPasswordComponent],
     }).compileComponents();
   }));
 

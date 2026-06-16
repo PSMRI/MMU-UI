@@ -21,14 +21,19 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 import {
   MasterdataService,
   DoctorService,
   NurseService,
 } from '../../shared/services';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgIf, NgFor } from '@angular/common';
 import { IdrsscoreService } from '../../shared/services/idrsscore.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
@@ -45,6 +50,25 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import {
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+} from '@angular/material/expansion';
+import {
+  MatLabel,
+  MatFormField,
+  MatSelect,
+  MatSuffix,
+} from '@angular/material/select';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+import {
+  MatDatepickerInput,
+  MatDatepickerToggle,
+  MatDatepicker,
+} from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-general-refer',
@@ -78,7 +102,24 @@ import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-s
       },
     },
   ],
-  standalone: false,
+  imports: [
+    MatExpansionPanel,
+    ReactiveFormsModule,
+    MatExpansionPanelHeader,
+    NgIf,
+    MatLabel,
+    MatTooltip,
+    MatIcon,
+    MatFormField,
+    MatSelect,
+    NgFor,
+    MatOption,
+    MatInput,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    MatDatepicker,
+  ],
 })
 export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

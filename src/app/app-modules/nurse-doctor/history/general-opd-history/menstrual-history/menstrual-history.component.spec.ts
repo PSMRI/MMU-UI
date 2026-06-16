@@ -58,7 +58,7 @@ describe('MenstrualHistoryComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [MenstrualHistoryComponent],
+      imports: [MenstrualHistoryComponent],
     }).compileComponents();
   }));
 

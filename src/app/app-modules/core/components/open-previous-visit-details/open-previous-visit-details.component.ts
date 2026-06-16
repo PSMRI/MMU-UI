@@ -25,12 +25,15 @@ import { HttpServiceService } from '../../services/http-service.service';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { SetLanguageComponent } from '../set-language.component';
 import { DoctorService } from 'src/app/app-modules/nurse-doctor/shared/services';
+import { MatDialogClose } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
+import { NgIf, NgFor, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-open-previous-visit-details',
   templateUrl: './open-previous-visit-details.component.html',
   styleUrls: ['./open-previous-visit-details.component.css'],
-  standalone: false,
+  imports: [MatDialogClose, MatIcon, NgIf, NgFor, DatePipe],
 })
 export class OpenPreviousVisitDetailsComponent implements OnInit {
   currentLanguageSet: any;

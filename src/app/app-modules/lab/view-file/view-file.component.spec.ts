@@ -30,7 +30,7 @@ describe('ViewFileComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ViewFileComponent],
+      imports: [ViewFileComponent],
     }).compileComponents();
   }));
 

@@ -29,15 +29,38 @@ import {
   DoCheck,
 } from '@angular/core';
 import { CameraService } from '../../../../core/services/camera.service';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
+import { NgIf } from '@angular/common';
+import {
+  MatButtonToggleGroup,
+  MatButtonToggle,
+} from '@angular/material/button-toggle';
+import { MatInput } from '@angular/material/input';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-doctor-abdominal-examination',
   templateUrl: './abdominal-examination.component.html',
   styleUrls: ['./abdominal-examination.component.css'],
-  standalone: false,
+  imports: [
+    ReactiveFormsModule,
+    MatRadioGroup,
+    MatRadioButton,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    NgIf,
+    MatButtonToggleGroup,
+    MatButtonToggle,
+    MatInput,
+    StringValidatorDirective,
+  ],
 })
 export class AbdominalExaminationComponent implements OnInit, DoCheck {
   @Input()

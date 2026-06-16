@@ -47,8 +47,12 @@ describe('SignsAndSymptomsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
-      declarations: [SignsAndSymptomsComponent],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        SignsAndSymptomsComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {

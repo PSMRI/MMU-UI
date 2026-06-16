@@ -28,12 +28,34 @@ import {
   AuthService,
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
+import { AppHeaderComponent } from '../core/components/app-header/app-header.component';
+import { MatGridList, MatGridTile } from '@angular/material/grid-list';
+import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatFormField, MatSuffix } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { MatIcon } from '@angular/material/icon';
+import { AppFooterComponent } from '../core/components/app-footer/app-footer.component';
 
 @Component({
   selector: 'app-set-password',
   templateUrl: './set-password.component.html',
   styleUrls: ['./set-password.component.css'],
-  standalone: false,
+  imports: [
+    AppHeaderComponent,
+    MatGridList,
+    MatGridTile,
+    MatCard,
+    MatCardTitle,
+    MatCardContent,
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormField,
+    MatInput,
+    MatIcon,
+    MatSuffix,
+    AppFooterComponent,
+  ],
 })
 export class SetPasswordComponent implements OnInit {
   newpwd: any;

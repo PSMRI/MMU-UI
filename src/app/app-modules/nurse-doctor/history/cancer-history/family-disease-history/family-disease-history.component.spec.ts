@@ -30,7 +30,7 @@ describe('FamilyDiseaseHistoryComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [FamilyDiseaseHistoryComponent],
+      imports: [FamilyDiseaseHistoryComponent],
     }).compileComponents();
   }));
 

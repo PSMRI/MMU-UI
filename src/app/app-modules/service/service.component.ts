@@ -26,12 +26,17 @@ import { SetLanguageComponent } from '../core/components/set-language.component'
 import { ConfirmationService } from '../core/services';
 import { HttpServiceService } from '../core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { AppHeaderComponent } from '../core/components/app-header/app-header.component';
+import { MatCard } from '@angular/material/card';
+import { NgFor } from '@angular/common';
+import { MatLabel } from '@angular/material/select';
+import { AppFooterComponent } from '../core/components/app-footer/app-footer.component';
 
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
   styleUrls: ['./service.component.css'],
-  standalone: false,
+  imports: [AppHeaderComponent, MatCard, NgFor, MatLabel, AppFooterComponent],
 })
 export class ServiceComponent implements OnInit, DoCheck {
   servicesList: any;

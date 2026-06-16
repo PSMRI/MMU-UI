@@ -22,10 +22,7 @@
 
 import { Directive, ElementRef, HostListener } from '@angular/core';
 
-@Directive({
-  selector: '[appMyName]',
-  standalone: false,
-})
+@Directive({ selector: '[appMyName]' })
 export class MyNameDirective {
   constructor(element: ElementRef) {}
 

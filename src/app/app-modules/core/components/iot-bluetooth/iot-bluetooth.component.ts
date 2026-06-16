@@ -25,12 +25,26 @@ import { HttpServiceService } from '../../services/http-service.service';
 import { IotService } from '../../services/iot.service';
 import { SetLanguageComponent } from '../set-language.component';
 import { ConfirmationService } from '../../services';
+import { NgClass, NgIf, NgFor } from '@angular/common';
+import { MatDialogClose, MatDialogContent } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-iot-bluetooth',
   templateUrl: './iot-bluetooth.component.html',
   styleUrls: ['./iot-bluetooth.component.css'],
-  standalone: false,
+  imports: [
+    NgClass,
+    MatDialogClose,
+    MatIcon,
+    MatTooltip,
+    CdkScrollable,
+    MatDialogContent,
+    NgIf,
+    NgFor,
+  ],
 })
 export class IotBluetoothComponent implements OnInit, DoCheck {
   current_language_set: any;

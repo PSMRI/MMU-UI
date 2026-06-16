@@ -22,11 +22,26 @@
 
 import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { NgIf } from '@angular/common';
+import { GeneralOpdDiagnosisComponent } from './general-opd-diagnosis/general-opd-diagnosis.component';
+import { AncDiagnosisComponent } from './anc-diagnosis/anc-diagnosis.component';
+import { PncDiagnosisComponent } from './pnc-diagnosis/pnc-diagnosis.component';
+import { NcdCareDiagnosisComponent } from './ncd-care-diagnosis/ncd-care-diagnosis.component';
+import { CovidDiagnosisComponent } from './covid-diagnosis/covid-diagnosis.component';
+import { NcdScreeningDiagnosisComponent } from './ncd-screening-diagnosis/ncd-screening-diagnosis.component';
 @Component({
   selector: 'app-diagnosis',
   templateUrl: './diagnosis.component.html',
   styleUrls: ['./diagnosis.component.css'],
-  standalone: false,
+  imports: [
+    NgIf,
+    GeneralOpdDiagnosisComponent,
+    AncDiagnosisComponent,
+    PncDiagnosisComponent,
+    NcdCareDiagnosisComponent,
+    CovidDiagnosisComponent,
+    NcdScreeningDiagnosisComponent,
+  ],
 })
 export class DiagnosisComponent {
   @Input()

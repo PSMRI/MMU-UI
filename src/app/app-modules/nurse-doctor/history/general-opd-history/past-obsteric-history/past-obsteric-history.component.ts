@@ -34,6 +34,7 @@ import {
   FormGroup,
   FormArray,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import {
   MasterdataService,
@@ -47,12 +48,40 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { NumberValidatorDirective } from '../../../../core/directives/numberValidator.directive';
+import { NgIf, NgFor } from '@angular/common';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatOption } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-general-past-obsteric-history',
   templateUrl: './past-obsteric-history.component.html',
   styleUrls: ['./past-obsteric-history.component.css'],
-  standalone: false,
+  imports: [
+    MatTooltip,
+    MatIcon,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+    NumberValidatorDirective,
+    NgIf,
+    NgFor,
+    MatCheckbox,
+    MatCard,
+    MatCardContent,
+    MatSelect,
+    MatOption,
+  ],
 })
 export class PastObstericHistoryComponent
   implements OnInit, DoCheck, OnChanges, OnDestroy

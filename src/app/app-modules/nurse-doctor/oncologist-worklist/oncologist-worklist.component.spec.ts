@@ -30,7 +30,7 @@ describe('OncologistWorklistComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [OncologistWorklistComponent],
+      imports: [OncologistWorklistComponent],
     }).compileComponents();
   }));
 

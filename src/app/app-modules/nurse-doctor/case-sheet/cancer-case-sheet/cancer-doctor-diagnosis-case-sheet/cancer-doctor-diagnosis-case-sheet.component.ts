@@ -25,12 +25,13 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MasterdataService } from '../../../shared/services';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-cancer-doctor-diagnosis-case-sheet',
   templateUrl: './cancer-doctor-diagnosis-case-sheet.component.html',
   styleUrls: ['./cancer-doctor-diagnosis-case-sheet.component.css'],
-  standalone: false,
+  imports: [NgIf],
 })
 export class CancerDoctorDiagnosisCaseSheetComponent
   implements OnInit, OnChanges, DoCheck

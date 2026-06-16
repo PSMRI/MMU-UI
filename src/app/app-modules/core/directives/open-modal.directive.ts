@@ -41,10 +41,7 @@ import { HttpServiceService } from '../services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 
-@Directive({
-  selector: '[appOpenModal]',
-  standalone: false,
-})
+@Directive({ selector: '[appOpenModal]' })
 export class OpenModalDirective implements OnInit, DoCheck {
   @Input()
   previousSelected: any;

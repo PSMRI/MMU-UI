@@ -30,17 +30,29 @@ import {
   DoCheck,
   AfterViewInit,
 } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import {
+  MatDialogRef,
+  MatDialogContent,
+  MatDialogActions,
+  MatDialogTitle,
+  MatDialogClose,
+} from '@angular/material/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
 import { ConfirmationService } from '../../services';
 import { SetLanguageComponent } from '../set-language.component';
 import { Subject } from 'rxjs/internal/Subject';
 import { ChartData, ChartType } from 'chart.js';
 import html2canvas from 'html2canvas';
-import { WebcamImage, WebcamInitError } from 'ngx-webcam';
+import { WebcamImage, WebcamInitError, WebcamModule } from 'ngx-webcam';
 import { Observable } from 'rxjs';
 import { saveAs } from 'file-saver';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf, NgFor } from '@angular/common';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgChartsModule } from 'ng2-charts';
 
 interface Mark {
   xCord: any;
@@ -53,7 +65,21 @@ interface Mark {
   selector: 'app-camera-dialog',
   templateUrl: './camera-dialog.component.html',
   styleUrls: ['./camera-dialog.component.css'],
-  standalone: false,
+  imports: [
+    NgIf,
+    CdkScrollable,
+    MatDialogContent,
+    WebcamModule,
+    MatDialogActions,
+    MatDialogTitle,
+    MatDialogClose,
+    NgFor,
+    MatFormField,
+    MatInput,
+    ReactiveFormsModule,
+    FormsModule,
+    NgChartsModule,
+  ],
 })
 export class CameraDialogComponent implements OnInit, DoCheck, AfterViewInit {
   @Output() cancelEvent = new EventEmitter();

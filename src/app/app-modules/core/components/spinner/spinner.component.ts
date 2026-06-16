@@ -22,12 +22,14 @@
 
 import { Component } from '@angular/core';
 import { SpinnerService } from '../../services';
+import { NgIf } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-spinner',
   templateUrl: './spinner.component.html',
   styleUrls: ['./spinner.component.css'],
-  standalone: false,
+  imports: [NgIf, MatProgressSpinner],
 })
 export class SpinnerComponent {
   constructor(public spinnerService: SpinnerService) {}

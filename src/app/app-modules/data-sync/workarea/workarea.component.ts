@@ -32,16 +32,36 @@ import { ConfirmationService } from '../../core/services/confirmation.service';
 import { DataSyncService } from './../shared/service/data-sync.service';
 import { DataSyncUtils } from '../shared/utility/data-sync-utility';
 import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { MatTabGroup, MatTab } from '@angular/material/tabs';
+import { MatDrawerContainer } from '@angular/material/sidenav';
+import { NgIf, NgFor, NgClass, NgStyle } from '@angular/common';
+import { MatCard } from '@angular/material/card';
+import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-workarea',
   templateUrl: './workarea.component.html',
   styleUrls: ['./workarea.component.css'],
-  standalone: false,
+  imports: [
+    MatTabGroup,
+    MatTab,
+    MatDrawerContainer,
+    NgIf,
+    NgFor,
+    NgClass,
+    NgStyle,
+    ReactiveFormsModule,
+    MatCard,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+  ],
 })
 export class WorkareaComponent
   implements OnInit, CanComponentDeactivate, DoCheck, OnDestroy

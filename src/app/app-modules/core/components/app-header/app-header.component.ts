@@ -21,7 +21,7 @@
  */
 
 import { Component, OnInit, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService, ConfirmationService } from '../../services';
@@ -30,12 +30,31 @@ import { IotService } from '../../services/iot.service';
 import { IotBluetoothComponent } from '../iot-bluetooth/iot-bluetooth.component';
 import { ShowCommitAndVersionDetailsComponent } from '../show-commit-and-version-details/show-commit-and-version-details.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { MatIcon } from '@angular/material/icon';
+import { NgIf, NgFor, NgClass, TitleCasePipe } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-header',
   templateUrl: './app-header.component.html',
   styleUrls: ['./app-header.component.css'],
-  standalone: false,
+  imports: [
+    MatIcon,
+    NgIf,
+    ReactiveFormsModule,
+    FormsModule,
+    NgFor,
+    MatTooltip,
+    NgClass,
+    MatMenu,
+    MatMenuItem,
+    RouterLink,
+    MatMenuTrigger,
+    RouterLinkActive,
+    TitleCasePipe,
+  ],
 })
 export class AppHeaderComponent implements OnInit {
   navigation = [
