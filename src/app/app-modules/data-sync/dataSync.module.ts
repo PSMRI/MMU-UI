@@ -34,8 +34,6 @@ import { MasterDownloadComponent } from './master-download/master-download.compo
 // import { SharedModule } from '../core/shared/shared/shared.module';
 import { DataSyncLoginComponent } from '../core/components/data-sync-login/data-sync-login.component';
 import { SharedModule } from '../core/components/shared/shared.module';
-import { CampHubQrCodeComponent } from './camp-hub-qr-code/camp-hub-qr-code.component';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -50,7 +48,6 @@ import { CampHubQrCodeComponent } from './camp-hub-qr-code/camp-hub-qr-code.comp
     DashboardComponent,
     MasterDownloadComponent,
     DataSyncLoginComponent,
-    CampHubQrCodeComponent,
   ],
   exports: [],
   providers: [DataSyncService, MasterDownloadComponent],
