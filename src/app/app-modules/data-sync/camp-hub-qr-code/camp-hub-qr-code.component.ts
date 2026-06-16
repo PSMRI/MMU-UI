@@ -137,7 +137,9 @@ export class CampHubQrCodeComponent implements OnInit {
 
   // Fires no-cors fetch requests across common private subnets.
   // The first IP that responds (TCP connection succeeds) is this device.
-  // Port 4202 (ng serve) is included so the IP is found even in dev mode.
+  // window.location.port is probed first — it is guaranteed open since the
+  // browser is already connected to it, which fixes detection on Windows where
+  // Chrome's mDNS obfuscation defeats WebRTC and Firewall blocks other ports.
   private probeNetworks(): Promise<string> {
     const subnets = [
       '192.168.0',
@@ -154,7 +156,10 @@ export class CampHubQrCodeComponent implements OnInit {
       '10.0.1',
       '10.1.0',
     ];
-    const ports = ['8087', '8083', '4202'];
+    const appPort = window.location.port || '80';
+    const ports = [appPort, '8087', '8083', '4202'].filter(
+      (p, i, arr) => arr.indexOf(p) === i
+    );
     const priority = [
       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 20, 30, 50, 100, 101,
       105, 110, 150, 200, 254,
@@ -183,7 +188,7 @@ export class CampHubQrCodeComponent implements OnInit {
       const t = setTimeout(() => {
         ctrl.abort();
         reject();
-      }, 1500);
+      }, 2000);
       fetch(`http://${ip}:${port}/`, {
         method: 'GET',
         mode: 'no-cors',
