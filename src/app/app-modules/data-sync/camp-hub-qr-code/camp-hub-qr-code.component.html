@@ -59,9 +59,9 @@
           <input
             matInput
             formControlName="campHubUrl"
-            placeholder="http://192.168.0.11:8087/"
+            placeholder="http://192.168.0.11/"
             autocomplete="off" />
-          <mat-hint>Format: http://&lt;network-ip&gt;:8087/</mat-hint>
+          <mat-hint>Format: http://&lt;network-ip&gt;/</mat-hint>
           <mat-error *ngIf="urlForm.controls.campHubUrl.hasError('required')">
             URL is required
           </mat-error>

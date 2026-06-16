@@ -55,7 +55,7 @@ export class CampHubQrCodeComponent implements OnInit {
 
     this.detectNetworkIP()
       .then(ip => {
-        this.urlForm.controls.campHubUrl.setValue(`http://${ip}:8087/`);
+        this.urlForm.controls.campHubUrl.setValue(`http://${ip}/`);
         this.isDetecting = false;
       })
       .catch(() => {
