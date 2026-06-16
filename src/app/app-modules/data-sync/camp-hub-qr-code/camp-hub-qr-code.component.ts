@@ -29,7 +29,7 @@ import { environment } from 'src/environments/environment';
 
 interface ConnectInfo {
   ip: string;
-  port: number;
+  port: 8080;
 }
 
 @Component({
@@ -76,9 +76,7 @@ export class CampHubQrCodeComponent implements OnInit {
 
     this.http.get<ConnectInfo>(environment.campHubConnectInfoAPI).subscribe({
       next: res => {
-        this.urlForm.controls.campHubUrl.setValue(
-          `http://${res.ip}:${res.port}/`
-        );
+        this.urlForm.controls.campHubUrl.setValue(`http://${res.ip}:8080/`);
         this.isDetecting = false;
         this.generate();
       },
