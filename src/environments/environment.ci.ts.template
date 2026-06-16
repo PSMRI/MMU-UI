@@ -50,7 +50,7 @@ const enableCaptcha = <%= ENABLE_CAPTCHA %>;
 export const environment = {
   production: true,
   isMMUOfflineSync: true,
-  isMMUOfflineQRCode: true,
+  isMMUOfflineQRCode: '<%= QRCODE_ENABLED>,
   encKey: sessionStorageEncKey,
 
   tracking: {
