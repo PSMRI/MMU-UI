@@ -74,72 +74,93 @@ export class CampHubQrCodeComponent implements OnInit {
 
     return new Promise<string>((resolve, reject) => {
       let settled = false;
-
       const done = (ip: string) => {
-        if (settled) return;
-        settled = true;
-        resolve(ip);
+        if (!settled) {
+          settled = true;
+          resolve(ip);
+        }
       };
       const fail = () => {
-        if (settled) return;
-        this.probeNetworks()
-          .then(ip => {
-            if (!settled) {
-              settled = true;
-              resolve(ip);
-            }
-          })
-          .catch(() => {
-            if (!settled) {
-              settled = true;
-              reject();
-            }
-          });
+        if (!settled) {
+          settled = true;
+          reject();
+        }
       };
 
-      // Try WebRTC first — works on some browsers without mDNS obfuscation
-      try {
-        const pc = new RTCPeerConnection({ iceServers: [] });
-        pc.createDataChannel('');
-        const ips = new Set<string>();
+      // All three strategies run in parallel; first to resolve wins.
+      // 1. WebRTC without STUN — fast on Linux / Mac / Firefox / Edge
+      // 2. WebRTC with STUN — Chrome Windows: srflx raddr carries the LAN IP
+      //    even when Chrome obfuscates host candidates with mDNS .local names
+      // 3. Network port probe — last-resort subnet scan
+      this.webRTCDetect([])
+        .then(done)
+        .catch(() => {});
+      this.webRTCDetect([{ urls: 'stun:stun.l.google.com:19302' }])
+        .then(done)
+        .catch(() => {});
+      this.probeNetworks()
+        .then(done)
+        .catch(() => {});
 
-        pc.onicecandidate = ev => {
-          if (!ev.candidate) {
-            pc.close();
-            const real = [...ips].find(
-              ip => !ip.startsWith('127.') && !ip.startsWith('169.254.')
-            );
-            real ? done(real) : fail();
-            return;
-          }
-          const m = /(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/.exec(
-            ev.candidate.candidate
-          );
-          if (m) ips.add(m[1]);
-        };
-
-        pc.createOffer()
-          .then(o => pc.setLocalDescription(o))
-          .catch(() => {
-            pc.close();
-            fail();
-          });
-
-        // Fall through to network probe after 3 s if WebRTC stalls
-        setTimeout(() => {
-          if (!settled) fail();
-        }, 3000);
-      } catch {
-        fail();
-      }
+      setTimeout(fail, 12000);
     });
   }
 
-  // Fires no-cors fetch requests across common private subnets.
+  // Attempts to discover the LAN IP via WebRTC ICE candidates.
+  // Without iceServers: extracts IPv4 from host candidates (non-Chrome).
+  // With a STUN server: also extracts raddr from srflx candidates, which
+  // Chrome populates with the real LAN IP even under mDNS obfuscation.
+  private webRTCDetect(iceServers: RTCIceServer[]): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      const pc = new RTCPeerConnection({ iceServers });
+      pc.createDataChannel('');
+      const hostIps = new Set<string>();
+      const raddrIps = new Set<string>();
+      const isUsable = (ip: string) =>
+        !ip.startsWith('127.') && !ip.startsWith('169.254.');
+
+      pc.onicecandidate = ev => {
+        if (!ev.candidate) {
+          pc.close();
+          const real =
+            [...hostIps].find(isUsable) ?? [...raddrIps].find(isUsable);
+          real ? resolve(real) : reject();
+          return;
+        }
+        const cand = ev.candidate.candidate;
+        const hostMatch = /(\d{1,3}(?:\.\d{1,3}){3}) \d+ typ host/.exec(cand);
+        if (hostMatch) hostIps.add(hostMatch[1]);
+        // raddr in srflx candidates = actual LAN IP on Chrome Windows
+        const raddrMatch = /raddr (\d{1,3}(?:\.\d{1,3}){3})/.exec(cand);
+        if (raddrMatch) raddrIps.add(raddrMatch[1]);
+      };
+
+      pc.createOffer()
+        .then(o => pc.setLocalDescription(o))
+        .catch(() => {
+          pc.close();
+          reject();
+        });
+
+      // STUN needs more time to get srflx candidates from the server
+      setTimeout(
+        () => {
+          try {
+            pc.close();
+          } catch {
+            /* ignore */
+          }
+          reject();
+        },
+        iceServers.length ? 6000 : 3000
+      );
+    });
+  }
+
+  // Fires no-cors fetch requests across common private subnets in parallel.
   // The first IP that responds (TCP connection succeeds) is this device.
-  // window.location.port is probed first — it is guaranteed open since the
-  // browser is already connected to it, which fixes detection on Windows where
-  // Chrome's mDNS obfuscation defeats WebRTC and Firewall blocks other ports.
+  // window.location.port is included — guaranteed open since the browser is
+  // already connected to it.
   private probeNetworks(): Promise<string> {
     const subnets = [
       '192.168.0',
