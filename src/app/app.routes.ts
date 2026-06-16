@@ -20,8 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 import { AuthGuard } from './app-modules/core/services/auth-guard.service';
 import { LoginComponent } from './app-modules/login/login.component';
 import { ServiceComponent } from './app-modules/service/service.component';
@@ -32,7 +31,7 @@ import { ServicePointComponent } from './app-modules/service-point/service-point
 import { ServicePointResolve } from './app-modules/service-point/service-point-resolve.service';
 import { ResetPasswordComponent } from './app-modules/reset-password/reset-password.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     redirectTo: 'login',
@@ -117,9 +116,3 @@ const routes: Routes = [
       ),
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}

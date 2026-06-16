@@ -1,5 +1,3 @@
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import {
   HttpClient,
   HTTP_INTERCEPTORS,
@@ -19,15 +17,33 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { AppRoutingModule } from './app/app-routing.module';
+import { provideRouter, withHashLocation } from '@angular/router';
+import { routes } from './app/app.routes';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { WebcamModule } from 'ngx-webcam';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { CoreModule } from './app/app-modules/core/core.module';
+import { NgChartsModule } from 'ng2-charts';
 import { MatChipsModule } from '@angular/material/chips';
 import { TrackingModule } from 'Common-UI/v2/tracking';
 import { AppComponent } from './app/app.component';
 import { importProvidersFrom } from '@angular/core';
+
+// Former CoreModule.forRoot() singleton services, now provided at the app root.
+import {
+  ConfirmationService,
+  CameraService,
+  AuthService,
+  SpinnerService,
+  BeneficiaryDetailsService,
+} from './app/app-modules/core/services';
+import { AuthGuard } from './app/app-modules/core/services/auth-guard.service';
+import { CommonService } from './app/app-modules/core/services/common-services.service';
+import { HttpServiceService } from './app/app-modules/core/services/http-service.service';
+import { InventoryService } from './app/app-modules/core/services/inventory.service';
+import { IotService } from './app/app-modules/core/services/iot.service';
+import { CanDeactivateGuardService } from './app/app-modules/core/services/can-deactivate-guard.service';
+import { SetLanguageComponent } from './app/app-modules/core/components/set-language.component';
+import { CameraDialogComponent } from './app/app-modules/core/components/camera-dialog/camera-dialog.component';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -40,19 +56,33 @@ bootstrapApplication(AppComponent, {
       MatFormFieldModule,
       MatInputModule,
       MatSelectModule,
-      AppRoutingModule,
       MatGridListModule,
       WebcamModule,
       NgxPaginationModule,
-      CoreModule.forRoot(),
+      NgChartsModule,
       MatChipsModule,
       TrackingModule.forRoot()
     ),
+    provideRouter(routes, withHashLocation()),
     HttpClient,
     ServicePointResolve,
     ServicePointService,
     RegistrarService,
     AudioRecordingService,
+    // Former CoreModule.forRoot() providers.
+    ConfirmationService,
+    CameraService,
+    AuthGuard,
+    AuthService,
+    SpinnerService,
+    BeneficiaryDetailsService,
+    CommonService,
+    InventoryService,
+    SetLanguageComponent,
+    CanDeactivateGuardService,
+    CameraDialogComponent,
+    HttpServiceService,
+    IotService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpInterceptorService,
