@@ -216,7 +216,7 @@
         color="primary"
         class="mat_blue pull-right"
         (click)="checkForDuplicateUpload()"
-        [disabled]="!fileData?.length"
+        [disabled]="!fileData.length"
       >
         {{ currentLanguageSet?.common?.upload || 'Upload' }}
       </button>

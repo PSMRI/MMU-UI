@@ -510,5 +510,7 @@ export const environment = {
   checkUsersignExistUrl: `${ADMIN_API}signature1/signexist/`,
   isEnableES: false,
   campHubConnectInfoAPI: `${COMMON_API}public/connect/info`,
+  elasticSearchUrl: `${MMU_API}registrar/quickSearchES`,
+  advanceElasticSearchUrl: `${MMU_API}registrar/advancedSearchES`,
 
 };

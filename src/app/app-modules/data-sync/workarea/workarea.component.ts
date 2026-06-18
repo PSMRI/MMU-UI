@@ -66,10 +66,8 @@ export class WorkareaComponent
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    if (
-      this.sessionstorage.getItem('serverKey') !== null ||
-      this.sessionstorage.getItem('serverKey') !== undefined
-    ) {
+    const serverKey = this.sessionstorage.getItem('serverKey');
+    if (serverKey) {
       this.getDataSYNCGroup();
     } else {
       this.router.navigate(['datasync/sync-login']);
@@ -348,8 +346,7 @@ export class WorkareaComponent
           this.dataSyncService
             .inventorySyncDownloadData(vanID)
             .subscribe((res: any) => {
-              if (res.statusCode === 200) {
-              } else {
+              if (res.statusCode !== 200) {
                 this.confirmationService.alert(res.errorMessage, 'error');
               }
             });
