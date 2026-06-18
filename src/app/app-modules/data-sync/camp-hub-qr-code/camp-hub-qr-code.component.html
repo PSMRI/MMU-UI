@@ -1,0 +1,99 @@
+<!--
+  AMRIT – Accessible Medical Records via Integrated Technology
+  Integrated EHR (Electronic Health Records) Solution
+
+  Copyright (C) "Piramal Swasthya Management and Research Institute"
+
+  This file is part of AMRIT.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see https://www.gnu.org/licenses/.
+-->
+
+<div class="qr-dialog-header">
+  <span class="qr-dialog-title">Camp Hub QR Code</span>
+  <button class="qr-close-btn" (click)="close()" matTooltip="Close" type="button">
+    <span class="material-icons">close</span>
+  </button>
+</div>
+
+<mat-dialog-content class="qr-dialog-content">
+  <p class="qr-subtitle">Scan with the Stop TB Mobile app to connect over Wi-Fi.</p>
+
+  <!-- Auto-detection status -->
+  <div *ngIf="isDetecting" class="detect-row">
+    <mat-spinner diameter="20"></mat-spinner>
+    <span class="detect-text">Fetching Camp Hub server info&hellip;</span>
+  </div>
+
+  <div *ngIf="!isDetecting && detectionFailed" class="detect-row warn">
+    <span class="material-icons" style="font-size: 18px; color: #f9a825">info</span>
+    <span class="detect-text">
+      Camp Hub server unreachable &mdash; enter the server URL manually below.
+    </span>
+    <button mat-icon-button (click)="autoDetect()" matTooltip="Retry" style="margin-left: 4px">
+      <span class="material-icons" style="font-size: 18px">refresh</span>
+    </button>
+  </div>
+
+  <div *ngIf="!isDetecting && !detectionFailed && urlForm.controls.campHubUrl.value" class="detect-row ok">
+    <span class="material-icons" style="font-size: 18px; color: #388e3c">check_circle</span>
+    <span class="detect-text">Server URL fetched &mdash; review below and click Generate.</span>
+  </div>
+
+  <!-- URL input + manual generate (shown only when auto-detect failed) -->
+  <form [formGroup]="urlForm" (ngSubmit)="generate()" style="margin-top: 16px">
+    <mat-form-field style="width: 100%">
+      <mat-label>Camp Hub Server URL</mat-label>
+      <input
+        matInput
+        formControlName="campHubUrl"
+        placeholder="http://192.168.137.1:8083/"
+        autocomplete="off" />
+      <mat-hint>Format: http://&lt;network-ip&gt;:&lt;port&gt;/</mat-hint>
+      <mat-error *ngIf="urlForm.controls.campHubUrl.hasError('required')">
+        URL is required
+      </mat-error>
+      <mat-error *ngIf="urlForm.controls.campHubUrl.hasError('pattern')">
+        Must start with http:// or https://
+      </mat-error>
+    </mat-form-field>
+
+    <div *ngIf="detectionFailed" style="margin-top: 20px; text-align: center">
+      <button
+        mat-raised-button
+        color="primary"
+        class="mat_blue"
+        type="submit"
+        [disabled]="urlForm.invalid || isGenerating">
+        <span class="material-icons btn-icon">qr_code</span>
+        Generate QR Code
+      </button>
+    </div>
+  </form>
+
+  <!-- QR result -->
+  <div *ngIf="qrDataUrl" class="qr-result">
+    <div class="url-chip">
+      <span class="material-icons url-icon">wifi</span>
+      <span class="url-text">{{ generatedUrl }}</span>
+    </div>
+
+    <img [src]="qrDataUrl" alt="Camp Hub QR Code" class="qr-image" />
+
+    <button mat-raised-button color="primary" class="mat_blue" (click)="downloadQR()">
+      <span class="material-icons btn-icon">download</span>
+      Download
+    </button>
+  </div>
+</mat-dialog-content>
