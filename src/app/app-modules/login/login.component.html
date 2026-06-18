@@ -116,6 +116,18 @@
             >
           </div>
         </div>
+        <div class="row m-t-10" *ngIf="isMMUOfflineQRCode">
+          <div class="col-xs-12 col-sm-12">
+            <button
+              mat-raised-button
+              type="button"
+              class="qr-btn"
+              (click)="openQrDialog()">
+              <mat-icon class="qr-btn-icon">qr_code_2</mat-icon>
+              Generate QR Code
+            </button>
+          </div>
+        </div>
       </form>
     </mat-card-content>
   </mat-card>
