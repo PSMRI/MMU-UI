@@ -27,7 +27,6 @@ import {
   ViewChild,
   ElementRef,
 } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router, RouterLink } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
 import {
@@ -35,48 +34,40 @@ import {
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { DataSyncLoginComponent } from '../core/components/data-sync-login/data-sync-login.component';
-import { MasterDownloadComponent } from '../data-sync/master-download/master-download.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { environment } from 'src/environments/environment';
 import { CaptchaComponent } from '../captcha/captcha.component';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
-import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card';
-import { MatIcon } from '@angular/material/icon';
-import {
-  MatPrefix,
-  MatFormField,
-  MatLabel,
-  MatSuffix,
-} from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
 import { StringValidatorDirective } from '../core/directives/stringValidator.directive';
-import { MatTooltip } from '@angular/material/tooltip';
-import { NgIf, NgClass } from '@angular/common';
-import { AppFooterComponent } from '../core/components/app-footer/app-footer.component';
+import { NgIf } from '@angular/common';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideUser,
+  lucideLock,
+  lucideEye,
+  lucideEyeOff,
+} from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-login-cmp',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   imports: [
-    MatCard,
-    MatCardTitle,
-    MatCardContent,
     ReactiveFormsModule,
-    MatIcon,
-    MatPrefix,
-    MatFormField,
-    MatLabel,
-    MatInput,
     StringValidatorDirective,
-    MatSuffix,
-    MatTooltip,
     NgIf,
     CaptchaComponent,
-    NgClass,
     RouterLink,
-    AppFooterComponent,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    NgIcon,
+  ],
+  viewProviders: [
+    provideIcons({ lucideUser, lucideLock, lucideEye, lucideEyeOff }),
   ],
 })
 export class LoginComponent implements OnInit, AfterViewInit {
@@ -99,7 +90,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   constructor(
     private router: Router,
-    private dialog: MatDialog,
     private authService: AuthService,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
@@ -343,37 +333,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   hidePWD() {
     this.dynamictype = 'password';
-  }
-
-  loginDialogRef!: MatDialogRef<DataSyncLoginComponent>;
-  openDialog() {
-    this.loginDialogRef = this.dialog.open(DataSyncLoginComponent, {
-      hasBackdrop: true,
-      disableClose: true,
-      panelClass: 'fit-screen',
-      backdropClass: 'backdrop',
-      position: { top: '20px' },
-      data: {
-        masterDowloadFirstTime: true,
-      },
-    });
-    this.loginDialogRef.afterClosed().subscribe(flag => {
-      if (flag) {
-        this.dialog
-          .open(MasterDownloadComponent, {
-            hasBackdrop: true,
-            disableClose: true,
-            panelClass: 'fit-screen',
-            backdropClass: 'backdrop',
-            position: { top: '20px' },
-          })
-          .afterClosed()
-          .subscribe(() => {
-            sessionStorage.clear();
-            // this.sessionstorage.clear();
-          });
-      }
-    });
   }
 
   onCaptchaResolved(token: any) {
