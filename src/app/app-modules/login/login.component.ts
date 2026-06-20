@@ -43,12 +43,15 @@ import { NgIf } from '@angular/common';
 import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 import { ZardInputDirective } from 'Common-UI/v2/ui/input';
 import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
+import { CampHubQrCodeComponent } from '../data-sync/camp-hub-qr-code/camp-hub-qr-code.component';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideUser,
   lucideLock,
   lucideEye,
   lucideEyeOff,
+  lucideQrCode,
 } from '@ng-icons/lucide';
 
 @Component({
@@ -67,7 +70,13 @@ import {
     NgIcon,
   ],
   viewProviders: [
-    provideIcons({ lucideUser, lucideLock, lucideEye, lucideEyeOff }),
+    provideIcons({
+      lucideUser,
+      lucideLock,
+      lucideEye,
+      lucideEyeOff,
+      lucideQrCode,
+    }),
   ],
 })
 export class LoginComponent implements OnInit, AfterViewInit {
@@ -87,6 +96,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   captchaToken!: string;
   enableCaptcha = environment.enableCaptcha;
+  isMMUOfflineQRCode = environment.isMMUOfflineQRCode;
 
   constructor(
     private router: Router,
@@ -94,7 +104,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
     readonly sessionstorage: SessionStorageService,
-    private trackingService: AmritTrackingService
+    private trackingService: AmritTrackingService,
+    private dialogService: ZardDialogService
   ) {
     this._keySize = 256;
     this._ivSize = 128;
@@ -333,6 +344,15 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   hidePWD() {
     this.dynamictype = 'password';
+  }
+
+  openQrDialog(): void {
+    this.dialogService.create({
+      zTitle: 'Camp Hub QR Code',
+      zContent: CampHubQrCodeComponent,
+      zWidth: '460px',
+      zHideFooter: true,
+    });
   }
 
   onCaptchaResolved(token: any) {
