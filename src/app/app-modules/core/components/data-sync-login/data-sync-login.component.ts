@@ -24,7 +24,7 @@ import { Component, OnInit, Injector, DoCheck } from '@angular/core';
 import { Router } from '@angular/router';
 
 import * as CryptoJS from 'crypto-js';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SetLanguageComponent } from '../set-language.component';
 import { ConfirmationService } from '../../services';
@@ -69,8 +69,8 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
   }
 
   loginForm = this.fb.group({
-    userName: [''],
-    password: [''],
+    userName: ['', Validators.required],
+    password: ['', Validators.required],
   });
 
   ngOnInit() {
@@ -143,17 +143,13 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
    added a concurrent login changes
   */
   dataSyncLogin() {
-    this.showProgressBar = true;
-    const userName: any = this.loginForm.controls['userName'].value;
-    const encriptPassword = this.encrypt(
-      this.Key_IV,
-      this.loginForm.controls['password'].value
-    );
-
-    if (
-      this.loginForm.controls['userName'].value &&
-      this.loginForm.controls['password'].value
-    ) {
+    if (this.loginForm.valid) {
+      this.showProgressBar = true;
+      const userName: any = this.loginForm.controls['userName'].value;
+      const encriptPassword = this.encrypt(
+        this.Key_IV,
+        this.loginForm.controls['password'].value
+      );
       this.dataSyncService
         .dataSyncLogin(
           this.loginForm.controls['userName'].value,
