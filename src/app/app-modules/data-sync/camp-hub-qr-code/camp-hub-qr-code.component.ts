@@ -51,7 +51,7 @@ interface ConnectInfo {
   selector: 'app-camp-hub-qr-code',
   standalone: true,
   templateUrl: './camp-hub-qr-code.component.html',
-  styleUrls: ['./camp-hub-qr-code.component.css'],
+  styleUrls: ['./camp-hub-qr-code.component.scss'],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -87,9 +87,10 @@ export class CampHubQrCodeComponent implements OnInit {
   });
 
   constructor(
-    private fb: FormBuilder,
-    private http: HttpClient,
-    @Optional() private dialogRef: ZardDialogRef<CampHubQrCodeComponent>
+    private readonly fb: FormBuilder,
+    private readonly http: HttpClient,
+    @Optional()
+    private readonly dialogRef: ZardDialogRef<CampHubQrCodeComponent>
   ) {}
 
   close(): void {

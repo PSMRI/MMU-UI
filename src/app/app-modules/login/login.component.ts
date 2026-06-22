@@ -57,7 +57,7 @@ import {
 @Component({
   selector: 'app-login-cmp',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.scss'],
   imports: [
     ReactiveFormsModule,
     StringValidatorDirective,
@@ -99,13 +99,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
   isMMUOfflineQRCode = environment.isMMUOfflineQRCode;
 
   constructor(
-    private router: Router,
-    private authService: AuthService,
-    private confirmationService: ConfirmationService,
-    private fb: FormBuilder,
+    private readonly router: Router,
+    private readonly authService: AuthService,
+    private readonly confirmationService: ConfirmationService,
+    private readonly fb: FormBuilder,
     readonly sessionstorage: SessionStorageService,
-    private trackingService: AmritTrackingService,
-    private dialogService: ZardDialogService
+    private readonly trackingService: AmritTrackingService,
+    private readonly dialogService: ZardDialogService
   ) {
     this._keySize = 256;
     this._ivSize = 128;

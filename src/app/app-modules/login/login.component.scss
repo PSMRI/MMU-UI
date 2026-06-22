@@ -164,8 +164,13 @@
 }
 
 .captcha-row {
+  /* rendered as a <fieldset> for a11y grouping — reset its default chrome */
   display: flex;
   justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
 }
 
 .forgot-row {

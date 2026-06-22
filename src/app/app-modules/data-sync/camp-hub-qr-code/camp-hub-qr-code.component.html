@@ -37,10 +37,11 @@
   <!-- URL input + manual generate -->
   <form [formGroup]="urlForm" (ngSubmit)="generate()" class="qr-form">
     <z-form-field>
-      <label z-form-label zRequired>Camp Hub Server URL</label>
+      <label z-form-label zRequired for="campHubUrl">Camp Hub Server URL</label>
       <z-form-control>
         <input
           z-input
+          id="campHubUrl"
           type="text"
           formControlName="campHubUrl"
           placeholder="http://192.168.137.1:8080/"

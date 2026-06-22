@@ -14,7 +14,7 @@
     </header>
 
     <z-form-field>
-      <label z-form-label zRequired>User Name</label>
+      <label z-form-label zRequired for="userID">User Name</label>
       <z-form-control>
         <div class="input-affix">
           <ng-icon
@@ -45,7 +45,7 @@
     </z-form-field>
 
     <z-form-field>
-      <label z-form-label zRequired>Password</label>
+      <label z-form-label zRequired for="password">Password</label>
       <z-form-control>
         <div class="password-row">
           <div class="input-affix">
@@ -89,16 +89,12 @@
       >
     </z-form-field>
 
-    <div
-      *ngIf="enableCaptcha"
-      class="captcha-row"
-      role="group"
-      aria-labelledby="captcha-label">
-      <label id="captcha-label" class="sr-only">Security check</label>
+    <fieldset *ngIf="enableCaptcha" class="captcha-row">
+      <legend class="sr-only">Security check</legend>
       <app-captcha
         #captchaCmp
         (tokenResolved)="onCaptchaResolved($event)"></app-captcha>
-    </div>
+    </fieldset>
 
     <div class="forgot-row">
       <a class="forgot-link" routerLink="/reset-password">Forgot Password?</a>
