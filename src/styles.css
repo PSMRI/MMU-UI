@@ -1,7 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
-
-@import 'css/custom.css';
-@import 'css/layout.css';
+/* NOTE: css/custom.css and css/layout.css are loaded via angular.json `styles`
+   (not @import here) so Tailwind's PostCSS bundler doesn't rewrite their url()s. */
 
 
 /* Lato Font - Local */

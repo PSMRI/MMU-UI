@@ -63,6 +63,8 @@ const enableCaptcha = false;
 export const environment = {
   production: true,
   isMMUOfflineSync: false,
+  isMMUOfflineQRCode: false,
+  campHubConnectInfoAPI: `${COMMON_API}public/connect/info`,
   encKey: sessionStorageEncKey,
   tracking: {
     platform: 'matomo',

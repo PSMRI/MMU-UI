@@ -1,0 +1,91 @@
+<div class="qr-body">
+  <p class="qr-subtitle">
+    Scan with the Stop TB Mobile app to connect over Wi-Fi.
+  </p>
+
+  <!-- Auto-detection status -->
+  <div *ngIf="isDetecting" class="status-row">
+    <ng-icon name="lucideLoaderCircle" class="animate-spin" size="18"></ng-icon>
+    <span>Fetching Camp Hub server info…</span>
+  </div>
+
+  <div *ngIf="!isDetecting && detectionFailed" class="status-row status-warn">
+    <ng-icon name="lucideInfo" size="18"></ng-icon>
+    <span
+      >Camp Hub server unreachable — enter the server URL manually below.</span
+    >
+    <button
+      z-button
+      zType="ghost"
+      zSize="icon-sm"
+      type="button"
+      (click)="autoDetect()"
+      aria-label="Retry detection">
+      <ng-icon name="lucideRefreshCw" size="16"></ng-icon>
+    </button>
+  </div>
+
+  <div
+    *ngIf="
+      !isDetecting && !detectionFailed && urlForm.controls.campHubUrl.value
+    "
+    class="status-row status-ok">
+    <ng-icon name="lucideCircleCheck" size="18"></ng-icon>
+    <span>Server URL fetched — review below and click Generate.</span>
+  </div>
+
+  <!-- URL input + manual generate -->
+  <form [formGroup]="urlForm" (ngSubmit)="generate()" class="qr-form">
+    <z-form-field>
+      <label z-form-label zRequired for="campHubUrl">Camp Hub Server URL</label>
+      <z-form-control>
+        <input
+          z-input
+          id="campHubUrl"
+          type="text"
+          formControlName="campHubUrl"
+          placeholder="http://192.168.137.1:8080/"
+          autocomplete="off"
+          class="w-full" />
+      </z-form-control>
+      <z-form-message
+        *ngIf="
+          urlForm.controls.campHubUrl.touched &&
+          urlForm.controls.campHubUrl.hasError('required')
+        "
+        >URL is required</z-form-message
+      >
+      <z-form-message
+        *ngIf="urlForm.controls.campHubUrl.hasError('pattern')"
+        >Must start with http:// or https://</z-form-message
+      >
+      <p class="qr-hint">Format: http://&lt;network-ip&gt;:&lt;port&gt;/</p>
+    </z-form-field>
+
+    <button
+      *ngIf="detectionFailed"
+      z-button
+      zFull
+      type="submit"
+      [zLoading]="isGenerating"
+      [disabled]="urlForm.invalid || isGenerating">
+      <ng-icon name="lucideQrCode" size="16"></ng-icon>
+      Generate QR Code
+    </button>
+  </form>
+
+  <!-- QR result -->
+  <div *ngIf="qrDataUrl" class="qr-result">
+    <div class="url-chip">
+      <ng-icon name="lucideWifi" size="16"></ng-icon>
+      <span class="url-text">{{ generatedUrl }}</span>
+    </div>
+
+    <img [src]="qrDataUrl" alt="Camp Hub QR Code" class="qr-image" />
+
+    <button z-button zType="outline" type="button" (click)="downloadQR()">
+      <ng-icon name="lucideDownload" size="16"></ng-icon>
+      Download
+    </button>
+  </div>
+</div>

@@ -50,6 +50,8 @@ const enableCaptcha = <%= ENABLE_CAPTCHA %>;
 export const environment = {
   production: true,
   isMMUOfflineSync: true,
+  isMMUOfflineQRCode: false,
+  campHubConnectInfoAPI: `${COMMON_API}public/connect/info`,
   encKey: sessionStorageEncKey,
 
   tracking: {
