@@ -25,6 +25,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NgChartsModule } from 'ng2-charts';
 import { MatChipsModule } from '@angular/material/chips';
 import { TrackingModule } from 'Common-UI/v2/tracking';
+import { provideZard } from 'Common-UI/v2/ui/provider';
 import { AppComponent } from './app/app.component';
 import { importProvidersFrom } from '@angular/core';
 
@@ -64,6 +65,8 @@ bootstrapApplication(AppComponent, {
       TrackingModule.forRoot()
     ),
     provideRouter(routes, withHashLocation()),
+    // Zard custom event-manager plugins ({key} multi-key + .debounce template syntax).
+    provideZard(),
     HttpClient,
     ServicePointResolve,
     ServicePointService,

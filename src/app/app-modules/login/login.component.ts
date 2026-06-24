@@ -346,6 +346,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.dynamictype = 'password';
   }
 
+  togglePWD() {
+    this.dynamictype = this.dynamictype === 'text' ? 'password' : 'text';
+  }
+
   openQrDialog(): void {
     this.dialogService.create({
       zTitle: 'Camp Hub QR Code',
