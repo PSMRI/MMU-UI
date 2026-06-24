@@ -28,34 +28,25 @@ import {
   AuthService,
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
-import { AppHeaderComponent } from '../core/components/app-header/app-header.component';
-import { MatGridList, MatGridTile } from '@angular/material/grid-list';
-import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MatFormField, MatSuffix } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import { MatIcon } from '@angular/material/icon';
-import { AppFooterComponent } from '../core/components/app-footer/app-footer.component';
+import { FormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideLock, lucideEye, lucideEyeOff } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
 
 @Component({
   selector: 'app-set-password',
   templateUrl: './set-password.component.html',
-  styleUrls: ['./set-password.component.css'],
+  styleUrls: ['./set-password.component.scss'],
   imports: [
-    AppHeaderComponent,
-    MatGridList,
-    MatGridTile,
-    MatCard,
-    MatCardTitle,
-    MatCardContent,
-    ReactiveFormsModule,
     FormsModule,
-    MatFormField,
-    MatInput,
-    MatIcon,
-    MatSuffix,
-    AppFooterComponent,
+    NgIcon,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
   ],
+  viewProviders: [provideIcons({ lucideLock, lucideEye, lucideEyeOff })],
 })
 export class SetPasswordComponent implements OnInit {
   newpwd: any;
@@ -94,6 +85,10 @@ export class SetPasswordComponent implements OnInit {
 
   hidePWD() {
     this.dynamictype = 'password';
+  }
+
+  togglePWD() {
+    this.dynamictype = this.dynamictype === 'text' ? 'password' : 'text';
   }
 
   get keySize() {

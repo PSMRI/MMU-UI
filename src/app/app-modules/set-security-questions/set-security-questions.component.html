@@ -1,259 +1,244 @@
-<div
-  style="text-align: -webkit-center; margin-top: 60px"
-  *ngIf="questionsection">
-  <mat-card style="width: 515px; height: 630px">
-    <mat-card-title>
-      <div class="row" style="width: fit-content">
-        <img src="assets/images/Piramal-logo-login.png" alt="Logo" />
-      </div>
-      <div class="row text-center">
-        <h4 class="font-Medium f-s-24">Account Support</h4>
-        <h5 class="f-s-16 f-c-54">
-          Follow the steps to change/reset the password
-        </h5>
-      </div>
-    </mat-card-title>
-    <div class="row" style="padding-left: 25px">
-      <form
-        #form1="ngForm"
-        style="text-align: justify"
-        class="mat_form_field_width">
-        <div class="col-xs-12 col-sm-12">
-          <mat-form-field style="width: 95%">
-            <mat-label>Question 1</mat-label>
-            <mat-select
-              [(ngModel)]="question1"
-              name="question1"
-              required
-              (change)="filterArrayOne(question1)"
-              (blur)="updateQuestions(question1, 0)">
-              <mat-option
-                *ngFor="let question of questions"
-                [value]="question.QuestionID">
-                {{ question.Question }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-xs-12 col-sm-12">
-          <mat-form-field style="width: 95%">
-            <mat-label>Answer 1</mat-label>
-            <input
-              id="ans1"
-              matInput
-              [(ngModel)]="answer1"
-              name="answer1"
-              required />
-          </mat-form-field>
-        </div>
-      </form>
-      <form #form2="ngForm" style="text-align: justify">
-        <div class="col-xs-12 col-sm-12">
-          <mat-form-field style="width: 95%">
-            <mat-label>Question 2</mat-label>
-            <mat-select
-              [disabled]="!form1.valid"
-              [(ngModel)]="question2"
-              name="question2"
-              required
-              (change)="filterArrayTwo(question2)"
-              (blur)="updateQuestions(question2, 1)">
-              <mat-option
-                *ngFor="let question of Q_array_one"
-                [value]="question.QuestionID">
-                {{ question.Question }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-xs-12 col-sm-12">
-          <mat-form-field style="width: 95%">
-            <mat-label>Answer 2</mat-label>
-            <input
-              id="ans2"
-              matInput
-              [disabled]="!form1.valid"
-              [(ngModel)]="answer2"
-              name="answer2"
-              required />
-          </mat-form-field>
-        </div>
-      </form>
-      <form #form3="ngForm" style="text-align: justify">
-        <div class="col-xs-12 col-sm-12">
-          <mat-form-field style="width: 95%">
-            <mat-label>Question 3</mat-label>
-            <mat-select
-              [disabled]="!form2.valid"
-              [(ngModel)]="question3"
-              name="question3"
-              required
-              (blur)="updateQuestions(question3, 2)"
-              (change)="filterArrayThree(question3)">
-              <mat-option
-                *ngFor="let question of Q_array_two"
-                [value]="question.QuestionID">
-                {{ question.Question }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-xs-12 col-sm-10">
-          <mat-form-field style="width: 114%">
-            <mat-label>Answer 3</mat-label>
-            <input
-              id="ans3"
-              matInput
-              [disabled]="!form2.valid"
-              [(ngModel)]="answer3"
-              name="answer3"
-              required />
-          </mat-form-field>
-        </div>
-      </form>
-      <div class="row">
-        <button
-          md-raised-button
-          color="primary"
-          style="width: 98%; margin-left: 4px"
-          class="full-width largeBtn mat_blue"
-          [disabled]="!form3.valid"
-          (click)="setSecurityQuestions()">
-          Next
-        </button>
-      </div>
-    </div>
-  </mat-card>
-</div>
+<div class="support-wrapper">
+  <!-- Step 1 — choose three security questions -->
+  <form
+    *ngIf="questionsection"
+    #form3="ngForm"
+    class="support-card"
+    autocomplete="off">
+    <header class="support-header">
+      <ng-icon
+        class="support-mark"
+        name="lucideShieldCheck"
+        size="32"
+        aria-hidden="true"></ng-icon>
+      <h1 class="support-title">Account Support</h1>
+      <p class="support-subtitle">
+        Follow the steps to change or reset your password
+      </p>
+    </header>
 
-<div
-  style="text-align: -webkit-center; margin-top: 60px"
-  *ngIf="passwordSection">
-  <mat-card style="width: 515px; height: 365px">
-    <mat-card-title>
-      <div class="row" style="width: fit-content">
-        <img src="assets/images/Piramal-logo-login.png" alt="Logo" />
-      </div>
-      <div class="row text-center">
-        <h4 class="font-Medium f-s-24">Account Support</h4>
-        <h5 class="f-s-16 f-c-54">
-          Follow the steps to change/reset the password
-        </h5>
-      </div>
-    </mat-card-title>
+    <z-form-field>
+      <label z-form-label zRequired for="question1">Question 1</label>
+      <z-form-control>
+        <z-select
+          id="question1"
+          name="question1"
+          required
+          [(ngModel)]="question1"
+          zPlaceholder="Select a question"
+          (zSelectionChange)="onSelectQuestion($event, 0)">
+          <z-select-item
+            *ngFor="let question of questions"
+            [zValue]="asValue(question.QuestionID)">
+            {{ question.Question }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
 
-    <form
-      #passwordForm="ngForm"
-      style="text-align: justify"
-      class="mat_form_field_width">
-      <div class="row">
-        <div class="col-xs-12 col-sm-12 row">
-          <div
-            class="col-2"
-            style="
-              padding-right: unset;
-              margin-top: 23px;
-              text-align: center;
-              margin-right: -15px;
-            ">
-            <mat-icon
-              matPrefix
-              class="mat-icon material-icons"
-              role="img"
-              aria-hidden="true"
-              style="color: gray"
-              >lock</mat-icon
-            >
+    <z-form-field>
+      <label z-form-label zRequired for="answer1">Answer 1</label>
+      <z-form-control>
+        <input
+          z-input
+          id="answer1"
+          name="answer1"
+          required
+          [(ngModel)]="answer1"
+          placeholder="Enter your answer" />
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field>
+      <label z-form-label zRequired for="question2">Question 2</label>
+      <z-form-control>
+        <z-select
+          id="question2"
+          name="question2"
+          required
+          [zDisabled]="!question1 || !answer1"
+          [(ngModel)]="question2"
+          zPlaceholder="Select a question"
+          (zSelectionChange)="onSelectQuestion($event, 1)">
+          <z-select-item
+            *ngFor="let question of Q_array_one"
+            [zValue]="asValue(question.QuestionID)">
+            {{ question.Question }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field>
+      <label z-form-label zRequired for="answer2">Answer 2</label>
+      <z-form-control>
+        <input
+          z-input
+          id="answer2"
+          name="answer2"
+          required
+          [disabled]="!question1 || !answer1"
+          [(ngModel)]="answer2"
+          placeholder="Enter your answer" />
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field>
+      <label z-form-label zRequired for="question3">Question 3</label>
+      <z-form-control>
+        <z-select
+          id="question3"
+          name="question3"
+          required
+          [zDisabled]="!question2 || !answer2"
+          [(ngModel)]="question3"
+          zPlaceholder="Select a question"
+          (zSelectionChange)="onSelectQuestion($event, 2)">
+          <z-select-item
+            *ngFor="let question of Q_array_two"
+            [zValue]="asValue(question.QuestionID)">
+            {{ question.Question }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field>
+      <label z-form-label zRequired for="answer3">Answer 3</label>
+      <z-form-control>
+        <input
+          z-input
+          id="answer3"
+          name="answer3"
+          required
+          [disabled]="!question2 || !answer2"
+          [(ngModel)]="answer3"
+          placeholder="Enter your answer" />
+      </z-form-control>
+    </z-form-field>
+
+    <button
+      z-button
+      type="button"
+      zType="default"
+      zFull
+      [disabled]="form3.invalid"
+      (click)="setSecurityQuestions()">
+      Next
+    </button>
+  </form>
+
+  <!-- Step 2 — set the new password -->
+  <form
+    *ngIf="passwordSection"
+    #passwordForm="ngForm"
+    class="support-card"
+    autocomplete="off">
+    <header class="support-header">
+      <ng-icon
+        class="support-mark"
+        name="lucideShieldCheck"
+        size="32"
+        aria-hidden="true"></ng-icon>
+      <h1 class="support-title">Account Support</h1>
+      <p class="support-subtitle">
+        Choose a new password to finish resetting your account
+      </p>
+    </header>
+
+    <z-form-field>
+      <label z-form-label zRequired for="newpwd">New Password</label>
+      <z-form-control>
+        <div class="password-row">
+          <div class="input-affix">
+            <ng-icon
+              class="input-icon"
+              name="lucideLock"
+              size="18"
+              aria-hidden="true"></ng-icon>
+            <input
+              z-input
+              class="has-leading-icon"
+              [type]="dynamictype"
+              id="newpwd"
+              name="newpwd"
+              [(ngModel)]="newpwd"
+              [pattern]="passwordPattern"
+              minlength="8"
+              maxlength="12"
+              #pwrd="ngModel"
+              required
+              placeholder="Enter new password" />
           </div>
-          <div class="col-10" style="padding: unset">
-            <mat-form-field style="width: 100%">
-              <mat-label>New Password</mat-label>
-              <input
-                matInput
-                type="{{ dynamictype }}"
-                [(ngModel)]="newpwd"
-                name="newpwd"
-                [pattern]="passwordPattern"
-                minlength="8"
-                maxlength="12"
-                #pwrd="ngModel"
-                required />
-              <mat-icon
-                matSuffix
-                class="mat-icon material-icons cursorPointer"
-                role="img"
-                aria-hidden="true"
-                mdTooltip="Show Password"
-                (mousedown)="showPWD()"
-                style="color: gray"
-                >visibility</mat-icon
-              >
-              <mat-hint class="errorText">
-                <span *ngIf="pwrd.hasError('pattern')"
-                  >Password is required(min:8,max:12,alphanumeric,1 special
-                  character,1 upper case)</span
-                >
-              </mat-hint>
-            </mat-form-field>
-          </div>
+          <button
+            type="button"
+            class="toggle-pwd"
+            tabindex="-1"
+            (click)="togglePWD()"
+            [attr.aria-label]="
+              dynamictype === 'text' ? 'Hide password' : 'Show password'
+            "
+            [attr.aria-pressed]="dynamictype === 'text'">
+            <ng-icon
+              [name]="dynamictype === 'text' ? 'lucideEyeOff' : 'lucideEye'"
+              size="18"></ng-icon>
+          </button>
         </div>
-        <div class="col-xs-12 col-sm-12 row">
-          <div
-            class="col-2"
-            style="
-              padding-right: unset;
-              margin-top: 23px;
-              text-align: center;
-              margin-right: -15px;
-            ">
-            <mat-icon
-              matPrefix
-              class="mat-icon material-icons"
-              role="img"
-              aria-hidden="true"
-              style="color: gray"
-              >lock</mat-icon
-            >
+      </z-form-control>
+      <z-form-message *ngIf="pwrd.touched && pwrd.hasError('pattern')">
+        Password must be 8–12 characters with at least one number, one uppercase
+        letter and one special character.
+      </z-form-message>
+    </z-form-field>
+
+    <z-form-field>
+      <label z-form-label zRequired for="confirmpwd">Confirm Password</label>
+      <z-form-control>
+        <div class="password-row">
+          <div class="input-affix">
+            <ng-icon
+              class="input-icon"
+              name="lucideLock"
+              size="18"
+              aria-hidden="true"></ng-icon>
+            <input
+              z-input
+              class="has-leading-icon"
+              [type]="dynamictype"
+              id="confirmpwd"
+              name="confirmpwd"
+              [(ngModel)]="confirmpwd"
+              [pattern]="passwordPattern"
+              minlength="8"
+              maxlength="12"
+              required
+              placeholder="Re-enter new password" />
           </div>
-          <div class="col-10" style="padding: unset">
-            <mat-form-field style="width: 100%">
-              <mat-label>confirm Password</mat-label>
-              <input
-                matInput
-                type="{{ dynamictype }}"
-                [(ngModel)]="confirmpwd"
-                name="confirmpwd"
-                [pattern]="passwordPattern"
-                minlength="8"
-                maxlength="12"
-                required />
-              <mat-icon
-                matSuffix
-                class="mat-icon material-icons cursorPointer"
-                role="img"
-                aria-hidden="true"
-                mdTooltip="Show Password"
-                (mousedown)="showPWD()"
-                style="color: gray"
-                >visibility</mat-icon
-              >
-            </mat-form-field>
-          </div>
+          <button
+            type="button"
+            class="toggle-pwd"
+            tabindex="-1"
+            (click)="togglePWD()"
+            [attr.aria-label]="
+              dynamictype === 'text' ? 'Hide password' : 'Show password'
+            "
+            [attr.aria-pressed]="dynamictype === 'text'">
+            <ng-icon
+              [name]="dynamictype === 'text' ? 'lucideEyeOff' : 'lucideEye'"
+              size="18"></ng-icon>
+          </button>
         </div>
-        <div class="col-xs-12 col-sm-12">
-          <div class="row">
-            <button
-              md-raised-button
-              style="width: 87%; margin-left: 35px"
-              color="primary"
-              [disabled]="!passwordForm.valid"
-              class="full-width largeBtn mat_blue"
-              (click)="updatePassword(newpwd)">
-              Update Password
-            </button>
-          </div>
-        </div>
-      </div>
-    </form>
-  </mat-card>
+      </z-form-control>
+    </z-form-field>
+
+    <button
+      z-button
+      type="button"
+      zType="default"
+      zFull
+      [disabled]="passwordForm.invalid"
+      (click)="updatePassword(newpwd)">
+      Update Password
+    </button>
+  </form>
 </div>

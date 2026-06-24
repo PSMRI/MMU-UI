@@ -68,8 +68,7 @@
             type="button"
             class="toggle-pwd"
             tabindex="-1"
-            (mousedown)="showPWD()"
-            (mouseup)="hidePWD()"
+            (click)="togglePWD()"
             [attr.aria-label]="
               dynamictype === 'text' ? 'Hide password' : 'Show password'
             "
