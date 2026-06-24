@@ -1,28 +1,23 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRoute } from '@angular/router';
-import { tap } from 'rxjs';
-import { HttpServiceService } from '../../core/services/http-service.service';
+import { CanActivate, Router } from '@angular/router';
+import { catchError, map } from 'rxjs/operators';
+import { of } from 'rxjs';
 import { AuthService } from './auth.service';
 @Injectable()
 export class AuthGuard implements CanActivate {
-  current_language_set: any;
   constructor(
     private auth: AuthService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private http_service: HttpServiceService
+    private router: Router
   ) {}
 
   canActivate(route: any, state: any) {
-    this.http_service.currentLangugae$.subscribe(
-      response => (this.current_language_set = response)
-    );
     return this.auth.validateSessionKey().pipe(
-      tap((res: any) => {
-        if (!(res && res.statusCode === 200 && res.data)) {
-          this.router.navigate(['/login']);
-        }
-      })
+      map((res: any) =>
+        res && res.statusCode === 200 && res.data
+          ? true
+          : this.router.createUrlTree(['/login'])
+      ),
+      catchError(() => of(this.router.createUrlTree(['/login'])))
     );
   }
 }
