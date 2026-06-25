@@ -297,9 +297,26 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
     });
 
     if (mmuService && mmuService.length > 0) {
+      const dataSyncPsmID = mmuService[0].providerServiceMapID;
+      const sessionPsmID = this.sessionstorage.getItem('providerServiceMapID');
+
+      if (
+        sessionPsmID &&
+        dataSyncPsmID &&
+        String(dataSyncPsmID) !== String(sessionPsmID)
+      ) {
+        this.showProgressBar = false;
+        sessionStorage.removeItem('serverKey');
+        this.confirmationService.alert(
+          'Data sync user does not belong to the same VAN. Please login with the correct credentials.',
+          'error'
+        );
+        return;
+      }
+
       this.sessionstorage.setItem(
         'dataSyncProviderServiceMapID',
-        mmuService[0].providerServiceMapID
+        dataSyncPsmID
       );
     }
 
