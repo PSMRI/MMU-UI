@@ -9,7 +9,7 @@
         [placeholder]="current_language_set?.common?.inTableSearch || 'Search'"
         name="filterTerm"
         [(ngModel)]="filterTerm"
-        (keyup)="filterBeneficiaryList(filterTerm)" />
+        (ngModelChange)="filterBeneficiaryList($event)" />
     </div>
 
     <button z-button class="refresh-btn" (click)="loadWorklist()">
@@ -37,12 +37,13 @@
             </tr>
           </thead>
           <tbody z-table-body>
-            <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events @angular-eslint/template/interactive-supports-focus -->
             <tr
               z-table-row
               class="ben-row"
+              tabindex="0"
               *ngFor="let row of pagedList"
-              (click)="loadLabExaminationPage(row)">
+              (click)="loadLabExaminationPage(row)"
+              (keydown.enter)="loadLabExaminationPage(row)">
               <td z-table-cell>{{ row.sno }}</td>
               <td z-table-cell>{{ row.beneficiaryID }}</td>
               <td z-table-cell>{{ row.benName | titlecase }}</td>
@@ -58,13 +59,15 @@
               </td>
               <td z-table-cell>{{ row.preferredPhoneNum }}</td>
               <td z-table-cell>{{ row.benVisitDate }}</td>
-              <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events @angular-eslint/template/interactive-supports-focus -->
-              <td
-                z-table-cell
-                class="img-cell"
-                [zTooltip]="current_language_set?.tc?.image || 'View image'"
-                (click)="$event.stopPropagation(); patientImageView(row.beneficiaryRegID)">
-                <img src="assets/images/Avatar-Profile_30X30.png" alt="profile" />
+              <td z-table-cell class="img-cell">
+                <button
+                  type="button"
+                  class="img-btn"
+                  [zTooltip]="current_language_set?.tc?.image || 'View image'"
+                  (click)="$event.stopPropagation(); patientImageView(row.beneficiaryRegID)"
+                  (keydown.enter)="$event.stopPropagation()">
+                  <img src="assets/images/Avatar-Profile_30X30.png" alt="profile" />
+                </button>
               </td>
             </tr>
           </tbody>
@@ -91,9 +94,13 @@
 
         <ul z-pagination-content class="pager-list">
           <li z-pagination-item>
-            <z-pagination-previous
+            <button
+              z-pagination-button
               [zDisabled]="currentPage === 1"
-              (click)="prevPage()"></z-pagination-previous>
+              aria-label="Previous page"
+              (click)="prevPage()">
+              <ng-icon name="lucideChevronLeft" size="16"></ng-icon>
+            </button>
           </li>
           <li z-pagination-item *ngFor="let p of pageNumbers">
             <button z-pagination-button [zActive]="p === currentPage" (click)="goToPage(p)">
@@ -101,9 +108,13 @@
             </button>
           </li>
           <li z-pagination-item>
-            <z-pagination-next
+            <button
+              z-pagination-button
               [zDisabled]="currentPage === totalPages"
-              (click)="nextPage()"></z-pagination-next>
+              aria-label="Next page"
+              (click)="nextPage()">
+              <ng-icon name="lucideChevronRight" size="16"></ng-icon>
+            </button>
           </li>
         </ul>
       </div>
