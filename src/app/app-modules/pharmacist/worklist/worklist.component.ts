@@ -35,7 +35,12 @@ import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-s
 import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf, TitleCasePipe } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideSearch, lucideRefreshCw } from '@ng-icons/lucide';
+import {
+  lucideSearch,
+  lucideRefreshCw,
+  lucideChevronLeft,
+  lucideChevronRight,
+} from '@ng-icons/lucide';
 import { cardImports } from 'Common-UI/v2/ui/card';
 import { ZardTableImports } from 'Common-UI/v2/ui/table';
 import { ZardPaginationImports } from 'Common-UI/v2/ui/pagination';
@@ -58,7 +63,14 @@ import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
     ...ZardPaginationImports,
     ...tooltipImports,
   ],
-  viewProviders: [provideIcons({ lucideSearch, lucideRefreshCw })],
+  viewProviders: [
+    provideIcons({
+      lucideSearch,
+      lucideRefreshCw,
+      lucideChevronLeft,
+      lucideChevronRight,
+    }),
+  ],
 })
 export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
   beneficiaryList: any[] = [];
@@ -167,6 +179,7 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
       'villageName',
       'beneficiaryRegID',
       'visitDate',
+      'benVisitDate',
     ];
     const filtered = this.beneficiaryList.filter((item: any) =>
       keys.some(key => ('' + item[key]).toLowerCase().indexOf(term) >= 0)

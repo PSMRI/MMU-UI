@@ -96,8 +96,23 @@
   color: var(--muted-foreground);
 }
 
-.img-cell {
+.ben-row:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
+.img-btn {
+  display: inline-flex;
+  padding: 0;
+  border: 0;
+  background: none;
   cursor: pointer;
+  border-radius: 9999px;
+}
+
+.img-btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
 
 .img-cell img {
