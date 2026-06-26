@@ -20,14 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import {
-  Component,
-  DoCheck,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { NurseService } from '../shared/services';
@@ -35,77 +28,58 @@ import { CameraService } from '../../core/services/camera.service';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
-import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MatCard } from '@angular/material/card';
-import { NgClass, NgIf, TitleCasePipe } from '@angular/common';
-import { MatTooltip } from '@angular/material/tooltip';
+import { FormsModule } from '@angular/forms';
+import { NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideSearch,
+  lucideRefreshCw,
+  lucideChevronLeft,
+  lucideChevronRight,
+} from '@ng-icons/lucide';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardPaginationImports } from 'Common-UI/v2/ui/pagination';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-nurse-worklist',
   templateUrl: './nurse-worklist.component.html',
-  styleUrls: ['./nurse-worklist.component.css'],
+  styleUrls: ['./nurse-worklist.component.scss'],
   imports: [
-    ReactiveFormsModule,
     FormsModule,
-    MatCard,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
     NgClass,
-    MatTooltip,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
+    NgFor,
     NgIf,
-    MatPaginator,
     TitleCasePipe,
+    NgIcon,
+    ZardButtonComponent,
+    ...cardImports,
+    ...ZardTableImports,
+    ...ZardPaginationImports,
+    ...tooltipImports,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideSearch,
+      lucideRefreshCw,
+      lucideChevronLeft,
+      lucideChevronRight,
+    }),
   ],
 })
 export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
-  rowsPerPage = 5;
-  activePage = 1;
-  pagedList: any = [];
-  rotate = true;
-
-  blankTable = [1, 2, 3, 4, 5];
-  beneficiaryList: any;
-  filteredBeneficiaryList: any = [];
+  beneficiaryList: any[] = [];
+  filteredBeneficiaryList: any[] = [];
   filterTerm: any;
   currentLanguageSet: any;
-  currentPage = 0;
-  displayedColumns: any = [
-    'sno',
-    'beneficiaryID',
-    'beneficiaryName',
-    'gender',
-    'age',
-    'status',
-    'fatherName',
-    'district',
-    'phoneNo',
-    'image',
-  ];
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
+
+  // client-side pagination (replaces MatPaginator)
+  pageSizeOptions = [5, 10, 20];
+  pageSize = 5;
+  currentPage = 1;
 
   constructor(
     private nurseService: NurseService,
@@ -124,18 +98,17 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
     this.getNurseWorklist();
     this.beneficiaryDetailsService.reset();
   }
-  /*
-   * JA354063 - Multilingual Changes added on 13/10/21
-   */
+
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
+
   assignSelectedLanguage() {
     const getLanguageJson = new SetLanguageComponent(this.httpServices);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
-  // Ends
+
   ngOnDestroy() {
     sessionStorage.removeItem('currentRole');
   }
@@ -160,23 +133,12 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
         if (res.statusCode === 200 && res.data !== null) {
           const benlist = this.loadDataToBenList(res.data);
           this.beneficiaryList = benlist;
-          this.filteredBeneficiaryList = benlist;
-          this.dataSource.data = [];
-          this.dataSource.data = benlist;
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.data.forEach((sectionCount: any, index: number) => {
-            sectionCount.sno = index + 1;
-          });
-          // this.pageChanged({
-          //   page: this.activePage,
-          //   itemsPerPage: this.rowsPerPage,
-          // });
           this.filterTerm = null;
-          // this.currentPage=1;
+          this.setFilteredList(benlist);
         } else {
           this.confirmationService.alert(res.errorMessage, 'error');
-          this.dataSource.data = [];
-          this.dataSource.paginator = this.paginator;
+          this.beneficiaryList = [];
+          this.setFilteredList([]);
         }
       },
       err => {
@@ -201,10 +163,77 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
     return data;
   }
 
-  pageChanged(event: any): void {
-    const startItem = (event.page - 1) * event.itemsPerPage;
-    const endItem = event.page * event.itemsPerPage;
-    this.pagedList = this.filteredBeneficiaryList.slice(startItem, endItem);
+  filterBeneficiaryList(searchTerm: string) {
+    if (!searchTerm) {
+      this.setFilteredList(this.beneficiaryList);
+      return;
+    }
+    const term = searchTerm.toLowerCase();
+    const keys = [
+      'beneficiaryID',
+      'benName',
+      'genderName',
+      'fatherName',
+      'districtName',
+      'preferredPhoneNum',
+      'villageName',
+    ];
+    const filtered = this.beneficiaryList.filter((item: any) => {
+      if (keys.some(key => ('' + item[key]).toLowerCase().includes(term))) {
+        return true;
+      }
+      // status column is derived text ("First visit" / "Revisit")
+      const status = '' + item.benVisitNo === '1' ? 'first visit' : 'revisit';
+      return status.includes(term);
+    });
+    this.setFilteredList(filtered);
+  }
+
+  /** Re-number (sno), reset to first page, and store the visible list. */
+  private setFilteredList(list: any[]) {
+    list.forEach((item: any, index: number) => (item.sno = index + 1));
+    this.filteredBeneficiaryList = list;
+    this.currentPage = 1;
+  }
+
+  get totalPages(): number {
+    return Math.max(
+      1,
+      Math.ceil(this.filteredBeneficiaryList.length / this.pageSize)
+    );
+  }
+
+  get pagedList(): any[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredBeneficiaryList.slice(start, start + this.pageSize);
+  }
+
+  /** A small window of page numbers around the current page (max 5). */
+  get pageNumbers(): number[] {
+    const total = this.totalPages;
+    let start = Math.max(1, this.currentPage - 2);
+    const end = Math.min(total, start + 4);
+    start = Math.max(1, end - 4);
+    const pages: number[] = [];
+    for (let i = start; i <= end; i++) pages.push(i);
+    return pages;
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) this.currentPage = page;
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) this.currentPage--;
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) this.currentPage++;
+  }
+
+  changePageSize(size: number) {
+    this.pageSize = Number(size);
+    this.currentPage = 1;
   }
 
   patientImageView(benregID: any) {
@@ -221,125 +250,32 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
 
   loadNursePatientDetails(beneficiary: any) {
     sessionStorage.removeItem('visitCategory');
-
-    //for WDF requirment
-    // if (beneficiary.nurseFlag === 100) {
-    //   this.confirmationService.confirm(`info`, `Please confirm to proceed further`)
-    //     .subscribe(result => {
-    //       if (result) {
-    //         this.sessionstorage.setItem('visitCode', beneficiary.visitCode);
-    //         this.sessionstorage.setItem('beneficiaryGender', beneficiary.genderName);
-    //         this.sessionstorage.setItem('visitCategory', "NCD screening");
-    //         this.sessionstorage.setItem('visitID', beneficiary.benVisitID);
-    //         this.sessionstorage.setItem('nurseFlag', beneficiary.nurseFlag);
-    //         this.sessionstorage.setItem('beneficiaryRegID', beneficiary.beneficiaryRegID);
-    //         this.sessionstorage.setItem('benFlowID', beneficiary.benFlowID);
-    //         this.sessionstorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
-    //         this.router.navigate(['/common/attendant/nurse/patient/', beneficiary.beneficiaryRegID]);
-    //       }
-    //     });
-    // } else
-    {
-      this.confirmationService
-        .confirm(
-          `info`,
-          this.currentLanguageSet.alerts.info.confirmtoProceedFurther
-        )
-        .subscribe(result => {
-          if (result) {
-            this.sessionstorage.setItem(
-              'beneficiaryGender',
-              beneficiary.genderName
-            );
-            this.sessionstorage.setItem(
-              'beneficiaryRegID',
-              beneficiary.beneficiaryRegID
-            );
-            this.sessionstorage.setItem('benFlowID', beneficiary.benFlowID);
-            this.sessionstorage.setItem(
-              'beneficiaryID',
-              beneficiary.beneficiaryID
-            );
-            this.sessionstorage.setItem('benVisitNo', beneficiary.benVisitNo);
-            this.router.navigate([
-              '/nurse-doctor/attendant/nurse/patient/',
-              beneficiary.beneficiaryRegID,
-            ]);
-          }
-        });
-    }
-  }
-
-  filterBeneficiaryList(searchTerm: string) {
-    if (!searchTerm) {
-      this.filteredBeneficiaryList = this.beneficiaryList;
-      this.dataSource.data = this.filteredBeneficiaryList;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.data.forEach((sectionCount: any, index: number) => {
-        sectionCount.sno = index + 1;
-      });
-    } else {
-      this.filteredBeneficiaryList = [];
-      this.dataSource.data = [];
-      this.dataSource.paginator = this.paginator;
-      this.beneficiaryList.forEach((item: any) => {
-        console.log('item', JSON.stringify(item, null, 4));
-        for (const key in item) {
-          if (
-            key === 'beneficiaryID' ||
-            key === 'benName' ||
-            key === 'genderName' ||
-            key === 'fatherName' ||
-            key === 'districtName' ||
-            key === 'preferredPhoneNum' ||
-            key === 'villageName'
-          ) {
-            const value: string = '' + item[key];
-            if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-              this.filteredBeneficiaryList.push(item);
-              this.dataSource.data.push(item);
-              this.dataSource.paginator = this.paginator;
-              this.dataSource.data.forEach(
-                (sectionCount: any, index: number) => {
-                  sectionCount.sno = index + 1;
-                }
-              );
-              break;
-            }
-          } else {
-            if (key === 'benVisitNo') {
-              const value: string = '' + item[key];
-              if (value === '1') {
-                const val = 'First visit';
-                if (val.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-                  this.filteredBeneficiaryList.push(item);
-                  this.dataSource.data.push(item);
-                  this.dataSource.paginator = this.paginator;
-                  this.dataSource.data.forEach(
-                    (sectionCount: any, index: number) => {
-                      sectionCount.sno = index + 1;
-                    }
-                  );
-                  break;
-                }
-              } else {
-                const val = 'Revisit';
-                if (val.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-                  this.filteredBeneficiaryList.push(item);
-                  this.dataSource.data.push(item);
-                  this.dataSource.paginator = this.paginator;
-                  this.dataSource.data.forEach(
-                    (sectionCount: any, index: number) => {
-                      sectionCount.sno = index + 1;
-                    }
-                  );
-                  break;
-                }
-              }
-            }
-          }
+    this.confirmationService
+      .confirm(
+        `info`,
+        this.currentLanguageSet.alerts.info.confirmtoProceedFurther
+      )
+      .subscribe(result => {
+        if (result) {
+          this.sessionstorage.setItem(
+            'beneficiaryGender',
+            beneficiary.genderName
+          );
+          this.sessionstorage.setItem(
+            'beneficiaryRegID',
+            beneficiary.beneficiaryRegID
+          );
+          this.sessionstorage.setItem('benFlowID', beneficiary.benFlowID);
+          this.sessionstorage.setItem(
+            'beneficiaryID',
+            beneficiary.beneficiaryID
+          );
+          this.sessionstorage.setItem('benVisitNo', beneficiary.benVisitNo);
+          this.router.navigate([
+            '/nurse-doctor/attendant/nurse/patient/',
+            beneficiary.beneficiaryRegID,
+          ]);
         }
       });
-    }
   }
 }
