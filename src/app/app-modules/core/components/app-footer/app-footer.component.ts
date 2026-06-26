@@ -20,41 +20,15 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, DoCheck } from '@angular/core';
-import { HttpServiceService } from '../../services/http-service.service';
-import { SetLanguageComponent } from '../set-language.component';
-import { NgIf } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { MatIcon } from '@angular/material/icon';
+import { Component } from '@angular/core';
 
+/**
+ * The global footer bar was removed from the UI. This component is intentionally
+ * empty so existing `<app-footer>` usages render nothing; the tags/imports can be
+ * cleaned out of the host screens in a later pass.
+ */
 @Component({
   selector: 'app-footer',
-  templateUrl: './app-footer.component.html',
-  styleUrls: ['./app-footer.component.css'],
-  imports: [NgIf, RouterLink, MatIcon],
+  template: '',
 })
-export class AppFooterComponent implements OnInit, DoCheck {
-  currentLanguageSet: any;
-  status = false;
-  isSpecialist = false;
-  constructor(public httpServiceService: HttpServiceService) {}
-  year: any;
-  today!: Date;
-  ngOnInit() {
-    this.assignSelectedLanguage();
-    this.today = new Date();
-    this.year = this.today.getFullYear();
-    setInterval(() => {
-      this.status = navigator.onLine;
-    }, 1000);
-  }
-
-  ngDoCheck() {
-    this.assignSelectedLanguage();
-  }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
-  }
-}
+export class AppFooterComponent {}
