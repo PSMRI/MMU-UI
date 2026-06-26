@@ -1,165 +1,104 @@
-<nav class="navbar navbar-expand-lg navbar-iemr">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <a class="navbar-brand">
-        <img src="assets/images/logo.png" alt="Logo" />
-      </a>
-    </div>
+<header class="app-header">
+  <a class="app-header-brand" aria-label="Piramal Swasthya">
+    <img src="assets/images/Swasthya.png" alt="Piramal Swasthya" />
+  </a>
 
+  <div class="app-header-actions">
+    <!-- Language -->
+    <label *ngIf="status" class="lang-field">
+      <span class="lang-label">{{ currentLanguageSet?.common?.SelectLanguage }}</span>
+      <select
+        class="lang-select"
+        name="app_language"
+        [(ngModel)]="app_language"
+        (change)="changeLanguage(app_language)">
+        <option
+          *ngFor="let language of languageArray"
+          [value]="language.languageName">
+          {{ language.languageName }}
+        </option>
+      </select>
+    </label>
+
+    <!-- Bluetooth -->
     <button
-      class="navbar-toggler ms-auto"
+      *ngIf="isAuthenticated"
       type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#top-navbar,#main-navbar">
-      <mat-icon class="white-icon">menu</mat-icon>
+      class="icon-btn icon-btn--bt"
+      [ngClass]="{ 'is-connected': isConnected }"
+      [zTooltip]="currentLanguageSet?.common?.connectBluetooth || 'Connect Bluetooth'"
+      zPosition="bottom"
+      (click)="openIOT()">
+      <ng-icon
+        [name]="isConnected ? 'lucideBluetoothConnected' : 'lucideBluetooth'"
+        size="20"></ng-icon>
     </button>
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse menu-font" id="top-navbar">
-      <ul class="navbar-nav ms-auto flex-row">
-        <li *ngIf="status" class="nav-item alignWord menu-font">
-          <span>{{ currentLanguageSet?.common?.SelectLanguage }}: </span>
-        </li>
-        <li
-          *ngIf="status"
-          class="nav-item alignDropDown"
-          style="margin-right: 8px">
-          <select
-            style="font-size: 13px"
-            class="menu-font drop-arrow border-radius-20 height-30 width120px pull-right"
-            name="app_language"
-            [(ngModel)]="app_language"
-            (change)="changeLanguage(app_language)">
-            <option
-              *ngFor="let language of languageArray"
-              [value]="language.languageName">
-              {{ language.languageName }}
-            </option>
-          </select>
-        </li>
 
-        <li
-          *ngIf="isAuthenticated"
-          style="margin-right: 8px"
-          class="nav-item cursorPointer"
-          matTooltip="{{ currentLanguageSet?.common?.connectBluetooth }}"
-          [ngClass]="{ connected: isConnected }">
-          <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events -->
-          <span class="material-icons iot" tabindex="{0}" (click)="openIOT()">
-            bluetooth_searching
-          </span>
-        </li>
-        <mat-menu #menu="matMenu" x-position="before" class="m-t-40">
-          <button mat-menu-item (click)="showVersionAndCommitDetails()">
-            {{ currentLanguageSet?.version }} : {{ versionUI }}
-          </button>
-          <button mat-menu-item>
-            <a target="_blank" rel="noopener noreferrer" href="{{ helpURL }}">{{
-              currentLanguageSet?.licenseInfo
-            }}</a>
-          </button>
-        </mat-menu>
+    <!-- User (profile — green) -->
+    <span *ngIf="userName" class="chip">
+      <ng-icon class="chip-icon chip-icon-user" name="lucideCircleUser" size="20"></ng-icon>
+      <span class="chip-label">{{ currentLanguageSet?.user }}:</span>
+      <span class="chip-value">{{ userName | titlecase }}</span>
+    </span>
 
-        <li
-          class="nav-item"
-          style="margin-top: 6px; margin-right: 8px"
-          *ngIf="userName"
-          matTooltip="{{ currentLanguageSet?.user }}">
-          <a>
-            <img src="assets/images/user1.png" alt="user" />
-            <span style="color: #d9d9d9">
-              {{ currentLanguageSet?.user }}
-              <span style="color: #d9d9d9">:</span>
-              <span style="color: #ffffff; margin-left: 5px">{{
-                userName | titlecase
-              }}</span>
-            </span>
-          </a>
-        </li>
-        <li
-          *ngIf="servicePoint"
-          class="nav-item servicePoint cursorPointer"
-          style="margin-top: 6px; margin-right: 5px"
-          [routerLink]="'/servicePoint'"
-          matTooltip="{{ currentLanguageSet?.servicePoint }}">
-          <a>
-            <img src="assets/images/placeholder.png" alt="servicepoint" />
-            <span style="color: #d9d9d9"
-              >{{ currentLanguageSet?.servicePoint }}
-              <span style="color: #d9d9d9">:</span>
-              <span style="color: #ffffff; margin-left: 5px">{{
-                servicePoint | titlecase
-              }}</span>
-            </span>
-          </a>
-        </li>
-        <li
-          class="nav-item cursorPointer"
-          *ngIf="isAuthenticated"
-          style="margin-top: 6px; margin-right: 5px">
-          <mat-icon
-            alt="Help"
-            [matMenuTriggerFor]="menu"
-            [matTooltip]="currentLanguageSet?.help"
-            >help_outline</mat-icon
-          >
-        </li>
-        <li
-          *ngIf="isAuthenticated"
-          class="nav-item logout cursorPointer"
-          style="margin-top: 6px"
-          matTooltip="{{ currentLanguageSet?.logOut }}">
-          <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events -->
-          <a tabindex="{0}" (click)="logout()">
-            <mat-icon color="warn">power_settings_new</mat-icon>
-          </a>
-        </li>
-      </ul>
-    </div>
+    <!-- Service point (location — red) -->
+    <a
+      *ngIf="servicePoint"
+      class="chip chip-link"
+      [routerLink]="'/servicePoint'"
+      [zTooltip]="currentLanguageSet?.servicePoint || 'Service Point'"
+      zPosition="bottom">
+      <ng-icon class="chip-icon chip-icon-location" name="lucideMapPin" size="20"></ng-icon>
+      <span class="chip-label">{{ currentLanguageSet?.servicePoint }}:</span>
+      <span class="chip-value">{{ servicePoint | titlecase }}</span>
+    </a>
+
+    <!-- Help (version / license menu) -->
+    <button
+      *ngIf="isAuthenticated"
+      type="button"
+      class="icon-btn icon-btn--help"
+      [zMenuTriggerFor]="helpMenu"
+      [zTooltip]="currentLanguageSet?.help || 'Help'"
+      zPosition="bottom">
+      <ng-icon name="lucideCircleHelp" size="20"></ng-icon>
+    </button>
+    <z-menu #helpMenu="zMenu">
+      <button z-menu-item (click)="showVersionAndCommitDetails()">
+        <ng-icon name="lucideInfo" size="16"></ng-icon>
+        {{ currentLanguageSet?.version }} : {{ versionUI }}
+      </button>
+      <a z-menu-item target="_blank" rel="noopener noreferrer" [href]="helpURL">
+        <ng-icon name="lucideFileText" size="16"></ng-icon>
+        {{ currentLanguageSet?.licenseInfo }}
+      </a>
+    </z-menu>
+
+    <!-- Logout (red) -->
+    <button
+      *ngIf="isAuthenticated"
+      type="button"
+      class="icon-btn icon-btn--danger"
+      [zTooltip]="currentLanguageSet?.logOut || 'Log out'"
+      zPosition="bottom"
+      (click)="logout()">
+      <ng-icon name="lucidePower" size="20"></ng-icon>
+    </button>
   </div>
-</nav>
+</header>
 
-<div *ngIf="showRoles" class="container-fluid">
-  <nav class="navbar navbar-expand-lg">
-    <div class="collapse navbar-collapse" id="main-navbar">
-      <ul
-        class="nav navbar-nav ml-auto"
-        *ngFor="let item of filteredNavigation; let isLast = last">
-        <!-- <li class="nav-item" *ngIf="item.role === 'Registrar'">
-          <button class="nav-btn" mat-button [matMenuTriggerFor]="items">
-            {{ item.label }}
-            <span class="caret"></span>
-          </button>
-          <mat-menu
-            class="registrar-menu"
-            #items="matMenu"
-            yPosition="below"
-            xPosition="after"
-            [overlapTrigger]="false">
-            <button
-              mat-menu-item
-              *ngFor="let value of item.work"
-              [routerLink]="[value.link]"
-              routerLinkActive="active">
-              {{ value.label }}
-            </button>
-          </mat-menu>
-        </li> -->
-        <li class="nav-item">
-          <button
-            class="nav-btn"
-            mat-button
-            [routerLink]="[item.link]"
-            routerLinkActive="active">
-            {{ item.label }}
-          </button>
-        </li>
-        <li class="nav-item" *ngIf="isLast">
-          <button class="nav-btn" mat-button routerLink="/nurse-doctor/reports">
-            {{ currentLanguageSet?.common?.report }}
-          </button>
-        </li>
-      </ul>
-    </div>
-  </nav>
-</div>
+<!-- Role navigation -->
+<nav *ngIf="showRoles" class="app-subnav">
+  <ng-container *ngFor="let item of filteredNavigation; let isLast = last">
+    <a class="subnav-link" [routerLink]="[item.link]" routerLinkActive="active">
+      {{ item.label }}
+    </a>
+    <a
+      *ngIf="isLast"
+      class="subnav-link"
+      routerLink="/nurse-doctor/reports"
+      routerLinkActive="active">
+      {{ currentLanguageSet?.common?.report }}
+    </a>
+  </ng-container>
+</nav>
