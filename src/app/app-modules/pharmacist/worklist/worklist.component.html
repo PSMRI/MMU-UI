@@ -1,229 +1,112 @@
-<div class="container-fluid">
-  <div class="row m-t-10">
-    <div class="col-xs-8 col-sm-6 col-md-4 fit_to_content">
-      <div class="sw">
-        <input
-          type="search"
-          class="search"
-          autocomplete="off"
-          placeholder="
-        {{ currentLanguageSet?.common?.inTableSearch }}"
-          name="filterTerm"
-          [(ngModel)]="filterTerm"
-          (keyup)="filterBeneficiaryList(filterTerm)" />
-        <button type="button" class="go" (click)="filterBeneficiaryList(filterTerm)">
-          <span class="material-icons">search</span>
-        </button>
+<div class="worklist">
+  <div class="worklist-toolbar">
+    <div class="search-box">
+      <ng-icon class="search-icon" name="lucideSearch" size="18"></ng-icon>
+      <input
+        type="search"
+        class="search-input"
+        autocomplete="off"
+        [placeholder]="currentLanguageSet?.common?.inTableSearch || 'Search'"
+        name="filterTerm"
+        [(ngModel)]="filterTerm"
+        (keyup)="filterBeneficiaryList(filterTerm)" />
+    </div>
+
+    <button z-button class="refresh-btn" (click)="loadPharmaWorklist()">
+      <ng-icon name="lucideRefreshCw" size="16"></ng-icon>
+      {{ currentLanguageSet?.common?.refresh }}
+    </button>
+  </div>
+
+  <z-card>
+    <z-card-content class="worklist-card-body">
+      <div class="table-scroll">
+        <table z-table>
+          <thead z-table-header>
+            <tr z-table-row>
+              <th z-table-head>{{ currentLanguageSet?.casesheet?.serialNo }}</th>
+              <th z-table-head>{{ currentLanguageSet?.bendetails?.beneficiaryID }}</th>
+              <th z-table-head>{{ currentLanguageSet?.bendetails?.beneficiaryName }}</th>
+              <th z-table-head>{{ currentLanguageSet?.bendetails?.gender }}</th>
+              <th z-table-head>{{ currentLanguageSet?.bendetails?.age }}</th>
+              <th z-table-head>{{ currentLanguageSet?.bendetails?.visitCategory }}</th>
+              <th z-table-head>{{ currentLanguageSet?.bendetails?.district }}</th>
+              <th z-table-head>{{ currentLanguageSet?.bendetails?.phoneNo }}</th>
+              <th z-table-head>{{ currentLanguageSet?.bendetails?.visitDate }}</th>
+              <th z-table-head>{{ currentLanguageSet?.bendetails?.image }}</th>
+            </tr>
+          </thead>
+          <tbody z-table-body>
+            <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events @angular-eslint/template/interactive-supports-focus -->
+            <tr
+              z-table-row
+              class="ben-row"
+              *ngFor="let row of pagedList"
+              (click)="loadPharmaPage(row)">
+              <td z-table-cell>{{ row.sno }}</td>
+              <td z-table-cell>{{ row.beneficiaryID }}</td>
+              <td z-table-cell>{{ row.benName | titlecase }}</td>
+              <td z-table-cell>{{ row.genderName | titlecase }}</td>
+              <td z-table-cell>{{ row.age }}</td>
+              <td z-table-cell>
+                {{ row.VisitCategory }} /
+                <span class="muted">{{ row.benVisitNo }}</span>
+              </td>
+              <td z-table-cell>
+                {{ row.districtName | titlecase }} /
+                {{ row.villageName | titlecase }}
+              </td>
+              <td z-table-cell>{{ row.preferredPhoneNum }}</td>
+              <td z-table-cell>{{ row.benVisitDate }}</td>
+              <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events @angular-eslint/template/interactive-supports-focus -->
+              <td
+                z-table-cell
+                class="img-cell"
+                [zTooltip]="currentLanguageSet?.tc?.image || 'View image'"
+                (click)="$event.stopPropagation(); patientImageView(row.beneficiaryRegID)">
+                <img src="assets/images/Avatar-Profile_30X30.png" alt="profile" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
-    <div class="col-xs-4 col-sm-6 col-md-8 fit_to_content">
-      <button
-        mat-raised-button
-        id="caseSheetButton"
-        style="display: none"
-        [disabled]="true"
-        class="btn btn-link pull-right">
-        {{ currentLanguageSet?.bendetails?.emergencyCaseSheet }}
-      </button>
-      <button
-        mat-raised-button
-        class="pull-right mat_blue"
-        color="primary"
-        id="refresh"
-        (click)="loadPharmaWorklist()">
-        {{ currentLanguageSet?.common?.refresh }}
-      </button>
-    </div>
-  </div>
 
-  <div class="row m-t-10 m-b-40">
-    <div class="col-sm-12">
-      <mat-card>
-        <section class="">
-          <table
-            mat-table
-            class="table table-striped"
-            [dataSource]="dataSource"
-            aria-describedby="pharmacistWorklist">
-            <ng-container matColumnDef="sno">
-              <th
-                mat-header-cell
-                style="border-bottom: none"
-                *matHeaderCellDef
-                mat-sort-header>
-                {{ currentLanguageSet?.casesheet?.serialNo }}
-              </th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.sno }}
-              </td>
-            </ng-container>
+      <div class="empty-state" *ngIf="filteredBeneficiaryList.length === 0">
+        <strong>{{ currentLanguageSet?.noRecordsFound }}</strong>
+      </div>
 
-            <ng-container matColumnDef="beneficiaryID">
-              <th
-                mat-header-cell
-                style="border-bottom: none"
-                *matHeaderCellDef
-                mat-sort-header>
-                {{ currentLanguageSet?.bendetails?.beneficiaryID }}
-              </th>
-              <td
-                mat-cell
-                *matCellDef="let element"
-                (click)="loadPharmaPage(element)">
-                {{ element.beneficiaryID }}
-              </td>
-            </ng-container>
+      <div class="worklist-pager" *ngIf="filteredBeneficiaryList.length > 0">
+        <label class="page-size">
+          <span>{{ currentLanguageSet?.common?.rowsPerPage || 'Rows per page' }}</span>
+          <select
+            class="page-size-select"
+            name="pageSize"
+            [(ngModel)]="pageSize"
+            (ngModelChange)="changePageSize($event)">
+            <option *ngFor="let size of pageSizeOptions" [ngValue]="size">
+              {{ size }}
+            </option>
+          </select>
+        </label>
 
-            <ng-container matColumnDef="beneficiaryName">
-              <th
-                mat-header-cell
-                style="border-bottom: none"
-                *matHeaderCellDef
-                mat-sort-header>
-                {{ currentLanguageSet?.bendetails?.beneficiaryName }}
-              </th>
-              <td
-                mat-cell
-                *matCellDef="let element"
-                (click)="loadPharmaPage(element)">
-                {{ element?.benName | titlecase }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="gender">
-              <th
-                mat-header-cell
-                style="border-bottom: none"
-                *matHeaderCellDef
-                mat-sort-header>
-                {{ currentLanguageSet?.bendetails?.gender }}
-              </th>
-              <td
-                mat-cell
-                *matCellDef="let element"
-                (click)="loadPharmaPage(element)">
-                {{ element?.genderName | titlecase }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="age">
-              <th
-                mat-header-cell
-                style="border-bottom: none"
-                *matHeaderCellDef
-                mat-sort-header>
-                {{ currentLanguageSet?.bendetails?.age }}
-              </th>
-              <td
-                mat-cell
-                *matCellDef="let element"
-                (click)="loadPharmaPage(element)">
-                {{ element?.age }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="visitCategory">
-              <th
-                mat-header-cell
-                style="border-bottom: none"
-                *matHeaderCellDef
-                mat-sort-header>
-                {{ currentLanguageSet?.bendetails?.visitCategory }}
-              </th>
-              <td
-                mat-cell
-                *matCellDef="let element"
-                (click)="loadPharmaPage(element)">
-                {{ element.VisitCategory }} /
-                <span style="color: #a6a6a6">{{ element.benVisitNo }}</span>
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="district">
-              <th
-                mat-header-cell
-                style="border-bottom: none"
-                *matHeaderCellDef
-                mat-sort-header>
-                {{ currentLanguageSet?.bendetails?.district }}
-              </th>
-              <td
-                mat-cell
-                *matCellDef="let element"
-                (click)="loadPharmaPage(element)">
-                {{ element.districtName | titlecase }} /
-                {{ element.villageName | titlecase }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="phoneNo">
-              <th
-                mat-header-cell
-                style="border-bottom: none"
-                *matHeaderCellDef
-                mat-sort-header>
-                {{ currentLanguageSet?.bendetails?.phoneNo }}
-              </th>
-              <td
-                mat-cell
-                *matCellDef="let element"
-                (click)="loadPharmaPage(element)">
-                {{ element.preferredPhoneNum }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="visitDate">
-              <th
-                mat-header-cell
-                style="border-bottom: none"
-                *matHeaderCellDef
-                mat-sort-header>
-                {{ currentLanguageSet?.bendetails?.visitDate }}
-              </th>
-              <td
-                mat-cell
-                *matCellDef="let element"
-                (click)="loadPharmaPage(element)">
-                {{ element.benVisitDate }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="image">
-              <th
-                mat-header-cell
-                style="border-bottom: none"
-                *matHeaderCellDef
-                mat-sort-header>
-                {{ currentLanguageSet?.bendetails?.image }}
-              </th>
-              <td
-                mat-cell
-                *matCellDef="let element"
-                (click)="patientImageView(element.beneficiaryRegID)"
-                matTooltip="{{ currentLanguageSet?.tc?.image }}">
-                <img
-                  src="assets/images/Avatar-Profile_30X30.png"
-                  alt="profile" />
-              </td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-          </table>
-          <div
-            class="pull-center"
-            style="margin-top: 30px; text-align: center"
-            [hidden]="dataSource.data.length > 0">
-            <strong>{{ currentLanguageSet?.noRecordsFound }}</strong>
-          </div>
-          <mat-paginator
-            [hidden]="dataSource.data.length === 0"
-            [pageSizeOptions]="[5, 10, 20]"
-            [pageSize]="5"
-            showFirstLastButtons
-            aria-label="Select patient in nurseWorklist">
-          </mat-paginator>
-        </section>
-      </mat-card>
-    </div>
-  </div>
+        <ul z-pagination-content class="pager-list">
+          <li z-pagination-item>
+            <z-pagination-previous
+              [zDisabled]="currentPage === 1"
+              (click)="prevPage()"></z-pagination-previous>
+          </li>
+          <li z-pagination-item *ngFor="let p of pageNumbers">
+            <button z-pagination-button [zActive]="p === currentPage" (click)="goToPage(p)">
+              {{ p }}
+            </button>
+          </li>
+          <li z-pagination-item>
+            <z-pagination-next
+              [zDisabled]="currentPage === totalPages"
+              (click)="nextPage()"></z-pagination-next>
+          </li>
+        </ul>
+      </div>
+    </z-card-content>
+  </z-card>
 </div>

@@ -28,13 +28,13 @@ import {
 } from '@angular/core';
 import { ConfirmationService } from './../../core/services/confirmation.service';
 import { Router, Route } from '@angular/router';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ZardLoaderComponent } from 'Common-UI/v2/ui/loader';
 
 @Component({
   selector: 'app-redir-fallback',
   templateUrl: './redir-fallback.component.html',
   styleUrls: ['./redir-fallback.component.css'],
-  imports: [MatProgressSpinner],
+  imports: [ZardLoaderComponent],
 })
 export class RedirFallbackComponent implements AfterViewInit {
   constructor(

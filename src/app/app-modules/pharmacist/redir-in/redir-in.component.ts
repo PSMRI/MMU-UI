@@ -23,13 +23,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConfirmationService } from './../../core/services/confirmation.service';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ZardLoaderComponent } from 'Common-UI/v2/ui/loader';
 
 @Component({
   selector: 'app-redir-in',
   templateUrl: './redir-in.component.html',
   styleUrls: ['./redir-in.component.css'],
-  imports: [MatProgressSpinner],
+  imports: [ZardLoaderComponent],
 })
 export class RedirInComponent implements OnInit {
   constructor(
