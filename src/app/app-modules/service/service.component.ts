@@ -27,16 +27,15 @@ import { ConfirmationService } from '../core/services';
 import { HttpServiceService } from '../core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { AppHeaderComponent } from '../core/components/app-header/app-header.component';
-import { MatCard } from '@angular/material/card';
 import { NgFor } from '@angular/common';
-import { MatLabel } from '@angular/material/select';
-import { AppFooterComponent } from '../core/components/app-footer/app-footer.component';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
-  styleUrls: ['./service.component.css'],
-  imports: [AppHeaderComponent, MatCard, NgFor, MatLabel, AppFooterComponent],
+  host: { class: 'block' },
+  imports: [AppHeaderComponent, NgFor, ZardButtonComponent, ...cardImports],
 })
 export class ServiceComponent implements OnInit, DoCheck {
   servicesList: any;

@@ -71,6 +71,26 @@ Nurse-doctor sub-routes: role-specific worklists, patient workarea (`attendant/:
 - **Formatting**: Prettier — 2-space tabs, single quotes, semicolons, 80 char width, ES5 trailing commas
 - **TypeScript**: strict mode, ES5 target, strict templates enabled
 
+## Frontend UI Standard — Zard UI + shadcn + Tailwind (migration)
+
+The app is being migrated **off Angular Material and Bootstrap** to **Zard UI (`Common-UI/v2/ui`, shadcn-style components) + Tailwind CSS v4 (utility-first)** on the shared AMRIT blue+white theme. When you create or migrate any screen/component:
+
+- **Reference the REAL shadcn + Tailwind docs first — never build from memory.** Use the shadcn MCP / **context7** (`/llmstxt/ui_shadcn_llms_txt`, `/tailwindlabs/tailwindcss.com`) for the actual block/component structure and exact utility names, every time. Building "shadcn-ish" from memory is the #1 mistake.
+- **A migrated screen contains ZERO Angular Material and ZERO Bootstrap.** No `mat-*`/`matInput`/`MaterialModule` in the template, no Bootstrap classes (`row`/`col-*`/`btn`/`d-flex`/`container`). `MatDialog`/`ConfirmationService` may remain *temporarily* during coexistence; migrate to `ZardDialogService` when reworking that area.
+- **Utility-first only — no component CSS.** Style inline with Tailwind utilities; **delete the component `.scss`/`.css`** and `styleUrls`. Use theme tokens (`bg-card`, `text-muted-foreground`, `bg-primary`, `border-input`, `rounded-lg`…); **never hardcode hex or inline `style=`**. Use Zard components for all controls (`z-card`, `z-form-field`/`z-input`, `z-select`, `z-button`, `z-menu`, …); import from `Common-UI/v2/...`.
+- **Border radius MUST match across the form** — inputs, buttons, and select triggers all use the theme radius (`var(--radius)`, 10px). See the gotcha below; verify they're identical.
+- **Every component standalone** (no `NgModule`); icons via `@ng-icons/lucide` + `provideIcons(...)`.
+
+### Critical gotchas (Material/Bootstrap still load globally; Tailwind preflight is OFF)
+Bootstrap is in the lowest `@layer`, so utilities beat it — but **unlayered legacy CSS (Material theme, `styles.css`) still beats utilities**:
+1. **Bare `<button>` (incl. the `z-select` trigger) renders square + native-gray** — Material ships an unlayered `button{border-radius:0}` and there's no preflight reset. Fixed app-wide by the unlayered reset in `src/styles.css`: `[z-button], z-select [role='combobox'] { -webkit-appearance:none; appearance:none; border-radius:var(--radius) }`. **Remove this block once Material is removed AND Tailwind preflight is re-enabled.**
+2. **Never put text in a bare `<h1>`–`<h6>`** — unlayered Material typography overrides `text-*`. Use `z-card-title`/`z-card-description`, a `label`, or a non-heading element.
+3. **Password eye toggle** = a plain boxless `<button>` (`appearance-none border-0 bg-transparent inline-flex items-center justify-center`) inside the input — shadcn's addon pattern, not a Button component. `::-ms-reveal` is suppressed in `tailwind.css` so Edge's native eye doesn't duplicate it.
+4. **`@ng-icons` size** comes from the `size` attribute (`--ng-icon__size`, an unlayered `:host` rule) — Tailwind `size-*` classes don't size an `ng-icon`. Inside a `z-button`, omit `size=` and let the button size it.
+5. **Watch out:** never write `*/` inside a CSS comment (e.g. `rounded-*/...`) — it closes the comment early and breaks the file.
+
+**Full guidance + per-screen recipe: the `frontend-ui` skill** (`.claude/skills/frontend-ui/SKILL.md`).
+
 ## Environment Configuration
 
 Environment files in `src/environments/`. CI build uses EJS template (`environment.ci.ts.template`) with env vars for API endpoints, encryption keys, captcha config, and tracking config. Key environment properties:
