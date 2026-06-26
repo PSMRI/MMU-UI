@@ -20,95 +20,70 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import {
-  Component,
-  DoCheck,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, DoCheck } from '@angular/core';
 import { Router } from '@angular/router';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../core/services/confirmation.service';
-import { DoctorService } from '../shared/services/doctor.service';
+import { DoctorService } from '../shared/services';
 import { CameraService } from '../../core/services/camera.service';
 import * as moment from 'moment';
-import { MatDialog } from '@angular/material/dialog';
-import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
-import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
+import { HttpServiceService } from '../../core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MatCard } from '@angular/material/card';
-import { MatTooltip } from '@angular/material/tooltip';
-import { TitleCasePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgFor, NgIf, TitleCasePipe } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideSearch,
+  lucideRefreshCw,
+  lucideChevronLeft,
+  lucideChevronRight,
+} from '@ng-icons/lucide';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardPaginationImports } from 'Common-UI/v2/ui/pagination';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-radiologist-worklist',
   templateUrl: './radiologist-worklist.component.html',
-  styleUrls: ['./radiologist-worklist.component.css'],
+  styleUrls: ['./radiologist-worklist.component.scss'],
   imports: [
-    ReactiveFormsModule,
     FormsModule,
-    MatCard,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatTooltip,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
-    MatPaginator,
+    NgFor,
+    NgIf,
     TitleCasePipe,
+    NgIcon,
+    ZardButtonComponent,
+    ...cardImports,
+    ...ZardTableImports,
+    ...ZardPaginationImports,
+    ...tooltipImports,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideSearch,
+      lucideRefreshCw,
+      lucideChevronLeft,
+      lucideChevronRight,
+    }),
   ],
 })
 export class RadiologistWorklistComponent
-  implements OnInit, DoCheck, OnDestroy
+  implements OnInit, OnDestroy, DoCheck
 {
-  rowsPerPage = 5;
-  activePage = 1;
-  pagedList = [];
-  rotate = true;
-  beneficiaryList: any;
-  filteredBeneficiaryList: any = [];
-  blankTable = [1, 2, 3, 4, 5];
+  beneficiaryList: any[] = [];
+  filteredBeneficiaryList: any[] = [];
   filterTerm: any;
   currentLanguageSet: any;
-  currentPage!: number;
-  displayedColumns: any = [
-    'sno',
-    'beneficiaryID',
-    'beneficiaryName',
-    'gender',
-    'age',
-    'visitCategory',
-    'district',
-    'phoneNo',
-    'visitDate',
-    'image',
-  ];
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
+
+  // client-side pagination (replaces MatPaginator)
+  pageSizeOptions = [5, 10, 20];
+  pageSize = 5;
+  currentPage = 1;
 
   constructor(
-    private dialog: MatDialog,
     private cameraService: CameraService,
     private router: Router,
     private confirmationService: ConfirmationService,
@@ -124,18 +99,17 @@ export class RadiologistWorklistComponent
     this.removeBeneficiaryDataForVisit();
     this.loadWorklist();
   }
-  /*
-   * JA354063 - Multilingual Changes added on 13/10/21
-   */
+
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
+
   assignSelectedLanguage() {
     const getLanguageJson = new SetLanguageComponent(this.httpServices);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
-  // Ends
+
   removeBeneficiaryDataForVisit() {
     sessionStorage.removeItem('visitCode');
     sessionStorage.removeItem('beneficiaryGender');
@@ -158,27 +132,14 @@ export class RadiologistWorklistComponent
     this.doctorService.getRadiologistWorklist().subscribe(
       (data: any) => {
         if (data.statusCode === 200 && data.data !== null) {
-          console.log('radiologist worklist', data.data);
-
           const benlist = this.loadDataToBenList(data.data);
           this.beneficiaryList = benlist;
-          this.filteredBeneficiaryList = benlist;
-          this.dataSource.data = [];
-          this.dataSource.data = benlist;
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.data.forEach((sectionCount: any, index: number) => {
-            sectionCount.sno = index + 1;
-          });
-          // this.pageChanged({
-          //   page: this.activePage,
-          //   itemsPerPage: this.rowsPerPage,
-          // });
           this.filterTerm = null;
-          // this.currentPage = 1;
+          this.setFilteredList(benlist);
         } else {
           this.confirmationService.alert(data.errorMessage, 'error');
-          this.dataSource.data = [];
-          this.dataSource.paginator = this.paginator;
+          this.beneficiaryList = [];
+          this.setFilteredList([]);
         }
       },
       err => {
@@ -208,56 +169,77 @@ export class RadiologistWorklistComponent
   }
 
   filterBeneficiaryList(searchTerm: string) {
-    if (!searchTerm) this.filteredBeneficiaryList = this.beneficiaryList;
-    else {
-      this.filteredBeneficiaryList = [];
-      this.dataSource.data = [];
-      this.dataSource.paginator = this.paginator;
-      this.beneficiaryList.forEach((item: any) => {
-        for (const key in item) {
-          if (
-            key === 'beneficiaryID' ||
-            key === 'benName' ||
-            key === 'genderName' ||
-            key === 'age' ||
-            key === 'VisitCategory' ||
-            key === 'benVisitNo' ||
-            key === 'districtName' ||
-            key === 'preferredPhoneNum' ||
-            key === 'villageName' ||
-            key === 'beneficiaryRegID' ||
-            key === 'visitDate'
-          ) {
-            const value: string = '' + item[key];
-            if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-              this.filteredBeneficiaryList.push(item);
-              this.dataSource.data.push(item);
-              this.dataSource.paginator = this.paginator;
-              this.dataSource.data.forEach(
-                (sectionCount: any, index: number) => {
-                  sectionCount.sno = index + 1;
-                }
-              );
-              break;
-            }
-          }
-        }
-      });
+    if (!searchTerm) {
+      this.setFilteredList(this.beneficiaryList);
+      return;
     }
-    // this.activePage = 1;
-    // this.pageChanged({
-    //   page: 1,
-    //   itemsPerPage: this.rowsPerPage,
-    // });
-    // this.currentPage = 1;
+    const term = searchTerm.toLowerCase();
+    const keys = [
+      'beneficiaryID',
+      'benName',
+      'genderName',
+      'age',
+      'VisitCategory',
+      'benVisitNo',
+      'districtName',
+      'preferredPhoneNum',
+      'villageName',
+      'beneficiaryRegID',
+      'visitDate',
+      'benVisitDate',
+    ];
+    const filtered = this.beneficiaryList.filter((item: any) =>
+      keys.some(key => ('' + item[key]).toLowerCase().includes(term))
+    );
+    this.setFilteredList(filtered);
   }
-  pageChanged(event: any): void {
-    console.log('called', event);
-    const startItem = (event.page - 1) * event.itemsPerPage;
-    const endItem = event.page * event.itemsPerPage;
-    this.pagedList = this.filteredBeneficiaryList.slice(startItem, endItem);
-    console.log('list', this.pagedList);
+
+  /** Re-number (sno), reset to first page, and store the visible list. */
+  private setFilteredList(list: any[]) {
+    list.forEach((item: any, index: number) => (item.sno = index + 1));
+    this.filteredBeneficiaryList = list;
+    this.currentPage = 1;
   }
+
+  get totalPages(): number {
+    return Math.max(
+      1,
+      Math.ceil(this.filteredBeneficiaryList.length / this.pageSize)
+    );
+  }
+
+  get pagedList(): any[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredBeneficiaryList.slice(start, start + this.pageSize);
+  }
+
+  get pageNumbers(): number[] {
+    const total = this.totalPages;
+    let start = Math.max(1, this.currentPage - 2);
+    const end = Math.min(total, start + 4);
+    start = Math.max(1, end - 4);
+    const pages: number[] = [];
+    for (let i = start; i <= end; i++) pages.push(i);
+    return pages;
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) this.currentPage = page;
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) this.currentPage--;
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) this.currentPage++;
+  }
+
+  changePageSize(size: number) {
+    this.pageSize = Number(size);
+    this.currentPage = 1;
+  }
+
   patientImageView(benregID: any) {
     this.beneficiaryDetailsService
       .getBeneficiaryImage(benregID)
