@@ -51,7 +51,7 @@ interface ConnectInfo {
   selector: 'app-camp-hub-qr-code',
   standalone: true,
   templateUrl: './camp-hub-qr-code.component.html',
-  styleUrls: ['./camp-hub-qr-code.component.scss'],
+  host: { class: 'block min-w-0' },
   imports: [
     CommonModule,
     ReactiveFormsModule,

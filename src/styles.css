@@ -2,6 +2,21 @@
 /* NOTE: css/custom.css and css/layout.css are loaded via angular.json `styles`
    (not @import here) so Tailwind's PostCSS bundler doesn't rewrite their url()s. */
 
+/* Material's prebuilt theme ships an unlayered "button border-radius 0" rule
+   (and the browser sets a native button appearance) that override Tailwind's
+   layered radius and appearance utilities. So every Zard control built on a
+   button element (the button itself AND the z-select trigger, a button with
+   role="combobox") renders square with the native look. These attribute
+   selectors outrank bare "button" and, being unlayered, beat Material/Bootstrap,
+   restoring the theme radius so they match inputs.
+   REMOVE this block once Material is removed and Tailwind preflight is enabled. */
+[z-button],
+z-select [role='combobox'] {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: var(--radius);
+}
+
 
 /* Lato Font - Local */
 @font-face {

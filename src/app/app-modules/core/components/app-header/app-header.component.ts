@@ -45,11 +45,13 @@ import {
 } from '@ng-icons/lucide';
 import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 import { menuImports } from 'Common-UI/v2/ui/menu';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 
 @Component({
   selector: 'app-header',
   templateUrl: './app-header.component.html',
-  styleUrls: ['./app-header.component.scss'],
+  host: { class: 'block' },
   imports: [
     NgIf,
     NgFor,
@@ -61,6 +63,8 @@ import { menuImports } from 'Common-UI/v2/ui/menu';
     NgIcon,
     ...tooltipImports,
     ...menuImports,
+    ZardButtonComponent,
+    ...ZardSelectImports,
   ],
   viewProviders: [
     provideIcons({

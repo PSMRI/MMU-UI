@@ -1,32 +1,39 @@
-<header class="app-header">
-  <a class="app-header-brand" aria-label="Piramal Swasthya">
-    <img src="assets/images/Swasthya.png" alt="Piramal Swasthya" />
+<header
+  class="flex min-h-14 flex-wrap items-center justify-between gap-4 border-b border-border bg-background px-6 py-2">
+  <a class="inline-flex items-center" aria-label="Piramal Swasthya">
+    <img class="h-9 w-auto" src="assets/images/Swasthya.png" alt="Piramal Swasthya" />
   </a>
 
-  <div class="app-header-actions">
+  <div class="flex flex-wrap items-center justify-end gap-2">
     <!-- Language -->
-    <label *ngIf="status" class="lang-field">
-      <span class="lang-label">{{ currentLanguageSet?.common?.SelectLanguage }}</span>
-      <select
-        class="lang-select"
+    <div *ngIf="status" class="inline-flex items-center gap-2">
+      <span class="text-sm text-muted-foreground">{{ currentLanguageSet?.common?.SelectLanguage }}</span>
+      <z-select
+        class="w-40"
         name="app_language"
         [(ngModel)]="app_language"
-        (change)="changeLanguage(app_language)">
-        <option
+        (zSelectionChange)="changeLanguage(app_language)">
+        <z-select-item
           *ngFor="let language of languageArray"
-          [value]="language.languageName">
+          [zValue]="language.languageName">
           {{ language.languageName }}
-        </option>
-      </select>
-    </label>
+        </z-select-item>
+      </z-select>
+    </div>
 
-    <!-- Bluetooth -->
+    <!-- Bluetooth (turns primary only when connected) -->
     <button
       *ngIf="isAuthenticated"
+      z-button
+      zType="ghost"
+      zSize="icon"
       type="button"
-      class="icon-btn icon-btn--bt"
-      [ngClass]="{ 'is-connected': isConnected }"
+      class="text-muted-foreground"
+      [ngClass]="{ 'text-primary': isConnected }"
       [zTooltip]="currentLanguageSet?.common?.connectBluetooth || 'Connect Bluetooth'"
+      [attr.aria-label]="
+        currentLanguageSet?.common?.connectBluetooth || 'Connect Bluetooth'
+      "
       zPosition="bottom"
       (click)="openIOT()">
       <ng-icon
@@ -34,52 +41,65 @@
         size="20"></ng-icon>
     </button>
 
-    <!-- User (profile — green) -->
-    <span *ngIf="userName" class="chip">
-      <ng-icon class="chip-icon chip-icon-user" name="lucideCircleUser" size="20"></ng-icon>
-      <span class="chip-label">{{ currentLanguageSet?.user }}:</span>
-      <span class="chip-value">{{ userName | titlecase }}</span>
+    <!-- User -->
+    <span *ngIf="userName" class="inline-flex items-center gap-1.5 px-2 py-1 text-sm">
+      <ng-icon class="text-muted-foreground" name="lucideCircleUser" size="20"></ng-icon>
+      <span class="text-muted-foreground">{{ currentLanguageSet?.user }}:</span>
+      <span class="font-semibold text-foreground">{{ userName | titlecase }}</span>
     </span>
 
-    <!-- Service point (location — red) -->
+    <!-- Service point -->
     <a
       *ngIf="servicePoint"
-      class="chip chip-link"
+      class="inline-flex cursor-pointer items-center gap-1.5 rounded-md px-2 py-1 text-sm transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       [routerLink]="'/servicePoint'"
       [zTooltip]="currentLanguageSet?.servicePoint || 'Service Point'"
       zPosition="bottom">
-      <ng-icon class="chip-icon chip-icon-location" name="lucideMapPin" size="20"></ng-icon>
-      <span class="chip-label">{{ currentLanguageSet?.servicePoint }}:</span>
-      <span class="chip-value">{{ servicePoint | titlecase }}</span>
+      <ng-icon class="text-muted-foreground" name="lucideMapPin" size="20"></ng-icon>
+      <span class="text-muted-foreground">{{ currentLanguageSet?.servicePoint }}:</span>
+      <span class="font-semibold text-foreground">{{ servicePoint | titlecase }}</span>
     </a>
 
     <!-- Help (version / license menu) -->
     <button
       *ngIf="isAuthenticated"
+      z-button
+      zType="ghost"
+      zSize="icon"
       type="button"
-      class="icon-btn icon-btn--help"
+      class="text-muted-foreground"
       [zMenuTriggerFor]="helpMenu"
       [zTooltip]="currentLanguageSet?.help || 'Help'"
+      [attr.aria-label]="currentLanguageSet?.help || 'Help'"
       zPosition="bottom">
       <ng-icon name="lucideCircleHelp" size="20"></ng-icon>
     </button>
     <z-menu #helpMenu="zMenu">
-      <button z-menu-item (click)="showVersionAndCommitDetails()">
+      <button z-menu-item class="flex items-center gap-2" (click)="showVersionAndCommitDetails()">
         <ng-icon name="lucideInfo" size="16"></ng-icon>
         {{ currentLanguageSet?.version }} : {{ versionUI }}
       </button>
-      <a z-menu-item target="_blank" rel="noopener noreferrer" [href]="helpURL">
+      <a
+        z-menu-item
+        class="flex items-center gap-2"
+        target="_blank"
+        rel="noopener noreferrer"
+        [href]="helpURL">
         <ng-icon name="lucideFileText" size="16"></ng-icon>
         {{ currentLanguageSet?.licenseInfo }}
       </a>
     </z-menu>
 
-    <!-- Logout (red) -->
+    <!-- Logout (destructive hint on hover) -->
     <button
       *ngIf="isAuthenticated"
+      z-button
+      zType="ghost"
+      zSize="icon"
       type="button"
-      class="icon-btn icon-btn--danger"
+      class="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
       [zTooltip]="currentLanguageSet?.logOut || 'Log out'"
+      [attr.aria-label]="currentLanguageSet?.logOut || 'Log out'"
       zPosition="bottom"
       (click)="logout()">
       <ng-icon name="lucidePower" size="20"></ng-icon>
@@ -88,17 +108,20 @@
 </header>
 
 <!-- Role navigation -->
-<nav *ngIf="showRoles" class="app-subnav">
-  <ng-container *ngFor="let item of filteredNavigation; let isLast = last">
-    <a class="subnav-link" [routerLink]="[item.link]" routerLinkActive="active">
-      {{ item.label }}
-    </a>
-    <a
-      *ngIf="isLast"
-      class="subnav-link"
-      routerLink="/nurse-doctor/reports"
-      routerLinkActive="active">
-      {{ currentLanguageSet?.common?.report }}
-    </a>
-  </ng-container>
+<nav
+  *ngIf="showRoles"
+  class="flex items-stretch gap-1 overflow-x-auto border-b border-border bg-background px-6">
+  <a
+    *ngFor="let item of filteredNavigation"
+    class="inline-flex items-center whitespace-nowrap border-b-2 border-transparent px-3.5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+    [routerLink]="[item.link]"
+    routerLinkActive="text-primary! border-primary!">
+    {{ item.label }}
+  </a>
+  <a
+    class="inline-flex items-center whitespace-nowrap border-b-2 border-transparent px-3.5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+    routerLink="/nurse-doctor/reports"
+    routerLinkActive="text-primary! border-primary!">
+    {{ currentLanguageSet?.common?.report }}
+  </a>
 </nav>

@@ -34,17 +34,19 @@ import { lucideLock, lucideEye, lucideEyeOff } from '@ng-icons/lucide';
 import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 import { ZardInputDirective } from 'Common-UI/v2/ui/input';
 import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { cardImports } from 'Common-UI/v2/ui/card';
 
 @Component({
   selector: 'app-set-password',
   templateUrl: './set-password.component.html',
-  styleUrls: ['./set-password.component.scss'],
+  host: { class: 'block' },
   imports: [
     FormsModule,
     NgIcon,
     ZardButtonComponent,
     ZardInputDirective,
     ...ZardFormImports,
+    ...cardImports,
   ],
   viewProviders: [provideIcons({ lucideLock, lucideEye, lucideEyeOff })],
 })
