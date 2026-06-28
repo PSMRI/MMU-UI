@@ -1,5 +1,6 @@
 <header
-  class="flex min-h-14 flex-wrap items-center justify-between gap-4 border-b border-border bg-background px-6 py-2">
+  class="flex min-h-14 flex-wrap items-center justify-between gap-4 border-border bg-background px-6 py-2"
+  [class.border-b]="!showRoles">
   <a class="inline-flex items-center" aria-label="Piramal Swasthya">
     <img class="h-9 w-auto" src="assets/images/Swasthya.png" alt="Piramal Swasthya" />
   </a>
@@ -109,18 +110,18 @@
 <!-- Role navigation -->
 <nav
   *ngIf="showRoles"
-  class="flex items-stretch gap-1 overflow-x-auto border-b border-border bg-background px-6">
+  class="flex items-stretch gap-5 overflow-x-auto border-b border-border bg-background px-6">
   <a
     *ngFor="let item of filteredNavigation"
-    class="inline-flex items-center whitespace-nowrap border-b-2 border-transparent px-3.5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+    class="inline-flex items-center whitespace-nowrap border-b-2 border-transparent px-0.5 pb-2.5 pt-3 text-sm font-medium text-muted-foreground no-underline transition-colors hover:text-foreground"
     [routerLink]="[item.link]"
-    routerLinkActive="text-primary! border-primary!">
+    routerLinkActive="text-foreground! border-primary!">
     {{ item.label }}
   </a>
   <a
-    class="inline-flex items-center whitespace-nowrap border-b-2 border-transparent px-3.5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+    class="inline-flex items-center whitespace-nowrap border-b-2 border-transparent px-0.5 pb-2.5 pt-3 text-sm font-medium text-muted-foreground no-underline transition-colors hover:text-foreground"
     routerLink="/nurse-doctor/reports"
-    routerLinkActive="text-primary! border-primary!">
+    routerLinkActive="text-foreground! border-primary!">
     {{ currentLanguageSet?.common?.report }}
   </a>
 </nav>
