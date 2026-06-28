@@ -25,7 +25,7 @@
       type="button"
       (click)="autoDetect()"
       aria-label="Retry detection">
-      <ng-icon name="lucideRefreshCw" size="16"></ng-icon>
+      <ng-icon name="lucideRefreshCw"></ng-icon>
     </button>
   </div>
 
@@ -78,7 +78,7 @@
       type="submit"
       [zLoading]="isGenerating"
       [disabled]="urlForm.invalid || isGenerating">
-      <ng-icon name="lucideQrCode" size="16"></ng-icon>
+      <ng-icon name="lucideQrCode"></ng-icon>
       Generate QR Code
     </button>
   </form>
@@ -99,7 +99,7 @@
       class="h-64 w-64 max-w-full rounded-lg border border-border bg-white" />
 
     <button z-button zType="outline" type="button" (click)="downloadQR()">
-      <ng-icon name="lucideDownload" size="16"></ng-icon>
+      <ng-icon name="lucideDownload"></ng-icon>
       Download
     </button>
   </div>

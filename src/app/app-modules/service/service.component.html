@@ -1,31 +1,29 @@
 <app-header [showRoles]="false"></app-header>
-<div class="container" style="margin-top: 8%">
-  <section>
-    <div class="col-md-3 col-sm-3 col-lg-3"></div>
-    <div class="col-md-6 col-sm-6 col-lg-6">
-      <mat-card class="matCardService" style="padding-bottom: 20px">
-        <div
-          class="row m-t-20"
-          style="text-align: center"
-          *ngFor="let service of servicesList">
-          <mat-label class="mat-label-text" class="nameList"
-            >Welcome&nbsp;&nbsp;{{ this.fullName }}</mat-label
-          >
-          <div class="note">Click on service to proceed</div>
-          <!-- eslint-disable-next-line  @angular-eslint/template/click-events-have-key-events -->
-          <div class="circle" tabindex="{0}" (click)="selectService(service)">
-            <div class="list-unstyled text-center f-s-20 p-r-15 line-height-65">
-              <img
-                style="margin-top: -8px"
-                [src]="'assets/images/' + service.serviceName + '.png'"
-                alt="{{ service.serviceName }}" />&nbsp;&nbsp;&nbsp;{{
-                service.serviceName
-              }}
-            </div>
-          </div>
-        </div>
-      </mat-card>
-    </div>
-  </section>
+
+<div class="flex min-h-[calc(100svh-3.5rem)] items-center justify-center px-6 py-10">
+  <z-card
+    class="w-full max-w-lg animate-in fade-in-0 slide-in-from-bottom-2 duration-300 motion-reduce:animate-none">
+    <z-card-header class="flex flex-col items-center gap-1.5 text-center">
+      <z-card-title>Welcome {{ fullName }}</z-card-title>
+      <z-card-description>Click on a service to proceed</z-card-description>
+    </z-card-header>
+
+    <z-card-content>
+      <div class="flex flex-wrap justify-center gap-4">
+        <button
+          z-button
+          zType="default"
+          type="button"
+          *ngFor="let service of servicesList"
+          (click)="selectService(service)"
+          class="h-auto min-h-36 max-w-80 flex-1 basis-72 gap-4 px-7 py-6 text-2xl font-semibold">
+          <img
+            class="size-20 object-contain"
+            [src]="'assets/images/' + service.serviceName + '.png'"
+            [alt]="service.serviceName" />
+          <span class="whitespace-nowrap">{{ service.serviceName }}</span>
+        </button>
+      </div>
+    </z-card-content>
+  </z-card>
 </div>
-<app-footer></app-footer>
