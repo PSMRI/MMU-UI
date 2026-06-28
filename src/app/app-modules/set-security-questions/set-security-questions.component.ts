@@ -38,11 +38,12 @@ import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 import { ZardInputDirective } from 'Common-UI/v2/ui/input';
 import { ZardFormImports } from 'Common-UI/v2/ui/form';
 import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { cardImports } from 'Common-UI/v2/ui/card';
 
 @Component({
   selector: 'app-set-security-questions',
   templateUrl: './set-security-questions.component.html',
-  styleUrls: ['./set-security-questions.component.scss'],
+  host: { class: 'block' },
   imports: [
     NgIf,
     NgFor,
@@ -52,6 +53,7 @@ import { ZardSelectImports } from 'Common-UI/v2/ui/select';
     ZardInputDirective,
     ...ZardFormImports,
     ...ZardSelectImports,
+    ...cardImports,
   ],
   viewProviders: [
     provideIcons({ lucideShieldCheck, lucideLock, lucideEye, lucideEyeOff }),

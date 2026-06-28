@@ -1,15 +1,19 @@
-<div class="qr-body">
-  <p class="qr-subtitle">
+<div class="flex min-w-0 flex-col gap-4">
+  <p class="m-0 text-sm text-muted-foreground">
     Scan with the Stop TB Mobile app to connect over Wi-Fi.
   </p>
 
   <!-- Auto-detection status -->
-  <div *ngIf="isDetecting" class="status-row">
+  <div
+    *ngIf="isDetecting"
+    class="flex items-center gap-2 text-sm text-muted-foreground">
     <ng-icon name="lucideLoaderCircle" class="animate-spin" size="18"></ng-icon>
     <span>Fetching Camp Hub server info…</span>
   </div>
 
-  <div *ngIf="!isDetecting && detectionFailed" class="status-row status-warn">
+  <div
+    *ngIf="!isDetecting && detectionFailed"
+    class="flex items-center gap-2 text-sm text-warning">
     <ng-icon name="lucideInfo" size="18"></ng-icon>
     <span
       >Camp Hub server unreachable — enter the server URL manually below.</span
@@ -29,13 +33,16 @@
     *ngIf="
       !isDetecting && !detectionFailed && urlForm.controls.campHubUrl.value
     "
-    class="status-row status-ok">
+    class="flex items-center gap-2 text-sm text-success">
     <ng-icon name="lucideCircleCheck" size="18"></ng-icon>
     <span>Server URL fetched — review below and click Generate.</span>
   </div>
 
   <!-- URL input + manual generate -->
-  <form [formGroup]="urlForm" (ngSubmit)="generate()" class="qr-form">
+  <form
+    [formGroup]="urlForm"
+    (ngSubmit)="generate()"
+    class="flex flex-col gap-3">
     <z-form-field>
       <label z-form-label zRequired for="campHubUrl">Camp Hub Server URL</label>
       <z-form-control>
@@ -59,7 +66,9 @@
         *ngIf="urlForm.controls.campHubUrl.hasError('pattern')"
         >Must start with http:// or https://</z-form-message
       >
-      <p class="qr-hint">Format: http://&lt;network-ip&gt;:&lt;port&gt;/</p>
+      <p class="mb-0 mt-1 text-xs text-muted-foreground">
+        Format: http://&lt;network-ip&gt;:&lt;port&gt;/
+      </p>
     </z-form-field>
 
     <button
@@ -75,13 +84,19 @@
   </form>
 
   <!-- QR result -->
-  <div *ngIf="qrDataUrl" class="qr-result">
-    <div class="url-chip">
-      <ng-icon name="lucideWifi" size="16"></ng-icon>
-      <span class="url-text">{{ generatedUrl }}</span>
+  <div
+    *ngIf="qrDataUrl"
+    class="flex min-w-0 flex-col items-center gap-3.5 pt-1">
+    <div
+      class="flex w-full min-w-0 items-center gap-1.5 overflow-hidden rounded-lg bg-muted px-3 py-1.5 text-sm text-foreground">
+      <ng-icon name="lucideWifi" size="16" class="flex-none"></ng-icon>
+      <span class="min-w-0 [overflow-wrap:anywhere]">{{ generatedUrl }}</span>
     </div>
 
-    <img [src]="qrDataUrl" alt="Camp Hub QR Code" class="qr-image" />
+    <img
+      [src]="qrDataUrl"
+      alt="Camp Hub QR Code"
+      class="h-64 w-64 max-w-full rounded-lg border border-border bg-white" />
 
     <button z-button zType="outline" type="button" (click)="downloadQR()">
       <ng-icon name="lucideDownload" size="16"></ng-icon>

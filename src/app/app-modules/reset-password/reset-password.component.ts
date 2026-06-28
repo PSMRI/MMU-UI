@@ -33,11 +33,12 @@ import { StringValidatorDirective } from '../core/directives/stringValidator.dir
 import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 import { ZardInputDirective } from 'Common-UI/v2/ui/input';
 import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { cardImports } from 'Common-UI/v2/ui/card';
 
 @Component({
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
-  styleUrls: ['./reset-password.component.scss'],
+  host: { class: 'block' },
   imports: [
     NgIf,
     FormsModule,
@@ -47,6 +48,7 @@ import { ZardFormImports } from 'Common-UI/v2/ui/form';
     ZardButtonComponent,
     ZardInputDirective,
     ...ZardFormImports,
+    ...cardImports,
   ],
   viewProviders: [provideIcons({ lucideUser, lucideEye, lucideEyeOff })],
 })

@@ -1,244 +1,234 @@
-<div class="support-wrapper">
+<div
+  class="flex min-h-svh w-full flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
   <!-- Step 1 — choose three security questions -->
-  <form
-    *ngIf="questionsection"
-    #form3="ngForm"
-    class="support-card"
-    autocomplete="off">
-    <header class="support-header">
-      <ng-icon
-        class="support-mark"
-        name="lucideShieldCheck"
-        size="32"
-        aria-hidden="true"></ng-icon>
-      <h1 class="support-title">Account Support</h1>
-      <p class="support-subtitle">
-        Follow the steps to change or reset your password
-      </p>
-    </header>
+  <z-card *ngIf="questionsection" class="w-full max-w-md">
+    <z-card-header class="flex flex-col items-center gap-1.5 text-center">
+      <span class="mb-1 inline-flex size-11 items-center justify-center rounded-full bg-primary/10 text-primary">
+        <ng-icon name="lucideShieldCheck" size="24" aria-hidden="true"></ng-icon>
+      </span>
+      <z-card-title>Account Support</z-card-title>
+      <z-card-description>Follow the steps to change or reset your password</z-card-description>
+    </z-card-header>
 
-    <z-form-field>
-      <label z-form-label zRequired for="question1">Question 1</label>
-      <z-form-control>
-        <z-select
-          id="question1"
-          name="question1"
-          required
-          [(ngModel)]="question1"
-          zPlaceholder="Select a question"
-          (zSelectionChange)="onSelectQuestion($event, 0)">
-          <z-select-item
-            *ngFor="let question of questions"
-            [zValue]="asValue(question.QuestionID)">
-            {{ question.Question }}
-          </z-select-item>
-        </z-select>
-      </z-form-control>
-    </z-form-field>
+    <z-card-content>
+      <form #form3="ngForm" class="flex flex-col gap-5" autocomplete="off">
+        <z-form-field>
+          <label z-form-label zRequired for="question1">Question 1</label>
+          <z-form-control>
+            <z-select
+              id="question1"
+              name="question1"
+              required
+              [(ngModel)]="question1"
+              zPlaceholder="Select a question"
+              (zSelectionChange)="onSelectQuestion($event, 0)">
+              <z-select-item
+                *ngFor="let question of questions"
+                [zValue]="asValue(question.QuestionID)">
+                {{ question.Question }}
+              </z-select-item>
+            </z-select>
+          </z-form-control>
+        </z-form-field>
 
-    <z-form-field>
-      <label z-form-label zRequired for="answer1">Answer 1</label>
-      <z-form-control>
-        <input
-          z-input
-          id="answer1"
-          name="answer1"
-          required
-          [(ngModel)]="answer1"
-          placeholder="Enter your answer" />
-      </z-form-control>
-    </z-form-field>
+        <z-form-field>
+          <label z-form-label zRequired for="answer1">Answer 1</label>
+          <z-form-control>
+            <input
+              z-input
+              class="w-full"
+              id="answer1"
+              name="answer1"
+              required
+              [(ngModel)]="answer1"
+              placeholder="Enter your answer" />
+          </z-form-control>
+        </z-form-field>
 
-    <z-form-field>
-      <label z-form-label zRequired for="question2">Question 2</label>
-      <z-form-control>
-        <z-select
-          id="question2"
-          name="question2"
-          required
-          [zDisabled]="!question1 || !answer1"
-          [(ngModel)]="question2"
-          zPlaceholder="Select a question"
-          (zSelectionChange)="onSelectQuestion($event, 1)">
-          <z-select-item
-            *ngFor="let question of Q_array_one"
-            [zValue]="asValue(question.QuestionID)">
-            {{ question.Question }}
-          </z-select-item>
-        </z-select>
-      </z-form-control>
-    </z-form-field>
+        <z-form-field>
+          <label z-form-label zRequired for="question2">Question 2</label>
+          <z-form-control>
+            <z-select
+              id="question2"
+              name="question2"
+              required
+              [zDisabled]="!question1 || !answer1"
+              [(ngModel)]="question2"
+              zPlaceholder="Select a question"
+              (zSelectionChange)="onSelectQuestion($event, 1)">
+              <z-select-item
+                *ngFor="let question of Q_array_one"
+                [zValue]="asValue(question.QuestionID)">
+                {{ question.Question }}
+              </z-select-item>
+            </z-select>
+          </z-form-control>
+        </z-form-field>
 
-    <z-form-field>
-      <label z-form-label zRequired for="answer2">Answer 2</label>
-      <z-form-control>
-        <input
-          z-input
-          id="answer2"
-          name="answer2"
-          required
-          [disabled]="!question1 || !answer1"
-          [(ngModel)]="answer2"
-          placeholder="Enter your answer" />
-      </z-form-control>
-    </z-form-field>
+        <z-form-field>
+          <label z-form-label zRequired for="answer2">Answer 2</label>
+          <z-form-control>
+            <input
+              z-input
+              class="w-full"
+              id="answer2"
+              name="answer2"
+              required
+              [disabled]="!question1 || !answer1"
+              [(ngModel)]="answer2"
+              placeholder="Enter your answer" />
+          </z-form-control>
+        </z-form-field>
 
-    <z-form-field>
-      <label z-form-label zRequired for="question3">Question 3</label>
-      <z-form-control>
-        <z-select
-          id="question3"
-          name="question3"
-          required
-          [zDisabled]="!question2 || !answer2"
-          [(ngModel)]="question3"
-          zPlaceholder="Select a question"
-          (zSelectionChange)="onSelectQuestion($event, 2)">
-          <z-select-item
-            *ngFor="let question of Q_array_two"
-            [zValue]="asValue(question.QuestionID)">
-            {{ question.Question }}
-          </z-select-item>
-        </z-select>
-      </z-form-control>
-    </z-form-field>
+        <z-form-field>
+          <label z-form-label zRequired for="question3">Question 3</label>
+          <z-form-control>
+            <z-select
+              id="question3"
+              name="question3"
+              required
+              [zDisabled]="!question2 || !answer2"
+              [(ngModel)]="question3"
+              zPlaceholder="Select a question"
+              (zSelectionChange)="onSelectQuestion($event, 2)">
+              <z-select-item
+                *ngFor="let question of Q_array_two"
+                [zValue]="asValue(question.QuestionID)">
+                {{ question.Question }}
+              </z-select-item>
+            </z-select>
+          </z-form-control>
+        </z-form-field>
 
-    <z-form-field>
-      <label z-form-label zRequired for="answer3">Answer 3</label>
-      <z-form-control>
-        <input
-          z-input
-          id="answer3"
-          name="answer3"
-          required
-          [disabled]="!question2 || !answer2"
-          [(ngModel)]="answer3"
-          placeholder="Enter your answer" />
-      </z-form-control>
-    </z-form-field>
+        <z-form-field>
+          <label z-form-label zRequired for="answer3">Answer 3</label>
+          <z-form-control>
+            <input
+              z-input
+              class="w-full"
+              id="answer3"
+              name="answer3"
+              required
+              [disabled]="!question2 || !answer2"
+              [(ngModel)]="answer3"
+              placeholder="Enter your answer" />
+          </z-form-control>
+        </z-form-field>
 
-    <button
-      z-button
-      type="button"
-      zType="default"
-      zFull
-      [disabled]="form3.invalid"
-      (click)="setSecurityQuestions()">
-      Next
-    </button>
-  </form>
+        <button
+          z-button
+          type="button"
+          zType="default"
+          zFull
+          [disabled]="form3.invalid"
+          (click)="setSecurityQuestions()">
+          Next
+        </button>
+      </form>
+    </z-card-content>
+  </z-card>
 
   <!-- Step 2 — set the new password -->
-  <form
-    *ngIf="passwordSection"
-    #passwordForm="ngForm"
-    class="support-card"
-    autocomplete="off">
-    <header class="support-header">
-      <ng-icon
-        class="support-mark"
-        name="lucideShieldCheck"
-        size="32"
-        aria-hidden="true"></ng-icon>
-      <h1 class="support-title">Account Support</h1>
-      <p class="support-subtitle">
-        Choose a new password to finish resetting your account
-      </p>
-    </header>
+  <z-card *ngIf="passwordSection" class="w-full max-w-sm">
+    <z-card-header class="flex flex-col items-center gap-1.5 text-center">
+      <span class="mb-1 inline-flex size-11 items-center justify-center rounded-full bg-primary/10 text-primary">
+        <ng-icon name="lucideShieldCheck" size="24" aria-hidden="true"></ng-icon>
+      </span>
+      <z-card-title>Account Support</z-card-title>
+      <z-card-description>Choose a new password to finish resetting your account</z-card-description>
+    </z-card-header>
 
-    <z-form-field>
-      <label z-form-label zRequired for="newpwd">New Password</label>
-      <z-form-control>
-        <div class="password-row">
-          <div class="input-affix">
-            <ng-icon
-              class="input-icon"
-              name="lucideLock"
-              size="18"
-              aria-hidden="true"></ng-icon>
-            <input
-              z-input
-              class="has-leading-icon"
-              [type]="dynamictype"
-              id="newpwd"
-              name="newpwd"
-              [(ngModel)]="newpwd"
-              [pattern]="passwordPattern"
-              minlength="8"
-              maxlength="12"
-              #pwrd="ngModel"
-              required
-              placeholder="Enter new password" />
-          </div>
-          <button
-            type="button"
-            class="toggle-pwd"
-            tabindex="-1"
-            (click)="togglePWD()"
-            [attr.aria-label]="
-              dynamictype === 'text' ? 'Hide password' : 'Show password'
-            "
-            [attr.aria-pressed]="dynamictype === 'text'">
-            <ng-icon
-              [name]="dynamictype === 'text' ? 'lucideEyeOff' : 'lucideEye'"
-              size="18"></ng-icon>
-          </button>
-        </div>
-      </z-form-control>
-      <z-form-message *ngIf="pwrd.touched && pwrd.hasError('pattern')">
-        Password must be 8–12 characters with at least one number, one uppercase
-        letter and one special character.
-      </z-form-message>
-    </z-form-field>
+    <z-card-content>
+      <form #passwordForm="ngForm" class="flex flex-col gap-6" autocomplete="off">
+        <z-form-field>
+          <label z-form-label zRequired for="newpwd">New Password</label>
+          <z-form-control>
+            <div class="relative">
+              <ng-icon
+                class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                name="lucideLock"
+                size="18"
+                aria-hidden="true"></ng-icon>
+              <input
+                z-input
+                class="w-full pl-9 pr-10"
+                [type]="dynamictype"
+                id="newpwd"
+                name="newpwd"
+                [(ngModel)]="newpwd"
+                [pattern]="passwordPattern"
+                minlength="8"
+                maxlength="12"
+                #pwrd="ngModel"
+                required
+                placeholder="Enter new password" />
+              <button
+                type="button"
+                class="absolute right-3 top-1/2 inline-flex -translate-y-1/2 items-center justify-center appearance-none border-0 bg-transparent p-0 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:text-foreground"
+                (click)="togglePWD()"
+                [attr.aria-label]="
+                  dynamictype === 'text' ? 'Hide password' : 'Show password'
+                "
+                [attr.aria-pressed]="dynamictype === 'text'">
+                <ng-icon
+                  [name]="dynamictype === 'text' ? 'lucideEyeOff' : 'lucideEye'"
+                  size="18"></ng-icon>
+              </button>
+            </div>
+          </z-form-control>
+          <z-form-message *ngIf="pwrd.touched && pwrd.hasError('pattern')">
+            Password must be 8–12 characters with at least one number, one
+            uppercase letter and one special character.
+          </z-form-message>
+        </z-form-field>
 
-    <z-form-field>
-      <label z-form-label zRequired for="confirmpwd">Confirm Password</label>
-      <z-form-control>
-        <div class="password-row">
-          <div class="input-affix">
-            <ng-icon
-              class="input-icon"
-              name="lucideLock"
-              size="18"
-              aria-hidden="true"></ng-icon>
-            <input
-              z-input
-              class="has-leading-icon"
-              [type]="dynamictype"
-              id="confirmpwd"
-              name="confirmpwd"
-              [(ngModel)]="confirmpwd"
-              [pattern]="passwordPattern"
-              minlength="8"
-              maxlength="12"
-              required
-              placeholder="Re-enter new password" />
-          </div>
-          <button
-            type="button"
-            class="toggle-pwd"
-            tabindex="-1"
-            (click)="togglePWD()"
-            [attr.aria-label]="
-              dynamictype === 'text' ? 'Hide password' : 'Show password'
-            "
-            [attr.aria-pressed]="dynamictype === 'text'">
-            <ng-icon
-              [name]="dynamictype === 'text' ? 'lucideEyeOff' : 'lucideEye'"
-              size="18"></ng-icon>
-          </button>
-        </div>
-      </z-form-control>
-    </z-form-field>
+        <z-form-field>
+          <label z-form-label zRequired for="confirmpwd">Confirm Password</label>
+          <z-form-control>
+            <div class="relative">
+              <ng-icon
+                class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                name="lucideLock"
+                size="18"
+                aria-hidden="true"></ng-icon>
+              <input
+                z-input
+                class="w-full pl-9 pr-10"
+                [type]="dynamictype"
+                id="confirmpwd"
+                name="confirmpwd"
+                [(ngModel)]="confirmpwd"
+                [pattern]="passwordPattern"
+                minlength="8"
+                maxlength="12"
+                required
+                placeholder="Re-enter new password" />
+              <button
+                type="button"
+                class="absolute right-3 top-1/2 inline-flex -translate-y-1/2 items-center justify-center appearance-none border-0 bg-transparent p-0 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:text-foreground"
+                (click)="togglePWD()"
+                [attr.aria-label]="
+                  dynamictype === 'text' ? 'Hide password' : 'Show password'
+                "
+                [attr.aria-pressed]="dynamictype === 'text'">
+                <ng-icon
+                  [name]="dynamictype === 'text' ? 'lucideEyeOff' : 'lucideEye'"
+                  size="18"></ng-icon>
+              </button>
+            </div>
+          </z-form-control>
+        </z-form-field>
 
-    <button
-      z-button
-      type="button"
-      zType="default"
-      zFull
-      [disabled]="passwordForm.invalid"
-      (click)="updatePassword(newpwd)">
-      Update Password
-    </button>
-  </form>
+        <button
+          z-button
+          type="button"
+          zType="default"
+          zFull
+          [disabled]="passwordForm.invalid"
+          (click)="updatePassword(newpwd)">
+          Update Password
+        </button>
+      </form>
+    </z-card-content>
+  </z-card>
 </div>
