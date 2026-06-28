@@ -45,12 +45,14 @@ import { cardImports } from 'Common-UI/v2/ui/card';
 import { ZardTableImports } from 'Common-UI/v2/ui/table';
 import { ZardPaginationImports } from 'Common-UI/v2/ui/pagination';
 import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-worklist',
   templateUrl: './worklist.component.html',
-  styleUrls: ['./worklist.component.scss'],
+  host: { class: 'block' },
   imports: [
     FormsModule,
     NgFor,
@@ -58,9 +60,11 @@ import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
     TitleCasePipe,
     NgIcon,
     ZardButtonComponent,
+    ZardInputDirective,
     ...cardImports,
     ...ZardTableImports,
     ...ZardPaginationImports,
+    ...ZardSelectImports,
     ...tooltipImports,
   ],
   viewProviders: [
@@ -229,8 +233,9 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
     if (this.currentPage < this.totalPages) this.currentPage++;
   }
 
-  changePageSize(size: number) {
-    this.pageSize = Number(size);
+  changePageSize(size: string | string[]) {
+    const value = Array.isArray(size) ? size[0] : size;
+    this.pageSize = Number(value);
     this.currentPage = 1;
   }
 

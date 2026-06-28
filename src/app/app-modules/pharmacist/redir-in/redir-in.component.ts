@@ -28,7 +28,6 @@ import { ZardLoaderComponent } from 'Common-UI/v2/ui/loader';
 @Component({
   selector: 'app-redir-in',
   templateUrl: './redir-in.component.html',
-  styleUrls: ['./redir-in.component.css'],
   imports: [ZardLoaderComponent],
 })
 export class RedirInComponent implements OnInit {

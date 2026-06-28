@@ -33,7 +33,6 @@ import { ZardLoaderComponent } from 'Common-UI/v2/ui/loader';
 @Component({
   selector: 'app-redir-fallback',
   templateUrl: './redir-fallback.component.html',
-  styleUrls: ['./redir-fallback.component.css'],
   imports: [ZardLoaderComponent],
 })
 export class RedirFallbackComponent implements AfterViewInit {
