@@ -7,7 +7,11 @@
    unlayered app CSS), so they only affect new ZardUI markup. AMRIT blue + white
    tokens drive ZardUI components from Common-UI/v2/ui. */
 
-@layer theme, components, utilities;
+/* Bootstrap is wrapped in the lowest cascade layer (see src/bootstrap.layer.css)
+   so Tailwind utilities win over Bootstrap's global element rules — letting us
+   style migrated screens with utility classes instead of component CSS.
+   Un-migrated screens are unaffected (no Tailwind utilities compete there). */
+@layer bootstrap, theme, components, utilities;
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/utilities.css' layer(utilities);
 @plugin 'tailwindcss-animate';

@@ -1,129 +1,138 @@
-<div class="login-wrapper">
-  <form
-    class="login-card"
-    [formGroup]="loginForm"
-    (ngSubmit)="loginForm.valid && login()"
-    autocomplete="off">
-    <header class="login-header">
+<div
+  class="flex min-h-svh w-full flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+  <z-card class="w-full max-w-sm">
+    <z-card-header class="flex flex-col items-center gap-1.5 text-center">
       <img
-        class="login-logo"
+        class="mb-2 h-12 w-auto"
         src="assets/images/Swasthya.png"
         alt="Piramal Swasthya" />
-      <h1 class="login-title">AMRIT MMU</h1>
-      <p class="login-subtitle">Sign in to your account to continue</p>
-    </header>
+      <z-card-title>AMRIT MMU</z-card-title>
+      <z-card-description>Sign in to your account to continue</z-card-description>
+    </z-card-header>
 
-    <z-form-field>
-      <label z-form-label zRequired for="userID">User Name</label>
-      <z-form-control>
-        <div class="input-affix">
-          <ng-icon
-            class="input-icon"
-            name="lucideUser"
-            size="18"
-            aria-hidden="true"></ng-icon>
-          <input
-            z-input
-            class="has-leading-icon"
-            type="text"
-            id="userID"
-            name="userName"
-            formControlName="userName"
-            allowText="usernameValidator"
-            #focus
-            placeholder="Enter user name"
-            autocomplete="username" />
-        </div>
-      </z-form-control>
-      <z-form-message
-        *ngIf="
-          loginForm.controls.userName.touched &&
-          loginForm.controls.userName.invalid
-        "
-        >User name is required.</z-form-message
-      >
-    </z-form-field>
-
-    <z-form-field>
-      <label z-form-label zRequired for="password">Password</label>
-      <z-form-control>
-        <div class="password-row">
-          <div class="input-affix">
-            <ng-icon
-              class="input-icon"
-              name="lucideLock"
-              size="18"
-              aria-hidden="true"></ng-icon>
-            <input
-              z-input
-              class="has-leading-icon"
-              [type]="dynamictype"
-              id="password"
-              name="password"
-              formControlName="password"
-              placeholder="Enter password"
-              autocomplete="current-password" />
-          </div>
-          <button
-            type="button"
-            class="toggle-pwd"
-            tabindex="-1"
-            (click)="togglePWD()"
-            [attr.aria-label]="
-              dynamictype === 'text' ? 'Hide password' : 'Show password'
+    <z-card-content>
+      <form
+        class="grid gap-6"
+        [formGroup]="loginForm"
+        (ngSubmit)="loginForm.valid && login()"
+        autocomplete="off">
+        <z-form-field>
+          <label z-form-label zRequired for="userID">User Name</label>
+          <z-form-control>
+            <div class="relative flex items-center">
+              <ng-icon
+                class="pointer-events-none absolute left-3 text-muted-foreground"
+                name="lucideUser"
+                size="18"
+                aria-hidden="true"></ng-icon>
+              <input
+                z-input
+                class="w-full pl-9"
+                type="text"
+                id="userID"
+                name="userName"
+                formControlName="userName"
+                allowText="usernameValidator"
+                #focus
+                placeholder="Enter user name"
+                autocomplete="username" />
+            </div>
+          </z-form-control>
+          <z-form-message
+            *ngIf="
+              loginForm.controls.userName.touched &&
+              loginForm.controls.userName.invalid
             "
-            [attr.aria-pressed]="dynamictype === 'text'">
-            <ng-icon
-              [name]="dynamictype === 'text' ? 'lucideEyeOff' : 'lucideEye'"
-              size="18"></ng-icon>
+            >User name is required.</z-form-message
+          >
+        </z-form-field>
+
+        <z-form-field>
+          <label z-form-label zRequired for="password">Password</label>
+          <z-form-control>
+            <div class="flex items-stretch gap-2">
+              <div class="relative flex flex-1 items-center">
+                <ng-icon
+                  class="pointer-events-none absolute left-3 text-muted-foreground"
+                  name="lucideLock"
+                  size="18"
+                  aria-hidden="true"></ng-icon>
+                <input
+                  z-input
+                  class="w-full pl-9"
+                  [type]="dynamictype"
+                  id="password"
+                  name="password"
+                  formControlName="password"
+                  placeholder="Enter password"
+                  autocomplete="current-password" />
+              </div>
+              <button
+                type="button"
+                class="inline-flex w-10 flex-none items-center justify-center rounded-md border border-input bg-transparent text-muted-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                tabindex="-1"
+                (click)="togglePWD()"
+                [attr.aria-label]="
+                  dynamictype === 'text' ? 'Hide password' : 'Show password'
+                "
+                [attr.aria-pressed]="dynamictype === 'text'">
+                <ng-icon
+                  [name]="dynamictype === 'text' ? 'lucideEyeOff' : 'lucideEye'"
+                  size="18"></ng-icon>
+              </button>
+            </div>
+          </z-form-control>
+          <z-form-message
+            *ngIf="
+              loginForm.controls.password.touched &&
+              loginForm.controls.password.invalid
+            "
+            >Password is required.</z-form-message
+          >
+        </z-form-field>
+
+        <fieldset
+          *ngIf="enableCaptcha"
+          class="m-0 flex min-w-0 justify-center border-0 p-0">
+          <legend class="sr-only">Security check</legend>
+          <app-captcha
+            #captchaCmp
+            (tokenResolved)="onCaptchaResolved($event)"></app-captcha>
+        </fieldset>
+
+        <a
+          class="-mt-2 ml-auto inline-block text-sm font-medium text-primary underline-offset-4 hover:underline"
+          routerLink="/reset-password"
+          >Forgot Password?</a
+        >
+
+        <div class="grid gap-3">
+          <button
+            z-button
+            type="submit"
+            zType="default"
+            zFull
+            [disabled]="
+              (enableCaptcha && (!captchaToken || loginForm.invalid)) ||
+              (!enableCaptcha && loginForm.invalid)
+            ">
+            Login
+          </button>
+
+          <button
+            *ngIf="isMMUOfflineQRCode"
+            z-button
+            type="button"
+            zType="outline"
+            zFull
+            (click)="openQrDialog()">
+            <ng-icon name="lucideQrCode" size="18"></ng-icon>
+            Generate QR Code
           </button>
         </div>
-      </z-form-control>
-      <z-form-message
-        *ngIf="
-          loginForm.controls.password.touched &&
-          loginForm.controls.password.invalid
-        "
-        >Password is required.</z-form-message
-      >
-    </z-form-field>
+      </form>
+    </z-card-content>
+  </z-card>
 
-    <fieldset *ngIf="enableCaptcha" class="captcha-row">
-      <legend class="sr-only">Security check</legend>
-      <app-captcha
-        #captchaCmp
-        (tokenResolved)="onCaptchaResolved($event)"></app-captcha>
-    </fieldset>
-
-    <div class="forgot-row">
-      <a class="forgot-link" routerLink="/reset-password">Forgot Password?</a>
-    </div>
-
-    <button
-      z-button
-      type="submit"
-      zType="default"
-      zFull
-      [disabled]="
-        (enableCaptcha && (!captchaToken || loginForm.invalid)) ||
-        (!enableCaptcha && loginForm.invalid)
-      ">
-      Login
-    </button>
-
-    <button
-      *ngIf="isMMUOfflineQRCode"
-      z-button
-      type="button"
-      zType="outline"
-      zFull
-      (click)="openQrDialog()">
-      <ng-icon name="lucideQrCode" size="18"></ng-icon>
-      Generate QR Code
-    </button>
-  </form>
-
-  <footer class="login-footer">
-    <span>© 2026 PSMRI · AMRIT</span>
-  </footer>
+  <p class="text-center text-xs text-muted-foreground">© 2026 PSMRI · AMRIT</p>
 </div>

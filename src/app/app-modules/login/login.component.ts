@@ -43,6 +43,7 @@ import { NgIf } from '@angular/common';
 import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 import { ZardInputDirective } from 'Common-UI/v2/ui/input';
 import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { cardImports } from 'Common-UI/v2/ui/card';
 import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { CampHubQrCodeComponent } from '../data-sync/camp-hub-qr-code/camp-hub-qr-code.component';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -57,7 +58,7 @@ import {
 @Component({
   selector: 'app-login-cmp',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  host: { class: 'block min-h-screen' },
   imports: [
     ReactiveFormsModule,
     StringValidatorDirective,
@@ -67,6 +68,7 @@ import {
     ZardButtonComponent,
     ZardInputDirective,
     ...ZardFormImports,
+    ...cardImports,
     NgIcon,
   ],
   viewProviders: [
