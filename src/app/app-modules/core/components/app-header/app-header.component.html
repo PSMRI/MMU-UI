@@ -37,8 +37,7 @@
       zPosition="bottom"
       (click)="openIOT()">
       <ng-icon
-        [name]="isConnected ? 'lucideBluetoothConnected' : 'lucideBluetooth'"
-        size="20"></ng-icon>
+        [name]="isConnected ? 'lucideBluetoothConnected' : 'lucideBluetooth'"></ng-icon>
     </button>
 
     <!-- User -->
@@ -72,7 +71,7 @@
       [zTooltip]="currentLanguageSet?.help || 'Help'"
       [attr.aria-label]="currentLanguageSet?.help || 'Help'"
       zPosition="bottom">
-      <ng-icon name="lucideCircleHelp" size="20"></ng-icon>
+      <ng-icon name="lucideCircleHelp"></ng-icon>
     </button>
     <z-menu #helpMenu="zMenu">
       <button z-menu-item class="flex items-center gap-2" (click)="showVersionAndCommitDetails()">
@@ -102,7 +101,7 @@
       [attr.aria-label]="currentLanguageSet?.logOut || 'Log out'"
       zPosition="bottom"
       (click)="logout()">
-      <ng-icon name="lucidePower" size="20"></ng-icon>
+      <ng-icon name="lucidePower"></ng-icon>
     </button>
   </div>
 </header>
