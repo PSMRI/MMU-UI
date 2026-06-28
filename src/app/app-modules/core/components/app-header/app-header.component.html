@@ -2,13 +2,18 @@
   class="flex min-h-12 flex-wrap items-center justify-between gap-4 border-border bg-background px-6 py-1.5"
   [class.border-b]="!showRoles">
   <a class="inline-flex items-center" aria-label="Piramal Swasthya">
-    <img class="h-8 w-auto" src="assets/images/Swasthya.png" alt="Piramal Swasthya" />
+    <img
+      class="h-8 w-auto"
+      src="assets/images/Swasthya.png"
+      alt="Piramal Swasthya" />
   </a>
 
   <div class="flex flex-wrap items-center justify-end gap-2">
     <!-- Language -->
     <div *ngIf="status" class="inline-flex items-center gap-2">
-      <span class="text-sm text-muted-foreground">{{ currentLanguageSet?.common?.SelectLanguage }}</span>
+      <span class="text-sm text-muted-foreground">{{
+        currentLanguageSet?.common?.SelectLanguage
+      }}</span>
       <z-select
         class="w-40"
         name="app_language"
@@ -31,21 +36,32 @@
       type="button"
       class="text-muted-foreground"
       [ngClass]="{ 'text-primary': isConnected }"
-      [zTooltip]="currentLanguageSet?.common?.connectBluetooth || 'Connect Bluetooth'"
+      [zTooltip]="
+        currentLanguageSet?.common?.connectBluetooth || 'Connect Bluetooth'
+      "
       [attr.aria-label]="
         currentLanguageSet?.common?.connectBluetooth || 'Connect Bluetooth'
       "
       zPosition="bottom"
       (click)="openIOT()">
       <ng-icon
-        [name]="isConnected ? 'lucideBluetoothConnected' : 'lucideBluetooth'"></ng-icon>
+        [name]="
+          isConnected ? 'lucideBluetoothConnected' : 'lucideBluetooth'
+        "></ng-icon>
     </button>
 
     <!-- User -->
-    <span *ngIf="userName" class="inline-flex items-center gap-1.5 px-2 py-1 text-sm">
-      <ng-icon class="text-muted-foreground" name="lucideCircleUser" size="20"></ng-icon>
+    <span
+      *ngIf="userName"
+      class="inline-flex items-center gap-1.5 px-2 py-1 text-sm">
+      <ng-icon
+        class="text-muted-foreground"
+        name="lucideCircleUser"
+        size="20"></ng-icon>
       <span class="text-muted-foreground">{{ currentLanguageSet?.user }}:</span>
-      <span class="font-semibold text-foreground">{{ userName | titlecase }}</span>
+      <span class="font-semibold text-foreground">{{
+        userName | titlecase
+      }}</span>
     </span>
 
     <!-- Service point -->
@@ -55,9 +71,16 @@
       [routerLink]="'/servicePoint'"
       [zTooltip]="currentLanguageSet?.servicePoint || 'Service Point'"
       zPosition="bottom">
-      <ng-icon class="text-muted-foreground" name="lucideMapPin" size="20"></ng-icon>
-      <span class="text-muted-foreground">{{ currentLanguageSet?.servicePoint }}:</span>
-      <span class="font-semibold text-foreground">{{ servicePoint | titlecase }}</span>
+      <ng-icon
+        class="text-muted-foreground"
+        name="lucideMapPin"
+        size="20"></ng-icon>
+      <span class="text-muted-foreground"
+        >{{ currentLanguageSet?.servicePoint }}:</span
+      >
+      <span class="font-semibold text-foreground">{{
+        servicePoint | titlecase
+      }}</span>
     </a>
 
     <!-- Help (version / license menu) -->
@@ -75,7 +98,10 @@
       <ng-icon name="lucideCircleHelp"></ng-icon>
     </button>
     <z-menu #helpMenu="zMenu">
-      <button z-menu-item class="flex items-center gap-2" (click)="showVersionAndCommitDetails()">
+      <button
+        z-menu-item
+        class="flex items-center gap-2"
+        (click)="showVersionAndCommitDetails()">
         <ng-icon name="lucideInfo" size="16"></ng-icon>
         {{ currentLanguageSet?.version }} : {{ versionUI }}
       </button>
@@ -110,18 +136,18 @@
 <!-- Role navigation -->
 <nav
   *ngIf="showRoles"
-  class="flex items-stretch gap-5 overflow-x-auto border-b border-border bg-background px-6">
+  class="mx-6 mt-2 inline-flex w-fit max-w-[calc(100%-3rem)] items-center gap-1 overflow-x-auto rounded-lg border border-muted-foreground/30 bg-muted p-1">
   <a
     *ngFor="let item of filteredNavigation"
-    class="inline-flex items-center whitespace-nowrap border-b-2 border-transparent px-0.5 py-2 text-sm font-medium text-muted-foreground no-underline transition-colors hover:text-foreground"
+    class="inline-flex items-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground no-underline transition-colors hover:text-foreground"
     [routerLink]="[item.link]"
-    routerLinkActive="text-foreground! border-primary!">
+    routerLinkActive="bg-background! text-foreground! shadow-sm!">
     {{ item.label }}
   </a>
   <a
-    class="inline-flex items-center whitespace-nowrap border-b-2 border-transparent px-0.5 py-2 text-sm font-medium text-muted-foreground no-underline transition-colors hover:text-foreground"
+    class="inline-flex items-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground no-underline transition-colors hover:text-foreground"
     routerLink="/nurse-doctor/reports"
-    routerLinkActive="text-foreground! border-primary!">
+    routerLinkActive="bg-background! text-foreground! shadow-sm!">
     {{ currentLanguageSet?.common?.report }}
   </a>
 </nav>
