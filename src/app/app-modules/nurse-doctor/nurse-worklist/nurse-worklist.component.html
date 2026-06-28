@@ -1,10 +1,14 @@
-<div class="worklist">
-  <div class="worklist-toolbar">
-    <div class="search-box">
-      <ng-icon class="search-icon" name="lucideSearch" size="18"></ng-icon>
+<div class="px-6 pb-10 pt-5">
+  <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+    <div class="relative flex max-w-96 flex-1 basis-72 items-center">
+      <ng-icon
+        class="pointer-events-none absolute left-2.5 text-muted-foreground"
+        name="lucideSearch"
+        size="18"></ng-icon>
       <input
+        z-input
         type="search"
-        class="search-input"
+        class="w-full bg-background pl-9"
         autocomplete="off"
         [placeholder]="currentLanguageSet?.common?.inTableSearch || 'Search'"
         name="filterTerm"
@@ -12,45 +16,56 @@
         (ngModelChange)="filterBeneficiaryList($event)" />
     </div>
 
-    <button z-button class="refresh-btn" (click)="getNurseWorklist()">
-      <ng-icon name="lucideRefreshCw" size="16"></ng-icon>
+    <button z-button zType="outline" type="button" (click)="getNurseWorklist()">
+      <ng-icon name="lucideRefreshCw"></ng-icon>
       {{ currentLanguageSet?.common?.refresh }}
     </button>
   </div>
 
   <z-card>
-    <z-card-content class="worklist-card-body">
-      <div class="table-scroll">
+    <z-card-content class="p-2">
+      <div class="w-full overflow-x-auto">
         <table z-table>
           <thead z-table-header>
             <tr z-table-row>
-              <th z-table-head>{{ currentLanguageSet?.casesheet?.serialNo }}</th>
-              <th z-table-head>{{ currentLanguageSet?.bendetails?.beneficiaryID }}</th>
-              <th z-table-head>{{ currentLanguageSet?.bendetails?.beneficiaryName }}</th>
+              <th z-table-head>
+                {{ currentLanguageSet?.casesheet?.serialNo }}
+              </th>
+              <th z-table-head>
+                {{ currentLanguageSet?.bendetails?.beneficiaryID }}
+              </th>
+              <th z-table-head>
+                {{ currentLanguageSet?.bendetails?.beneficiaryName }}
+              </th>
               <th z-table-head>{{ currentLanguageSet?.bendetails?.gender }}</th>
               <th z-table-head>{{ currentLanguageSet?.bendetails?.age }}</th>
               <th z-table-head>{{ currentLanguageSet?.bendetails?.status }}</th>
-              <th z-table-head>{{ currentLanguageSet?.bendetails?.fatherName }}</th>
-              <th z-table-head>{{ currentLanguageSet?.bendetails?.district }}</th>
-              <th z-table-head>{{ currentLanguageSet?.bendetails?.phoneNo }}</th>
+              <th z-table-head>
+                {{ currentLanguageSet?.bendetails?.fatherName }}
+              </th>
+              <th z-table-head>
+                {{ currentLanguageSet?.bendetails?.district }}
+              </th>
+              <th z-table-head>
+                {{ currentLanguageSet?.bendetails?.phoneNo }}
+              </th>
               <th z-table-head>{{ currentLanguageSet?.bendetails?.image }}</th>
             </tr>
           </thead>
           <tbody z-table-body>
             <tr
               z-table-row
-              class="ben-row"
+              class="cursor-pointer transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
               tabindex="0"
               *ngFor="let row of pagedList"
               (click)="loadNursePatientDetails(row)"
               (keydown.enter)="loadNursePatientDetails(row)">
               <td
                 z-table-cell
-                [ngClass]="{
-                  'visit-sno': true,
-                  'first-visit': row.benVisitNo === 1,
-                  revisit: row.benVisitNo !== 1
-                }">
+                class="border-l-[3px] font-semibold"
+                [ngClass]="
+                  row.benVisitNo === 1 ? 'border-l-success' : 'border-l-warning'
+                ">
                 {{ row.sno }}
               </td>
               <td z-table-cell>{{ row.beneficiaryID }}</td>
@@ -66,52 +81,70 @@
                 {{ row.villageName | titlecase }}
               </td>
               <td z-table-cell>{{ row.preferredPhoneNum }}</td>
-              <td z-table-cell class="img-cell">
+              <td z-table-cell>
                 <button
                   type="button"
-                  class="img-btn"
+                  class="inline-flex appearance-none rounded-full border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   [zTooltip]="currentLanguageSet?.tc?.image || 'View image'"
-                  (click)="$event.stopPropagation(); patientImageView(row.beneficiaryRegID)"
+                  (click)="
+                    $event.stopPropagation();
+                    patientImageView(row.beneficiaryRegID)
+                  "
                   (keydown.enter)="$event.stopPropagation()">
-                  <img src="assets/images/Avatar-Profile_30X30.png" alt="profile" />
+                  <img
+                    class="size-[1.875rem] rounded-full object-cover"
+                    src="assets/images/Avatar-Profile_30X30.png"
+                    alt="profile" />
                 </button>
+              </td>
+            </tr>
+            <tr z-table-row *ngIf="filteredBeneficiaryList.length === 0">
+              <td
+                z-table-cell
+                colspan="10"
+                class="h-24 text-center text-muted-foreground">
+                {{ currentLanguageSet?.noRecordsFound }}
               </td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <div class="empty-state" *ngIf="filteredBeneficiaryList.length === 0">
-        <strong>{{ currentLanguageSet?.noRecordsFound }}</strong>
-      </div>
-
-      <div class="worklist-footer" *ngIf="filteredBeneficiaryList.length > 0">
-        <ul class="visit-legend">
-          <li>
-            <span class="legend-marker first-visit-marker"></span>
+      <div
+        class="mt-4 flex flex-wrap items-center justify-between gap-4 px-2"
+        *ngIf="filteredBeneficiaryList.length > 0">
+        <ul
+          class="m-0 flex list-none items-center gap-5 p-0 text-[0.8125rem] text-muted-foreground">
+          <li class="inline-flex items-center gap-1.5">
+            <span class="size-3 rounded bg-success"></span>
             {{ currentLanguageSet?.common?.firstVisit }}
           </li>
-          <li>
-            <span class="legend-marker revisit-marker"></span>
+          <li class="inline-flex items-center gap-1.5">
+            <span class="size-3 rounded bg-warning"></span>
             {{ currentLanguageSet?.common?.reVisit }}
           </li>
         </ul>
 
-        <div class="worklist-pager">
-          <label class="page-size">
-            <span>{{ currentLanguageSet?.common?.rowsPerPage || 'Rows per page' }}</span>
-            <select
-              class="page-size-select"
+        <div class="flex flex-wrap items-center gap-4">
+          <div
+            class="inline-flex items-center gap-2 text-[0.8125rem] text-muted-foreground">
+            <span>{{
+              currentLanguageSet?.common?.rowsPerPage || 'Rows per page'
+            }}</span>
+            <z-select
+              class="w-[4.5rem]"
               name="pageSize"
-              [(ngModel)]="pageSize"
-              (ngModelChange)="changePageSize($event)">
-              <option *ngFor="let size of pageSizeOptions" [ngValue]="size">
+              [zValue]="pageSize.toString()"
+              (zSelectionChange)="changePageSize($event)">
+              <z-select-item
+                *ngFor="let size of pageSizeOptions"
+                [zValue]="size.toString()">
                 {{ size }}
-              </option>
-            </select>
-          </label>
+              </z-select-item>
+            </z-select>
+          </div>
 
-          <ul z-pagination-content class="pager-list">
+          <ul z-pagination-content class="m-0">
             <li z-pagination-item>
               <button
                 z-pagination-button
@@ -122,7 +155,10 @@
               </button>
             </li>
             <li z-pagination-item *ngFor="let p of pageNumbers">
-              <button z-pagination-button [zActive]="p === currentPage" (click)="goToPage(p)">
+              <button
+                z-pagination-button
+                [zActive]="p === currentPage"
+                (click)="goToPage(p)">
                 {{ p }}
               </button>
             </li>

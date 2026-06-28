@@ -30,7 +30,7 @@ import { NurseRefferedWorklistComponent } from './nurse-reffered-worklist/nurse-
 @Component({
   selector: 'app-nurse-worklist-tabs',
   templateUrl: './nurse-worklist-tabs.component.html',
-  styleUrls: ['./nurse-worklist-tabs.component.scss'],
+  host: { class: 'block' },
   imports: [
     ZardTabGroupComponent,
     ZardTabComponent,
