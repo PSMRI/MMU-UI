@@ -15,7 +15,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href=".\assets\images\MMULOGO.png" />
     <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+    <!-- Bootstrap CSS is loaded (cascade-layered) via src/bootstrap.layer.css so
+         Tailwind utilities win on migrated screens. Do NOT re-add an unlayered
+         <link> to bootstrap.min.css here — its reboot rules (a, button, headings)
+         would sit outside the layers and override every non-!important utility. -->
     <link rel="stylesheet" href="./assets/css/font-awesome.min.css" />
   </head>
 
