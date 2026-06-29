@@ -23,7 +23,6 @@
 import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgClass, TitleCasePipe } from '@angular/common';
-import * as moment from 'moment';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { ZardTableImports } from 'Common-UI/v2/ui/table';
 import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
@@ -131,23 +130,9 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   loadDataToBenList(data: any) {
-    data.forEach((element: any) => {
-      element.genderName = element.genderName || 'Not Available';
-      element.age = element.age || 'Not Available';
-      element.statusMessage = element.statusMessage || 'Not Available';
-      element.VisitCategory = element.VisitCategory || 'Not Available';
-      element.benVisitNo = element.benVisitNo || 'Not Available';
-      element.districtName = element.districtName || 'Not Available';
-      element.villageName = element.villageName || 'Not Available';
-      element.arrival = false;
-      element.preferredPhoneNum = element.preferredPhoneNum || 'Not Available';
-      element.visitDate =
-        moment(element.visitDate, 'DD-MM-YYYY HH:mm A') || 'Not Available';
-      element.benVisitDate =
-        moment(element.benVisitDate).format('DD-MM-YYYY HH:mm A ') ||
-        'Not Available';
-    });
-    return data;
+    const rows = this.roleWorklist.normalizeStandardRows(data);
+    rows.forEach((element: any) => (element.arrival = false));
+    return rows;
   }
 
   patientImageView(benRegID: any) {
