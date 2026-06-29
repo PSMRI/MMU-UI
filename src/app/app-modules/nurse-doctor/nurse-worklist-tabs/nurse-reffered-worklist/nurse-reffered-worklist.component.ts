@@ -32,65 +32,63 @@ import {
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import * as moment from 'moment';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { FormsModule } from '@angular/forms';
-import { NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/common';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import {
-  lucideSearch,
-  lucideRefreshCw,
-  lucideChevronLeft,
-  lucideChevronRight,
-} from '@ng-icons/lucide';
-import { cardImports } from 'Common-UI/v2/ui/card';
+import { NgClass, TitleCasePipe } from '@angular/common';
 import { ZardTableImports } from 'Common-UI/v2/ui/table';
-import { ZardPaginationImports } from 'Common-UI/v2/ui/pagination';
-import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
-import { ZardInputDirective } from 'Common-UI/v2/ui/input';
-import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { BeneficiaryWorklistComponent } from 'src/app/app-modules/core/components/beneficiary-worklist/beneficiary-worklist.component';
 
 @Component({
   selector: 'app-nurse-reffered-worklist',
   templateUrl: './nurse-reffered-worklist.component.html',
   host: { class: 'block' },
   imports: [
-    FormsModule,
     NgClass,
-    NgFor,
-    NgIf,
     TitleCasePipe,
-    NgIcon,
-    ZardButtonComponent,
-    ZardInputDirective,
-    ...cardImports,
+    BeneficiaryWorklistComponent,
     ...ZardTableImports,
-    ...ZardPaginationImports,
-    ...ZardSelectImports,
     ...tooltipImports,
-  ],
-  viewProviders: [
-    provideIcons({
-      lucideSearch,
-      lucideRefreshCw,
-      lucideChevronLeft,
-      lucideChevronRight,
-    }),
   ],
 })
 export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
   currentLanguageSet: any;
   beneficiaryList: any[] = [];
-  filteredBeneficiaryList: any[] = [];
-  filterTerm: any;
-
-  // client-side pagination (replaces MatPaginator)
-  pageSizeOptions = [5, 10, 20];
-  pageSize = 5;
-  currentPage = 1;
 
   visitCategory: any;
   casesheetSubs: any;
   caseSheetData: any;
+
+  /** Nurse worklist columns include status + father's name. */
+  readonly searchKeys = [
+    'beneficiaryID',
+    'benName',
+    'genderName',
+    'fatherName',
+    'districtName',
+    'preferredPhoneNum',
+    'villageName',
+  ];
+
+  /** Also match the derived status text ("First visit" / "Revisit"). */
+  readonly statusSearch = (item: any, term: string): boolean =>
+    (item.benVisitNo === 1 ? 'first visit' : 'revisit').includes(term);
+
+  /** Column headers (status + father's name in place of category/date). */
+  get headers(): string[] {
+    const b = this.currentLanguageSet?.bendetails;
+    const c = this.currentLanguageSet?.casesheet;
+    return [
+      c?.serialNo,
+      b?.beneficiaryID,
+      b?.beneficiaryName,
+      b?.gender,
+      b?.age,
+      b?.status,
+      b?.fatherName,
+      b?.district,
+      b?.phoneNo,
+      b?.image,
+    ];
+  }
 
   constructor(
     private router: Router,
@@ -122,17 +120,12 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
 
   loadWorklist() {
     sessionStorage.removeItem('disableNoOnSuccessOfYes');
-    this.filterTerm = null;
     this.nurseService.getNurseWorklistTMreferred().subscribe((res: any) => {
       if (res.statusCode === 200 && res.data !== null) {
-        const benlist = this.loadDataToBenList(res.data);
-        this.beneficiaryList = benlist;
-        this.filterTerm = null;
-        this.setFilteredList(benlist);
+        this.beneficiaryList = this.loadDataToBenList(res.data);
       } else {
         this.confirmationService.alert(res.errorMessage, 'error');
         this.beneficiaryList = [];
-        this.setFilteredList([]);
       }
     });
   }
@@ -198,78 +191,6 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
       element.isTMVisitDone = element.isTMVisitDone || 'Not Available';
     });
     return data;
-  }
-
-  filterBeneficiaryList(searchTerm: string) {
-    if (!searchTerm) {
-      this.setFilteredList(this.beneficiaryList);
-      return;
-    }
-    const term = searchTerm.toLowerCase();
-    const keys = [
-      'beneficiaryID',
-      'benName',
-      'genderName',
-      'fatherName',
-      'districtName',
-      'preferredPhoneNum',
-      'villageName',
-    ];
-    const filtered = this.beneficiaryList.filter((item: any) => {
-      if (keys.some(key => ('' + item[key]).toLowerCase().includes(term))) {
-        return true;
-      }
-      const status = '' + item.benVisitNo === '1' ? 'first visit' : 'revisit';
-      return status.includes(term);
-    });
-    this.setFilteredList(filtered);
-  }
-
-  /** Re-number (sno), reset to first page, and store the visible list. */
-  private setFilteredList(list: any[]) {
-    list.forEach((item: any, index: number) => (item.sno = index + 1));
-    this.filteredBeneficiaryList = list;
-    this.currentPage = 1;
-  }
-
-  get totalPages(): number {
-    return Math.max(
-      1,
-      Math.ceil(this.filteredBeneficiaryList.length / this.pageSize)
-    );
-  }
-
-  get pagedList(): any[] {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.filteredBeneficiaryList.slice(start, start + this.pageSize);
-  }
-
-  get pageNumbers(): number[] {
-    const total = this.totalPages;
-    let start = Math.max(1, this.currentPage - 2);
-    const end = Math.min(total, start + 4);
-    start = Math.max(1, end - 4);
-    const pages: number[] = [];
-    for (let i = start; i <= end; i++) pages.push(i);
-    return pages;
-  }
-
-  goToPage(page: number) {
-    if (page >= 1 && page <= this.totalPages) this.currentPage = page;
-  }
-
-  prevPage() {
-    if (this.currentPage > 1) this.currentPage--;
-  }
-
-  nextPage() {
-    if (this.currentPage < this.totalPages) this.currentPage++;
-  }
-
-  changePageSize(size: string | string[]) {
-    const value = Array.isArray(size) ? size[0] : size;
-    this.pageSize = Number(value);
-    this.currentPage = 1;
   }
 
   patientImageView(benregID: any) {

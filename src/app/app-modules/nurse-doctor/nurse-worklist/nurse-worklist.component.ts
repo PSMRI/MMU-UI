@@ -29,61 +29,41 @@ import { BeneficiaryDetailsService } from '../../core/services/beneficiary-detai
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { FormsModule } from '@angular/forms';
-import { NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/common';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import {
-  lucideSearch,
-  lucideRefreshCw,
-  lucideChevronLeft,
-  lucideChevronRight,
-} from '@ng-icons/lucide';
-import { cardImports } from 'Common-UI/v2/ui/card';
+import { NgClass, TitleCasePipe } from '@angular/common';
 import { ZardTableImports } from 'Common-UI/v2/ui/table';
-import { ZardPaginationImports } from 'Common-UI/v2/ui/pagination';
-import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
-import { ZardInputDirective } from 'Common-UI/v2/ui/input';
-import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { BeneficiaryWorklistComponent } from '../../core/components/beneficiary-worklist/beneficiary-worklist.component';
 
 @Component({
   selector: 'app-nurse-worklist',
   templateUrl: './nurse-worklist.component.html',
   host: { class: 'block' },
   imports: [
-    FormsModule,
     NgClass,
-    NgFor,
-    NgIf,
     TitleCasePipe,
-    NgIcon,
-    ZardButtonComponent,
-    ZardInputDirective,
-    ...cardImports,
+    BeneficiaryWorklistComponent,
     ...ZardTableImports,
-    ...ZardPaginationImports,
-    ...ZardSelectImports,
     ...tooltipImports,
-  ],
-  viewProviders: [
-    provideIcons({
-      lucideSearch,
-      lucideRefreshCw,
-      lucideChevronLeft,
-      lucideChevronRight,
-    }),
   ],
 })
 export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
   beneficiaryList: any[] = [];
-  filteredBeneficiaryList: any[] = [];
-  filterTerm: any;
   currentLanguageSet: any;
 
-  // client-side pagination (replaces MatPaginator)
-  pageSizeOptions = [5, 10, 20];
-  pageSize = 5;
-  currentPage = 1;
+  /** Nurse worklist columns include status + father's name. */
+  readonly searchKeys = [
+    'beneficiaryID',
+    'benName',
+    'genderName',
+    'fatherName',
+    'districtName',
+    'preferredPhoneNum',
+    'villageName',
+  ];
+
+  /** Also match the derived status text ("First visit" / "Revisit"). */
+  readonly statusSearch = (item: any, term: string): boolean =>
+    (item.benVisitNo === 1 ? 'first visit' : 'revisit').includes(term);
 
   constructor(
     private nurseService: NurseService,
@@ -113,6 +93,24 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 
+  /** Column headers (status + father's name in place of category/date). */
+  get headers(): string[] {
+    const b = this.currentLanguageSet?.bendetails;
+    const c = this.currentLanguageSet?.casesheet;
+    return [
+      c?.serialNo,
+      b?.beneficiaryID,
+      b?.beneficiaryName,
+      b?.gender,
+      b?.age,
+      b?.status,
+      b?.fatherName,
+      b?.district,
+      b?.phoneNo,
+      b?.image,
+    ];
+  }
+
   ngOnDestroy() {
     sessionStorage.removeItem('currentRole');
   }
@@ -135,14 +133,10 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
     this.nurseService.getNurseWorklist().subscribe(
       (res: any) => {
         if (res.statusCode === 200 && res.data !== null) {
-          const benlist = this.loadDataToBenList(res.data);
-          this.beneficiaryList = benlist;
-          this.filterTerm = null;
-          this.setFilteredList(benlist);
+          this.beneficiaryList = this.loadDataToBenList(res.data);
         } else {
           this.confirmationService.alert(res.errorMessage, 'error');
           this.beneficiaryList = [];
-          this.setFilteredList([]);
         }
       },
       err => {
@@ -165,80 +159,6 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
       element.preferredPhoneNum = element.preferredPhoneNum || 'Not Available';
     });
     return data;
-  }
-
-  filterBeneficiaryList(searchTerm: string) {
-    if (!searchTerm) {
-      this.setFilteredList(this.beneficiaryList);
-      return;
-    }
-    const term = searchTerm.toLowerCase();
-    const keys = [
-      'beneficiaryID',
-      'benName',
-      'genderName',
-      'fatherName',
-      'districtName',
-      'preferredPhoneNum',
-      'villageName',
-    ];
-    const filtered = this.beneficiaryList.filter((item: any) => {
-      if (keys.some(key => ('' + item[key]).toLowerCase().includes(term))) {
-        return true;
-      }
-      // status column is derived text ("First visit" / "Revisit")
-      const status = '' + item.benVisitNo === '1' ? 'first visit' : 'revisit';
-      return status.includes(term);
-    });
-    this.setFilteredList(filtered);
-  }
-
-  /** Re-number (sno), reset to first page, and store the visible list. */
-  private setFilteredList(list: any[]) {
-    list.forEach((item: any, index: number) => (item.sno = index + 1));
-    this.filteredBeneficiaryList = list;
-    this.currentPage = 1;
-  }
-
-  get totalPages(): number {
-    return Math.max(
-      1,
-      Math.ceil(this.filteredBeneficiaryList.length / this.pageSize)
-    );
-  }
-
-  get pagedList(): any[] {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.filteredBeneficiaryList.slice(start, start + this.pageSize);
-  }
-
-  /** A small window of page numbers around the current page (max 5). */
-  get pageNumbers(): number[] {
-    const total = this.totalPages;
-    let start = Math.max(1, this.currentPage - 2);
-    const end = Math.min(total, start + 4);
-    start = Math.max(1, end - 4);
-    const pages: number[] = [];
-    for (let i = start; i <= end; i++) pages.push(i);
-    return pages;
-  }
-
-  goToPage(page: number) {
-    if (page >= 1 && page <= this.totalPages) this.currentPage = page;
-  }
-
-  prevPage() {
-    if (this.currentPage > 1) this.currentPage--;
-  }
-
-  nextPage() {
-    if (this.currentPage < this.totalPages) this.currentPage++;
-  }
-
-  changePageSize(size: string | string[]) {
-    const value = Array.isArray(size) ? size[0] : size;
-    this.pageSize = Number(value);
-    this.currentPage = 1;
   }
 
   patientImageView(benregID: any) {
