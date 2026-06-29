@@ -86,8 +86,11 @@ export class BeneficiaryWorklistComponent implements OnChanges {
   @Input() headers: string[] = [];
   /** Object keys the search box filters on. */
   @Input() searchKeys: string[] = [];
-  /** Renders the <td> cells for one row; context `$implicit` is the row. */
-  @Input() rowTemplate!: TemplateRef<{ $implicit: any }>;
+  /**
+   * Renders the <td> cells for one row. Template context: `$implicit` is the
+   * row and `sno` is its 1-based serial number for the current page.
+   */
+  @Input() rowTemplate!: TemplateRef<{ $implicit: any; sno: number }>;
   /** Optional left-aligned footer content (e.g. a status legend / total). */
   @Input() footerStart: TemplateRef<unknown> | null = null;
   /** Optional extra match for derived/computed columns (e.g. visit status). */
@@ -129,7 +132,8 @@ export class BeneficiaryWorklistComponent implements OnChanges {
           ) || (this.extraSearch ? this.extraSearch(item, t) : false)
       );
     }
-    list.forEach((item, index) => (item.sno = index + 1));
+    // Serial numbers are passed to the row template via context (see the
+    // template) rather than mutated onto the parent-owned row objects.
     this.filteredData = list;
     this.currentPage = 1;
   }

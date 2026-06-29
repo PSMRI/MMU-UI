@@ -40,13 +40,16 @@
               z-table-row
               class="cursor-pointer transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
               tabindex="0"
-              *ngFor="let row of pagedList"
+              *ngFor="let row of pagedList; let i = index"
               (click)="rowClick.emit(row)"
               (keydown.enter)="rowClick.emit(row)">
               <ng-container
                 *ngTemplateOutlet="
                   rowTemplate;
-                  context: { $implicit: row }
+                  context: {
+                    $implicit: row,
+                    sno: (currentPage - 1) * pageSize + i + 1,
+                  }
                 "></ng-container>
             </tr>
             <tr z-table-row *ngIf="filteredData.length === 0">

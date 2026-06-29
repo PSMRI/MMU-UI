@@ -11,8 +11,8 @@
   "
   (rowClick)="loadPharmaPage($event)"
   (refresh)="loadPharmaWorklist()">
-  <ng-template #row let-row>
-    <td z-table-cell>{{ row.sno }}</td>
+  <ng-template #row let-row let-sno="sno">
+    <td z-table-cell>{{ sno }}</td>
     <td z-table-cell>{{ row.beneficiaryID }}</td>
     <td z-table-cell>{{ row.benName | titlecase }}</td>
     <td z-table-cell>{{ row.genderName | titlecase }}</td>
