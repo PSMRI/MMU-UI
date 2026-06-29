@@ -57,39 +57,6 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
   casesheetSubs: any;
   caseSheetData: any;
 
-  /** Nurse worklist columns include status + father's name. */
-  readonly searchKeys = [
-    'beneficiaryID',
-    'benName',
-    'genderName',
-    'fatherName',
-    'districtName',
-    'preferredPhoneNum',
-    'villageName',
-  ];
-
-  /** Also match the derived status text ("First visit" / "Revisit"). */
-  readonly statusSearch = (item: any, term: string): boolean =>
-    (item.benVisitNo === 1 ? 'first visit' : 'revisit').includes(term);
-
-  /** Column headers (status + father's name in place of category/date). */
-  get headers(): string[] {
-    const b = this.currentLanguageSet?.bendetails;
-    const c = this.currentLanguageSet?.casesheet;
-    return [
-      c?.serialNo,
-      b?.beneficiaryID,
-      b?.beneficiaryName,
-      b?.gender,
-      b?.age,
-      b?.status,
-      b?.fatherName,
-      b?.district,
-      b?.phoneNo,
-      b?.image,
-    ];
-  }
-
   constructor(
     private router: Router,
     private nurseService: NurseService,

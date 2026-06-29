@@ -2,62 +2,8 @@
   [data]="beneficiaryList"
   [currentLanguageSet]="currentLanguageSet"
   [padded]="false"
-  [headers]="headers"
-  [searchKeys]="searchKeys"
-  [extraSearch]="statusSearch"
-  [rowTemplate]="row"
-  [footerStart]="legend"
+  [visitStatus]="true"
   (rowClick)="loadNursePatientDetails($event)"
-  (refresh)="getNurseWorklist()">
-  <ng-template #row let-row let-sno="sno">
-    <td
-      z-table-cell
-      class="border-l-[3px] font-semibold"
-      [ngClass]="
-        row.benVisitNo === 1 ? 'border-l-success' : 'border-l-warning'
-      ">
-      {{ sno }}
-    </td>
-    <td z-table-cell>{{ row.beneficiaryID }}</td>
-    <td z-table-cell>{{ row.benName | titlecase }}</td>
-    <td z-table-cell>{{ row.genderName | titlecase }}</td>
-    <td z-table-cell>{{ row.age }}</td>
-    <td z-table-cell>
-      {{ row.benVisitNo === 1 ? 'First visit' : 'Revisit' }}
-    </td>
-    <td z-table-cell>{{ row.fatherName | titlecase }}</td>
-    <td z-table-cell>
-      {{ row.districtName | titlecase }} / {{ row.villageName | titlecase }}
-    </td>
-    <td z-table-cell>{{ row.preferredPhoneNum }}</td>
-    <td z-table-cell>
-      <button
-        type="button"
-        class="inline-flex appearance-none rounded-full border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        [zTooltip]="currentLanguageSet?.tc?.image || 'View image'"
-        (click)="
-          $event.stopPropagation(); patientImageView(row.beneficiaryRegID)
-        "
-        (keydown.enter)="$event.stopPropagation()">
-        <img
-          class="size-[1.875rem] rounded-full object-cover"
-          src="assets/images/Avatar-Profile_30X30.png"
-          alt="profile" />
-      </button>
-    </td>
-  </ng-template>
-
-  <ng-template #legend>
-    <ul
-      class="m-0 flex list-none items-center gap-5 p-0 text-[0.8125rem] text-muted-foreground">
-      <li class="inline-flex items-center gap-1.5">
-        <span class="size-3 rounded bg-success"></span>
-        {{ currentLanguageSet?.common?.firstVisit }}
-      </li>
-      <li class="inline-flex items-center gap-1.5">
-        <span class="size-3 rounded bg-warning"></span>
-        {{ currentLanguageSet?.common?.reVisit }}
-      </li>
-    </ul>
-  </ng-template>
+  (refresh)="getNurseWorklist()"
+  (imageClick)="patientImageView($event)">
 </app-beneficiary-worklist>
