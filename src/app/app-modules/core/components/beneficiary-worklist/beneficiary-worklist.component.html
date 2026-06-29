@@ -1,12 +1,16 @@
 <div class="px-6 pb-10 pt-3">
   <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
     <div class="relative flex max-w-96 flex-1 basis-72 items-center">
+      <label class="sr-only" for="worklist-search">{{
+        searchPlaceholder
+      }}</label>
       <ng-icon
         class="pointer-events-none absolute left-2.5 text-muted-foreground"
         name="lucideSearch"
         size="18"></ng-icon>
       <input
         z-input
+        id="worklist-search"
         type="search"
         class="w-full bg-background pl-9"
         autocomplete="off"
