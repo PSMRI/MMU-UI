@@ -36,10 +36,10 @@ import { HttpServiceService } from '../../../core/services/http-service.service'
 @Injectable({ providedIn: 'root' })
 export class NurseWorklistService {
   constructor(
-    private httpServices: HttpServiceService,
-    private beneficiaryDetailsService: BeneficiaryDetailsService,
-    private cameraService: CameraService,
-    private confirmationService: ConfirmationService
+    private readonly httpServices: HttpServiceService,
+    private readonly beneficiaryDetailsService: BeneficiaryDetailsService,
+    private readonly cameraService: CameraService,
+    private readonly confirmationService: ConfirmationService
   ) {}
 
   /** Load and return the currently selected language set. */
@@ -54,7 +54,7 @@ export class NurseWorklistService {
     this.beneficiaryDetailsService
       .getBeneficiaryImage(benRegID)
       .subscribe((data: any) => {
-        if (data && data.benImage) this.cameraService.viewImage(data.benImage);
+        if (data?.benImage) this.cameraService.viewImage(data.benImage);
         else
           this.confirmationService.alert(
             currentLanguageSet?.alerts?.info?.imageNotFound

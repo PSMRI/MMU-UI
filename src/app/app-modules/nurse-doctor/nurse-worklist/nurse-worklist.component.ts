@@ -43,7 +43,7 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
     private confirmationService: ConfirmationService,
     private router: Router,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    private nurseWorklistService: NurseWorklistService,
+    private readonly nurseWorklistService: NurseWorklistService,
     readonly sessionstorage: SessionStorageService
   ) {}
 

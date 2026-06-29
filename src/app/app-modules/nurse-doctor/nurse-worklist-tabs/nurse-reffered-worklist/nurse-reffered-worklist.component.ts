@@ -46,7 +46,7 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
     private router: Router,
     private nurseService: NurseService,
     private confirmationService: ConfirmationService,
-    private nurseWorklistService: NurseWorklistService,
+    private readonly nurseWorklistService: NurseWorklistService,
     readonly sessionstorage: SessionStorageService
   ) {}
 
