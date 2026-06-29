@@ -140,7 +140,11 @@
       <div
         class="mt-4 flex flex-wrap items-center justify-between gap-4 px-2"
         *ngIf="filteredData.length > 0">
-        <ng-container *ngTemplateOutlet="footerStart"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="
+            footerStart;
+            context: { $implicit: filteredData.length }
+          "></ng-container>
         <ul
           *ngIf="!footerStart && visitStatus"
           class="m-0 flex list-none items-center gap-5 p-0 text-[0.8125rem] text-muted-foreground">
