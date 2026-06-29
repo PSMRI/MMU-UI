@@ -1,0 +1,115 @@
+<div class="px-6 pb-10 pt-3">
+  <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+    <div class="relative flex max-w-96 flex-1 basis-72 items-center">
+      <ng-icon
+        class="pointer-events-none absolute left-2.5 text-muted-foreground"
+        name="lucideSearch"
+        size="18"></ng-icon>
+      <input
+        z-input
+        type="search"
+        class="w-full bg-background pl-9"
+        autocomplete="off"
+        [placeholder]="searchPlaceholder"
+        name="filterTerm"
+        [(ngModel)]="filterTerm"
+        (ngModelChange)="applyFilter($event)" />
+    </div>
+
+    <button z-button zType="outline" type="button" (click)="refresh.emit()">
+      <ng-icon name="lucideRefreshCw"></ng-icon>
+      {{ refreshLabel }}
+    </button>
+  </div>
+
+  <z-card>
+    <z-card-content class="p-2">
+      <div class="w-full overflow-x-auto">
+        <table z-table>
+          <thead z-table-header>
+            <tr z-table-row>
+              <th z-table-head *ngFor="let header of headers">{{ header }}</th>
+            </tr>
+          </thead>
+          <tbody z-table-body>
+            <tr
+              z-table-row
+              class="cursor-pointer transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+              tabindex="0"
+              *ngFor="let row of pagedList"
+              (click)="rowClick.emit(row)"
+              (keydown.enter)="rowClick.emit(row)">
+              <ng-container
+                *ngTemplateOutlet="
+                  rowTemplate;
+                  context: { $implicit: row }
+                "></ng-container>
+            </tr>
+            <tr z-table-row *ngIf="filteredData.length === 0">
+              <td
+                z-table-cell
+                [attr.colspan]="headers.length"
+                class="h-24 text-center text-muted-foreground">
+                {{ emptyLabel }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div
+        class="mt-4 flex flex-wrap items-center justify-between gap-4 px-2"
+        *ngIf="filteredData.length > 0">
+        <ng-container *ngTemplateOutlet="footerStart"></ng-container>
+        <span *ngIf="!footerStart" aria-hidden="true"></span>
+
+        <div class="flex flex-wrap items-center gap-4">
+          <div
+            class="inline-flex items-center gap-2 text-[0.8125rem] text-muted-foreground">
+            <span>{{ rowsPerPageLabel }}</span>
+            <z-select
+              class="w-[4.5rem]"
+              name="pageSize"
+              [zValue]="pageSize.toString()"
+              (zSelectionChange)="changePageSize($event)">
+              <z-select-item
+                *ngFor="let size of pageSizeOptions"
+                [zValue]="size.toString()">
+                {{ size }}
+              </z-select-item>
+            </z-select>
+          </div>
+
+          <ul z-pagination-content class="m-0">
+            <li z-pagination-item>
+              <button
+                z-pagination-button
+                [zDisabled]="currentPage === 1"
+                aria-label="Previous page"
+                (click)="prevPage()">
+                <ng-icon name="lucideChevronLeft" size="16"></ng-icon>
+              </button>
+            </li>
+            <li z-pagination-item *ngFor="let p of pageNumbers">
+              <button
+                z-pagination-button
+                [zActive]="p === currentPage"
+                (click)="goToPage(p)">
+                {{ p }}
+              </button>
+            </li>
+            <li z-pagination-item>
+              <button
+                z-pagination-button
+                [zDisabled]="currentPage === totalPages"
+                aria-label="Next page"
+                (click)="nextPage()">
+                <ng-icon name="lucideChevronRight" size="16"></ng-icon>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </z-card-content>
+  </z-card>
+</div>
