@@ -27,7 +27,6 @@ import { ConfirmationService } from '../../core/services/confirmation.service';
 import { LabService, MasterDataService } from '../shared/services';
 import { CameraService } from '../../core/services/camera.service';
 import * as moment from 'moment';
-import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
@@ -87,7 +86,6 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
   currentPage = 1;
 
   constructor(
-    private dialog: MatDialog,
     private cameraService: CameraService,
     private router: Router,
     private masterdataService: MasterDataService,
