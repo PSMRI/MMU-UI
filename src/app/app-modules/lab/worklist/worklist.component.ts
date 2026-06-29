@@ -20,93 +20,29 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ViewChild,
-  DoCheck,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, DoCheck } from '@angular/core';
 import { Router } from '@angular/router';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { LabService, MasterDataService } from '../shared/services';
 import { CameraService } from '../../core/services/camera.service';
 import * as moment from 'moment';
-import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
-import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MatCard } from '@angular/material/card';
-import { MatTooltip } from '@angular/material/tooltip';
-import { TitleCasePipe } from '@angular/common';
+import { BeneficiaryWorklistComponent } from '../../core/components/beneficiary-worklist/beneficiary-worklist.component';
 
 @Component({
   selector: 'app-worklist',
   templateUrl: './worklist.component.html',
-  styleUrls: ['./worklist.component.css'],
-  imports: [
-    ReactiveFormsModule,
-    FormsModule,
-    MatCard,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatTooltip,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
-    MatPaginator,
-    TitleCasePipe,
-  ],
+  host: { class: 'block' },
+  imports: [BeneficiaryWorklistComponent],
 })
 export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
-  rowsPerPage = 5;
-  activePage = 1;
-  pagedList = [];
-  rotate = true;
-  beneficiaryList: any;
-  filteredBeneficiaryList: any = [];
-  blankTable = [1, 2, 3, 4, 5];
-  filterTerm: any;
+  beneficiaryList: any[] = [];
   current_language_set: any;
-  currentPage!: number;
-  displayedColumns: any = [
-    'sno',
-    'beneficiaryID',
-    'beneficiaryName',
-    'gender',
-    'age',
-    'visitCategory',
-    'district',
-    'phoneNo',
-    'visitDate',
-    'image',
-  ];
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
 
   constructor(
-    private dialog: MatDialog,
     private cameraService: CameraService,
     private router: Router,
     private masterdataService: MasterDataService,
@@ -123,6 +59,7 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
     this.beneficiaryDetailsService.reset();
     this.removeBeneficiaryDataForVisit();
   }
+
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
@@ -132,6 +69,7 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
+
   removeBeneficiaryDataForVisit() {
     sessionStorage.removeItem('visitCode');
     sessionStorage.removeItem('beneficiaryGender');
@@ -154,36 +92,16 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
     this.labService.getLabWorklist().subscribe(
       (data: any) => {
         if (data && data.statusCode === 200 && data.data) {
-          console.log('lab worklist', data.data);
-
-          const benlist = this.loadDataToBenList(data.data);
-          this.beneficiaryList = benlist;
-          this.filteredBeneficiaryList = benlist;
-          this.dataSource.data = [];
-          this.dataSource.data = benlist;
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.data.forEach((sectionCount: any, index: number) => {
-            sectionCount.sno = index + 1;
-          });
-          this.filterTerm = null;
+          this.beneficiaryList = this.loadDataToBenList(data.data);
         } else {
           this.confirmationService.alert(data.errorMessage, 'error');
-          this.dataSource.data = [];
-          this.dataSource.paginator = this.paginator;
+          this.beneficiaryList = [];
         }
       },
       err => {
         this.confirmationService.alert(err, 'error');
       }
     );
-  }
-
-  pageChanged(event: any): void {
-    console.log('called', event);
-    const startItem = (event.page - 1) * event.itemsPerPage;
-    const endItem = event.page * event.itemsPerPage;
-    this.pagedList = this.filteredBeneficiaryList.slice(startItem, endItem);
-    console.log('list', this.pagedList);
   }
 
   loadDataToBenList(data: any) {
@@ -195,7 +113,6 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
         benName: element.benName,
         genderName: element.genderName || 'Not Available',
         age: element.age || 'Not Available',
-        // statusMessage: element.statusMessage || 'Not Available',
         VisitCategory: element.VisitCategory || 'Not Available',
         benVisitNo: element.benVisitNo || 'Not Available',
         districtName: element.districtName || 'Not Available',
@@ -213,45 +130,6 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
       });
     });
     return benDataList;
-  }
-
-  filterBeneficiaryList(searchTerm: string) {
-    if (!searchTerm) this.filteredBeneficiaryList = this.beneficiaryList;
-    else {
-      this.filteredBeneficiaryList = [];
-      this.dataSource.data = [];
-      this.dataSource.paginator = this.paginator;
-      this.beneficiaryList.forEach((item: any) => {
-        for (const key in item) {
-          if (
-            key === 'beneficiaryID' ||
-            key === 'benName' ||
-            key === 'genderName' ||
-            key === 'age' ||
-            key === 'VisitCategory' ||
-            key === 'benVisitNo' ||
-            key === 'districtName' ||
-            key === 'preferredPhoneNum' ||
-            key === 'villageName' ||
-            key === 'beneficiaryRegID' ||
-            key === 'visitDate'
-          ) {
-            const value: string = '' + item[key];
-            if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-              this.filteredBeneficiaryList.push(item);
-              this.dataSource.data.push(item);
-              this.dataSource.paginator = this.paginator;
-              this.dataSource.data.forEach(
-                (sectionCount: any, index: number) => {
-                  sectionCount.sno = index + 1;
-                }
-              );
-              break;
-            }
-          }
-        }
-      });
-    }
   }
 
   patientImageView(benregID: any) {
@@ -274,8 +152,6 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   loadLabExaminationPage(beneficiary: any) {
-    console.log('beneficiary', JSON.stringify(beneficiary, null, 4));
-
     this.confirmationService
       .confirm(
         `info`,
@@ -324,23 +200,8 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
               storedValue !== null ? JSON.parse(storedValue) : null;
             }
           }
-          console.log(
-            this.sessionstorage.getItem('visitCode'),
-            'visitCodebeforedave'
-          );
           this.router.navigate(['/lab/patient/', beneficiary.beneficiaryRegID]);
         }
       });
-    // }
-    // else {
-    //   //this.confirmationService.alert('Consultation Done.');
-    //   this.confirmationService.confirm("Current visit case-sheet Confirmation", "Consultation Done. Want to Print Current Case-sheet ???").subscribe((res) => {
-    //     if (res) {
-    //       this.sessionstorage.setItem('visitCategory', beneficiary.VisitCategory);
-    //       let visitDateTime = new Date().toISOString();
-    //       window.open(environment.printCancerCase_sheet_url + '/#/common/casesheet/' + beneficiary.beneficiaryRegID + '/' + beneficiary.benVisitID + '/' + visitDateTime);
-    //     }
-    //   }, (err) => { })
-    // }
   }
 }
