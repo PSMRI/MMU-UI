@@ -23,9 +23,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import * as moment from 'moment';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { normalizeStandardWorklistRows } from '../../../core/components/beneficiary-worklist/worklist-data.util';
 import { NurseWorklistService } from './nurse-worklist.service';
 
 /**
@@ -60,23 +60,7 @@ export class RoleWorklistService {
 
   /** Fill the "Not Available" defaults the standard worklist columns need. */
   normalizeStandardRows(data: any[]): any[] {
-    data.forEach((element: any) => {
-      element.genderName = element.genderName || 'Not Available';
-      element.age = element.age || 'Not Available';
-      element.statusMessage = element.statusMessage || 'Not Available';
-      element.VisitCategory = element.VisitCategory || 'Not Available';
-      element.benVisitNo = element.benVisitNo || 'Not Available';
-      element.districtName = element.districtName || 'Not Available';
-      element.villageName = element.villageName || 'Not Available';
-      element.preferredPhoneNum = element.preferredPhoneNum || 'Not Available';
-      element.visitDate =
-        moment(element.visitDate).format('DD-MM-YYYY HH:mm A ') ||
-        'Not Available';
-      element.benVisitDate =
-        moment(element.benVisitDate).format('DD-MM-YYYY HH:mm A ') ||
-        'Not Available';
-    });
-    return data;
+    return normalizeStandardWorklistRows(data);
   }
 
   /**

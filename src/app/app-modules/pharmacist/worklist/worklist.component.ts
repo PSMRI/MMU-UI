@@ -28,11 +28,11 @@ import { ConfirmationService } from '../../core/services/confirmation.service';
 import { PharmacistService } from '../shared/services/pharmacist.service';
 import { CameraService } from '../../core/services/camera.service';
 import { InventoryService } from '../../core/services/inventory.service';
-import * as moment from 'moment';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { BeneficiaryWorklistComponent } from '../../core/components/beneficiary-worklist/beneficiary-worklist.component';
+import { normalizeStandardWorklistRows } from '../../core/components/beneficiary-worklist/worklist-data.util';
 
 @Component({
   selector: 'app-worklist',
@@ -99,23 +99,7 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   loadDataToBenList(data: any) {
-    data.forEach((element: any) => {
-      element.genderName = element.genderName || 'Not Available';
-      element.age = element.age || 'Not Available';
-      element.statusMessage = element.statusMessage || 'Not Available';
-      element.VisitCategory = element.VisitCategory || 'Not Available';
-      element.benVisitNo = element.benVisitNo || 'Not Available';
-      element.districtName = element.districtName || 'Not Available';
-      element.villageName = element.villageName || 'Not Available';
-      element.preferredPhoneNum = element.preferredPhoneNum || 'Not Available';
-      element.visitDate =
-        moment(element.visitDate).format('DD-MM-YYYY HH:mm A ') ||
-        'Not Available';
-      element.benVisitDate =
-        moment(element.benVisitDate).format('DD-MM-YYYY HH:mm A ') ||
-        'Not Available';
-    });
-    return data;
+    return normalizeStandardWorklistRows(data);
   }
 
   patientImageView(benregID: any) {
