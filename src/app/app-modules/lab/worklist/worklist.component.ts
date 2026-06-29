@@ -200,7 +200,7 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
       'benVisitDate',
     ];
     const filtered = this.beneficiaryList.filter((item: any) =>
-      keys.some(key => ('' + item[key]).toLowerCase().indexOf(term) >= 0)
+      keys.some(key => ('' + item[key]).toLowerCase().includes(term))
     );
     this.setFilteredList(filtered);
   }
