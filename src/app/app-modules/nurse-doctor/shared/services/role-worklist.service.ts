@@ -24,64 +24,38 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
-import { SetLanguageComponent } from '../../../core/components/set-language.component';
-import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
-import { CameraService } from '../../../core/services/camera.service';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
-import { HttpServiceService } from '../../../core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NurseWorklistService } from './nurse-worklist.service';
 
 /**
  * Logic shared by the "standard" role worklists (doctor / oncologist /
- * radiologist tabs). They load the same i18n set, open the beneficiary
- * image the same way, clear the same visit-session keys, normalise the
- * same rows and route to the work area / case sheet identically — so that
- * lives here once instead of being copied into each component.
+ * radiologist tabs): normalise the standard rows, run the worklist fetch
+ * and route to the work area / case sheet. The language / image / session
+ * helpers common to every worklist are reused from NurseWorklistService.
  */
 @Injectable({ providedIn: 'root' })
 export class RoleWorklistService {
   constructor(
     private readonly router: Router,
-    private readonly httpServices: HttpServiceService,
-    private readonly beneficiaryDetailsService: BeneficiaryDetailsService,
-    private readonly cameraService: CameraService,
     private readonly confirmationService: ConfirmationService,
-    private readonly sessionstorage: SessionStorageService
+    private readonly sessionstorage: SessionStorageService,
+    private readonly nurseWorklist: NurseWorklistService
   ) {}
 
   /** Load and return the currently selected language set. */
   getLanguageSet(): any {
-    const getLanguageJson = new SetLanguageComponent(this.httpServices);
-    getLanguageJson.setLanguage();
-    return getLanguageJson.currentLanguageObject;
+    return this.nurseWorklist.getLanguageSet();
   }
 
   /** Fetch and display the beneficiary's photo, or alert if none exists. */
   viewBeneficiaryImage(benRegID: any, currentLanguageSet: any): void {
-    this.beneficiaryDetailsService
-      .getBeneficiaryImage(benRegID)
-      .subscribe((data: any) => {
-        if (data?.benImage) this.cameraService.viewImage(data.benImage);
-        else
-          this.confirmationService.alert(
-            currentLanguageSet?.alerts?.info?.imageNotFound
-          );
-      });
+    this.nurseWorklist.viewBeneficiaryImage(benRegID, currentLanguageSet);
   }
 
   /** Clear the visit-related sessionStorage keys common to every role. */
   clearVisitSession(): void {
-    sessionStorage.removeItem('visitCode');
-    sessionStorage.removeItem('beneficiaryGender');
-    sessionStorage.removeItem('benFlowID');
-    sessionStorage.removeItem('visitCategory');
-    sessionStorage.removeItem('beneficiaryRegID');
-    sessionStorage.removeItem('visitID');
-    sessionStorage.removeItem('beneficiaryID');
-    sessionStorage.removeItem('doctorFlag');
-    sessionStorage.removeItem('nurseFlag');
-    sessionStorage.removeItem('pharmacist_flag');
-    sessionStorage.removeItem('caseSheetTMFlag');
+    this.nurseWorklist.clearNurseVisitSession();
   }
 
   /** Fill the "Not Available" defaults the standard worklist columns need. */
