@@ -30,41 +30,17 @@ import * as moment from 'moment';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { TitleCasePipe } from '@angular/common';
-import { ZardTableImports } from 'Common-UI/v2/ui/table';
-import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 import { BeneficiaryWorklistComponent } from '../../core/components/beneficiary-worklist/beneficiary-worklist.component';
 
 @Component({
   selector: 'app-worklist',
   templateUrl: './worklist.component.html',
   host: { class: 'block' },
-  imports: [
-    TitleCasePipe,
-    BeneficiaryWorklistComponent,
-    ...ZardTableImports,
-    ...tooltipImports,
-  ],
+  imports: [BeneficiaryWorklistComponent],
 })
 export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
   beneficiaryList: any[] = [];
   current_language_set: any;
-
-  /** Columns the shared worklist may filter against. */
-  readonly searchKeys = [
-    'beneficiaryID',
-    'benName',
-    'genderName',
-    'age',
-    'VisitCategory',
-    'benVisitNo',
-    'districtName',
-    'preferredPhoneNum',
-    'villageName',
-    'beneficiaryRegID',
-    'visitDate',
-    'benVisitDate',
-  ];
 
   constructor(
     private cameraService: CameraService,
@@ -92,24 +68,6 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
-  }
-
-  /** Column headers (kept here because they're language-driven). */
-  get headers(): string[] {
-    const b = this.current_language_set?.bendetails;
-    const c = this.current_language_set?.casesheet;
-    return [
-      c?.serialNo,
-      b?.beneficiaryID,
-      b?.beneficiaryName,
-      b?.gender,
-      b?.age,
-      b?.visitCategory,
-      b?.district,
-      b?.phoneNo,
-      b?.visitDate,
-      b?.image,
-    ];
   }
 
   removeBeneficiaryDataForVisit() {

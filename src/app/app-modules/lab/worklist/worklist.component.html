@@ -1,45 +1,7 @@
 <app-beneficiary-worklist
   [data]="beneficiaryList"
-  [headers]="headers"
-  [searchKeys]="searchKeys"
-  [rowTemplate]="row"
-  [searchPlaceholder]="current_language_set?.common?.inTableSearch || 'Search'"
-  [refreshLabel]="current_language_set?.common?.refresh || 'Refresh'"
-  [emptyLabel]="current_language_set?.noRecordsFound || 'No Records Found'"
-  [rowsPerPageLabel]="
-    current_language_set?.common?.rowsPerPage || 'Rows per page'
-  "
+  [currentLanguageSet]="current_language_set"
   (rowClick)="loadLabExaminationPage($event)"
-  (refresh)="loadWorklist()">
-  <ng-template #row let-row let-sno="sno">
-    <td z-table-cell>{{ sno }}</td>
-    <td z-table-cell>{{ row.beneficiaryID }}</td>
-    <td z-table-cell>{{ row.benName | titlecase }}</td>
-    <td z-table-cell>{{ row.genderName | titlecase }}</td>
-    <td z-table-cell>{{ row.age }}</td>
-    <td z-table-cell>
-      {{ row.VisitCategory }} /
-      <span class="text-muted-foreground">{{ row.benVisitNo }}</span>
-    </td>
-    <td z-table-cell>
-      {{ row.districtName | titlecase }} / {{ row.villageName | titlecase }}
-    </td>
-    <td z-table-cell>{{ row.preferredPhoneNum }}</td>
-    <td z-table-cell>{{ row.benVisitDate }}</td>
-    <td z-table-cell>
-      <button
-        type="button"
-        class="inline-flex appearance-none rounded-full border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        [zTooltip]="current_language_set?.tc?.image || 'View image'"
-        (click)="
-          $event.stopPropagation(); patientImageView(row.beneficiaryRegID)
-        "
-        (keydown.enter)="$event.stopPropagation()">
-        <img
-          class="size-[1.875rem] rounded-full object-cover"
-          src="assets/images/Avatar-Profile_30X30.png"
-          alt="profile" />
-      </button>
-    </td>
-  </ng-template>
+  (refresh)="loadWorklist()"
+  (imageClick)="patientImageView($event)">
 </app-beneficiary-worklist>
