@@ -23,28 +23,16 @@
 import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService } from '../../core/services/confirmation.service';
-import { NurseService } from '../shared/services';
-import { CameraService } from '../../core/services/camera.service';
+import { NurseService, NurseWorklistService } from '../shared/services';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
-import { HttpServiceService } from '../../core/services/http-service.service';
-import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { NgClass, TitleCasePipe } from '@angular/common';
-import { ZardTableImports } from 'Common-UI/v2/ui/table';
-import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 import { BeneficiaryWorklistComponent } from '../../core/components/beneficiary-worklist/beneficiary-worklist.component';
 
 @Component({
   selector: 'app-nurse-worklist',
   templateUrl: './nurse-worklist.component.html',
   host: { class: 'block' },
-  imports: [
-    NgClass,
-    TitleCasePipe,
-    BeneficiaryWorklistComponent,
-    ...ZardTableImports,
-    ...tooltipImports,
-  ],
+  imports: [BeneficiaryWorklistComponent],
 })
 export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
   beneficiaryList: any[] = [];
@@ -54,9 +42,8 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
     private nurseService: NurseService,
     private confirmationService: ConfirmationService,
     private router: Router,
-    private cameraService: CameraService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    private httpServices: HttpServiceService,
+    private nurseWorklistService: NurseWorklistService,
     readonly sessionstorage: SessionStorageService
   ) {}
 
@@ -73,9 +60,7 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServices);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+    this.currentLanguageSet = this.nurseWorklistService.getLanguageSet();
   }
 
   ngOnDestroy() {
@@ -83,17 +68,7 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   removeBeneficiaryDataForNurseVisit() {
-    sessionStorage.removeItem('visitCode');
-    sessionStorage.removeItem('beneficiaryGender');
-    sessionStorage.removeItem('benFlowID');
-    sessionStorage.removeItem('visitCategory');
-    sessionStorage.removeItem('beneficiaryRegID');
-    sessionStorage.removeItem('visitID');
-    sessionStorage.removeItem('beneficiaryID');
-    sessionStorage.removeItem('doctorFlag');
-    sessionStorage.removeItem('nurseFlag');
-    sessionStorage.removeItem('pharmacist_flag');
-    sessionStorage.removeItem('caseSheetTMFlag');
+    this.nurseWorklistService.clearNurseVisitSession();
   }
 
   getNurseWorklist() {
@@ -129,15 +104,10 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   patientImageView(benregID: any) {
-    this.beneficiaryDetailsService
-      .getBeneficiaryImage(benregID)
-      .subscribe((data: any) => {
-        if (data && data.benImage) this.cameraService.viewImage(data.benImage);
-        else
-          this.confirmationService.alert(
-            this.currentLanguageSet.alerts.info.imageNotFound
-          );
-      });
+    this.nurseWorklistService.viewBeneficiaryImage(
+      benregID,
+      this.currentLanguageSet
+    );
   }
 
   loadNursePatientDetails(beneficiary: any) {

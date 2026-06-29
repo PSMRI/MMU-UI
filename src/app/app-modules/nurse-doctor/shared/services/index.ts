@@ -23,3 +23,4 @@
 export * from './doctor.service';
 export * from './nurse.service';
 export * from './masterdata.service';
+export * from './nurse-worklist.service';

@@ -21,33 +21,18 @@
  */
 
 import { Component, DoCheck, OnInit } from '@angular/core';
-import { NurseService } from '../../shared/services';
+import { NurseService, NurseWorklistService } from '../../shared/services';
 import { Router } from '@angular/router';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import {
-  BeneficiaryDetailsService,
-  CameraService,
-  ConfirmationService,
-} from 'src/app/app-modules/core/services';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { ConfirmationService } from 'src/app/app-modules/core/services';
 import * as moment from 'moment';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { NgClass, TitleCasePipe } from '@angular/common';
-import { ZardTableImports } from 'Common-UI/v2/ui/table';
-import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 import { BeneficiaryWorklistComponent } from 'src/app/app-modules/core/components/beneficiary-worklist/beneficiary-worklist.component';
 
 @Component({
   selector: 'app-nurse-reffered-worklist',
   templateUrl: './nurse-reffered-worklist.component.html',
   host: { class: 'block' },
-  imports: [
-    NgClass,
-    TitleCasePipe,
-    BeneficiaryWorklistComponent,
-    ...ZardTableImports,
-    ...tooltipImports,
-  ],
+  imports: [BeneficiaryWorklistComponent],
 })
 export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
   currentLanguageSet: any;
@@ -61,9 +46,7 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
     private router: Router,
     private nurseService: NurseService,
     private confirmationService: ConfirmationService,
-    private httpServices: HttpServiceService,
-    private cameraService: CameraService,
-    private beneficiaryDetailsService: BeneficiaryDetailsService,
+    private nurseWorklistService: NurseWorklistService,
     readonly sessionstorage: SessionStorageService
   ) {}
 
@@ -80,9 +63,7 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
   }
 
   assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServices);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+    this.currentLanguageSet = this.nurseWorklistService.getLanguageSet();
   }
 
   loadWorklist() {
@@ -161,15 +142,10 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
   }
 
   patientImageView(benregID: any) {
-    this.beneficiaryDetailsService
-      .getBeneficiaryImage(benregID)
-      .subscribe((data: any) => {
-        if (data && data.benImage) this.cameraService.viewImage(data.benImage);
-        else
-          this.confirmationService.alert(
-            this.currentLanguageSet.alerts.info.imageNotFound
-          );
-      });
+    this.nurseWorklistService.viewBeneficiaryImage(
+      benregID,
+      this.currentLanguageSet
+    );
   }
 
   loadNursePatientDetails(beneficiary: any) {
@@ -217,19 +193,9 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
   }
 
   removeBeneficiaryDataForNurseVisit() {
-    sessionStorage.removeItem('visitCode');
-    sessionStorage.removeItem('beneficiaryGender');
-    sessionStorage.removeItem('benFlowID');
-    sessionStorage.removeItem('visitCategory');
-    sessionStorage.removeItem('beneficiaryRegID');
-    sessionStorage.removeItem('visitID');
-    sessionStorage.removeItem('beneficiaryID');
-    sessionStorage.removeItem('doctorFlag');
-    sessionStorage.removeItem('nurseFlag');
-    sessionStorage.removeItem('pharmacist_flag');
+    this.nurseWorklistService.clearNurseVisitSession();
     sessionStorage.removeItem('specialistFlag');
     sessionStorage.removeItem('visitCat');
-    sessionStorage.removeItem('caseSheetTMFlag');
   }
 
   viewAndPrintCaseSheet(beneficiaryData: any) {
