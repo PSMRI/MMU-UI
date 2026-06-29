@@ -119,6 +119,9 @@ export class BeneficiaryWorklistComponent implements OnChanges {
   /** Optional extra match for derived/computed columns (e.g. visit status). */
   @Input() extraSearch: ((item: any, term: string) => boolean) | null = null;
 
+  /** When false, drops the outer page padding (e.g. when embedded in tabs). */
+  @Input() padded = true;
+
   /** Optional label overrides (otherwise derived from currentLanguageSet). */
   @Input() searchPlaceholder?: string;
   @Input() refreshLabel?: string;
