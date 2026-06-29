@@ -20,87 +20,33 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, DoCheck, OnInit, ViewChild } from '@angular/core';
-import { NurseService } from '../../shared/services';
+import { Component, DoCheck, OnInit } from '@angular/core';
+import { NurseService, NurseWorklistService } from '../../shared/services';
 import { Router } from '@angular/router';
-import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import {
-  BeneficiaryDetailsService,
-  CameraService,
-  ConfirmationService,
-} from 'src/app/app-modules/core/services';
-import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { ConfirmationService } from 'src/app/app-modules/core/services';
 import * as moment from 'moment';
-import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MatCard } from '@angular/material/card';
-import { NgClass, NgIf, TitleCasePipe } from '@angular/common';
-import { MatTooltip } from '@angular/material/tooltip';
+import { BeneficiaryWorklistComponent } from 'src/app/app-modules/core/components/beneficiary-worklist/beneficiary-worklist.component';
 
 @Component({
   selector: 'app-nurse-reffered-worklist',
   templateUrl: './nurse-reffered-worklist.component.html',
-  styleUrls: ['./nurse-reffered-worklist.component.css'],
-  imports: [
-    ReactiveFormsModule,
-    FormsModule,
-    MatCard,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    NgClass,
-    MatTooltip,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
-    NgIf,
-    MatPaginator,
-    TitleCasePipe,
-  ],
+  host: { class: 'block' },
+  imports: [BeneficiaryWorklistComponent],
 })
 export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
   currentLanguageSet: any;
-  currentPage = 0;
-  displayedColumns: any = [
-    'sno',
-    'beneficiaryID',
-    'beneficiaryName',
-    'gender',
-    'age',
-    'status',
-    'fatherName',
-    'district',
-    'phoneNo',
-    'image',
-  ];
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
+  beneficiaryList: any[] = [];
+
+  visitCategory: any;
+  casesheetSubs: any;
+  caseSheetData: any;
 
   constructor(
     private router: Router,
     private nurseService: NurseService,
     private confirmationService: ConfirmationService,
-    private httpServices: HttpServiceService,
-    private cameraService: CameraService,
-    private beneficiaryDetailsService: BeneficiaryDetailsService,
+    private readonly nurseWorklistService: NurseWorklistService,
     readonly sessionstorage: SessionStorageService
   ) {}
 
@@ -111,130 +57,25 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
     this.removeBeneficiaryDataForNurseVisit();
     this.loadWorklist();
   }
+
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
-  assignSelectedLanguage() {
-    const getLanguageJson = new SetLanguageComponent(this.httpServices);
-    getLanguageJson.setLanguage();
-    this.currentLanguageSet = getLanguageJson.currentLanguageObject;
-  }
-  beneficiaryList: any;
-  filteredBeneficiaryList: any = [];
-  activePage = 1;
-  pagedList = [];
-  rowsPerPage = 5;
-  filterTerm: any;
-  blankTable = [1, 2, 3, 4, 5];
 
-  filterBeneficiaryList(searchTerm: string) {
-    if (!searchTerm) {
-      this.filteredBeneficiaryList = this.beneficiaryList;
-      this.dataSource.data = this.filteredBeneficiaryList;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.data.forEach((sectionCount: any, index: number) => {
-        sectionCount.sno = index + 1;
-      });
-    } else {
-      this.filteredBeneficiaryList = [];
-      this.beneficiaryList.forEach((item: any) => {
-        console.log('item', JSON.stringify(item, null, 4));
-        for (const key in item) {
-          if (
-            key === 'beneficiaryID' ||
-            key === 'benName' ||
-            key === 'genderName' ||
-            key === 'fatherName' ||
-            key === 'districtName' ||
-            key === 'preferredPhoneNum' ||
-            key === 'villageName'
-          ) {
-            const value: string = '' + item[key];
-            if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-              this.filteredBeneficiaryList.push(item);
-              this.dataSource.data.push(item);
-              this.dataSource.paginator = this.paginator;
-              this.dataSource.data.forEach(
-                (sectionCount: any, index: number) => {
-                  sectionCount.sno = index + 1;
-                }
-              );
-              break;
-            }
-          } else {
-            if (key === 'benVisitNo') {
-              const value: string = '' + item[key];
-              if (value === '1') {
-                const val = 'First visit';
-                if (val.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-                  this.filteredBeneficiaryList.push(item);
-                  this.dataSource.data.push(item);
-                  this.dataSource.paginator = this.paginator;
-                  this.dataSource.data.forEach(
-                    (sectionCount: any, index: number) => {
-                      sectionCount.sno = index + 1;
-                    }
-                  );
-                  break;
-                }
-              } else {
-                const val = 'Revisit';
-                if (val.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-                  this.filteredBeneficiaryList.push(item);
-                  this.dataSource.data.push(item);
-                  this.dataSource.paginator = this.paginator;
-                  this.dataSource.data.forEach(
-                    (sectionCount: any, index: number) => {
-                      sectionCount.sno = index + 1;
-                    }
-                  );
-                  break;
-                }
-              }
-            }
-          }
-        }
-      });
-    }
+  assignSelectedLanguage() {
+    this.currentLanguageSet = this.nurseWorklistService.getLanguageSet();
   }
-  pageChanged(event: any): void {
-    const startItem = (event.page - 1) * event.itemsPerPage;
-    const endItem = event.page * event.itemsPerPage;
-    this.pagedList = this.filteredBeneficiaryList.slice(startItem, endItem);
-  }
+
   loadWorklist() {
     sessionStorage.removeItem('disableNoOnSuccessOfYes');
-    this.filterTerm = null;
-    this.nurseService.getNurseWorklistTMreferred().subscribe(
-      (res: any) => {
-        if (res.statusCode === 200 && res.data !== null) {
-          const benlist = this.loadDataToBenList(res.data);
-          this.beneficiaryList = benlist;
-          this.filteredBeneficiaryList = benlist;
-          this.filteredBeneficiaryList = this.filteredBeneficiaryList.filter(
-            (visitCategory: any) =>
-              visitCategory.VisitCategory === 'NCD screening'
-          );
-          this.dataSource.data = [];
-          this.dataSource.data = benlist;
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.data.forEach((sectionCount: any, index: number) => {
-            sectionCount.sno = index + 1;
-          });
-          this.filterTerm = null;
-          this.currentPage = 1;
-        } else {
-          this.confirmationService.alert(res.errorMessage, 'error');
-        }
+    this.nurseService.getNurseWorklistTMreferred().subscribe((res: any) => {
+      if (res.statusCode === 200 && res.data !== null) {
+        this.beneficiaryList = this.loadDataToBenList(res.data);
+      } else {
+        this.confirmationService.alert(res.errorMessage, 'error');
+        this.beneficiaryList = [];
       }
-      // err => {
-      //   this.confirmationService.alert(err, 'error');
-      // }
-    );
-    console.log(
-      'filtered Beneficiary List',
-      JSON.stringify(this.filteredBeneficiaryList)
-    );
+    });
   }
 
   loadDataToBenList(data: any) {
@@ -301,19 +142,13 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
   }
 
   patientImageView(benregID: any) {
-    this.beneficiaryDetailsService
-      .getBeneficiaryImage(benregID)
-      .subscribe((data: any) => {
-        if (data && data.benImage) this.cameraService.viewImage(data.benImage);
-        else
-          this.confirmationService.alert(
-            this.currentLanguageSet.alerts.info.imageNotFound
-          );
-      });
+    this.nurseWorklistService.viewBeneficiaryImage(
+      benregID,
+      this.currentLanguageSet
+    );
   }
 
   loadNursePatientDetails(beneficiary: any) {
-    console.log('beneficiary', JSON.stringify(beneficiary, null, 4));
     this.sessionstorage.setItem('visitCode', beneficiary.visitCode);
     this.sessionstorage.setItem('visitID', beneficiary.benVisitID);
     if (beneficiary.specialist_flag === 100) {
@@ -358,22 +193,11 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
   }
 
   removeBeneficiaryDataForNurseVisit() {
-    sessionStorage.removeItem('visitCode');
-    sessionStorage.removeItem('beneficiaryGender');
-    sessionStorage.removeItem('benFlowID');
-    sessionStorage.removeItem('visitCategory');
-    sessionStorage.removeItem('beneficiaryRegID');
-    sessionStorage.removeItem('visitID');
-    sessionStorage.removeItem('beneficiaryID');
-    sessionStorage.removeItem('doctorFlag');
-    sessionStorage.removeItem('nurseFlag');
-    sessionStorage.removeItem('pharmacist_flag');
+    this.nurseWorklistService.clearNurseVisitSession();
     sessionStorage.removeItem('specialistFlag');
     sessionStorage.removeItem('visitCat');
-    sessionStorage.removeItem('caseSheetTMFlag');
   }
 
-  visitCategory: any;
   viewAndPrintCaseSheet(beneficiaryData: any) {
     this.setCasesheetData(beneficiaryData);
     const specialistFlag: any = this.sessionstorage.getItem('specialistFlag');
@@ -393,13 +217,11 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
           'caseSheetBeneficiaryRegID'
         ),
         visitCode: this.sessionstorage.getItem('caseSheetVisitCode'),
-        // "isCaseSheetdownloaded": this.sessionstorage.getItem('isCaseSheetdownloaded') === "true" ? true : false
       };
       this.getTMReferredCasesheetData(caseSheetRequest);
     }
   }
-  casesheetSubs: any;
-  caseSheetData: any;
+
   getTMReferredCasesheetData(caseSheetRequest: any) {
     this.casesheetSubs = this.nurseService
       .getTMReferredCasesheetData(caseSheetRequest)
@@ -408,8 +230,8 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
           if (res && res.statusCode === 200 && res.data) {
             this.confirmationService
               .confirm('info', this.currentLanguageSet.alerts.info.consulation)
-              .subscribe(res => {
-                if (res) {
+              .subscribe(result => {
+                if (result) {
                   this.routeToCaseSheet();
                 }
               });
@@ -427,6 +249,7 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
         }
       );
   }
+
   setCasesheetData(beneficiary: any) {
     this.sessionstorage.setItem('caseSheetBenFlowID', beneficiary.benFlowID);
     this.sessionstorage.setItem(
@@ -441,6 +264,7 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
     this.sessionstorage.setItem('caseSheetVisitCode', beneficiary.visitCode);
     this.sessionstorage.setItem('caseSheetTMFlag', 'true');
   }
+
   routeToCaseSheet() {
     this.router.navigate(['/nurse-doctor/print/' + 'MMU' + '/' + 'current']);
   }
