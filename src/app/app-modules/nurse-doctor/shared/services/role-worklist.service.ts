@@ -83,6 +83,7 @@ export class RoleWorklistService {
       err => {
         if (err?.handled) return;
         this.confirmationService.alert(err, 'error');
+        assign([]);
       }
     );
   }
@@ -93,7 +94,6 @@ export class RoleWorklistService {
    * case sheet. Used by the oncologist/radiologist tabs.
    */
   openStandardExamination(beneficiary: any, currentLanguageSet: any): void {
-    this.sessionstorage.setItem('visitCode', beneficiary.visitCode);
     if (beneficiary.visitFlowStatusFlag === 'N') {
       this.confirmationService
         .confirm(
@@ -102,6 +102,7 @@ export class RoleWorklistService {
         )
         .subscribe(result => {
           if (result) {
+            this.sessionstorage.setItem('visitCode', beneficiary.visitCode);
             this.sessionstorage.setItem('benFlowID', beneficiary.benFlowID);
             this.sessionstorage.setItem('visitID', beneficiary.benVisitID);
             this.sessionstorage.setItem('doctorFlag', beneficiary.doctorFlag);
@@ -133,6 +134,7 @@ export class RoleWorklistService {
         .confirm('info', currentLanguageSet?.alerts?.info?.consulation)
         .subscribe(res => {
           if (res) {
+            this.sessionstorage.setItem('visitCode', beneficiary.visitCode);
             this.sessionstorage.setItem(
               'caseSheetBenFlowID',
               beneficiary.benFlowID

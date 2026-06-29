@@ -30,19 +30,22 @@ import * as moment from 'moment';
 export function normalizeStandardWorklistRows(rows: any[]): any[] {
   rows.forEach((element: any) => {
     element.genderName = element.genderName || 'Not Available';
-    element.age = element.age || 'Not Available';
+    // Numeric fields: keep a legitimate 0 (e.g. an infant's age).
+    element.age = element.age ?? 'Not Available';
     element.statusMessage = element.statusMessage || 'Not Available';
     element.VisitCategory = element.VisitCategory || 'Not Available';
-    element.benVisitNo = element.benVisitNo || 'Not Available';
+    element.benVisitNo = element.benVisitNo ?? 'Not Available';
     element.districtName = element.districtName || 'Not Available';
     element.villageName = element.villageName || 'Not Available';
     element.preferredPhoneNum = element.preferredPhoneNum || 'Not Available';
-    element.visitDate =
-      moment(element.visitDate).format('DD-MM-YYYY HH:mm A ') ||
-      'Not Available';
-    element.benVisitDate =
-      moment(element.benVisitDate).format('DD-MM-YYYY HH:mm A ') ||
-      'Not Available';
+    // Only format real dates — moment(undefined) would yield "now" and an
+    // invalid input formats to "Invalid date", so guard before formatting.
+    element.visitDate = element.visitDate
+      ? moment(element.visitDate).format('DD-MM-YYYY HH:mm A ')
+      : 'Not Available';
+    element.benVisitDate = element.benVisitDate
+      ? moment(element.benVisitDate).format('DD-MM-YYYY HH:mm A ')
+      : 'Not Available';
   });
   return rows;
 }

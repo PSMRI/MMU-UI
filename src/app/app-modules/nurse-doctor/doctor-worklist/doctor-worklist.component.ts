@@ -120,11 +120,15 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
             item.statusCode = temp.statusCode;
           });
           this.beneficiaryList = this.loadDataToBenList(data.data);
-        } else this.confirmationService.alert(data.errorMessage, 'error');
+        } else {
+          this.confirmationService.alert(data.errorMessage, 'error');
+          this.beneficiaryList = [];
+        }
       },
       err => {
         if (err?.handled) return;
         this.confirmationService.alert(err, 'error');
+        this.beneficiaryList = [];
       }
     );
   }

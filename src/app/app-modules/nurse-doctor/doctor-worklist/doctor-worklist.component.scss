@@ -30,8 +30,6 @@
   --status-labtest-done: #eaaa26;
   --status-consultation-done: #43760f;
   --status-tm-referred: #00cc00;
-  --status-pending-labtest-cancelled: #9933ff;
-  --status-tc-cancelled: #000000;
 }
 
 /* Serial-no cell carries a status colour bar. */
@@ -66,12 +64,6 @@
 }
 .visit-sno.dark-green::before {
   background: var(--status-tm-referred);
-}
-.visit-sno.p-f-t-c::before {
-  background: var(--status-pending-labtest-cancelled);
-}
-.visit-sno.t-c-c::before {
-  background: var(--status-tc-cancelled);
 }
 
 /* Legend swatches (size via Tailwind; colour is domain-specific). */
