@@ -43,13 +43,45 @@
               *ngFor="let row of pagedList; let i = index"
               (click)="rowClick.emit(row)"
               (keydown.enter)="rowClick.emit(row)">
-              <ng-container *ngIf="rowTemplate; else standardRow">
+              <ng-container *ngIf="rowTemplate; else builtinRow">
                 <ng-container
                   *ngTemplateOutlet="
                     rowTemplate;
                     context: { $implicit: row, sno: serial(i) }
                   "></ng-container>
               </ng-container>
+              <ng-template #builtinRow>
+                <ng-container *ngIf="visitStatus; else standardRow">
+                  <td
+                    z-table-cell
+                    class="border-l-[3px] font-semibold"
+                    [ngClass]="
+                      row.benVisitNo === 1
+                        ? 'border-l-success'
+                        : 'border-l-warning'
+                    ">
+                    {{ serial(i) }}
+                  </td>
+                  <td z-table-cell>{{ row.beneficiaryID }}</td>
+                  <td z-table-cell>{{ row.benName | titlecase }}</td>
+                  <td z-table-cell>{{ row.genderName | titlecase }}</td>
+                  <td z-table-cell>{{ row.age }}</td>
+                  <td z-table-cell>
+                    {{ row.benVisitNo === 1 ? firstVisitText : reVisitText }}
+                  </td>
+                  <td z-table-cell>{{ row.fatherName | titlecase }}</td>
+                  <td z-table-cell>
+                    {{ row.districtName | titlecase }} /
+                    {{ row.villageName | titlecase }}
+                  </td>
+                  <td z-table-cell>{{ row.preferredPhoneNum }}</td>
+                  <ng-container
+                    *ngTemplateOutlet="
+                      imageCell;
+                      context: { $implicit: row }
+                    "></ng-container>
+                </ng-container>
+              </ng-template>
               <ng-template #standardRow>
                 <td z-table-cell>{{ serial(i) }}</td>
                 <td z-table-cell>{{ row.beneficiaryID }}</td>
@@ -68,22 +100,11 @@
                 </td>
                 <td z-table-cell>{{ row.preferredPhoneNum }}</td>
                 <td z-table-cell>{{ row.benVisitDate }}</td>
-                <td z-table-cell>
-                  <button
-                    type="button"
-                    class="inline-flex appearance-none rounded-full border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    [zTooltip]="imageTooltip"
-                    (click)="
-                      $event.stopPropagation();
-                      imageClick.emit(row.beneficiaryRegID)
-                    "
-                    (keydown.enter)="$event.stopPropagation()">
-                    <img
-                      class="size-[1.875rem] rounded-full object-cover"
-                      src="assets/images/Avatar-Profile_30X30.png"
-                      alt="profile" />
-                  </button>
-                </td>
+                <ng-container
+                  *ngTemplateOutlet="
+                    imageCell;
+                    context: { $implicit: row }
+                  "></ng-container>
               </ng-template>
             </tr>
             <tr z-table-row *ngIf="filteredData.length === 0">
@@ -98,11 +119,41 @@
         </table>
       </div>
 
+      <ng-template #imageCell let-row>
+        <td z-table-cell>
+          <button
+            type="button"
+            class="inline-flex appearance-none rounded-full border-0 bg-transparent p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            [zTooltip]="imageTooltip"
+            (click)="
+              $event.stopPropagation(); imageClick.emit(row.beneficiaryRegID)
+            "
+            (keydown.enter)="$event.stopPropagation()">
+            <img
+              class="size-[1.875rem] rounded-full object-cover"
+              src="assets/images/Avatar-Profile_30X30.png"
+              alt="profile" />
+          </button>
+        </td>
+      </ng-template>
+
       <div
         class="mt-4 flex flex-wrap items-center justify-between gap-4 px-2"
         *ngIf="filteredData.length > 0">
         <ng-container *ngTemplateOutlet="footerStart"></ng-container>
-        <span *ngIf="!footerStart" aria-hidden="true"></span>
+        <ul
+          *ngIf="!footerStart && visitStatus"
+          class="m-0 flex list-none items-center gap-5 p-0 text-[0.8125rem] text-muted-foreground">
+          <li class="inline-flex items-center gap-1.5">
+            <span class="size-3 rounded bg-success"></span>
+            {{ firstVisitText }}
+          </li>
+          <li class="inline-flex items-center gap-1.5">
+            <span class="size-3 rounded bg-warning"></span>
+            {{ reVisitText }}
+          </li>
+        </ul>
+        <span *ngIf="!footerStart && !visitStatus" aria-hidden="true"></span>
 
         <div class="flex flex-wrap items-center gap-4">
           <div

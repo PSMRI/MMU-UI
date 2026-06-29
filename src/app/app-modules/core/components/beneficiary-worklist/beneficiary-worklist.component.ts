@@ -30,7 +30,13 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgFor, NgIf, NgTemplateOutlet, TitleCasePipe } from '@angular/common';
+import {
+  NgClass,
+  NgFor,
+  NgIf,
+  NgTemplateOutlet,
+  TitleCasePipe,
+} from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideSearch,
@@ -62,6 +68,17 @@ export const STANDARD_WORKLIST_SEARCH_KEYS = [
   'benVisitDate',
 ];
 
+/** Object keys the nurse "visit status" worklist filters against. */
+export const VISIT_STATUS_SEARCH_KEYS = [
+  'beneficiaryID',
+  'benName',
+  'genderName',
+  'fatherName',
+  'districtName',
+  'preferredPhoneNum',
+  'villageName',
+];
+
 /**
  * Shared presentational shell for the role worklists (pharmacist, lab,
  * nurse, doctor, …). It owns the common chrome — search toolbar, z-card +
@@ -80,6 +97,7 @@ export const STANDARD_WORKLIST_SEARCH_KEYS = [
   host: { class: 'block' },
   imports: [
     FormsModule,
+    NgClass,
     NgFor,
     NgIf,
     NgTemplateOutlet,
@@ -122,6 +140,14 @@ export class BeneficiaryWorklistComponent implements OnChanges {
   /** When false, drops the outer page padding (e.g. when embedded in tabs). */
   @Input() padded = true;
 
+  /**
+   * Nurse "visit status" mode: renders the status-coloured row (first
+   * visit / revisit), the matching headers, the first-visit/revisit legend,
+   * and matches the derived status text when searching — so the nurse
+   * worklists don't each duplicate that markup.
+   */
+  @Input() visitStatus = false;
+
   /** Optional label overrides (otherwise derived from currentLanguageSet). */
   @Input() searchPlaceholder?: string;
   @Input() refreshLabel?: string;
@@ -145,6 +171,20 @@ export class BeneficiaryWorklistComponent implements OnChanges {
     if (this.headers?.length) return this.headers;
     const b = this.currentLanguageSet?.bendetails;
     const c = this.currentLanguageSet?.casesheet;
+    if (this.visitStatus) {
+      return [
+        c?.serialNo,
+        b?.beneficiaryID,
+        b?.beneficiaryName,
+        b?.gender,
+        b?.age,
+        b?.status,
+        b?.fatherName,
+        b?.district,
+        b?.phoneNo,
+        b?.image,
+      ];
+    }
     return [
       c?.serialNo,
       b?.beneficiaryID,
@@ -160,9 +200,19 @@ export class BeneficiaryWorklistComponent implements OnChanges {
   }
 
   get effectiveSearchKeys(): string[] {
-    return this.searchKeys?.length
-      ? this.searchKeys
+    if (this.searchKeys?.length) return this.searchKeys;
+    return this.visitStatus
+      ? VISIT_STATUS_SEARCH_KEYS
       : STANDARD_WORKLIST_SEARCH_KEYS;
+  }
+
+  /** Legend / status labels (fall back to English when no language set). */
+  get firstVisitText(): string {
+    return this.currentLanguageSet?.common?.firstVisit ?? 'First visit';
+  }
+
+  get reVisitText(): string {
+    return this.currentLanguageSet?.common?.reVisit ?? 'Revisit';
   }
 
   get searchLabel(): string {
@@ -216,7 +266,9 @@ export class BeneficiaryWorklistComponent implements OnChanges {
       list = list.filter(
         item =>
           keys.some(key => ('' + item[key]).toLowerCase().includes(t)) ||
-          (this.extraSearch ? this.extraSearch(item, t) : false)
+          (this.extraSearch ? this.extraSearch(item, t) : false) ||
+          (this.visitStatus &&
+            (item.benVisitNo === 1 ? 'first visit' : 'revisit').includes(t))
       );
     }
     // Serial numbers are passed to the row via context / computed for the
