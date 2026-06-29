@@ -30,7 +30,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgFor, NgIf, NgTemplateOutlet, TitleCasePipe } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideSearch,
@@ -44,13 +44,34 @@ import { ZardPaginationImports } from 'Common-UI/v2/ui/pagination';
 import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 import { ZardInputDirective } from 'Common-UI/v2/ui/input';
 import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+
+/** Object keys the standard beneficiary worklist filters against. */
+export const STANDARD_WORKLIST_SEARCH_KEYS = [
+  'beneficiaryID',
+  'benName',
+  'genderName',
+  'age',
+  'VisitCategory',
+  'benVisitNo',
+  'districtName',
+  'preferredPhoneNum',
+  'villageName',
+  'beneficiaryRegID',
+  'visitDate',
+  'benVisitDate',
+];
 
 /**
  * Shared presentational shell for the role worklists (pharmacist, lab,
  * nurse, doctor, …). It owns the common chrome — search toolbar, z-card +
- * z-table, client-side filtering and pagination, and the empty state — so
- * each role's worklist is a thin wrapper that supplies its columns, data,
- * row cells and click handler. Routing, services and per-role behaviour
+ * z-table, client-side filtering and pagination, and the empty state.
+ *
+ * For the standard beneficiary columns (used by pharmacist/lab/oncologist/
+ * radiologist) it renders the default cells itself — a consumer only passes
+ * `data` + `currentLanguageSet` and wires `rowClick`/`refresh`/`imageClick`.
+ * Screens with extra/custom columns (nurse, doctor) override `rowTemplate`
+ * (and `headers`/`footerStart`). Routing, services and per-role behaviour
  * stay in the role component.
  */
 @Component({
@@ -62,6 +83,7 @@ import { ZardSelectImports } from 'Common-UI/v2/ui/select';
     NgFor,
     NgIf,
     NgTemplateOutlet,
+    TitleCasePipe,
     NgIcon,
     ZardButtonComponent,
     ZardInputDirective,
@@ -69,6 +91,7 @@ import { ZardSelectImports } from 'Common-UI/v2/ui/select';
     ...ZardTableImports,
     ...ZardPaginationImports,
     ...ZardSelectImports,
+    ...tooltipImports,
   ],
   viewProviders: [
     provideIcons({
@@ -82,35 +105,96 @@ import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 export class BeneficiaryWorklistComponent implements OnChanges {
   /** Full (unfiltered) list of rows; the component filters + paginates it. */
   @Input() data: any[] = [];
-  /** Column header labels (also drives the empty-row colspan). */
-  @Input() headers: string[] = [];
-  /** Object keys the search box filters on. */
-  @Input() searchKeys: string[] = [];
-  /**
-   * Renders the <td> cells for one row. Template context: `$implicit` is the
-   * row and `sno` is its 1-based serial number for the current page.
-   */
-  @Input() rowTemplate!: TemplateRef<{ $implicit: any; sno: number }>;
+  /** Language set; drives the default headers, labels and image tooltip. */
+  @Input() currentLanguageSet: any = null;
+  /** Override the default standard headers. */
+  @Input() headers: string[] | null = null;
+  /** Override the default search keys. */
+  @Input() searchKeys: string[] | null = null;
+  /** Override the default standard cells with a custom row (context: row, sno). */
+  @Input() rowTemplate: TemplateRef<{ $implicit: any; sno: number }> | null =
+    null;
   /** Optional left-aligned footer content (e.g. a status legend / total). */
   @Input() footerStart: TemplateRef<unknown> | null = null;
   /** Optional extra match for derived/computed columns (e.g. visit status). */
   @Input() extraSearch: ((item: any, term: string) => boolean) | null = null;
 
-  @Input() searchPlaceholder = 'Search';
-  @Input() refreshLabel = 'Refresh';
-  @Input() emptyLabel = 'No Records Found';
-  @Input() rowsPerPageLabel = 'Rows per page';
+  /** Optional label overrides (otherwise derived from currentLanguageSet). */
+  @Input() searchPlaceholder?: string;
+  @Input() refreshLabel?: string;
+  @Input() emptyLabel?: string;
+  @Input() rowsPerPageLabel?: string;
 
   /** Emitted when a row is clicked or activated via keyboard. */
   @Output() rowClick = new EventEmitter<any>();
   /** Emitted when the refresh button is pressed. */
   @Output() refresh = new EventEmitter<void>();
+  /** Emitted by the default image cell with the row's beneficiaryRegID. */
+  @Output() imageClick = new EventEmitter<any>();
 
   filterTerm = '';
   filteredData: any[] = [];
   pageSizeOptions = [5, 10, 20];
   pageSize = 5;
   currentPage = 1;
+
+  get effectiveHeaders(): string[] {
+    if (this.headers?.length) return this.headers;
+    const b = this.currentLanguageSet?.bendetails;
+    const c = this.currentLanguageSet?.casesheet;
+    return [
+      c?.serialNo,
+      b?.beneficiaryID,
+      b?.beneficiaryName,
+      b?.gender,
+      b?.age,
+      b?.visitCategory,
+      b?.district,
+      b?.phoneNo,
+      b?.visitDate,
+      b?.image,
+    ];
+  }
+
+  get effectiveSearchKeys(): string[] {
+    return this.searchKeys?.length
+      ? this.searchKeys
+      : STANDARD_WORKLIST_SEARCH_KEYS;
+  }
+
+  get searchLabel(): string {
+    return (
+      this.searchPlaceholder ??
+      this.currentLanguageSet?.common?.inTableSearch ??
+      'Search'
+    );
+  }
+
+  get refreshText(): string {
+    return (
+      this.refreshLabel ?? this.currentLanguageSet?.common?.refresh ?? 'Refresh'
+    );
+  }
+
+  get emptyText(): string {
+    return (
+      this.emptyLabel ??
+      this.currentLanguageSet?.noRecordsFound ??
+      'No Records Found'
+    );
+  }
+
+  get rowsPerPageText(): string {
+    return (
+      this.rowsPerPageLabel ??
+      this.currentLanguageSet?.common?.rowsPerPage ??
+      'Rows per page'
+    );
+  }
+
+  get imageTooltip(): string {
+    return this.currentLanguageSet?.tc?.image ?? 'View image';
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     // Re-filter only when the underlying data changes, so header/template
@@ -125,17 +209,22 @@ export class BeneficiaryWorklistComponent implements OnChanges {
     const t = (term || '').toLowerCase().trim();
     let list = this.data ?? [];
     if (t) {
+      const keys = this.effectiveSearchKeys;
       list = list.filter(
         item =>
-          this.searchKeys.some(key =>
-            ('' + item[key]).toLowerCase().includes(t)
-          ) || (this.extraSearch ? this.extraSearch(item, t) : false)
+          keys.some(key => ('' + item[key]).toLowerCase().includes(t)) ||
+          (this.extraSearch ? this.extraSearch(item, t) : false)
       );
     }
-    // Serial numbers are passed to the row template via context (see the
-    // template) rather than mutated onto the parent-owned row objects.
+    // Serial numbers are passed to the row via context / computed for the
+    // default cells, never mutated onto the parent-owned row objects.
     this.filteredData = list;
     this.currentPage = 1;
+  }
+
+  /** 1-based serial number for the row at page-index `i`. */
+  serial(i: number): number {
+    return (this.currentPage - 1) * this.pageSize + i + 1;
   }
 
   get totalPages(): number {
