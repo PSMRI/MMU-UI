@@ -30,7 +30,13 @@ import {
 import { MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
-import { NgIf, NgClass, NgFor, TitleCasePipe } from '@angular/common';
+import {
+  NgIf,
+  NgClass,
+  NgFor,
+  TitleCasePipe,
+  NgTemplateOutlet,
+} from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StringValidatorDirective } from '../../directives/stringValidator.directive';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -56,6 +62,7 @@ import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
     NgClass,
     NgFor,
     TitleCasePipe,
+    NgTemplateOutlet,
     ReactiveFormsModule,
     FormsModule,
     StringValidatorDirective,
