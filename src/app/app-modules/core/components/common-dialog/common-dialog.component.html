@@ -222,8 +222,10 @@
       {{ btnOkText }}
     </button>
   </div>
+</div>
 
-  <div *ngIf="choiceSelect" class="flex flex-col gap-4 p-1">
+<!-- Choice-select (radio) — top-level mode, independent of sessionTimeout -->
+<div *ngIf="choiceSelect" class="flex flex-col gap-4 p-1">
     <ng-container
       *ngTemplateOutlet="
         dialogHeader;
@@ -249,5 +251,4 @@
         {{ btnOkText }}
       </button>
     </div>
-  </div>
 </div>
