@@ -31,41 +31,37 @@ import { ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
 import { DataSyncService } from '../../../data-sync/shared/service/data-sync.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { NgClass, NgIf } from '@angular/common';
-import { MatIcon } from '@angular/material/icon';
-import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { NgIf } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  MatPrefix,
-  MatFormField,
-  MatLabel,
-  MatSuffix,
-} from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
+  lucideUser,
+  lucideLock,
+  lucideEye,
+  lucideEyeOff,
+  lucideX,
+} from '@ng-icons/lucide';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
 import { StringValidatorDirective } from '../../directives/stringValidator.directive';
-import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-data-sync-login',
   templateUrl: './data-sync-login.component.html',
-  styleUrls: ['./data-sync-login.component.css'],
   providers: [DataSyncService],
+  viewProviders: [
+    provideIcons({ lucideUser, lucideLock, lucideEye, lucideEyeOff, lucideX }),
+  ],
   imports: [
-    NgClass,
     NgIf,
-    MatIcon,
-    MatCard,
-    MatCardTitle,
-    MatProgressSpinner,
-    MatCardContent,
+    NgIcon,
     ReactiveFormsModule,
-    MatPrefix,
-    MatFormField,
-    MatLabel,
-    MatInput,
+    ...cardImports,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
     StringValidatorDirective,
-    MatSuffix,
-    MatTooltip,
   ],
 })
 export class DataSyncLoginComponent implements OnInit, DoCheck {
@@ -118,12 +114,8 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
 
-  showPWD() {
-    this.dynamictype = 'text';
-  }
-
-  hidePWD() {
-    this.dynamictype = 'password';
+  togglePWD() {
+    this.dynamictype = this.dynamictype === 'text' ? 'password' : 'text';
   }
 
   get keySize() {

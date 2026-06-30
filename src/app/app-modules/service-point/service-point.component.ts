@@ -31,47 +31,31 @@ import { RegistrarService } from '../registrar/shared/services/registrar.service
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
 import { AppHeaderComponent } from '../core/components/app-header/app-header.component';
-import {
-  MatCard,
-  MatCardHeader,
-  MatCardContent,
-  MatCardActions,
-} from '@angular/material/card';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
-import { NgFor } from '@angular/common';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import {
-  MatOption,
-  MatAutocompleteTrigger,
-  MatAutocomplete,
-} from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
-import { StringValidatorDirective } from '../core/directives/stringValidator.directive';
 import { AppFooterComponent } from '../core/components/app-footer/app-footer.component';
+import { NgFor } from '@angular/common';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardComboboxComponent } from 'Common-UI/v2/ui/combobox';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
 
 @Component({
   selector: 'app-service-point',
   templateUrl: './service-point.component.html',
-  styleUrls: ['./service-point.component.css'],
   imports: [
     AppHeaderComponent,
-    MatCard,
-    MatCardHeader,
-    MatCardContent,
-    ReactiveFormsModule,
-    MatRadioGroup,
-    NgFor,
-    MatRadioButton,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
-    MatInput,
-    MatAutocompleteTrigger,
-    StringValidatorDirective,
-    MatAutocomplete,
-    MatCardActions,
     AppFooterComponent,
+    ReactiveFormsModule,
+    NgFor,
+    ...cardImports,
+    ZardButtonComponent,
+    ...ZardSelectImports,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
+    ZardComboboxComponent,
+    ...ZardFormImports,
   ],
 })
 export class ServicePointComponent implements OnInit, DoCheck {
@@ -142,6 +126,27 @@ export class ServicePointComponent implements OnInit, DoCheck {
     this.serviceProviderId = this.sessionstorage.getItem('providerServiceID');
     this.userId = this.sessionstorage.getItem('userID');
     this.getServicePoint();
+
+    // The service-point combobox commits the selected name to the form
+    // control; resolve its demographics whenever that value changes (replaces
+    // the old matInput (input)/(ngModelChange)="getDemographics()" hooks).
+    this.servicePointForm.controls.servicePointName.valueChanges.subscribe(() =>
+      this.getDemographics()
+    );
+  }
+
+  /**
+   * The z-select CVA writes its option value as a string, but the cascading
+   * filter/fetch logic compares against the numeric IDs in the data arrays
+   * (vanID, districtID, …). Coerce the just-selected control back to a number
+   * so the existing strict-equality comparisons keep working unchanged.
+   */
+  coerceNumber(controlName: string, value: string | string[]) {
+    const raw = Array.isArray(value) ? value[0] : value;
+    const control = this.servicePointForm.get(controlName);
+    if (control && raw !== null && raw !== undefined && raw !== '') {
+      control.setValue(Number(raw) as never, { emitEvent: false });
+    }
   }
 
   // resetLocalStorage() {

@@ -1,205 +1,185 @@
 <app-header [showRoles]="false"></app-header>
 
-<div class="container" style="margin-top: 5%; margin-bottom: 5%">
-  <section>
-    <div class="col-md-6 col-sm-6 col-6">
-      <mat-card class="matCardService">
-        <mat-card-header>
-          <img
-            src="assets/images/Swasthya.png"
-            alt="Logo"
-            style="margin: auto auto" />
-        </mat-card-header>
-        <mat-card-content>
-          <form [formGroup]="servicePointForm">
-            <div class="form-group" style="margin-top: 10px; margin-left: 17px">
-              <mat-radio-group
-                formControlName="sessionID"
-                (change)="filterVansList()"
-                (selectionChange)="trackFieldInteraction('Service Type')">
-                <strong>{{ currentLanguageSet?.serviceType }}:</strong>
-                <mat-radio-button
-                  class="radio-btn"
-                  color="primary"
-                  *ngFor="let session of sessionsList"
-                  [value]="session.sessionID">
-                  {{ session.sessionName }}
-                </mat-radio-button>
-              </mat-radio-group>
-            </div>
+<div class="flex min-h-[calc(100svh-4rem)] items-center justify-center px-4">
+  <z-card class="w-full max-w-xl gap-3 py-4">
+    <z-card-header class="flex flex-col items-center gap-1 text-center">
+      <img
+        class="h-8 w-auto"
+        src="assets/images/Swasthya.png"
+        alt="Piramal Swasthya" />
+      <z-card-title>{{
+        currentLanguageSet?.servicePoint || 'Service Point'
+      }}</z-card-title>
+    </z-card-header>
 
-            <div class="col-6 mat_form_field_width" style="margin-left: 20px">
-              <mat-form-field
-                class="mat-form-field-width"
-                style="margin-bottom: -20px">
-                <mat-label>{{ currentLanguageSet?.van }}</mat-label>
-                <mat-select
-                  required
-                  name="vanID"
-                  formControlName="vanID"
-                  (selectionChange)="
-                    filterServicePointsList(); trackFieldInteraction('Van')
-                  ">
-                  <mat-option
-                    class="alignOption"
-                    *ngFor="let van of vansList"
-                    [value]="van.vanID">
-                    {{ van.vanNoAndType }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+    <z-card-content>
+      <form [formGroup]="servicePointForm" class="flex flex-col gap-4">
+        <!-- Service Type -->
+        <div class="flex flex-col gap-1.5">
+          <label z-form-label for="sessionID">{{
+            currentLanguageSet?.serviceType
+          }}</label>
+          <z-radio-group
+            id="sessionID"
+            formControlName="sessionID"
+            zOrientation="horizontal"
+            class="flex-wrap gap-4"
+            (zChange)="filterVansList(); trackFieldInteraction('Service Type')">
+            <z-radio
+              *ngFor="let session of sessionsList"
+              [value]="session.sessionID">
+              {{ session.sessionName }}
+            </z-radio>
+          </z-radio-group>
+        </div>
 
-              <mat-form-field
-                class="mat-form-field-width"
-                style="margin-bottom: -20px">
-                <mat-label>{{
-                  currentLanguageSet?.casesheet?.servicePoint
-                }}</mat-label>
-                <input
-                  autocomplete="off"
-                  allowText="inputFieldValidator"
-                  matInput
-                  aria-label="Service Point"
-                  [required]="true"
-                  [matAutocomplete]="auto"
-                  formControlName="servicePointName"
-                  name="servicePointName"
-                  (input)="getDemographics()"
-                  (ngModelChange)="getDemographics()"
-                  (keyup)="
-                    filterServicePointVan(
-                      servicePointForm.controls.servicePointName.value
-                    )
-                  "
-                  (focus)="trackFieldInteraction('Service Point')" />
-                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                  <mat-option
-                    class="alignOption"
-                    *ngFor="let servicePoint of filteredServicePoints"
-                    [value]="servicePoint.servicePointName">
-                    {{ servicePoint.servicePointName }}</mat-option
-                  >
-                </mat-autocomplete>
-              </mat-form-field>
+        <div class="flex flex-col gap-4">
+          <!-- Van -->
+          <z-form-field class="gap-1">
+          <label z-form-label zRequired for="vanID">{{
+            currentLanguageSet?.van
+          }}</label>
+          <z-form-control>
+            <z-select
+              id="vanID"
+              class="w-full"
+              name="vanID"
+              formControlName="vanID"
+              [zPlaceholder]="currentLanguageSet?.van || 'Van'"
+              (zSelectionChange)="
+                coerceNumber('vanID', $event);
+                filterServicePointsList();
+                trackFieldInteraction('Van')
+              ">
+              <z-select-item
+                *ngFor="let van of vansList"
+                [zValue]="van.vanID.toString()">
+                {{ van.vanNoAndType }}
+              </z-select-item>
+            </z-select>
+          </z-form-control>
+        </z-form-field>
 
-              <!-- <mat-form-field [style.width]="'100%'" style="margin: -8px">
-                <mat-label class="mat-label-text">{{
-                  currentLanguageSet?.ro?.locInfo?.state
-                }}</mat-label>
-                <mat-select
-                  class="align-Field"
-                  formControlName="stateID"
-                  name="stateID"
-                  [required]="true"
-                  (selectionChange)="
-                    fetchDistrictsOnStateSelection(
-                      servicePointForm.controls.stateID.value
-                    )
-                  ">
-                  <mat-option
-                    class="alignOption"
-                    *ngFor="let state of statesList"
-                    [value]="state.stateID">
-                    {{ state.stateName }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field> -->
+        <!-- Service Point name -->
+        <z-form-field class="gap-1">
+          <label z-form-label zRequired for="servicePointName">{{
+            currentLanguageSet?.casesheet?.servicePoint
+          }}</label>
+          <z-form-control>
+            <z-combobox
+              id="servicePointName"
+              formControlName="servicePointName"
+              [zOptions]="servicePointsList"
+              zLabelKey="servicePointName"
+              zValueKey="servicePointName"
+              [zPlaceholder]="
+                currentLanguageSet?.casesheet?.servicePoint || 'Service Point'
+              " />
+          </z-form-control>
+        </z-form-field>
 
-              <mat-form-field
-                class="mat-form-field-width"
-                style="margin-bottom: -20px">
-                <mat-label class="mat-label-text">{{
-                  currentLanguageSet?.ro?.locInfo?.districtTownCity
-                }}</mat-label>
-                <mat-select
-                  formControlName="districtID"
-                  name="districtID"
-                  [required]="true"
-                  (selectionChange)="
-                    fetchSubDistrictsOnDistrictSelection(
-                      servicePointForm.controls.districtID.value
-                    );
-                    trackFieldInteraction('District')
-                  ">
-                  <mat-option
-                    class="alignOption"
-                    *ngFor="let district of districtList"
-                    [value]="district.districtID">
-                    {{ district.districtName }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+        <!-- District / Town / City -->
+        <z-form-field class="gap-1">
+          <label z-form-label zRequired for="districtID">{{
+            currentLanguageSet?.ro?.locInfo?.districtTownCity
+          }}</label>
+          <z-form-control>
+            <z-select
+              id="districtID"
+              class="w-full"
+              name="districtID"
+              formControlName="districtID"
+              [zPlaceholder]="
+                currentLanguageSet?.ro?.locInfo?.districtTownCity || 'District'
+              "
+              (zSelectionChange)="
+                coerceNumber('districtID', $event);
+                fetchSubDistrictsOnDistrictSelection(
+                  servicePointForm.controls.districtID.value
+                );
+                trackFieldInteraction('District')
+              ">
+              <z-select-item
+                *ngFor="let district of districtList"
+                [zValue]="district.districtID.toString()">
+                {{ district.districtName }}
+              </z-select-item>
+            </z-select>
+          </z-form-control>
+        </z-form-field>
 
-              <mat-form-field
-                class="mat-form-field-width"
-                style="margin-bottom: -20px">
-                <mat-label class="mat-label-text">{{
-                  currentLanguageSet?.ro?.locInfo?.taluk
-                }}</mat-label>
-                <mat-select
-                  formControlName="blockID"
-                  name="blockID"
-                  [required]="true"
-                  (selectionChange)="
-                    onSubDistrictChange(
-                      servicePointForm.controls.blockID.value
-                    );
-                    trackFieldInteraction('Taluk')
-                  ">
-                  <mat-option
-                    class="alignOption"
-                    *ngFor="let taluk of subDistrictList"
-                    [value]="taluk.blockID">
-                    {{ taluk.blockName }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+        <!-- Taluk -->
+        <z-form-field class="gap-1">
+          <label z-form-label zRequired for="blockID">{{
+            currentLanguageSet?.ro?.locInfo?.taluk
+          }}</label>
+          <z-form-control>
+            <z-select
+              id="blockID"
+              class="w-full"
+              name="blockID"
+              formControlName="blockID"
+              [zPlaceholder]="currentLanguageSet?.ro?.locInfo?.taluk || 'Taluk'"
+              (zSelectionChange)="
+                coerceNumber('blockID', $event);
+                onSubDistrictChange(servicePointForm.controls.blockID.value);
+                trackFieldInteraction('Taluk')
+              ">
+              <z-select-item
+                *ngFor="let taluk of subDistrictList"
+                [zValue]="taluk.blockID.toString()">
+                {{ taluk.blockName }}
+              </z-select-item>
+            </z-select>
+          </z-form-control>
+        </z-form-field>
 
-              <mat-form-field
-                class="mat-form-field-width"
-                style="margin-bottom: -10px">
-                <mat-label>{{
-                  currentLanguageSet?.ro?.locInfo?.street
-                }}</mat-label>
-                <mat-select
-                  formControlName="districtBranchID"
-                  name="districtBranchID"
-                  (selectionChange)="
-                    onDistrictBranchSelection(
-                      servicePointForm.controls.districtBranchID.value
-                    );
-                    trackFieldInteraction('Street')
-                  "
-                  [required]="true">
-                  <mat-option
-                    class="alignOption"
-                    *ngFor="let street of villageList"
-                    [value]="street.districtBranchID">
-                    {{ street.villageName }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
+          <!-- Street -->
+          <z-form-field class="gap-1">
+            <label z-form-label zRequired for="districtBranchID">{{
+              currentLanguageSet?.ro?.locInfo?.street
+            }}</label>
+          <z-form-control>
+            <z-select
+              id="districtBranchID"
+              class="w-full"
+              name="districtBranchID"
+              formControlName="districtBranchID"
+              [zPlaceholder]="
+                currentLanguageSet?.ro?.locInfo?.street || 'Street'
+              "
+              (zSelectionChange)="
+                coerceNumber('districtBranchID', $event);
+                onDistrictBranchSelection(
+                  servicePointForm.controls.districtBranchID.value
+                );
+                trackFieldInteraction('Street')
+              ">
+              <z-select-item
+                *ngFor="let street of villageList"
+                [zValue]="street.districtBranchID.toString()">
+                {{ street.villageName }}
+              </z-select-item>
+            </z-select>
+          </z-form-control>
+          </z-form-field>
+        </div>
 
-            <mat-card-actions
-              style="text-align: center; padding: 8px 16px 0px 0px">
-              <button
-                mat-raised-button
-                color="primary"
-                (click)="
-                  saveLocationDataToStorage();
-                  trackFieldInteraction('Continue Button')
-                "
-                class="mat_blue p-l-r-38 f-s-18"
-                [disabled]="!servicePointForm.valid">
-                {{ currentLanguageSet?.spoke_selection?.continue }}
-              </button>
-            </mat-card-actions>
-          </form>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </section>
+        <div class="flex justify-end pt-1">
+          <button
+            z-button
+            type="button"
+            [disabled]="!servicePointForm.valid"
+            (click)="
+              saveLocationDataToStorage();
+              trackFieldInteraction('Continue Button')
+            ">
+            {{ currentLanguageSet?.spoke_selection?.continue }}
+          </button>
+        </div>
+      </form>
+    </z-card-content>
+  </z-card>
 </div>
 
 <app-footer></app-footer>

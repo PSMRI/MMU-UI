@@ -36,31 +36,60 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatTabGroup, MatTab } from '@angular/material/tabs';
-import { MatDrawerContainer } from '@angular/material/sidenav';
-import { NgIf, NgFor, NgClass, NgStyle } from '@angular/common';
-import { MatCard } from '@angular/material/card';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
+import { NgIf, NgFor } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideHourglass,
+  lucideSquareMinus,
+  lucideCircleCheckBig,
+  lucideCircleAlert,
+  lucideCheck,
+  lucideDownload,
+  lucideRefreshCw,
+} from '@ng-icons/lucide';
+import { ZardTabComponent, ZardTabGroupComponent } from 'Common-UI/v2/ui/tabs';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import {
+  ZardTableComponent,
+  ZardTableHeaderComponent,
+  ZardTableBodyComponent,
+  ZardTableRowComponent,
+  ZardTableHeadComponent,
+  ZardTableCellComponent,
+} from 'Common-UI/v2/ui/table';
 
 @Component({
   selector: 'app-workarea',
   templateUrl: './workarea.component.html',
-  styleUrls: ['./workarea.component.css'],
   imports: [
-    MatTabGroup,
-    MatTab,
-    MatDrawerContainer,
     NgIf,
     NgFor,
-    NgClass,
-    NgStyle,
     ReactiveFormsModule,
-    MatCard,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
+    NgIcon,
+    ZardTabComponent,
+    ZardTabGroupComponent,
+    ZardButtonComponent,
+    ...cardImports,
+    ...ZardSelectImports,
+    ZardTableComponent,
+    ZardTableHeaderComponent,
+    ZardTableBodyComponent,
+    ZardTableRowComponent,
+    ZardTableHeadComponent,
+    ZardTableCellComponent,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideHourglass,
+      lucideSquareMinus,
+      lucideCircleCheckBig,
+      lucideCircleAlert,
+      lucideCheck,
+      lucideDownload,
+      lucideRefreshCw,
+    }),
   ],
 })
 export class WorkareaComponent
@@ -161,83 +190,6 @@ export class WorkareaComponent
       });
   }
 
-  // syncGroups() {
-  //   this.dataSyncService.syncAllGroups().subscribe(
-  //     (res: any) => {
-  //       console.log(res);
-  //       if (res.statusCode === 200) {
-  //         // Update status for each group based on the response
-  //         this.updateGroupStatus(res.data.groupsProgress);
-  //         this.confirmationService.alert(res.data.response, 'success');
-  //       } else {
-  //         this.confirmationService.alert(res.errorMessage, 'error');
-  //       }
-  //     },
-  //     err => {
-  //       this.confirmationService.alert(err, 'error');
-  //     }
-  //   );
-  // }
-
-  // updateGroupStatus(groupsProgress: any[]) {
-  //   // Update status for each group based on the response
-  //   this.syncTableGroupList.forEach((group: any) => {
-  //     const progress = groupsProgress.find((item: any) => item.groupId === group.syncTableGroupID);
-  //     if (progress) {
-  //       if (progress.status === 'completed') {
-  //         group.status = 'success';
-  //       } else if (progress.status === 'failed') {
-  //         group.status = 'failed';
-  //       }
-  //     } else {
-  //       group.status = 'pending';
-  //     }
-  //   });
-  // }
-  // syncGroups() {
-  //   this.dataSyncService.syncAllGroups().subscribe(
-  //     (res: any) => {
-  //       console.log(res);
-  //       if (res.statusCode === 200) {
-  //         if (res.data.groupsProgress) {
-  //           this.updateGroupStatus(res.data.groupsProgress);
-  //         }
-  //         this.confirmationService.alert(res.data.response, 'success');
-  //       } else {
-  //         this.confirmationService.alert(res.data.response, 'error');
-  //         if (res.data.groupsProgress) {
-  //           this.updateGroupStatus(res.data.groupsProgress);
-  //         }
-  //       }
-  //       this.showTable = true;
-  //     },
-  //     err => {
-  //       this.confirmationService.alert(
-  //         err.message || 'An error occurred',
-  //         'error'
-  //       );
-  //     }
-  //   );
-  // }
-
-  // updateGroupStatus(groupsProgress: any[]) {
-  //   this.syncTableGroupList.forEach((group: any) => {
-  //     const progress = groupsProgress.find(
-  //       (item: any) => item.groupId === group.syncTableGroupID
-  //     );
-  //     if (progress) {
-  //       if (progress.status === 'completed') {
-  //         group.status = 'success';
-  //       } else if (progress.status === 'failed') {
-  //         group.status = 'failed';
-  //       } else {
-  //         group.status = 'pending';
-  //       }
-  //     } else {
-  //       group.status = 'pending';
-  //     }
-  //   });
-  // }
   syncGroups() {
     this.dataSyncService.syncAllGroups().subscribe(
       (res: any) => {
