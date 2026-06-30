@@ -27,34 +27,53 @@ import {
   EventEmitter,
   DoCheck,
 } from '@angular/core';
-import { MatDialogRef, MatDialogClose } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
 import { NgIf, NgClass, NgFor, TitleCasePipe } from '@angular/common';
-import { MatFormField, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StringValidatorDirective } from '../../directives/stringValidator.directive';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideInfo,
+  lucideCircleCheck,
+  lucideTriangleAlert,
+  lucideCircleX,
+  lucideChevronRight,
+} from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
 
 @Component({
   selector: 'app-common-dialog',
+  standalone: true,
   templateUrl: './common-dialog.component.html',
-  styleUrls: ['./common-dialog.component.css'],
   imports: [
     NgIf,
     NgClass,
-    MatDialogClose,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    ReactiveFormsModule,
-    StringValidatorDirective,
-    FormsModule,
     NgFor,
-    MatRadioGroup,
-    MatRadioButton,
     TitleCasePipe,
+    ReactiveFormsModule,
+    FormsModule,
+    StringValidatorDirective,
+    NgIcon,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ZardRadioComponent,
+    ZardRadioGroupComponent,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideInfo,
+      lucideCircleCheck,
+      lucideTriangleAlert,
+      lucideCircleX,
+      lucideChevronRight,
+    }),
   ],
 })
 export class CommonDialogComponent implements OnInit, DoCheck {
@@ -114,6 +133,36 @@ export class CommonDialogComponent implements OnInit, DoCheck {
 
   Confirm() {
     this.cancelEvent.emit(null);
+  }
+
+  statusIcon(status: string): string {
+    switch ((status || '').toLowerCase()) {
+      case 'success':
+        return 'lucideCircleCheck';
+      case 'warn':
+      case 'warning':
+        return 'lucideTriangleAlert';
+      case 'error':
+      case 'fail':
+        return 'lucideCircleX';
+      default:
+        return 'lucideInfo';
+    }
+  }
+
+  statusColor(status: string): string {
+    switch ((status || '').toLowerCase()) {
+      case 'success':
+        return 'text-success';
+      case 'warn':
+      case 'warning':
+        return 'text-warning';
+      case 'error':
+      case 'fail':
+        return 'text-destructive';
+      default:
+        return 'text-info';
+    }
   }
 
   sessionTimeout: any;
