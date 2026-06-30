@@ -21,22 +21,19 @@
  */
 
 import { Component, OnInit, Inject, DoCheck } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogClose,
-  MatDialogContent,
-} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
-import { MatIcon } from '@angular/material/icon';
-import { CdkScrollable } from '@angular/cdk/scrolling';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
 
 @Component({
   selector: 'app-show-commit-and-version-details',
   templateUrl: './show-commit-and-version-details.component.html',
-  styleUrls: ['./show-commit-and-version-details.component.css'],
-  imports: [MatDialogClose, MatIcon, CdkScrollable, MatDialogContent],
+  imports: [NgIcon, ZardButtonComponent, ...ZardTableImports],
+  viewProviders: [provideIcons({ lucideX })],
 })
 export class ShowCommitAndVersionDetailsComponent implements OnInit, DoCheck {
   current_language_set: any;

@@ -1,24 +1,40 @@
-<div class="title">
-  <h4>{{ current_language_set?.files }}</h4>
+<div
+  class="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
+  <span class="text-base font-semibold text-foreground">
+    {{ current_language_set?.files }}
+  </span>
   <button
-    mat-icon-button
-    matDialogClose
-    matTooltip="{{ current_language_set?.common?.close }}"
-    (click)="closeDialog()"
-    class="pull-right exit mat_icon_white">
-    <mat-icon>close</mat-icon>
+    z-button
+    zType="ghost"
+    zSize="icon-sm"
+    type="button"
+    [zTooltip]="current_language_set?.common?.close"
+    zPosition="bottom"
+    [attr.aria-label]="current_language_set?.common?.close"
+    (click)="closeDialog()">
+    <ng-icon name="lucideX"></ng-icon>
   </button>
 </div>
+
 <div
-  class="container-fluid"
-  style="margin-bottom: 10px"
+  class="flex flex-wrap gap-2 p-4"
   *ngIf="fileObj && fileObj.length > 0">
-  <mat-chip
+  <span
     *ngFor="let file of fileObj"
-    [ngClass]="{ chipEdit: file.isUploaded }"
-    >{{ file.fileName }}
-    <mat-icon matChipRemove *ngIf="!file.isUploaded" (click)="remove(file)"
-      >cancel</mat-icon
-    >
-  </mat-chip>
+    class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium"
+    [ngClass]="
+      file.isUploaded
+        ? 'bg-muted text-muted-foreground'
+        : 'bg-secondary text-secondary-foreground'
+    ">
+    {{ file.fileName }}
+    <button
+      *ngIf="!file.isUploaded"
+      type="button"
+      class="inline-flex appearance-none items-center justify-center rounded-full border-0 bg-transparent p-0.5 text-current hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      [attr.aria-label]="current_language_set?.common?.close"
+      (click)="remove(file)">
+      <ng-icon name="lucideX" size="12"></ng-icon>
+    </button>
+  </span>
 </div>

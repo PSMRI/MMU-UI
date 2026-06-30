@@ -26,15 +26,17 @@ import { ConfirmationService } from '../../core/services/confirmation.service';
 import { DataSyncService } from './../shared/service/data-sync.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { NgIf, NgStyle, NgFor } from '@angular/common';
-import { MatIcon } from '@angular/material/icon';
+import { NgIf, NgFor } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX, lucideCheck } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 
 @Component({
   selector: 'app-master-download',
   templateUrl: './master-download.component.html',
-  styleUrls: ['./master-download.component.css'],
   providers: [DataSyncService],
-  imports: [NgIf, MatIcon, NgStyle, NgFor],
+  imports: [NgIf, NgFor, NgIcon, ZardButtonComponent],
+  viewProviders: [provideIcons({ lucideX, lucideCheck })],
 })
 export class MasterDownloadComponent implements OnInit {
   constructor(
