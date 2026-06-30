@@ -100,7 +100,7 @@
     <z-menu #helpMenu="zMenu">
       <button
         z-menu-item
-        class="flex items-center gap-2"
+        class="flex items-center gap-2 whitespace-nowrap"
         (click)="showVersionAndCommitDetails()">
         <ng-icon name="lucideInfo" size="16"></ng-icon>
         {{ currentLanguageSet?.version }} : {{ versionUI }}
