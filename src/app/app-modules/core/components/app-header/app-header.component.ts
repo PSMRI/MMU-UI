@@ -23,6 +23,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import packageJson from '../../../../../../package.json';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService, ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
@@ -306,13 +307,14 @@ export class AppHeaderComponent implements OnInit {
     }
   }
   commitDetailsUI: any;
-  versionUI: any;
+  // Displayed app version comes from package.json (single source of truth);
+  // git-version.json is still used for the commit hash in the details dialog.
+  versionUI = packageJson.version;
   getUIVersionAndCommitDetails() {
     const commitDetailsPath: any = 'assets/git-version.json';
     this.auth.getUIVersionAndCommitDetails(commitDetailsPath).subscribe(
       res => {
         this.commitDetailsUI = res;
-        this.versionUI = this.commitDetailsUI['version'];
       },
       err => {}
     );
@@ -330,8 +332,8 @@ export class AppHeaderComponent implements OnInit {
   constructAPIAndUIDetails(apiVersionAndCommitDetails: any) {
     const data = {
       commitDetailsUI: {
-        version: this.commitDetailsUI['version'],
-        commit: this.commitDetailsUI['commit'],
+        version: packageJson.version,
+        commit: this.commitDetailsUI?.['commit'],
       },
       commitDetailsAPI: {
         version: apiVersionAndCommitDetails['git.build.version'] || 'NA',
