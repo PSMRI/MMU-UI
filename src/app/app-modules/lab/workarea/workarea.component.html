@@ -51,8 +51,7 @@
                         {{ component.value.testComponentName }}
                       </z-card-title>
 
-                      <label
-                        z-checkbox
+                      <z-checkbox
                         formControlName="stripsNotavailable"
                         name="altNum"
                         (zCheckedChange)="onStripsCheckBox($event, i, j)"
@@ -61,18 +60,21 @@
                           current_language_set?.coreComponents
                             ?.stripsNotAvailable
                         }}
-                      </label>
+                      </z-checkbox>
 
                       <!-- TextBox component -->
                       <z-form-field
                         *ngIf="component.value.inputType === 'TextBox'">
-                        <label z-form-label>{{
-                          current_language_set?.common?.result
-                        }}</label>
+                        <label
+                          z-form-label
+                          [attr.for]="'lab-result-' + i + '-' + j"
+                          >{{ current_language_set?.common?.result }}</label
+                        >
                         <z-form-control>
                           <div class="flex items-center gap-2">
                             <input
                               z-input
+                              [id]="'lab-result-' + i + '-' + j"
                               class="flex-1"
                               autocomplete="off"
                               formControlName="inputValue"
@@ -139,14 +141,13 @@
                               j
                             )
                           ">
-                          <label
-                            z-radio
+                          <z-radio
                             *ngFor="
                               let radio of component?.controls.compOpt?.controls
                             "
                             [value]="radio.value.name">
                             {{ radio.value.name }}
-                          </label>
+                          </z-radio>
                         </z-radio-group>
 
                         <z-form-field
@@ -154,11 +155,15 @@
                             procedure.value.procedureName.includes('ECG') &&
                             enableEcgAbnormal
                           ">
-                          <label z-form-label zRequired
+                          <label
+                            z-form-label
+                            zRequired
+                            [attr.for]="'lab-ecg-' + i + '-' + j"
                             >ECG Abnormalities</label
                           >
                           <z-form-control>
                             <z-select
+                              [id]="'lab-ecg-' + i + '-' + j"
                               class="w-full"
                               [zMultiple]="true"
                               formControlName="ecgAbnormalities"
@@ -176,11 +181,14 @@
                       <!-- DropDown component -->
                       <z-form-field
                         *ngIf="component.value.inputType === 'DropDown'">
-                        <label z-form-label>{{
-                          current_language_set?.common?.result
-                        }}</label>
+                        <label
+                          z-form-label
+                          [attr.for]="'lab-dropdown-' + i + '-' + j"
+                          >{{ current_language_set?.common?.result }}</label
+                        >
                         <z-form-control>
                           <z-select
+                            [id]="'lab-dropdown-' + i + '-' + j"
                             class="w-full"
                             formControlName="compOptSelected"
                             [zPlaceholder]="
@@ -200,12 +208,15 @@
 
                       <!-- Remarks -->
                       <z-form-field>
-                        <label z-form-label>{{
-                          current_language_set?.common?.remarks
-                        }}</label>
+                        <label
+                          z-form-label
+                          [attr.for]="'lab-remarks-' + i + '-' + j"
+                          >{{ current_language_set?.common?.remarks }}</label
+                        >
                         <z-form-control>
                           <input
                             z-input
+                            [id]="'lab-remarks-' + i + '-' + j"
                             class="w-full"
                             autocomplete="off"
                             formControlName="remarks"
@@ -282,12 +293,13 @@
                   (change)="uploadFile($event, procedure?.value.procedureID)" />
 
                 <z-form-field>
-                  <label z-form-label>{{
-                    current_language_set?.common?.remarks
-                  }}</label>
+                  <label z-form-label [attr.for]="'lab-rad-remarks-' + m"
+                    >{{ current_language_set?.common?.remarks }}</label
+                  >
                   <z-form-control>
                     <input
                       z-input
+                      [id]="'lab-rad-remarks-' + m"
                       class="w-full"
                       autocomplete="off"
                       [formControl]="procedure.value.compDetails.remarks"
