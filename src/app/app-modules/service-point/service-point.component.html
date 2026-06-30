@@ -1,10 +1,10 @@
 <app-header [showRoles]="false"></app-header>
 
-<div class="flex justify-center px-4 py-10">
-  <z-card class="w-full max-w-xl">
-    <z-card-header class="items-center text-center">
+<div class="flex min-h-[calc(100svh-4rem)] items-center justify-center px-4">
+  <z-card class="w-full max-w-xl gap-3 py-4">
+    <z-card-header class="flex flex-col items-center gap-1 text-center">
       <img
-        class="mx-auto h-12 w-auto"
+        class="h-8 w-auto"
         src="assets/images/Swasthya.png"
         alt="Piramal Swasthya" />
       <z-card-title>{{
@@ -13,9 +13,9 @@
     </z-card-header>
 
     <z-card-content>
-      <form [formGroup]="servicePointForm" class="flex flex-col gap-6">
+      <form [formGroup]="servicePointForm" class="flex flex-col gap-4">
         <!-- Service Type -->
-        <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-1.5">
           <label z-form-label>{{ currentLanguageSet?.serviceType }}</label>
           <z-radio-group
             formControlName="sessionID"
@@ -31,8 +31,9 @@
           </z-radio-group>
         </div>
 
-        <!-- Van -->
-        <z-form-field>
+        <div class="flex flex-col gap-4">
+          <!-- Van -->
+          <z-form-field class="gap-1">
           <label z-form-label zRequired>{{ currentLanguageSet?.van }}</label>
           <z-form-control>
             <z-select
@@ -55,7 +56,7 @@
         </z-form-field>
 
         <!-- Service Point name -->
-        <z-form-field>
+        <z-form-field class="gap-1">
           <label z-form-label zRequired>{{
             currentLanguageSet?.casesheet?.servicePoint
           }}</label>
@@ -72,7 +73,7 @@
         </z-form-field>
 
         <!-- District / Town / City -->
-        <z-form-field>
+        <z-form-field class="gap-1">
           <label z-form-label zRequired>{{
             currentLanguageSet?.ro?.locInfo?.districtTownCity
           }}</label>
@@ -101,7 +102,7 @@
         </z-form-field>
 
         <!-- Taluk -->
-        <z-form-field>
+        <z-form-field class="gap-1">
           <label z-form-label zRequired>{{
             currentLanguageSet?.ro?.locInfo?.taluk
           }}</label>
@@ -125,11 +126,11 @@
           </z-form-control>
         </z-form-field>
 
-        <!-- Street -->
-        <z-form-field>
-          <label z-form-label zRequired>{{
-            currentLanguageSet?.ro?.locInfo?.street
-          }}</label>
+          <!-- Street -->
+          <z-form-field class="gap-1">
+            <label z-form-label zRequired>{{
+              currentLanguageSet?.ro?.locInfo?.street
+            }}</label>
           <z-form-control>
             <z-select
               class="w-full"
@@ -152,9 +153,10 @@
               </z-select-item>
             </z-select>
           </z-form-control>
-        </z-form-field>
+          </z-form-field>
+        </div>
 
-        <div class="flex justify-end pt-2">
+        <div class="flex justify-end pt-1">
           <button
             z-button
             type="button"

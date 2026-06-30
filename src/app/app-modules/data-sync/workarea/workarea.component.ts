@@ -59,7 +59,6 @@ import {
   ZardTableHeadComponent,
   ZardTableCellComponent,
 } from 'Common-UI/v2/ui/table';
-import { ZardBadgeComponent } from 'Common-UI/v2/ui/badge';
 
 @Component({
   selector: 'app-workarea',
@@ -80,7 +79,6 @@ import { ZardBadgeComponent } from 'Common-UI/v2/ui/badge';
     ZardTableRowComponent,
     ZardTableHeadComponent,
     ZardTableCellComponent,
-    ZardBadgeComponent,
   ],
   viewProviders: [
     provideIcons({
