@@ -1,747 +1,577 @@
-<div class="container-fluid" *ngIf="technicianForm">
-  <mat-sidenav-container class="example-sidenav-fab-container">
-    <mat-sidenav #sidenav mode="side" opened="false">
-      <div class="example-scrolling-content">
-        <app-beneficiary-details></app-beneficiary-details>
-      </div>
-    </mat-sidenav>
+<div class="relative px-4 py-6" *ngIf="technicianForm">
+  <form [formGroup]="technicianForm">
+    <z-tab-group>
+      <!-- ===================== LABORATORY INFORMATION ===================== -->
+      <z-tab
+        *ngIf="labForm"
+        [label]="
+          current_language_set?.labTechnicianData?.laboratoryinformation ||
+          'Laboratory Information'
+        ">
+        <section formArrayName="labForm" class="min-h-[400px] pt-4">
+          <z-accordion *ngIf="labTechnicianData()" class="flex flex-col gap-4">
+            <z-accordion-item
+              class="rounded-lg border border-border bg-card"
+              *ngFor="let procedure of labTechnicianData(); let i = index"
+              [zValue]="i.toString()"
+              [formGroupName]="i">
+              <div class="flex items-center gap-3 px-4">
+                <z-accordion-trigger class="flex-1 text-left">
+                  <span class="text-sm font-semibold text-foreground">
+                    {{ procedure.value.procedureName }}
+                  </span>
+                </z-accordion-trigger>
+                <button
+                  z-button
+                  zType="outline"
+                  zSize="sm"
+                  type="button"
+                  [zTooltip]="current_language_set?.startTest"
+                  *ngIf="procedure?.value?.procedureStartAPI !== undefined"
+                  (click)="openIOTModal(procedure, i); $event.stopPropagation()"
+                  (keydown.enter)="$event.stopPropagation()">
+                  {{ current_language_set?.coreComponents?.start }}
+                </button>
+              </div>
 
-    <div class="example-scrolling-content">
-      <form [formGroup]="technicianForm">
-        <mat-tab-group class="tabs_css">
-          <mat-tab
-            label="{{
-              current_language_set?.labTechnicianData?.laboratoryinformation
-            }}"
-            *ngIf="labForm">
-            <section
-              formArrayName="labForm"
-              class="container-fluid"
-              style="min-height: 400px">
-              <mat-accordion>
-                <div *ngIf="labTechnicianData()">
-                  <section
-                    class=""
-                    *ngFor="
-                      let procedure of labTechnicianData();
-                      let i = index;
-                      let isLast = last
-                    ">
-                    <ng-container [formGroupName]="i">
-                      <mat-expansion-panel
-                        [expanded]="i === stepExpand"
-                        hideToggle>
-                        <mat-expansion-panel-header>
-                          <mat-panel-title>
-                            <h5>{{ procedure.value.procedureName }}&nbsp;</h5>
-                          </mat-panel-title>
-                          <button
-                            matTooltip="{{ current_language_set?.startTest }}"
-                            md-button
-                            type="button"
-                            class="button-style"
-                            style="margin-right: 15px"
-                            *ngIf="
-                              procedure?.value?.procedureStartAPI !== undefined
-                            "
-                            (click)="
-                              openIOTModal(procedure, i);
-                              $event.stopPropagation()
-                            ">
-                            {{ current_language_set?.coreComponents?.start }}
-                          </button>
-                          <mat-panel-description> </mat-panel-description>
-                        </mat-expansion-panel-header>
-                        <div
-                          formArrayName="compListDetails"
-                          class="container-fluid">
-                          <div class="row">
-                            <div
-                              class="col-sm-4 col-md-4 cl-lg-4"
-                              style="margin-bottom: 20px"
-                              *ngFor="
-                                let component of procedure?.controls
-                                  .compListDetails.controls;
-                                let j = index;
-                                let innerLast = last
-                              ">
-                              <ng-container [formGroupName]="j">
-                                <mat-card style="margin-top: 10px; padding: 0">
-                                  <mat-card-title
-                                    style="padding: 15px"
-                                    class="overlay">
-                                    {{ component.value.testComponentName }}
-                                  </mat-card-title>
-
-                                  <mat-checkbox
-                                    color="accent"
-                                    formControlName="stripsNotavailable"
-                                    name="altNum"
-                                    style="padding-left: 4%"
-                                    (change)="onStripsCheckBox($event, i, j)"
-                                    *ngIf="
-                                      procedure.value.procedureName === testName
-                                    ">
-                                    {{
-                                      current_language_set?.coreComponents
-                                        ?.stripsNotAvailable
-                                    }}
-                                  </mat-checkbox>
-                                  <mat-card-content>
-                                    <section
-                                      class="container-fluid"
-                                      #textboxChoice
-                                      *ngIf="
-                                        component.value.inputType === 'TextBox'
-                                      ">
-                                      <div style="text-align: center" class="">
-                                        <mat-form-field
-                                          style="width: 93%; margin-left: -38px"
-                                          [ngClass]="{
-                                            'mat-input-invalid':
-                                              component.value.abnormal,
-                                            'mat-form-field-invalid':
-                                              component.value.abnormal,
-                                            'ng-invalid':
-                                              component.value.abnormal,
-                                            'ng-valid':
-                                              !component.value.abnormal,
-                                            'mat-input-valid':
-                                              !component.value.abnormal,
-                                            'mat-form-field-valid':
-                                              !component.value.abnormal
-                                          }">
-                                          <mat-label>{{
-                                            current_language_set?.common?.result
-                                          }}</mat-label>
-                                          <input
-                                            autocomplete="off"
-                                            matInput
-                                            formControlName="inputValue"
-                                            [allowText]="
-                                              component.value.allowText
-                                            "
-                                            maxLength="50"
-                                            (input)="checkNormalRange(i, j)"
-                                            (blur)="checkRange(i, j)"
-                                            [required]="
-                                              procedure.value.isMandatory ===
-                                                true &&
-                                              procedure.value.procedureName ===
-                                                testName &&
-                                              stripSelected === true
-                                                ? true
-                                                : false ||
-                                                    (procedure.value
-                                                      .procedureName !==
-                                                      testName &&
-                                                      procedure.value
-                                                        .isMandatory === true)
-                                                  ? true
-                                                  : false
-                                            " />
-
-                                          <mat-hint
-                                            >{{
-                                              current_language_set
-                                                ?.coreComponents?.range
-                                            }}
-                                            {{ component.value.range_min }}
-                                            {{
-                                              current_language_set
-                                                ?.coreComponents?.to
-                                            }}
-                                            {{
-                                              component.value.range_max
-                                            }}</mat-hint
-                                          >
-                                        </mat-form-field>
-                                        <span
-                                          style="
-                                            margin-top: unset;
-                                            font-weight: 700;
-                                          "
-                                          >{{ component.value.measurementUnit }}
-                                        </span>
-                                      </div>
-                                    </section>
-                                    <section
-                                      #radioChoice
-                                      *ngIf="
-                                        component.value.inputType ===
-                                        'RadioButton'
-                                      ">
-                                      <div>
-                                        <span
-                                          *ngIf="
-                                            procedure.value.isMandatory ===
-                                              true &&
-                                            procedure.value.procedureName ===
-                                              testName &&
-                                            stripSelected === true
-                                              ? true
-                                              : false ||
-                                                  (procedure.value
-                                                    .procedureName !==
-                                                    testName &&
-                                                    procedure.value
-                                                      .isMandatory === true)
-                                                ? true
-                                                : false
-                                          ">
-                                          <p style="font-size: 12px">
-                                            {{
-                                              current_language_set
-                                                ?.coreComponents?.mandatory
-                                            }}*
-                                          </p>
-                                        </span>
-
-                                        <mat-radio-group
-                                          formControlName="compOptSelected"
-                                          disableRipple="true"
-                                          (change)="
-                                            checkForEcg(
-                                              component.value.compOptSelected,
-                                              procedure.value.procedureName,
-                                              j
-                                            )
-                                          "
-                                          [required]="
-                                            procedure.value.isMandatory ===
-                                              true &&
-                                            procedure.value.procedureName ===
-                                              testName &&
-                                            stripSelected === true
-                                              ? true
-                                              : false ||
-                                                  (procedure.value
-                                                    .procedureName !==
-                                                    testName &&
-                                                    procedure.value
-                                                      .isMandatory === true)
-                                                ? true
-                                                : false
-                                          ">
-                                          <mat-radio-button
-                                            color="primary"
-                                            *ngFor="
-                                              let radio of component?.controls
-                                                .compOpt?.controls
-                                            "
-                                            class="radio-button"
-                                            [value]="radio.value.name">
-                                            {{ radio.value.name }}
-                                          </mat-radio-button>
-                                        </mat-radio-group>
-                                        <div>
-                                          <mat-form-field
-                                            *ngIf="
-                                              procedure.value.procedureName.includes(
-                                                'ECG'
-                                              ) && enableEcgAbnormal
-                                            ">
-                                            <mat-label
-                                              >ECG Abnormalities</mat-label
-                                            >
-                                            <mat-select
-                                              multiple
-                                              formControlName="ecgAbnormalities"
-                                              style="line-height: unset"
-                                              required>
-                                              <mat-option
-                                                *ngFor="
-                                                  let option of ecgAbnormalities
-                                                "
-                                                [value]="option.ecgAbnormality"
-                                                >{{ option.ecgAbnormality }}
-                                              </mat-option>
-                                            </mat-select>
-                                          </mat-form-field>
-                                        </div>
-                                      </div>
-                                    </section>
-                                    <section
-                                      #dropdownChoice
-                                      *ngIf="
-                                        component.value.inputType === 'DropDown'
-                                      ">
-                                      <div class="mat_form_field_width">
-                                        <mat-form-field>
-                                          <mat-label>{{
-                                            current_language_set?.common?.result
-                                          }}</mat-label>
-                                          <mat-select
-                                            formControlName="compOptSelected"
-                                            style="line-height: unset"
-                                            [required]="
-                                              procedure.value.isMandatory ===
-                                                true &&
-                                              procedure.value.procedureName ===
-                                                testName &&
-                                              stripSelected === true
-                                                ? true
-                                                : false ||
-                                                    (procedure.value
-                                                      .procedureName !==
-                                                      testName &&
-                                                      procedure.value
-                                                        .isMandatory === true)
-                                                  ? true
-                                                  : false
-                                            ">
-                                            <mat-option
-                                              *ngFor="
-                                                let options of component
-                                                  ?.controls.compOpt?.controls
-                                              "
-                                              [value]="options.value.name"
-                                              >{{ options.value.name }}
-                                            </mat-option>
-                                          </mat-select>
-                                        </mat-form-field>
-                                      </div>
-                                    </section>
-                                    <mat-form-field
-                                      class="mat_form_field_width">
-                                      <mat-label>{{
-                                        current_language_set?.common?.remarks
-                                      }}</mat-label>
-                                      <input
-                                        autocomplete="off"
-                                        matInput
-                                        formControlName="remarks"
-                                        allowText="alphanumericspace" />
-                                    </mat-form-field>
-                                  </mat-card-content>
-                                </mat-card>
-                              </ng-container>
-                            </div>
-                          </div>
-                        </div>
-                      </mat-expansion-panel>
-                    </ng-container>
-                  </section>
-                </div>
-              </mat-accordion>
-            </section>
-          </mat-tab>
-          <mat-tab
-            label="{{
-              current_language_set?.labTechnicianData?.radiologyimaging
-            }} "
-            *ngIf="radiologyForm">
-            <section
-              formArrayName="radiologyForm"
-              class="container-fluid"
-              style="min-height: 400px">
-              <section class="row" style="margin: 20px">
+              <z-accordion-content>
                 <div
-                  class="col-mat-6 col-lg-6"
-                  style="margin-top: 10px"
-                  *ngFor="
-                    let procedure of radiologyForm?.controls;
-                    let m = index;
-                    let isLast = last
-                  ">
-                  <ng-container [formGroupName]="m">
-                    <mat-card class="radio_newCard" style="height: 300px">
-                      <section class="overlay shade_full">
-                        <mat-card-title class="radio_proc_title">{{
-                          procedure?.value.procedureName | titlecase
-                        }}</mat-card-title>
-                      </section>
-                      <mat-card-content class="shade_full">
-                        <label
-                          for="upload-file"
-                          style="color: gray; margin-left: -25px">
-                          {{ current_language_set?.uploadFileSizeLimit }} :{{
-                            maxFileSize
-                          }}
-                          {{ current_language_set?.mb }} ,
-                          {{ current_language_set?.supportedFileFormats }}
-                        </label>
-                        <br />
-                        <section>
-                          <div class="col-xs-12 col-sm-12 col-mat-12 col-lg-12">
-                            <button
-                              mat-raised-button
-                              color="primary"
-                              class="pull-left mat_blue"
-                              (click)="filelist.click()">
-                              {{
-                                current_language_set?.nurseData
-                                  ?.visitDetailsForm?.selectFile
-                              }}
-                            </button>
-                            <button
-                              mat-raised-button
-                              color="primary"
-                              class="pull-right mat_blue"
-                              style="
-                                margin-top: 15px;
-                                position: absolute;
-                                margin-left: 100px;
-                              "
-                              *ngIf="
-                                fileObj &&
-                                (fileObj | json) !== '{}' &&
-                                fileObj[procedure?.value.procedureID]
-                              "
-                              (click)="
-                                openToViewFile(procedure?.value.procedureID)
-                              ">
-                              {{
-                                current_language_set?.nurseData
-                                  ?.visitDetailsForm?.viewFiles
-                              }}
-                            </button>
-                          </div>
-                          <div>
-                            <span class="span-style">
-                              <input
-                                autocomplete="off"
-                                type="file"
-                                #filelist
-                                style="display: inline-block"
-                                (change)="
-                                  uploadFile(
-                                    $event,
-                                    procedure?.value.procedureID
-                                  )
-                                " />
-                            </span>
+                  formArrayName="compListDetails"
+                  class="grid grid-cols-1 gap-4 px-4 sm:grid-cols-2 lg:grid-cols-3">
+                  <z-card
+                    class="bg-background"
+                    *ngFor="
+                      let component of procedure?.controls.compListDetails
+                        .controls;
+                      let j = index
+                    "
+                    [formGroupName]="j">
+                    <z-card-content class="flex flex-col gap-4 p-4">
+                      <z-card-title class="text-base">
+                        {{ component.value.testComponentName }}
+                      </z-card-title>
 
-                            <div
-                              class="col-xs-12 col-sm-12 col-mat-12 col-lg-12 margin-style">
-                              <button
-                                mat-raised-button
-                                color="primary"
-                                class="pull-right mat_blue"
-                                style="margin-top: 60px"
-                                (click)="
-                                  saveUploadDetails(
-                                    procedure?.value.procedureID
-                                  )
-                                ">
-                                {{
-                                  current_language_set?.nurseData
-                                    ?.visitDetailsForm?.uploadFiles
-                                }}
-                              </button>
-                            </div>
-                            <div>
-                              <mat-form-field [style.width]="'95%'">
-                                <mat-label>{{
-                                  current_language_set?.common?.remarks
-                                }}</mat-label>
-                                <input
-                                  autocomplete="off"
-                                  matInput
-                                  [formControl]="
-                                    procedure.value.compDetails.remarks
-                                  "
-                                  allowText="alphanumericspace"
-                                  maxLength="300" />
-                              </mat-form-field>
-                            </div>
-                          </div>
-                        </section>
-                      </mat-card-content>
-                    </mat-card>
-                  </ng-container>
-                </div>
-              </section>
-            </section>
-          </mat-tab>
-          <mat-tab
-            label="{{ current_language_set?.externalInvest }} "
-            *ngIf="externalForm">
-            <form [formGroup]="externalForm">
-              <section style="min-height: 400px">
-                <div class="container">
-                  <div class="row">
-                    <mat-card>
-                      <mat-card-title>
+                      <label
+                        z-checkbox
+                        formControlName="stripsNotavailable"
+                        name="altNum"
+                        (zCheckedChange)="onStripsCheckBox($event, i, j)"
+                        *ngIf="procedure.value.procedureName === testName">
                         {{
                           current_language_set?.coreComponents
-                            ?.belowExternalTestRequired
+                            ?.stripsNotAvailable
                         }}
-                      </mat-card-title>
-                      <mat-card-subtitle>
-                        {{ externalForm.value.tests }}
-                      </mat-card-subtitle>
-                    </mat-card>
-                  </div>
+                      </label>
+
+                      <!-- TextBox component -->
+                      <z-form-field
+                        *ngIf="component.value.inputType === 'TextBox'">
+                        <label z-form-label>{{
+                          current_language_set?.common?.result
+                        }}</label>
+                        <z-form-control>
+                          <div class="flex items-center gap-2">
+                            <input
+                              z-input
+                              class="flex-1"
+                              autocomplete="off"
+                              formControlName="inputValue"
+                              [allowText]="component.value.allowText"
+                              maxLength="50"
+                              (input)="checkNormalRange(i, j)"
+                              (blur)="checkRange(i, j)"
+                              [class.border-destructive]="
+                                component.value.abnormal
+                              "
+                              [required]="
+                                procedure.value.isMandatory === true &&
+                                procedure.value.procedureName === testName &&
+                                stripSelected === true
+                                  ? true
+                                  : false ||
+                                      (procedure.value.procedureName !==
+                                        testName &&
+                                        procedure.value.isMandatory === true)
+                                    ? true
+                                    : false
+                              " />
+                            <span class="font-bold text-foreground">{{
+                              component.value.measurementUnit
+                            }}</span>
+                          </div>
+                        </z-form-control>
+                        <span z-form-message class="text-muted-foreground">
+                          {{ current_language_set?.coreComponents?.range }}
+                          {{ component.value.range_min }}
+                          {{ current_language_set?.coreComponents?.to }}
+                          {{ component.value.range_max }}
+                        </span>
+                      </z-form-field>
+
+                      <!-- RadioButton component -->
+                      <div
+                        class="flex flex-col gap-2"
+                        *ngIf="component.value.inputType === 'RadioButton'">
+                        <span
+                          class="text-xs text-muted-foreground"
+                          *ngIf="
+                            procedure.value.isMandatory === true &&
+                            procedure.value.procedureName === testName &&
+                            stripSelected === true
+                              ? true
+                              : false ||
+                                  (procedure.value.procedureName !== testName &&
+                                    procedure.value.isMandatory === true)
+                                ? true
+                                : false
+                          ">
+                          {{ current_language_set?.coreComponents?.mandatory }}*
+                        </span>
+
+                        <z-radio-group
+                          formControlName="compOptSelected"
+                          zOrientation="horizontal"
+                          class="flex-wrap gap-4"
+                          (zChange)="
+                            checkForEcg(
+                              component.value.compOptSelected,
+                              procedure.value.procedureName,
+                              j
+                            )
+                          ">
+                          <label
+                            z-radio
+                            *ngFor="
+                              let radio of component?.controls.compOpt?.controls
+                            "
+                            [value]="radio.value.name">
+                            {{ radio.value.name }}
+                          </label>
+                        </z-radio-group>
+
+                        <z-form-field
+                          *ngIf="
+                            procedure.value.procedureName.includes('ECG') &&
+                            enableEcgAbnormal
+                          ">
+                          <label z-form-label zRequired
+                            >ECG Abnormalities</label
+                          >
+                          <z-form-control>
+                            <z-select
+                              class="w-full"
+                              [zMultiple]="true"
+                              formControlName="ecgAbnormalities"
+                              zPlaceholder="ECG Abnormalities">
+                              <z-select-item
+                                *ngFor="let option of ecgAbnormalities"
+                                [zValue]="option.ecgAbnormality">
+                                {{ option.ecgAbnormality }}
+                              </z-select-item>
+                            </z-select>
+                          </z-form-control>
+                        </z-form-field>
+                      </div>
+
+                      <!-- DropDown component -->
+                      <z-form-field
+                        *ngIf="component.value.inputType === 'DropDown'">
+                        <label z-form-label>{{
+                          current_language_set?.common?.result
+                        }}</label>
+                        <z-form-control>
+                          <z-select
+                            class="w-full"
+                            formControlName="compOptSelected"
+                            [zPlaceholder]="
+                              current_language_set?.common?.result || 'Result'
+                            ">
+                            <z-select-item
+                              *ngFor="
+                                let options of component?.controls.compOpt
+                                  ?.controls
+                              "
+                              [zValue]="options.value.name">
+                              {{ options.value.name }}
+                            </z-select-item>
+                          </z-select>
+                        </z-form-control>
+                      </z-form-field>
+
+                      <!-- Remarks -->
+                      <z-form-field>
+                        <label z-form-label>{{
+                          current_language_set?.common?.remarks
+                        }}</label>
+                        <z-form-control>
+                          <input
+                            z-input
+                            class="w-full"
+                            autocomplete="off"
+                            formControlName="remarks"
+                            allowText="alphanumericspace" />
+                        </z-form-control>
+                      </z-form-field>
+                    </z-card-content>
+                  </z-card>
                 </div>
-              </section>
-            </form>
-          </mat-tab>
-          <mat-tab
-            label="{{ current_language_set?.labTechnicianData?.labResults }}"
-            *ngIf="archiveList && archiveList.length">
-            <section style="min-height: 400px">
-              <mat-card style="min-height: 400px">
-                <div *ngIf="filteredLaboratoryData.length > 0">
-                  <mat-form-field id="filterbox" class="m-t-20">
+              </z-accordion-content>
+            </z-accordion-item>
+          </z-accordion>
+        </section>
+      </z-tab>
+
+      <!-- ===================== RADIOLOGY / IMAGING ===================== -->
+      <z-tab
+        *ngIf="radiologyForm"
+        [label]="
+          current_language_set?.labTechnicianData?.radiologyimaging ||
+          'Radiology / Imaging'
+        ">
+        <section formArrayName="radiologyForm" class="min-h-[400px] pt-4">
+          <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <z-card
+              *ngFor="let procedure of radiologyForm?.controls; let m = index"
+              [formGroupName]="m">
+              <z-card-content class="flex flex-col gap-4 p-4">
+                <z-card-title class="text-base">{{
+                  procedure?.value.procedureName | titlecase
+                }}</z-card-title>
+
+                <p class="text-sm text-muted-foreground">
+                  {{ current_language_set?.uploadFileSizeLimit }} :{{
+                    maxFileSize
+                  }}
+                  {{ current_language_set?.mb }},
+                  {{ current_language_set?.supportedFileFormats }}
+                </p>
+
+                <div class="flex flex-wrap items-center gap-3">
+                  <button
+                    z-button
+                    zType="outline"
+                    type="button"
+                    (click)="filelist.click()">
+                    {{
+                      current_language_set?.nurseData?.visitDetailsForm
+                        ?.selectFile
+                    }}
+                  </button>
+                  <button
+                    z-button
+                    zType="outline"
+                    type="button"
+                    *ngIf="
+                      fileObj &&
+                      (fileObj | json) !== '{}' &&
+                      fileObj[procedure?.value.procedureID]
+                    "
+                    (click)="openToViewFile(procedure?.value.procedureID)">
+                    {{
+                      current_language_set?.nurseData?.visitDetailsForm
+                        ?.viewFiles
+                    }}
+                  </button>
+                </div>
+
+                <input
+                  autocomplete="off"
+                  type="file"
+                  #filelist
+                  class="block w-full text-sm text-muted-foreground file:mr-3 file:rounded-md file:border file:border-input file:bg-background file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-foreground hover:file:bg-accent"
+                  (change)="uploadFile($event, procedure?.value.procedureID)" />
+
+                <z-form-field>
+                  <label z-form-label>{{
+                    current_language_set?.common?.remarks
+                  }}</label>
+                  <z-form-control>
                     <input
+                      z-input
+                      class="w-full"
                       autocomplete="off"
-                      matInput
-                      placeholder="{{
-                        current_language_set?.labTechnicianData?.inTableSearch
-                      }}"
-                      #filterTerm
-                      (keyup)="filterProceduresLab(filterTerm.value)" />
-                    <mat-icon matSuffix>search</mat-icon>
-                  </mat-form-field>
-                </div>
-                <div class="clearfix"></div>
-                <section class="table-responsive">
-                  <mat-table [dataSource]="laboratoryData">
-                    <ng-container matColumnDef="date">
-                      <mat-header-cell *matHeaderCellDef>{{
-                        current_language_set?.common?.date
-                      }}</mat-header-cell>
-                      <mat-cell *matCellDef="let row">{{
-                        row.createdDate | date: 'dd/MM/yyyy, h:mm a'
-                      }}</mat-cell>
-                    </ng-container>
+                      [formControl]="procedure.value.compDetails.remarks"
+                      allowText="alphanumericspace"
+                      maxLength="300" />
+                  </z-form-control>
+                </z-form-field>
 
-                    <ng-container matColumnDef="testName">
-                      <mat-header-cell *matHeaderCellDef>{{
-                        current_language_set?.labTechnicianData.testName
-                      }}</mat-header-cell>
-                      <mat-cell *matCellDef="let row">{{
-                        row.procedureName
-                      }}</mat-cell>
-                    </ng-container>
+                <button
+                  z-button
+                  type="button"
+                  class="self-end"
+                  (click)="saveUploadDetails(procedure?.value.procedureID)">
+                  {{
+                    current_language_set?.nurseData?.visitDetailsForm
+                      ?.uploadFiles
+                  }}
+                </button>
+              </z-card-content>
+            </z-card>
+          </div>
+        </section>
+      </z-tab>
 
-                    <ng-container matColumnDef="componentName">
-                      <mat-header-cell *matHeaderCellDef>{{
-                        current_language_set?.labTechnicianData.componentName
-                      }}</mat-header-cell>
-                      <mat-cell *matCellDef="let row">{{
-                        row.componentList[0]?.componentName
-                      }}</mat-cell>
-                    </ng-container>
+      <!-- ===================== EXTERNAL INVESTIGATIONS ===================== -->
+      <z-tab
+        *ngIf="externalForm"
+        [label]="
+          current_language_set?.externalInvest || 'External Investigations'
+        ">
+        <section formGroupName="externalForm" class="min-h-[400px] pt-4">
+          <z-card>
+            <z-card-content class="flex flex-col gap-2 p-4">
+              <z-card-title class="text-base">
+                {{
+                  current_language_set?.coreComponents
+                    ?.belowExternalTestRequired
+                }}
+              </z-card-title>
+              <p class="text-sm text-muted-foreground">
+                {{ externalForm.value.tests }}
+              </p>
+            </z-card-content>
+          </z-card>
+        </section>
+      </z-tab>
 
-                    <ng-container matColumnDef="result">
-                      <mat-header-cell *matHeaderCellDef>{{
-                        current_language_set?.common?.result
-                      }}</mat-header-cell>
-                      <mat-cell *matCellDef="let row">{{
-                        row.componentList[0]?.testResultValue
-                      }}</mat-cell>
-                    </ng-container>
+      <!-- ===================== LAB RESULTS ===================== -->
+      <z-tab
+        *ngIf="archiveList && archiveList.length"
+        [label]="
+          current_language_set?.labTechnicianData?.labResults || 'Lab Results'
+        ">
+        <section class="min-h-[400px] pt-4">
+          <z-card>
+            <z-card-content class="flex flex-col gap-4 p-4">
+              <div
+                class="relative flex max-w-96 items-center"
+                *ngIf="filteredLaboratoryData.length > 0">
+                <ng-icon
+                  class="pointer-events-none absolute left-2.5 text-muted-foreground"
+                  name="lucideSearch"
+                  size="18"></ng-icon>
+                <input
+                  z-input
+                  type="search"
+                  class="w-full bg-background pl-9"
+                  autocomplete="off"
+                  [placeholder]="
+                    current_language_set?.labTechnicianData?.inTableSearch
+                  "
+                  name="laboratoryFilterTerm"
+                  [(ngModel)]="laboratoryFilterTerm"
+                  [ngModelOptions]="{ standalone: true }"
+                  (ngModelChange)="filterProceduresLab($event)" />
+              </div>
 
-                    <ng-container matColumnDef="measurementUnit">
-                      <mat-header-cell *matHeaderCellDef>{{
-                        current_language_set?.labTechnicianData.measurementUnit
-                      }}</mat-header-cell>
-                      <mat-cell *matCellDef="let row">{{
-                        row.componentList[0]?.testResultUnit
-                      }}</mat-cell>
-                    </ng-container>
+              <div class="w-full overflow-x-auto">
+                <table z-table>
+                  <thead z-table-header>
+                    <tr z-table-row>
+                      <th z-table-head>
+                        {{ current_language_set?.common?.date }}
+                      </th>
+                      <th z-table-head>
+                        {{ current_language_set?.labTechnicianData.testName }}
+                      </th>
+                      <th z-table-head>
+                        {{
+                          current_language_set?.labTechnicianData.componentName
+                        }}
+                      </th>
+                      <th z-table-head>
+                        {{ current_language_set?.common?.result }}
+                      </th>
+                      <th z-table-head>
+                        {{
+                          current_language_set?.labTechnicianData
+                            .measurementUnit
+                        }}
+                      </th>
+                      <th z-table-head>
+                        {{ current_language_set?.common?.remarks }}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody z-table-body>
+                    <tr z-table-row *ngFor="let row of laboratoryData">
+                      <td z-table-cell>
+                        {{ row.createdDate | date: 'dd/MM/yyyy, h:mm a' }}
+                      </td>
+                      <td z-table-cell>{{ row.procedureName }}</td>
+                      <td z-table-cell>
+                        {{ row.componentList[0]?.componentName }}
+                      </td>
+                      <td z-table-cell>
+                        {{ row.componentList[0]?.testResultValue }}
+                      </td>
+                      <td z-table-cell>
+                        {{ row.componentList[0]?.testResultUnit }}
+                      </td>
+                      <td z-table-cell>{{ row.componentList[0]?.remarks }}</td>
+                    </tr>
+                    <tr z-table-row *ngIf="laboratoryData.length === 0">
+                      <td
+                        z-table-cell
+                        colspan="6"
+                        class="h-24 text-center text-muted-foreground">
+                        {{ current_language_set?.Reports?.notestresultsfound }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
 
-                    <ng-container matColumnDef="remarks">
-                      <mat-header-cell *matHeaderCellDef>{{
-                        current_language_set?.common?.remarks
-                      }}</mat-header-cell>
-                      <mat-cell *matCellDef="let row">{{
-                        row.componentList[0]?.remarks
-                      }}</mat-cell>
-                    </ng-container>
+              <div
+                *ngIf="laboratoryData.length > 0"
+                class="text-sm text-muted-foreground">
+                {{ current_language_set?.common?.totalCount }} :
+                {{ laboratoryData.length }}
+              </div>
+            </z-card-content>
+          </z-card>
+        </section>
+      </z-tab>
 
-                    <mat-header-row
-                      *matHeaderRowDef="[
-                        'date',
-                        'testName',
-                        'componentName',
-                        'result',
-                        'measurementUnit',
-                        'remarks'
-                      ]"></mat-header-row>
-                    <mat-row
-                      *matRowDef="
-                        let row;
-                        columns: [
-                          'date',
-                          'testName',
-                          'componentName',
-                          'result',
-                          'measurementUnit',
-                          'remarks'
-                        ]
-                      "></mat-row>
-                  </mat-table>
-                  <div *ngIf="laboratoryData.data.length === 0">
-                    <h3>
-                      {{ current_language_set?.Reports?.notestresultsfound }}
-                    </h3>
-                  </div>
-                  <div
-                    *ngIf="laboratoryData.data.length > 0"
-                    class="totalCount">
-                    {{ current_language_set?.common?.totalCount }} :
-                    {{ laboratoryData.data.length }}
-                  </div>
-                  <mat-paginator
-                    [hidden]="laboratoryData.data.length > 0"
-                    [pageSize]="5"
-                    showFirstLastButtons></mat-paginator>
-                </section>
-              </mat-card>
-            </section>
-          </mat-tab>
-          <mat-tab
-            label="{{
-              current_language_set?.labTechnicianData?.radiologyResults
-            }}"
-            *ngIf="archiveList && archiveList.length">
-            <section style="min-height: 400px">
-              <mat-card style="min-height: 400px">
-                <div *ngIf="filteredRadiologyData.length > 0">
-                  <mat-form-field id="filterbox" class="m-t-20">
-                    <input
-                      autocomplete="off"
-                      matInput
-                      placeholder="{{
-                        current_language_set?.labTechnicianData?.inTableSearch
-                      }}"
-                      #filterTerm
-                      (keyup)="filterProceduresRadiology(filterTerm.value)" />
-                    <mat-icon matSuffix>search</mat-icon>
-                  </mat-form-field>
-                </div>
-                <div class="clearfix"></div>
-                <section class="table-responsive">
-                  <mat-table [dataSource]="radiologyFile">
-                    <ng-container matColumnDef="date1">
-                      <mat-header-cell *matHeaderCellDef>{{
-                        current_language_set?.common?.date
-                      }}</mat-header-cell>
-                      <mat-cell *matCellDef="let row">{{
-                        row.createdDate | date: 'dd/MM/yyyy, h:mm a'
-                      }}</mat-cell>
-                    </ng-container>
+      <!-- ===================== RADIOLOGY RESULTS ===================== -->
+      <z-tab
+        *ngIf="archiveList && archiveList.length"
+        [label]="
+          current_language_set?.labTechnicianData?.radiologyResults ||
+          'Radiology Results'
+        ">
+        <section class="min-h-[400px] pt-4">
+          <z-card>
+            <z-card-content class="flex flex-col gap-4 p-4">
+              <div
+                class="relative flex max-w-96 items-center"
+                *ngIf="filteredRadiologyData.length > 0">
+                <ng-icon
+                  class="pointer-events-none absolute left-2.5 text-muted-foreground"
+                  name="lucideSearch"
+                  size="18"></ng-icon>
+                <input
+                  z-input
+                  type="search"
+                  class="w-full bg-background pl-9"
+                  autocomplete="off"
+                  [placeholder]="
+                    current_language_set?.labTechnicianData?.inTableSearch
+                  "
+                  name="radiologyFilterTerm"
+                  [(ngModel)]="radiologyFilterTerm"
+                  [ngModelOptions]="{ standalone: true }"
+                  (ngModelChange)="filterProceduresRadiology($event)" />
+              </div>
 
-                    <ng-container matColumnDef="testName1">
-                      <mat-header-cell *matHeaderCellDef>{{
-                        current_language_set?.labTechnicianData.testName
-                      }}</mat-header-cell>
-                      <mat-cell *matCellDef="let row">{{
-                        row.procedureName
-                      }}</mat-cell>
-                    </ng-container>
+              <div class="w-full overflow-x-auto">
+                <table z-table>
+                  <thead z-table-header>
+                    <tr z-table-row>
+                      <th z-table-head>
+                        {{ current_language_set?.common?.date }}
+                      </th>
+                      <th z-table-head>
+                        {{ current_language_set?.labTechnicianData.testName }}
+                      </th>
+                      <th z-table-head>
+                        {{
+                          current_language_set?.labTechnicianData.componentName
+                        }}
+                      </th>
+                      <th z-table-head>
+                        {{ current_language_set?.common?.result }}
+                      </th>
+                      <th z-table-head>
+                        {{
+                          current_language_set?.labTechnicianData
+                            .measurementUnit
+                        }}
+                      </th>
+                      <th z-table-head>
+                        {{ current_language_set?.common?.remarks }}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody z-table-body>
+                    <tr z-table-row *ngFor="let row of radiologyFile">
+                      <td z-table-cell>
+                        {{ row.createdDate | date: 'dd/MM/yyyy, h:mm a' }}
+                      </td>
+                      <td z-table-cell>{{ row.procedureName }}</td>
+                      <td z-table-cell>
+                        {{ row.componentList[0]?.componentName }}
+                      </td>
+                      <td z-table-cell>{{ row.componentList[0]?.remarks }}</td>
+                      <td z-table-cell></td>
+                      <td z-table-cell></td>
+                    </tr>
+                    <tr z-table-row *ngIf="radiologyFile.length === 0">
+                      <td
+                        z-table-cell
+                        colspan="6"
+                        class="h-24 text-center text-muted-foreground">
+                        {{
+                          current_language_set?.Reports?.noradiologyreportsfound
+                        }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
 
-                    <ng-container matColumnDef="componentName1">
-                      <mat-header-cell *matHeaderCellDef>{{
-                        current_language_set?.labTechnicianData.componentName
-                      }}</mat-header-cell>
-                      <mat-cell *matCellDef="let row">{{
-                        row.componentList[0]?.componentName
-                      }}</mat-cell>
-                    </ng-container>
+              <div
+                *ngIf="radiologyFile.length > 0"
+                class="text-sm text-muted-foreground">
+                {{ current_language_set?.common?.totalCount }} :
+                {{ radiologyFile.length }}
+              </div>
+            </z-card-content>
+          </z-card>
+        </section>
+      </z-tab>
+    </z-tab-group>
+  </form>
 
-                    <ng-container matColumnDef="result1">
-                      <mat-header-cell *matHeaderCellDef>{{
-                        current_language_set?.common?.result
-                      }}</mat-header-cell>
-                      <mat-cell *matCellDef="let row">{{
-                        row.componentList[0]?.remarks
-                      }}</mat-cell>
-                    </ng-container>
+  <!-- Action buttons -->
+  <div class="mt-6 mb-8 flex justify-end gap-3">
+    <button
+      z-button
+      zType="outline"
+      id="resetButton"
+      type="button"
+      [disabled]="!technicianForm.dirty"
+      (click)="confirmFormReset()">
+      {{ current_language_set?.common?.reset }}
+    </button>
+    <button
+      z-button
+      id="submitButton"
+      type="button"
+      [disabled]="technicianForm.invalid"
+      (click)="validateSubmit(true)">
+      {{ current_language_set?.common?.submit }}
+    </button>
+  </div>
 
-                    <ng-container matColumnDef="measurementUnit1">
-                      <mat-header-cell *matHeaderCellDef>{{
-                        current_language_set?.labTechnicianData.measurementUnit
-                      }}</mat-header-cell>
-                      <mat-cell *matCellDef="let row"></mat-cell>
-                    </ng-container>
+  <!-- Beneficiary details sheet trigger -->
+  <button
+    z-button
+    zType="default"
+    zSize="icon"
+    type="button"
+    class="fixed bottom-12 left-5 z-30 rounded-full shadow-lg"
+    [zTooltip]="current_language_set?.common?.beneficiaryDetails"
+    zPosition="right"
+    (click)="toggleSidenav()">
+    <ng-icon name="lucideUserRound"></ng-icon>
+  </button>
 
-                    <ng-container matColumnDef="remarks1">
-                      <mat-header-cell *matHeaderCellDef>{{
-                        current_language_set?.common?.remarks
-                      }}</mat-header-cell>
-                      <mat-cell *matCellDef="let row"></mat-cell>
-                    </ng-container>
-
-                    <mat-header-row
-                      *matHeaderRowDef="[
-                        'date1',
-                        'testName1',
-                        'componentName1',
-                        'result1',
-                        'measurementUnit1',
-                        'remarks1'
-                      ]"></mat-header-row>
-                    <mat-row
-                      *matRowDef="
-                        let row;
-                        columns: [
-                          'date1',
-                          'testName1',
-                          'componentName1',
-                          'result1',
-                          'measurementUnit1',
-                          'remarks1'
-                        ]
-                      "></mat-row>
-                  </mat-table>
-
-                  <div *ngIf="radiologyFile.data.length === 0">
-                    <h3>
-                      {{
-                        current_language_set?.Reports?.noradiologyreportsfound
-                      }}
-                    </h3>
-                  </div>
-                  <div *ngIf="radiologyFile.data.length > 0" class="totalCount">
-                    {{ current_language_set?.common?.totalCount }} :
-                    {{ radiologyFile.data.length }}
-                  </div>
-                  <mat-paginator
-                    [hidden]="radiologyFile.data.length > 0"
-                    [pageSize]="5"
-                    showFirstLastButtons></mat-paginator>
-                </section>
-              </mat-card>
-            </section>
-          </mat-tab>
-        </mat-tab-group>
-      </form>
-      <div class="row m-t-20" style="margin-bottom: 30px">
-        <div class="col-sm-12 step-btn" style="float: right">
-          <button
-            mat-raised-button
-            id="submitButton"
-            class="mat_blue"
-            color="primary"
-            (click)="validateSubmit(true)"
-            [disabled]="technicianForm.invalid"
-            type="submit">
-            {{ current_language_set?.common?.submit }}
-          </button>
-          <button
-            id="resetButton"
-            [disabled]="!technicianForm.dirty"
-            mat-raised-button
-            class="mat_blue"
-            color="primary"
-            type="submit"
-            (click)="confirmFormReset()">
-            {{ current_language_set?.common?.reset }}
-          </button>
-        </div>
-      </div>
-      <button
-        mat-mini-fab
-        class="example-fab mat_blue_circle"
-        color="primary"
-        style="margin-bottom: 40px"
-        (click)="sideNavModeChange(sidenav)">
-        <mat-icon>account_box</mat-icon>
-      </button>
-    </div>
-  </mat-sidenav-container>
+  <z-sheet
+    [(zOpen)]="sidenavOpen"
+    zSide="left"
+    [zTitle]="current_language_set?.common?.beneficiaryDetails || ''">
+    <app-beneficiary-details></app-beneficiary-details>
+  </z-sheet>
 </div>

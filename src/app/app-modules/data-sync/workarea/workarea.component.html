@@ -1,294 +1,262 @@
-<div class="container-fluid">
-  <div class="row m-t-10 m-b-30">
-    <div class="col-xs-12">
-      <mat-tab-group class="tabs_css">
-        <mat-tab label="Data Upload" [disabled]="showProgressBar">
-          <mat-drawer-container class="example-container m-t-10">
-            <div
-              class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
-              style="text-align: center; padding: 20px">
-              <button
-                *ngIf="displaySyncBool"
-                mat-raised-button
-                color="primary"
-                class="mat_blue"
-                (click)="syncGroups()"
-                color="primary">
-                {{ current_language_set?.startDataSync }}
-              </button>
-            </div>
-            <section
-              class="table-responsive"
-              style="padding-bottom: 20px !important; border: unset">
-              <table
-                aria-describedby="synctable"
-                class="table table-striped"
-                *ngIf="showTable">
-                <thead>
-                  <tr>
-                    <th id="empty">&nbsp;</th>
-                    <th id="SYNCTableGroupName">
+<div class="mx-auto w-full max-w-5xl px-4 py-6">
+  <z-tab-group>
+    <!-- Tab 1 — Data Upload -->
+    <z-tab label="Data Upload">
+      <div class="space-y-6 pt-6">
+        <div *ngIf="displaySyncBool" class="flex justify-center">
+          <button z-button type="button" (click)="syncGroups()">
+            <ng-icon name="lucideRefreshCw"></ng-icon>
+            {{ current_language_set?.startDataSync }}
+          </button>
+        </div>
+
+        <z-card *ngIf="showTable">
+          <z-card-content class="p-2">
+            <div class="w-full overflow-x-auto">
+              <table z-table aria-describedby="synctable">
+                <thead z-table-header>
+                  <tr z-table-row>
+                    <th z-table-head class="w-1" id="empty">
+                      <span class="sr-only">Status</span>
+                    </th>
+                    <th z-table-head id="SYNCTableGroupName">
                       {{
                         current_language_set?.coreComponents?.sYNCTableGroupName
                       }}
                     </th>
-                    <th id="sync">
+                    <th z-table-head id="sync">
                       {{ current_language_set?.coreComponents?.sYNC }}
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody z-table-body>
                   <ng-container
                     *ngIf="
                       syncTableGroupList && syncTableGroupList.length === 0;
                       else groupList
                     ">
-                    <tr *ngFor="let row of blankTable">
-                      <td>&nbsp;</td>
-                      <td>&nbsp;</td>
-                      <td>&nbsp;</td>
+                    <tr z-table-row *ngFor="let row of blankTable">
+                      <td z-table-cell>&nbsp;</td>
+                      <td z-table-cell>&nbsp;</td>
+                      <td z-table-cell>&nbsp;</td>
                     </tr>
                   </ng-container>
                   <ng-template #groupList>
                     <tr
-                      *ngFor="let syncTableGroup of syncTableGroupList"
-                      class="table-hover">
-                      <td>
-                        <div
-                          [ngClass]="{
-                            visitStatus: true,
-                            'p-f-c': syncTableGroup.status === 'partial' ||
-                              syncTableGroup.status === 'pending',
-                            'c-d': syncTableGroup.status === 'completed' ||
-                              syncTableGroup.status === 'success',
-                            't-d': syncTableGroup.status === 'failed'
-                          }"></div>
+                      z-table-row
+                      *ngFor="let syncTableGroup of syncTableGroupList">
+                      <td
+                        z-table-cell
+                        class="border-l-[3px]"
+                        [class.border-l-info]="
+                          syncTableGroup.status === 'pending'
+                        "
+                        [class.border-l-warning]="
+                          syncTableGroup.status === 'partial'
+                        "
+                        [class.border-l-success]="
+                          syncTableGroup.status === 'completed' ||
+                          syncTableGroup.status === 'success'
+                        "
+                        [class.border-l-destructive]="
+                          syncTableGroup.status === 'failed'
+                        "
+                        [class.border-l-transparent]="!syncTableGroup.status">
+                        &nbsp;
                       </td>
-                      <td>
+                      <td z-table-cell>
                         {{ syncTableGroup?.syncTableGroupName }}
                       </td>
-                      <td>
-                        <span
-                          class="material-icons"
-                          style="color: #0b69b2;"
+                      <td z-table-cell>
+                        <ng-icon
                           *ngIf="syncTableGroup.status === 'pending'"
-                          >hourglass_empty</span
-                        >
-                        <span
-                          class="material-icons"
-                          style="color: #eaaa26;"
+                          class="text-info"
+                          name="lucideHourglass"
+                          size="20"
+                          aria-label="Pending for data sync"></ng-icon>
+                        <ng-icon
                           *ngIf="syncTableGroup.status === 'partial'"
-                          >indeterminate_check_box</span
-                        >
-                        <span
-                          class="material-icons"
-                          style="color: #43760f;"
-                          *ngIf="syncTableGroup.status === 'success' || syncTableGroup.status === 'completed'"
-                          >check_circle</span
-                        >
-                        <span
-                          class="material-icons"
-                          style="color: #e44e4f;"
+                          class="text-warning"
+                          name="lucideSquareMinus"
+                          size="20"
+                          aria-label="Partial data sync"></ng-icon>
+                        <ng-icon
+                          *ngIf="
+                            syncTableGroup.status === 'success' ||
+                            syncTableGroup.status === 'completed'
+                          "
+                          class="text-success"
+                          name="lucideCircleCheckBig"
+                          size="20"
+                          aria-label="Data synced"></ng-icon>
+                        <ng-icon
                           *ngIf="syncTableGroup.status === 'failed'"
-                          >error</span
-                        >
+                          class="text-destructive"
+                          name="lucideCircleAlert"
+                          size="20"
+                          aria-label="Error for data sync"></ng-icon>
                       </td>
                     </tr>
                   </ng-template>
                 </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="3">
-                      <ul
-                        class="description"
-                        style="display: flex;justify-content: center;"
-                        *ngIf="syncTableGroupList.length > 0">
-                        <li>
-                          <div class="marker-p-f-c" style="margin-right: 4px; margin-top: 4px;"></div>
-                          <p>
-                            {{
-                              current_language_set?.coreComponents
-                                ?.pendingForDataSYNC
-                            }}
-                          </p>
-                        </li>
-                        <li>
-                          <div class="marker-t-d" style="margin-right: 4px; margin-top: 4px;"></div>
-                          <p>
-                            {{
-                              current_language_set?.coreComponents
-                                ?.partialDataSync
-                            }}
-                          </p>
-                        </li>
-                        <li>
-                          <div class="marker-p-f-t" style="margin-right: 4px; margin-top: 4px;"></div>
-                          <p>
-                            {{
-                              current_language_set?.coreComponents
-                                ?.errorForDataSync
-                            }}
-                          </p>
-                        </li>
-                        <li>
-                          <div class="marker-c-d" style="margin-right: 4px; margin-top: 4px;"></div>
-                          <p>
-                            {{
-                              current_language_set?.coreComponents?.dataSynced
-                            }}
-                          </p>
-                        </li>
-                      </ul>
-                    </td>
-                  </tr>
-                </tfoot>
               </table>
-            </section>
-          </mat-drawer-container>
-        </mat-tab>
-        <mat-tab label="Data Download">
-          <mat-drawer-container class="example-container m-t-10" autosize>
-            <div class="example-sidenav-content">
-              <button
-                type="button"
-                mat-raised-button
-                color="primary"
-                class="btn-green mat_blue"
-                (click)="syncDownloadData()"
-                [disabled]="showProgressBar">
-                {{ current_language_set?.coreComponents?.download }}
-              </button>
             </div>
 
-            <div class="example-sidenav-content">
-              <div *ngIf="showProgressBar" class="progress">
-                <div
-                  class="progress-bar progress-bar-striped active"
-                  role="progressbar"
-                  [attr.aria-valuenow]="progressValue"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  [ngStyle]="{ width: progressValue + '%' }">
-                  {{ progressValue + '%' }}
-                </div>
-              </div>
-
-              <section
-                *ngIf="failedMasterList && failedMasterList.length > 0"
-                class="failedMaster">
-                <h4>
-                  {{ current_language_set?.coreComponents?.failedMasters }} :
-                </h4>
-                <ul class="list-group">
-                  <li
-                    class="list-group-item"
-                    *ngFor="let item of failedMasterList">
-                    {{ item }}
-                  </li>
-                </ul>
-              </section>
-
-              <section
-                *ngIf="failedMasterList && failedMasterList.length === 0"
-                class="download-success">
-                <h4>
-                  {{
-                    current_language_set?.coreComponents
-                      ?.dataDownloadedSuccessfully
-                  }}
-                  <span class="material-icons">done</span>
-                </h4>
-              </section>
+            <div
+              *ngIf="syncTableGroupList.length > 0"
+              class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-border px-2 pt-4 text-sm text-muted-foreground">
+              <span class="inline-flex items-center gap-1.5">
+                <span class="size-3 rounded-sm bg-info"></span>
+                {{ current_language_set?.coreComponents?.pendingForDataSYNC }}
+              </span>
+              <span class="inline-flex items-center gap-1.5">
+                <span class="size-3 rounded-sm bg-warning"></span>
+                {{ current_language_set?.coreComponents?.partialDataSync }}
+              </span>
+              <span class="inline-flex items-center gap-1.5">
+                <span class="size-3 rounded-sm bg-destructive"></span>
+                {{ current_language_set?.coreComponents?.errorForDataSync }}
+              </span>
+              <span class="inline-flex items-center gap-1.5">
+                <span class="size-3 rounded-sm bg-success"></span>
+                {{ current_language_set?.coreComponents?.dataSynced }}
+              </span>
             </div>
-          </mat-drawer-container>
-        </mat-tab>
-        <mat-tab label="Generate BeneficiaryID">
-          <div class="col-12" style="width: 99%; padding-left: 12px">
-            <section
-              [formGroup]="generateBenIDForm"
-              style="margin-top: 10px"
-              class="row">
-              <div class="col-6">
-                <mat-card style="min-height: 240px">
-                  <h4 style="text-align: center">Check BenID Availability</h4>
-                  <div class="col-md-12 div-align">
-                    <button
-                      mat-raised-button
-                      color="primary"
-                      class="mat_blue"
-                      (click)="checkBenIDAvailability()">
-                      Check BenID
-                    </button>
-                  </div>
-                  <div class="col-md-12 div-align" *ngIf="benID_Count">
-                    <span
-                      >Available BeneficiaryID Count: {{ benID_Count }}</span
-                    >
-                  </div>
-                </mat-card>
-              </div>
-              <div class="col-6">
-                <mat-card style="min-height: 240px">
-                  <h4 style="text-align: center">Generate BenID</h4>
-                  <div
-                    class="col-12 row container-fluid"
-                    style="margin-top: 20px; padding-left: 60px">
-                    <div class="col-6">
-                      <mat-form-field style="width: 100%">
-                        <mat-label class="mat-label-text"
-                          >BenID Range</mat-label
-                        >
-                        <mat-select
-                          class=""
-                          [disabled]="!benID_Count"
-                          name="benID_Range"
-                          formControlName="benID_Range"
-                          required>
-                          <mat-option value="1000">1000</mat-option>
-                          <mat-option value="2000">2000</mat-option>
-                          <mat-option value="3000">3000</mat-option>
-                          <mat-option value="4000">4000</mat-option>
-                          <mat-option value="5000">5000</mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-                    <div class="col-6">
-                      <button
-                        mat-raised-button
-                        color="primary"
-                        style="float: left; margin-top: 10px; margin-left: 45px"
-                        [disabled]="!generateBenIDForm.valid"
-                        class="pull-right mat_blue"
-                        (click)="
-                          generateBenID(
-                            generateBenIDForm.controls['benID_Range'].value
-                          )
-                        ">
-                        Generate BenID
-                      </button>
-                    </div>
-                  </div>
-                </mat-card>
-              </div>
-            </section>
+          </z-card-content>
+        </z-card>
+      </div>
+    </z-tab>
+
+    <!-- Tab 2 — Data Download -->
+    <z-tab label="Data Download">
+      <div class="flex flex-col items-center gap-6 pt-6">
+        <button
+          z-button
+          type="button"
+          (click)="syncDownloadData()"
+          [disabled]="showProgressBar">
+          <ng-icon name="lucideDownload"></ng-icon>
+          {{ current_language_set?.coreComponents?.download }}
+        </button>
+
+        <div
+          *ngIf="showProgressBar"
+          class="h-4 w-full max-w-md overflow-hidden rounded-full bg-muted">
+          <div
+            class="flex h-full items-center justify-center bg-primary text-[0.625rem] font-medium text-primary-foreground transition-all"
+            role="progressbar"
+            [style.width.%]="progressValue"
+            [attr.aria-valuenow]="progressValue"
+            aria-valuemin="0"
+            aria-valuemax="100">
+            {{ progressValue }}%
           </div>
-        </mat-tab>
-        <mat-tab label="Inventory Data Download">
-          <mat-drawer-container class="example-container m-t-10" autosize>
-            <div class="example-sidenav-content">
+        </div>
+
+        <section
+          *ngIf="failedMasterList && failedMasterList.length > 0"
+          class="w-full max-w-md">
+          <p class="mb-1 text-sm font-semibold text-destructive">
+            {{ current_language_set?.coreComponents?.failedMasters }} :
+          </p>
+          <ul class="m-0 list-none space-y-1 p-0 text-sm">
+            <li
+              *ngFor="let item of failedMasterList"
+              class="rounded-md border border-border px-2 py-1">
+              {{ item }}
+            </li>
+          </ul>
+        </section>
+
+        <div
+          *ngIf="failedMasterList && failedMasterList.length === 0"
+          class="inline-flex items-center gap-1.5 text-sm font-medium text-success">
+          <ng-icon name="lucideCheck" size="18"></ng-icon>
+          {{ current_language_set?.coreComponents?.dataDownloadedSuccessfully }}
+        </div>
+      </div>
+    </z-tab>
+
+    <!-- Tab 3 — Generate BeneficiaryID -->
+    <z-tab label="Generate BeneficiaryID">
+      <form
+        [formGroup]="generateBenIDForm"
+        class="grid grid-cols-1 gap-6 pt-6 md:grid-cols-2">
+        <z-card>
+          <z-card-header>
+            <z-card-title>Check BenID Availability</z-card-title>
+            <z-card-description>
+              Check how many Beneficiary IDs are available on this van.
+            </z-card-description>
+          </z-card-header>
+          <z-card-content class="flex flex-col items-center gap-4">
+            <button z-button type="button" (click)="checkBenIDAvailability()">
+              Check BenID
+            </button>
+            <p *ngIf="benID_Count" class="text-sm text-muted-foreground">
+              Available BeneficiaryID Count:
+              <span class="font-semibold text-foreground">{{
+                benID_Count
+              }}</span>
+            </p>
+          </z-card-content>
+        </z-card>
+
+        <z-card>
+          <z-card-header>
+            <z-card-title>Generate BenID</z-card-title>
+            <z-card-description>
+              Select a range and generate new Beneficiary IDs.
+            </z-card-description>
+          </z-card-header>
+          <z-card-content class="flex flex-col gap-4">
+            <div class="flex flex-col gap-2">
+              <label
+                class="text-sm font-medium text-foreground"
+                for="benID_Range">
+                BenID Range
+              </label>
+              <z-select
+                id="benID_Range"
+                class="w-full"
+                formControlName="benID_Range"
+                [zDisabled]="!benID_Count"
+                zPlaceholder="Select range">
+                <z-select-item [zValue]="'1000'">1000</z-select-item>
+                <z-select-item [zValue]="'2000'">2000</z-select-item>
+                <z-select-item [zValue]="'3000'">3000</z-select-item>
+                <z-select-item [zValue]="'4000'">4000</z-select-item>
+                <z-select-item [zValue]="'5000'">5000</z-select-item>
+              </z-select>
+            </div>
+            <div>
               <button
+                z-button
                 type="button"
-                mat-raised-button
-                color="primary"
-                class="btn-green m-b-20 mat_blue"
-                (click)="inventorySyncDataDownload()"
-                [disabled]="showProgressBar">
-                Download
+                [disabled]="!generateBenIDForm.valid"
+                (click)="
+                  generateBenID(generateBenIDForm.controls['benID_Range'].value)
+                ">
+                Generate BenID
               </button>
             </div>
-          </mat-drawer-container>
-        </mat-tab>
-      </mat-tab-group>
-    </div>
-  </div>
+          </z-card-content>
+        </z-card>
+      </form>
+    </z-tab>
+
+    <!-- Tab 4 — Inventory Data Download -->
+    <z-tab label="Inventory Data Download">
+      <div class="flex justify-center pt-6">
+        <button
+          z-button
+          type="button"
+          (click)="inventorySyncDataDownload()"
+          [disabled]="showProgressBar">
+          <ng-icon name="lucideDownload"></ng-icon>
+          Download
+        </button>
+      </div>
+    </z-tab>
+  </z-tab-group>
 </div>
