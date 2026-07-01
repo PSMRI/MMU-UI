@@ -39,25 +39,27 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { DataSyncLoginComponent } from 'src/app/app-modules/core/components/data-sync-login/data-sync-login.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatLabel, MatFormField, MatSelect } from '@angular/material/select';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 import { NgIf, NgFor } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
 
 @Component({
   selector: 'app-tmcconfirmation',
   templateUrl: './tmcconfirmation.component.html',
-  styleUrls: ['./tmcconfirmation.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatLabel,
-    MatRadioGroup,
-    MatRadioButton,
     NgIf,
-    MatFormField,
-    MatSelect,
     NgFor,
-    MatOption,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
+    ...ZardSelectImports,
+    ...ZardFormImports,
+    ZardButtonComponent,
+    ...ZardTableImports,
   ],
 })
 export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
@@ -96,6 +98,7 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
   showRadio: boolean = false;
   confirmedDisease: any;
   currentLanguageSet: any;
+  selectedInstituteLabel = '';
 
   constructor(
     private masterdataService: MasterdataService,
@@ -188,6 +191,7 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
                 res.data.Refer.referredToInstituteName,
             });
             this.defaultCentre = referedToInstitute[0].institutionName;
+            this.selectedInstituteLabel = referedToInstitute[0].institutionName;
             console.log('form', this.tmcConfirmationFormsGroup);
           }
         }
@@ -273,6 +277,22 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
     if (selected !== null && selected.institutionName) {
       this.selectValueService = true;
     }
+  }
+
+  // z-select is string-valued (keyed on institutionID); resolve the full
+  // institution object and store it on the control so the submitted payload
+  // stays identical to the original mat-select (object-valued) behaviour.
+  onReferInstituteChange(institutionID: string | string[]): void {
+    const selectedCenter = (this.higherHealthcareCenter || []).find(
+      (center: any) => center.institutionID.toString() === institutionID
+    );
+    this.selectedInstituteLabel = selectedCenter
+      ? selectedCenter.institutionName
+      : '';
+    this.tmcConfirmationFormsGroup.patchValue({
+      refrredToAdditionalServiceList: selectedCenter ?? null,
+    });
+    this.higherhealthcarecenter(selectedCenter ?? null);
   }
   dataSync: boolean = false;
   viewAndPrintCaseSheet() {

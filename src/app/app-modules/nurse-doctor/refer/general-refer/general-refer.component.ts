@@ -26,6 +26,7 @@ import {
   FormGroup,
   Validators,
   ReactiveFormsModule,
+  FormsModule,
 } from '@angular/forms';
 
 import {
@@ -40,85 +41,39 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
-import {
-  MomentDateAdapter,
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-} from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import {
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
-import {
-  MatLabel,
-  MatFormField,
-  MatSelect,
-  MatSuffix,
-} from '@angular/material/select';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
-import {
-  MatDatepickerInput,
-  MatDatepickerToggle,
-  MatDatepicker,
-} from '@angular/material/datepicker';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardDatePickerComponent } from 'Common-UI/v2/ui/date-picker';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory } from '@ng-icons/lucide';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-general-refer',
   templateUrl: './general-refer.component.html',
-  styleUrls: ['./general-refer.component.css'],
+  viewProviders: [provideIcons({ lucideHistory })],
   providers: [
     {
       provide: DatePipe,
     },
-    {
-      provide: MAT_DATE_LOCALE,
-      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
-    },
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    },
-    {
-      provide: MAT_DATE_FORMATS,
-      useValue: {
-        parse: {
-          dateInput: 'LL',
-        },
-        display: {
-          dateInput: 'DD/MM/YYYY', // Set the desired display format
-          monthYearLabel: 'MMM YYYY',
-          dateA11yLabel: 'LL',
-          monthYearA11yLabel: 'MMMM YYYY',
-        },
-      },
-    },
   ],
   imports: [
-    MatExpansionPanel,
     ReactiveFormsModule,
-    MatExpansionPanelHeader,
+    FormsModule,
     NgIf,
-    MatLabel,
-    MatTooltip,
-    MatIcon,
-    MatFormField,
-    MatSelect,
     NgFor,
-    MatOption,
-    MatInput,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-    MatSuffix,
-    MatDatepicker,
+    NgIcon,
+    ...cardImports,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ...tooltipImports,
+    ...ZardSelectImports,
+    ZardDatePickerComponent,
   ],
 })
 export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
@@ -285,6 +240,9 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
     referDetails.referralReason = this.referralReason;
     this.referForm.patchValue({ referralReason: referDetails.referralReason });
     this.referForm.patchValue(referDetails);
+    this.revisitDateModel = referDetails.revisitDate
+      ? new Date(referDetails.revisitDate)
+      : null;
     if (referDetails.referredToInstituteName !== null) {
       this.healthCareReferred = true;
     }
@@ -347,6 +305,46 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
     } // should display the selected option.
     this.toggleReferralReasonValidator();
     console.log(this.selectValue);
+  }
+
+  // --- Zard control adapters. z-select is string-valued and z-date-picker is
+  // Date-valued, but the reactive-form controls keep their original object /
+  // object-array / ISO-string values so the submission contract is unchanged. ---
+  revisitDateModel: Date | null = null;
+
+  get selectedServiceNames(): string[] {
+    const val = this.referForm.get('refrredToAdditionalServiceList')?.value;
+    return Array.isArray(val) ? val.map((s: any) => s?.serviceName) : [];
+  }
+
+  onInstituteChange(value: string | string[]): void {
+    const id = Array.isArray(value) ? value[0] : value;
+    const center = (this.higherHealthcareCenter || []).find(
+      (c: any) => String(c.institutionID) === id
+    );
+    this.referForm.controls['referredToInstituteName'].setValue(center ?? null);
+    this.referForm.controls['referredToInstituteName'].markAsDirty();
+    this.higherhealthcarecenter(center ?? null);
+  }
+
+  onAdditionalServicesChange(value: string | string[]): void {
+    const names = Array.isArray(value) ? value : [value];
+    const selected = (this.additionalServices || []).filter((s: any) =>
+      names.includes(s.serviceName)
+    );
+    this.referForm.controls['refrredToAdditionalServiceList'].setValue(
+      selected
+    );
+    this.referForm.controls['refrredToAdditionalServiceList'].markAsDirty();
+    this.additionalservices(selected);
+  }
+
+  onRevisitDateChange(date: Date | null): void {
+    if (date) {
+      this.checkdate(date);
+    } else {
+      this.referForm.patchValue({ revisitDate: null });
+    }
   }
 
   private toggleReferralReasonValidator(): void {

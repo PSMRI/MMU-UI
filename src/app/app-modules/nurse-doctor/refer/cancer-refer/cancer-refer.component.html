@@ -1,99 +1,103 @@
-<mat-expansion-panel [formGroup]="referForm" expanded="true">
-  <mat-expansion-panel-header>
-    <h5>{{ currentLanguageSet?.Referdetails?.refer }}</h5>
-  </mat-expansion-panel-header>
+<z-card class="block">
+  <z-card-header>
+    <z-card-title>{{ currentLanguageSet?.Referdetails?.refer }}</z-card-title>
+  </z-card-header>
 
-  <div class="">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell">
-        <mat-label>
-          {{
-            currentLanguageSet?.Referdetails?.higherhealthcarecenter
-          }}</mat-label
-        >
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell">
-        <mat-form-field [style.width]="'50%'">
-          <mat-label>{{
-            currentLanguageSet?.Referdetails?.referredtoinstitute
-          }}</mat-label>
-          <mat-select
-            (ngModelChange)="higherhealthcarecenter($event)"
-            name="referredToInstituteID"
-            formControlName="referredToInstituteID">
-            <mat-option
+  <z-card-content>
+    <form
+      [formGroup]="referForm"
+      autocomplete="off"
+      class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <!-- Referred to institute -->
+      <z-form-field class="gap-1.5">
+        <label z-form-label for="referredToInstituteID">
+          {{ currentLanguageSet?.Referdetails?.higherhealthcarecenter }}
+        </label>
+        <z-form-control>
+          <z-select
+            class="w-full"
+            id="referredToInstituteID"
+            formControlName="referredToInstituteID"
+            [zPlaceholder]="currentLanguageSet?.Referdetails?.referredtoinstitute"
+            (zSelectionChange)="higherhealthcarecenter($event)">
+            <z-select-item
               *ngFor="let center of higherHealthcareCenter"
-              [value]="center.institutionID"
-              >{{ center.institutionName }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell">
-        <mat-label class="align-middle">{{
-          currentLanguageSet?.Referdetails?.additionalservices
-        }}</mat-label>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell">
-        <mat-form-field [style.width]="'50%'">
-          <mat-label>{{
-            currentLanguageSet?.Referdetails?.additionalservices
-          }}</mat-label>
-          <mat-select
-            (ngModelChange)="additionalservices($event)"
-            multiple="true"
-            name="refrredToAdditionalServiceList"
-            formControlName="refrredToAdditionalServiceList">
-            <mat-option
-              *ngFor="let service of additionalServices"
-              [value]="service.serviceName"
-              [disabled]="canDisable(service)">
-              {{ service.serviceName }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 tcell alignment">
-        {{ currentLanguageSet?.Referdetails?.referralReason }}
-        <span *ngIf="referForm.get('referralReason')?.enabled">*</span>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <mat-form-field style="width: 50%">
-          <textarea matInput formControlName="referralReason" name="Remarks" maxLength="300" matTextareaAutosize>
-      </textarea>
-        </mat-form-field>
-      </div>
-    </div>
+              [zValue]="center.institutionID?.toString()">
+              {{ center.institutionName }}
+            </z-select-item>
+          </z-select>
+        </z-form-control>
+      </z-form-field>
 
-    <!--Revisit Date Added-->
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: flex">
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <mat-label>{{
-          currentLanguageSet?.Referdetails?.revisitDate
-        }}</mat-label>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <mat-form-field [style.width]="'50%'">
-          <mat-label>{{
-            currentLanguageSet?.Referdetails?.revisitDate
-          }}</mat-label>
-          <input
-            matInput
-            [max]="maxSchedulerDate"
-            [matDatepicker]="picker"
+      <!-- Additional services -->
+      <z-form-field class="gap-1.5">
+        <label z-form-label for="refrredToAdditionalServiceList">
+          {{ currentLanguageSet?.Referdetails?.additionalservices }}
+        </label>
+        <z-form-control>
+          <z-select
+            class="w-full"
+            id="refrredToAdditionalServiceList"
+            [zMultiple]="true"
+            formControlName="refrredToAdditionalServiceList"
+            [zPlaceholder]="currentLanguageSet?.Referdetails?.additionalservices"
+            (zSelectionChange)="additionalservices($event)">
+            <z-select-item
+              *ngFor="let service of additionalServices"
+              [zValue]="service.serviceName"
+              [zDisabled]="canDisable(service)">
+              {{ service.serviceName }}
+            </z-select-item>
+          </z-select>
+        </z-form-control>
+      </z-form-field>
+
+      <!-- Referral reason -->
+      <z-form-field class="gap-1.5 sm:col-span-2">
+        <label
+          z-form-label
+          for="referralReason"
+          [zRequired]="!!referForm.get('referralReason')?.enabled">
+          {{ currentLanguageSet?.Referdetails?.referralReason }}
+        </label>
+        <z-form-control>
+          <textarea
+            z-input
+            class="w-full"
+            id="referralReason"
+            name="Remarks"
+            rows="3"
+            maxlength="300"
+            formControlName="referralReason"></textarea>
+        </z-form-control>
+        <z-form-message
+          zType="error"
+          *ngIf="
+            referForm.get('referralReason')?.enabled &&
+            referForm.get('referralReason')?.errors?.['required'] &&
+            referForm.get('referralReason')?.touched
+          ">
+          {{ currentLanguageSet?.Referdetails?.referralReason }}
+        </z-form-message>
+      </z-form-field>
+
+      <!-- Revisit date -->
+      <z-form-field class="gap-1.5">
+        <label z-form-label for="revisitDate">
+          {{ currentLanguageSet?.Referdetails?.revisitDate }}
+        </label>
+        <z-form-control>
+          <z-date-picker
+            class="w-full"
+            id="revisitDate"
             formControlName="revisitDate"
-            [min]="tomorrow"
-            (dateChange)="checkdate($event.value)" />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      </div>
-    </div>
-  </div>
-</mat-expansion-panel>
+            zFormat="dd/MM/yyyy"
+            [placeholder]="currentLanguageSet?.Referdetails?.revisitDate"
+            [minDate]="tomorrow"
+            [maxDate]="maxSchedulerDate"
+            (dateChange)="checkdate($event)"></z-date-picker>
+        </z-form-control>
+      </z-form-field>
+    </form>
+  </z-card-content>
+</z-card>
