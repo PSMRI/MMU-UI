@@ -38,7 +38,7 @@ import { ZardLoaderComponent } from 'Common-UI/v2/ui/loader';
 import { ZardTableImports } from 'Common-UI/v2/ui/table';
 import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
 import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
-import { ZardPaginationImports } from 'Common-UI/v2/ui/pagination';
+import { ZardPaginatorComponent } from 'Common-UI/v2/ui/paginator';
 import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
@@ -56,7 +56,7 @@ import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
     ...ZardTableImports,
     ZardRadioComponent,
     ZardRadioGroupComponent,
-    ...ZardPaginationImports,
+    ZardPaginatorComponent,
     ...tooltipImports,
   ],
   viewProviders: [provideIcons({ lucideX })],
@@ -75,8 +75,7 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
   displayedColumns: any = ['ConceptID', 'term', 'empty'];
 
   componentsData: any[] = [];
-  pageSize = 5;
-  currentPage = 1;
+  pagedItems: any[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public input: any,
@@ -97,19 +96,6 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
-  }
-
-  get totalPages(): number {
-    return Math.max(1, Math.ceil(this.componentsData.length / this.pageSize));
-  }
-
-  get pagedComponents(): any[] {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.componentsData.slice(start, start + this.pageSize);
-  }
-
-  onPageChange(page: number) {
-    this.currentPage = page;
   }
 
   selectComponentName(item: any, component: any) {
@@ -141,7 +127,6 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
               this.showProgressBar = false;
               if (res.data && res.data.sctMaster.length > 0) {
                 this.componentsData = res.data.sctMaster;
-                this.currentPage = 1;
               } else {
                 this.message = this.current_language_set.common.noRecordFound;
                 this.resetData();
@@ -161,6 +146,5 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
 
   resetData() {
     this.componentsData = [];
-    this.currentPage = 1;
   }
 }

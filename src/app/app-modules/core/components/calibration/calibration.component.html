@@ -76,53 +76,8 @@
     </table>
   </div>
 
-  <div
-    class="flex flex-wrap items-center justify-end gap-4"
-    *ngIf="filteredDataList.length > 0">
-    <div
-      class="inline-flex items-center gap-2 text-[0.8125rem] text-muted-foreground">
-      <span>{{ current_language_set?.rowsPerPage }}</span>
-      <z-select
-        id="calibration-page-size"
-        class="w-[4.5rem]"
-        name="pageSize"
-        [zValue]="pageSize.toString()"
-        (zSelectionChange)="changePageSize($event)">
-        <z-select-item
-          *ngFor="let size of pageSizeOptions"
-          [zValue]="size.toString()">
-          {{ size }}
-        </z-select-item>
-      </z-select>
-    </div>
-
-    <ul z-pagination-content class="m-0">
-      <li z-pagination-item>
-        <button
-          z-pagination-button
-          [zDisabled]="currentPage === 1"
-          aria-label="Previous page"
-          (click)="prevPage()">
-          <ng-icon name="lucideChevronLeft" size="16"></ng-icon>
-        </button>
-      </li>
-      <li z-pagination-item *ngFor="let p of pageNumbers">
-        <button
-          z-pagination-button
-          [zActive]="p === currentPage"
-          (click)="goToPage(p)">
-          {{ p }}
-        </button>
-      </li>
-      <li z-pagination-item>
-        <button
-          z-pagination-button
-          [zDisabled]="currentPage === totalPages"
-          aria-label="Next page"
-          (click)="nextPage()">
-          <ng-icon name="lucideChevronRight" size="16"></ng-icon>
-        </button>
-      </li>
-    </ul>
-  </div>
+  <z-paginator
+    [zData]="filteredDataList"
+    [zRowsPerPageLabel]="current_language_set?.rowsPerPage"
+    (zPagedChange)="pagedItems = $event"></z-paginator>
 </div>

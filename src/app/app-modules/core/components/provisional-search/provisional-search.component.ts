@@ -29,20 +29,14 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgIf, NgFor } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import {
-  lucideX,
-  lucideSearch,
-  lucideChevronLeft,
-  lucideChevronRight,
-} from '@ng-icons/lucide';
+import { lucideX, lucideSearch } from '@ng-icons/lucide';
 import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 import { ZardInputDirective } from 'Common-UI/v2/ui/input';
 import { ZardFormImports } from 'Common-UI/v2/ui/form';
 import { ZardTableImports } from 'Common-UI/v2/ui/table';
 import { ZardCheckboxComponent } from 'Common-UI/v2/ui/checkbox';
 import { ZardLoaderComponent } from 'Common-UI/v2/ui/loader';
-import { ZardPaginationImports } from 'Common-UI/v2/ui/pagination';
-import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardPaginatorComponent } from 'Common-UI/v2/ui/paginator';
 import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
@@ -61,16 +55,13 @@ import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
     ...ZardTableImports,
     ZardCheckboxComponent,
     ZardLoaderComponent,
-    ...ZardPaginationImports,
-    ...ZardSelectImports,
+    ZardPaginatorComponent,
     ...tooltipImports,
   ],
   viewProviders: [
     provideIcons({
       lucideX,
       lucideSearch,
-      lucideChevronLeft,
-      lucideChevronRight,
     }),
   ],
 })
@@ -82,9 +73,7 @@ export class ProvisionalSearchComponent implements OnInit, DoCheck {
   current_language_set: any;
   displayedColumns: any = ['ConceptID', 'term', 'empty'];
   diagnosisData: any[] = [];
-  pageSizeOptions = [5, 10, 20];
-  pageSize = 5;
-  currentPage = 1;
+  pagedItems: any[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public input: any,
@@ -180,7 +169,6 @@ export class ProvisionalSearchComponent implements OnInit, DoCheck {
               if (res.data && res.data.sctMaster.length > 0) {
                 this.showProgressBar = false;
                 this.diagnosisData = res.data.sctMaster;
-                this.currentPage = 1;
               }
             } else {
               this.resetData();
@@ -197,42 +185,5 @@ export class ProvisionalSearchComponent implements OnInit, DoCheck {
 
   resetData() {
     this.diagnosisData = [];
-    this.currentPage = 1;
-  }
-
-  get totalPages(): number {
-    return Math.max(1, Math.ceil(this.diagnosisData.length / this.pageSize));
-  }
-
-  get pagedList(): any[] {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.diagnosisData.slice(start, start + this.pageSize);
-  }
-
-  get pageNumbers(): number[] {
-    const total = this.totalPages;
-    const start = Math.max(1, this.currentPage - 2);
-    const end = Math.min(total, start + 4);
-    const pages: number[] = [];
-    for (let p = start; p <= end; p++) pages.push(p);
-    return pages;
-  }
-
-  goToPage(page: number) {
-    if (page >= 1 && page <= this.totalPages) this.currentPage = page;
-  }
-
-  prevPage() {
-    if (this.currentPage > 1) this.currentPage--;
-  }
-
-  nextPage() {
-    if (this.currentPage < this.totalPages) this.currentPage++;
-  }
-
-  changePageSize(size: string | string[]) {
-    const value = Array.isArray(size) ? size[0] : size;
-    this.pageSize = Number(value);
-    this.currentPage = 1;
   }
 }

@@ -31,19 +31,13 @@ import { SetLanguageComponent } from '../set-language.component';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import {
-  lucideX,
-  lucideSearch,
-  lucideChevronLeft,
-  lucideChevronRight,
-} from '@ng-icons/lucide';
+import { lucideX, lucideSearch } from '@ng-icons/lucide';
 import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 import { ZardInputDirective } from 'Common-UI/v2/ui/input';
 import { ZardFormImports } from 'Common-UI/v2/ui/form';
 import { ZardTableImports } from 'Common-UI/v2/ui/table';
 import { ZardLoaderComponent } from 'Common-UI/v2/ui/loader';
-import { ZardPaginationImports } from 'Common-UI/v2/ui/pagination';
-import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardPaginatorComponent } from 'Common-UI/v2/ui/paginator';
 import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
@@ -61,16 +55,13 @@ import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
     ...ZardFormImports,
     ...ZardTableImports,
     ZardLoaderComponent,
-    ...ZardPaginationImports,
-    ...ZardSelectImports,
+    ZardPaginatorComponent,
     ...tooltipImports,
   ],
   viewProviders: [
     provideIcons({
       lucideX,
       lucideSearch,
-      lucideChevronLeft,
-      lucideChevronRight,
     }),
   ],
 })
@@ -86,10 +77,7 @@ export class CalibrationComponent implements OnInit, DoCheck {
   current_language_set: any;
   displayedColumns: any = ['sno', 'SCode', 'ExpiryDate'];
   showProgressBar = false;
-
-  pageSizeOptions = [5, 10, 20];
-  pageSize = 5;
-  currentPage = 1;
+  pagedItems: any[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public input: any,
@@ -128,7 +116,6 @@ export class CalibrationComponent implements OnInit, DoCheck {
             ) {
               this.dataList = res.data.calibrationData;
               this.filteredDataList = res.data.calibrationData;
-              this.currentPage = 1;
             } else {
               this.message = this.current_language_set.common.noRecordFound;
               this.resetData();
@@ -178,7 +165,6 @@ export class CalibrationComponent implements OnInit, DoCheck {
   resetData() {
     this.dataList = [];
     this.filteredDataList = [];
-    this.currentPage = 1;
   }
 
   filterPreviousData(searchTerm: any) {
@@ -196,42 +182,5 @@ export class CalibrationComponent implements OnInit, DoCheck {
         }
       });
     }
-    this.currentPage = 1;
-  }
-
-  get totalPages(): number {
-    return Math.max(1, Math.ceil(this.filteredDataList.length / this.pageSize));
-  }
-
-  get pagedItems(): any[] {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.filteredDataList.slice(start, start + this.pageSize);
-  }
-
-  get pageNumbers(): number[] {
-    const total = this.totalPages;
-    const start = Math.max(1, this.currentPage - 2);
-    const end = Math.min(total, start + 4);
-    const pages: number[] = [];
-    for (let p = start; p <= end; p++) pages.push(p);
-    return pages;
-  }
-
-  goToPage(page: number) {
-    if (page >= 1 && page <= this.totalPages) this.currentPage = page;
-  }
-
-  prevPage() {
-    if (this.currentPage > 1) this.currentPage--;
-  }
-
-  nextPage() {
-    if (this.currentPage < this.totalPages) this.currentPage++;
-  }
-
-  changePageSize(size: string | string[]) {
-    const value = Array.isArray(size) ? size[0] : size;
-    this.pageSize = Number(value);
-    this.currentPage = 1;
   }
 }

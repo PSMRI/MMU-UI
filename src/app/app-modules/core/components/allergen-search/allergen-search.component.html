@@ -33,7 +33,7 @@
           </tr>
         </thead>
         <tbody z-table-body>
-          <tr z-table-row *ngFor="let element of pagedComponents">
+          <tr z-table-row *ngFor="let element of pagedItems">
             <td z-table-cell>{{ element?.conceptID }}</td>
             <td z-table-cell>{{ element?.term }}</td>
             <td z-table-cell class="text-center">
@@ -55,15 +55,10 @@
       {{ current_language_set?.noRecordsFound }}
     </p>
 
-    <div
-      *ngIf="componentsData.length !== 0"
-      class="flex items-center justify-end">
-      <z-pagination
-        [zPageIndex]="currentPage"
-        [zTotal]="totalPages"
-        zSize="sm"
-        (zPageIndexChange)="onPageChange($event)"></z-pagination>
-    </div>
+    <z-paginator
+      [zData]="componentsData"
+      [zShowPageSize]="false"
+      (zPagedChange)="pagedItems = $event"></z-paginator>
 
     <div *ngIf="componentsData.length !== 0" class="flex justify-end">
       <button
