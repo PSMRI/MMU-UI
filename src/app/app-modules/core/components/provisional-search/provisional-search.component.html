@@ -47,13 +47,12 @@
     </button>
   </div>
 
-  <div
+  <output
     *ngIf="showProgressBar"
     class="flex items-center justify-center py-6"
-    role="status"
     aria-live="polite">
     <z-loader></z-loader>
-  </div>
+  </output>
 
   <div class="w-full overflow-x-auto">
     <table z-table>
@@ -73,7 +72,9 @@
               [zChecked]="element.selected || selectedDiagnosis(element)"
               [disabled]="disableSelection(element)"
               aria-label="Select diagnosis"
-              (zCheckedChange)="selectDiagnosis($event, element)"></z-checkbox>
+              (zCheckedChange)="
+                $event ? addDiagnosis(element) : removeDiagnosis(element)
+              "></z-checkbox>
           </td>
         </tr>
         <tr z-table-row *ngIf="diagnosisData.length === 0">

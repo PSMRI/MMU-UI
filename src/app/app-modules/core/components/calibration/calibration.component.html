@@ -32,13 +32,12 @@
     </z-form-control>
   </z-form-field>
 
-  <div
+  <output
     *ngIf="showProgressBar"
     class="flex items-center justify-center py-6"
-    role="status"
     aria-live="polite">
     <z-loader></z-loader>
-  </div>
+  </output>
 
   <div class="w-full overflow-x-auto rounded-md border border-border">
     <table z-table>

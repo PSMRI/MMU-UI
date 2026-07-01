@@ -110,15 +110,15 @@ export class ProvisionalSearchComponent implements OnInit, DoCheck {
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
 
-  selectDiagnosis(checked: boolean, item: any) {
-    if (checked) {
-      item.selected = true;
-      this.selectedDiagnosisList.push(item);
-    } else {
-      const index = this.selectedDiagnosisList.indexOf(item);
-      this.selectedDiagnosisList.splice(index, 1);
-      item.selected = false;
-    }
+  addDiagnosis(item: any) {
+    item.selected = true;
+    this.selectedDiagnosisList.push(item);
+  }
+
+  removeDiagnosis(item: any) {
+    const index = this.selectedDiagnosisList.indexOf(item);
+    this.selectedDiagnosisList.splice(index, 1);
+    item.selected = false;
   }
 
   disableSelection(item: any) {
