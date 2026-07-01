@@ -62,19 +62,16 @@ import { OpenPreviousVisitDetailsComponent } from '../../core/components/open-pr
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { SmsNotificationComponent } from '../sms-notification/sms-notification.component';
 import { NgIf } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { MatSidenavContainer, MatSidenav } from '@angular/material/sidenav';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideUserRound, lucideFileText } from '@ng-icons/lucide';
 import { BeneficiaryDetailsComponent } from '../../core/components/beneficiary-details/beneficiary-details.component';
-import {
-  MatStepper,
-  MatStep,
-  MatStepLabel,
-  MatStepperNext,
-  MatStepperPrevious,
-} from '@angular/material/stepper';
+import { ZardStepperImports } from 'Common-UI/v2/ui/stepper';
+import { ZardSheetComponent } from 'Common-UI/v2/ui/sheet';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardLoaderComponent } from 'Common-UI/v2/ui/loader';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 import { VisitDetailsComponent } from '../visit-details/visit-details.component';
 import { TmVisitDetailsComponent } from '../tm-visit-details/tm-visit-details.component';
-import { MatHint } from '@angular/material/select';
 import { AncComponent } from '../anc/anc.component';
 import { PncComponent } from '../pnc/pnc.component';
 import { HistoryComponent } from '../history/history.component';
@@ -84,29 +81,23 @@ import { IdrsComponent } from '../idrs/idrs.component';
 import { CaseRecordComponent } from '../case-record/case-record.component';
 import { QuickConsultComponent } from '../quick-consult/quick-consult.component';
 import { ReferComponent } from '../refer/refer.component';
-import { MatIcon } from '@angular/material/icon';
-import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-workarea',
   templateUrl: './workarea.component.html',
-  styleUrls: ['./workarea.component.css'],
   imports: [
     NgIf,
-    MatProgressSpinner,
-    MatSidenavContainer,
-    MatSidenav,
+    NgIcon,
     BeneficiaryDetailsComponent,
     ReactiveFormsModule,
-    MatStepper,
-    MatStep,
-    MatStepLabel,
+    ...ZardStepperImports,
+    ZardSheetComponent,
+    ZardButtonComponent,
+    ZardLoaderComponent,
+    ...tooltipImports,
     VisitDetailsComponent,
-    MatStepperNext,
     TmVisitDetailsComponent,
-    MatHint,
     AncComponent,
-    MatStepperPrevious,
     PncComponent,
     HistoryComponent,
     VitalsComponent,
@@ -115,9 +106,8 @@ import { MatTooltip } from '@angular/material/tooltip';
     CaseRecordComponent,
     QuickConsultComponent,
     ReferComponent,
-    MatIcon,
-    MatTooltip,
   ],
+  viewProviders: [provideIcons({ lucideUserRound, lucideFileText })],
 })
 export class WorkareaComponent
   implements
@@ -166,6 +156,73 @@ export class WorkareaComponent
   showRefer = false;
   showVisitDetails = true;
   showTMVisitDetails = false;
+
+  // --- Step navigation (replaces mat-horizontal-stepper; z-stepper is display-only) ---
+  // `label` mirrors the original <mat-step label="..."> values, which updatePending()
+  // switches on via the synthesized `previouslySelectedStep.label`.
+  readonly workareaSteps: { key: string; label: string }[] = [
+    { key: 'visitDetails', label: 'Visit Details' },
+    { key: 'tmVisitDetails', label: 'Visit Details' },
+    { key: 'anc', label: 'ANC' },
+    { key: 'pnc', label: 'PNC' },
+    { key: 'history', label: 'History' },
+    { key: 'vitals', label: 'Vitals' },
+    { key: 'examination', label: 'Examination' },
+    { key: 'ncdScreening', label: 'Screening' },
+    { key: 'caseRecord', label: 'Case Record' },
+    { key: 'quickConsult', label: '' },
+    { key: 'refer', label: 'Refer' },
+  ];
+  currentStep = 0;
+  benSidenavOpen = false;
+
+  get enabledSteps(): { key: string; label: string }[] {
+    const shown: Record<string, boolean> = {
+      visitDetails: this.showVisitDetails,
+      tmVisitDetails: this.showTMVisitDetails,
+      anc: this.showAnc,
+      pnc: this.showPNC,
+      history: this.showHistory,
+      vitals: this.showVitals,
+      examination: this.showExamination,
+      ncdScreening: this.showNCDScreening,
+      caseRecord: this.showCaseRecord,
+      quickConsult: this.showQuickConsult,
+      refer: this.showRefer,
+    };
+    return this.workareaSteps.filter(step => shown[step.key]);
+  }
+
+  get activeStepKey(): string {
+    return this.enabledSteps[this.currentStep]?.key ?? '';
+  }
+
+  get isLastStep(): boolean {
+    return this.currentStep >= this.enabledSteps.length - 1;
+  }
+
+  private goToStepIndex(target: number): void {
+    const steps = this.enabledSteps;
+    if (target < 0 || target >= steps.length || target === this.currentStep) {
+      return;
+    }
+    const leaving = steps[this.currentStep];
+    this.currentStep = target;
+    // Preserve the mat-stepper (selectionChange) unsaved-changes warning for the step left.
+    this.updatePending({ previouslySelectedStep: { label: leaving?.label } });
+  }
+
+  nextStep(): void {
+    this.goToStepIndex(this.currentStep + 1);
+  }
+
+  previousStep(): void {
+    this.goToStepIndex(this.currentStep - 1);
+  }
+
+  toggleBenSidenav(): void {
+    this.benSidenavOpen = !this.benSidenavOpen;
+  }
 
   doctorFlag: any;
   nurseFlag: any;
@@ -3806,14 +3863,6 @@ export class WorkareaComponent
           ' ' +
           this.currentLanguageSet.alerts.info.changes
       );
-  }
-
-  sideNavModeChange(sidenav: any) {
-    const deviceHeight = window.screen.height;
-    const deviceWidth = window.screen.width;
-    if (deviceWidth < 700) sidenav.mode = 'over';
-    else sidenav.mode = 'side';
-    sidenav.toggle();
   }
 
   canDeactivate(): Observable<boolean> {
