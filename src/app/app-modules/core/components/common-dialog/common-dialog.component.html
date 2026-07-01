@@ -14,7 +14,7 @@
 <!-- Confirm (confirmAlert and confirmcalibration are identical) -->
 <div
   *ngIf="confirmAlert || confirmcalibration"
-  class="flex flex-col gap-4 p-1">
+  class="flex flex-col gap-4 p-6">
   <ng-container
     *ngTemplateOutlet="
       dialogHeader;
@@ -39,7 +39,7 @@
 </div>
 
 <!-- Alert / alertError (single acknowledge button) -->
-<div *ngIf="alert || alertError" class="flex flex-col gap-4 p-1">
+<div *ngIf="alert || alertError" class="flex flex-col gap-4 p-6">
   <ng-container
     *ngTemplateOutlet="
       dialogHeader;
@@ -61,7 +61,7 @@
 </div>
 
 <!-- Remarks (single-line) -->
-<div *ngIf="remarks" class="flex flex-col gap-4 p-1">
+<div *ngIf="remarks" class="flex flex-col gap-4 p-6">
   <ng-container
     *ngTemplateOutlet="
       dialogHeader;
@@ -89,7 +89,7 @@
 </div>
 
 <!-- Edit remarks (multi-line) -->
-<div *ngIf="editRemarks" class="flex flex-col gap-4 p-1">
+<div *ngIf="editRemarks" class="flex flex-col gap-4 p-6">
   <ng-container
     *ngTemplateOutlet="
       dialogHeader;
@@ -119,7 +119,7 @@
 </div>
 
 <!-- Notify (mandatory-fields list) -->
-<div *ngIf="notify" class="flex flex-col gap-4 p-1">
+<div *ngIf="notify" class="flex flex-col gap-4 p-6">
   <ng-container
     *ngTemplateOutlet="
       dialogHeader;
@@ -166,7 +166,7 @@
 </div>
 
 <!-- Choice (radio) -->
-<div *ngIf="choice" class="flex flex-col gap-4 p-1">
+<div *ngIf="choice" class="flex flex-col gap-4 p-6">
   <ng-container
     *ngTemplateOutlet="
       dialogHeader;
@@ -195,7 +195,7 @@
 </div>
 
 <!-- Session timeout (with nested choiceSelect, preserved as in the original) -->
-<div *ngIf="sessionTimeout" class="flex flex-col gap-4 p-1">
+<div *ngIf="sessionTimeout" class="flex flex-col gap-4 p-6">
   <ng-container
     *ngTemplateOutlet="
       dialogHeader;
@@ -225,7 +225,7 @@
 </div>
 
 <!-- Choice-select (radio) — top-level mode, independent of sessionTimeout -->
-<div *ngIf="choiceSelect" class="flex flex-col gap-4 p-1">
+<div *ngIf="choiceSelect" class="flex flex-col gap-4 p-6">
     <ng-container
       *ngTemplateOutlet="
         dialogHeader;
