@@ -17,6 +17,19 @@ z-select [role='combobox'] {
   border-radius: var(--radius);
 }
 
+/* z-pagination-button is a wrapper <button> around the actual <z-button>.
+   With preflight off, that bare wrapper shows the browser's native button
+   border + background (appearance:none alone doesn't clear them, and unlike a
+   real z-button it has no border-transparent/bg class). Zero it fully so only
+   the inner Zard button (ghost prev/next, outline active page) is visible. */
+[z-pagination-button] {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+}
+
 
 /* Lato Font - Local */
 @font-face {

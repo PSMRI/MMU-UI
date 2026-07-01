@@ -1,148 +1,163 @@
-<div *ngIf="confirmAlert">
-  <h3 [ngClass]="['title', title]">
-    {{ (title === 'warn' ? 'warning' : title) | titlecase }}
-  </h3>
-  <div class="message">{{ message }}</div>
-  <div class="action">
-    <button
-      class="full-width-login button-reset"
-      (click)="dialogRef.close(false)">
+<!-- Shared header: status icon + title, colored by status (info/success/warn/error) -->
+<ng-template #dialogHeader let-status="status" let-text="text">
+  <div class="flex items-center gap-2">
+    <ng-icon
+      [name]="statusIcon(status)"
+      size="20"
+      [ngClass]="statusColor(status)"></ng-icon>
+    <p class="m-0 text-base font-semibold" [ngClass]="statusColor(status)">
+      {{ text }}
+    </p>
+  </div>
+</ng-template>
+
+<!-- Confirm (confirmAlert and confirmcalibration are identical) -->
+<div
+  *ngIf="confirmAlert || confirmcalibration"
+  class="flex flex-col gap-4 p-6">
+  <ng-container
+    *ngTemplateOutlet="
+      dialogHeader;
+      context: {
+        status: title,
+        text: (title === 'warn' ? 'warning' : title) | titlecase
+      }
+    "></ng-container>
+  <p class="m-0 text-sm text-muted-foreground">{{ message }}</p>
+  <div class="flex justify-end gap-2">
+    <button z-button zType="outline" (click)="dialogRef.close(false)">
       {{ btnCancelText }}
     </button>
     <button
-      class="full-width-login button-ok"
+      z-button
+      zType="default"
       (click)="dialogRef.close(true)"
-      [ngClass]="{ 'background-primary': title !== 'warn' }"
       cdkFocusInitial>
       {{ btnOkText }}
     </button>
   </div>
 </div>
-<div *ngIf="confirmcalibration">
-  <h3 [ngClass]="['title', title]">
-    {{ (title === 'warn' ? 'warning' : title) | titlecase }}
-  </h3>
-  <div class="message">{{ message }}</div>
-  <div class="action">
+
+<!-- Alert / alertError (single acknowledge button) -->
+<div *ngIf="alert || alertError" class="flex flex-col gap-4 p-6">
+  <ng-container
+    *ngTemplateOutlet="
+      dialogHeader;
+      context: {
+        status: status,
+        text: (status === 'warn' ? 'warning' : status) | titlecase
+      }
+    "></ng-container>
+  <p class="m-0 text-sm text-muted-foreground">{{ message }}</p>
+  <div class="flex justify-end gap-2">
     <button
-      class="full-width-login button-reset"
-      (click)="dialogRef.close(false)">
-      {{ btnCancelText }}
-    </button>
-    <button
-      class="full-width-login button-ok"
+      z-button
+      zType="default"
       (click)="dialogRef.close(true)"
-      [ngClass]="{ 'background-primary': title !== 'warn' }"
       cdkFocusInitial>
       {{ btnOkText }}
     </button>
   </div>
 </div>
-<div *ngIf="alert">
-  <h3 [ngClass]="['title', status]">
-    {{ (status === 'warn' ? 'warning' : status) | titlecase }}
-  </h3>
-  <div class="message">{{ message }}</div>
-  <div class="action">
-    <button class="full-width-login button-ok" mat-dialog-close cdkFocusInitial>
-      {{ btnOkText }}
-    </button>
-  </div>
-</div>
 
-<div *ngIf="remarks">
-  <h3 class="title info">{{ message | titlecase }}</h3>
-  <div class="message">
-    <mat-form-field>
-      <mat-label>Enter Remarks</mat-label>
-      <input autocomplete="off" matInput name="Remarks" #remarksRef />
-    </mat-form-field>
-  </div>
-  <div class="action">
-    <button
-      class="full-width-login button-reset"
-      (click)="dialogRef.close(false)">
-      {{ btnCancelText }}
-    </button>
-    <button
-      mat-raised-button
-      class="background-success"
-      (click)="dialogRef.close(remarksRef.value)">
-      {{ btnOkText }}
-    </button>
-  </div>
-</div>
-
-<div *ngIf="editRemarks">
-  <h3 class="title info">{{ message | titlecase }}</h3>
-  <div class="message">
-    <mat-form-field>
-      <textarea
-        matInput
-        allowText="textAreaValidator"
-        mdTextareaAutosize
-        placeholder="Observation"
+<!-- Remarks (single-line) -->
+<div *ngIf="remarks" class="flex flex-col gap-4 p-6">
+  <ng-container
+    *ngTemplateOutlet="
+      dialogHeader;
+      context: { status: 'info', text: message | titlecase }
+    "></ng-container>
+  <z-form-field>
+    <label z-form-label for="dialog-remarks">Enter Remarks</label>
+    <z-form-control>
+      <input
+        z-input
+        id="dialog-remarks"
+        autocomplete="off"
         name="Remarks"
-        maxLength="500"
-        #remarksRef
-        [(ngModel)]="comments"></textarea>
-    </mat-form-field>
+        #remarksRef />
+    </z-form-control>
+  </z-form-field>
+  <div class="flex justify-end gap-2">
+    <button z-button zType="outline" (click)="dialogRef.close(false)">
+      {{ btnCancelText }}
+    </button>
+    <button z-button zType="default" (click)="dialogRef.close(remarksRef.value)">
+      {{ btnOkText }}
+    </button>
   </div>
-  <div class="action">
-    <button
-      class="full-width-login button-reset"
-      (click)="dialogRef.close(false)">
+</div>
+
+<!-- Edit remarks (multi-line) -->
+<div *ngIf="editRemarks" class="flex flex-col gap-4 p-6">
+  <ng-container
+    *ngTemplateOutlet="
+      dialogHeader;
+      context: { status: 'info', text: message | titlecase }
+    "></ng-container>
+  <textarea
+    z-input
+    class="min-h-20"
+    aria-label="Observation"
+    allowText="textAreaValidator"
+    placeholder="Observation"
+    name="Remarks"
+    maxLength="500"
+    #remarksRef
+    [(ngModel)]="comments"></textarea>
+  <div class="flex justify-end gap-2">
+    <button z-button zType="outline" (click)="dialogRef.close(false)">
       {{ btnCancelText }}
     </button>
     <button
-      class="full-width-login button-ok"
-      class="background-success"
+      z-button
+      zType="default"
       (click)="dialogRef.close(remarksRef.value + '.')">
       {{ btnOkText }}
     </button>
   </div>
 </div>
 
-<div *ngIf="notify">
-  <h3 class="title info">Info</h3>
-  <div class="message">
-    <h4>{{ message | titlecase }}</h4>
-    <ul class="list-group">
+<!-- Notify (mandatory-fields list) -->
+<div *ngIf="notify" class="flex flex-col gap-4 p-6">
+  <ng-container
+    *ngTemplateOutlet="
+      dialogHeader;
+      context: { status: 'info', text: 'Info' }
+    "></ng-container>
+  <div class="flex flex-col gap-2">
+    <p class="m-0 text-sm text-muted-foreground">{{ message | titlecase }}</p>
+    <ul class="flex flex-col gap-1">
       <li
-        class="list-group-item alert alert-danger"
+        class="flex items-center gap-2 rounded-md bg-destructive/10 px-3 py-1.5 text-sm text-destructive"
         *ngFor="let items of mandatories">
-        <div
+        <ng-container
           *ngIf="
             items !== undefined &&
             items !== null &&
             items.toLowerCase() !== 'ABHA'.toLowerCase() &&
             items.toLowerCase() !== 'ABHA Generation Mode'.toLowerCase()
           ">
-          <span
-            class="glyphicon glyphicon-hand-right"
-            style="color: #cd807e; margin-right: 5px"></span>
-          <span style="color: #cd807e; margin-right: 5px">
-            {{ items | titlecase }}</span
-          >
-        </div>
-        <div
+          <ng-icon name="lucideChevronRight" size="16"></ng-icon>
+          <span>{{ items | titlecase }}</span>
+        </ng-container>
+        <ng-container
           *ngIf="
             items !== undefined &&
             items !== null &&
             (items.toLowerCase() === 'ABHA'.toLowerCase() ||
               items.toLowerCase() === 'ABHA Generation Mode'.toLowerCase())
           ">
-          <span
-            class="glyphicon glyphicon-hand-right"
-            style="color: #cd807e; margin-right: 5px"></span>
-          <span style="color: #cd807e; margin-right: 5px">{{ items }}</span>
-        </div>
+          <ng-icon name="lucideChevronRight" size="16"></ng-icon>
+          <span>{{ items }}</span>
+        </ng-container>
       </li>
     </ul>
   </div>
-  <div class="action">
+  <div class="flex justify-end gap-2">
     <button
-      class="full-width-login button-ok"
+      z-button
+      zType="default"
       (click)="dialogRef.close(true)"
       cdkFocusInitial>
       {{ btnOkText }}
@@ -150,47 +165,28 @@
   </div>
 </div>
 
-<div *ngIf="alertError">
-  <h3 [ngClass]="['title', status]">
-    {{ (status === 'warn' ? 'warning' : status) | titlecase }}
-  </h3>
-  <div class="message">{{ message }}</div>
-  <div class="action">
-    <button
-      (click)="dialogRef.close(true)"
-      mat-raised-button
-      mat-dialog-close
-      cdkFocusInitial>
-      {{ btnOkText }}
-    </button>
-  </div>
-</div>
-
-<div *ngIf="choice">
-  <h3 class="title info">Info</h3>
-  <div class="message">
-    <h4>{{ message | titlecase }}</h4>
-    <mat-radio-group
-      [(ngModel)]="selectedValue"
-      disableRipple="true"
-      class="radio-group">
-      <mat-radio-button
-        disableRipple="true"
-        class="radio-button"
-        *ngFor="let value of values"
-        [value]="value.id">
+<!-- Choice (radio) -->
+<div *ngIf="choice" class="flex flex-col gap-4 p-6">
+  <ng-container
+    *ngTemplateOutlet="
+      dialogHeader;
+      context: { status: 'info', text: 'Info' }
+    "></ng-container>
+  <div class="flex flex-col gap-2">
+    <p class="m-0 text-sm text-muted-foreground">{{ message | titlecase }}</p>
+    <z-radio-group [(ngModel)]="selectedValue" class="gap-2">
+      <z-radio *ngFor="let value of values" [value]="value.id">
         {{ value.name }}
-      </mat-radio-button>
-    </mat-radio-group>
+      </z-radio>
+    </z-radio-group>
   </div>
-  <div class="action">
-    <button
-      class="full-width-login button-reset"
-      (click)="dialogRef.close(false)">
+  <div class="flex justify-end gap-2">
+    <button z-button zType="outline" (click)="dialogRef.close(false)">
       {{ btnCancelText }}
     </button>
     <button
-      class="full-width-login button-ok"
+      z-button
+      zType="default"
       (click)="dialogRef.close(selectedValue)"
       cdkFocusInitial>
       {{ btnOkText }}
@@ -198,9 +194,14 @@
   </div>
 </div>
 
-<div *ngIf="sessionTimeout">
-  <h3 class="title warn">{{ title }}</h3>
-  <div class="message">
+<!-- Session timeout (with nested choiceSelect, preserved as in the original) -->
+<div *ngIf="sessionTimeout" class="flex flex-col gap-4 p-6">
+  <ng-container
+    *ngTemplateOutlet="
+      dialogHeader;
+      context: { status: 'warn', text: title }
+    "></ng-container>
+  <p class="m-0 text-sm text-muted-foreground">
     <span>{{ message }} &nbsp;</span>
     <small>
       <span *ngIf="minutes >= 1"
@@ -208,48 +209,46 @@
       >
       <span *ngIf="seconds > 0">{{ seconds }} &nbsp; seconds</span>
     </small>
-  </div>
-  <div class="action">
-    <button class="full-width-login button-reset" (click)="stopTimer()">
+  </p>
+  <div class="flex justify-end gap-2">
+    <button z-button zType="outline" (click)="stopTimer()">
       {{ btnCancelText }}
     </button>
     <button
-      class="full-width-login button-ok"
+      z-button
+      zType="default"
       (click)="continueSession()"
       cdkFocusInitial>
       {{ btnOkText }}
     </button>
   </div>
+</div>
 
-  <div *ngIf="choiceSelect">
-    <h3 class="title info">Info</h3>
-    <div class="message">
-      <h4>{{ message | titlecase }}</h4>
-      <mat-radio-group
-        [(ngModel)]="selectedOption"
-        disableRipple="true"
-        class="radio-group">
-        <mat-radio-button
-          disableRipple="true"
-          class="radio-button"
-          *ngFor="let option of options"
-          [value]="option.id">
+<!-- Choice-select (radio) — top-level mode, independent of sessionTimeout -->
+<div *ngIf="choiceSelect" class="flex flex-col gap-4 p-6">
+    <ng-container
+      *ngTemplateOutlet="
+        dialogHeader;
+        context: { status: 'info', text: 'Info' }
+      "></ng-container>
+    <div class="flex flex-col gap-2">
+      <p class="m-0 text-sm text-muted-foreground">{{ message | titlecase }}</p>
+      <z-radio-group [(ngModel)]="selectedOption" class="gap-2">
+        <z-radio *ngFor="let option of options" [value]="option.id">
           {{ option.name }}
-        </mat-radio-button>
-      </mat-radio-group>
+        </z-radio>
+      </z-radio-group>
     </div>
-    <div class="action">
-      <button
-        class="full-width-login button-reset"
-        (click)="dialogRef.close(false)">
+    <div class="flex justify-end gap-2">
+      <button z-button zType="outline" (click)="dialogRef.close(false)">
         {{ btnCancelText }}
       </button>
       <button
-        class="full-width-login button-ok"
+        z-button
+        zType="default"
         (click)="dialogRef.close(selectedOption)"
         cdkFocusInitial>
         {{ btnOkText }}
       </button>
     </div>
-  </div>
 </div>
