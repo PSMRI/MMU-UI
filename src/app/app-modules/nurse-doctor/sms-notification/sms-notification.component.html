@@ -53,13 +53,12 @@
 
     <!-- SMS Section -->
     <div class="flex flex-wrap items-end gap-4">
-      <label
-        z-checkbox
+      <z-checkbox
         name="altNum"
         class="pb-2.5"
         [(ngModel)]="altNum">
         {{ currentLanguageSet?.alternateNumber }}
-      </label>
+      </z-checkbox>
 
       <z-form-field *ngIf="altNum" class="w-64 max-w-full">
         <label z-form-label for="sms-mobile-number">{{
