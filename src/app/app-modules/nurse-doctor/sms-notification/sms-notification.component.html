@@ -1,79 +1,101 @@
-<!-- <section class="container-fluid"> -->
-<!-- Title Bar -->
-<mat-toolbar>
-  <span>Send Prescription to Beneficiary</span>
-  <button (click)="onClose()" class="close-btn">
-    <mat-icon>cancel</mat-icon>
-  </button>
+<div class="flex max-h-[85vh] w-[56rem] max-w-full flex-col">
+  <!-- Header -->
+  <div class="flex items-center justify-between gap-4 border-b border-border px-6 py-4">
+    <p class="m-0 text-lg font-semibold text-foreground">
+      Send Prescription to Beneficiary
+    </p>
+    <button
+      z-button
+      zType="ghost"
+      zSize="icon-sm"
+      type="button"
+      aria-label="Close"
+      (click)="onClose()">
+      <ng-icon name="lucideX"></ng-icon>
+    </button>
+  </div>
 
-</mat-toolbar>
-
-<!-- Dialog Content -->
-<mat-dialog-content>
-  <!-- Prescription Table -->
-  <div class="table-responsive">
-
-    <table class="mat-elevation-z4">
-      <thead>
-        <tr>
-          <th>Prescription ID</th>
-          <th>Drug</th>
-          <th>Strength</th>
-          <th>Frequency</th>
-          <th>No. of Days</th>
-          <th>Remarks</th>
-        </tr>
-      </thead>
-      <tbody *ngIf="data?.prescribedDrugs">
-        <ng-container *ngFor="let p of data.prescribedDrugs; let i = index">
-          <tr>
-            <td>
-              {{ p.prescribedDrugID }}
-            </td>
-            <td>{{ p.drugName }}</td>
-            <td>{{ p.dosage }}</td>
-            <td>{{ p.frequency }}</td>
-            <td>{{ p.noOfDays }}</td>
-            <td *ngIf="i === 0" [attr.rowspan]="data.prescribedDrugs.length">
+  <!-- Scrollable content -->
+  <div class="flex flex-col gap-6 overflow-y-auto px-6 py-5">
+    <!-- Prescription Table -->
+    <div class="w-full overflow-x-auto">
+      <table z-table>
+        <thead z-table-header>
+          <tr z-table-row>
+            <th z-table-head>Prescription ID</th>
+            <th z-table-head>Drug</th>
+            <th z-table-head>Strength</th>
+            <th z-table-head>Frequency</th>
+            <th z-table-head>No. of Days</th>
+            <th z-table-head>Remarks</th>
+          </tr>
+        </thead>
+        <tbody z-table-body *ngIf="data?.prescribedDrugs">
+          <tr
+            z-table-row
+            *ngFor="let p of data.prescribedDrugs; let i = index">
+            <td z-table-cell>{{ p.prescribedDrugID }}</td>
+            <td z-table-cell>{{ p.drugName }}</td>
+            <td z-table-cell>{{ p.dosage }}</td>
+            <td z-table-cell>{{ p.frequency }}</td>
+            <td z-table-cell>{{ p.noOfDays }}</td>
+            <td
+              z-table-cell
+              *ngIf="i === 0"
+              [attr.rowspan]="data.prescribedDrugs.length"
+              class="align-top">
               {{ data.remarks }}
             </td>
           </tr>
-        </ng-container>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
 
+    <!-- SMS Section -->
+    <div class="flex flex-wrap items-end gap-4">
+      <label
+        z-checkbox
+        name="altNum"
+        class="pb-2.5"
+        [(ngModel)]="altNum">
+        {{ currentLanguageSet?.alternateNumber }}
+      </label>
+
+      <z-form-field *ngIf="altNum" class="w-64 max-w-full">
+        <label z-form-label for="sms-mobile-number">{{
+          currentLanguageSet?.mobileNumber
+        }}</label>
+        <z-form-control>
+          <input
+            z-input
+            id="sms-mobile-number"
+            type="text"
+            class="bg-background"
+            required
+            minlength="10"
+            maxlength="10"
+            pattern="^[0-9]\d{9}$"
+            inputmode="numeric"
+            autocomplete="off"
+            [placeholder]="currentLanguageSet?.enterTenDigitMobileNumber"
+            name="mobileNumber"
+            #phnNum="ngModel"
+            [(ngModel)]="mobileNumber"
+            (keyup)="mobileNum(mobileNumber)"
+            (keypress)="allowOnlyNumbers($event)" />
+        </z-form-control>
+        <z-form-message *ngIf="phnNum.invalid && phnNum.touched" zType="error">
+          {{ currentLanguageSet?.enterTenDigitMobileNumber }}
+        </z-form-message>
+      </z-form-field>
+    </div>
   </div>
 
-  <!-- Pagination -->
-  <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
-
-
-  <!-- SMS Section -->
-  <div class="sms-section">
-    <mat-checkbox color="primary" class="alt-checkbox" [(ngModel)]="altNum">
-      {{ currentLanguageSet?.alternateNumber }}
-    </mat-checkbox>
-
-    <mat-form-field appearance="outline" *ngIf="altNum" class="alt-phone-field">
-      <mat-label>{{ currentLanguageSet?.mobileNumber }}</mat-label>
-      <!-- NOTE: removed inline padding style -->
-      <input placeholder="{{ currentLanguageSet?.enterTenDigitMobileNumber }}" type="text" required minlength="10"
-        maxlength="10" [(ngModel)]="mobileNumber" name="mobileNumber" #phnNum="ngModel"
-        (keyup)="mobileNum(mobileNumber)" (keypress)="allowOnlyNumbers($event)" pattern="^[0-9]\d{9}$"
-        inputmode="numeric" />
-      <mat-error *ngIf="phnNum.invalid && phnNum.touched">
-        {{ currentLanguageSet?.enterTenDigitMobileNumber }}
-      </mat-error>
-    </mat-form-field>
-  </div>
-
-
-
-  <!-- Action Buttons -->
-  <div class="action-row">
-    <button mat-raised-button class="send-btn" (click)="sendSMS()">
+  <!-- Footer -->
+  <div class="flex justify-end gap-2 border-t border-border px-6 py-4">
+    <button z-button zType="default" type="button" (click)="sendSMS()">
+      <ng-icon name="lucideSend"></ng-icon>
       Send SMS
     </button>
   </div>
-</mat-dialog-content>
-<!-- </section> -->
+</div>
