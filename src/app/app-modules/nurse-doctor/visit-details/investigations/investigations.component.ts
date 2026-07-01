@@ -35,6 +35,7 @@ import {
   FormGroup,
   FormControl,
   FormArray,
+  FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -47,21 +48,20 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
 import { NgFor } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 
 @Component({
   selector: 'app-patient-investigations',
   templateUrl: './investigations.component.html',
-  styleUrls: ['./investigations.component.css'],
+  standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatSelect,
+    FormsModule,
     NgFor,
-    MatOption,
+    ...ZardFormImports,
+    ...ZardSelectImports,
   ],
 })
 export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
@@ -79,6 +79,15 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
   RBStestDone: boolean = false;
   rbsTestResultCurrent: any;
 
+  /**
+   * z-select is string-valued, but the `laboratoryList` form control stores the
+   * full array of selected procedure OBJECTS (the API payload reads it directly).
+   * This local model keys each option by its stringified procedureID so the
+   * string-valued select can drive an object-valued control (adapter pattern).
+   */
+  selectedLabIds: string[] = [];
+  private laboratoryListSubscription!: Subscription;
+
   constructor(
     private fb: FormBuilder,
     private masterdataService: MasterdataService,
@@ -93,6 +102,44 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
     this.assignSelectedLanguage();
     this.getNurseMasterData();
     this.rbsTestValidation();
+
+    // Keep the string-id model in sync when the object-valued control is
+    // patched externally (view-mode checkLabTest, RBS auto-selection).
+    this.syncSelectedIdsFromControl();
+    this.laboratoryListSubscription =
+      this.laboratoryList.valueChanges.subscribe(() => {
+        this.syncSelectedIdsFromControl();
+      });
+  }
+
+  stringifyId(procedureID: any): string {
+    return String(procedureID);
+  }
+
+  private syncSelectedIdsFromControl() {
+    const selectedObjects = this.laboratoryList.value;
+    const ids = Array.isArray(selectedObjects)
+      ? selectedObjects.map((item: any) => this.stringifyId(item.procedureID))
+      : [];
+    // Assign a new reference only when the set actually changed, to avoid a
+    // ngModel/valueChanges feedback loop.
+    if (
+      ids.length !== this.selectedLabIds.length ||
+      ids.some(id => !this.selectedLabIds.includes(id))
+    ) {
+      this.selectedLabIds = ids;
+    }
+  }
+
+  onLaboratorySelectionChange(selectedIds: string | string[]) {
+    const ids = Array.isArray(selectedIds) ? selectedIds : [selectedIds];
+    // Resolve the selected id strings back to the full procedure objects so
+    // the form control keeps storing objects (its stored value type).
+    const selectedObjects = (this.selectLabTest || []).filter((item: any) =>
+      ids.includes(this.stringifyId(item.procedureID))
+    );
+    this.laboratoryList.setValue(selectedObjects);
+    this.checkTestName(selectedObjects);
   }
   /*
    * JA354063 - Multilingual Changes added on 13/10/21
@@ -132,6 +179,9 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
       this.getInvestigationDetails.unsubscribe();
     if (this.rbsTestResultSubscription) {
       this.rbsTestResultSubscription.unsubscribe();
+    }
+    if (this.laboratoryListSubscription) {
+      this.laboratoryListSubscription.unsubscribe();
     }
   }
 
@@ -207,10 +257,10 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
     return false;
   }
 
-  checkTestName(event: any) {
-    console.log('testName', event);
+  checkTestName(selectedTests: any) {
+    console.log('testName', selectedTests);
     this.RBStestDone = false;
-    const item = event.value;
+    const item = selectedTests;
     let oneSelected = 0;
     this.nurseService.setRbsSelectedInInvestigation(false);
     item.forEach((element: any) => {

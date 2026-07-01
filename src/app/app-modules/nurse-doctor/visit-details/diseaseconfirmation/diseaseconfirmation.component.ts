@@ -37,13 +37,12 @@ import { IdrsscoreService } from '../../shared/services/idrsscore.service';
 import { VisitDetailUtils } from '../../shared/utility/visit-detail-utility';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgFor } from '@angular/common';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { ZardCheckboxComponent } from 'Common-UI/v2/ui/checkbox';
 
 @Component({
   selector: 'app-diseaseconfirmation',
   templateUrl: './diseaseconfirmation.component.html',
-  styleUrls: ['./diseaseconfirmation.component.css'],
-  imports: [ReactiveFormsModule, NgFor, MatCheckbox],
+  imports: [ReactiveFormsModule, NgFor, ZardCheckboxComponent],
 })
 export class DiseaseconfirmationComponent implements OnInit {
   @Input()
@@ -114,8 +113,8 @@ export class DiseaseconfirmationComponent implements OnInit {
     );
   }
 
-  checked(event: any, item: any) {
-    console.log(event.checked);
+  checked(checkedState: boolean, item: any) {
+    console.log(checkedState);
     console.log(this.diseaseFormsGroup.value);
     if (this.diseaseFormsGroup.value) {
       this.diseasearray =
@@ -125,7 +124,7 @@ export class DiseaseconfirmationComponent implements OnInit {
         if (value.selected !== false) ar.push(value.diseaseName);
       });
       console.log('diseasearray', ar);
-      if (!event.checked) {
+      if (!checkedState) {
         if (item.value.diseaseName === 'Hypertension') {
           this.idrsScoreService.clearHypertensionSelected();
         }

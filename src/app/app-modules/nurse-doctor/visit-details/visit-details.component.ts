@@ -28,11 +28,7 @@ import { DoctorService } from '../shared/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
+import { ZardAccordionImports } from 'Common-UI/v2/ui/accordion';
 import { PatientVisitDetailsComponent } from './visit-details/visit-details.component';
 import { NgIf } from '@angular/common';
 import { CovidVaccinationStatusComponent } from './covid-vaccination-status/covid-vaccination-status.component';
@@ -48,12 +44,9 @@ import { DiseaseconfirmationComponent } from './diseaseconfirmation/diseaseconfi
 @Component({
   selector: 'app-visit-details',
   templateUrl: './visit-details.component.html',
-  styleUrls: ['./visit-details.component.css'],
   imports: [
-    MatAccordion,
+    ZardAccordionImports,
     ReactiveFormsModule,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
     PatientVisitDetailsComponent,
     NgIf,
     CovidVaccinationStatusComponent,

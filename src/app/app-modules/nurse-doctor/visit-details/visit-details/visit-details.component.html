@@ -1,123 +1,134 @@
-<div class="row m-t-20" [formGroup]="patientVisitDetailsForm">
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+<div
+  class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+  [formGroup]="patientVisitDetailsForm">
+  <z-form-field
+    class="gap-1"
     *ngIf="mode?.toLowerCase() === 'view'">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
-        currentLanguageSet?.Reports?.visitcode
-      }}</mat-label>
+    <label z-form-label for="visitCode">{{
+      currentLanguageSet?.Reports?.visitcode
+    }}</label>
+    <z-form-control>
       <input
-        matInput
+        z-input
+        class="w-full"
+        id="visitCode"
         name="visitCode"
         formControlName="visitCode"
         (focus)="trackFieldInteraction('Visit Code')" />
-    </mat-form-field>
-  </div>
+    </z-form-control>
+  </z-form-field>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
-        currentLanguageSet?.nurseData?.visitDetailsForm?.reasonForVisit
-      }}</mat-label>
-      <mat-select
-        matInput
-        class="input-full-width"
+  <z-form-field class="gap-1">
+    <label z-form-label zRequired for="visitReason">{{
+      currentLanguageSet?.nurseData?.visitDetailsForm?.reasonForVisit
+    }}</label>
+    <z-form-control>
+      <z-select
+        class="w-full"
+        id="visitReason"
         name="visitReason"
         formControlName="visitReason"
-        (selectionChange)="
+        [zPlaceholder]="
+          currentLanguageSet?.nurseData?.visitDetailsForm?.reasonForVisit || ''
+        "
+        (zSelectionChange)="
           reasonSelected(patientVisitDetailsForm.controls['visitReason'].value);
           trackFieldInteraction('Reason For Visit')
-        "
-        required>
-        <mat-option
+        ">
+        <z-select-item
           *ngFor="let visitReasons of templateVisitReasons"
-          [value]="visitReasons.visitReason">
+          [zValue]="visitReasons.visitReason">
           {{ visitReasons.visitReason }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+        </z-select-item>
+      </z-select>
+    </z-form-control>
+  </z-form-field>
 
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+  <z-form-field
+    class="gap-1"
     *ngIf="patientVisitDetailsForm!.controls['visitReason']?.value">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
-        currentLanguageSet?.nurseData?.visitDetailsForm?.visitCategory
-      }}</mat-label>
-      <mat-select
-        class="input-full-width"
+    <label z-form-label zRequired for="visitCategory">{{
+      currentLanguageSet?.nurseData?.visitDetailsForm?.visitCategory
+    }}</label>
+    <z-form-control>
+      <z-select
+        class="w-full"
+        id="visitCategory"
         name="visitCategory"
-        matInput
         formControlName="visitCategory"
-        (selectionChange)="
+        [zPlaceholder]="
+          currentLanguageSet?.nurseData?.visitDetailsForm?.visitCategory || ''
+        "
+        (zSelectionChange)="
           checkCategoryDependent(
             patientVisitDetailsForm.controls['visitCategory'].value
           );
           trackFieldInteraction('Visit Category')
-        "
-        required>
-        <mat-option
+        ">
+        <z-select-item
           *ngFor="let VisitCategories of templateFilterVisitCategories"
-          [value]="VisitCategories.visitCategory">
+          [zValue]="VisitCategories.visitCategory">
           {{ VisitCategories.visitCategory }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+        </z-select-item>
+      </z-select>
+    </z-form-control>
+  </z-form-field>
 
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+  <z-form-field
+    class="gap-1"
     *ngIf="
       showPregnancyStatus &&
       patientVisitDetailsForm!.controls['visitCategory']?.value !== null &&
       patientVisitDetailsForm!.controls['visitCategory']?.value !== undefined &&
       patientVisitDetailsForm!.controls['visitCategory']?.value !== 'PNC'
     ">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
-        currentLanguageSet?.nurseData?.visitDetailsForm?.pregnancyStatus
-      }}</mat-label>
-      <mat-select
-        matInput
-        class="input-full-width"
+    <label z-form-label for="pregnancyStatus">{{
+      currentLanguageSet?.nurseData?.visitDetailsForm?.pregnancyStatus
+    }}</label>
+    <z-form-control>
+      <z-select
+        class="w-full"
         id="pregnancyStatus"
         name="pregnancyStatus"
         formControlName="pregnancyStatus"
         [attr.readonly]="
           patientVisitDetailsForm.controls['visitCategory'].value === 'ANC'
         "
-        (selectionChange)="trackFieldInteraction('Pregnancy Status')">
-        <mat-option
+        [zPlaceholder]="
+          currentLanguageSet?.nurseData?.visitDetailsForm?.pregnancyStatus || ''
+        "
+        (zSelectionChange)="trackFieldInteraction('Pregnancy Status')">
+        <z-select-item
           *ngFor="let pregnancyStatus of templatePregnancyStatus"
-          [value]="pregnancyStatus">
+          [zValue]="pregnancyStatus">
           {{ pregnancyStatus }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+        </z-select-item>
+      </z-select>
+    </z-form-control>
+  </z-form-field>
 
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+  <z-form-field
+    class="gap-1"
     *ngIf="
       patientVisitDetailsForm!.controls['pregnancyStatus']?.value &&
       patientVisitDetailsForm!.controls['pregnancyStatus']?.value === 'Yes' &&
       patientVisitDetailsForm!.controls['visitCategory']?.value !== 'PNC'
     ">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
-        currentLanguageSet?.nurseData?.visitDetailsForm?.MCTSOrRCHID
-      }}</mat-label>
+    <label z-form-label for="rCHID">{{
+      currentLanguageSet?.nurseData?.visitDetailsForm?.MCTSOrRCHID
+    }}</label>
+    <z-form-control>
       <input
-        matInput
+        z-input
+        class="w-full"
+        id="rCHID"
         autocomplete="off"
-        matInput
         appDefaultNull
         allowText="number"
         maxlength="20"
         name="rCHID"
         formControlName="rCHID"
         (focus)="trackFieldInteraction('MCTS Or RCH ID')" />
-    </mat-form-field>
-  </div>
+    </z-form-control>
+  </z-form-field>
 </div>

@@ -34,21 +34,20 @@ import {
   DoctorService,
 } from '../../shared/services';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
 import { NgFor, NgIf } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 @Component({
   selector: 'app-covid-vaccination-status',
   templateUrl: './covid-vaccination-status.component.html',
-  styleUrls: ['./covid-vaccination-status.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatSelect,
     NgFor,
-    MatOption,
     NgIf,
+    ...ZardFormImports,
+    ...ZardSelectImports,
+    ZardButtonComponent,
   ],
 })
 export class CovidVaccinationStatusComponent implements OnInit, DoCheck {
