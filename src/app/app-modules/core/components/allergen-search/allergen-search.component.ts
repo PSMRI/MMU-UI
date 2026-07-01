@@ -144,6 +144,7 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
                 this.currentPage = 1;
               } else {
                 this.message = this.current_language_set.common.noRecordFound;
+                this.resetData();
               }
             } else {
               this.resetData();
