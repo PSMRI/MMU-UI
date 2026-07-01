@@ -26,23 +26,11 @@ import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-de
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { SetLanguageComponent } from '../../../core/components/set-language.component';
 import { HttpServiceService } from '../../../core/services/http-service.service';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
-import {
-  MomentDateAdapter,
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-} from '@angular/material-moment-adapter';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import {
-  MatDatepickerInput,
-  MatDatepickerToggle,
-  MatDatepicker,
-} from '@angular/material/datepicker';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardDatePickerComponent } from 'Common-UI/v2/ui/date-picker';
 import { NullDefaultValueDirective } from '../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
 import { NumberValidatorDirective } from '../../../core/directives/numberValidator.directive';
@@ -50,43 +38,13 @@ import { NumberValidatorDirective } from '../../../core/directives/numberValidat
 @Component({
   selector: 'app-nurse-anc-details',
   templateUrl: './anc-details.component.html',
-  styleUrls: ['./anc-details.component.css'],
-  providers: [
-    {
-      provide: MAT_DATE_LOCALE,
-      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
-    },
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    },
-    {
-      provide: MAT_DATE_FORMATS,
-      useValue: {
-        parse: {
-          dateInput: 'LL',
-        },
-        display: {
-          dateInput: 'DD/MM/YYYY', // Set the desired display format
-          monthYearLabel: 'MMM YYYY',
-          dateA11yLabel: 'LL',
-          monthYearA11yLabel: 'MMMM YYYY',
-        },
-      },
-    },
-  ],
   imports: [
     ReactiveFormsModule,
-    MatRadioGroup,
-    MatRadioButton,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-    MatSuffix,
-    MatDatepicker,
+    ZardFormImports,
+    ZardInputDirective,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
+    ZardDatePickerComponent,
     NullDefaultValueDirective,
     StringValidatorDirective,
     NumberValidatorDirective,
@@ -145,7 +103,7 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
 
     checkdate.setMonth(today.getMonth() - 9);
 
-    const lmpDateJS = lmpDate.toDate();
+    const lmpDateJS = lmpDate;
 
     if (lmpDateJS > checkdate && lmpDateJS < today) {
       this.patientANCDetailsForm.patchValue({

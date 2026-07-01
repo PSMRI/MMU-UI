@@ -20,7 +20,15 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, DoCheck, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  DoCheck,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DoctorService, MasterdataService } from '../shared/services';
@@ -28,27 +36,27 @@ import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
+  ZardAccordionComponent,
+  ZardAccordionImports,
+} from 'Common-UI/v2/ui/accordion';
 import { PatientVisitDetailsComponent } from '../visit-details/visit-details/visit-details.component';
 import { TmcconfirmationComponent } from './tmcconfirmation/tmcconfirmation.component';
 
 @Component({
   selector: 'app-tm-visit-details',
   templateUrl: './tm-visit-details.component.html',
-  styleUrls: ['./tm-visit-details.component.css'],
   imports: [
-    MatAccordion,
+    ...ZardAccordionImports,
     ReactiveFormsModule,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
     PatientVisitDetailsComponent,
     TmcconfirmationComponent,
   ],
 })
-export class TmVisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
+export class TmVisitDetailsComponent
+  implements OnInit, AfterViewInit, DoCheck, OnDestroy
+{
+  @ViewChild(ZardAccordionComponent)
+  visitAccordion?: ZardAccordionComponent;
   @Input()
   patientVisitForm!: FormGroup;
 
@@ -90,6 +98,14 @@ export class TmVisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
     this.tmcConfirmationForm = this.patientVisitForm.get(
       'tmcConfirmationForm'
     ) as FormGroup;
+  }
+  ngAfterViewInit() {
+    // The Zard accordion has no controlled-open input, so the "visit" panel
+    // (previously mat-expansion-panel expanded="true") is opened imperatively
+    // once the panels exist, to preserve the default-expanded first section.
+    if (this.visitAccordion && !this.visitAccordion.isOpen('visit')) {
+      this.visitAccordion.toggle('visit');
+    }
   }
   /*
    * JA354063 - Multilingual Changes added on 13/10/21

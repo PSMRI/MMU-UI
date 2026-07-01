@@ -30,7 +30,6 @@ import { GeneralPatientVitalsComponent } from './general-patient-vitals/general-
 @Component({
   selector: 'app-nurse-vitals',
   templateUrl: './vitals.component.html',
-  styleUrls: ['./vitals.component.css'],
   imports: [NgIf, CancerPatientVitalsComponent, GeneralPatientVitalsComponent],
 })
 export class VitalsComponent implements OnInit, OnChanges, DoCheck {
