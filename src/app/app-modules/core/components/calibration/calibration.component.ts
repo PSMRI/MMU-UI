@@ -22,61 +22,56 @@
 
 //SH20094090,calibration integration,09-06-2021
 
-import { Component, Inject, OnInit, DoCheck, ViewChild } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogContent,
-} from '@angular/material/dialog';
+import { Component, Inject, OnInit, DoCheck } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MasterdataService } from 'src/app/app-modules/nurse-doctor/shared/services';
 import { ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
-import { MatPaginator } from '@angular/material/paginator';
+import { NgIf, NgFor, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { CdkScrollable } from '@angular/cdk/scrolling';
-import { MatFormField, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import { DatePipe } from '@angular/common';
+  lucideX,
+  lucideSearch,
+  lucideChevronLeft,
+  lucideChevronRight,
+} from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardLoaderComponent } from 'Common-UI/v2/ui/loader';
+import { ZardPaginationImports } from 'Common-UI/v2/ui/pagination';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-calibration',
+  standalone: true,
   templateUrl: './calibration.component.html',
-  styleUrls: ['./calibration.component.css'],
   imports: [
-    MatTooltip,
-    MatIcon,
-    CdkScrollable,
-    MatDialogContent,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
-    MatPaginator,
+    NgIf,
+    NgFor,
     DatePipe,
+    FormsModule,
+    NgIcon,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ...ZardTableImports,
+    ZardLoaderComponent,
+    ...ZardPaginationImports,
+    ...ZardSelectImports,
+    ...tooltipImports,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideX,
+      lucideSearch,
+      lucideChevronLeft,
+      lucideChevronRight,
+    }),
   ],
 })
 export class CalibrationComponent implements OnInit, DoCheck {
@@ -85,23 +80,16 @@ export class CalibrationComponent implements OnInit, DoCheck {
   message = '';
   pageCount: any;
   selectedComponentsList = [];
-  currentPage = 1;
-  pager: any = {
-    totalItems: 0,
-    currentPage: 0,
-    totalPages: 0,
-    startPage: 0,
-    endPage: 0,
-    pages: 0,
-  };
-  pagedItems = [];
   placeHolderSearch: any;
-  dataList = [];
-  filteredDataList = [];
+  dataList: any[] = [];
+  filteredDataList: any[] = [];
   current_language_set: any;
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  components = new MatTableDataSource<any>();
   displayedColumns: any = ['sno', 'SCode', 'ExpiryDate'];
+  showProgressBar = false;
+
+  pageSizeOptions = [5, 10, 20];
+  pageSize = 5;
+  currentPage = 1;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public input: any,
@@ -126,29 +114,31 @@ export class CalibrationComponent implements OnInit, DoCheck {
   }
 
   masterData(providerServiceMapID: any, pageNo: any) {
+    this.showProgressBar = true;
     this.masterdataService
       .fetchCalibrationStrips(providerServiceMapID, pageNo)
       .subscribe(
         (res: any) => {
+          this.showProgressBar = false;
           if (res.statusCode === 200) {
             if (
               res.data &&
               res.data.calibrationData !== undefined &&
               res.data.calibrationData.length > 0
             ) {
-              this.components.data = res.data.calibrationData;
               this.dataList = res.data.calibrationData;
-              this.components.paginator = this.paginator;
+              this.filteredDataList = res.data.calibrationData;
+              this.currentPage = 1;
             } else {
               this.message = this.current_language_set.common.noRecordFound;
-              this.components.data = [];
-              this.components.paginator = this.paginator;
+              this.resetData();
             }
           } else {
             this.resetData();
           }
         },
         err => {
+          this.showProgressBar = false;
           this.resetData();
         }
       );
@@ -186,27 +176,62 @@ export class CalibrationComponent implements OnInit, DoCheck {
   }
 
   resetData() {
-    this.components.data = [];
-    this.components.paginator = this.paginator;
+    this.dataList = [];
+    this.filteredDataList = [];
+    this.currentPage = 1;
   }
 
   filterPreviousData(searchTerm: any) {
     if (!searchTerm) {
-      this.components.data = this.dataList;
-      this.components.paginator = this.paginator;
+      this.filteredDataList = this.dataList;
     } else {
-      this.components.data = [];
-      this.components.paginator = this.paginator;
+      this.filteredDataList = [];
       this.dataList.forEach(item => {
         for (const key in item) {
           const value: string = '' + item[key];
           if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-            this.components.data.push(item);
-            this.components.paginator = this.paginator;
+            this.filteredDataList.push(item);
             break;
           }
         }
       });
     }
+    this.currentPage = 1;
+  }
+
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.filteredDataList.length / this.pageSize));
+  }
+
+  get pagedItems(): any[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredDataList.slice(start, start + this.pageSize);
+  }
+
+  get pageNumbers(): number[] {
+    const total = this.totalPages;
+    const start = Math.max(1, this.currentPage - 2);
+    const end = Math.min(total, start + 4);
+    const pages: number[] = [];
+    for (let p = start; p <= end; p++) pages.push(p);
+    return pages;
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) this.currentPage = page;
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) this.currentPage--;
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) this.currentPage++;
+  }
+
+  changePageSize(size: string | string[]) {
+    const value = Array.isArray(size) ? size[0] : size;
+    this.pageSize = Number(value);
+    this.currentPage = 1;
   }
 }

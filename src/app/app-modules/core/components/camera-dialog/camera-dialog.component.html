@@ -1,183 +1,146 @@
-<div class="container-fluid dialog" *ngIf="capture">
-  <mat-dialog-content>
-    <div class="row">
-      <webcam
-        *ngIf="!captured"
-        [width]="options.width"
-        [height]="options.height"
-        #workarea
-        [trigger]="triggerObservable"
-        (imageCapture)="captureImg($event)"></webcam>
+<!-- Capture mode: live webcam + captured preview -->
+<div *ngIf="capture" class="flex flex-col gap-4 p-6">
+  <div class="flex justify-end">
+    <button
+      z-button
+      zType="ghost"
+      zSize="icon"
+      class="p-0"
+      aria-label="Close"
+      (click)="dialogRef.close(false)">
+      <ng-icon name="lucideX"></ng-icon>
+    </button>
+  </div>
 
-      <img
-        *ngIf="webcamImage"
-        [src]="webcamImage.imageAsDataUrl"
-        alt="sys"
-        height="400px" />
-    </div>
-  </mat-dialog-content>
-  <mat-dialog-actions align="center">
-    <h3 mat-dialog-title>
-      <div class="row">
-        <button
-          mat-raised-button
-          color="primary"
-          class="mat_blue col-2"
-          style="width: 12%; margin-right: 5px"
-          (click)="dialogRef.close(false)">
-          {{ current_language_set?.common?.cancel }}
-        </button>
-        <button
-          mat-raised-button
-          color="primary"
-          class="mat_blue col-2"
-          style="width: 12%; margin-right: 5px"
-          (click)="getSnapshot()">
-          {{ status }}
-        </button>
-        <button
-          mat-raised-button
-          color="primary"
-          class="mat_blue col-2"
-          style="width: 12%; margin-right: 5px"
-          [disabled]="!captured"
-          [mat-dialog-close]="sysImage">
-          {{ current_language_set?.common?.proceed }}
-        </button>
-      </div>
-    </h3>
-  </mat-dialog-actions>
+  <div class="flex justify-center">
+    <webcam
+      *ngIf="!captured"
+      [width]="options.width"
+      [height]="options.height"
+      #workarea
+      [trigger]="triggerObservable"
+      (imageCapture)="captureImg($event)"></webcam>
+
+    <img
+      *ngIf="webcamImage"
+      [src]="webcamImage.imageAsDataUrl"
+      alt="sys"
+      class="h-[400px] w-auto object-contain" />
+  </div>
+
+  <div class="flex justify-end gap-2">
+    <button z-button zType="outline" (click)="dialogRef.close(false)">
+      {{ current_language_set?.common?.cancel }}
+    </button>
+    <button z-button zType="default" (click)="getSnapshot()">
+      {{ status }}
+    </button>
+    <button
+      z-button
+      zType="default"
+      [disabled]="!captured"
+      (click)="dialogRef.close(sysImage)">
+      {{ current_language_set?.common?.proceed }}
+    </button>
+  </div>
 </div>
 
-<div class="container-fluid dialog" *ngIf="imageCode">
-  <mat-dialog-content>
-    <div class="row">
-      <img
-        *ngIf="webcamImage"
-        [src]="webcamImage.imageAsDataUrl"
-        alt="sys"
-        height="400px" />
-    </div>
-  </mat-dialog-content>
-  <mat-dialog-actions align="center">
-    <div class="row">
-      <button
-        mat-raised-button
-        color="primary"
-        class="mat_blue"
-        mat-dialog-close>
-        {{ current_language_set?.coreComponents?.close }}
-      </button>
-    </div>
-  </mat-dialog-actions>
+<!-- View captured image -->
+<div *ngIf="imageCode" class="flex flex-col gap-4 p-6">
+  <div class="flex justify-center">
+    <img
+      *ngIf="webcamImage"
+      [src]="webcamImage.imageAsDataUrl"
+      alt="sys"
+      class="h-[400px] w-auto object-contain" />
+  </div>
+  <div class="flex justify-end gap-2">
+    <button z-button zType="default" (click)="dialogRef.close()">
+      {{ current_language_set?.coreComponents?.close }}
+    </button>
+  </div>
 </div>
 
+<!-- No data available -->
 <div
-  class="container-fluid dialog"
-  *ngIf="!imageCode && !capture && !annotate && !graph">
-  <mat-dialog-content>
-    <div class="row">
-      <h3>
-        {{
-          current_language_set?.coreComponents
-            ?.noDataAvailableForThisBeneficiary
-        }}
-      </h3>
-    </div>
-  </mat-dialog-content>
-  <mat-dialog-actions align="center">
-    <div class="row">
-      <button
-        mat-raised-button
-        color="primary"
-        class="mat_blue"
-        mat-dialog-close>
-        {{ current_language_set?.coreComponents?.close }}
-      </button>
-    </div>
-  </mat-dialog-actions>
+  *ngIf="!imageCode && !capture && !annotate && !graph"
+  class="flex flex-col gap-4 p-6">
+  <p class="text-sm text-muted-foreground">
+    {{ current_language_set?.coreComponents?.noDataAvailableForThisBeneficiary }}
+  </p>
+  <div class="flex justify-end gap-2">
+    <button z-button zType="default" (click)="dialogRef.close()">
+      {{ current_language_set?.coreComponents?.close }}
+    </button>
+  </div>
 </div>
 
-<div class="container-fluid dialog" *ngIf="annotate">
-  <mat-dialog-content>
-    <div class="row">
-      <div class="col-md-5 col-sm-5 text-center">
-        <div style="display: none">
-          <img
-            [src]="annotate"
-            alt="annotate"
-            #myImg
-            (load)="loadingCanvas()" />
-        </div>
-        <canvas
-          #myCanvas
-          width="250"
-          height="250"
-          (click)="pointMark($event)"
-          style="border: 1px solid #d3d3d3"></canvas>
+<!-- Annotate: canvas + mark descriptions -->
+<div *ngIf="annotate" class="flex flex-col gap-4 p-6">
+  <div class="flex flex-col gap-4 md:flex-row">
+    <div class="flex flex-col items-center gap-2 md:basis-5/12">
+      <div class="hidden">
+        <img [src]="annotate" alt="annotate" #myImg (load)="loadingCanvas()" />
       </div>
+      <canvas
+        #myCanvas
+        width="250"
+        height="250"
+        (click)="pointMark($event)"
+        class="rounded-lg border border-input"></canvas>
+    </div>
 
-      <div class="col-md-7 overflown col-sm-7">
-        <h4>{{ current_language_set?.coreComponents?.markDescriptions }}</h4>
-        <div *ngFor="let mark of markers">
-          <mat-form-field>
-            <input
-              autocomplete="off"
-              matInput
-              placeholder="{{ mark.point }}."
-              maxlength="30"
-              [(ngModel)]="mark.description" />
-          </mat-form-field>
-        </div>
+    <div class="max-h-[250px] overflow-y-auto md:basis-7/12">
+      <p class="mb-2 text-sm font-semibold text-foreground">
+        {{ current_language_set?.coreComponents?.markDescriptions }}
+      </p>
+      <div *ngFor="let mark of markers" class="mb-2">
+        <label z-form-label class="flex flex-col gap-1">
+          <span class="text-xs text-muted-foreground">{{ mark.point }}.</span>
+          <input
+            z-input
+            autocomplete="off"
+            placeholder="{{ mark.point }}."
+            maxlength="30"
+            [(ngModel)]="mark.description" />
+        </label>
       </div>
     </div>
-  </mat-dialog-content>
+  </div>
 
-  <mat-dialog-actions align="center">
-    <div class="col-12 row">
-      <button
-        mat-raised-button
-        color="primary"
-        class="mat_blue col-2"
-        style="width: 12%; margin-right: 5px"
-        mat-dialog-close>
-        {{ current_language_set?.coreComponents?.close }}
-      </button>
-      <button
-        mat-raised-button
-        color="primary"
-        style="width: 12%; margin-right: 5px"
-        class="mat_blue col-2"
-        [disabled]="!markers.length"
-        (click)="clearPointers()">
-        {{ current_language_set?.coreComponents?.reset }}
-      </button>
-      <button
-        mat-raised-button
-        color="primary"
-        class="mat_blue col-2"
-        style="width: 12%; margin-right: 5px"
-        [disabled]="!markers.length"
-        [mat-dialog-close]="getMarkers()">
-        {{ current_language_set?.coreComponents?.save }}
-      </button>
-    </div>
-  </mat-dialog-actions>
+  <div class="flex justify-end gap-2">
+    <button z-button zType="outline" (click)="dialogRef.close()">
+      {{ current_language_set?.coreComponents?.close }}
+    </button>
+    <button
+      z-button
+      zType="outline"
+      [disabled]="!markers.length"
+      (click)="clearPointers()">
+      {{ current_language_set?.coreComponents?.reset }}
+    </button>
+    <button
+      z-button
+      zType="default"
+      [disabled]="!markers.length"
+      (click)="dialogRef.close(getMarkers())">
+      {{ current_language_set?.coreComponents?.save }}
+    </button>
+  </div>
 </div>
 
-<div class="container-fluid dialog" *ngIf="graph">
-  <mat-dialog-content
-    id="container-dialog"
-    style="max-height: unset !important">
-    <h4 *ngIf="graph?.type === 'bw'">
+<!-- Graph trends: chart + download -->
+<div *ngIf="graph" class="flex flex-col gap-4 p-6">
+  <div id="container-dialog" class="flex flex-col gap-2">
+    <p *ngIf="graph?.type === 'bw'" class="text-sm font-semibold text-foreground">
       {{ current_language_set?.previousvisit?.bodyweighttrends }}
-    </h4>
-    <h4 *ngIf="graph?.type === 'bg'">
+    </p>
+    <p *ngIf="graph?.type === 'bg'" class="text-sm font-semibold text-foreground">
       {{ current_language_set?.previousvisit?.bloodGlucoseTrends }}
-    </h4>
-    <h4 *ngIf="graph?.type === 'bp'">
+    </p>
+    <p *ngIf="graph?.type === 'bp'" class="text-sm font-semibold text-foreground">
       {{ current_language_set?.previousvisit?.bloodPressureTrends }}
-    </h4>
+    </p>
     <canvas
       baseChart
       [datasets]="graph?.chartData"
@@ -186,20 +149,14 @@
       [legend]="graph?.chartLegend"
       [data]="barChartData"
       [type]="barChartType"></canvas>
-  </mat-dialog-content>
+  </div>
 
-  <mat-dialog-actions align="center">
-    <div class="row">
-      <button mat-raised-button mat-dialog-close>
-        {{ current_language_set?.coreComponents?.close }}
-      </button>
-      <button
-        mat-raised-button
-        color="primary"
-        class="mat_blue"
-        (click)="downloadGraph()">
-        {{ current_language_set?.coreComponents?.download }}
-      </button>
-    </div>
-  </mat-dialog-actions>
+  <div class="flex justify-end gap-2">
+    <button z-button zType="outline" (click)="dialogRef.close()">
+      {{ current_language_set?.coreComponents?.close }}
+    </button>
+    <button z-button zType="default" (click)="downloadGraph()">
+      {{ current_language_set?.coreComponents?.download }}
+    </button>
+  </div>
 </div>

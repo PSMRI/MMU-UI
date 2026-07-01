@@ -20,70 +20,58 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Inject, DoCheck, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, DoCheck } from '@angular/core';
 import { MasterdataService } from '../../../nurse-doctor/shared/services/masterdata.service';
 import { SpinnerService } from '../../services/spinner.service';
 import { HttpServiceService } from '../../services/http-service.service';
-import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
 import { SetLanguageComponent } from '../set-language.component';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogClose,
-  MatDialogContent,
-} from '@angular/material/dialog';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { CdkScrollable } from '@angular/cdk/scrolling';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { NgIf, NgFor } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideX,
+  lucideSearch,
+  lucideChevronLeft,
+  lucideChevronRight,
+} from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardCheckboxComponent } from 'Common-UI/v2/ui/checkbox';
+import { ZardLoaderComponent } from 'Common-UI/v2/ui/loader';
+import { ZardPaginationImports } from 'Common-UI/v2/ui/pagination';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-provisional-search',
+  standalone: true,
   templateUrl: './provisional-search.component.html',
-  styleUrls: ['./provisional-search.component.css'],
   imports: [
-    MatDialogClose,
-    MatTooltip,
-    MatIcon,
-    MatFormField,
-    MatLabel,
-    MatInput,
+    NgIf,
+    NgFor,
     ReactiveFormsModule,
     FormsModule,
-    NgIf,
-    MatProgressSpinner,
-    CdkScrollable,
-    MatDialogContent,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatCheckbox,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
-    MatPaginator,
+    NgIcon,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ...ZardTableImports,
+    ZardCheckboxComponent,
+    ZardLoaderComponent,
+    ...ZardPaginationImports,
+    ...ZardSelectImports,
+    ...tooltipImports,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideX,
+      lucideSearch,
+      lucideChevronLeft,
+      lucideChevronRight,
+    }),
   ],
 })
 export class ProvisionalSearchComponent implements OnInit, DoCheck {
@@ -93,8 +81,10 @@ export class ProvisionalSearchComponent implements OnInit, DoCheck {
   disableDiagnosisList: any = [];
   current_language_set: any;
   displayedColumns: any = ['ConceptID', 'term', 'empty'];
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  diagnosis = new MatTableDataSource<any>();
+  diagnosisData: any[] = [];
+  pageSizeOptions = [5, 10, 20];
+  pageSize = 5;
+  currentPage = 1;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public input: any,
@@ -120,8 +110,8 @@ export class ProvisionalSearchComponent implements OnInit, DoCheck {
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
 
-  selectDiagnosis(event: any, item: any) {
-    if (event.checked) {
+  selectDiagnosis(checked: boolean, item: any) {
+    if (checked) {
       item.selected = true;
       this.selectedDiagnosisList.push(item);
     } else {
@@ -189,8 +179,8 @@ export class ProvisionalSearchComponent implements OnInit, DoCheck {
               this.showProgressBar = false;
               if (res.data && res.data.sctMaster.length > 0) {
                 this.showProgressBar = false;
-                this.diagnosis.data = res.data.sctMaster;
-                this.diagnosis.paginator = this.paginator;
+                this.diagnosisData = res.data.sctMaster;
+                this.currentPage = 1;
               }
             } else {
               this.resetData();
@@ -206,7 +196,43 @@ export class ProvisionalSearchComponent implements OnInit, DoCheck {
   }
 
   resetData() {
-    this.diagnosis.data = [];
-    this.diagnosis.paginator = this.paginator;
+    this.diagnosisData = [];
+    this.currentPage = 1;
+  }
+
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.diagnosisData.length / this.pageSize));
+  }
+
+  get pagedList(): any[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.diagnosisData.slice(start, start + this.pageSize);
+  }
+
+  get pageNumbers(): number[] {
+    const total = this.totalPages;
+    const start = Math.max(1, this.currentPage - 2);
+    const end = Math.min(total, start + 4);
+    const pages: number[] = [];
+    for (let p = start; p <= end; p++) pages.push(p);
+    return pages;
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) this.currentPage = page;
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) this.currentPage--;
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) this.currentPage++;
+  }
+
+  changePageSize(size: string | string[]) {
+    const value = Array.isArray(size) ? size[0] : size;
+    this.pageSize = Number(value);
+    this.currentPage = 1;
   }
 }
