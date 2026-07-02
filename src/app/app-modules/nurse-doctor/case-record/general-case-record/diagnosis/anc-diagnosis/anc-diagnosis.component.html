@@ -1,70 +1,74 @@
-<div class="m-t-10" [formGroup]="generalDiagnosisForm">
-  <div class="col-xs-12 text-right" *ngIf="visitCategory === 'ANC'">
-    <mat-label
-      class="mat-label-text"
-      *ngIf="showHRP === 'true' || complicationPregHRP === 'true'"
-      style="color: red"
-      ><h5>
-        <strong>** {{ current_language_set?.highRiskPregnancy }} **</strong>
-      </h5></mat-label
-    ><br />
+<div class="mt-4 flex flex-col gap-6" [formGroup]="generalDiagnosisForm">
+  <div
+    class="text-right"
+    *ngIf="visitCategory === 'ANC'">
+    <span
+      z-form-message
+      zType="error"
+      class="text-base font-bold"
+      *ngIf="showHRP === 'true' || complicationPregHRP === 'true'">
+      ** {{ current_language_set?.highRiskPregnancy }} **
+    </span>
   </div>
-  <section>
-    <!-- First Row -->
 
-    <div class="row">
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{ current_language_set?.casesheet?.gravida }}</mat-label>
+  <section class="flex flex-col gap-6">
+    <!-- First Row -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <z-form-field class="w-full">
+        <label z-form-label for="gravida_G">{{
+          current_language_set?.casesheet?.gravida
+        }}</label>
+        <z-form-control>
           <input
+            z-input
+            class="w-full"
+            id="gravida_G"
             autocomplete="off"
-            matInput
             defaultNull
             allowText="number"
             maxlength="2"
             name="gravida_G"
             formControlName="gravida_G"
             [readonly]="true" />
-        </mat-form-field>
-      </div>
+        </z-form-control>
+      </z-form-field>
 
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            current_language_set?.casesheet?.periodPreg
-          }}</mat-label>
+      <z-form-field class="w-full">
+        <label z-form-label for="duration">{{
+          current_language_set?.casesheet?.periodPreg
+        }}</label>
+        <z-form-control>
           <input
+            z-input
+            class="w-full"
+            id="duration"
             autocomplete="off"
-            matInput
             defaultNull
             name="duration"
             formControlName="duration"
             allowText="number"
             allowMax="10"
             [readonly]="true" />
-        </mat-form-field>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            current_language_set?.casesheet?.complications
-          }}</mat-label>
-          <mat-select
-            class="select-full-width"
+        </z-form-control>
+      </z-form-field>
+
+      <z-form-field class="w-full">
+        <label z-form-label for="complicationOfCurrentPregnancyList">{{
+          current_language_set?.casesheet?.complications
+        }}</label>
+        <z-form-control>
+          <z-select
+            class="w-full"
+            id="complicationOfCurrentPregnancyList"
             name="complicationOfCurrentPregnancyList"
-            formControlName="complicationOfCurrentPregnancyList"
-            multiple
-            (change)="
-              resetOtherPregnancyComplication(
-                complicationOfCurrentPregnancyList,
-                0
-              );
-              displayPositive(complicationOfCurrentPregnancyList)
-            ">
-            <mat-option
+            [zMultiple]="true"
+            [zPlaceholder]="current_language_set?.casesheet?.complications || ''"
+            [zValue]="selectedComplicationTypes"
+            (zSelectionChange)="onComplicationChange($event)">
+            <z-select-item
               *ngFor="let complication of masterData?.pregComplicationTypes"
-              [value]="complication"
-              [disabled]="
+              [zValue]="complication.pregComplicationType"
+              [zDisabled]="
                 !showAllPregComplication &&
                 ((disableNonePregnancyComplication &&
                   (complication.pregComplicationType === 'None' ||
@@ -74,144 +78,140 @@
                       complication.pregComplicationType !== 'Nil')))
               ">
               {{ complication.pregComplicationType }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div
-        class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-        *ngIf="showOtherPregnancyComplication">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            current_language_set?.common?.otherComplication
-          }}</mat-label>
+            </z-select-item>
+          </z-select>
+        </z-form-control>
+      </z-form-field>
+
+      <z-form-field class="w-full" *ngIf="showOtherPregnancyComplication">
+        <label z-form-label for="otherCurrPregComplication">{{
+          current_language_set?.common?.otherComplication
+        }}</label>
+        <z-form-control>
           <input
+            z-input
+            class="w-full"
+            id="otherCurrPregComplication"
             autocomplete="off"
-            matInput
             defaultNull
             allowText="alphaspace"
             maxlength="50"
             name="otherCurrPregComplication"
             formControlName="otherCurrPregComplication" />
-        </mat-form-field>
-      </div>
+        </z-form-control>
+      </z-form-field>
     </div>
 
     <!-- Second Row -->
-
-    <div class="row">
-      <div class="col-xs-6 m-t-20">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            current_language_set?.casesheet?.highStatus
-          }}</mat-label>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <z-form-field class="w-full">
+        <label z-form-label for="highRiskStatus">{{
+          current_language_set?.casesheet?.highStatus
+        }}</label>
+        <z-form-control>
           <textarea
-            matInput
+            z-input
+            class="min-h-20 w-full"
+            id="highRiskStatus"
             allowText="textAreaValidator"
             defaultNull
             maxlength="300"
             name="highRiskStatus"
-            formControlName="highRiskStatus">
-          </textarea>
-        </mat-form-field>
-      </div>
+            formControlName="highRiskStatus"></textarea>
+        </z-form-control>
+      </z-form-field>
 
-      <div class="col-xs-6 m-t-20">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            current_language_set?.casesheet?.highCondition
-          }}</mat-label>
+      <z-form-field class="w-full">
+        <label z-form-label for="highRiskCondition">{{
+          current_language_set?.casesheet?.highCondition
+        }}</label>
+        <z-form-control>
           <textarea
-            matInput
+            z-input
+            class="min-h-20 w-full"
+            id="highRiskCondition"
             allowText="textAreaValidator"
             defaultNull
             maxlength="300"
             name="highRiskCondition"
-            formControlName="highRiskCondition">
-          </textarea>
-        </mat-form-field>
-      </div>
+            formControlName="highRiskCondition"></textarea>
+        </z-form-control>
+      </z-form-field>
     </div>
 
     <!-- Third Row -->
-
-    <div class="row">
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 box">
-        <div class="form-group">
-          <mat-label
-            class="mat-label-text"
-            class="control-label"
-            for="deathDuringANCCaseRecord"
-            >{{ current_language_set?.casesheet?.maternalDeath }}</mat-label
-          >
-          <div class="clearfix"></div>
-          <mat-radio-group
-            name="isMaternalDeath"
-            formControlName="isMaternalDeath"
-            (change)="checkWithDeathDetails()">
-            <mat-radio-button color="primary" [value]="true"
-              >Yes</mat-radio-button
-            >
-            <mat-radio-button color="primary" [value]="false"
-              >No</mat-radio-button
-            >
-          </mat-radio-group>
-        </div>
-      </div>
+    <div class="flex flex-col gap-3">
+      <label z-form-label for="isMaternalDeath">{{
+        current_language_set?.casesheet?.maternalDeath
+      }}</label>
+      <z-radio-group
+        id="isMaternalDeath"
+        name="isMaternalDeath"
+        formControlName="isMaternalDeath"
+        zOrientation="horizontal"
+        class="gap-6"
+        (zChange)="checkWithDeathDetails()">
+        <z-radio [value]="true">Yes</z-radio>
+        <z-radio [value]="false">No</z-radio>
+      </z-radio-group>
     </div>
 
     <!-- Fourth Row -->
-
-    <div class="row" *ngIf="generalDiagnosisForm.value.isMaternalDeath">
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            current_language_set?.casesheet?.placeOfDeath
-          }}</mat-label>
+    <div
+      class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+      *ngIf="generalDiagnosisForm.value.isMaternalDeath">
+      <z-form-field class="w-full">
+        <label z-form-label for="placeOfDeath">{{
+          current_language_set?.casesheet?.placeOfDeath
+        }}</label>
+        <z-form-control>
           <input
+            z-input
+            class="w-full"
+            id="placeOfDeath"
             autocomplete="off"
-            matInput
             defaultNull
             name="placeOfDeath"
             allowText="alphaspace"
             formControlName="placeOfDeath"
             maxlength="50" />
-        </mat-form-field>
-      </div>
+        </z-form-control>
+      </z-form-field>
 
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            current_language_set?.casesheet?.dateOfDeath
-          }}</mat-label>
-          <input
-            matInput
-            [max]="today"
-            [matDatepicker]="picker"
+      <z-form-field class="w-full">
+        <label z-form-label for="dateOfDeath">{{
+          current_language_set?.casesheet?.dateOfDeath
+        }}</label>
+        <z-form-control>
+          <z-date-picker
+            id="dateOfDeath"
+            class="w-full"
             formControlName="dateOfDeath"
-            [min]="minimumDeathDate" />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      </div>
+            zFormat="dd/MM/yyyy"
+            [minDate]="minimumDeathDate"
+            [maxDate]="today"
+            [placeholder]="current_language_set?.casesheet?.dateOfDeath || ''">
+          </z-date-picker>
+        </z-form-control>
+      </z-form-field>
 
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            current_language_set?.casesheet?.causeOfDeath
-          }}</mat-label>
+      <z-form-field class="w-full">
+        <label z-form-label for="causeOfDeath">{{
+          current_language_set?.casesheet?.causeOfDeath
+        }}</label>
+        <z-form-control>
           <input
+            z-input
+            class="w-full"
+            id="causeOfDeath"
             autocomplete="off"
-            matInput
             defaultNull
             allowText="alphaspace"
             name="causeOfDeath"
             formControlName="causeOfDeath"
             maxlength="50" />
-        </mat-form-field>
-      </div>
+        </z-form-control>
+      </z-form-field>
     </div>
   </section>
 </div>

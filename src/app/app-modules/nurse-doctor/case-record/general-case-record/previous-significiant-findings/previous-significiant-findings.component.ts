@@ -20,69 +20,43 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import {
-  Component,
-  DoCheck,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { DoctorService } from '../../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { NgIf, DatePipe } from '@angular/common';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import { MatIcon } from '@angular/material/icon';
+import { NgIf, NgFor, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideSearch } from '@ng-icons/lucide';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardPaginatorComponent } from 'Common-UI/v2/ui/paginator';
 @Component({
   selector: 'app-previous-significiant-findings',
   templateUrl: './previous-significiant-findings.component.html',
-  styleUrls: ['./previous-significiant-findings.component.css'],
+  standalone: true,
   imports: [
     NgIf,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatIcon,
-    MatSuffix,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
-    MatPaginator,
+    NgFor,
+    FormsModule,
+    NgIcon,
     DatePipe,
+    ...cardImports,
+    ...ZardTableImports,
+    ZardInputDirective,
+    ZardPaginatorComponent,
   ],
+  viewProviders: [provideIcons({ lucideSearch })],
 })
 export class PreviousSignificiantFindingsComponent
   implements OnInit, OnDestroy, DoCheck
 {
   current_language_set: any;
+  filterTerm = '';
 
   displayedColumns: any = ['sno', 'significantfindings', 'captureddate'];
-
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
 
   constructor(
     private doctorService: DoctorService,
@@ -91,7 +65,7 @@ export class PreviousSignificiantFindingsComponent
   ) {}
   rowsPerPage = 5;
   activePage = 1;
-  pagedList = [];
+  pagedList: any[] = [];
   rotate = true;
   ngOnInit() {
     this.getPreviousSignificiantFindings();
@@ -120,8 +94,8 @@ export class PreviousSignificiantFindingsComponent
     console.log('list', this.pagedList);
   }
 
-  previousSignificiantFindingsList = [];
-  filteredPreviousSignificiantFindingsList = [];
+  previousSignificiantFindingsList: any[] = [];
+  filteredPreviousSignificiantFindingsList: any[] = [];
   previousSignificantFindingsSubs: any;
   getPreviousSignificiantFindings() {
     const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
@@ -134,9 +108,6 @@ export class PreviousSignificiantFindingsComponent
             this.previousSignificiantFindingsList = data.data.findings;
             this.filteredPreviousSignificiantFindingsList =
               this.previousSignificiantFindingsList;
-            this.dataSource.data = [];
-            this.dataSource.data = this.previousSignificiantFindingsList;
-            this.dataSource.paginator = this.paginator;
           }
         }
       });
@@ -148,8 +119,6 @@ export class PreviousSignificiantFindingsComponent
         this.previousSignificiantFindingsList;
     else {
       this.filteredPreviousSignificiantFindingsList = [];
-      this.dataSource.data = [];
-      this.dataSource.paginator = this.paginator;
       this.previousSignificiantFindingsList.forEach(item => {
         for (const key in item) {
           const value: string = '' + item[key];

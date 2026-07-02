@@ -25,35 +25,40 @@ import {
   MAT_DIALOG_DATA,
   MatDialogRef,
   MatDialogClose,
-  MatDialogContent,
 } from '@angular/material/dialog';
+import { NgIf, NgFor } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX, lucideSearch } from '@ng-icons/lucide';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MatIcon } from '@angular/material/icon';
-import { CdkScrollable } from '@angular/cdk/scrolling';
-import { NgIf } from '@angular/common';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import { NgxPaginationModule } from 'ngx-pagination';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardPaginatorComponent } from 'Common-UI/v2/ui/paginator';
+
 @Component({
   selector: 'app-beneficiary-mcts-call-history',
   templateUrl: './beneficiary-mcts-call-history.component.html',
-  styleUrls: ['./beneficiary-mcts-call-history.component.css'],
+  standalone: true,
   imports: [
     MatDialogClose,
-    MatIcon,
-    CdkScrollable,
-    MatDialogContent,
     NgIf,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatSuffix,
-    NgxPaginationModule,
+    NgFor,
+    FormsModule,
+    NgIcon,
+    ...cardImports,
+    ...ZardTableImports,
+    ZardInputDirective,
+    ZardButtonComponent,
+    ZardPaginatorComponent,
   ],
+  viewProviders: [provideIcons({ lucideX, lucideSearch })],
 })
 export class BeneficiaryMctsCallHistoryComponent implements OnInit, DoCheck {
   current_language_set: any;
+  filterTerm = '';
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -64,23 +69,23 @@ export class BeneficiaryMctsCallHistoryComponent implements OnInit, DoCheck {
   callDetails: any = [];
   filteredCallDetails: any = [];
   callDetailsRowsPerPage = 5;
-  callDetailsActivePage = 1;
+  callDetailsPagedList: any = [];
+
   ngOnInit() {
     this.callDetails = this.data;
     this.filteredCallDetails = this.data;
-    this.callDetailsPageChanged({
-      page: this.callDetailsActivePage,
-      itemsPerPage: this.callDetailsRowsPerPage,
-    });
   }
+
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
+
   assignSelectedLanguage() {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
+
   filterCallHistory(searchTerm?: string) {
     if (!searchTerm) {
       this.filteredCallDetails = this.callDetails;
@@ -93,23 +98,5 @@ export class BeneficiaryMctsCallHistoryComponent implements OnInit, DoCheck {
         }
       });
     }
-
-    this.callDetailsActivePage = 1;
-    this.callDetailsPageChanged({
-      page: 1,
-      itemsPerPage: this.callDetailsRowsPerPage,
-    });
-  }
-
-  callDetailsPagedList: any = [];
-  callDetailsPageChanged(event: any): void {
-    console.log('called', event);
-    const startItem = (event.page - 1) * event.itemsPerPage;
-    const endItem = event.page * event.itemsPerPage;
-    this.callDetailsPagedList = this.filteredCallDetails.slice(
-      startItem,
-      endItem
-    );
-    console.log('list', this.callDetailsPagedList);
   }
 }

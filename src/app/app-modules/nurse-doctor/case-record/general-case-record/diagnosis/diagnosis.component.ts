@@ -32,7 +32,6 @@ import { NcdScreeningDiagnosisComponent } from './ncd-screening-diagnosis/ncd-sc
 @Component({
   selector: 'app-diagnosis',
   templateUrl: './diagnosis.component.html',
-  styleUrls: ['./diagnosis.component.css'],
   imports: [
     NgIf,
     GeneralOpdDiagnosisComponent,
@@ -44,7 +43,6 @@ import { NcdScreeningDiagnosisComponent } from './ncd-screening-diagnosis/ncd-sc
   ],
 })
 export class DiagnosisComponent {
-  @Input()
   @Input()
   generalDiagnosisForm!: FormGroup;
 
