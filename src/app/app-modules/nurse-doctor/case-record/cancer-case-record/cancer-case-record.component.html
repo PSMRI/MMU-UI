@@ -1,251 +1,334 @@
-<mat-accordion [formGroup]="diagnosisForm">
-  <mat-expansion-panel expanded="true">
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.previousvisit?.Previousvisitdetails }}</h5>
-    </mat-expansion-panel-header>
-    <app-beneficiary-platform-history></app-beneficiary-platform-history>
-    <div class="row m-t-20">
-      <div class="col-xs-12 col-sm-12 col-md-6">
-        <h4>{{ current_language_set?.previousvisit?.currentvitals }}</h4>
-        <table
-          class="table table-bordered table-responsive currentVitals-table"
-          aria-describedby="currentvitals">
-          <tr>
-            <td>
-              {{
-                current_language_set?.vitalsDetails
-                  ?.AnthropometryDataANC_OPD_NCD_PNC?.weight
-              }}: <span>{{ currentVitals?.weight_Kg }}</span>
-            </td>
-            <td>
-              {{
-                current_language_set?.vitalsDetails
-                  ?.AnthropometryDataANC_OPD_NCD_PNC?.height
-              }}: <span>{{ currentVitals?.height_cm }}</span>
-            </td>
-            <td>
-              {{
-                current_language_set?.vitalsDetails
-                  ?.AnthropometryDataANC_OPD_NCD_PNC?.waist
-              }}:
-              <span [ngClass]="{ abnormal: !normalWaist }">{{
-                currentVitals?.waistCircumference_cm
-              }}</span>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {{
-                current_language_set?.vitalsDetails
-                  ?.AnthropometryDataANC_OPD_NCD_PNC?.BMI
-              }}(Kg/m<sup>2</sup>):
-              <span
-                [ngClass]="{
-                  abnormal: calculateBMI() < 18.5 || calculateBMI() > 24.9
-                }"
-                >{{ calculateBMI() }}</span
-              >
-            </td>
-            <td>
-              {{
-                current_language_set?.vitalsDetails?.vitalsCancerscreening_QC
-                  ?.HbA1c
-              }}(%):
-              <span [ngClass]="{ abnormal: +currentVitals?.hbA1C > 5.7 }">{{
-                currentVitals?.hbA1C
-              }}</span>
-            </td>
-            <td>
-              {{
-                current_language_set?.vitalsDetails?.vitalsCancerscreening_QC
-                  ?.hemoglobin
-              }}: <span>{{ currentVitals?.hemoglobin }}</span>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {{ current_language_set?.sPOTwoWithUnit }}:
-              <span
-                [ngClass]="{
-                  abnormal: currentVitals?.sPO2 < 1 || currentVitals?.sPO2 > 100
-                }"
-                >{{ currentVitals?.sPO2 }}</span
-              >
-            </td>
-          </tr>
-          <tr>
-            <th colspan="3" id="bloodpressuremmhg">
-              {{ current_language_set?.previousvisit?.bloodpressuremmhg }}
-            </th>
-          </tr>
-          <tr>
-            <td>
-              {{
-                current_language_set?.vitalsDetails?.vitalsCancerscreening_QC
-                  ?.systolic
-              }}: <span>{{ currentVitals?.systolicBP_1stReading }}</span>
-            </td>
-            <td>
-              {{
-                current_language_set?.vitalsDetails?.vitalsCancerscreening_QC
-                  ?.systolic
-              }}: <span>{{ currentVitals?.systolicBP_2ndReading }}</span>
-            </td>
-            <td>
-              {{
-                current_language_set?.vitalsDetails?.vitalsCancerscreening_QC
-                  ?.systolic
-              }}: <span>{{ currentVitals?.systolicBP_3rdReading }}</span>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {{
-                current_language_set?.vitalsDetails?.vitalsCancerscreening_QC
-                  ?.diastolic
-              }}: <span>{{ currentVitals?.diastolicBP_1stReading }}</span>
-            </td>
-            <td>
-              {{
-                current_language_set?.vitalsDetails?.vitalsCancerscreening_QC
-                  ?.diastolic
-              }}: <span>{{ currentVitals?.diastolicBP_2ndReading }}</span>
-            </td>
-            <td>
-              {{
-                current_language_set?.vitalsDetails?.vitalsCancerscreening_QC
-                  ?.diastolic
-              }}: <span>{{ currentVitals?.diastolicBP_3rdReading }}</span>
-            </td>
-          </tr>
-          <tr>
-            <th colspan="3" id="bloodpressuremmhgp">
-              {{ current_language_set?.previousvisit?.bloodglucosemg }}
-            </th>
-          </tr>
-          <tr>
-            <td>
-              {{
-                current_language_set?.vitalsDetails?.vitalsCancerscreening_QC
-                  ?.fasting
-              }}:
-              <span
-                [ngClass]="{
-                  abnormal: currentVitals?.bloodGlucose_Fasting > 100
-                }"
-                >{{ currentVitals?.bloodGlucose_Fasting }}</span
-              >
-            </td>
-            <td>
-              {{
-                current_language_set?.vitalsDetails?.vitalsCancerscreening_QC
-                  ?.random
-              }}:
-              <span
-                [ngClass]="{
-                  abnormal: currentVitals?.bloodGlucose_Random > 140
-                }"
-                >{{ currentVitals?.bloodGlucose_Random }}</span
-              >
-            </td>
-            <td>
-              {{
-                current_language_set?.vitalsDetails?.vitalsCancerscreening_QC
-                  ?.postPrandial
-              }}:
-              <span
-                [ngClass]="{
-                  abnormal: currentVitals?.bloodGlucose_2HrPostPrandial > 140
-                }"
-                >{{ currentVitals?.bloodGlucose_2HrPostPrandial }}</span
-              >
-            </td>
-          </tr>
-        </table>
-        <div class="view-link">
-          <a mat-raised-button style="display: none">{{
-            current_language_set?.common?.viewMore
-          }}</a>
-        </div>
-      </div>
-
-      <div class="col-xs-12 col-sm-12 col-md-6 p-t-10">
-        <div
-          style="margin: 10px; display: block; max-height: 150px"
-          *ngIf="weightChartData.length && weightChartLabels.length">
-          <h5>{{ current_language_set?.previousvisit?.bodyweighttrends }}</h5>
-
-          <canvas
-            baseChart
-            [datasets]="weightChartData"
-            [labels]="weightChartLabels"
-            [options]="lineChartOptions"
-            [legend]="weightChartLegend"
-            [type]="'line'"
-            (chartClick)="chartClicked('bw')"></canvas>
-        </div>
-        <div class="no_records" *ngIf="!weightChartData.length">
-          <h4>{{ current_language_set?.common?.previousRecordWeight }}</h4>
-        </div>
-      </div>
+<z-accordion
+  zType="multiple"
+  class="flex flex-col gap-4"
+  [formGroup]="diagnosisForm">
+  <z-accordion-item
+    class="rounded-lg border border-border bg-card"
+    zValue="previous-visit">
+    <div class="flex items-center gap-3 px-4">
+      <z-accordion-trigger class="flex-1 text-left">
+        <span class="text-sm font-semibold text-foreground">{{
+          current_language_set?.previousvisit?.Previousvisitdetails
+        }}</span>
+      </z-accordion-trigger>
     </div>
 
-    <div class="row">
-      <div class="col-md-6 p-t-10">
-        <div
-          style="margin: 10px; display: block; max-height: 150px"
-          *ngIf="bpChartData.length && bpChartLabels.length">
-          <h5>
-            {{ current_language_set?.previousvisit?.bloodPressureTrends }}
-          </h5>
-          <canvas
-            baseChart
-            [datasets]="bpChartData"
-            [labels]="bpChartLabels"
-            [options]="lineChartOptions"
-            [legend]="bpChartLegend"
-            [type]="'line'"
-            (chartClick)="chartClicked('bp')"></canvas>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-beneficiary-platform-history></app-beneficiary-platform-history>
+
+        <div class="mt-5 grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div class="flex flex-col gap-3">
+            <p class="text-base font-semibold text-foreground">
+              {{ current_language_set?.previousvisit?.currentvitals }}
+            </p>
+            <div
+              class="overflow-x-auto rounded-lg border border-border"
+              aria-describedby="currentvitals">
+              <table class="w-full border-collapse text-sm">
+                <tbody>
+                  <tr class="border-b border-border">
+                    <td class="border-r border-border px-3 py-2">
+                      {{
+                        current_language_set?.vitalsDetails
+                          ?.AnthropometryDataANC_OPD_NCD_PNC?.weight
+                      }}:
+                      <span class="font-medium text-foreground">{{
+                        currentVitals?.weight_Kg
+                      }}</span>
+                    </td>
+                    <td class="border-r border-border px-3 py-2">
+                      {{
+                        current_language_set?.vitalsDetails
+                          ?.AnthropometryDataANC_OPD_NCD_PNC?.height
+                      }}:
+                      <span class="font-medium text-foreground">{{
+                        currentVitals?.height_cm
+                      }}</span>
+                    </td>
+                    <td class="px-3 py-2">
+                      {{
+                        current_language_set?.vitalsDetails
+                          ?.AnthropometryDataANC_OPD_NCD_PNC?.waist
+                      }}:
+                      <span
+                        class="font-medium text-foreground"
+                        [ngClass]="{ 'text-destructive': !normalWaist }"
+                        >{{ currentVitals?.waistCircumference_cm }}</span
+                      >
+                    </td>
+                  </tr>
+                  <tr class="border-b border-border">
+                    <td class="border-r border-border px-3 py-2">
+                      {{
+                        current_language_set?.vitalsDetails
+                          ?.AnthropometryDataANC_OPD_NCD_PNC?.BMI
+                      }}(Kg/m<sup>2</sup>):
+                      <span
+                        class="font-medium text-foreground"
+                        [ngClass]="{
+                          'text-destructive':
+                            calculateBMI() < 18.5 || calculateBMI() > 24.9
+                        }"
+                        >{{ calculateBMI() }}</span
+                      >
+                    </td>
+                    <td class="border-r border-border px-3 py-2">
+                      {{
+                        current_language_set?.vitalsDetails
+                          ?.vitalsCancerscreening_QC?.HbA1c
+                      }}(%):
+                      <span
+                        class="font-medium text-foreground"
+                        [ngClass]="{
+                          'text-destructive': +currentVitals?.hbA1C > 5.7
+                        }"
+                        >{{ currentVitals?.hbA1C }}</span
+                      >
+                    </td>
+                    <td class="px-3 py-2">
+                      {{
+                        current_language_set?.vitalsDetails
+                          ?.vitalsCancerscreening_QC?.hemoglobin
+                      }}:
+                      <span class="font-medium text-foreground">{{
+                        currentVitals?.hemoglobin
+                      }}</span>
+                    </td>
+                  </tr>
+                  <tr class="border-b border-border">
+                    <td class="px-3 py-2" colspan="3">
+                      {{ current_language_set?.sPOTwoWithUnit }}:
+                      <span
+                        class="font-medium text-foreground"
+                        [ngClass]="{
+                          'text-destructive':
+                            currentVitals?.sPO2 < 1 || currentVitals?.sPO2 > 100
+                        }"
+                        >{{ currentVitals?.sPO2 }}</span
+                      >
+                    </td>
+                  </tr>
+                  <tr class="border-b border-border bg-muted/50">
+                    <th
+                      class="px-3 py-2 text-left font-semibold text-foreground"
+                      colspan="3"
+                      id="bloodpressuremmhg">
+                      {{
+                        current_language_set?.previousvisit?.bloodpressuremmhg
+                      }}
+                    </th>
+                  </tr>
+                  <tr class="border-b border-border">
+                    <td class="border-r border-border px-3 py-2">
+                      {{
+                        current_language_set?.vitalsDetails
+                          ?.vitalsCancerscreening_QC?.systolic
+                      }}:
+                      <span class="font-medium text-foreground">{{
+                        currentVitals?.systolicBP_1stReading
+                      }}</span>
+                    </td>
+                    <td class="border-r border-border px-3 py-2">
+                      {{
+                        current_language_set?.vitalsDetails
+                          ?.vitalsCancerscreening_QC?.systolic
+                      }}:
+                      <span class="font-medium text-foreground">{{
+                        currentVitals?.systolicBP_2ndReading
+                      }}</span>
+                    </td>
+                    <td class="px-3 py-2">
+                      {{
+                        current_language_set?.vitalsDetails
+                          ?.vitalsCancerscreening_QC?.systolic
+                      }}:
+                      <span class="font-medium text-foreground">{{
+                        currentVitals?.systolicBP_3rdReading
+                      }}</span>
+                    </td>
+                  </tr>
+                  <tr class="border-b border-border">
+                    <td class="border-r border-border px-3 py-2">
+                      {{
+                        current_language_set?.vitalsDetails
+                          ?.vitalsCancerscreening_QC?.diastolic
+                      }}:
+                      <span class="font-medium text-foreground">{{
+                        currentVitals?.diastolicBP_1stReading
+                      }}</span>
+                    </td>
+                    <td class="border-r border-border px-3 py-2">
+                      {{
+                        current_language_set?.vitalsDetails
+                          ?.vitalsCancerscreening_QC?.diastolic
+                      }}:
+                      <span class="font-medium text-foreground">{{
+                        currentVitals?.diastolicBP_2ndReading
+                      }}</span>
+                    </td>
+                    <td class="px-3 py-2">
+                      {{
+                        current_language_set?.vitalsDetails
+                          ?.vitalsCancerscreening_QC?.diastolic
+                      }}:
+                      <span class="font-medium text-foreground">{{
+                        currentVitals?.diastolicBP_3rdReading
+                      }}</span>
+                    </td>
+                  </tr>
+                  <tr class="border-b border-border bg-muted/50">
+                    <th
+                      class="px-3 py-2 text-left font-semibold text-foreground"
+                      colspan="3"
+                      id="bloodpressuremmhgp">
+                      {{ current_language_set?.previousvisit?.bloodglucosemg }}
+                    </th>
+                  </tr>
+                  <tr>
+                    <td class="border-r border-border px-3 py-2">
+                      {{
+                        current_language_set?.vitalsDetails
+                          ?.vitalsCancerscreening_QC?.fasting
+                      }}:
+                      <span
+                        class="font-medium text-foreground"
+                        [ngClass]="{
+                          'text-destructive':
+                            currentVitals?.bloodGlucose_Fasting > 100
+                        }"
+                        >{{ currentVitals?.bloodGlucose_Fasting }}</span
+                      >
+                    </td>
+                    <td class="border-r border-border px-3 py-2">
+                      {{
+                        current_language_set?.vitalsDetails
+                          ?.vitalsCancerscreening_QC?.random
+                      }}:
+                      <span
+                        class="font-medium text-foreground"
+                        [ngClass]="{
+                          'text-destructive':
+                            currentVitals?.bloodGlucose_Random > 140
+                        }"
+                        >{{ currentVitals?.bloodGlucose_Random }}</span
+                      >
+                    </td>
+                    <td class="px-3 py-2">
+                      {{
+                        current_language_set?.vitalsDetails
+                          ?.vitalsCancerscreening_QC?.postPrandial
+                      }}:
+                      <span
+                        class="font-medium text-foreground"
+                        [ngClass]="{
+                          'text-destructive':
+                            currentVitals?.bloodGlucose_2HrPostPrandial > 140
+                        }"
+                        >{{ currentVitals?.bloodGlucose_2HrPostPrandial }}</span
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="text-center">
+              <a class="hidden" z-button zType="outline">{{
+                current_language_set?.common?.viewMore
+              }}</a>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <div
+              class="mx-2 block max-h-40"
+              *ngIf="weightChartData.length && weightChartLabels.length">
+              <p class="text-sm font-semibold text-foreground">
+                {{ current_language_set?.previousvisit?.bodyweighttrends }}
+              </p>
+              <canvas
+                baseChart
+                [datasets]="weightChartData"
+                [labels]="weightChartLabels"
+                [options]="lineChartOptions"
+                [legend]="weightChartLegend"
+                [type]="'line'"
+                (chartClick)="chartClicked('bw')"></canvas>
+            </div>
+            <div
+              class="mt-12 block rounded-lg border border-border p-12 text-center"
+              *ngIf="!weightChartData.length">
+              <p class="text-base font-semibold text-foreground">
+                {{ current_language_set?.common?.previousRecordWeight }}
+              </p>
+            </div>
+          </div>
         </div>
-        <div class="no_records" *ngIf="!bpChartData.length">
-          <h4>
-            {{
-              current_language_set?.previousvisit
-                ?.previousbloodpressurerecordsfound
-            }}
-          </h4>
+
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div class="pt-2">
+            <div
+              class="mx-2 block max-h-40"
+              *ngIf="bpChartData.length && bpChartLabels.length">
+              <p class="text-sm font-semibold text-foreground">
+                {{ current_language_set?.previousvisit?.bloodPressureTrends }}
+              </p>
+              <canvas
+                baseChart
+                [datasets]="bpChartData"
+                [labels]="bpChartLabels"
+                [options]="lineChartOptions"
+                [legend]="bpChartLegend"
+                [type]="'line'"
+                (chartClick)="chartClicked('bp')"></canvas>
+            </div>
+            <div
+              class="mt-12 block rounded-lg border border-border p-12 text-center"
+              *ngIf="!bpChartData.length">
+              <p class="text-base font-semibold text-foreground">
+                {{
+                  current_language_set?.previousvisit
+                    ?.previousbloodpressurerecordsfound
+                }}
+              </p>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <div
+              class="mx-2 block max-h-40"
+              *ngIf="bgChartData.length && bgChartLabels.length">
+              <p class="text-sm font-semibold text-foreground">
+                {{ current_language_set?.common?.bloodGlucoseTrend }}
+              </p>
+              <canvas
+                baseChart
+                [datasets]="bgChartData"
+                [labels]="bgChartLabels"
+                [options]="lineChartOptions"
+                [legend]="bgChartLegend"
+                [type]="'line'"
+                (chartClick)="chartClicked('bg')"></canvas>
+            </div>
+            <div
+              class="mt-12 block rounded-lg border border-border p-12 text-center"
+              *ngIf="!bgChartData.length">
+              <p class="text-base font-semibold text-foreground">
+                {{
+                  current_language_set?.previousvisit
+                    ?.previousbloodglucoserecordsfound
+                }}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
+    </z-accordion-content>
+  </z-accordion-item>
 
-      <div class="col-md-6 p-t-10">
-        <div
-          style="margin: 10px; display: block; max-height: 150px"
-          *ngIf="bgChartData.length && bgChartLabels.length">
-          <h5>{{ current_language_set?.common?.bloodGlucoseTrend }}</h5>
-
-          <canvas
-            baseChart
-            [datasets]="bgChartData"
-            [labels]="bgChartLabels"
-            [options]="lineChartOptions"
-            [legend]="bgChartLegend"
-            [type]="'line'"
-            (chartClick)="chartClicked('bg')"></canvas>
-        </div>
-        <div class="no_records" *ngIf="!bgChartData.length">
-          <h4>
-            {{
-              current_language_set?.previousvisit
-                ?.previousbloodglucoserecordsfound
-            }}
-          </h4>
-        </div>
-      </div>
-    </div>
-    <div class="row p-t-30"></div>
-  </mat-expansion-panel>
-
-  <mat-expansion-panel
+  <z-accordion-item
+    class="rounded-lg border border-border bg-card"
+    zValue="findings"
     *ngIf="
       findings &&
       ((findings.briefHistory && findings.briefHistory !== '') ||
@@ -255,164 +338,203 @@
         (findings.gynecologicalExamination &&
           findings.gynecologicalExamination !== ''))
     ">
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.Find?.findings }}</h5>
-    </mat-expansion-panel-header>
-    <div class="row m-t-10">
-      <div
-        class="col-xs-12 col-sm-12 col-md-6"
-        *ngIf="
-          findings && findings.briefHistory && findings.briefHistory !== ''
-        ">
-        <mat-form-field class="textarea-full-width">
-          <textarea
-            matInput
-            disabled="true"
-            matTextareaAutosize
-            allowText="textAreaValidator"
-            placeholder="{{
+    <div class="flex items-center gap-3 px-4">
+      <z-accordion-trigger class="flex-1 text-left">
+        <span class="text-sm font-semibold text-foreground">{{
+          current_language_set?.Find?.findings
+        }}</span>
+      </z-accordion-trigger>
+    </div>
+
+    <z-accordion-content>
+      <div class="px-4">
+        <div class="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2">
+          <z-form-field
+            *ngIf="
+              findings && findings.briefHistory && findings.briefHistory !== ''
+            ">
+            <label z-form-label for="findings-brief-history">{{
               current_language_set?.ExaminationData?.cancerScreeningExamination
                 ?.symptoms?.briefHistory
-            }}"
-            >{{ findings?.briefHistory }}</textarea
-          >
-        </mat-form-field>
-      </div>
+            }}</label>
+            <z-form-control>
+              <textarea
+                id="findings-brief-history"
+                z-input
+                class="min-h-20 w-full"
+                disabled
+                allowText="textAreaValidator"
+                placeholder="{{
+                  current_language_set?.ExaminationData
+                    ?.cancerScreeningExamination?.symptoms?.briefHistory
+                }}"
+                >{{ findings?.briefHistory }}</textarea
+              >
+            </z-form-control>
+          </z-form-field>
 
-      <div
-        class="col-xs-12 col-sm-12 col-md-6"
-        *ngIf="
-          findings &&
-          findings.oralExamination &&
-          findings.oralExamination !== ''
-        ">
-        <mat-form-field class="textarea-full-width">
-          <textarea
-            matInput
-            disabled="true"
-            matTextareaAutosize
-            placeholder="{{
+          <z-form-field
+            *ngIf="
+              findings &&
+              findings.oralExamination &&
+              findings.oralExamination !== ''
+            ">
+            <label z-form-label for="findings-oral">{{
               current_language_set?.ExaminationData?.cancerScreeningExamination
                 ?.oral?.oralExamamination
-            }}"
-            >{{ findings?.oralExamination }}</textarea
-          >
-        </mat-form-field>
-      </div>
+            }}</label>
+            <z-form-control>
+              <textarea
+                id="findings-oral"
+                z-input
+                class="min-h-20 w-full"
+                disabled
+                placeholder="{{
+                  current_language_set?.ExaminationData
+                    ?.cancerScreeningExamination?.oral?.oralExamamination
+                }}"
+                >{{ findings?.oralExamination }}</textarea
+              >
+            </z-form-control>
+          </z-form-field>
 
-      <div
-        class="col-xs-12 col-sm-12 col-md-6"
-        *ngIf="
-          findings &&
-          findings.abdominalExamination &&
-          findings.abdominalExamination !== ''
-        ">
-        <mat-form-field class="textarea-full-width">
-          <textarea
-            matInput
-            disabled="true"
-            matTextareaAutosize
-            placeholder="{{
+          <z-form-field
+            *ngIf="
+              findings &&
+              findings.abdominalExamination &&
+              findings.abdominalExamination !== ''
+            ">
+            <label z-form-label for="findings-abdominal">{{
               current_language_set?.ExaminationData?.cancerScreeningExamination
                 ?.abdominal?.abdominalExamination
-            }}"
-            >{{ findings?.abdominalExamination }}</textarea
-          >
-        </mat-form-field>
-      </div>
+            }}</label>
+            <z-form-control>
+              <textarea
+                id="findings-abdominal"
+                z-input
+                class="min-h-20 w-full"
+                disabled
+                placeholder="{{
+                  current_language_set?.ExaminationData
+                    ?.cancerScreeningExamination?.abdominal
+                    ?.abdominalExamination
+                }}"
+                >{{ findings?.abdominalExamination }}</textarea
+              >
+            </z-form-control>
+          </z-form-field>
 
-      <div
-        class="col-xs-12 col-sm-12 col-md-6"
-        *ngIf="
-          findings &&
-          findings.gynecologicalExamination &&
-          findings.gynecologicalExamination !== ''
-        ">
-        <mat-form-field class="textarea-full-width">
-          <textarea
-            matInput
-            disabled="true"
-            matTextareaAutosize
-            placeholder="{{
+          <z-form-field
+            *ngIf="
+              findings &&
+              findings.gynecologicalExamination &&
+              findings.gynecologicalExamination !== ''
+            ">
+            <label z-form-label for="findings-gynecological">{{
               current_language_set?.ExaminationData?.cancerScreeningExamination
                 ?.gynecological?.gynecologicalExamination
-            }}"
-            >{{ findings?.gynecologicalExamination }}</textarea
-          >
-        </mat-form-field>
+            }}</label>
+            <z-form-control>
+              <textarea
+                id="findings-gynecological"
+                z-input
+                class="min-h-20 w-full"
+                disabled
+                placeholder="{{
+                  current_language_set?.ExaminationData
+                    ?.cancerScreeningExamination?.gynecological
+                    ?.gynecologicalExamination
+                }}"
+                >{{ findings?.gynecologicalExamination }}</textarea
+              >
+            </z-form-control>
+          </z-form-field>
+        </div>
+
+        <div class="mt-4 flex flex-col gap-2" *ngIf="mammogramLink">
+          <p class="text-base font-semibold text-foreground">
+            {{
+              current_language_set?.ExaminationData?.cancerScreeningExamination
+                ?.breast?.breastExamination
+            }}
+            -
+            <span class="text-sm font-normal text-muted-foreground">{{
+              current_language_set?.common?.resultMammogram
+            }}</span>
+          </p>
+          <div class="grid grid-cols-1 items-center gap-2 sm:grid-cols-2">
+            <strong class="text-sm text-foreground">{{
+              current_language_set?.common?.report
+            }}</strong>
+            <a href="#" class="text-primary">
+              <ng-icon name="lucideFile" size="20"></ng-icon>
+            </a>
+          </div>
+        </div>
       </div>
+    </z-accordion-content>
+  </z-accordion-item>
+
+  <z-accordion-item
+    class="rounded-lg border border-border bg-card"
+    zValue="diagnosis">
+    <div class="flex items-center gap-3 px-4">
+      <z-accordion-trigger class="flex-1 text-left">
+        <span class="text-sm font-semibold text-foreground">{{
+          current_language_set?.DiagnosisDetails?.diagnosis
+        }}</span>
+      </z-accordion-trigger>
     </div>
 
-    <div class="row" *ngIf="mammogramLink">
-      <div class="col-xs-12">
-        <h4>
-          {{
-            current_language_set?.ExaminationData?.cancerScreeningExamination
-              ?.breast?.breastExamination
-          }}
-          - <small>{{ current_language_set?.common?.resultMammogram }}</small>
-        </h4>
-      </div>
-
-      <div class="col-xs-6 col-sm-3">
-        <strong>{{ current_language_set?.common?.report }}</strong>
-      </div>
-
-      <div class="col-xs-6 col-sm-3">
-        <a href="#"><em class="fa fa-file-o fa-lg cursorPointer"></em></a>
-      </div>
-    </div>
-  </mat-expansion-panel>
-
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.DiagnosisDetails?.diagnosis }}</h5>
-    </mat-expansion-panel-header>
-    <div class="row m-t-10">
-      <div class="col-xs-12">
-        <mat-form-field class="textarea-full-width">
-          <mat-label>{{
+    <z-accordion-content>
+      <div class="mt-2 flex flex-col gap-4 px-4">
+        <z-form-field>
+          <label z-form-label zRequired for="provisional-diagnosis-primary">{{
             current_language_set?.DiagnosisDetails?.provisionaldiagnosisprimary
-          }}</mat-label>
-          <textarea
-            matInput
-            matTextareaAutosize
-            allowText="inputFieldValidator"
-            allowText="textAreaValidator"
-            maxlength="500"
-            formControlName="provisionalDiagnosisPrimaryDoctor"
-            required>
-          </textarea>
-        </mat-form-field>
-      </div>
+          }}</label>
+          <z-form-control>
+            <textarea
+              id="provisional-diagnosis-primary"
+              z-input
+              class="min-h-20 w-full"
+              allowText="inputFieldValidator"
+              allowText="textAreaValidator"
+              maxlength="500"
+              formControlName="provisionalDiagnosisPrimaryDoctor"
+              required></textarea>
+          </z-form-control>
+        </z-form-field>
 
-      <div class="col-xs-12">
-        <mat-form-field class="textarea-full-width">
-          <mat-label>{{ current_language_set?.common?.remarks }}</mat-label>
-          <textarea
-            matInput
-            allowText="textAreaValidator"
-            matTextareaAutosize
-            maxlength="500"
-            formControlName="remarks">
-          </textarea>
-        </mat-form-field>
-      </div>
+        <z-form-field>
+          <label z-form-label for="diagnosis-remarks">{{
+            current_language_set?.common?.remarks
+          }}</label>
+          <z-form-control>
+            <textarea
+              id="diagnosis-remarks"
+              z-input
+              class="min-h-20 w-full"
+              allowText="textAreaValidator"
+              maxlength="500"
+              formControlName="remarks"></textarea>
+          </z-form-control>
+        </z-form-field>
 
-      <div class="col-xs-12">
-        <mat-form-field class="textarea-full-width">
-          <mat-label>{{
+        <z-form-field>
+          <label z-form-label for="provisional-diagnosis-oncologist">{{
             current_language_set?.DiagnosisDetails?.diagnosisbyoncologist
-          }}</mat-label>
-          <textarea
-            matInput
-            matTextareaAutosize
-            allowText="textAreaValidator"
-            maxlength="500"
-            formControlName="provisionalDiagnosisOncologist">
-          </textarea>
-        </mat-form-field>
+          }}</label>
+          <z-form-control>
+            <textarea
+              id="provisional-diagnosis-oncologist"
+              z-input
+              class="min-h-20 w-full"
+              allowText="textAreaValidator"
+              maxlength="500"
+              formControlName="provisionalDiagnosisOncologist"></textarea>
+          </z-form-control>
+        </z-form-field>
       </div>
-    </div>
-  </mat-expansion-panel>
-</mat-accordion>
+    </z-accordion-content>
+  </z-accordion-item>
+</z-accordion>

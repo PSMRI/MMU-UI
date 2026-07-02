@@ -41,20 +41,19 @@ import {
 import { MasterdataService, DoctorService } from '../../../shared/services';
 import { GeneralUtils } from '../../../shared/utility/general-utility';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
-import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
 import { NgIf, NgFor, NgClass, SlicePipe } from '@angular/common';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import {
-  MatOption,
-  MatAutocompleteTrigger,
-  MatAutocomplete,
-} from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCheck, lucideX, lucidePencil } from '@ng-icons/lucide';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { ZardPaginationComponent } from 'Common-UI/v2/ui/pagination';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 interface prescribe {
@@ -80,25 +79,23 @@ interface prescribe {
 @Component({
   selector: 'app-prescription',
   templateUrl: './prescription.component.html',
-  styleUrls: ['./prescription.component.css'],
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucideCheck, lucideX, lucidePencil })],
   imports: [
     ReactiveFormsModule,
     FormsModule,
     NgIf,
-    MatIcon,
-    MatFormField,
-    MatLabel,
-    MatSelect,
     NgFor,
-    MatOption,
-    MatInput,
-    MatAutocompleteTrigger,
-    MatAutocomplete,
-    StringValidatorDirective,
     NgClass,
-    MatPaginator,
     SlicePipe,
+    NgIcon,
+    ...ZardSelectImports,
+    ZardInputDirective,
+    ZardButtonComponent,
+    ...ZardFormImports,
+    ...tooltipImports,
+    ZardPaginationComponent,
+    StringValidatorDirective,
   ],
 })
 export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
@@ -115,8 +112,9 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
   createdBy: any;
 
   pageSize = 5;
-  pageEvent!: PageEvent;
   pageLimits: any = [];
+  currentPageIndex = 1;
+  medicineListOpen = false;
   currentPrescription: prescribe = {
     id: null,
     drugID: null,
@@ -175,6 +173,62 @@ export class PrescriptionComponent implements OnInit, OnDestroy, DoCheck {
     return prescribedDrugsControl instanceof FormArray
       ? prescribedDrugsControl.controls
       : null;
+  }
+
+  // --- Zard control adapters ---------------------------------------------
+  // z-pagination is 1-based and drives the existing pageLimits slicing, which
+  // stays 0-based via setLimits(). totalPages feeds z-pagination's [zTotal].
+  get totalPages(): number {
+    const length =
+      this.drugPrescriptionForm?.get('prescribedDrugs')?.value?.length || 0;
+    return Math.max(1, Math.ceil(length / this.pageSize));
+  }
+
+  // The medicine text field holds either the raw typed string (while filtering)
+  // or the selected drug object (after selection); this mirrors matAutocomplete's
+  // [displayWith]="displayFn" so the input shows the object's label, unchanged.
+  get medicineDisplay(): string {
+    if (this.tempDrugName && typeof this.tempDrugName === 'object') {
+      return this.displayFn(this.tempDrugName);
+    }
+    return this.tempDrugName || '';
+  }
+
+  onMedicineInput(value: string) {
+    this.tempDrugName = value;
+    this.medicineListOpen = true;
+    this.filterMedicine(this.tempDrugName);
+  }
+
+  onMedicineFocus() {
+    this.trackFieldInteraction('Medicine');
+    this.medicineListOpen = true;
+  }
+
+  onMedicineBlur() {
+    // Defer so a list option's (mousedown) commits before the list closes.
+    setTimeout(() => {
+      this.medicineListOpen = false;
+      this.reEnterMedicine();
+    });
+  }
+
+  onMedicineSelected(item: any) {
+    this.tempDrugName = item;
+    this.medicineListOpen = false;
+    this.selectMedicineObject({ option: { value: item } });
+  }
+
+  // z-select is string-valued; keep the numeric duration/quantity value types.
+  onDurationChange(value: string | string[]) {
+    const raw = Array.isArray(value) ? value[0] : value;
+    this.currentPrescription.duration = raw === '' ? null : +raw;
+  }
+
+  onQuantityChange(value: string | string[]) {
+    const raw = Array.isArray(value) ? value[0] : value;
+    this.currentPrescription.qtyPrescribed = raw === '' ? null : +raw;
+    this.trackFieldInteraction('Quantity Selection');
   }
 
   ngOnInit() {
