@@ -20,10 +20,10 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, DoCheck, OnInit } from '@angular/core';
+import { Component, DoCheck, OnInit, ViewContainerRef } from '@angular/core';
 import { DoctorService } from '../../shared/services';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
@@ -127,7 +127,8 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   constructor(
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
-    private dialog: MatDialog,
+    private dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private httpServiceService: HttpServiceService,
     readonly sessionstorage: SessionStorageService,
     private router: Router
@@ -302,14 +303,17 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
             '/nurse-doctor/print/' + 'MMU' + '/' + 'previous',
           ]);
         } else {
-          this.dialog.open(CaseSheetComponent, {
-            disableClose: true,
-            width: '95%',
-            panelClass: 'preview-casesheet',
-            data: {
+          this.dialog.create<CaseSheetComponent, unknown>({
+            zContent: CaseSheetComponent,
+            zMaskClosable: false,
+            zWidth: '95%',
+            zData: {
               previous: true,
               serviceType: serviceType,
             },
+            zHideFooter: true,
+            zClosable: false,
+            zViewContainerRef: this.viewContainerRef,
           });
         }
       }
@@ -444,12 +448,17 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   }
 
   showCallDetails(CallDetails: any) {
-    const mdDialogRef: MatDialogRef<BeneficiaryMctsCallHistoryComponent> =
-      this.dialog.open(BeneficiaryMctsCallHistoryComponent, {
-        width: '70%',
-        panelClass: 'preview-casesheet',
-        data: CallDetails,
-      });
+    const mdDialogRef = this.dialog.create<
+      BeneficiaryMctsCallHistoryComponent,
+      unknown
+    >({
+      zContent: BeneficiaryMctsCallHistoryComponent,
+      zWidth: '70%',
+      zData: CallDetails,
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
+    });
 
     mdDialogRef.afterClosed().subscribe(result => {
       if (result) {

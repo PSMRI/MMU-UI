@@ -27,6 +27,7 @@ import {
   ViewChild,
   DoCheck,
   AfterViewChecked,
+  ViewContainerRef,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import {
@@ -45,7 +46,7 @@ import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard
 import { ViewFileComponent } from './../view-file/view-file.component';
 import { ViewRadiologyUploadedFilesComponent } from '../../core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { environment } from 'src/environments/environment';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { Observable, of } from 'rxjs';
@@ -188,7 +189,8 @@ export class WorkareaComponent
   constructor(
     private fb: FormBuilder,
     private confirmationService: ConfirmationService,
-    private dialog: MatDialog,
+    private dialog: ZardDialogService,
+    private viewContainerRef: ViewContainerRef,
     private router: Router,
     private masterdataService: MasterDataService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
@@ -774,12 +776,16 @@ export class WorkareaComponent
     return kmFileManager;
   }
   openToViewFile(procedureID: any) {
-    const dialogRef = this.dialog.open(ViewFileComponent, {
-      width: '50%',
-      data: {
+    const dialogRef = this.dialog.create<ViewFileComponent, unknown>({
+      zContent: ViewFileComponent,
+      zWidth: '50%',
+      zData: {
         viewFileObj: this.fileObj,
         procedureID: procedureID,
       },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       this.fileObj = result;
@@ -1078,11 +1084,18 @@ export class WorkareaComponent
 
   viewFileContent(fileIDs: any) {
     console.log(fileIDs);
-    const dialogRef = this.dialog.open(ViewRadiologyUploadedFilesComponent, {
-      width: '40%',
-      data: {
+    const dialogRef = this.dialog.create<
+      ViewRadiologyUploadedFilesComponent,
+      unknown
+    >({
+      zContent: ViewRadiologyUploadedFilesComponent,
+      zWidth: '40%',
+      zData: {
         filesDetails: fileIDs,
       },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
@@ -1110,15 +1123,18 @@ export class WorkareaComponent
       output.push(element.componentCode);
     });
     console.log('calibration', api);
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '200px',
-      disableClose: true,
-      data: {
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: {
         startAPI: api.value.procedureStartAPI,
         output: output,
         procedure: api,
       },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('he;;p', result, result['result']);

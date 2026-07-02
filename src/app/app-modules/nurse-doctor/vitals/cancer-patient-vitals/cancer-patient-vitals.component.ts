@@ -27,6 +27,7 @@ import {
   OnChanges,
   OnDestroy,
   DoCheck,
+  ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
@@ -36,7 +37,7 @@ import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-de
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { IotcomponentComponent } from 'src/app/app-modules/core/components/iotcomponent/iotcomponent.component';
 import { ActivatedRoute } from '@angular/router';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
@@ -108,7 +109,8 @@ export class CancerPatientVitalsComponent
 
   constructor(
     private fb: FormBuilder,
-    private dialog: MatDialog,
+    private dialog: ZardDialogService,
+    private viewContainerRef: ViewContainerRef,
     private confirmationService: ConfirmationService,
     private httpServiceService: HttpServiceService,
     private nurseService: NurseService,
@@ -281,11 +283,14 @@ export class CancerPatientVitalsComponent
   }
   openIOTRBSModel() {
     this.rbsPopup = true;
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startRBSTest },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startRBSTest },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       this.rbsPopup = false;
@@ -307,11 +312,14 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTSPO2Model() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startPulseTest },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startPulseTest },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result !== null) {
@@ -776,11 +784,14 @@ export class CancerPatientVitalsComponent
     }
   }
   openIOTWeightModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startWeightTest },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startWeightTest },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('he;;p', result, result['result']);
@@ -794,11 +805,14 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTTempModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startTempTest },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startTempTest },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('temperature', result, result['temperature']);
@@ -812,11 +826,14 @@ export class CancerPatientVitalsComponent
   }
 
   openIOTPulseRateModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startPulseTest },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startPulseTest },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('pulse_oxymetery', result, result['pulseRate']);
@@ -829,11 +846,14 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTBP1Model() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBPTest },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startBPTest },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);
@@ -847,11 +867,14 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTBP2Model() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBPTest },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startBPTest },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);
@@ -865,11 +888,14 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTBP3Model() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBPTest },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startBPTest },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);
@@ -883,11 +909,14 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTHemoglobinModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startHemoglobinTest },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startHemoglobinTest },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);
@@ -900,11 +929,14 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTBGFastingModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBloodGlucose },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startBloodGlucose },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_glucose', result['sys'], result['dia']);
@@ -917,11 +949,14 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTBGRandomModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBloodGlucose },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startBloodGlucose },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_glucose', result['sys'], result['dia']);
@@ -934,11 +969,14 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTBGPostPrandialModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBloodGlucose },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startBloodGlucose },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result !== null) {

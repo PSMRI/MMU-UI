@@ -27,6 +27,7 @@ import {
   OnChanges,
   DoCheck,
   OnDestroy,
+  ViewContainerRef,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -39,7 +40,7 @@ import {
 } from '../shared/services';
 import { NCDScreeningUtils } from '../shared/utility';
 import { environment } from 'src/environments/environment';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { mergeMap, of } from 'rxjs';
@@ -122,7 +123,8 @@ export class NcdScreeningComponent
 
   constructor(
     private fb: FormBuilder,
-    private dialog: MatDialog,
+    private dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private confirmationService: ConfirmationService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private masterdataService: MasterdataService,
@@ -902,11 +904,14 @@ export class NcdScreeningComponent
   }
 
   openIOTWeightModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startWeightTest },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startWeightTest },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('he;;p', result, result['result']);
@@ -920,11 +925,14 @@ export class NcdScreeningComponent
     });
   }
   openIOTBGFastingModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBloodGlucose },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startBloodGlucose },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_glucose', result['sys'], result['dia']);
@@ -936,11 +944,14 @@ export class NcdScreeningComponent
     });
   }
   openIOTBGRandomModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBloodGlucose },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startBloodGlucose },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_glucose', result['sys'], result['dia']);
@@ -952,11 +963,14 @@ export class NcdScreeningComponent
     });
   }
   openIOTBGPostPrandialModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBloodGlucose },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startBloodGlucose },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_glucose', result['sys'], result['dia']);
@@ -968,11 +982,14 @@ export class NcdScreeningComponent
     });
   }
   openIOTBGNotSpecifiedModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBloodGlucose },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startBloodGlucose },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_glucose', result['sys'], result['dia']);
@@ -984,11 +1001,14 @@ export class NcdScreeningComponent
     });
   }
   openIOTBP1Model() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBPTest },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startBPTest },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);
@@ -1001,11 +1021,14 @@ export class NcdScreeningComponent
     });
   }
   openIOTBP2Model() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBPTest },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startBPTest },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);
@@ -1018,11 +1041,14 @@ export class NcdScreeningComponent
     });
   }
   openIOTBP3Model() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBPTest },
+    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
+      zContent: IotcomponentComponent,
+      zWidth: '600px',
+      zMaskClosable: false,
+      zData: { startAPI: this.startBPTest },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);

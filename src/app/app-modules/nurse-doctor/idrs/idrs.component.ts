@@ -30,6 +30,7 @@ import {
   OnDestroy,
   DoCheck,
   OnChanges,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   FormGroup,
@@ -50,7 +51,7 @@ import {
   BeneficiaryDetailsService,
   ConfirmationService,
 } from '../../core/services';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { PreviousDetailsComponent } from '../../core/components/previous-details/previous-details.component';
@@ -146,7 +147,8 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   constructor(
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private route: ActivatedRoute,
-    private dialog: MatDialog,
+    private dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private confirmationService: ConfirmationService,
     private idrsScoreService: IdrsscoreService,
     private masterdataService: MasterdataService,
@@ -1446,11 +1448,15 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   }
 
   viewPreviousData(data: any) {
-    this.dialog.open(PreviousDetailsComponent, {
-      data: {
+    this.dialog.create<PreviousDetailsComponent, unknown>({
+      zContent: PreviousDetailsComponent,
+      zData: {
         dataList: data,
         title: this.currentLanguageSet.previousDiabetesHistoryDetails,
       },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
   }
 }

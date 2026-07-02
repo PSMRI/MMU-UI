@@ -27,7 +27,7 @@ import {
   DoCheck,
   OnDestroy,
   ChangeDetectorRef,
-  Injector,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -46,7 +46,7 @@ import {
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import { ValidationUtils } from '../../../shared/utility/validation-utility';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
@@ -144,8 +144,8 @@ export class GeneralPersonalHistoryComponent
 
   constructor(
     private fb: FormBuilder,
-    private dialog: MatDialog,
-    private readonly injector: Injector,
+    private dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private nurseService: NurseService,
     private doctorService: DoctorService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
@@ -979,8 +979,12 @@ export class GeneralPersonalHistoryComponent
   }
 
   viewPreviousData(data: any, title: any) {
-    this.dialog.open(PreviousDetailsComponent, {
-      data: { dataList: data, title: title },
+    this.dialog.create({
+      zContent: PreviousDetailsComponent,
+      zData: { dataList: data, title: title },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
   }
 
@@ -1187,9 +1191,12 @@ export class GeneralPersonalHistoryComponent
       searchTerm !== undefined &&
       searchTerm.length > 2
     ) {
-      const dialogRef = this.dialog.open(AllergenSearchComponent, {
-        injector: this.injector,
-        data: { searchTerm: searchTerm },
+      const dialogRef = this.dialog.create<AllergenSearchComponent, unknown>({
+        zContent: AllergenSearchComponent,
+        zData: { searchTerm: searchTerm },
+        zHideFooter: true,
+        zClosable: false,
+        zViewContainerRef: this.viewContainerRef,
       });
 
       dialogRef.afterClosed().subscribe(result => {

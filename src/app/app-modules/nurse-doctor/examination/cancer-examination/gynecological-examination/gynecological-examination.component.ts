@@ -28,6 +28,7 @@ import {
   ElementRef,
   DoCheck,
   EventEmitter,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -43,7 +44,7 @@ import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { NgIf, NgFor } from '@angular/common';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -104,7 +105,8 @@ export class GynecologicalExaminationComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     readonly sessionstorage: SessionStorageService,
     private doctorService: DoctorService,
-    private dialog: MatDialog
+    private dialog: ZardDialogService,
+    private viewContainerRef: ViewContainerRef
   ) {}
 
   ngOnInit() {
@@ -325,18 +327,22 @@ export class GynecologicalExaminationComponent implements OnInit, DoCheck {
   }
 
   viewNurseSelectedFiles() {
-    const ViewTestReport = this.dialog.open(
+    const ViewTestReport = this.dialog.create<
       ViewRadiologyUploadedFilesComponent,
-      {
-        width: '40%',
-        data: {
-          filesDetails: this.viewFiles,
-          // width: 0.8 * window.innerWidth + "px",
-          panelClass: 'dialog-width',
-          disableClose: false,
-        },
-      }
-    );
+      unknown
+    >({
+      zContent: ViewRadiologyUploadedFilesComponent,
+      zWidth: '40%',
+      zData: {
+        filesDetails: this.viewFiles,
+        // width: 0.8 * window.innerWidth + "px",
+        panelClass: 'dialog-width',
+        disableClose: false,
+      },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
+    });
     ViewTestReport.afterClosed().subscribe(result => {
       if (result) {
         this.labService.viewFileContent(result).subscribe((res: any) => {

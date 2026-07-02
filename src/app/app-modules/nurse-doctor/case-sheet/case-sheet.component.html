@@ -9,7 +9,7 @@
     z-button
     zType="ghost"
     zSize="icon"
-    [matDialogClose]="false"
+    (click)="dialogRef?.close(false)"
     aria-label="Close">
     <ng-icon name="lucideX"></ng-icon>
   </button>

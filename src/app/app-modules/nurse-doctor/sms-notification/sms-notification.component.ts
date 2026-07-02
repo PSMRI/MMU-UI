@@ -1,9 +1,5 @@
 import { Component, Inject, OnInit, DoCheck } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialog,
-} from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { SmsTemplateService } from '../smsTemplate/sms-template.service';
 import { ConfirmationService } from '../../core/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
@@ -54,15 +50,17 @@ export class SmsNotificationComponent implements OnInit, DoCheck {
   currentLanguageSet: any;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialog: MatDialog,
+    @Inject(Z_MODAL_DATA) public data: any,
     private snackBar: MatSnackBar,
     private _smsService: SmsTemplateService,
     private alertMessage: ConfirmationService,
-    public dialogRef: MatDialogRef<SmsNotificationComponent>,
+    public dialogRef: ZardDialogRef<SmsNotificationComponent>,
     public httpServices: HttpServiceService,
     readonly sessionstorage: SessionStorageService
-  ) {}
+  ) {
+    // Preserve the original MatDialog disableClose:true behaviour.
+    this.dialogRef.disableClose = true;
+  }
 
   ngOnInit() {
     this.assignSelectedLanguage();

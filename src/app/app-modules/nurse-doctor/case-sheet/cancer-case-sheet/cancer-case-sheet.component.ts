@@ -20,14 +20,21 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Input, OnDestroy, DoCheck } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnDestroy,
+  DoCheck,
+  ViewContainerRef,
+} from '@angular/core';
 import { Location, NgIf } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { DoctorService } from '../../shared/services/doctor.service';
 import { PrintPageSelectComponent } from '../../print-page-select/print-page-select.component';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -87,7 +94,8 @@ export class CancerCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
 
   constructor(
     private doctorService: DoctorService,
-    private dialog: MatDialog,
+    private dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private location: Location,
     private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
@@ -255,15 +263,18 @@ export class CancerCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   selectPrintPage() {
-    const mdDialogRef: MatDialogRef<PrintPageSelectComponent> =
-      this.dialog.open(PrintPageSelectComponent, {
-        width: '420px',
-        disableClose: false,
-        data: {
-          printPagePreviewSelect: this.printPagePreviewSelect,
-          visitCategory: this.visitCategory,
-        },
-      });
+    const mdDialogRef = this.dialog.create<PrintPageSelectComponent, unknown>({
+      zContent: PrintPageSelectComponent,
+      zWidth: '420px',
+      zMaskClosable: true,
+      zData: {
+        printPagePreviewSelect: this.printPagePreviewSelect,
+        visitCategory: this.visitCategory,
+      },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
+    });
 
     mdDialogRef.afterClosed().subscribe(result => {
       if (result) {

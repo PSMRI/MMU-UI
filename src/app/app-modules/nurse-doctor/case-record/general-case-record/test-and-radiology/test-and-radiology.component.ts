@@ -20,10 +20,16 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, OnDestroy, DoCheck } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  DoCheck,
+  ViewContainerRef,
+} from '@angular/core';
 import { ViewTestReportComponent } from './view-test-report/view-test-report.component';
 import { DoctorService } from '../../../shared/services';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
@@ -76,7 +82,8 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
 
   constructor(
     private doctorService: DoctorService,
-    private dialog: MatDialog,
+    private dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private labService: LabService,
     private idrsScoreService: IdrsscoreService,
     private httpServiceService: HttpServiceService,
@@ -290,17 +297,21 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   showTestResult(fileIDs: any) {
-    const ViewTestReport = this.dialog.open(
+    const ViewTestReport = this.dialog.create<
       ViewRadiologyUploadedFilesComponent,
-      {
-        width: '40%',
-        data: {
-          filesDetails: fileIDs,
-          panelClass: 'dialog-width',
-          disableClose: false,
-        },
-      }
-    );
+      unknown
+    >({
+      zContent: ViewRadiologyUploadedFilesComponent,
+      zWidth: '40%',
+      zData: {
+        filesDetails: fileIDs,
+        panelClass: 'dialog-width',
+        disableClose: false,
+      },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
+    });
     ViewTestReport.afterClosed().subscribe(result => {
       if (result) {
         this.labService.viewFileContent(result).subscribe((res: any) => {
@@ -386,11 +397,14 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
 
   showArchivedRadiologyTestResult(radiologyReport: any) {
     console.log('reports', radiologyReport);
-    this.dialog.open(ViewTestReportComponent, {
-      data: radiologyReport,
-      width: 0.8 * window.innerWidth + 'px',
-      panelClass: 'dialog-width',
-      disableClose: false,
+    this.dialog.create<ViewTestReportComponent, unknown>({
+      zContent: ViewTestReportComponent,
+      zData: radiologyReport,
+      zWidth: 0.8 * window.innerWidth + 'px',
+      zMaskClosable: true,
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
   }
 

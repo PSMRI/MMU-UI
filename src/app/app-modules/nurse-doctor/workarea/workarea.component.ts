@@ -29,7 +29,7 @@ import {
   OnDestroy,
   AfterViewChecked,
   AfterViewInit,
-  Injector,
+  ViewContainerRef,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
@@ -56,7 +56,7 @@ import { SetLanguageComponent } from '../../core/components/set-language.compone
 import { Observable, Subscription, of } from 'rxjs';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { IdrsscoreService } from '../shared/services/idrsscore.service';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { environment } from 'src/environments/environment';
 import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard.service';
 import { OpenPreviousVisitDetailsComponent } from '../../core/components/open-previous-visit-details/open-previous-visit-details.component';
@@ -280,8 +280,8 @@ export class WorkareaComponent
     private doctorService: DoctorService,
     private route: ActivatedRoute,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    private mdDialog: MatDialog,
-    private readonly injector: Injector,
+    private mdDialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     readonly sessionstorage: SessionStorageService,
     private idrsScoreService: IdrsscoreService,
     private languageComponent: SetLanguageComponent
@@ -2680,11 +2680,14 @@ export class WorkareaComponent
   }
 
   sendPrescriptionSms(prescriptionSmsObject: any) {
-    const dialogRef = this.mdDialog.open(SmsNotificationComponent, {
-      width: '900px',
-      disableClose: true,
-      injector: this.injector,
-      data: prescriptionSmsObject,
+    const dialogRef = this.mdDialog.create<SmsNotificationComponent, unknown>({
+      zContent: SmsNotificationComponent,
+      zWidth: '900px',
+      zMaskClosable: false,
+      zData: prescriptionSmsObject,
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -3918,14 +3921,16 @@ export class WorkareaComponent
   }
 
   openBenPreviousisitDetails() {
-    this.mdDialog.open(OpenPreviousVisitDetailsComponent, {
-      disableClose: true,
-      width: '95%',
-      panelClass: 'preview-casesheet',
-      injector: this.injector,
-      data: {
+    this.mdDialog.create<OpenPreviousVisitDetailsComponent, unknown>({
+      zContent: OpenPreviousVisitDetailsComponent,
+      zWidth: '95%',
+      zMaskClosable: false,
+      zData: {
         previous: true,
       },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
   }
   //--End--

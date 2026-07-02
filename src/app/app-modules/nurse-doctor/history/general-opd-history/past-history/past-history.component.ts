@@ -27,6 +27,7 @@ import {
   ChangeDetectorRef,
   DoCheck,
   OnDestroy,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   FormArray,
@@ -44,7 +45,7 @@ import {
   DoctorService,
 } from '../../../shared/services';
 import { ValidationUtils } from '../../../shared/utility/validation-utility';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
@@ -105,7 +106,8 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private fb: FormBuilder,
-    private dialog: MatDialog,
+    private dialog: ZardDialogService,
+    private viewContainerRef: ViewContainerRef,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private confirmationService: ConfirmationService,
     private nurseService: NurseService,
@@ -695,13 +697,17 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   viewPreviousData(data: any) {
-    this.dialog.open(PreviousDetailsComponent, {
-      data: {
+    this.dialog.create({
+      zContent: PreviousDetailsComponent,
+      zData: {
         dataList: data,
         title:
           this.currentLanguageSet.historyData.Previousillness
             .previouspasthistory,
       },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
   }
 

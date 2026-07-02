@@ -20,7 +20,14 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnDestroy,
+  ViewContainerRef,
+} from '@angular/core';
 import {
   FormBuilder,
   FormArray,
@@ -29,7 +36,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import {
   ConfirmationService,
@@ -108,7 +115,8 @@ export class FamilyHistoryNcdscreeningComponent
 
   constructor(
     private fb: FormBuilder,
-    private dialog: MatDialog,
+    private dialog: ZardDialogService,
+    private viewContainerRef: ViewContainerRef,
     private nurseService: NurseService,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
@@ -539,13 +547,17 @@ export class FamilyHistoryNcdscreeningComponent
   }
 
   viewPreviousData(data: any) {
-    this.dialog.open(PreviousDetailsComponent, {
-      data: {
+    this.dialog.create({
+      zContent: PreviousDetailsComponent,
+      zData: {
         dataList: data,
         title:
           this.currentLanguageSet.historyData.familyhistory
             .previousfamilyhistory,
       },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
   }
 
