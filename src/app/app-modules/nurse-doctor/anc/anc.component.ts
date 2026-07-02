@@ -27,6 +27,8 @@ import {
   OnChanges,
   DoCheck,
   OnDestroy,
+  AfterViewInit,
+  ViewChild,
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DoctorService } from '../shared/services';
@@ -36,10 +38,9 @@ import { BeneficiaryDetailsService } from '../../core/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
+  ZardAccordionComponent,
+  ZardAccordionImports,
+} from 'Common-UI/v2/ui/accordion';
 import { AncDetailsComponent } from './anc-details/anc-details.component';
 import { ObstetricFormulaComponent } from './obstetric-formula/obstetric-formula.component';
 import { NgIf } from '@angular/common';
@@ -47,19 +48,21 @@ import { AncImmunizationComponent } from './anc-immunization/anc-immunization.co
 @Component({
   selector: 'app-nurse-anc',
   templateUrl: './anc.component.html',
-  styleUrls: ['./anc.component.css'],
   imports: [
-    MatAccordion,
     ReactiveFormsModule,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
+    ...ZardAccordionImports,
     AncDetailsComponent,
     ObstetricFormulaComponent,
     NgIf,
     AncImmunizationComponent,
   ],
 })
-export class AncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
+export class AncComponent
+  implements OnInit, DoCheck, OnChanges, OnDestroy, AfterViewInit
+{
+  @ViewChild(ZardAccordionComponent)
+  ancAccordion?: ZardAccordionComponent;
+
   @Input()
   patientANCDataForm!: FormGroup;
 
@@ -96,6 +99,15 @@ export class AncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
       'patientANCImmunizationForm'
     ) as FormGroup;
   }
+
+  ngAfterViewInit() {
+    // The Zard accordion has no controlled-open input; open the ANC Details
+    // panel by default, matching the original panel's expanded="true".
+    if (this.ancAccordion && !this.ancAccordion.isOpen('ancDetails')) {
+      this.ancAccordion.toggle('ancDetails');
+    }
+  }
+
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
