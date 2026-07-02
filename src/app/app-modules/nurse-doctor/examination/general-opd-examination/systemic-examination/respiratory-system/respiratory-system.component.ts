@@ -25,28 +25,26 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
 import { NgFor } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
 import { StringValidatorDirective } from '../../../../../core/directives/stringValidator.directive';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
 
 @Component({
   selector: 'app-nurse-respiratory-system',
   templateUrl: './respiratory-system.component.html',
-  styleUrls: ['./respiratory-system.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatSelect,
     NgFor,
-    MatOption,
-    MatInput,
     StringValidatorDirective,
-    MatRadioGroup,
-    MatRadioButton,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
+    ZardRadioComponent,
+    ZardRadioGroupComponent,
   ],
 })
 export class RespiratorySystemComponent implements OnInit, DoCheck {

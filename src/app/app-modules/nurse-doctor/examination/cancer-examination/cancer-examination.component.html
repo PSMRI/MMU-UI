@@ -1,67 +1,91 @@
-<mat-accordion [formGroup]="cancerForm">
-  <mat-expansion-panel expanded="true">
-    <mat-expansion-panel-header>
-      <h5>
+<z-accordion #cancerAccordion [formGroup]="cancerForm" class="flex flex-col gap-4">
+  <z-accordion-item
+    zValue="symptoms"
+    class="rounded-lg border border-border bg-card px-4">
+    <z-accordion-trigger>
+      <span class="text-sm font-semibold text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.symptoms?.symptoms
         }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-doctor-signs-and-symptoms
-      [signsForm]="signsForm"></app-doctor-signs-and-symptoms>
-  </mat-expansion-panel>
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <app-doctor-signs-and-symptoms
+        [signsForm]="signsForm"></app-doctor-signs-and-symptoms>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>{{ currentLanguageSet?.casesheet?.oralExamination }}</h5>
-    </mat-expansion-panel-header>
-    <app-cancer-oral-examination
-      [oralExaminationForm]="oralExaminationForm"></app-cancer-oral-examination>
-  </mat-expansion-panel>
+  <z-accordion-item
+    zValue="oral"
+    class="rounded-lg border border-border bg-card px-4">
+    <z-accordion-trigger>
+      <span class="text-sm font-semibold text-foreground">{{
+        currentLanguageSet?.casesheet?.oralExamination
+      }}</span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <app-cancer-oral-examination
+        [oralExaminationForm]="oralExaminationForm"></app-cancer-oral-examination>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel *ngIf="showBreastExamination || female">
-    <mat-expansion-panel-header>
-      <h5>
+  <z-accordion-item
+    *ngIf="showBreastExamination || female"
+    zValue="breast"
+    class="rounded-lg border border-border bg-card px-4">
+    <z-accordion-trigger>
+      <span class="text-sm font-semibold text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.breast?.breastExamination
         }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-doctor-breast-examination
-      [breastExaminationForm]="breastExaminationForm"
-      id="breastExamination"></app-doctor-breast-examination>
-  </mat-expansion-panel>
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <app-doctor-breast-examination
+        [breastExaminationForm]="breastExaminationForm"
+        id="breastExamination"></app-doctor-breast-examination>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>
+  <z-accordion-item
+    zValue="abdominal"
+    class="rounded-lg border border-border bg-card px-4">
+    <z-accordion-trigger>
+      <span class="text-sm font-semibold text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.abdominal?.abdominalExamination
         }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-doctor-abdominal-examination
-      [abdominalExaminationForm]="
-        abdominalExaminationForm
-      "></app-doctor-abdominal-examination>
-  </mat-expansion-panel>
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <app-doctor-abdominal-examination
+        [abdominalExaminationForm]="
+          abdominalExaminationForm
+        "></app-doctor-abdominal-examination>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel *ngIf="female">
-    <mat-expansion-panel-header>
-      <h5>
+  <z-accordion-item
+    *ngIf="female"
+    zValue="gynecological"
+    class="rounded-lg border border-border bg-card px-4">
+    <z-accordion-trigger>
+      <span class="text-sm font-semibold text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.gynecological?.gynecologicalExamination
         }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-doctor-gynecological-examination
-      [viewFiles]="doctorService.gynecologicalFiles"
-      [gynecologicalExaminationForm]="
-        gynecologicalExaminationForm
-      "></app-doctor-gynecological-examination>
-  </mat-expansion-panel>
-</mat-accordion>
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <app-doctor-gynecological-examination
+        [viewFiles]="doctorService.gynecologicalFiles"
+        [gynecologicalExaminationForm]="
+          gynecologicalExaminationForm
+        "></app-doctor-gynecological-examination>
+    </z-accordion-content>
+  </z-accordion-item>
+</z-accordion>
