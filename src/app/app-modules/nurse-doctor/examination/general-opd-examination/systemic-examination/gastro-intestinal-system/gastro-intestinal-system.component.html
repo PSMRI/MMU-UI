@@ -1,163 +1,192 @@
-<div class="row m-t-20" [formGroup]="gastroIntestinalSystemDataForm">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <mat-form-field class="textarea-full-width">
-      <mat-label>{{
-        currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.inspection
-      }}</mat-label>
+<div [formGroup]="gastroIntestinalSystemDataForm" class="flex flex-col gap-6">
+  <!-- Inspection -->
+  <z-form-field>
+    <label z-form-label for="inspection">{{
+      currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.inspection
+    }}</label>
+    <z-form-control>
       <textarea
-        matInput
+        z-input
+        class="w-full"
+        rows="3"
         allowText="textAreaValidator"
         defaultNull
-        matTextareaAutosize
         name="inspection"
+        id="inspection"
         formControlName="inspection"
         maxlength="300"
         (focus)="trackFieldInteraction('Inspection')"></textarea>
-    </mat-form-field>
-  </div>
+    </z-form-control>
+  </z-form-field>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field>
-      <mat-label>{{
+  <!-- Palpation selects -->
+  <div class="grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-3">
+    <!-- Abdomen texture -->
+    <z-form-field>
+      <label z-form-label for="palpation_AbdomenTexture">{{
         currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro
           ?.abdomenTexture
-      }}</mat-label>
-      <mat-select
-        class="select-full-width"
-        name="palpation_AbdomenTexture"
-        formControlName="palpation_AbdomenTexture"
-        (selectionChange)="trackFieldInteraction('Abdomen Texture Selection')">
-        <mat-option
-          *ngFor="let texture of selectAbdomenTexture"
-          [value]="texture.name">
-          {{ texture.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+      }}</label>
+      <z-form-control>
+        <z-select
+          id="palpation_AbdomenTexture"
+          class="w-full"
+          name="palpation_AbdomenTexture"
+          formControlName="palpation_AbdomenTexture"
+          (zSelectionChange)="
+            trackFieldInteraction('Abdomen Texture Selection')
+          ">
+          <z-select-item
+            *ngFor="let texture of selectAbdomenTexture"
+            [zValue]="texture.name">
+            {{ texture.name }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field>
-      <mat-label>{{
+    <!-- Liver -->
+    <z-form-field>
+      <label z-form-label for="palpation_Liver">{{
         currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.liver
-      }}</mat-label>
-      <mat-select
-        class="select-full-width"
-        name="palpation_Liver"
-        formControlName="palpation_Liver"
-        (selectionChange)="trackFieldInteraction('Liver Selection')">
-        <mat-option *ngFor="let liver of selectLiver" [value]="liver.name">
-          {{ liver.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+      }}</label>
+      <z-form-control>
+        <z-select
+          id="palpation_Liver"
+          class="w-full"
+          name="palpation_Liver"
+          formControlName="palpation_Liver"
+          (zSelectionChange)="trackFieldInteraction('Liver Selection')">
+          <z-select-item
+            *ngFor="let liver of selectLiver"
+            [zValue]="liver.name">
+            {{ liver.name }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field>
-      <mat-label>{{
+    <!-- Spleen -->
+    <z-form-field>
+      <label z-form-label for="palpation_Spleen">{{
         currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.spleen
-      }}</mat-label>
-      <mat-select
-        class="select-full-width"
-        name="palpation_Spleen"
-        formControlName="palpation_Spleen"
-        (selectionChange)="trackFieldInteraction('Spleen Selection')">
-        <mat-option *ngFor="let spleen of selectSpleen" [value]="spleen.name">
-          {{ spleen.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+      }}</label>
+      <z-form-control>
+        <z-select
+          id="palpation_Spleen"
+          class="w-full"
+          name="palpation_Spleen"
+          formControlName="palpation_Spleen"
+          (zSelectionChange)="trackFieldInteraction('Spleen Selection')">
+          <z-select-item
+            *ngFor="let spleen of selectSpleen"
+            [zValue]="spleen.name">
+            {{ spleen.name }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+
+    <!-- Tenderness -->
+    <div class="flex flex-col gap-2">
+      <label z-form-label for="palpation_Tenderness">{{
+        currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.tenderness
+      }}</label>
+      <z-radio-group
+        id="palpation_Tenderness"
+        name="palpation_Tenderness"
+        formControlName="palpation_Tenderness"
+        zOrientation="horizontal"
+        class="gap-6"
+        (zChange)="checkWithTenderness()">
+        <z-radio [value]="'Present'">{{
+          currentLanguageSet?.common?.present
+        }}</z-radio>
+        <z-radio [value]="'Absent'">{{
+          currentLanguageSet?.common?.absent
+        }}</z-radio>
+      </z-radio-group>
+    </div>
   </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <label class="control-label" for="gastroIntestinalSystem">{{
-      currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.tenderness
+  <!-- Location of tenderness (conditional) -->
+  <z-form-field *ngIf="palpation_Tenderness === 'Present'">
+    <label z-form-label for="palpation_LocationOfTenderness">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+        ?.Gastro?.location
     }}</label>
-    <div class="clearfix"></div>
-    <mat-radio-group
-      name="palpation_Tenderness"
-      id="palpation_Tenderness"
-      formControlName="palpation_Tenderness"
-      (change)="checkWithTenderness()">
-      <mat-radio-button color="primary" class="radio-btn" value="Present">{{
-        currentLanguageSet?.common?.present
-      }}</mat-radio-button>
-      <mat-radio-button color="primary" class="radio-btn" value="Absent">{{
-        currentLanguageSet?.common?.absent
-      }}</mat-radio-button>
-    </mat-radio-group>
-  </div>
-
-  <div
-    class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
-    *ngIf="palpation_Tenderness === 'Present'">
-    <mat-form-field class="textarea-full-width">
-      <mat-label>{{
-        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-          ?.Gastro?.location
-      }}</mat-label>
+    <z-form-control>
       <textarea
-        matInput
+        z-input
+        class="w-full"
+        rows="3"
         allowText="textAreaValidator"
         defaultNull
-        matTextareaAutosize
         id="palpation_LocationOfTenderness"
         name="palpation_LocationOfTenderness"
         formControlName="palpation_LocationOfTenderness"
         maxlength="300"
         (focus)="trackFieldInteraction('Location Of Tenderness')"></textarea>
-    </mat-form-field>
-  </div>
+    </z-form-control>
+  </z-form-field>
 
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <mat-form-field class="textarea-full-width">
-      <mat-label>{{
-        currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.percussion
-      }}</mat-label>
+  <!-- Percussion -->
+  <z-form-field>
+    <label z-form-label for="percussion">{{
+      currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.percussion
+    }}</label>
+    <z-form-control>
       <textarea
-        matInput
+        z-input
+        class="w-full"
+        rows="3"
         allowText="textAreaValidator"
         defaultNull
-        matTextareaAutosize
         name="percussion"
+        id="percussion"
         formControlName="percussion"
         maxlength="300"
         (focus)="trackFieldInteraction('Percussion')"></textarea>
-    </mat-form-field>
-  </div>
+    </z-form-control>
+  </z-form-field>
 
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <mat-form-field class="textarea-full-width">
-      <mat-label>{{
-        currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.auscultation
-      }}</mat-label>
+  <!-- Auscultation -->
+  <z-form-field>
+    <label z-form-label for="auscultation">{{
+      currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.auscultation
+    }}</label>
+    <z-form-control>
       <textarea
-        matInput
+        z-input
+        class="w-full"
+        rows="3"
         allowText="textAreaValidator"
         defaultNull
-        matTextareaAutosize
         name="auscultation"
+        id="auscultation"
         formControlName="auscultation"
         maxlength="300"
         (focus)="trackFieldInteraction('Auscultation')"></textarea>
-    </mat-form-field>
-  </div>
+    </z-form-control>
+  </z-form-field>
 
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <mat-form-field class="textarea-full-width">
-      <mat-label>{{
-        currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.analregion
-      }}</mat-label>
+  <!-- Anal region -->
+  <z-form-field>
+    <label z-form-label for="analRegion">{{
+      currentLanguageSet?.ExaminationData?.genralOPD_PNC?.Gastro?.analregion
+    }}</label>
+    <z-form-control>
       <textarea
-        matInput
+        z-input
+        class="w-full"
+        rows="3"
         allowText="textAreaValidator"
         defaultNull
-        matTextareaAutosize
         name="analRegion"
+        id="analRegion"
         formControlName="analRegion"
         maxlength="300"
         (focus)="trackFieldInteraction('Anal Region')"></textarea>
-    </mat-form-field>
-  </div>
+    </z-form-control>
+  </z-form-field>
 </div>

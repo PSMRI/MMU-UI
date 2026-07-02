@@ -27,6 +27,8 @@ import {
   DoCheck,
   OnChanges,
   OnDestroy,
+  AfterViewInit,
+  ViewChild,
 } from '@angular/core';
 import { FormGroup, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { DoctorService } from '../../shared/services/doctor.service';
@@ -38,10 +40,9 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
+  ZardAccordionImports,
+  ZardAccordionComponent,
+} from 'Common-UI/v2/ui/accordion';
 import { SignsAndSymptomsComponent } from './signs-and-symptoms/signs-and-symptoms.component';
 import { OralExaminationComponent } from './oral-examination/oral-examination.component';
 import { NgIf } from '@angular/common';
@@ -51,12 +52,9 @@ import { GynecologicalExaminationComponent } from './gynecological-examination/g
 @Component({
   selector: 'app-cancer-examination',
   templateUrl: './cancer-examination.component.html',
-  styleUrls: ['./cancer-examination.component.css'],
   imports: [
-    MatAccordion,
     ReactiveFormsModule,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
+    ...ZardAccordionImports,
     SignsAndSymptomsComponent,
     OralExaminationComponent,
     NgIf,
@@ -66,8 +64,10 @@ import { GynecologicalExaminationComponent } from './gynecological-examination/g
   ],
 })
 export class CancerExaminationComponent
-  implements OnInit, DoCheck, OnChanges, OnDestroy
+  implements OnInit, AfterViewInit, DoCheck, OnChanges, OnDestroy
 {
+  @ViewChild('cancerAccordion')
+  cancerAccordion!: ZardAccordionComponent;
   @Input()
   cancerForm!: FormGroup;
 
@@ -115,6 +115,12 @@ export class CancerExaminationComponent
     this.gynecologicalExaminationForm = this.cancerForm.get(
       'gynecologicalExaminationForm'
     ) as FormGroup;
+  }
+
+  ngAfterViewInit() {
+    // First panel (symptoms) is expanded by default.
+    if (this.cancerAccordion && !this.cancerAccordion.isOpen('symptoms'))
+      this.cancerAccordion.toggle('symptoms');
   }
 
   ngOnChanges() {

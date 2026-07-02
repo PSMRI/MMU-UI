@@ -26,25 +26,23 @@ import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-s
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
 import { NgFor, NgIf } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
 
 @Component({
   selector: 'app-nurse-general-examination',
   templateUrl: './general-examination.component.html',
-  styleUrls: ['./general-examination.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatSelect,
     NgFor,
-    MatOption,
-    MatRadioGroup,
-    MatRadioButton,
     NgIf,
+    ...ZardFormImports,
+    ...ZardSelectImports,
+    ZardRadioComponent,
+    ZardRadioGroupComponent,
   ],
 })
 export class GeneralExaminationComponent implements OnInit, DoCheck, OnChanges {

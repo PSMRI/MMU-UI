@@ -44,39 +44,33 @@ import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 import { MatDialog } from '@angular/material/dialog';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 import { NgIf, NgFor } from '@angular/common';
-import { MatInput } from '@angular/material/input';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
-import {
-  MatChipListbox,
-  MatChip,
-  MatChipRemove,
-} from '@angular/material/chips';
-import { MatIcon } from '@angular/material/icon';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
 
 @Component({
   selector: 'app-doctor-gynecological-examination',
   templateUrl: './gynecological-examination.component.html',
-  styleUrls: ['./gynecological-examination.component.css'],
+  viewProviders: [provideIcons({ lucideX })],
   imports: [
     ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
-    MatRadioGroup,
-    MatRadioButton,
     NgIf,
-    MatInput,
-    StringValidatorDirective,
-    MatChipListbox,
     NgFor,
-    MatChip,
-    MatIcon,
-    MatChipRemove,
+    NgIcon,
+    StringValidatorDirective,
+    ...ZardSelectImports,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
   ],
 })
 export class GynecologicalExaminationComponent implements OnInit, DoCheck {

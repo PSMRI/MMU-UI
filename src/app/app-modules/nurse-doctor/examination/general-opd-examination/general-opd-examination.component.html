@@ -1,47 +1,60 @@
-<mat-accordion>
-  <mat-expansion-panel expanded="true">
-    <mat-expansion-panel-header>
-      <h5>
+<z-accordion #examinationAccordion class="flex flex-col gap-4">
+  <z-accordion-item
+    zValue="generalExamination"
+    class="rounded-lg border border-border bg-card px-4">
+    <z-accordion-trigger class="text-left">
+      <span class="text-sm font-semibold text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
             ?.genExamination?.generalExamination
         }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-nurse-general-examination
-      [generalExaminationDataForm]="
-        generalExaminationForm
-      "></app-nurse-general-examination>
-  </mat-expansion-panel>
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <app-nurse-general-examination
+        [generalExaminationDataForm]="
+          generalExaminationForm
+        "></app-nurse-general-examination>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>
+  <z-accordion-item
+    zValue="headToToeExamination"
+    class="rounded-lg border border-border bg-card px-4">
+    <z-accordion-trigger class="text-left">
+      <span class="text-sm font-semibold text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
             ?.headexamination
         }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-nurse-head-to-toe-examination
-      [headToToeExaminationDataForm]="
-        headToToeExaminationForm
-      "></app-nurse-head-to-toe-examination>
-  </mat-expansion-panel>
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <app-nurse-head-to-toe-examination
+        [headToToeExaminationDataForm]="
+          headToToeExaminationForm
+        "></app-nurse-head-to-toe-examination>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel *ngIf="visitCategory !== 'NCD Care'">
-    <mat-expansion-panel-header>
-      <h5>
+  <z-accordion-item
+    *ngIf="visitCategory !== 'NCD Care'"
+    zValue="systemicExamination"
+    class="rounded-lg border border-border bg-card px-4">
+    <z-accordion-trigger class="text-left">
+      <span class="text-sm font-semibold text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
             ?.systemicExamination
         }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-nurse-systemic-examination
-      [visitCategory]="visitCategory"
-      [systemicExaminationDataForm]="
-        systemicExaminationForm
-      "></app-nurse-systemic-examination>
-  </mat-expansion-panel>
-</mat-accordion>
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <app-nurse-systemic-examination
+        [visitCategory]="visitCategory"
+        [systemicExaminationDataForm]="
+          systemicExaminationForm
+        "></app-nurse-systemic-examination>
+    </z-accordion-content>
+  </z-accordion-item>
+</z-accordion>

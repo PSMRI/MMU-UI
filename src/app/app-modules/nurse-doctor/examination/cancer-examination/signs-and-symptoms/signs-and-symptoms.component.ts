@@ -20,14 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import {
-  Component,
-  OnInit,
-  Input,
-  DoCheck,
-  ViewChild,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -39,56 +32,30 @@ import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary
 import { CancerUtils } from '../../../shared/utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
-import { NgIf } from '@angular/common';
-import { MatFormField, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
+import { NgIf, NgFor } from '@angular/common';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
-import {
-  MatButtonToggleGroup,
-  MatButtonToggle,
-} from '@angular/material/button-toggle';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardToggleGroupImports } from 'Common-UI/v2/ui/toggle-group';
 
 @Component({
   selector: 'app-doctor-signs-and-symptoms',
   templateUrl: './signs-and-symptoms.component.html',
-  styleUrls: ['./signs-and-symptoms.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatRadioGroup,
-    MatRadioButton,
     NgIf,
-    MatFormField,
-    MatLabel,
-    MatInput,
+    NgFor,
+    ZardRadioComponent,
+    ZardRadioGroupComponent,
+    ...ZardFormImports,
+    ZardInputDirective,
     StringValidatorDirective,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatButtonToggleGroup,
-    MatButtonToggle,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
+    ...ZardTableImports,
+    ...ZardToggleGroupImports,
   ],
 })
 export class SignsAndSymptomsComponent implements OnInit, DoCheck, OnDestroy {
@@ -108,9 +75,6 @@ export class SignsAndSymptomsComponent implements OnInit, DoCheck, OnDestroy {
     'mobility_right',
     'right',
   ];
-
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
 
   constructor(
     private fb: FormBuilder,
@@ -174,13 +138,6 @@ export class SignsAndSymptomsComponent implements OnInit, DoCheck, OnDestroy {
         ).lymphNodesArray.map(item => item),
       });
     }
-    const lymphNodesControl = this.signsForm.get('lymphNodes');
-    let LymphNodesdata: any = [];
-    LymphNodesdata =
-      lymphNodesControl instanceof FormArray
-        ? lymphNodesControl.controls
-        : null;
-    this.dataSource.data = LymphNodesdata;
   }
 
   get observation() {

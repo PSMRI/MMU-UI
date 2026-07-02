@@ -1,494 +1,442 @@
-<div class="row m-t-20" [formGroup]="generalExaminationDataForm">
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <div class="form-group">
-      <mat-form-field class="select-full-width">
-        <mat-label>{{
+<div
+  class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+  [formGroup]="generalExaminationDataForm">
+  <z-form-field>
+    <label z-form-label for="consciousness">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+        ?.genExamination?.consciousness
+    }}</label>
+    <z-form-control>
+      <z-select
+        id="consciousness"
+        class="w-full"
+        name="consciousness"
+        formControlName="consciousness"
+        [zPlaceholder]="
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-            ?.genExamination?.consciousness
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          id="consciousness"
-          name="consciousness"
-          formControlName="consciousness"
-          (selectionChange)="trackFieldInteraction('Consciousness')">
-          <mat-option
-            *ngFor="let consciousness of selectConsciousness"
-            [value]="consciousness.name">
-            {{ consciousness.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </div>
+            ?.genExamination?.consciousness || ''
+        "
+        (zSelectionChange)="trackFieldInteraction('Consciousness')">
+        <z-select-item
+          *ngFor="let consciousness of selectConsciousness"
+          [zValue]="consciousness.name">
+          {{ consciousness.name }}
+        </z-select-item>
+      </z-select>
+    </z-form-control>
+  </z-form-field>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <div class="form-group">
-      <mat-form-field class="select-full-width">
-        <mat-label>{{
+  <z-form-field>
+    <label z-form-label for="cooperation">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+        ?.genExamination?.cooperation
+    }}</label>
+    <z-form-control>
+      <z-select
+        id="cooperation"
+        class="w-full"
+        name="cooperation"
+        formControlName="cooperation"
+        [zPlaceholder]="
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-            ?.genExamination?.cooperation
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          id="cooperation"
-          name="cooperation"
-          formControlName="cooperation"
-          (selectionChange)="trackFieldInteraction('Cooperation')">
-          <mat-option
-            *ngFor="let cooperation of selectCooperation"
-            [value]="cooperation.name">
-            {{ cooperation.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </div>
+            ?.genExamination?.cooperation || ''
+        "
+        (zSelectionChange)="trackFieldInteraction('Cooperation')">
+        <z-select-item
+          *ngFor="let cooperation of selectCooperation"
+          [zValue]="cooperation.name">
+          {{ cooperation.name }}
+        </z-select-item>
+      </z-select>
+    </z-form-control>
+  </z-form-field>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <div class="form-group">
-      <mat-form-field class="select-full-width">
-        <mat-label>{{
+  <z-form-field>
+    <label z-form-label for="builtAndAppearance">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+        ?.genExamination?.built
+    }}</label>
+    <z-form-control>
+      <z-select
+        id="builtAndAppearance"
+        class="w-full"
+        name="builtAndAppearance"
+        formControlName="builtAndAppearance"
+        [zPlaceholder]="
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-            ?.genExamination?.built
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          id="builtAndAppearance"
-          name="builtAndAppearance"
-          formControlName="builtAndAppearance"
-          (selectionChange)="trackFieldInteraction('Built')">
-          <mat-option *ngFor="let built of selectBuilt" [value]="built.name">
-            {{ built.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+            ?.genExamination?.built || ''
+        "
+        (zSelectionChange)="trackFieldInteraction('Built')">
+        <z-select-item *ngFor="let built of selectBuilt" [zValue]="built.name">
+          {{ built.name }}
+        </z-select-item>
+      </z-select>
+    </z-form-control>
+  </z-form-field>
+
+  <div class="flex flex-col gap-2">
+    <label z-form-label for="coherence">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+        ?.genExamination?.coherence
+    }}</label>
+    <z-radio-group
+      id="coherence"
+      name="coherence"
+      formControlName="coherence"
+      zOrientation="horizontal"
+      (zChange)="trackFieldInteraction('Coherence')">
+      <z-radio [value]="'Coherent'">{{
+        currentLanguageSet?.common?.coherent
+      }}</z-radio>
+      <z-radio [value]="'Incoherent'">{{
+        currentLanguageSet?.common?.incoherent
+      }}</z-radio>
+    </z-radio-group>
   </div>
 
-  <div class="clearfix"></div>
-
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <div class="form-group">
-      <label class="control-label" for="coherence">{{
-        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-          ?.genExamination?.coherence
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
-        id="coherence"
-        name="coherence"
-        formControlName="coherence"
-        (change)="trackFieldInteraction('Coherence')">
-        <mat-radio-button color="primary" class="radio-btn" value="Coherent">{{
-          currentLanguageSet?.common?.coherent
-        }}</mat-radio-button>
-        <mat-radio-button
-          color="primary"
-          class="radio-btn"
-          value="Incoherent"
-          >{{ currentLanguageSet?.common?.incoherent }}</mat-radio-button
-        >
-      </mat-radio-group>
-    </div>
+  <div class="flex flex-col gap-2">
+    <label z-form-label for="comfortness">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+        ?.genExamination?.comfortness
+    }}</label>
+    <z-radio-group
+      id="comfortness"
+      name="comfortness"
+      formControlName="comfortness"
+      zOrientation="horizontal"
+      (zChange)="trackFieldInteraction('Comfortness')">
+      <z-radio [value]="'Comfortable'">{{
+        currentLanguageSet?.common?.comfortable
+      }}</z-radio>
+      <z-radio [value]="'Uncomfortable'">{{
+        currentLanguageSet?.common?.uncomfortable
+      }}</z-radio>
+    </z-radio-group>
   </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <div class="form-group">
-      <mat-label class="mat-label-text" class="control-label"
-        >{{
+  <div class="flex flex-col gap-2">
+    <label z-form-label for="gait">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+        ?.genExamination?.gait
+    }}</label>
+    <z-radio-group
+      id="gait"
+      name="gait"
+      formControlName="gait"
+      zOrientation="horizontal"
+      (zChange)="trackFieldInteraction('Gait')">
+      <z-radio [value]="'Normal'">{{
+        currentLanguageSet?.common?.normal
+      }}</z-radio>
+      <z-radio [value]="'Limping'">{{
+        currentLanguageSet?.common?.limping
+      }}</z-radio>
+    </z-radio-group>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label z-form-label for="dangerSigns">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+        ?.genExamination?.dangersigns
+    }}</label>
+    <z-radio-group
+      id="dangerSigns"
+      name="dangerSigns"
+      formControlName="dangerSigns"
+      zOrientation="horizontal"
+      (zChange)="checkWithDangerSign(); trackFieldInteraction('Danger Signs')">
+      <z-radio [value]="'Yes'">{{ currentLanguageSet?.common?.yes }}</z-radio>
+      <z-radio [value]="'No'">{{ currentLanguageSet?.common?.no }}</z-radio>
+    </z-radio-group>
+  </div>
+
+  <z-form-field [hidden]="dangerSigns !== 'Yes'">
+    <label z-form-label for="typeOfDangerSigns">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+        ?.genExamination?.dangersigns
+    }}</label>
+    <z-form-control>
+      <z-select
+        id="typeOfDangerSigns"
+        class="w-full"
+        name="typeOfDangerSigns"
+        formControlName="typeOfDangerSigns"
+        [zMultiple]="true"
+        [required]="dangerSigns === 'Yes'"
+        [zPlaceholder]="
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-            ?.genExamination?.comfortness
-        }}
-      </mat-label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
-        id="comfortness"
-        name="comfortness"
-        formControlName="comfortness"
-        (change)="trackFieldInteraction('Comfortness')">
-        <mat-radio-button
-          color="primary"
-          class="radio-btn"
-          value="Comfortable"
-          >{{ currentLanguageSet?.common?.comfortable }}</mat-radio-button
-        >
-        <mat-radio-button
-          color="primary"
-          class="radio-btn"
-          value="Uncomfortable"
-          >{{ currentLanguageSet?.common?.uncomfortable }}</mat-radio-button
-        >
-      </mat-radio-group>
-    </div>
+            ?.genExamination?.dangersigns || ''
+        ">
+        <z-select-item
+          *ngFor="let signs of selectDangerSigns"
+          [zValue]="signs.name">
+          {{ signs.name }}
+        </z-select-item>
+      </z-select>
+    </z-form-control>
+  </z-form-field>
+
+  <div class="flex flex-col gap-2">
+    <label z-form-label for="pallor">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+        ?.genExamination?.pallor
+    }}</label>
+    <z-radio-group
+      id="pallor"
+      name="pallor"
+      formControlName="pallor"
+      zOrientation="horizontal"
+      (zChange)="trackFieldInteraction('Pallor')">
+      <z-radio [value]="'Present'">{{
+        currentLanguageSet?.common?.present
+      }}</z-radio>
+      <z-radio [value]="'Absent'">{{
+        currentLanguageSet?.common?.absent
+      }}</z-radio>
+    </z-radio-group>
   </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <div class="form-group">
-      <label class="control-label" for="gait">{{
-        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-          ?.genExamination?.gait
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
-        id="gait"
-        name="gait"
-        formControlName="gait"
-        (change)="trackFieldInteraction('Gait')">
-        <mat-radio-button color="primary" class="radio-btn" value="Normal">{{
-          currentLanguageSet?.common?.normal
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" class="radio-btn" value="Limping">{{
-          currentLanguageSet?.common?.limping
-        }}</mat-radio-button>
-      </mat-radio-group>
-    </div>
+  <div class="flex flex-col gap-2">
+    <label z-form-label for="jaundice">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+        ?.genExamination?.jaundice
+    }}</label>
+    <z-radio-group
+      id="jaundice"
+      name="jaundice"
+      formControlName="jaundice"
+      zOrientation="horizontal"
+      (zChange)="trackFieldInteraction('Jaundice')">
+      <z-radio [value]="'Present'">{{
+        currentLanguageSet?.common?.present
+      }}</z-radio>
+      <z-radio [value]="'Absent'">{{
+        currentLanguageSet?.common?.absent
+      }}</z-radio>
+    </z-radio-group>
   </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <div class="form-group">
-      <label class="control-label" for="dangerSigns">{{
-        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-          ?.genExamination?.dangersigns
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
-        id="dangerSigns"
-        name="dangerSigns"
-        formControlName="dangerSigns"
-        (change)="checkWithDangerSign(); trackFieldInteraction('Danger Signs')">
-        <mat-radio-button color="primary" class="radio-btn" value="Yes">{{
-          currentLanguageSet?.common?.yes
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" class="radio-btn" value="No">{{
-          currentLanguageSet?.common?.no
-        }}</mat-radio-button>
-      </mat-radio-group>
-    </div>
+  <div class="flex flex-col gap-2">
+    <label z-form-label for="cyanosis">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+        ?.genExamination?.cyanosis
+    }}</label>
+    <z-radio-group
+      id="cyanosis"
+      name="cyanosis"
+      formControlName="cyanosis"
+      zOrientation="horizontal"
+      (zChange)="trackFieldInteraction('Cyanosis')">
+      <z-radio [value]="'Present'">{{
+        currentLanguageSet?.common?.present
+      }}</z-radio>
+      <z-radio [value]="'Absent'">{{
+        currentLanguageSet?.common?.absent
+      }}</z-radio>
+    </z-radio-group>
   </div>
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    [hidden]="dangerSigns !== 'Yes'">
-    <div class="form-group">
-      <mat-form-field class="select-full-width">
-        <mat-label>{{
+
+  <div class="flex flex-col gap-2">
+    <label z-form-label for="clubbing">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+        ?.genExamination?.clubbing
+    }}</label>
+    <z-radio-group
+      id="clubbing"
+      name="clubbing"
+      formControlName="clubbing"
+      zOrientation="horizontal"
+      (zChange)="trackFieldInteraction('Clubbing')">
+      <z-radio [value]="'Present'">{{
+        currentLanguageSet?.common?.present
+      }}</z-radio>
+      <z-radio [value]="'Absent'">{{
+        currentLanguageSet?.common?.absent
+      }}</z-radio>
+    </z-radio-group>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label z-form-label for="lymphadenopathy">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+        ?.genExamination?.lymphadenopathy
+    }}</label>
+    <z-radio-group
+      id="lymphadenopathy"
+      name="lymphadenopathy"
+      formControlName="lymphadenopathy"
+      zOrientation="horizontal"
+      (zChange)="
+        checkWithLymphadenopathy(); trackFieldInteraction('Lymphadenopathy')
+      ">
+      <z-radio [value]="'Present'">{{
+        currentLanguageSet?.common?.present
+      }}</z-radio>
+      <z-radio [value]="'Absent'">{{
+        currentLanguageSet?.common?.absent
+      }}</z-radio>
+    </z-radio-group>
+  </div>
+
+  <z-form-field [hidden]="lymphadenopathy !== 'Present'">
+    <label z-form-label for="lymphnodesInvolved">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+        ?.genExamination?.lymph
+    }}</label>
+    <z-form-control>
+      <z-select
+        id="lymphnodesInvolved"
+        class="w-full"
+        name="lymphnodesInvolved"
+        formControlName="lymphnodesInvolved"
+        [required]="lymphadenopathy === 'Present'"
+        [zPlaceholder]="
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-            ?.genExamination?.dangersigns
-        }}</mat-label>
-        <mat-select
-          multiple
-          class="select-full-width"
-          id="typeOfDangerSigns"
-          name="typeOfDangerSigns"
-          formControlName="typeOfDangerSigns"
-          [required]="dangerSigns === 'Yes'">
-          <mat-option
-            *ngFor="let signs of selectDangerSigns"
-            [value]="signs.name">
-            {{ signs.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </div>
+            ?.genExamination?.lymph || ''
+        ">
+        <z-select-item
+          *ngFor="let lymphNodes of selectLymphNodes"
+          [zValue]="lymphNodes.name">
+          {{ lymphNodes.name }}
+        </z-select-item>
+      </z-select>
+    </z-form-control>
+  </z-form-field>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <div class="form-group">
-      <label class="control-label" for="pallor">{{
-        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-          ?.genExamination?.pallor
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
-        id="pallor"
-        name="pallor"
-        formControlName="pallor"
-        (change)="trackFieldInteraction('Pallor')">
-        <mat-radio-button color="primary" class="radio-btn" value="Present">{{
-          currentLanguageSet?.common?.present
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" class="radio-btn" value="Absent">{{
-          currentLanguageSet?.common?.absent
-        }}</mat-radio-button>
-      </mat-radio-group>
-    </div>
-  </div>
-
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <div class="form-group">
-      <label class="control-label" for="jaundice">{{
-        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-          ?.genExamination?.jaundice
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
-        id="jaundice"
-        name="jaundice"
-        formControlName="jaundice"
-        (change)="trackFieldInteraction('Jaundice')">
-        <mat-radio-button color="primary" class="radio-btn" value="Present">{{
-          currentLanguageSet?.common?.present
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" class="radio-btn" value="Absent">{{
-          currentLanguageSet?.common?.absent
-        }}</mat-radio-button>
-      </mat-radio-group>
-    </div>
-  </div>
-
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <div class="form-group">
-      <label class="control-label" for="cyanosis">{{
-        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-          ?.genExamination?.cyanosis
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
-        id="cyanosis"
-        name="cyanosis"
-        formControlName="cyanosis"
-        (change)="trackFieldInteraction('Cyanosis')">
-        <mat-radio-button color="primary" class="radio-btn" value="Present">{{
-          currentLanguageSet?.common?.present
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" class="radio-btn" value="Absent">{{
-          currentLanguageSet?.common?.absent
-        }}</mat-radio-button>
-      </mat-radio-group>
-    </div>
-  </div>
-
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <div class="form-group">
-      <label class="control-label" for="clubbing">{{
-        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-          ?.genExamination?.clubbing
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
-        id="clubbing"
-        name="clubbing"
-        formControlName="clubbing"
-        (change)="trackFieldInteraction('Clubbing')">
-        <mat-radio-button color="primary" class="radio-btn" value="Present">{{
-          currentLanguageSet?.common?.present
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" class="radio-btn" value="Absent">{{
-          currentLanguageSet?.common?.absent
-        }}</mat-radio-button>
-      </mat-radio-group>
-    </div>
-  </div>
-
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <div class="form-group">
-      <label class="control-label" for="lymphadenopathy">{{
-        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-          ?.genExamination?.lymphadenopathy
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
-        id="lymphadenopathy"
-        name="lymphadenopathy"
-        formControlName="lymphadenopathy"
-        (change)="checkWithLymphadenopathy(); trackFieldInteraction('Lymphadenopathy')">
-        <mat-radio-button color="primary" class="radio-btn" value="Present">{{
-          currentLanguageSet?.common?.present
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" class="radio-btn" value="Absent">{{
-          currentLanguageSet?.common?.absent
-        }}</mat-radio-button>
-      </mat-radio-group>
-    </div>
-  </div>
-
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    [hidden]="lymphadenopathy !== 'Present'">
-    <div class="form-group">
-      <mat-form-field class="select-full-width">
-        <mat-label>{{
+  <z-form-field [hidden]="lymphadenopathy !== 'Present'">
+    <label z-form-label for="typeOfLymphadenopathy">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+        ?.genExamination?.typeofLymphadenopathy
+    }}</label>
+    <z-form-control>
+      <z-select
+        id="typeOfLymphadenopathy"
+        class="w-full"
+        name="typeOfLymphadenopathy"
+        formControlName="typeOfLymphadenopathy"
+        [required]="lymphadenopathy === 'Present'"
+        [zPlaceholder]="
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-            ?.genExamination?.lymph
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          id="lymphnodesInvolved"
-          name="lymphnodesInvolved"
-          formControlName="lymphnodesInvolved"
-          [required]="lymphadenopathy === 'Present'">
-          <mat-option
-            *ngFor="let lymphNodes of selectLymphNodes"
-            [value]="lymphNodes.name">
-            {{ lymphNodes.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+            ?.genExamination?.typeofLymphadenopathy || ''
+        ">
+        <z-select-item
+          *ngFor="let typeOfLymphadenopathy of selectTypeOfLymphadenopathy"
+          [zValue]="typeOfLymphadenopathy.name">
+          {{ typeOfLymphadenopathy.name }}
+        </z-select-item>
+      </z-select>
+    </z-form-control>
+  </z-form-field>
+
+  <div class="flex flex-col gap-2">
+    <label z-form-label for="edema">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+        ?.genExamination?.edema
+    }}</label>
+    <z-radio-group
+      id="edema"
+      name="edema"
+      formControlName="edema"
+      zOrientation="horizontal"
+      (zChange)="checkWithEdema(); trackFieldInteraction('Edema')">
+      <z-radio [value]="'Present'">{{
+        currentLanguageSet?.common?.present
+      }}</z-radio>
+      <z-radio [value]="'Absent'">{{
+        currentLanguageSet?.common?.absent
+      }}</z-radio>
+    </z-radio-group>
   </div>
 
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    [hidden]="lymphadenopathy !== 'Present'">
-    <div class="form-group">
-      <mat-form-field class="select-full-width">
-        <mat-label>{{
-          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-            ?.genExamination?.typeofLymphadenopathy
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          id="typeOfLymphadenopathy"
-          name="typeOfLymphadenopathy"
-          formControlName="typeOfLymphadenopathy"
-          [required]="lymphadenopathy === 'Present'">
-          <mat-option
-            *ngFor="let typeOfLymphadenopathy of selectTypeOfLymphadenopathy"
-            [value]="typeOfLymphadenopathy.name">
-            {{ typeOfLymphadenopathy.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <div class="form-group">
-      <label class="control-label" for="edema">{{
-        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-          ?.genExamination?.edema
-      }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
-        id="edema"
-        name="edema"
-        formControlName="edema"
-        (change)="checkWithEdema(); trackFieldInteraction('Edema')">
-        <mat-radio-button color="primary" class="radio-btn" value="Present">{{
-          currentLanguageSet?.common?.present
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" class="radio-btn" value="Absent">{{
-          currentLanguageSet?.common?.absent
-        }}</mat-radio-button>
-      </mat-radio-group>
-    </div>
-  </div>
-
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    [hidden]="edema !== 'Present'">
-    <div class="form-group">
-      <mat-form-field class="select-full-width">
-        <mat-label>{{
-          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-            ?.genExamination?.extentofEdema
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          id="extentOfEdema"
-          name="extentOfEdema"
-          formControlName="extentOfEdema"
-          [required]="edema === 'Present'"
-          (selectionChange)="trackFieldInteraction('Extent Of Edema')">
-          <mat-option
-            *ngFor="let extentOfEdema of selectExtentOfEdema"
-            [value]="extentOfEdema.name">
-            {{ extentOfEdema.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    [hidden]="edema !== 'Present'">
-    <div class="form-group">
-      <label class="control-label" for="typeOfEdema"
-        >{{
-          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-            ?.genExamination?.typeofEdema
-        }}*</label
-      >
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
-        id="edemaType"
-        name="edemaType"
-        formControlName="edemaType"
+  <z-form-field [hidden]="edema !== 'Present'">
+    <label z-form-label for="extentOfEdema">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+        ?.genExamination?.extentofEdema
+    }}</label>
+    <z-form-control>
+      <z-select
+        id="extentOfEdema"
+        class="w-full"
+        name="extentOfEdema"
+        formControlName="extentOfEdema"
         [required]="edema === 'Present'"
-        (change)="trackFieldInteraction('Type Of Edema')">
-        <mat-radio-button color="primary" class="radio-btn" value="Pitting">{{
+        [zPlaceholder]="
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-            ?.genExamination?.pitting
-        }}</mat-radio-button>
-        <mat-radio-button
-          color="primary"
-          class="radio-btn"
-          value="Non-Pitting"
-          >{{
-            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-              ?.genExamination?.nonPitting
-          }}</mat-radio-button
-        >
-      </mat-radio-group>
-    </div>
+            ?.genExamination?.extentofEdema || ''
+        "
+        (zSelectionChange)="trackFieldInteraction('Extent Of Edema')">
+        <z-select-item
+          *ngFor="let extentOfEdema of selectExtentOfEdema"
+          [zValue]="extentOfEdema.name">
+          {{ extentOfEdema.name }}
+        </z-select-item>
+      </z-select>
+    </z-form-control>
+  </z-form-field>
+
+  <div class="flex flex-col gap-2" [hidden]="edema !== 'Present'">
+    <label z-form-label for="edemaType"
+      >{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+          ?.genExamination?.typeofEdema
+      }}*</label
+    >
+    <z-radio-group
+      id="edemaType"
+      name="edemaType"
+      formControlName="edemaType"
+      zOrientation="horizontal"
+      [required]="edema === 'Present'"
+      (zChange)="trackFieldInteraction('Type Of Edema')">
+      <z-radio [value]="'Pitting'">{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+          ?.genExamination?.pitting
+      }}</z-radio>
+      <z-radio [value]="'Non-Pitting'">{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+          ?.genExamination?.nonPitting
+      }}</z-radio>
+    </z-radio-group>
   </div>
 
-  <div *ngIf="hideForANCAndQC">
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <div class="form-group">
-        <label class="control-label" for="quickening">{{
-          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-            ?.genExamination?.quickening
-        }}</label>
-        <div class="clearfix"></div>
-        <mat-radio-group
-          style="margin-left: -9px"
-          id="quickening"
-          name="quickening"
-          formControlName="quickening"
-          (change)="trackFieldInteraction('Quickening')">
-          <mat-radio-button color="primary" class="radio-btn" value="Present">{{
-            currentLanguageSet?.common?.present
-          }}</mat-radio-button>
-          <mat-radio-button color="primary" class="radio-btn" value="Absent">{{
-            currentLanguageSet?.common?.absent
-          }}</mat-radio-button>
-        </mat-radio-group>
-      </div>
+  <ng-container *ngIf="hideForANCAndQC">
+    <div class="flex flex-col gap-2">
+      <label z-form-label for="quickening">{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+          ?.genExamination?.quickening
+      }}</label>
+      <z-radio-group
+        id="quickening"
+        name="quickening"
+        formControlName="quickening"
+        zOrientation="horizontal"
+        (zChange)="trackFieldInteraction('Quickening')">
+        <z-radio [value]="'Present'">{{
+          currentLanguageSet?.common?.present
+        }}</z-radio>
+        <z-radio [value]="'Absent'">{{
+          currentLanguageSet?.common?.absent
+        }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <div class="form-group">
-        <label class="control-label" for="foetalMovements">{{
-          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-            ?.genExamination?.foetalmovements
-        }}</label>
-        <div class="clearfix"></div>
-        <mat-radio-group
-          style="margin-left: -9px"
-          id="foetalMovements"
-          name="foetalMovements"
-          formControlName="foetalMovements">
-          <mat-radio-button color="primary" class="radio-btn" value="Present">{{
-            currentLanguageSet?.common?.present
-          }}</mat-radio-button>
-          <mat-radio-button color="primary" class="radio-btn" value="Absent">{{
-            currentLanguageSet?.common?.absent
-          }}</mat-radio-button>
-        </mat-radio-group>
-      </div>
+    <div class="flex flex-col gap-2">
+      <label z-form-label for="foetalMovements">{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+          ?.genExamination?.foetalmovements
+      }}</label>
+      <z-radio-group
+        id="foetalMovements"
+        name="foetalMovements"
+        formControlName="foetalMovements"
+        zOrientation="horizontal">
+        <z-radio [value]="'Present'">{{
+          currentLanguageSet?.common?.present
+        }}</z-radio>
+        <z-radio [value]="'Absent'">{{
+          currentLanguageSet?.common?.absent
+        }}</z-radio>
+      </z-radio-group>
     </div>
-  </div>
+  </ng-container>
 </div>

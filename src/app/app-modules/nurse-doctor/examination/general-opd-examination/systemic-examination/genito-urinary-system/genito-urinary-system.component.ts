@@ -25,19 +25,17 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
-import { MatFormField, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
 import { StringValidatorDirective } from '../../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-nurse-genito-urinary-system',
   templateUrl: './genito-urinary-system.component.html',
-  styleUrls: ['./genito-urinary-system.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatInput,
+    ...ZardFormImports,
+    ZardInputDirective,
     StringValidatorDirective,
   ],
 })
