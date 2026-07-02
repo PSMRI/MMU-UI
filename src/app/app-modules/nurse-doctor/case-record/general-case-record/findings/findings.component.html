@@ -95,15 +95,16 @@
                 (focus)="trackFieldInteraction('Chief Complaint')" />
             </z-form-control>
 
-            <ul
+            <div
               *ngIf="suggestedChiefComplaintList[i]?.length"
               role="listbox"
               class="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md">
-              <li
+              <button
+                type="button"
                 role="option"
                 *ngFor="let compl of suggestedChiefComplaintList[i]"
-                tabindex="0"
-                class="flex cursor-pointer items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground"
+                [attr.aria-selected]="false"
+                class="flex w-full cursor-pointer appearance-none items-center rounded-sm border-0 bg-transparent px-2 py-1.5 text-left text-sm outline-none hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground"
                 (mousedown)="
                   filterComplaints(compl, i);
                   getSCTid(compl, i);
@@ -117,8 +118,8 @@
                   trackFieldInteraction('Chief Complaint Selection')
                 ">
                 {{ compl.chiefComplaint }}
-              </li>
-            </ul>
+              </button>
+            </div>
           </z-form-field>
 
           <z-form-field [hidden]="true">

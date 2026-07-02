@@ -43,6 +43,7 @@
                       *ngFor="let diag of suggestedDiagnosisList[i]"
                       role="option"
                       tabindex="0"
+                      [attr.aria-selected]="false"
                       class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
                       (click)="onDiagnosisSelected(diag, i)"
                       (keydown.enter)="onDiagnosisSelected(diag, i)">
@@ -130,6 +131,7 @@
                       *ngFor="let diag of suggestedConfirmatoryDiagnosisList[i]"
                       role="option"
                       tabindex="0"
+                      [attr.aria-selected]="false"
                       class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
                       (click)="onConfirmatoryDiagnosisSelected(diag, i)"
                       (keydown.enter)="onConfirmatoryDiagnosisSelected(diag, i)">

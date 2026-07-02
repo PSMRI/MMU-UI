@@ -301,7 +301,14 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
   // Multi-select of screening-condition strings. z-select emits the selected
   // string[]; feed it into the original handler via the { value } shape it reads.
   onNcdScreeningConditionChange(value: string | string[]): void {
-    const selected = Array.isArray(value) ? value : value ? [value] : [];
+    let selected: string[];
+    if (Array.isArray(value)) {
+      selected = value;
+    } else if (value) {
+      selected = [value];
+    } else {
+      selected = [];
+    }
     this.changeNcdScreeningCondition(selected, { value: selected });
   }
 
