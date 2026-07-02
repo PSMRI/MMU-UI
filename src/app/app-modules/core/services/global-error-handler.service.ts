@@ -25,7 +25,11 @@ import { ErrorHandler, Injectable } from '@angular/core';
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
   handleError(error: Error) {
-    console.log(error);
-    throw error;
+    // Use console.error so the browser DevTools error panel captures it and
+    // it is distinguishable from informational logs.
+    // Do NOT re-throw here: Angular's ErrorHandler runs inside NgZone and
+    // re-throwing causes the zone to invoke handleError again, creating an
+    // infinite loop that freezes the application.
+    console.error(error);
   }
 }
