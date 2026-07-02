@@ -50,34 +50,35 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
 import { NgFor, NgClass, NgIf } from '@angular/common';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory, lucidePlus, lucideX } from '@ng-icons/lucide';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 
 @Component({
   selector: 'app-nurse-cancer-family-disease-history',
   templateUrl: './family-disease-history.component.html',
-  styleUrls: ['./family-disease-history.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatTooltip,
-    MatIcon,
     NgFor,
     NgClass,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
     NgIf,
-    MatInput,
+    NgIcon,
+    ...tooltipImports,
+    ZardButtonComponent,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
     NullDefaultValueDirective,
     StringValidatorDirective,
   ],
+  viewProviders: [provideIcons({ lucideHistory, lucidePlus, lucideX })],
 })
 export class FamilyDiseaseHistoryComponent
   implements OnInit, OnDestroy, DoCheck
@@ -228,6 +229,24 @@ export class FamilyDiseaseHistoryComponent
             console.log('beneficiary', beneficiaryDetails);
         }
       );
+  }
+
+  onCancerDiseaseTypeChange(
+    selectedType: string | string[],
+    i: any,
+    familyDiseaseForm: AbstractControl<any, any>
+  ) {
+    const matchedDisease = (this.temp[i]?.diseaseType || []).find(
+      (item: any) => item.cancerDiseaseType === selectedType
+    );
+    familyDiseaseForm
+      .get('cancerDiseaseType')
+      ?.setValue(matchedDisease ?? null);
+    this.filterFamilyMember(
+      familyDiseaseForm.value?.cancerDiseaseType,
+      i,
+      familyDiseaseForm
+    );
   }
 
   filterFamilyMember(

@@ -48,39 +48,39 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { MatDialog } from '@angular/material/dialog';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 import { NumberValidatorDirective } from '../../../../core/directives/numberValidator.directive';
 import { NgIf, NgFor } from '@angular/common';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { MatCard, MatCardContent } from '@angular/material/card';
-import { MatOption } from '@angular/material/autocomplete';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory } from '@ng-icons/lucide';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardCheckboxComponent } from 'Common-UI/v2/ui/checkbox';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-general-past-obsteric-history',
   templateUrl: './past-obsteric-history.component.html',
-  styleUrls: ['./past-obsteric-history.component.css'],
+  viewProviders: [provideIcons({ lucideHistory })],
   imports: [
-    MatTooltip,
-    MatIcon,
     ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatInput,
     NullDefaultValueDirective,
     StringValidatorDirective,
     NumberValidatorDirective,
     NgIf,
     NgFor,
-    MatCheckbox,
-    MatCard,
-    MatCardContent,
-    MatSelect,
-    MatOption,
+    NgIcon,
+    ...cardImports,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ...ZardSelectImports,
+    ZardCheckboxComponent,
+    ...tooltipImports,
   ],
 })
 export class PastObstericHistoryComponent
@@ -785,5 +785,245 @@ export class PastObstericHistoryComponent
       );
       pastObstericHistoryForm.patchValue({ pregDuration: null });
     }
+  }
+
+  /* --- Zard select adapters ---
+   * z-select is a string-valued control, but every dropdown here stores a
+   * full master-data OBJECT (single-select) or an OBJECT ARRAY (multi-select)
+   * in its reactive-form control. These getters expose the current object
+   * value(s) as string label(s) for the z-select trigger, and the handlers
+   * reconstruct the object(s) from the chosen label(s) and setValue() them
+   * back into the control — so the stored value TYPE and the submission
+   * contract are unchanged. */
+
+  private asControl(form: AbstractControl<any, any>, name: string) {
+    return (form as FormGroup).controls[name];
+  }
+
+  private mapNamesToObjects(
+    value: string | string[],
+    source: any[],
+    key: string
+  ): any[] {
+    const names = Array.isArray(value) ? value : [value];
+    return (source || []).filter((item: any) => names.includes(item[key]));
+  }
+
+  private mapNameToObject(
+    value: string | string[],
+    source: any[],
+    key: string
+  ): any {
+    const name = Array.isArray(value) ? value[0] : value;
+    return (source || []).find((item: any) => item[key] === name) ?? null;
+  }
+
+  // pregComplicationList (multi, object array keyed by pregComplicationType)
+  getPregComplicationValues(form: AbstractControl<any, any>): string[] {
+    const val = form.value.pregComplicationList;
+    return Array.isArray(val)
+      ? val.map((c: any) => c?.pregComplicationType)
+      : [];
+  }
+  onPregComplicationChange(
+    form: AbstractControl<any, any>,
+    value: string | string[],
+    index: any
+  ) {
+    const selected = this.mapNamesToObjects(
+      value,
+      this.masterData?.pregComplicationTypes,
+      'pregComplicationType'
+    );
+    this.asControl(form, 'pregComplicationList').setValue(selected);
+    this.asControl(form, 'pregComplicationList').markAsDirty();
+    this.resetOtherPregnancyComplication(form, index);
+  }
+
+  // pregOutcome (single, object keyed by pregOutcome)
+  getPregOutcomeLabel(form: AbstractControl<any, any>): string {
+    return form.value.pregOutcome?.pregOutcome ?? '';
+  }
+  onPregOutcomeChange(
+    form: AbstractControl<any, any>,
+    value: string | string[]
+  ) {
+    const selected = this.mapNameToObject(
+      value,
+      this.masterData?.pregOutcomes,
+      'pregOutcome'
+    );
+    this.asControl(form, 'pregOutcome').setValue(selected);
+    this.asControl(form, 'pregOutcome').markAsDirty();
+    this.checkPregnancyOutcome(form);
+  }
+
+  // abortionType (single, object keyed by complicationValue)
+  getAbortionTypeLabel(form: AbstractControl<any, any>): string {
+    return form.value.abortionType?.complicationValue ?? '';
+  }
+  onAbortionTypeChange(
+    form: AbstractControl<any, any>,
+    value: string | string[]
+  ) {
+    const selected = this.mapNameToObject(
+      value,
+      this.masterData?.typeOfAbortion,
+      'complicationValue'
+    );
+    this.asControl(form, 'abortionType').setValue(selected);
+    this.asControl(form, 'abortionType').markAsDirty();
+    this.onAbortionType(form, selected?.complicationValue);
+  }
+
+  // typeofFacility (single, object keyed by facilityName)
+  getTypeofFacilityLabel(form: AbstractControl<any, any>): string {
+    return form.value.typeofFacility?.facilityName ?? '';
+  }
+  onTypeofFacilityChange(
+    form: AbstractControl<any, any>,
+    value: string | string[]
+  ) {
+    const selected = this.mapNameToObject(
+      value,
+      this.masterData?.serviceFacilities,
+      'facilityName'
+    );
+    this.asControl(form, 'typeofFacility').setValue(selected);
+    this.asControl(form, 'typeofFacility').markAsDirty();
+  }
+
+  // postAbortionComplication (multi, object array keyed by complicationValue)
+  getPostAbortionValues(form: AbstractControl<any, any>): string[] {
+    const val = form.value.postAbortionComplication;
+    return Array.isArray(val) ? val.map((c: any) => c?.complicationValue) : [];
+  }
+  onPostAbortionChange(
+    form: AbstractControl<any, any>,
+    value: string | string[],
+    index: any
+  ) {
+    const selected = this.mapNamesToObjects(
+      value,
+      this.masterData?.postAbortionComplications,
+      'complicationValue'
+    );
+    this.asControl(form, 'postAbortionComplication').setValue(selected);
+    this.asControl(form, 'postAbortionComplication').markAsDirty();
+    this.resetPostComplicationType(form, index);
+  }
+
+  // durationType (single, object keyed by durationType)
+  getDurationTypeLabel(form: AbstractControl<any, any>): string {
+    return form.value.durationType?.durationType ?? '';
+  }
+  onDurationTypeChange(
+    form: AbstractControl<any, any>,
+    value: string | string[]
+  ) {
+    const selected = this.mapNameToObject(
+      value,
+      this.masterData?.pregDuration,
+      'durationType'
+    );
+    this.asControl(form, 'durationType').setValue(selected);
+    this.asControl(form, 'durationType').markAsDirty();
+  }
+
+  // deliveryPlace (single, object keyed by deliveryPlace)
+  getDeliveryPlaceLabel(form: AbstractControl<any, any>): string {
+    return form.value.deliveryPlace?.deliveryPlace ?? '';
+  }
+  onDeliveryPlaceChange(
+    form: AbstractControl<any, any>,
+    value: string | string[]
+  ) {
+    const selected = this.mapNameToObject(
+      value,
+      this.masterData?.deliveryPlaces,
+      'deliveryPlace'
+    );
+    this.asControl(form, 'deliveryPlace').setValue(selected);
+    this.asControl(form, 'deliveryPlace').markAsDirty();
+    this.resetOtherDeliveryPlace(form);
+  }
+
+  // deliveryType (single, object keyed by deliveryType)
+  getDeliveryTypeLabel(form: AbstractControl<any, any>): string {
+    return form.value.deliveryType?.deliveryType ?? '';
+  }
+  onDeliveryTypeChange(
+    form: AbstractControl<any, any>,
+    value: string | string[]
+  ) {
+    const selected = this.mapNameToObject(
+      value,
+      this.selectDeliveryTypes,
+      'deliveryType'
+    );
+    this.asControl(form, 'deliveryType').setValue(selected);
+    this.asControl(form, 'deliveryType').markAsDirty();
+  }
+
+  // deliveryComplicationList (multi, object array keyed by deliveryComplicationType)
+  getDeliveryComplicationValues(form: AbstractControl<any, any>): string[] {
+    const val = form.value.deliveryComplicationList;
+    return Array.isArray(val)
+      ? val.map((c: any) => c?.deliveryComplicationType)
+      : [];
+  }
+  onDeliveryComplicationChange(
+    form: AbstractControl<any, any>,
+    value: string | string[],
+    index: any
+  ) {
+    const selected = this.mapNamesToObjects(
+      value,
+      this.masterData?.deliveryComplicationTypes,
+      'deliveryComplicationType'
+    );
+    this.asControl(form, 'deliveryComplicationList').setValue(selected);
+    this.asControl(form, 'deliveryComplicationList').markAsDirty();
+    this.resetOtherDeliveryComplication(form, index);
+  }
+
+  // postpartumComplicationList (multi, object array keyed by postpartumComplicationType)
+  getPostpartumComplicationValues(form: AbstractControl<any, any>): string[] {
+    const val = form.value.postpartumComplicationList;
+    return Array.isArray(val)
+      ? val.map((c: any) => c?.postpartumComplicationType)
+      : [];
+  }
+  onPostpartumComplicationChange(
+    form: AbstractControl<any, any>,
+    value: string | string[],
+    index: any
+  ) {
+    const selected = this.mapNamesToObjects(
+      value,
+      this.masterData?.postpartumComplicationTypes,
+      'postpartumComplicationType'
+    );
+    this.asControl(form, 'postpartumComplicationList').setValue(selected);
+    this.asControl(form, 'postpartumComplicationList').markAsDirty();
+    this.resetOtherPostpartumComplicationType(form, index);
+  }
+
+  // newBornComplication (single, object keyed by complicationValue)
+  getNewBornComplicationLabel(form: AbstractControl<any, any>): string {
+    return form.value.newBornComplication?.complicationValue ?? '';
+  }
+  onNewBornComplicationChange(
+    form: AbstractControl<any, any>,
+    value: string | string[]
+  ) {
+    const selected = this.mapNameToObject(
+      value,
+      this.masterData?.newBornComplications,
+      'complicationValue'
+    );
+    this.asControl(form, 'newBornComplication').setValue(selected);
+    this.asControl(form, 'newBornComplication').markAsDirty();
+    this.resetOtherNewBornComplications(form);
   }
 }
