@@ -1,124 +1,127 @@
-<div class="" [formGroup]="developmentHistoryForm">
-  <div class="col-12" style="text-align: end">
-    <span class="font-history-label">{{
+<div [formGroup]="developmentHistoryForm" class="flex flex-col gap-4">
+  <div class="flex items-center justify-end gap-2">
+    <span class="text-sm font-semibold text-foreground">{{
       currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
         ?.previousDevelopmentalHistory
     }}</span>
     <button
+      z-button
+      zType="ghost"
+      zSize="icon-sm"
       type="button"
-      mat-icon-button
-      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
       id="previousDevelopmentalHistory"
-      class="mat_icon_blue"
-      color="primary"
+      class="text-primary"
+      [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
+      [attr.aria-label]="currentLanguageSet?.DurationData?.previousDetails"
       (click)="getPreviousDevelopmentalHistory()">
-      <mat-icon class="md-18">history</mat-icon>
+      <ng-icon name="lucideHistory"></ng-icon>
     </button>
   </div>
-  <div>
-    <div class="col-12 row">
-      <div class="col-6 box">
-        <mat-form-field>
-          <mat-label class="mat-label-text">{{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-              ?.grossMotorMilestone
-          }}</mat-label>
-          <mat-select
-            multiple
-            class="select-full-width"
-            name="grossMotorMilestone"
-            formControlName="grossMotorMilestones">
-            <mat-option
-              *ngFor="
-                let grossMotorMilestone of masterData?.grossMotorMilestones
-              "
-              [value]="grossMotorMilestone.gMMilestone"
-              >{{ grossMotorMilestone.gMMilestone }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-      </div>
 
-      <div class="col-6 box">
-        <mat-form-field>
-          <mat-label class="mat-label-text">{{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-              ?.fineMotorMilestone
-          }}</mat-label>
-          <mat-select
-            multiple
-            class="select-full-width"
-            name="fineMotorMilestone"
-            formControlName="fineMotorMilestones">
-            <mat-option value="Changes object from one to another hand"
-              >Changes object from one to another hand</mat-option
-            >
-            <mat-option value="Holding object with Palm"
-              >Holding object with Palm</mat-option
-            >
-            <mat-option value="Pincer's Grasp">Pincer's Grasp</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
+  <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="grossMotorMilestones">{{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
+          ?.grossMotorMilestone
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full bg-background"
+          id="grossMotorMilestones"
+          name="grossMotorMilestone"
+          formControlName="grossMotorMilestones"
+          [zMultiple]="true">
+          <z-select-item
+            *ngFor="let grossMotorMilestone of masterData?.grossMotorMilestones"
+            [zValue]="grossMotorMilestone.gMMilestone">
+            {{ grossMotorMilestone.gMMilestone }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
 
-    <div class="col-12 row">
-      <div class="col-6 box">
-        <mat-form-field>
-          <mat-label class="mat-label-text">{{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-              ?.socialMilestone
-          }}</mat-label>
-          <mat-select
-            multiple
-            class="select-full-width"
-            name="socialMilestone"
-            formControlName="socialMilestones">
-            <mat-option value="Social smile">Social smile</mat-option>
-            <mat-option value="Cooing">Cooing</mat-option>
-            <mat-option value="Stranger Anxiety">Stranger Anxiety</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="fineMotorMilestones">{{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
+          ?.fineMotorMilestone
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full bg-background"
+          id="fineMotorMilestones"
+          name="fineMotorMilestone"
+          formControlName="fineMotorMilestones"
+          [zMultiple]="true">
+          <z-select-item zValue="Changes object from one to another hand">
+            Changes object from one to another hand
+          </z-select-item>
+          <z-select-item zValue="Holding object with Palm">
+            Holding object with Palm
+          </z-select-item>
+          <z-select-item zValue="Pincer's Grasp">Pincer's Grasp</z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
 
-      <div class="col-6 box">
-        <mat-form-field>
-          <mat-label class="mat-label-text">{{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-              ?.languageMilestone
-          }}</mat-label>
-          <mat-select
-            multiple
-            class="select-full-width"
-            name="languageMilestone"
-            formControlName="languageMilestones">
-            <mat-option value="Monosyllables">Monosyllables</mat-option>
-            <mat-option value="Bi syllables">Bi syllables</mat-option>
-            <mat-option value="Words">Words</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="socialMilestones">{{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
+          ?.socialMilestone
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full bg-background"
+          id="socialMilestones"
+          name="socialMilestone"
+          formControlName="socialMilestones"
+          [zMultiple]="true">
+          <z-select-item zValue="Social smile">Social smile</z-select-item>
+          <z-select-item zValue="Cooing">Cooing</z-select-item>
+          <z-select-item zValue="Stranger Anxiety">Stranger Anxiety</z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
 
-    <div class="col-12 row"></div>
-    <div class="col-6 box">
-      <mat-form-field>
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-            ?.developmentalProblems
-        }}</mat-label>
-        <mat-select
-          multiple
-          class="select-full-width"
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="languageMilestones">{{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
+          ?.languageMilestone
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full bg-background"
+          id="languageMilestones"
+          name="languageMilestone"
+          formControlName="languageMilestones"
+          [zMultiple]="true">
+          <z-select-item zValue="Monosyllables">Monosyllables</z-select-item>
+          <z-select-item zValue="Bi syllables">Bi syllables</z-select-item>
+          <z-select-item zValue="Words">Words</z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="developmentProblems">{{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
+          ?.developmentalProblems
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full bg-background"
+          id="developmentProblems"
           name="developmentalProblems"
-          formControlName="developmentProblems">
-          <mat-option value="Nil">Nil</mat-option>
-          <mat-option value="Cerebral Palsy">Cerebral Palsy</mat-option>
-          <mat-option value="ADHD">ADHD</mat-option>
-          <mat-option value="Autism">Autism</mat-option>
-          <mat-option value="Learning Disorders">Learning Disorders</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+          formControlName="developmentProblems"
+          [zMultiple]="true">
+          <z-select-item zValue="Nil">Nil</z-select-item>
+          <z-select-item zValue="Cerebral Palsy">Cerebral Palsy</z-select-item>
+          <z-select-item zValue="ADHD">ADHD</z-select-item>
+          <z-select-item zValue="Autism">Autism</z-select-item>
+          <z-select-item zValue="Learning Disorders">
+            Learning Disorders
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
   </div>
 </div>

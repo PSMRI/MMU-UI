@@ -1,50 +1,79 @@
-<mat-accordion [formGroup]="nurseCancerHistoryForm">
-  <mat-expansion-panel expanded="true">
-    <mat-expansion-panel-header>
-      <h5>
-        {{
-          currentLanguageSet?.historyData?.cancerScreeningHistory?.familyMedical
-            ?.familyMedicalHistory
-        }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-nurse-cancer-family-disease-history
-      [mode]="mode"
-      [cancerPatientFamilyMedicalHistoryForm]="
-        cancerPatientFamilyMedicalHistoryForm
-      "></app-nurse-cancer-family-disease-history>
-  </mat-expansion-panel>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>
-        {{
-          currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-            ?.personalHistory
-        }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-nurse-cancer-personal-history
-      [cancerPatientPerosnalHistoryForm]="
-        cancerPatientPerosnalHistoryForm
-      "></app-nurse-cancer-personal-history>
-  </mat-expansion-panel>
-  <mat-expansion-panel
+<z-accordion
+  [formGroup]="nurseCancerHistoryForm"
+  zType="single"
+  class="flex flex-col gap-4">
+  <z-accordion-item
+    zValue="family"
+    class="rounded-lg border border-border bg-card">
+    <div class="px-4">
+      <z-accordion-trigger class="flex-1 text-left">
+        <span class="text-sm font-semibold text-foreground">
+          {{
+            currentLanguageSet?.historyData?.cancerScreeningHistory
+              ?.familyMedical?.familyMedicalHistory
+          }}
+        </span>
+      </z-accordion-trigger>
+    </div>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-nurse-cancer-family-disease-history
+          [mode]="mode"
+          [cancerPatientFamilyMedicalHistoryForm]="
+            cancerPatientFamilyMedicalHistoryForm
+          "></app-nurse-cancer-family-disease-history>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
+
+  <z-accordion-item
+    zValue="personal"
+    class="rounded-lg border border-border bg-card">
+    <div class="px-4">
+      <z-accordion-trigger class="flex-1 text-left">
+        <span class="text-sm font-semibold text-foreground">
+          {{
+            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+              ?.personalHistory
+          }}
+        </span>
+      </z-accordion-trigger>
+    </div>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-nurse-cancer-personal-history
+          [cancerPatientPerosnalHistoryForm]="
+            cancerPatientPerosnalHistoryForm
+          "></app-nurse-cancer-personal-history>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
+
+  <z-accordion-item
     *ngIf="
       (templateBeneficiaryDetails?.genderName === 'Female' &&
         templateBeneficiaryDetails?.ageVal > 19) ||
       (templateBeneficiaryDetails?.genderName === 'Transgender' &&
         templateBeneficiaryDetails?.ageVal > 19)
-    ">
-    <mat-expansion-panel-header>
-      <h5>
-        {{
-          currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
-            ?.obstetricHistory
-        }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-nurse-cancer-obstetric-history
-      [cancerPatientObstetricHistoryForm]="cancerPatientObstetricHistoryForm"
-      [ispregnant]="pregnancyStatus"></app-nurse-cancer-obstetric-history>
-  </mat-expansion-panel>
-</mat-accordion>
+    "
+    zValue="obstetric"
+    class="rounded-lg border border-border bg-card">
+    <div class="px-4">
+      <z-accordion-trigger class="flex-1 text-left">
+        <span class="text-sm font-semibold text-foreground">
+          {{
+            currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
+              ?.obstetricHistory
+          }}
+        </span>
+      </z-accordion-trigger>
+    </div>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-nurse-cancer-obstetric-history
+          [cancerPatientObstetricHistoryForm]="cancerPatientObstetricHistoryForm"
+          [ispregnant]="pregnancyStatus"></app-nurse-cancer-obstetric-history>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
+</z-accordion>

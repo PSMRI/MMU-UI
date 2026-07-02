@@ -1,205 +1,200 @@
-<ng-container [formGroup]="generalPersonalHistoryForm">
-  <div class="col-12 row">
+<div [formGroup]="generalPersonalHistoryForm" class="flex flex-col gap-6">
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
     <div
-      class="previous-history col-4"
-      style="text-align: center"
+      class="flex items-center justify-center gap-2"
       *ngIf="beneficiary?.ageVal >= 13">
-      <span class="font-history-label">{{
+      <span class="text-sm font-medium text-foreground">{{
         currentLanguageSet?.historyData?.ancHistory
           ?.personalHistoryANC_OPD_NCD_PNC?.previousTobaccohistory
       }}</span>
       <button
+        z-button
+        zType="ghost"
+        zSize="icon-sm"
         type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
         id="previousTobaccoHistory"
-        class="mat_icon_blue"
-        color="primary"
+        class="text-primary"
+        [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
+        [attr.aria-label]="currentLanguageSet?.DurationData?.previousDetails"
         (click)="getPreviousTobaccoHistory()">
-        <mat-icon class="md-24">history</mat-icon>
+        <ng-icon name="lucideHistory"></ng-icon>
       </button>
     </div>
+
     <div
-      class="col-4 previous-history"
-      style="text-align: center"
+      class="flex items-center justify-center gap-2"
       *ngIf="beneficiary?.ageVal >= 13">
-      <span class="font-history-label">{{
+      <span class="text-sm font-medium text-foreground">{{
         currentLanguageSet?.historyData?.ancHistory
           ?.personalHistoryANC_OPD_NCD_PNC?.previousAlcoholhistory
       }}</span>
       <button
+        z-button
+        zType="ghost"
+        zSize="icon-sm"
         type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
         id="previousAlcoholHistory"
-        class="mat_icon_blue"
-        color="primary"
+        class="text-primary"
+        [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
+        [attr.aria-label]="currentLanguageSet?.DurationData?.previousDetails"
         (click)="getPreviousAlcoholHistory()">
-        <mat-icon class="md-18">history</mat-icon>
+        <ng-icon name="lucideHistory"></ng-icon>
       </button>
     </div>
-    <div class="col-4 previous-history" style="text-align: center">
-      <span class="font-history-label">{{
+
+    <div class="flex items-center justify-center gap-2">
+      <span class="text-sm font-medium text-foreground">{{
         currentLanguageSet?.historyData?.ancHistory
           ?.personalHistoryANC_OPD_NCD_PNC?.previousAllergyhistory
       }}</span>
       <button
+        z-button
+        zType="ghost"
+        zSize="icon-sm"
         type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
         id="previousAllergyHistory"
-        class="mat_icon_blue"
-        color="primary"
+        class="text-primary"
+        [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
+        [attr.aria-label]="currentLanguageSet?.DurationData?.previousDetails"
         (click)="getPreviousAllergyHistory()">
-        <mat-icon class="md-18">history</mat-icon>
+        <ng-icon name="lucideHistory"></ng-icon>
       </button>
     </div>
   </div>
-  <div class="row m-t-10">
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <label class="control-label" for="dietaryType">{{
+
+  <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="flex flex-col gap-1.5">
+      <label z-form-label for="dietaryType">{{
         currentLanguageSet?.historyData?.ancHistory
           ?.personalHistoryANC_OPD_NCD_PNC?.dietaryType
       }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group formControlName="dietaryType" style="margin-left: -10px">
-        <mat-radio-button color="primary" value="Vegetarian">{{
+      <z-radio-group
+        id="dietaryType"
+        name="dietaryType"
+        formControlName="dietaryType"
+        zOrientation="horizontal"
+        class="flex-wrap gap-6">
+        <z-radio value="Vegetarian">{{
           currentLanguageSet?.historyData?.ancHistory
             ?.personalHistoryANC_OPD_NCD_PNC?.vegetarian
-        }}</mat-radio-button>
-        <mat-radio-button
-          color="primary"
-          class="radio-button"
-          value="Non-Vegetarian"
-          >{{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.personalHistoryANC_OPD_NCD_PNC?.nonVegetarian
-          }}</mat-radio-button
-        >
-      </mat-radio-group>
+        }}</z-radio>
+        <z-radio value="Non-Vegetarian">{{
+          currentLanguageSet?.historyData?.ancHistory
+            ?.personalHistoryANC_OPD_NCD_PNC?.nonVegetarian
+        }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      style="margin-left: -8px">
-      <label class="control-label" for="physicalActivityType">{{
+    <div class="flex flex-col gap-1.5">
+      <label z-form-label for="physicalActivityType">{{
         currentLanguageSet?.historyData?.ancHistory
           ?.personalHistoryANC_OPD_NCD_PNC?.physicalActivityType
       }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
+      <z-radio-group
+        id="physicalActivityType"
+        name="physicalActivityType"
         formControlName="physicalActivityType"
-        style="margin-left: -10px">
-        <mat-radio-button color="primary" value="Sedentary">{{
+        zOrientation="horizontal"
+        class="flex-wrap gap-6">
+        <z-radio value="Sedentary">{{
           currentLanguageSet?.historyData?.ancHistory
             ?.personalHistoryANC_OPD_NCD_PNC?.sedentary
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" class="radio-button" value="Active">{{
+        }}</z-radio>
+        <z-radio value="Active">{{
           currentLanguageSet?.historyData?.ancHistory
             ?.personalHistoryANC_OPD_NCD_PNC?.active
-        }}</mat-radio-button>
-      </mat-radio-group>
+        }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      style="margin-left: -8px"
-      *ngIf="beneficiary?.ageVal >= 18">
-      <label class="control-label" for="riskySexualPracticesStatus">{{
+    <div class="flex flex-col gap-1.5" *ngIf="beneficiary?.ageVal >= 18">
+      <label z-form-label for="riskySexualPracticesStatus">{{
         currentLanguageSet?.historyData?.ancHistory
           ?.personalHistoryANC_OPD_NCD_PNC?.riskySexualPracticesStatus
       }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
+      <z-radio-group
+        id="riskySexualPracticesStatus"
+        name="riskySexualPracticesStatus"
         formControlName="riskySexualPracticesStatus"
-        style="margin-left: -10px">
-        <mat-radio-button color="primary" [value]="true">Yes</mat-radio-button>
-        <mat-radio-button color="primary" class="radio-button" [value]="false"
-          >No</mat-radio-button
-        >
-      </mat-radio-group>
+        zOrientation="horizontal"
+        class="flex-wrap gap-6">
+        <z-radio [value]="true">Yes</z-radio>
+        <z-radio [value]="false">No</z-radio>
+      </z-radio-group>
     </div>
 
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      *ngIf="beneficiary?.ageVal >= 13">
-      <mat-form-field class="mat_form_field" [style.width]="'85%'">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData?.tobaccoUseStatus
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
+    <z-form-field class="gap-1.5" *ngIf="beneficiary?.ageVal >= 13">
+      <label z-form-label for="tobaccoUseStatus">{{
+        currentLanguageSet?.historyData?.ancHistory
+          ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData?.tobaccoUseStatus
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="tobaccoUseStatus"
+          name="tobaccoUseStatus"
           formControlName="tobaccoUseStatus"
-          (selectionChange)="checkTobaccoStatus()">
-          <mat-option value="Yes">Yes</mat-option>
-          <mat-option value="No">No</mat-option>
-          <mat-option value="Discontinued">Discontinued</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+          (zSelectionChange)="checkTobaccoStatus()">
+          <z-select-item [zValue]="'Yes'">Yes</z-select-item>
+          <z-select-item [zValue]="'No'">No</z-select-item>
+          <z-select-item [zValue]="'Discontinued'">Discontinued</z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
 
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      style="margin-left: -8px"
-      *ngIf="beneficiary?.ageVal >= 13">
-      <mat-form-field class="mat_form_field" [style.width]="'85%'">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.alcoholUseStatus
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
+    <z-form-field class="gap-1.5" *ngIf="beneficiary?.ageVal >= 13">
+      <label z-form-label for="alcoholIntakeStatus">{{
+        currentLanguageSet?.historyData?.ancHistory
+          ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.alcoholUseStatus
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="alcoholIntakeStatus"
+          name="alcoholIntakeStatus"
           formControlName="alcoholIntakeStatus"
-          (selectionChange)="checkAlcoholStatus()">
-          <mat-option value="Yes">Yes</mat-option>
-          <mat-option value="No">No</mat-option>
-          <mat-option value="Discontinued">Discontinued</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+          (zSelectionChange)="checkAlcoholStatus()">
+          <z-select-item [zValue]="'Yes'">Yes</z-select-item>
+          <z-select-item [zValue]="'No'">No</z-select-item>
+          <z-select-item [zValue]="'Discontinued'">Discontinued</z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
 
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      style="margin-left: -8px">
-      <mat-form-field class="mat_form_field" [style.width]="'85%'">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus?.allergicStatus
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="allergyStatus">{{
+        currentLanguageSet?.historyData?.ancHistory
+          ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus?.allergicStatus
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="allergyStatus"
+          name="allergyStatus"
           formControlName="allergyStatus"
-          (selectionChange)="checkAllergicStatus()">
-          <mat-option value="Yes">Yes</mat-option>
-          <mat-option value="No">No</mat-option>
-          <mat-option value="Discontinued">Don't Know</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+          (zSelectionChange)="checkAllergicStatus()">
+          <z-select-item [zValue]="'Yes'">Yes</z-select-item>
+          <z-select-item [zValue]="'No'">No</z-select-item>
+          <z-select-item [zValue]="'Discontinued'">Don't Know</z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
   </div>
 
-  <mat-card
-    class="row m-t-10"
-    style="margin-bottom: 15px"
+  <z-card
     *ngIf="
       (tobaccoUseStatus === 'Yes' || tobaccoUseStatus === 'Discontinued') &&
       beneficiary?.ageVal >= 13
     ">
-    <mat-card-header>
-      <mat-card-title>
-        <h4>
-          <strong>{{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData?.tobacco
-          }}</strong>
-        </h4>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content formArrayName="tobaccoList">
+    <z-card-header>
+      <z-card-title>{{
+        currentLanguageSet?.historyData?.ancHistory
+          ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData?.tobacco
+      }}</z-card-title>
+    </z-card-header>
+    <z-card-content formArrayName="tobaccoList" class="flex flex-col gap-4">
       <div
-        class="row multi-row-select col-12"
-        style="background-color: #f0f5f5; margin: 8px 0px 0px 0px"
+        class="rounded-lg bg-muted/40 p-4"
         *ngFor="
           let tobacco of getTobaccoList();
           let i = index;
@@ -208,157 +203,167 @@
         "
         [ngClass]="{ odd: !isOdd }">
         <ng-container [formGroupName]="i">
-          <div class="col-3 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData
-                  ?.typeofTobaccoUse
-              }}</mat-label>
-              <mat-select
-                class="select-full-width"
-                formControlName="tobaccoUseType"
-                (selectionChange)="filterTobaccoList($event, i, tobacco)">
-                <mat-option
-                  *ngFor="let tobacco of tobaccoSelectList[i]"
-                  [value]="tobacco">
-                  {{ tobacco.habitValue }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-
           <div
-            class="col-2 box"
-            *ngIf="tobacco.value.tobaccoUseType?.habitValue === 'Other'">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
+            class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+            <z-form-field class="gap-1.5">
+              <label z-form-label for="tobaccoUseType-{{ i }}">{{
+                currentLanguageSet?.historyData?.ancHistory
+                  ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData?.typeofTobaccoUse
+              }}</label>
+              <z-form-control>
+                <z-select
+                  class="w-full bg-background"
+                  id="tobaccoUseType-{{ i }}"
+                  name="tobaccoUseType"
+                  [zValue]="getTobaccoUseTypeLabel(tobacco)"
+                  (zSelectionChange)="
+                    onTobaccoUseTypeChange($event, i, tobacco)
+                  ">
+                  <z-select-item
+                    *ngFor="let tobaccoItem of tobaccoSelectList[i]"
+                    [zValue]="tobaccoItem.habitValue">
+                    {{ tobaccoItem.habitValue }}
+                  </z-select-item>
+                </z-select>
+              </z-form-control>
+            </z-form-field>
+
+            <z-form-field
+              class="gap-1.5"
+              *ngIf="tobacco.value.tobaccoUseType?.habitValue === 'Other'">
+              <label z-form-label for="otherTobaccoUseType-{{ i }}">{{
                 currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
                   ?.others
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                maxlength="50"
-                allowText="alphabet"
-                formControlName="otherTobaccoUseType" />
-            </mat-form-field>
-          </div>
+              }}</label>
+              <z-form-control>
+                <input
+                  z-input
+                  class="w-full bg-background"
+                  autocomplete="off"
+                  appDefaultNull
+                  maxlength="50"
+                  allowText="alphabet"
+                  id="otherTobaccoUseType-{{ i }}"
+                  name="otherTobaccoUseType"
+                  formControlName="otherTobaccoUseType" />
+              </z-form-control>
+            </z-form-field>
 
-          <div class="col-2 box">
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
+            <z-form-field class="gap-1.5">
+              <label z-form-label for="tobaccoNumber-{{ i }}">{{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData?.number
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                maxlength="2"
-                allowText="number"
-                formControlName="number"
-                (blur)="perDayChange()"
-                (input)="enableFields(tobacco)" />
-            </mat-form-field>
-          </div>
+              }}</label>
+              <z-form-control>
+                <input
+                  z-input
+                  class="w-full bg-background"
+                  autocomplete="off"
+                  appDefaultNull
+                  maxlength="2"
+                  allowText="number"
+                  id="tobaccoNumber-{{ i }}"
+                  name="number"
+                  formControlName="number"
+                  (blur)="perDayChange()"
+                  (input)="enableFields(tobacco)" />
+              </z-form-control>
+            </z-form-field>
 
-          <div class="col-xs-12 col-sm-6 col-md-2 box">
-            <mat-radio-group formControlName="perDay" (change)="perDayChange()">
-              <mat-radio-button
-                color="primary"
-                class="radio-button"
-                [value]="true">
-                per day</mat-radio-button
-              >
-              <mat-radio-button
-                color="primary"
-                class="radio-button"
-                [value]="false">
-                per week</mat-radio-button
-              >
-            </mat-radio-group>
-          </div>
+            <div class="flex flex-col gap-1.5">
+              <label z-form-label for="perDay-{{ i }}">{{
+                currentLanguageSet?.historyData?.ancHistory
+                  ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData?.number
+              }}</label>
+              <z-radio-group
+                id="perDay-{{ i }}"
+                name="perDay"
+                formControlName="perDay"
+                zOrientation="horizontal"
+                class="flex-wrap gap-6"
+                (zChange)="perDayChange()">
+                <z-radio [value]="true">per day</z-radio>
+                <z-radio [value]="false">per week</z-radio>
+              </z-radio-group>
+            </div>
 
-          <div class="col-2 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
+            <z-form-field class="gap-1.5">
+              <label z-form-label for="tobaccoDuration-{{ i }}">{{
                 currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                maxlength="2"
-                allowText="number"
-                formControlName="duration"
-                (change)="validateDuration(tobacco)" />
-            </mat-form-field>
-          </div>
+              }}</label>
+              <z-form-control>
+                <input
+                  z-input
+                  class="w-full bg-background"
+                  autocomplete="off"
+                  appDefaultNull
+                  maxlength="2"
+                  allowText="number"
+                  id="tobaccoDuration-{{ i }}"
+                  name="duration"
+                  formControlName="duration"
+                  (change)="validateDuration(tobacco)" />
+              </z-form-control>
+            </z-form-field>
 
-          <div class="col-3 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
+            <z-form-field class="gap-1.5">
+              <label z-form-label for="tobaccoDurationUnit-{{ i }}">{{
                 currentLanguageSet?.DurationData?.durationUnit
-              }}</mat-label>
-              <mat-select
-                class="select-full-width"
-                formControlName="durationUnit"
-                (selectionChange)="validateDuration(tobacco)">
-                <mat-option value="Days">Day(s)</mat-option>
-                <mat-option value="Weeks">Week(s)</mat-option>
-                <mat-option value="Months">Month(s)</mat-option>
-                <mat-option value="Years">Year(s)</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+              }}</label>
+              <z-form-control>
+                <z-select
+                  class="w-full bg-background"
+                  id="tobaccoDurationUnit-{{ i }}"
+                  name="durationUnit"
+                  formControlName="durationUnit"
+                  (zSelectionChange)="validateDuration(tobacco)">
+                  <z-select-item [zValue]="'Days'">Day(s)</z-select-item>
+                  <z-select-item [zValue]="'Weeks'">Week(s)</z-select-item>
+                  <z-select-item [zValue]="'Months'">Month(s)</z-select-item>
+                  <z-select-item [zValue]="'Years'">Year(s)</z-select-item>
+                </z-select>
+              </z-form-control>
+            </z-form-field>
 
-          <div
-            class="ccol-12 box action-btn-container -al"
-            style="text-align: end; margin-top: 5px">
-            <button
-              md-mini-fab
-              color="warn"
-              class="mat_warn_circle"
-              style="margin-right: 3px"
-              *ngIf="i !== 0 || (i === 0 && (tobacco.touched || tobacco.dirty))"
-              (click)="removeTobacco(i, tobacco)">
-              <mat-icon class="md-18">close</mat-icon>
-            </button>
-            <button
-              md-mini-fab
-              color="primary"
-              *ngIf="isLast"
-              class="mat_blue_circle"
-              [disabled]="checkTobaccoValidity(tobacco)"
-              (click)="addTobacco()">
-              <mat-icon class="md-18">add</mat-icon>
-            </button>
+            <div class="flex items-end justify-end gap-2 lg:col-span-4">
+              <button
+                z-button
+                zType="destructive"
+                zSize="icon"
+                type="button"
+                *ngIf="i !== 0 || (i === 0 && (tobacco.touched || tobacco.dirty))"
+                [attr.aria-label]="currentLanguageSet?.common?.remove"
+                (click)="removeTobacco(i, tobacco)">
+                <ng-icon name="lucideX"></ng-icon>
+              </button>
+              <button
+                z-button
+                zType="default"
+                zSize="icon"
+                type="button"
+                *ngIf="isLast"
+                [disabled]="checkTobaccoValidity(tobacco)"
+                [attr.aria-label]="currentLanguageSet?.common?.add"
+                (click)="addTobacco()">
+                <ng-icon name="lucidePlus"></ng-icon>
+              </button>
+            </div>
           </div>
         </ng-container>
       </div>
-    </mat-card-content>
-  </mat-card>
+    </z-card-content>
+  </z-card>
 
-  <mat-card
-    class="row m-t-10"
-    *ngIf="alcoholIntakeStatus === 'Yes' && beneficiary?.ageVal >= 13"
-    style="margin-bottom: 15px">
-    <mat-card-header>
-      <mat-card-title>
-        <h4>
-          <strong>{{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.alcohol
-          }}</strong>
-        </h4>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content formArrayName="alcoholList">
+  <z-card *ngIf="alcoholIntakeStatus === 'Yes' && beneficiary?.ageVal >= 13">
+    <z-card-header>
+      <z-card-title>{{
+        currentLanguageSet?.historyData?.ancHistory
+          ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.alcohol
+      }}</z-card-title>
+    </z-card-header>
+    <z-card-content formArrayName="alcoholList" class="flex flex-col gap-4">
       <div
-        class="row multi-row-select"
-        style="background-color: #f0f5f5; margin: 8px 0px 0px 0px"
+        class="rounded-lg bg-muted/40 p-4"
         *ngFor="
           let alcohol of getAlcoholList();
           let i = index;
@@ -367,160 +372,172 @@
         "
         [ngClass]="{ odd: !isOdd }">
         <ng-container [formGroupName]="i">
-          <div class="col-2 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
+          <div
+            class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+            <z-form-field class="gap-1.5">
+              <label z-form-label for="typeOfAlcohol-{{ i }}">{{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.typeofAlcohol
-              }}</mat-label>
-              <mat-select
-                class="select-full-width"
-                formControlName="typeOfAlcohol"
-                (selectionChange)="filterAlcoholList($event, i, alcohol)">
-                <mat-option
-                  *ngFor="let alcohol of alcoholSelectList[i]"
-                  [value]="alcohol"
-                  >{{ alcohol.habitValue }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+              }}</label>
+              <z-form-control>
+                <z-select
+                  class="w-full bg-background"
+                  id="typeOfAlcohol-{{ i }}"
+                  name="typeOfAlcohol"
+                  [zValue]="getTypeOfAlcoholLabel(alcohol)"
+                  (zSelectionChange)="onTypeOfAlcoholChange($event, i, alcohol)">
+                  <z-select-item
+                    *ngFor="let alcoholItem of alcoholSelectList[i]"
+                    [zValue]="alcoholItem.habitValue">
+                    {{ alcoholItem.habitValue }}
+                  </z-select-item>
+                </z-select>
+              </z-form-control>
+            </z-form-field>
 
-          <div
-            class="col-4 box"
-            *ngIf="alcohol.value.typeOfAlcohol === 'Other'">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
+            <z-form-field
+              class="gap-1.5"
+              *ngIf="alcohol.value.typeOfAlcohol === 'Other'">
+              <label z-form-label for="otherAlcoholType-{{ i }}">{{
                 currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
                   ?.others
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                maxlength="50"
-                allowText="alphabet"
-                formControlName="otherAlcoholType" />
-            </mat-form-field>
-          </div>
+              }}</label>
+              <z-form-control>
+                <input
+                  z-input
+                  class="w-full bg-background"
+                  autocomplete="off"
+                  appDefaultNull
+                  maxlength="50"
+                  allowText="alphabet"
+                  id="otherAlcoholType-{{ i }}"
+                  name="otherAlcoholType"
+                  formControlName="otherAlcoholType" />
+              </z-form-control>
+            </z-form-field>
 
-          <div class="col-4 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
+            <z-form-field class="gap-1.5">
+              <label z-form-label for="alcoholIntakeFrequency-{{ i }}">{{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.freqofAlcohol
-              }}</mat-label>
-              <mat-select
-                id="frequencyIntake"
-                class="select-full-width"
-                formControlName="alcoholIntakeFrequency"
-                (selectionChange)="onChangeAlcIntakFreq(alcohol)">
-                <mat-option
-                  *ngFor="let frequency of masterData?.frequencyOfAlcoholIntake"
-                  [value]="frequency.habitValue">
-                  {{ frequency.habitValue }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+              }}</label>
+              <z-form-control>
+                <z-select
+                  class="w-full bg-background"
+                  id="alcoholIntakeFrequency-{{ i }}"
+                  name="alcoholIntakeFrequency"
+                  formControlName="alcoholIntakeFrequency"
+                  (zSelectionChange)="onChangeAlcIntakFreq(alcohol)">
+                  <z-select-item
+                    *ngFor="let frequency of masterData?.frequencyOfAlcoholIntake"
+                    [zValue]="frequency.habitValue">
+                    {{ frequency.habitValue }}
+                  </z-select-item>
+                </z-select>
+              </z-form-control>
+            </z-form-field>
 
-          <div class="col-4 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
+            <z-form-field class="gap-1.5">
+              <label z-form-label for="avgAlcoholConsumption-{{ i }}">{{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData
                   ?.qtyofAlcoholintake
-              }}</mat-label>
-              <mat-select
-                formControlName="avgAlcoholConsumption"
-                (selectionChange)="onChangeAvgAlcoholConsumption(alcohol)">
-                <mat-option
-                  *ngFor="let quantity of masterData?.quantityOfAlcoholIntake"
-                  [value]="quantity">
-                  {{ quantity.habitValue }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+              }}</label>
+              <z-form-control>
+                <z-select
+                  class="w-full bg-background"
+                  id="avgAlcoholConsumption-{{ i }}"
+                  name="avgAlcoholConsumption"
+                  [zValue]="getAvgAlcoholConsumptionLabel(alcohol)"
+                  (zSelectionChange)="
+                    onAvgAlcoholConsumptionChange($event, i, alcohol)
+                  ">
+                  <z-select-item
+                    *ngFor="let quantity of masterData?.quantityOfAlcoholIntake"
+                    [zValue]="quantity.habitValue">
+                    {{ quantity.habitValue }}
+                  </z-select-item>
+                </z-select>
+              </z-form-control>
+            </z-form-field>
 
-          <div class="col-2 box">
-            <mat-form-field class="input-full-width">
-              <mat-label class="mat-label-text">{{
+            <z-form-field class="gap-1.5">
+              <label z-form-label for="alcoholDuration-{{ i }}">{{
                 currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                maxlength="2"
-                allowText="number"
-                formControlName="duration"
-                (change)="validateDuration(alcohol)" />
-            </mat-form-field>
-          </div>
+              }}</label>
+              <z-form-control>
+                <input
+                  z-input
+                  class="w-full bg-background"
+                  autocomplete="off"
+                  appDefaultNull
+                  maxlength="2"
+                  allowText="number"
+                  id="alcoholDuration-{{ i }}"
+                  name="duration"
+                  formControlName="duration"
+                  (change)="validateDuration(alcohol)" />
+              </z-form-control>
+            </z-form-field>
 
-          <div class="col-4 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
+            <z-form-field class="gap-1.5">
+              <label z-form-label for="alcoholDurationUnit-{{ i }}">{{
                 currentLanguageSet?.DurationData?.durationUnit
-              }}</mat-label>
-              <mat-select
-                formControlName="durationUnit"
-                (selectionChange)="validateDuration(alcohol)">
-                <mat-option value="Days">Day(s)</mat-option>
-                <mat-option value="Weeks">Week(s)</mat-option>
-                <mat-option value="Months">Month(s)</mat-option>
-                <mat-option value="Years">Year(s)</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+              }}</label>
+              <z-form-control>
+                <z-select
+                  class="w-full bg-background"
+                  id="alcoholDurationUnit-{{ i }}"
+                  name="durationUnit"
+                  formControlName="durationUnit"
+                  (zSelectionChange)="validateDuration(alcohol)">
+                  <z-select-item [zValue]="'Days'">Day(s)</z-select-item>
+                  <z-select-item [zValue]="'Weeks'">Week(s)</z-select-item>
+                  <z-select-item [zValue]="'Months'">Month(s)</z-select-item>
+                  <z-select-item [zValue]="'Years'">Year(s)</z-select-item>
+                </z-select>
+              </z-form-control>
+            </z-form-field>
 
-          <div
-            class="col-8 box action-btn-container -al"
-            style="text-align: end">
-            <button
-              md-mini-fab
-              color="warn"
-              class="mat_warn_circle"
-              style="margin-right: 3px"
-              *ngIf="i !== 0 || (i === 0 && (alcohol.touched || alcohol.dirty))"
-              (click)="removeAlcohol(i, alcohol)">
-              <mat-icon class="md-18">close</mat-icon>
-            </button>
-            <button
-              md-mini-fab
-              color="primary"
-              class="mat_blue_circle"
-              *ngIf="isLast"
-              [disabled]="checkAlcoholValidity(alcohol)"
-              (click)="addAlcohol()">
-              <mat-icon class="md-18">add</mat-icon>
-            </button>
+            <div class="flex items-end justify-end gap-2 lg:col-span-3">
+              <button
+                z-button
+                zType="destructive"
+                zSize="icon"
+                type="button"
+                *ngIf="i !== 0 || (i === 0 && (alcohol.touched || alcohol.dirty))"
+                [attr.aria-label]="currentLanguageSet?.common?.remove"
+                (click)="removeAlcohol(i, alcohol)">
+                <ng-icon name="lucideX"></ng-icon>
+              </button>
+              <button
+                z-button
+                zType="default"
+                zSize="icon"
+                type="button"
+                *ngIf="isLast"
+                [disabled]="checkAlcoholValidity(alcohol)"
+                [attr.aria-label]="currentLanguageSet?.common?.add"
+                (click)="addAlcohol()">
+                <ng-icon name="lucidePlus"></ng-icon>
+              </button>
+            </div>
           </div>
         </ng-container>
       </div>
-    </mat-card-content>
-  </mat-card>
+    </z-card-content>
+  </z-card>
 
-  <mat-card
-    class="row m-t-10"
-    style="margin-bottom: 15px"
-    *ngIf="allergyStatus === 'Yes'"
-    tyle="margin-bottom: 15px;">
-    <mat-card-header>
-      <mat-card-title>
-        <h4>
-          <strong>{{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus?.allergy
-          }}</strong>
-        </h4>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content formArrayName="allergicList">
+  <z-card *ngIf="allergyStatus === 'Yes'">
+    <z-card-header>
+      <z-card-title>{{
+        currentLanguageSet?.historyData?.ancHistory
+          ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus?.allergy
+      }}</z-card-title>
+    </z-card-header>
+    <z-card-content formArrayName="allergicList" class="flex flex-col gap-4">
       <div
-        class="row multi-row-select col-12"
-        style="background-color: #f0f5f5; margin: 8px 0px 0px 0px"
+        class="rounded-lg bg-muted/40 p-4"
         *ngFor="
           let allergy of getAllergyList();
           let i = index;
@@ -529,132 +546,161 @@
         "
         [ngClass]="{ odd: !isOdd }">
         <ng-container [formGroupName]="i">
-          <div class="col-4 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
+          <div
+            class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+            <z-form-field class="gap-1.5">
+              <label z-form-label for="allergyType-{{ i }}">{{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus?.allergyType
-              }}</mat-label>
-              <mat-select
-                class="select-full-width"
-                formControlName="allergyType"
-                (selectionChange)="filterAlleryList($event, i, allergy)">
-                <mat-option
-                  *ngFor="let allergy of allerySelectList[i]"
-                  [value]="allergy"
-                  >{{ allergy.allergyType }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="col-4 row box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
+              }}</label>
+              <z-form-control>
+                <z-select
+                  class="w-full bg-background"
+                  id="allergyType-{{ i }}"
+                  name="allergyType"
+                  [zValue]="getAllergyTypeLabel(allergy)"
+                  (zSelectionChange)="onAllergyTypeChange($event, i, allergy)">
+                  <z-select-item
+                    *ngFor="let allergyItem of allerySelectList[i]"
+                    [zValue]="allergyItem.allergyType">
+                    {{ allergyItem.allergyType }}
+                  </z-select-item>
+                </z-select>
+              </z-form-control>
+            </z-form-field>
+
+            <z-form-field class="gap-1.5">
+              <label z-form-label for="snomedTerm-{{ i }}">{{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus?.allergenName
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                allowText="inputFieldValidator"
-                matInput
-                appDefaultNull
-                maxlength="200"
-                formControlName="snomedTerm"
-                (change)="removeSnomedCode(allergy, i)"
-                (keyup.enter)="
-                  searchComponents(allergy.value.snomedTerm, i, allergy)
-                " />
-              <mat-icon
-                matSuffix
-                (click)="searchComponents(allergy, i, allergy)"
-                [class.toolbar-icon-disabled]="componentFlag"
-                >search</mat-icon
-              >
-            </mat-form-field>
-          </div>
+              }}</label>
+              <z-form-control>
+                <div class="relative w-full">
+                  <input
+                    z-input
+                    class="w-full bg-background pr-10"
+                    autocomplete="off"
+                    allowText="inputFieldValidator"
+                    appDefaultNull
+                    maxlength="200"
+                    id="snomedTerm-{{ i }}"
+                    name="snomedTerm"
+                    formControlName="snomedTerm"
+                    (change)="removeSnomedCode(allergy, i)"
+                    (keyup.enter)="
+                      searchComponents(allergy.value.snomedTerm, i, allergy)
+                    " />
+                  <button
+                    type="button"
+                    class="absolute inset-y-0 right-0 inline-flex w-10 appearance-none items-center justify-center border-0 bg-transparent p-0 text-muted-foreground disabled:pointer-events-none disabled:opacity-50"
+                    [disabled]="componentFlag"
+                    [attr.aria-label]="
+                      currentLanguageSet?.historyData?.ancHistory
+                        ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus
+                        ?.allergenName
+                    "
+                    (click)="searchComponents(allergy, i, allergy)">
+                    <ng-icon name="lucideSearch" size="18"></ng-icon>
+                  </button>
+                </div>
+              </z-form-control>
+            </z-form-field>
 
-          <div class="clearfix"></div>
-          <div class="col-4 box" [hidden]="true">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
+            <z-form-field class="gap-1.5" [hidden]="true">
+              <label z-form-label for="snomedCode-{{ i }}">{{
                 currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
                   ?.sctCode
-              }}</mat-label>
-              <input
-                maxlength="100"
-                matInput
-                formControlName="snomedCode"
-                readonly />
-            </mat-form-field>
-          </div>
+              }}</label>
+              <z-form-control>
+                <input
+                  z-input
+                  class="w-full bg-background"
+                  maxlength="100"
+                  id="snomedCode-{{ i }}"
+                  name="snomedCode"
+                  formControlName="snomedCode"
+                  readonly />
+              </z-form-control>
+            </z-form-field>
 
-          <div class="col-4 box">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
+            <z-form-field class="gap-1.5">
+              <label z-form-label for="typeOfAllergicReactions-{{ i }}">{{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus
                   ?.typeofReaction
-              }}</mat-label>
-              <mat-select
-                class="select-full-width"
-                multiple
-                formControlName="typeOfAllergicReactions"
-                (change)="canEnableOtherAllergy(allergy)">
-                <mat-option
-                  *ngFor="
-                    let allergicReaction of masterData?.AllergicReactionTypes
-                  "
-                  [value]="allergicReaction">
-                  {{ allergicReaction.name }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+              }}</label>
+              <z-form-control>
+                <z-select
+                  class="w-full bg-background"
+                  id="typeOfAllergicReactions-{{ i }}"
+                  name="typeOfAllergicReactions"
+                  [zMultiple]="true"
+                  [zValue]="getTypeOfAllergicReactionsValues(allergy)"
+                  (zSelectionChange)="
+                    onTypeOfAllergicReactionsChange($event, i, allergy)
+                  ">
+                  <z-select-item
+                    *ngFor="
+                      let allergicReaction of masterData?.AllergicReactionTypes
+                    "
+                    [zValue]="allergicReaction.name">
+                    {{ allergicReaction.name }}
+                  </z-select-item>
+                </z-select>
+              </z-form-control>
+            </z-form-field>
 
-          <div class="col-4 box" *ngIf="allergy.value.enableOtherAllergy">
-            <mat-form-field class="select-full-width">
-              <mat-label class="mat-label-text">{{
+            <z-form-field
+              class="gap-1.5"
+              *ngIf="allergy.value.enableOtherAllergy">
+              <label z-form-label for="otherAllergicReaction-{{ i }}">{{
                 currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
                   ?.others
-              }}</mat-label>
-              <input
-                autocomplete="off"
-                matInput
-                appDefaultNull
-                maxlength="50"
-                allowText="alphaspace"
-                formControlName="otherAllergicReaction" />
-            </mat-form-field>
-          </div>
+              }}</label>
+              <z-form-control>
+                <input
+                  z-input
+                  class="w-full bg-background"
+                  autocomplete="off"
+                  appDefaultNull
+                  maxlength="50"
+                  allowText="alphaspace"
+                  id="otherAllergicReaction-{{ i }}"
+                  name="otherAllergicReaction"
+                  formControlName="otherAllergicReaction" />
+              </z-form-control>
+            </z-form-field>
 
-          <div
-            class="col-4 box action-btn-container -al"
-            style="text-align: center">
-            <button
-              md-mini-fab
-              color="warn"
-              class="mat_warn_circle"
-              style="margin-right: 3px"
-              *ngIf="i !== 0 || (i === 0 && (allergy.touched || allergy.dirty))"
-              (click)="removeAllergy(i, allergy)">
-              <mat-icon class="md-18">close</mat-icon>
-            </button>
-            <button
-              md-mini-fab
-              color="primary"
-              class="mat_blue_circle"
-              *ngIf="
-                isLast &&
-                generalPersonalHistoryForm.get('allergicList')?.value?.length <
-                  allergyMasterData.length
-              "
-              [disabled]="checkAllergyValidity(allergy)"
-              (click)="addAllergy()">
-              <mat-icon class="md-18">add</mat-icon>
-            </button>
+            <div class="flex items-end justify-end gap-2 lg:col-span-3">
+              <button
+                z-button
+                zType="destructive"
+                zSize="icon"
+                type="button"
+                *ngIf="i !== 0 || (i === 0 && (allergy.touched || allergy.dirty))"
+                [attr.aria-label]="currentLanguageSet?.common?.remove"
+                (click)="removeAllergy(i, allergy)">
+                <ng-icon name="lucideX"></ng-icon>
+              </button>
+              <button
+                z-button
+                zType="default"
+                zSize="icon"
+                type="button"
+                *ngIf="
+                  isLast &&
+                  generalPersonalHistoryForm.get('allergicList')?.value?.length <
+                    allergyMasterData.length
+                "
+                [disabled]="checkAllergyValidity(allergy)"
+                [attr.aria-label]="currentLanguageSet?.common?.add"
+                (click)="addAllergy()">
+                <ng-icon name="lucidePlus"></ng-icon>
+              </button>
+            </div>
           </div>
         </ng-container>
       </div>
-    </mat-card-content>
-  </mat-card>
-</ng-container>
+    </z-card-content>
+  </z-card>
+</div>

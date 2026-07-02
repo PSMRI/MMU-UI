@@ -33,80 +33,34 @@ import { ConfirmationService } from '../../../../core/services/confirmation.serv
 import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
-import {
-  MomentDateAdapter,
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-} from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import {
-  MatFormField,
-  MatLabel,
-  MatSelect,
-  MatSuffix,
-} from '@angular/material/select';
 import { NgFor, NgIf } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
-import { MatInput } from '@angular/material/input';
-import {
-  MatDatepickerInput,
-  MatDatepickerToggle,
-  MatDatepicker,
-} from '@angular/material/datepicker';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory } from '@ng-icons/lucide';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardDatePickerComponent } from 'Common-UI/v2/ui/date-picker';
 
 @Component({
   selector: 'app-general-menstrual-history',
   templateUrl: './menstrual-history.component.html',
-  styleUrls: ['./menstrual-history.component.css'],
-  providers: [
-    {
-      provide: MAT_DATE_LOCALE,
-      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
-    },
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    },
-    {
-      provide: MAT_DATE_FORMATS,
-      useValue: {
-        parse: {
-          dateInput: 'LL',
-        },
-        display: {
-          dateInput: 'DD/MM/YYYY', // Set the desired display format
-          monthYearLabel: 'MMM YYYY',
-          dateA11yLabel: 'LL',
-          monthYearA11yLabel: 'MMMM YYYY',
-        },
-      },
-    },
-  ],
+  viewProviders: [provideIcons({ lucideHistory })],
   imports: [
-    MatTooltip,
-    MatIcon,
     ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatSelect,
     NgFor,
-    MatOption,
     NgIf,
-    MatRadioGroup,
-    MatRadioButton,
-    MatInput,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-    MatSuffix,
-    MatDatepicker,
+    NgIcon,
+    ...tooltipImports,
+    ZardButtonComponent,
+    ...ZardFormImports,
+    ...ZardSelectImports,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
+    ZardDatePickerComponent,
   ],
 })
 export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
@@ -342,5 +296,86 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
     this.isOtherSelected = selectedList.some(
       (item: any) => item.problemName !== 'None'
     );
+  }
+
+  /* --- Zard select adapters ---
+   * z-select is a string-valued control, but these dropdowns each store a
+   * full master-data OBJECT (single-select) or an OBJECT ARRAY (multi-select)
+   * in their reactive-form control. These getters expose the current object
+   * value(s) as string label(s) for the z-select trigger, and the handlers
+   * reconstruct the object(s) from the chosen label(s) and setValue() them
+   * back into the control — so the stored value TYPE and submission contract
+   * are unchanged. */
+
+  // menstrualCycleStatus (single, object keyed by name)
+  getMenstrualCycleStatusLabel(): string {
+    return (
+      this.menstrualHistoryForm.controls['menstrualCycleStatus'].value?.name ??
+      ''
+    );
+  }
+  onMenstrualCycleStatusChange(value: string | string[]) {
+    const name = Array.isArray(value) ? value[0] : value;
+    const selected =
+      (this.masterData?.menstrualCycleStatus || []).find(
+        (item: any) => item.name === name
+      ) ?? null;
+    this.menstrualHistoryForm.controls['menstrualCycleStatus'].setValue(
+      selected
+    );
+    this.menstrualHistoryForm.controls['menstrualCycleStatus'].markAsDirty();
+    this.checkMenstrualCycleStatus();
+  }
+
+  // cycleLength (single, object keyed by menstrualCycleRange)
+  getCycleLengthLabel(): string {
+    return (
+      this.menstrualHistoryForm.controls['cycleLength'].value
+        ?.menstrualCycleRange ?? ''
+    );
+  }
+  onCycleLengthChange(value: string | string[]) {
+    const range = Array.isArray(value) ? value[0] : value;
+    const selected =
+      (this.masterData?.menstrualCycleLengths || []).find(
+        (item: any) => item.menstrualCycleRange === range
+      ) ?? null;
+    this.menstrualHistoryForm.controls['cycleLength'].setValue(selected);
+    this.menstrualHistoryForm.controls['cycleLength'].markAsDirty();
+  }
+
+  // bloodFlowDuration (single, object keyed by menstrualCycleRange)
+  getBloodFlowDurationLabel(): string {
+    return (
+      this.menstrualHistoryForm.controls['bloodFlowDuration'].value
+        ?.menstrualCycleRange ?? ''
+    );
+  }
+  onBloodFlowDurationChange(value: string | string[]) {
+    const range = Array.isArray(value) ? value[0] : value;
+    const selected =
+      (this.masterData?.menstrualCycleBloodFlowDuration || []).find(
+        (item: any) => item.menstrualCycleRange === range
+      ) ?? null;
+    this.menstrualHistoryForm.controls['bloodFlowDuration'].setValue(selected);
+    this.menstrualHistoryForm.controls['bloodFlowDuration'].markAsDirty();
+  }
+
+  // menstrualProblemList (multi, object array keyed by problemName)
+  getMenstrualProblemValues(): string[] {
+    const val =
+      this.menstrualHistoryForm.controls['menstrualProblemList'].value;
+    return Array.isArray(val) ? val.map((p: any) => p?.problemName) : [];
+  }
+  onMenstrualProblemChange(value: string | string[]) {
+    const names = Array.isArray(value) ? value : [value];
+    const selected = (this.masterData?.menstrualProblem || []).filter(
+      (item: any) => names.includes(item.problemName)
+    );
+    this.menstrualHistoryForm.controls['menstrualProblemList'].setValue(
+      selected
+    );
+    this.menstrualHistoryForm.controls['menstrualProblemList'].markAsDirty();
+    this.resetOtherMenstrualProblems();
   }
 }

@@ -1,250 +1,315 @@
-<mat-accordion>
-  <div *ngIf="visitCategory !== 'NCD screening'">
-    <mat-expansion-panel expanded="true">
-      <mat-expansion-panel-header>
-        <h5>{{ currentLanguageSet?.historyData?.ancHistory?.pastHistory }}</h5>
-      </mat-expansion-panel-header>
-      <app-general-past-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [pastHistoryForm]="pastHistory">
-      </app-general-past-history>
-    </mat-expansion-panel>
+<div *ngIf="visitCategory !== 'NCD screening'">
+  <z-accordion zType="multiple" class="flex flex-col gap-3">
+    <z-accordion-item
+      zValue="pastHistory"
+      class="rounded-lg border border-border bg-card px-4">
+      <z-accordion-trigger>
+        <span class="text-sm font-semibold text-foreground">{{
+          currentLanguageSet?.historyData?.ancHistory?.pastHistory
+        }}</span>
+      </z-accordion-trigger>
+      <z-accordion-content>
+        <app-general-past-history
+          [mode]="mode"
+          [visitCategory]="visitCategory"
+          [pastHistoryForm]="pastHistory">
+        </app-general-past-history>
+      </z-accordion-content>
+    </z-accordion-item>
 
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <h5>
+    <z-accordion-item
+      zValue="comorbidityHistory"
+      class="rounded-lg border border-border bg-card px-4">
+      <z-accordion-trigger>
+        <span class="text-sm font-semibold text-foreground">
           {{
             currentLanguageSet?.historyData?.ancHistory
               ?.combordityANC_OPD_NCD_PNC?.comorbidityConditions
           }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-comorbidity-concurrent-conditions
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [comorbidityConcurrentConditionsForm]="comorbidityHistory">
-      </app-general-comorbidity-concurrent-conditions>
-    </mat-expansion-panel>
+        </span>
+      </z-accordion-trigger>
+      <z-accordion-content>
+        <app-general-comorbidity-concurrent-conditions
+          [mode]="mode"
+          [visitCategory]="visitCategory"
+          [comorbidityConcurrentConditionsForm]="comorbidityHistory">
+        </app-general-comorbidity-concurrent-conditions>
+      </z-accordion-content>
+    </z-accordion-item>
 
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <h5>
+    <z-accordion-item
+      zValue="medicationHistory"
+      class="rounded-lg border border-border bg-card px-4">
+      <z-accordion-trigger>
+        <span class="text-sm font-semibold text-foreground">
           {{
             currentLanguageSet?.historyData?.ancHistory
               ?.medicationANC_OPD_NCD_PNC?.medicationHistory
           }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-medication-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [medicationHistoryForm]="
-          medicationHistory
-        "></app-general-medication-history>
-    </mat-expansion-panel>
+        </span>
+      </z-accordion-trigger>
+      <z-accordion-content>
+        <app-general-medication-history
+          [mode]="mode"
+          [visitCategory]="visitCategory"
+          [medicationHistoryForm]="medicationHistory">
+        </app-general-medication-history>
+      </z-accordion-content>
+    </z-accordion-item>
 
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <h5>
+    <z-accordion-item
+      zValue="personalHistory"
+      class="rounded-lg border border-border bg-card px-4">
+      <z-accordion-trigger>
+        <span class="text-sm font-semibold text-foreground">
           {{
             currentLanguageSet?.historyData?.ancHistory
               ?.personalHistoryANC_OPD_NCD_PNC?.personalHistoryData
           }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-personal-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [generalPersonalHistoryForm]="
-          personalHistory
-        "></app-general-personal-history>
-    </mat-expansion-panel>
+        </span>
+      </z-accordion-trigger>
+      <z-accordion-content>
+        <app-general-personal-history
+          [mode]="mode"
+          [visitCategory]="visitCategory"
+          [generalPersonalHistoryForm]="personalHistory">
+        </app-general-personal-history>
+      </z-accordion-content>
+    </z-accordion-item>
 
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <h5>
+    <z-accordion-item
+      zValue="familyHistory"
+      class="rounded-lg border border-border bg-card px-4">
+      <z-accordion-trigger>
+        <span class="text-sm font-semibold text-foreground">
           {{
             currentLanguageSet?.historyData?.ancHistory
               ?.familyHistoryDataANC_OPD_NCD_PNC?.familyHistory
           }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-family-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [familyHistoryForm]="familyHistory"></app-general-family-history>
-    </mat-expansion-panel>
+        </span>
+      </z-accordion-trigger>
+      <z-accordion-content>
+        <app-general-family-history
+          [mode]="mode"
+          [visitCategory]="visitCategory"
+          [familyHistoryForm]="familyHistory">
+        </app-general-family-history>
+      </z-accordion-content>
+    </z-accordion-item>
 
-    <mat-expansion-panel
+    <z-accordion-item
       *ngIf="
         beneficiary &&
         beneficiary.ageVal >= 8 &&
         beneficiary.genderName !== 'Male'
-      ">
-      <mat-expansion-panel-header>
-        <h5>
+      "
+      zValue="menstrualHistory"
+      class="rounded-lg border border-border bg-card px-4">
+      <z-accordion-trigger>
+        <span class="text-sm font-semibold text-foreground">
           {{
             currentLanguageSet?.historyData?.ancHistory?.menstrualHistoryANC
               ?.menstrualHistory
           }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-menstrual-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [menstrualHistoryForm]="
-          menstrualHistory
-        "></app-general-menstrual-history>
-    </mat-expansion-panel>
+        </span>
+      </z-accordion-trigger>
+      <z-accordion-content>
+        <app-general-menstrual-history
+          [mode]="mode"
+          [visitCategory]="visitCategory"
+          [menstrualHistoryForm]="menstrualHistory">
+        </app-general-menstrual-history>
+      </z-accordion-content>
+    </z-accordion-item>
 
-    <mat-expansion-panel *ngIf="beneficiary?.ageVal <= 1">
-      <mat-expansion-panel-header>
-        <h5>
+    <z-accordion-item
+      *ngIf="beneficiary?.ageVal <= 1"
+      zValue="perinatalHistory"
+      class="rounded-lg border border-border bg-card px-4">
+      <z-accordion-trigger>
+        <span class="text-sm font-semibold text-foreground">
           {{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
               ?.perinatalHistory
           }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-perinatal-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [perinatalHistoryForm]="
-          perinatalHistory
-        "></app-general-perinatal-history>
-    </mat-expansion-panel>
+        </span>
+      </z-accordion-trigger>
+      <z-accordion-content>
+        <app-general-perinatal-history
+          [mode]="mode"
+          [visitCategory]="visitCategory"
+          [perinatalHistoryForm]="perinatalHistory">
+        </app-general-perinatal-history>
+      </z-accordion-content>
+    </z-accordion-item>
 
-    <mat-expansion-panel *ngIf="showObstetricHistory">
-      <mat-expansion-panel-header>
-        <h5>
+    <z-accordion-item
+      *ngIf="showObstetricHistory"
+      zValue="pastObstericHistory"
+      class="rounded-lg border border-border bg-card px-4">
+      <z-accordion-trigger>
+        <span class="text-sm font-semibold text-foreground">
           {{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
               ?.pastObstetricHistory
           }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-past-obsteric-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [pastObstericHistoryForm]="
-          pastObstericHistory
-        "></app-general-past-obsteric-history>
-    </mat-expansion-panel>
+        </span>
+      </z-accordion-trigger>
+      <z-accordion-content>
+        <app-general-past-obsteric-history
+          [mode]="mode"
+          [visitCategory]="visitCategory"
+          [pastObstericHistoryForm]="pastObstericHistory">
+        </app-general-past-obsteric-history>
+      </z-accordion-content>
+    </z-accordion-item>
 
-    <mat-expansion-panel *ngIf="beneficiary?.ageVal <= 16">
-      <mat-expansion-panel-header>
-        <h5>
+    <z-accordion-item
+      *ngIf="beneficiary?.ageVal <= 16"
+      zValue="immunizationHistory"
+      class="rounded-lg border border-border bg-card px-4">
+      <z-accordion-trigger>
+        <span class="text-sm font-semibold text-foreground">
           {{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.immunization
               ?.ImmunizationHistory
           }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-immunization-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [immunizationHistoryForm]="
-          immunizationHistory
-        "></app-general-immunization-history>
-    </mat-expansion-panel>
+        </span>
+      </z-accordion-trigger>
+      <z-accordion-content>
+        <app-general-immunization-history
+          [mode]="mode"
+          [visitCategory]="visitCategory"
+          [immunizationHistoryForm]="immunizationHistory">
+        </app-general-immunization-history>
+      </z-accordion-content>
+    </z-accordion-item>
 
-    <mat-expansion-panel *ngIf="beneficiary?.ageVal <= 16">
-      <mat-expansion-panel-header>
-        <h5>
+    <z-accordion-item
+      *ngIf="beneficiary?.ageVal <= 16"
+      zValue="otherVaccines"
+      class="rounded-lg border border-border bg-card px-4">
+      <z-accordion-trigger>
+        <span class="text-sm font-semibold text-foreground">
           {{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
               ?.otherVaccines
           }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-other-vaccines
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [otherVaccinesForm]="otherVaccines"></app-general-other-vaccines>
-    </mat-expansion-panel>
+        </span>
+      </z-accordion-trigger>
+      <z-accordion-content>
+        <app-general-other-vaccines
+          [mode]="mode"
+          [visitCategory]="visitCategory"
+          [otherVaccinesForm]="otherVaccines">
+        </app-general-other-vaccines>
+      </z-accordion-content>
+    </z-accordion-item>
 
-    <mat-expansion-panel *ngIf="beneficiary?.ageVal <= 6">
-      <mat-expansion-panel-header>
-        <h5>
+    <z-accordion-item
+      *ngIf="beneficiary?.ageVal <= 6"
+      zValue="feedingHistory"
+      class="rounded-lg border border-border bg-card px-4">
+      <z-accordion-trigger>
+        <span class="text-sm font-semibold text-foreground">
           {{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
               ?.feedingHistory
           }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-feeding-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [feedingHistoryForm]="feedingHistory"></app-general-feeding-history>
-    </mat-expansion-panel>
+        </span>
+      </z-accordion-trigger>
+      <z-accordion-content>
+        <app-general-feeding-history
+          [mode]="mode"
+          [visitCategory]="visitCategory"
+          [feedingHistoryForm]="feedingHistory">
+        </app-general-feeding-history>
+      </z-accordion-content>
+    </z-accordion-item>
 
-    <mat-expansion-panel *ngIf="beneficiary?.ageVal <= 2">
-      <mat-expansion-panel-header>
-        <h5>
+    <z-accordion-item
+      *ngIf="beneficiary?.ageVal <= 2"
+      zValue="developmentHistory"
+      class="rounded-lg border border-border bg-card px-4">
+      <z-accordion-trigger>
+        <span class="text-sm font-semibold text-foreground">
           {{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
               ?.developmentHistory
           }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-development-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [developmentHistoryForm]="
-          developmentHistory
-        "></app-general-development-history>
-    </mat-expansion-panel>
-  </div>
+        </span>
+      </z-accordion-trigger>
+      <z-accordion-content>
+        <app-general-development-history
+          [mode]="mode"
+          [visitCategory]="visitCategory"
+          [developmentHistoryForm]="developmentHistory">
+        </app-general-development-history>
+      </z-accordion-content>
+    </z-accordion-item>
+  </z-accordion>
+</div>
 
-  <div *ngIf="visitCategory === 'NCD screening'">
-    <mat-expansion-panel expanded="true">
-      <mat-expansion-panel-header>
-        <h5>
+<div *ngIf="visitCategory === 'NCD screening'">
+  <z-accordion zType="multiple" class="flex flex-col gap-3">
+    <z-accordion-item
+      zValue="ncdFamilyHistory"
+      class="rounded-lg border border-border bg-card px-4">
+      <z-accordion-trigger>
+        <span class="text-sm font-semibold text-foreground">
           {{
             currentLanguageSet?.historyData?.ancHistory
               ?.familyHistoryDataANC_OPD_NCD_PNC?.familyHistory
           }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-family-history-ncdscreening
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [familyHistoryForm]="familyHistory"></app-family-history-ncdscreening>
-    </mat-expansion-panel>
+        </span>
+      </z-accordion-trigger>
+      <z-accordion-content>
+        <app-family-history-ncdscreening
+          [mode]="mode"
+          [visitCategory]="visitCategory"
+          [familyHistoryForm]="familyHistory">
+        </app-family-history-ncdscreening>
+      </z-accordion-content>
+    </z-accordion-item>
 
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <h5>
+    <z-accordion-item
+      zValue="physicalActivityHistory"
+      class="rounded-lg border border-border bg-card px-4">
+      <z-accordion-trigger>
+        <span class="text-sm font-semibold text-foreground">
           {{
             currentLanguageSet?.historyData?.ncdPhysicalActivityHistory
               ?.physicalActivityHistory
           }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-physical-activity-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [physicalActivityHistoryForm]="
-          physicalActivityHistory
-        "></app-physical-activity-history>
-    </mat-expansion-panel>
+        </span>
+      </z-accordion-trigger>
+      <z-accordion-content>
+        <app-physical-activity-history
+          [mode]="mode"
+          [visitCategory]="visitCategory"
+          [physicalActivityHistoryForm]="physicalActivityHistory">
+        </app-physical-activity-history>
+      </z-accordion-content>
+    </z-accordion-item>
 
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <h5>
+    <z-accordion-item
+      zValue="ncdPersonalHistory"
+      class="rounded-lg border border-border bg-card px-4">
+      <z-accordion-trigger>
+        <span class="text-sm font-semibold text-foreground">
           {{
             currentLanguageSet?.historyData?.ancHistory
               ?.personalHistoryANC_OPD_NCD_PNC?.personalHistoryData
           }}
-        </h5>
-      </mat-expansion-panel-header>
-      <app-general-personal-history
-        [mode]="mode"
-        [visitCategory]="visitCategory"
-        [generalPersonalHistoryForm]="
-          personalHistory
-        "></app-general-personal-history>
-    </mat-expansion-panel>
-  </div>
-</mat-accordion>
+        </span>
+      </z-accordion-trigger>
+      <z-accordion-content>
+        <app-general-personal-history
+          [mode]="mode"
+          [visitCategory]="visitCategory"
+          [generalPersonalHistoryForm]="personalHistory">
+        </app-general-personal-history>
+      </z-accordion-content>
+    </z-accordion-item>
+  </z-accordion>
+</div>

@@ -1,56 +1,65 @@
 <ng-container [formGroup]="physicalActivityHistoryForm">
-  <div class="col-12" style="text-align: end">
-    <span class="font-history-label">{{
+  <div class="flex items-center justify-end gap-2">
+    <span class="text-sm font-semibold text-foreground">{{
       currentLanguageSet?.historyData?.ncdPhysicalActivityHistory
         ?.previousPhysicalActivityHistory
     }}</span>
     <button
+      z-button
+      zType="ghost"
+      zSize="icon-sm"
       type="button"
-      mat-icon-button
-      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
       id="previousANCFamilyHistory"
-      class="mat_icon_blue hbx"
-      color="primary"
+      class="text-primary"
+      [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
+      [attr.aria-label]="currentLanguageSet?.DurationData?.previousDetails"
       (click)="getPreviousPhysicalActivityHistory()">
-      <mat-icon class="md-18">history</mat-icon>
+      <ng-icon name="lucideHistory"></ng-icon>
     </button>
   </div>
-  <div class="row">
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box hbx">
-      <label class="control-label" for="physicalActivityType">{{
+
+  <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="flex flex-col gap-1.5">
+      <label z-form-label for="physicalActivityType">{{
         currentLanguageSet?.historyData?.ncdPhysicalActivityHistory
           ?.physicalActivityType
       }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group formControlName="physicalActivityType">
-        <mat-radio-button color="primary" value="Sedentary">{{
+      <z-radio-group
+        id="physicalActivityType"
+        name="physicalActivityType"
+        formControlName="physicalActivityType"
+        zOrientation="horizontal"
+        class="flex-wrap gap-6">
+        <z-radio value="Sedentary">{{
           currentLanguageSet?.historyData?.ncdPhysicalActivityHistory?.sedentary
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" class="radio-button" value="Active">{{
+        }}</z-radio>
+        <z-radio value="Active">{{
           currentLanguageSet?.historyData?.ncdPhysicalActivityHistory?.active
-        }}</mat-radio-button>
-      </mat-radio-group>
+        }}</z-radio>
+      </z-radio-group>
     </div>
-    <div class="box col-xs-12 col-sm-6 col-md-6 col-lg-6">
-      <mat-form-field style="width: 600px">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.historyData?.ncdPhysicalActivityHistory
-            ?.physcialActivityQuestions
-        }}</mat-label>
-        <mat-select
+
+    <z-form-field class="gap-1.5 sm:col-span-2 lg:col-span-2">
+      <label z-form-label for="activityType" [zRequired]="age >= 30">{{
+        currentLanguageSet?.historyData?.ncdPhysicalActivityHistory
+          ?.physcialActivityQuestions
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="activityType"
           name="physicalActivitQuestions"
           formControlName="activityType"
-          (selectionChange)="
-            calculateIDRSScore($event, physicalActivityHistoryForm)
-          "
-          [required]="age >= 30">
-          <mat-option
+          (zSelectionChange)="
+            calculateIDRSScore({ value: $event }, physicalActivityHistoryForm)
+          ">
+          <z-select-item
             *ngFor="let questions of physicalActivityQuestions"
-            [value]="questions.activityType">
-            {{ questions.activityType }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
+            [zValue]="questions.activityType">
+            {{ questions.activityType }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
   </div>
 </ng-container>

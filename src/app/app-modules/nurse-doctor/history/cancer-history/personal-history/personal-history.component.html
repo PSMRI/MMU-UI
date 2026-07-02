@@ -1,519 +1,505 @@
-<!--{{cancerPatientPerosnalHistoryForm.value | json}} -->
-<div [formGroup]="cancerPatientPerosnalHistoryForm">
-  <div class="m-t-10">
-    <div class="col-12" style="text-align: end">
-      <span class="font-history-label">{{
-        currentLanguageSet?.historyData?.personalhabit?.personalhabithistroy
-      }}</span>
-      <button
-        mat-icon-button
-        matTooltip="{{
-          currentLanguageSet?.alerts?.previousHistoryDetailsAlert?.previousHabit
-        }}"
-        color="primary"
-        class="mat_icon_blue"
-        id="PreviousCancerPersonalHabitHistory"
-        (click)="getPreviousCancerPersonalHabitHistory()">
-        <mat-icon class="md-18">history</mat-icon>
-      </button>
-    </div>
+<!-- {{cancerPatientPerosnalHistoryForm.value | json}} -->
+<div
+  [formGroup]="cancerPatientPerosnalHistoryForm"
+  class="flex flex-col gap-6">
+  <div class="flex items-center justify-end gap-2">
+    <span class="text-sm font-semibold text-foreground">{{
+      currentLanguageSet?.historyData?.personalhabit?.personalhabithistroy
+    }}</span>
+    <button
+      z-button
+      zType="ghost"
+      zSize="icon-sm"
+      type="button"
+      id="PreviousCancerPersonalHabitHistory"
+      class="text-primary"
+      [zTooltip]="
+        currentLanguageSet?.alerts?.previousHistoryDetailsAlert?.previousHabit
+      "
+      [attr.aria-label]="
+        currentLanguageSet?.alerts?.previousHistoryDetailsAlert?.previousHabit
+      "
+      (click)="getPreviousCancerPersonalHabitHistory()">
+      <ng-icon name="lucideHistory"></ng-icon>
+    </button>
   </div>
 
-  <div class="m-t-10">
-    <div class="col-12 row">
-      <div class="col-4 box">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-              ?.tobaccoUse
-          }}</mat-label>
-          <mat-select
-            class="input-full-width"
-            name="tobaccoUse"
-            formControlName="tobaccoUse"
-            (slectionChange)="checkTobaccoUseStatus(tobaccoUse)">
-            <mat-option
-              *ngFor="let tobaccousage of templateTobaccoUseStatus"
-              [value]="tobaccousage.habitValue">
-              {{ tobaccousage.habitValue }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+  <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="tobaccoUse">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.tobaccoUse
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="tobaccoUse"
+          name="tobaccoUse"
+          formControlName="tobaccoUse"
+          (slectionChange)="checkTobaccoUseStatus(tobaccoUse)">
+          <z-select-item
+            *ngFor="let tobaccousage of templateTobaccoUseStatus"
+            [zValue]="tobaccousage.habitValue">
+            {{ tobaccousage.habitValue }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
 
-      <div class="col-4 box" *ngIf="tobaccoUse && tobaccoUse !== 'Never Used'">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-              ?.startAge
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            allowText="number"
-            maxlength="3"
-            name="startAge_year"
-            formControlName="startAge_year"
-            (change)="checkStartAge($event)" />
-        </mat-form-field>
-      </div>
+    <z-form-field
+      class="gap-1.5"
+      *ngIf="tobaccoUse && tobaccoUse !== 'Never Used'">
+      <label z-form-label for="startAge_year">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.startAge
+      }}</label>
+      <z-form-control>
+        <input
+          z-input
+          class="w-full"
+          autocomplete="off"
+          appDefaultNull
+          allowText="number"
+          maxlength="3"
+          id="startAge_year"
+          name="startAge_year"
+          formControlName="startAge_year"
+          (change)="checkStartAge($event)" />
+      </z-form-control>
+    </z-form-field>
 
-      <div
-        class="col-4 box"
-        *ngIf="
-          tobaccoUse &&
-          tobaccoUse !== 'Never Used' &&
-          tobaccoUse !== 'Currently Using'
-        ">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-              ?.stopAge
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            allowText="number"
-            maxlength="3"
-            name="endAge_year"
-            formControlName="endAge_year"
-            (change)="checkStopAge($event)" />
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="col-12 row">
-      <div class="col-4 box" *ngIf="tobaccoUse && tobaccoUse !== 'Never Used'">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-              ?.typeofTobaccoProductsused
-          }}</mat-label>
-          <mat-select
-            class="input-full-width"
-            multiple
-            name="typeOfTobaccoProductList"
-            formControlName="typeOfTobaccoProductList"
-            (slectionChange)="tobaccoSelected()">
-            <mat-option
-              *ngFor="let typeOfTobaccoProducts of templateTobaccoProductUsed"
-              [value]="typeOfTobaccoProducts.habitValue">
-              {{ typeOfTobaccoProducts.habitValue }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+    <z-form-field
+      class="gap-1.5"
+      *ngIf="
+        tobaccoUse &&
+        tobaccoUse !== 'Never Used' &&
+        tobaccoUse !== 'Currently Using'
+      ">
+      <label z-form-label for="endAge_year">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.stopAge
+      }}</label>
+      <z-form-control>
+        <input
+          z-input
+          class="w-full"
+          autocomplete="off"
+          appDefaultNull
+          allowText="number"
+          maxlength="3"
+          id="endAge_year"
+          name="endAge_year"
+          formControlName="endAge_year"
+          (change)="checkStopAge($event)" />
+      </z-form-control>
+    </z-form-field>
 
-      <div class="col-4 box" *ngIf="doSmokeCigarettes || doSmokeBeedi">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-              ?.cigarettes
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            allowText="number"
-            maxlength="2"
-            name="quantityPerDay"
-            formControlName="quantityPerDay" />
-        </mat-form-field>
-      </div>
+    <z-form-field
+      class="gap-1.5"
+      *ngIf="tobaccoUse && tobaccoUse !== 'Never Used'">
+      <label z-form-label for="typeOfTobaccoProductList">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.typeofTobaccoProductsused
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="typeOfTobaccoProductList"
+          [zMultiple]="true"
+          name="typeOfTobaccoProductList"
+          formControlName="typeOfTobaccoProductList"
+          (slectionChange)="tobaccoSelected()">
+          <z-select-item
+            *ngFor="let typeOfTobaccoProducts of templateTobaccoProductUsed"
+            [zValue]="typeOfTobaccoProducts.habitValue">
+            {{ typeOfTobaccoProducts.habitValue }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
 
-      <div
-        class="col-4 box"
-        style="padding-left: 27px"
-        *ngIf="doSmokeCigarettes">
-        <label class="control-label" for="drug">{{
+    <z-form-field class="gap-1.5" *ngIf="doSmokeCigarettes || doSmokeBeedi">
+      <label z-form-label for="quantityPerDay">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.cigarettes
+      }}</label>
+      <z-form-control>
+        <input
+          z-input
+          class="w-full"
+          autocomplete="off"
+          appDefaultNull
+          allowText="number"
+          maxlength="2"
+          id="quantityPerDay"
+          name="quantityPerDay"
+          formControlName="quantityPerDay" />
+      </z-form-control>
+    </z-form-field>
+
+    <div class="flex flex-col gap-1.5" *ngIf="doSmokeCigarettes">
+      <label z-form-label for="isFilteredCigaerette">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.cigarette
+      }}</label>
+      <z-radio-group
+        id="isFilteredCigaerette"
+        name="isFilteredCigaerette"
+        formControlName="isFilteredCigaerette"
+        zOrientation="horizontal"
+        class="flex-wrap gap-6">
+        <z-radio [value]="true">{{
           currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-            ?.cigarette
-        }}</label>
-        <div class="clearfix"></div>
-        <mat-radio-group
-          name="isFilteredCigaerette"
-          formControlName="isFilteredCigaerette">
-          <mat-radio-button color="primary" class="radio-button" [value]="true"
-            >{{
-              currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                ?.filtered
-            }}
-          </mat-radio-button>
-          <mat-radio-button color="primary" class="radio-button" [value]="false"
-            >{{
-              currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                ?.nonFiltered
-            }}
-          </mat-radio-button>
-        </mat-radio-group>
-      </div>
-    </div>
-    <div class="col-12 row">
-      <div class="col-4 box">
-        <label class="control-label" for="drug">{{
+            ?.filtered
+        }}</z-radio>
+        <z-radio [value]="false">{{
           currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-            ?.exposuretoSecondHandsmoke
-        }}</label>
-        <div class="clearfix"></div>
-        <mat-radio-group
-          name="isCigaretteExposure"
-          formControlName="isCigaretteExposure">
-          <mat-radio-button
-            color="primary"
-            class="radio-button"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="radio-button"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
-
-      <div class="col-4 box">
-        <label class="control-label" for="drug">
-          {{
-            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-              ?.habitofBetelnutchewing
-          }}
-        </label>
-        <div class="clearfix"></div>
-        <mat-radio-group
-          name="isBetelNutChewing"
-          formControlName="isBetelNutChewing"
-          (change)="checkBetelQuid()">
-          <mat-radio-button
-            color="primary"
-            class="radio-button"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="radio-button"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
-
-      <div class="col-4 box" *ngIf="isBetelNutChewing">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-              ?.durationofbetelquidinmouth
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            [min]="1"
-            allowText="number"
-            maxlength="2"
-            name="durationOfBetelQuid"
-            formControlName="durationOfBetelQuid"
-            (keypress)="minimumvaluenonZeroBetelQuid($event)"
-            (change)="minimumvaluenonZeroBetelQuid($event)"
-            (focus)="minimumvaluenonZeroBetelQuid($event)" />
-        </mat-form-field>
-      </div>
+            ?.nonFiltered
+        }}</z-radio>
+      </z-radio-group>
     </div>
-    <div class="col-12 row">
-      <div class="col-4 box">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-              ?.alcoholuse
-          }}</mat-label>
-          <mat-select
-            class="input-full-width"
-            name="alcoholUse"
-            formControlName="alcoholUse"
-            (selectionChange)="checkUsageOfAlcohol()">
-            <mat-option
-              *ngFor="let alcoholUsage of templateAlcoholUseStatus"
-              [value]="alcoholUsage.habitValue">
-              {{ alcoholUsage.habitValue }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
 
-      <div
-        class="col-4 box"
-        *ngIf="alcoholUse && alcoholUse !== 'Never Used'">
-        <label class="control-label" for="drug">{{
+    <div class="flex flex-col gap-1.5">
+      <label z-form-label for="isCigaretteExposure">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.exposuretoSecondHandsmoke
+      }}</label>
+      <z-radio-group
+        id="isCigaretteExposure"
+        name="isCigaretteExposure"
+        formControlName="isCigaretteExposure"
+        zOrientation="horizontal"
+        class="flex-wrap gap-6">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.yes }}</z-radio>
+        <z-radio [value]="false">{{ currentLanguageSet?.common?.no }}</z-radio>
+      </z-radio-group>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <label z-form-label for="isBetelNutChewing">
+        {{
           currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-            ?.alcoholconsumed
-        }}</label>
-        <div class="clearfix"></div>
-        <mat-radio-group
-          name="ssAlcoholUsed"
-          formControlName="ssAlcoholUsed"
-          (change)="checkLastAlcoholUsage()">
-          <mat-radio-button
-            color="primary"
-            class="radio-button"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="radio-button"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
-
-      <div
-        class="col-4 box"
-        *ngIf="alcoholUse && alcoholUse !== 'Never Used' && ssAlcoholUsed">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-              ?.frequency
-          }}</mat-label>
-          <mat-select
-            class="input-full-width"
-            name="frequencyOfAlcoholUsed"
-            formControlName="frequencyOfAlcoholUsed">
-            <mat-option
-              *ngFor="let frequencyOfAlcoholIntake of templateFrequecyOfAlcohol"
-              [value]="frequencyOfAlcoholIntake.habitValue">
-              {{ frequencyOfAlcoholIntake.habitValue }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+            ?.habitofBetelnutchewing
+        }}
+      </label>
+      <z-radio-group
+        id="isBetelNutChewing"
+        name="isBetelNutChewing"
+        formControlName="isBetelNutChewing"
+        zOrientation="horizontal"
+        class="flex-wrap gap-6"
+        (zChange)="checkBetelQuid()">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.yes }}</z-radio>
+        <z-radio [value]="false">{{ currentLanguageSet?.common?.no }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="m-t-10">
-      <div class="col-12" style="text-align: end">
-        <span class="font-history-label">{{
-          currentLanguageSet?.historyData?.personalhistory?.personaldiethistory
-        }}</span>
-        <button
-          mat-icon-button
-          matTooltip="{{
-            currentLanguageSet?.alerts?.previousHistoryDetailsAlert
-              ?.previousDiet
-          }}"
-          id="previousCancerPersonalDietHistory"
-          color="primary"
-          class="mat_icon_blue"
-          (click)="getPreviousCancerPersonalDietHistory()">
-          <mat-icon class="md-18">history</mat-icon>
-        </button>
-      </div>
+    <z-form-field class="gap-1.5" *ngIf="isBetelNutChewing">
+      <label z-form-label for="durationOfBetelQuid">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.durationofbetelquidinmouth
+      }}</label>
+      <z-form-control>
+        <input
+          z-input
+          class="w-full"
+          autocomplete="off"
+          appDefaultNull
+          [min]="1"
+          allowText="number"
+          maxlength="2"
+          id="durationOfBetelQuid"
+          name="durationOfBetelQuid"
+          formControlName="durationOfBetelQuid"
+          (keypress)="minimumvaluenonZeroBetelQuid($event)"
+          (change)="minimumvaluenonZeroBetelQuid($event)"
+          (focus)="minimumvaluenonZeroBetelQuid($event)" />
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="alcoholUse">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.alcoholuse
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="alcoholUse"
+          name="alcoholUse"
+          formControlName="alcoholUse"
+          (zSelectionChange)="checkUsageOfAlcohol()">
+          <z-select-item
+            *ngFor="let alcoholUsage of templateAlcoholUseStatus"
+            [zValue]="alcoholUsage.habitValue">
+            {{ alcoholUsage.habitValue }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+
+    <div
+      class="flex flex-col gap-1.5"
+      *ngIf="alcoholUse && alcoholUse !== 'Never Used'">
+      <label z-form-label for="ssAlcoholUsed">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.alcoholconsumed
+      }}</label>
+      <z-radio-group
+        id="ssAlcoholUsed"
+        name="ssAlcoholUsed"
+        formControlName="ssAlcoholUsed"
+        zOrientation="horizontal"
+        class="flex-wrap gap-6"
+        (zChange)="checkLastAlcoholUsage()">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.yes }}</z-radio>
+        <z-radio [value]="false">{{ currentLanguageSet?.common?.no }}</z-radio>
+      </z-radio-group>
     </div>
-    <div class="col-12 row">
-      <div class="col-4 box">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-              ?.dietType
-          }}</mat-label>
-          <mat-select
-            class="input-full-width"
-            name="dietType"
-            formControlName="dietType">
-            <mat-option
-              *ngFor="let diet of templateDietTypes"
-              [value]="diet.habitValue">
-              {{ diet.habitValue }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="col-xs-4 box">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-              ?.weeklyintakeofOutsidemeal
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            allowText="number "
-            maxlength="2 "
-            name="intakeOfOutsidePreparedMeal"
-            formControlName="intakeOfOutsidePreparedMeal" />
-        </mat-form-field>
-      </div>
 
-      <div class="col-4 box">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-              ?.fruitconsumption
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            allowText="number "
-            (keypress)="preventFruitConsumption($event)"
-            (change)="checkFruitConsumption()"
-            maxlength="1"
-            name="fruitConsumptionDays"
-            formControlName="fruitConsumptionDays" />
-        </mat-form-field>
-      </div>
+    <z-form-field
+      class="gap-1.5"
+      *ngIf="alcoholUse && alcoholUse !== 'Never Used' && ssAlcoholUsed">
+      <label z-form-label for="frequencyOfAlcoholUsed">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.frequency
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="frequencyOfAlcoholUsed"
+          name="frequencyOfAlcoholUsed"
+          formControlName="frequencyOfAlcoholUsed">
+          <z-select-item
+            *ngFor="let frequencyOfAlcoholIntake of templateFrequecyOfAlcohol"
+            [zValue]="frequencyOfAlcoholIntake.habitValue">
+            {{ frequencyOfAlcoholIntake.habitValue }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+  </div>
+
+  <div class="flex items-center justify-end gap-2">
+    <span class="text-sm font-semibold text-foreground">{{
+      currentLanguageSet?.historyData?.personalhistory?.personaldiethistory
+    }}</span>
+    <button
+      z-button
+      zType="ghost"
+      zSize="icon-sm"
+      type="button"
+      id="previousCancerPersonalDietHistory"
+      class="text-primary"
+      [zTooltip]="
+        currentLanguageSet?.alerts?.previousHistoryDetailsAlert?.previousDiet
+      "
+      [attr.aria-label]="
+        currentLanguageSet?.alerts?.previousHistoryDetailsAlert?.previousDiet
+      "
+      (click)="getPreviousCancerPersonalDietHistory()">
+      <ng-icon name="lucideHistory"></ng-icon>
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="dietType">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.dietType
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="dietType"
+          name="dietType"
+          formControlName="dietType">
+          <z-select-item
+            *ngFor="let diet of templateDietTypes"
+            [zValue]="diet.habitValue">
+            {{ diet.habitValue }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="intakeOfOutsidePreparedMeal">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.weeklyintakeofOutsidemeal
+      }}</label>
+      <z-form-control>
+        <input
+          z-input
+          class="w-full"
+          autocomplete="off"
+          appDefaultNull
+          allowText="number "
+          maxlength="2 "
+          id="intakeOfOutsidePreparedMeal"
+          name="intakeOfOutsidePreparedMeal"
+          formControlName="intakeOfOutsidePreparedMeal" />
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="fruitConsumptionDays">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.fruitconsumption
+      }}</label>
+      <z-form-control>
+        <input
+          z-input
+          class="w-full"
+          autocomplete="off"
+          appDefaultNull
+          allowText="number "
+          (keypress)="preventFruitConsumption($event)"
+          (change)="checkFruitConsumption()"
+          maxlength="1"
+          id="fruitConsumptionDays"
+          name="fruitConsumptionDays"
+          formControlName="fruitConsumptionDays" />
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field
+      class="gap-1.5"
+      *ngIf="fruitConsumptionDays && fruitConsumptionDays !== '0'">
+      <label z-form-label for="fruitQuantityPerDay">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.quantityconsumed
+      }}</label>
+      <z-form-control>
+        <input
+          z-input
+          class="w-full"
+          autocomplete="off"
+          appDefaultNull
+          allowText="number "
+          (change)="fruitConsumptionPerDayCheck($event)"
+          maxlength="2"
+          id="fruitQuantityPerDay"
+          name="fruitQuantityPerDay"
+          formControlName="fruitQuantityPerDay" />
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="vegetableConsumptionDays">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.vegetableconsumption
+      }}</label>
+      <z-form-control>
+        <input
+          z-input
+          class="w-full"
+          autocomplete="off"
+          appDefaultNull
+          allowText="number "
+          (keypress)="preventVegetableConsumption($event)"
+          (change)="checkVegetableConsumption()"
+          maxlength="1 "
+          id="vegetableConsumptionDays"
+          name="vegetableConsumptionDays"
+          formControlName="vegetableConsumptionDays" />
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field
+      class="gap-1.5"
+      *ngIf="vegetableConsumptionDays && vegetableConsumptionDays !== '0'">
+      <label z-form-label for="vegetableQuantityPerDay">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.quantityconsumed
+      }}</label>
+      <z-form-control>
+        <input
+          z-input
+          class="w-full"
+          autocomplete="off"
+          appDefaultNull
+          allowText="number "
+          (change)="vegetableConsumptionPerDayCheck($event)"
+          maxlength="2 "
+          id="vegetableQuantityPerDay"
+          name="vegetableQuantityPerDay"
+          formControlName="vegetableQuantityPerDay" />
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="typeOfOilConsumedList">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.typeofoilconsumed
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="typeOfOilConsumedList"
+          [zMultiple]="true"
+          (zSelectionChange)="oilSelected()"
+          name="typeOfOilConsumedList"
+          formControlName="typeOfOilConsumedList">
+          <z-select-item
+            *ngFor="let oil of templateOilConsumed"
+            [zValue]="oil.habitValue">
+            {{ oil.habitValue }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="physicalActivityType">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.physicalActivityType
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="physicalActivityType"
+          name="physicalActivityType"
+          formControlName="physicalActivityType">
+          <z-select-item
+            *ngFor="let activity of templatePhysicalActivityType"
+            [zValue]="activity.habitValue">
+            {{ activity.habitValue }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+
+    <div class="flex flex-col gap-1.5">
+      <label z-form-label for="ssRadiationExposure">{{
+        currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
+          ?.historyofexposuretoradiation
+      }}</label>
+      <z-radio-group
+        id="ssRadiationExposure"
+        name="ssRadiationExposure"
+        formControlName="ssRadiationExposure"
+        zOrientation="horizontal"
+        class="flex-wrap gap-6">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.yes }}</z-radio>
+        <z-radio [value]="false">{{ currentLanguageSet?.common?.no }}</z-radio>
+      </z-radio-group>
     </div>
-    <div class="col-12 row">
-      <div
-        class="col-4 box"
-        *ngIf="fruitConsumptionDays && fruitConsumptionDays !== '0'">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-              ?.quantityconsumed
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            allowText="number "
-            (change)="fruitConsumptionPerDayCheck($event)"
-            maxlength="2"
-            name="fruitQuantityPerDay"
-            formControlName="fruitQuantityPerDay" />
-        </mat-form-field>
-      </div>
 
-      <div class="col-4 box">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-              ?.vegetableconsumption
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            allowText="number "
-            (keypress)="preventVegetableConsumption($event)"
-            (change)="checkVegetableConsumption()"
-            maxlength="1 "
-            name="vegetableConsumptionDays"
-            formControlName="vegetableConsumptionDays" />
-        </mat-form-field>
-      </div>
-
-      <div
-        class="col-4 box"
-        *ngIf="vegetableConsumptionDays && vegetableConsumptionDays !== '0'">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-              ?.quantityconsumed
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            allowText="number "
-            (change)="vegetableConsumptionPerDayCheck($event)"
-            maxlength="2 "
-            name="vegetableQuantityPerDay"
-            formControlName="vegetableQuantityPerDay" />
-        </mat-form-field>
-      </div>
-
-      <div class="col-4 box mat_label">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-              ?.typeofoilconsumed
-          }}</mat-label>
-          <mat-select
-            class="input-full-width"
-            multiple
-            (selectionChange)="oilSelected()"
-            name="typeOfOilConsumedList"
-            formControlName="typeOfOilConsumedList">
-            <mat-option
-              *ngFor="let oil of templateOilConsumed"
-              [value]="oil.habitValue">
-              {{ oil.habitValue }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="col-12 row">
-      <div class="col-4 box">
-        <mat-form-field class="input-full-width">
-          <mat-label>{{
-            currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-              ?.physicalActivityType
-          }}</mat-label>
-          <mat-select
-            class="input-full-width"
-            name="physicalActivityType"
-            formControlName="physicalActivityType">
-            <mat-option
-              *ngFor="let activity of templatePhysicalActivityType"
-              [value]="activity.habitValue">
-              {{ activity.habitValue }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <div class="col-4 box">
-        <label class="control-label" for="drug">{{
-          currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-            ?.historyofexposuretoradiation
-        }}</label>
-        <div class="clearfix"></div>
-        <mat-radio-group
-          name="ssRadiationExposure"
-          formControlName="ssRadiationExposure">
-          <mat-radio-button
-            color="primary"
-            class="radio-button"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="radio-button"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
-
-      <div class="col-4 box">
-        <label class="control-label" for="drug">{{
-          currentLanguageSet?.historyData?.personalhistory
-            ?.historyofanythyroiddisorder
-        }}</label>
-        <div class="clearfix"></div>
-        <mat-radio-group
-          name="isThyroidDisorder"
-          formControlName="isThyroidDisorder">
-          <mat-radio-button
-            color="primary"
-            class="radio-button"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="radio-button"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
+    <div class="flex flex-col gap-1.5">
+      <label z-form-label for="isThyroidDisorder">{{
+        currentLanguageSet?.historyData?.personalhistory
+          ?.historyofanythyroiddisorder
+      }}</label>
+      <z-radio-group
+        id="isThyroidDisorder"
+        name="isThyroidDisorder"
+        formControlName="isThyroidDisorder"
+        zOrientation="horizontal"
+        class="flex-wrap gap-6">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.yes }}</z-radio>
+        <z-radio [value]="false">{{ currentLanguageSet?.common?.no }}</z-radio>
+      </z-radio-group>
     </div>
   </div>
 </div>

@@ -49,34 +49,35 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
 import { NgFor, NgClass, NgIf } from '@angular/common';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory, lucidePlus, lucideX } from '@ng-icons/lucide';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-general-past-history',
   templateUrl: './past-history.component.html',
-  styleUrls: ['./past-history.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatTooltip,
-    MatIcon,
     NgFor,
     NgClass,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
     NgIf,
-    MatInput,
+    NgIcon,
+    ...tooltipImports,
+    ZardButtonComponent,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
     NullDefaultValueDirective,
     StringValidatorDirective,
   ],
+  viewProviders: [provideIcons({ lucideHistory, lucidePlus, lucideX })],
 })
 export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
   @Input()
@@ -422,6 +423,28 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
     this.sortIllnessList(this.pastIllnessSelectList[0]);
   }
 
+  onIllnessTypeChange(
+    value: string | string[],
+    i: number,
+    pastIllnessForm: AbstractControl<any, any>
+  ) {
+    const selected = Array.isArray(value) ? value[0] : value;
+    const source =
+      (this.pastIllnessSelectList && this.pastIllnessSelectList[i]) ||
+      this.illnessMasterData ||
+      [];
+    const matchedIllness =
+      source.find((item: any) => item.illnessType === selected) ?? null;
+
+    pastIllnessForm.get('illnessType')?.setValue(matchedIllness);
+    pastIllnessForm.get('illnessType')?.markAsDirty();
+    pastIllnessForm.markAsDirty();
+
+    if (matchedIllness) {
+      this.filterPastIllnessType(matchedIllness, i, pastIllnessForm);
+    }
+  }
+
   filterPastIllnessType(
     illness: any,
     i: any,
@@ -555,6 +578,28 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
       pastSurgeryList.removeAt(i);
       this.previousSelectedSurgeryTypeList.splice(i, 1);
       this.pastSurgerySelectList.splice(i, 1);
+    }
+  }
+
+  onSurgeryTypeChange(
+    value: string | string[],
+    i: number,
+    pastSurgeryForm: AbstractControl<any, any>
+  ) {
+    const selected = Array.isArray(value) ? value[0] : value;
+    const source =
+      (this.pastSurgerySelectList && this.pastSurgerySelectList[i]) ||
+      this.surgeryMasterData ||
+      [];
+    const matchedSurgery =
+      source.find((item: any) => item.surgeryType === selected) ?? null;
+
+    pastSurgeryForm.get('surgeryType')?.setValue(matchedSurgery);
+    pastSurgeryForm.get('surgeryType')?.markAsDirty();
+    pastSurgeryForm.markAsDirty();
+
+    if (matchedSurgery) {
+      this.filterPastSurgeryType(matchedSurgery, i, pastSurgeryForm);
     }
   }
 

@@ -52,51 +52,46 @@ import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/pr
 import { AllergenSearchComponent } from 'src/app/app-modules/core/components/allergen-search/allergen-search.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgIf, NgFor, NgClass } from '@angular/common';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  MatFormField,
-  MatLabel,
-  MatSelect,
-  MatSuffix,
-} from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import {
-  MatCard,
-  MatCardHeader,
-  MatCardTitle,
-  MatCardContent,
-} from '@angular/material/card';
-import { MatInput } from '@angular/material/input';
+  lucideHistory,
+  lucidePlus,
+  lucideSearch,
+  lucideX,
+} from '@ng-icons/lucide';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { cardImports } from 'Common-UI/v2/ui/card';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-general-personal-history',
   templateUrl: './personal-history.component.html',
-  styleUrls: ['./personal-history.component.css'],
   imports: [
     ReactiveFormsModule,
     NgIf,
-    MatTooltip,
-    MatIcon,
-    MatRadioGroup,
-    MatRadioButton,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
-    MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatCardContent,
     NgFor,
     NgClass,
-    MatInput,
+    NgIcon,
+    ...tooltipImports,
+    ZardButtonComponent,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
+    ...cardImports,
     NullDefaultValueDirective,
     StringValidatorDirective,
-    MatSuffix,
+  ],
+  viewProviders: [
+    provideIcons({ lucideHistory, lucidePlus, lucideSearch, lucideX }),
   ],
 })
 export class GeneralPersonalHistoryComponent
@@ -1308,5 +1303,134 @@ export class GeneralPersonalHistoryComponent
       alcoholForm?.get('durationUnit')?.disable();
       alcoholForm?.get('durationUnit')?.reset();
     }
+  }
+
+  /* --- Zard select adapters ---
+   * z-select is a string-valued control, but every dropdown here stores a full
+   * master-data OBJECT (single-select) or an OBJECT ARRAY (multi-select) in its
+   * reactive-form control. The get<X>Label/get<X>Values getters expose the
+   * current stored object value(s) as string label(s) for the z-select trigger,
+   * and the on<X>Change handlers reconstruct the object(s) from the chosen
+   * label(s), setValue() them back into the SAME control, mark it dirty, then
+   * hand off to the original filter/change logic (which reads `event.value` or
+   * the freshly-set control value) — so the stored value TYPE and the
+   * submission contract are unchanged. */
+
+  private mapNameToObject(
+    value: string | string[],
+    source: any[],
+    key: string
+  ): any {
+    const name = Array.isArray(value) ? value[0] : value;
+    return (source || []).find((item: any) => item[key] === name) ?? null;
+  }
+
+  private mapNamesToObjects(
+    value: string | string[],
+    source: any[],
+    key: string
+  ): any[] {
+    const names = Array.isArray(value) ? value : [value];
+    return (source || []).filter((item: any) => names.includes(item[key]));
+  }
+
+  // tobaccoUseType (single, object keyed by habitValue; source = tobaccoSelectList[i])
+  getTobaccoUseTypeLabel(tobaccoForm: AbstractControl<any, any>): string {
+    return tobaccoForm.value.tobaccoUseType?.habitValue ?? '';
+  }
+  onTobaccoUseTypeChange(
+    value: string | string[],
+    i: any,
+    tobaccoForm: AbstractControl<any, any>
+  ) {
+    const selected = this.mapNameToObject(
+      value,
+      this.tobaccoSelectList[i],
+      'habitValue'
+    );
+    tobaccoForm.get('tobaccoUseType')?.setValue(selected);
+    tobaccoForm.get('tobaccoUseType')?.markAsDirty();
+    this.filterTobaccoList({ value: selected }, i, tobaccoForm);
+  }
+
+  // typeOfAlcohol (single, object keyed by habitValue; source = alcoholSelectList[i])
+  getTypeOfAlcoholLabel(alcoholForm: AbstractControl<any, any>): string {
+    return alcoholForm.value.typeOfAlcohol?.habitValue ?? '';
+  }
+  onTypeOfAlcoholChange(
+    value: string | string[],
+    i: any,
+    alcoholForm: AbstractControl<any, any>
+  ) {
+    const selected = this.mapNameToObject(
+      value,
+      this.alcoholSelectList[i],
+      'habitValue'
+    );
+    alcoholForm.get('typeOfAlcohol')?.setValue(selected);
+    alcoholForm.get('typeOfAlcohol')?.markAsDirty();
+    this.filterAlcoholList({ value: selected }, i, alcoholForm);
+  }
+
+  // avgAlcoholConsumption (single, object keyed by habitValue; source = masterData.quantityOfAlcoholIntake)
+  getAvgAlcoholConsumptionLabel(
+    alcoholForm: AbstractControl<any, any>
+  ): string {
+    return alcoholForm.value.avgAlcoholConsumption?.habitValue ?? '';
+  }
+  onAvgAlcoholConsumptionChange(
+    value: string | string[],
+    i: any,
+    alcoholForm: AbstractControl<any, any>
+  ) {
+    const selected = this.mapNameToObject(
+      value,
+      this.masterData?.quantityOfAlcoholIntake,
+      'habitValue'
+    );
+    alcoholForm.get('avgAlcoholConsumption')?.setValue(selected);
+    alcoholForm.get('avgAlcoholConsumption')?.markAsDirty();
+    this.onChangeAvgAlcoholConsumption(alcoholForm);
+  }
+
+  // allergyType (single, object keyed by allergyType; source = allerySelectList[i])
+  getAllergyTypeLabel(allergyForm: AbstractControl<any, any>): string {
+    return allergyForm.value.allergyType?.allergyType ?? '';
+  }
+  onAllergyTypeChange(
+    value: string | string[],
+    i: any,
+    allergyForm: AbstractControl<any, any>
+  ) {
+    const selected = this.mapNameToObject(
+      value,
+      this.allerySelectList[i],
+      'allergyType'
+    );
+    allergyForm.get('allergyType')?.setValue(selected);
+    allergyForm.get('allergyType')?.markAsDirty();
+    this.filterAlleryList({ value: selected }, i, allergyForm);
+  }
+
+  // typeOfAllergicReactions (multi, object array keyed by name; source = masterData.AllergicReactionTypes)
+  getTypeOfAllergicReactionsValues(
+    allergyForm: AbstractControl<any, any>
+  ): string[] {
+    const val = allergyForm.value.typeOfAllergicReactions;
+    return Array.isArray(val) ? val.map((item: any) => item?.name) : [];
+  }
+  onTypeOfAllergicReactionsChange(
+    value: string | string[],
+    i: any,
+    allergyForm: AbstractControl<any, any>
+  ) {
+    const selected = this.mapNamesToObjects(
+      value,
+      this.masterData?.AllergicReactionTypes,
+      'name'
+    );
+    allergyForm.get('typeOfAllergicReactions')?.setValue(selected);
+    allergyForm.get('typeOfAllergicReactions')?.markAsDirty();
+    this.canEnableOtherAllergy(allergyForm);
   }
 }

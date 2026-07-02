@@ -42,34 +42,35 @@ import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
 import { NgFor, NgClass, NgIf } from '@angular/common';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory, lucidePlus, lucideX } from '@ng-icons/lucide';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 
 @Component({
   selector: 'app-general-comorbidity-concurrent-conditions',
   templateUrl: './comorbidity-concurrent-conditions.component.html',
-  styleUrls: ['./comorbidity-concurrent-conditions.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatTooltip,
-    MatIcon,
     NgFor,
     NgClass,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
     NgIf,
-    MatInput,
+    NgIcon,
+    ...tooltipImports,
+    ZardButtonComponent,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
     NullDefaultValueDirective,
     StringValidatorDirective,
   ],
+  viewProviders: [provideIcons({ lucideHistory, lucidePlus, lucideX })],
 })
 export class ComorbidityConcurrentConditionsComponent
   implements OnInit, DoCheck, OnDestroy
@@ -317,6 +318,24 @@ export class ComorbidityConcurrentConditionsComponent
           this.comorbidityConcurrentConditionsForm.markAsDirty();
         }
       });
+  }
+
+  onComorbidConditionsChange(
+    selectedType: string | string[],
+    i: any,
+    comorbidityConcurrentConditionsForm: AbstractControl<any, any>
+  ) {
+    const matchedCondition = (this.comorbiditySelectList[i] || []).find(
+      (condition: any) => condition.comorbidCondition === selectedType
+    );
+    comorbidityConcurrentConditionsForm
+      .get('comorbidConditions')
+      ?.setValue(matchedCondition ?? null);
+    this.filterComorbidityConcurrentConditionsType(
+      matchedCondition,
+      i,
+      comorbidityConcurrentConditionsForm
+    );
   }
 
   filterComorbidityConcurrentConditionsType(
