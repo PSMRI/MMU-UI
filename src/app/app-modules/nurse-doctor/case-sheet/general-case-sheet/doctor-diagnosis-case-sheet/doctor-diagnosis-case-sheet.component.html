@@ -1026,16 +1026,22 @@
     <div *ngIf="visitCategory === 'General OPD'">
       <table z-table class="w-full" aria-describedby="GeneralOPDDiagnosisTbl">
         <tbody z-table-body>
-          <ng-container
-            *ngTemplateOutlet="
-              provisionalDiagRows;
-              context: {
-                value:
+          <tr z-table-row>
+            <th z-table-head colspan="4" scope="col">
+              {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
+            </th>
+          </tr>
+          <tr z-table-row>
+            <td z-table-cell colspan="4">
+              <div class="min-h-[100px] rounded-md border border-input p-2">
+                {{
                   caseRecords &&
-                  caseRecords.diagnosis &&
-                  caseRecords.diagnosis.diagnosisProvided
-              }
-            "></ng-container>
+                    caseRecords.diagnosis &&
+                    caseRecords.diagnosis.diagnosisProvided
+                }}
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -1076,16 +1082,22 @@
     <div *ngIf="visitCategory === 'General OPD (QC)'">
       <table z-table class="w-full" aria-describedby="GeneralOPDQCDiagnosisTbl">
         <tbody z-table-body>
-          <ng-container
-            *ngTemplateOutlet="
-              provisionalDiagRows;
-              context: {
-                value:
+          <tr z-table-row>
+            <th z-table-head colspan="4" scope="col">
+              {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
+            </th>
+          </tr>
+          <tr z-table-row>
+            <td z-table-cell colspan="4">
+              <div class="min-h-[100px] rounded-md border border-input p-2">
+                {{
                   caseRecords &&
-                  caseRecords.diagnosis &&
-                  caseRecords.diagnosis.provisionalDiagnosis
-              }
-            "></ng-container>
+                    caseRecords.diagnosis &&
+                    caseRecords.diagnosis.provisionalDiagnosis
+                }}
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -1363,7 +1375,7 @@
       </td>
     </tr>
     <tr z-table-row>
-      <th z-table-head colspan="4">
+      <th z-table-head colspan="4" scope="col">
         {{ currentLanguageSet?.casesheet?.causeOfDeath }}:
       </th>
     </tr>
@@ -1410,7 +1422,7 @@
 
 <ng-template #provisionalDiagRows let-value="value">
   <tr z-table-row>
-    <th z-table-head colspan="4">
+    <th z-table-head colspan="4" scope="col">
       {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
     </th>
   </tr>
