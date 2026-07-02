@@ -1,460 +1,378 @@
-<div class="container-fluid">
-  <div class="overlay" *ngIf="showProgressBar">
-    <div class="overlay-content">
-      <mat-spinner></mat-spinner>
-    </div>
+<div class="w-full">
+  <!-- Loading overlay -->
+  <div
+    *ngIf="showProgressBar"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-background/60">
+    <z-loader></z-loader>
   </div>
 
-  <mat-sidenav-container class="example-sidenav-fab-container">
-    <mat-sidenav #sidenav mode="side" opened="false">
-      <div class="example-scrolling-content sidenav">
-        <app-beneficiary-details></app-beneficiary-details>
-      </div>
-    </mat-sidenav>
-    <div class="example-scrolling-content content">
-      <form
-        [formGroup]="patientMedicalForm"
-        autocomplete="off"
-        tabindex="{0}"
-        (keyup.enter)="preventSubmitOnEnter($event)">
-        <mat-horizontal-stepper
-          linear="false"
-          (selectionChange)="updatePending($event)">
-          <mat-step selected *ngIf="showVisitDetails" label="Visit Details">
-            <ng-template matStepLabel>{{
-              currentLanguageSet?.nurseData?.visitDetails
-            }}</ng-template>
-            <app-visit-details
-              [mode]="visitMode"
-              [patientVisitDataForm]="patientVisitForm"></app-visit-details>
-            <div class="row m-t-20">
-              <div class="col-sm-12 step-btn m-b-40">
-                <button
-                  class="mat_blue"
-                  type="button"
-                  matStepperNext
-                  (click)="checkMandatory()">
-                  {{ currentLanguageSet?.common?.next }}
-                </button>
-              </div>
-            </div>
-          </mat-step>
+  <!-- Beneficiary details panel (slide-over) -->
+  <z-sheet [(zOpen)]="benSidenavOpen" zSide="left">
+    <app-beneficiary-details></app-beneficiary-details>
+  </z-sheet>
 
-          <mat-step selected *ngIf="showTMVisitDetails" label="Visit Details">
-            <ng-template matStepLabel>{{
-              currentLanguageSet?.nurseData?.visitDetails
-            }}</ng-template>
-            <app-tm-visit-details
-              [mode]="visitMode"
-              [patientVisitForm]="patientVisitForm"></app-tm-visit-details>
-            <div class="row m-t-20">
-              <div class="col-sm-12 step-btn m-b-40">
-                <button
-                  mat-raised-button
-                  color="primary"
-                  type="button"
-                  (click)="submitTMPatientVisitForm(patientMedicalForm)"
-                  [disabled]="tmcDisable">
-                  {{ currentLanguageSet?.common?.submit }}
-                </button>
-                <mat-hint class="textcolor" *ngIf="tmcDisable">
-                  {{
-                    currentLanguageSet?.common?.pleaseviewTMcasesheet
-                  }}</mat-hint
-                >
-              </div>
-            </div>
-          </mat-step>
-
-          <mat-step *ngIf="showAnc" label="ANC">
-            <ng-template matStepLabel>{{
-              currentLanguageSet?.ancData?.anc
-            }}</ng-template>
-            <app-nurse-anc
-              [mode]="ancMode"
-              [patientANCDataForm]="patientANCForm"></app-nurse-anc>
-            <div class="row m-t-20">
-              <div class="col-sm-12 step-btn m-b-40">
-                <button class="mat_blue" type="button" matStepperNext>
-                  {{ currentLanguageSet?.common?.next }}
-                </button>
-                <button class="mat_blue" matStepperPrevious type="button">
-                  {{ currentLanguageSet?.common?.back }}
-                </button>
-                <button
-                  mat-raised-button
-                  class="mat_blue"
-                  *ngIf="ancMode"
-                  [disabled]="
-                    !patientMedicalForm.controls['patientANCForm'].dirty
-                  "
-                  (click)="updatePatientANC()"
-                  type="button">
-                  {{ currentLanguageSet?.common?.update }}
-                </button>
-              </div>
-            </div>
-          </mat-step>
-
-          <mat-step *ngIf="showPNC" label="PNC">
-            <ng-template matStepLabel>{{
-              currentLanguageSet?.pncData?.pnc
-            }}</ng-template>
-            <app-nurse-pnc
-              [mode]="pncMode"
-              [patientPNCDataForm]="patientPNCForm"></app-nurse-pnc>
-            <div class="row m-t-20">
-              <div class="col-sm-12 step-btn m-b-40">
-                <button class="mat_blue" type="button" matStepperNext>
-                  {{ currentLanguageSet?.common?.next }}
-                </button>
-                <button
-                  mat-raised-button
-                  class="mat_blue"
-                  matStepperPrevious
-                  type="button">
-                  {{ currentLanguageSet?.common?.back }}
-                </button>
-                <button
-                  mat-raised-button
-                  color="primary"
-                  class="mat_blue"
-                  *ngIf="pncMode"
-                  [disabled]="
-                    !patientMedicalForm.controls['patientPNCForm'].dirty
-                  "
-                  (click)="updatePatientPNC()"
-                  type="button">
-                  {{ currentLanguageSet?.common?.update }}
-                </button>
-              </div>
-            </div>
-          </mat-step>
-
-          <mat-step *ngIf="showHistory" label="History">
-            <ng-template matStepLabel>{{
-              currentLanguageSet?.common?.history
-            }}</ng-template>
-            <app-nurse-history
-              [mode]="historyMode"
-              [visitCategory]="visitCategory"
-              [pregnancyStatus]="pregnancyStatus"
-              [primeGravidaStatus]="primeGravidaStatus"
-              [patientHistoryDataForm]="patientHistoryForm"></app-nurse-history>
-            <div class="row m-t-20">
-              <div class="col-sm-12 step-btn m-b-40">
-                <button class="mat_blue" type="button" matStepperNext>
-                  {{ currentLanguageSet?.common?.next }}
-                </button>
-                <button
-                  mat-raised-button
-                  color="primary"
-                  class="mat_blue"
-                  matStepperPrevious
-                  type="button">
-                  {{ currentLanguageSet?.common?.back }}
-                </button>
-                <button
-                  mat-raised-button
-                  color="primary"
-                  class="mat_blue"
-                  *ngIf="historyMode"
-                  (click)="updatePatientHistory()"
-                  [disabled]="
-                    !patientMedicalForm.controls['patientHistoryForm'].dirty
-                  "
-                  type="button">
-                  {{ currentLanguageSet?.common?.update }}
-                </button>
-              </div>
-            </div>
-          </mat-step>
-
-          <mat-step *ngIf="showVitals" label="Vitals">
-            <ng-template matStepLabel>{{
-              currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-                ?.vitals
-            }}</ng-template>
-            <app-nurse-vitals
-              [vitalsMode]="vitalsMode"
-              [pregnancyStatus]="pregnancyStatus"
-              [visitCategory]="visitCategory"
-              [patientVitalsDataForm]="patientVitalsForm"></app-nurse-vitals>
-            <div class="row m-t-20">
-              <div class="col-sm-12 step-btn m-b-40">
-                <button
-                  mat-raised-button
-                  class="mat_blue"
-                  type="button"
-                  *ngIf="!showExamination && !showRefer && !showNCDScreening"
-                  [disabled]="disableSubmitButton"
-                  (click)="submitPatientMedicalDetailsForm(patientMedicalForm)">
-                  {{ currentLanguageSet?.common?.submit }}
-                </button>
-                <button
-                  mat-raised-button
-                  class="mat_blue"
-                  *ngIf="showExamination || showCaseRecord || showNCDScreening"
-                  matStepperNext
-                  type="button">
-                  {{ currentLanguageSet?.common?.next }}
-                </button>
-                <button
-                  mat-raised-button
-                  class="mat_blue"
-                  matStepperPrevious
-                  type="button">
-                  {{ currentLanguageSet?.common?.back }}
-                </button>
-                <button
-                  mat-raised-button
-                  class="mat_blue"
-                  *ngIf="vitalsMode"
-                  (click)="updatePatientVitals()"
-                  [disabled]="
-                    !patientMedicalForm.controls['patientVitalsForm'].dirty &&
-                    !enableUpdateButtonInVitals
-                  "
-                  type="button">
-                  {{ currentLanguageSet?.common?.update }}
-                </button>
-              </div>
-            </div>
-          </mat-step>
-
-          <mat-step *ngIf="showExamination" label="Examination">
-            <ng-template matStepLabel>{{
-              currentLanguageSet?.ExaminationData?.examination
-            }}</ng-template>
-            <app-nurse-examination
-              [examinationMode]="examinationMode"
-              [visitCategory]="visitCategory"
-              [patientExaminationDataForm]="
-                patientExaminationForm
-              "></app-nurse-examination>
-            <div class="row m-t-20">
-              <div class="col-sm-12 step-btn m-b-40">
-                <button
-                  mat-raised-button
-                  class="mat_blue"
-                  type="button"
-                  *ngIf="!showRefer"
-                  [disabled]="disableSubmitButton"
-                  (click)="submitPatientMedicalDetailsForm(patientMedicalForm)">
-                  {{ currentLanguageSet?.common?.submit }}
-                </button>
-                <button
-                  mat-raised-button
-                  class="mat_blue"
-                  *ngIf="showCaseRecord"
-                  matStepperNext
-                  type="button">
-                  {{ currentLanguageSet?.common?.next }}
-                </button>
-                <button
-                  mat-raised-button
-                  class="mat_blue"
-                  matStepperPrevious
-                  type="button">
-                  {{ currentLanguageSet?.common?.back }}
-                </button>
-                <button
-                  mat-raised-button
-                  class="mat_blue"
-                  *ngIf="examinationMode"
-                  (click)="updatePatientExamination()"
-                  [disabled]="!patientExaminationForm.dirty"
-                  type="button">
-                  {{ currentLanguageSet?.common?.update }}
-                </button>
-              </div>
-            </div>
-          </mat-step>
-          <mat-step *ngIf="showNCDScreening" label="Screening">
-            <ng-template matStepLabel>{{
-              currentLanguageSet?.idrs?.screening
-            }}</ng-template>
-            <app-idrs
-              [ncdScreeningMode]="ncdScreeningMode"
-              [patientMedicalForm]="patientMedicalForm"
-              (IDRSChanged)="idrsChange($event)"
-              [idrsScreeningForm]="idrsScreeningForm"></app-idrs>
-            <div class="row m-t-20">
-              <div class="col-sm-12 step-btn m-b-40">
-                <button
-                  *ngIf="!ncdScreeningMode"
-                  mat-raised-button
-                  color="primary"
-                  class="mat_blue"
-                  [disabled]="disableSubmitButton"
-                  (click)="submitPatientMedicalDetailsForm(patientMedicalForm)"
-                  type="button">
-                  {{ currentLanguageSet?.common?.submit }}
-                </button>
-                <button
-                  *ngIf="showCaseRecord"
-                  class="mat_blue"
-                  type="button"
-                  matStepperNext>
-                  {{ currentLanguageSet?.common?.next }}
-                </button>
-                <button
-                  mat-raised-button
-                  color="primary"
-                  class="mat_blue"
-                  matStepperPrevious
-                  type="button">
-                  {{ currentLanguageSet?.common?.back }}
-                </button>
-                <button
-                  *ngIf="ncdScreeningMode"
-                  mat-raised-button
-                  class="mat_blue"
-                  color="primary"
-                  type="button"
-                  (click)="updatePatientNcdScreening()"
-                  [disabled]="enableIDRSUpdate">
-                  {{ currentLanguageSet?.common?.update }}
-                </button>
-              </div>
-            </div>
-          </mat-step>
-          <mat-step *ngIf="showCaseRecord" label="Case Record">
-            <ng-template matStepLabel>{{
-              currentLanguageSet?.common?.caseRecord
-            }}</ng-template>
-            <app-case-record
-              [caseRecordMode]="caseRecordMode"
-              [visitCategory]="visitCategory"
-              [pregnancyStatus]="pregnancyStatus"
-              [findings]="findings"
-              [currentVitals]="currentVitals"
-              [patientCaseRecordForm]="patientCaseRecordForm"></app-case-record>
-            <div class="row m-t-20">
-              <div class="col-sm-12 step-btn m-b-40">
-                <button
-                  mat-raised-button
-                  class="mat_blue"
-                  color="primary"
-                  *ngIf="showExamination || showHistory"
-                  matStepperNext
-                  type="button">
-                  {{ currentLanguageSet?.common?.next }}
-                </button>
-                <button
-                  mat-raised-button
-                  color="primary"
-                  class="mat_blue"
-                  matStepperPrevious
-                  type="button">
-                  {{ currentLanguageSet?.common?.back }}
-                </button>
-              </div>
-            </div>
-          </mat-step>
-
-          <mat-step *ngIf="showQuickConsult">
-            <ng-template matStepLabel
-              >{{
-                currentLanguageSet?.historyData?.QuickConsultDetails
-                  ?.quickconsult
-              }}
-            </ng-template>
-            <app-doctor-quick-consult
-              [quickConsultMode]="quickConsultMode"
-              [patientQuickConsultForm]="
-                patientQuickConsultForm
-              "></app-doctor-quick-consult>
-
-            <div class="row m-t-20">
-              <div class="col-sm-12 step-btn m-b-40">
-                <button class="mat_blue" type="button" matStepperNext>
-                  {{ currentLanguageSet?.common?.next }}
-                </button>
-                <button
-                  mat-raised-button
-                  color="primary"
-                  class="mat_blue"
-                  matStepperPrevious
-                  type="button">
-                  {{ currentLanguageSet?.common?.back }}
-                </button>
-              </div>
-            </div>
-          </mat-step>
-
-          <mat-step *ngIf="showRefer" label="Refer">
-            <ng-template matStepLabel>{{
-              currentLanguageSet?.Referdetails?.revisitAndRefer
-            }}</ng-template>
-            <app-refer
-              [referMode]="referMode"
-              [visitCategory]="visitCategory"
-              [patientReferForm]="patientReferForm"></app-refer>
-            <div class="row m-t-20">
-              <div class="col-sm-12 step-btn m-b-40">
-                <button
-                  *ngIf="doctorFlag === 1"
-                  mat-raised-button
-                  color="primary"
-                  class="mat_blue"
-                  [disabled]="disableSubmitButton"
-                  (click)="submitDoctorDiagnosisForm()"
-                  type="submit">
-                  {{ currentLanguageSet?.common?.submit }}
-                </button>
-                <button
-                  *ngIf="
-                    doctorFlag !== 1 && visitCategory !== 'General OPD (QC)'
-                  "
-                  mat-raised-button
-                  color="primary"
-                  class="mat_blue"
-                  (click)="updateDoctorDiagnosisForm()"
-                  type="submit">
-                  {{ doctorUpdateAndTCSubmit }}
-                </button>
-
-                <button
-                  *ngIf="
-                    doctorFlag !== 1 && visitCategory === 'General OPD (QC)'
-                  "
-                  mat-raised-button
-                  color="primary"
-                  class="mat_blue"
-                  (click)="updateQuickConsultDiagnosisForm()"
-                  type="submit">
-                  {{ doctorUpdateAndTCSubmit }}
-                </button>
-
-                <button
-                  mat-raised-button
-                  color="primary"
-                  class="mat_blue"
-                  matStepperPrevious
-                  type="button">
-                  {{ currentLanguageSet?.common?.back }}
-                </button>
-              </div>
-            </div>
-          </mat-step>
-        </mat-horizontal-stepper>
-      </form>
+  <div class="px-4 pb-10 pt-3">
+    <!-- Quick actions (were floating FAB buttons) -->
+    <div class="mb-4 flex items-center gap-2">
+      <button
+        z-button
+        zType="outline"
+        zSize="icon-lg"
+        type="button"
+        aria-label="Beneficiary details"
+        (click)="toggleBenSidenav()">
+        <ng-icon name="lucideUserRound"></ng-icon>
+      </button>
+      <button
+        z-button
+        zType="outline"
+        zSize="icon-lg"
+        type="button"
+        [zTooltip]="currentLanguageSet?.benPreviousVisitDetails"
+        zPosition="bottom"
+        aria-label="Previous visit details"
+        (click)="openBenPreviousisitDetails()">
+        <ng-icon name="lucideFileText"></ng-icon>
+      </button>
     </div>
-    <button
-      style="margin-left: 10px; position: absolute"
-      class="mat_blue_circle"
-      (click)="sideNavModeChange(sidenav)">
-      <mat-icon>account_box</mat-icon>
-    </button>
 
-    <button
-      style="margin-left: 55px; position: absolute"
-      class="mat_blue_circle"
-      (click)="openBenPreviousisitDetails()"
-      matTooltip="{{ currentLanguageSet?.benPreviousVisitDetails }}">
-      <mat-icon class="iconStyle"> description</mat-icon>
-    </button>
-  </mat-sidenav-container>
-  <div></div>
+    <form
+      [formGroup]="patientMedicalForm"
+      autocomplete="off"
+      (keyup.enter)="preventSubmitOnEnter($event)">
+      <!-- Stepper indicator -->
+      <z-stepper [zActiveIndex]="currentStep" class="mb-6 w-full justify-center">
+        <z-step
+          *ngIf="showVisitDetails"
+          [zLabel]="currentLanguageSet?.nurseData?.visitDetails"></z-step>
+        <z-step
+          *ngIf="showTMVisitDetails"
+          [zLabel]="currentLanguageSet?.nurseData?.visitDetails"></z-step>
+        <z-step
+          *ngIf="showAnc"
+          [zLabel]="currentLanguageSet?.ancData?.anc"></z-step>
+        <z-step
+          *ngIf="showPNC"
+          [zLabel]="currentLanguageSet?.pncData?.pnc"></z-step>
+        <z-step
+          *ngIf="showHistory"
+          [zLabel]="currentLanguageSet?.common?.history"></z-step>
+        <z-step
+          *ngIf="showVitals"
+          [zLabel]="
+            currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC?.vitals
+          "></z-step>
+        <z-step
+          *ngIf="showExamination"
+          [zLabel]="currentLanguageSet?.ExaminationData?.examination"></z-step>
+        <z-step
+          *ngIf="showNCDScreening"
+          [zLabel]="currentLanguageSet?.idrs?.screening"></z-step>
+        <z-step
+          *ngIf="showCaseRecord"
+          [zLabel]="currentLanguageSet?.common?.caseRecord"></z-step>
+        <z-step
+          *ngIf="showQuickConsult"
+          [zLabel]="
+            currentLanguageSet?.historyData?.QuickConsultDetails?.quickconsult
+          "></z-step>
+        <z-step
+          *ngIf="showRefer"
+          [zLabel]="currentLanguageSet?.Referdetails?.revisitAndRefer"></z-step>
+      </z-stepper>
+
+      <!-- Visit Details -->
+      <div *ngIf="activeStepKey === 'visitDetails'">
+        <app-visit-details
+          [mode]="visitMode"
+          [patientVisitDataForm]="patientVisitForm"></app-visit-details>
+        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+          <button z-button type="button" (click)="nextStep(); checkMandatory()">
+            {{ currentLanguageSet?.common?.next }}
+          </button>
+        </div>
+      </div>
+
+      <!-- TM Visit Details -->
+      <div *ngIf="activeStepKey === 'tmVisitDetails'">
+        <app-tm-visit-details
+          [mode]="visitMode"
+          [patientVisitForm]="patientVisitForm"></app-tm-visit-details>
+        <div class="mt-5 mb-10 flex flex-wrap items-center gap-2">
+          <button
+            z-button
+            type="button"
+            [disabled]="tmcDisable"
+            (click)="submitTMPatientVisitForm(patientMedicalForm)">
+            {{ currentLanguageSet?.common?.submit }}
+          </button>
+          <p class="m-0 text-sm text-warning" *ngIf="tmcDisable">
+            {{ currentLanguageSet?.common?.pleaseviewTMcasesheet }}
+          </p>
+        </div>
+      </div>
+
+      <!-- ANC -->
+      <div *ngIf="activeStepKey === 'anc'">
+        <app-nurse-anc
+          [mode]="ancMode"
+          [patientANCDataForm]="patientANCForm"></app-nurse-anc>
+        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+          <button z-button type="button" (click)="nextStep()">
+            {{ currentLanguageSet?.common?.next }}
+          </button>
+          <button z-button zType="outline" type="button" (click)="previousStep()">
+            {{ currentLanguageSet?.common?.back }}
+          </button>
+          <button
+            z-button
+            *ngIf="ancMode"
+            type="button"
+            [disabled]="!patientMedicalForm.controls['patientANCForm'].dirty"
+            (click)="updatePatientANC()">
+            {{ currentLanguageSet?.common?.update }}
+          </button>
+        </div>
+      </div>
+
+      <!-- PNC -->
+      <div *ngIf="activeStepKey === 'pnc'">
+        <app-nurse-pnc
+          [mode]="pncMode"
+          [patientPNCDataForm]="patientPNCForm"></app-nurse-pnc>
+        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+          <button z-button type="button" (click)="nextStep()">
+            {{ currentLanguageSet?.common?.next }}
+          </button>
+          <button z-button zType="outline" type="button" (click)="previousStep()">
+            {{ currentLanguageSet?.common?.back }}
+          </button>
+          <button
+            z-button
+            *ngIf="pncMode"
+            type="button"
+            [disabled]="!patientMedicalForm.controls['patientPNCForm'].dirty"
+            (click)="updatePatientPNC()">
+            {{ currentLanguageSet?.common?.update }}
+          </button>
+        </div>
+      </div>
+
+      <!-- History -->
+      <div *ngIf="activeStepKey === 'history'">
+        <app-nurse-history
+          [mode]="historyMode"
+          [visitCategory]="visitCategory"
+          [pregnancyStatus]="pregnancyStatus"
+          [primeGravidaStatus]="primeGravidaStatus"
+          [patientHistoryDataForm]="patientHistoryForm"></app-nurse-history>
+        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+          <button z-button type="button" (click)="nextStep()">
+            {{ currentLanguageSet?.common?.next }}
+          </button>
+          <button z-button zType="outline" type="button" (click)="previousStep()">
+            {{ currentLanguageSet?.common?.back }}
+          </button>
+          <button
+            z-button
+            *ngIf="historyMode"
+            type="button"
+            [disabled]="!patientMedicalForm.controls['patientHistoryForm'].dirty"
+            (click)="updatePatientHistory()">
+            {{ currentLanguageSet?.common?.update }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Vitals -->
+      <div *ngIf="activeStepKey === 'vitals'">
+        <app-nurse-vitals
+          [vitalsMode]="vitalsMode"
+          [pregnancyStatus]="pregnancyStatus"
+          [visitCategory]="visitCategory"
+          [patientVitalsDataForm]="patientVitalsForm"></app-nurse-vitals>
+        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+          <button
+            z-button
+            type="button"
+            *ngIf="!showExamination && !showRefer && !showNCDScreening"
+            [disabled]="disableSubmitButton"
+            (click)="submitPatientMedicalDetailsForm(patientMedicalForm)">
+            {{ currentLanguageSet?.common?.submit }}
+          </button>
+          <button
+            z-button
+            *ngIf="showExamination || showCaseRecord || showNCDScreening"
+            type="button"
+            (click)="nextStep()">
+            {{ currentLanguageSet?.common?.next }}
+          </button>
+          <button z-button zType="outline" type="button" (click)="previousStep()">
+            {{ currentLanguageSet?.common?.back }}
+          </button>
+          <button
+            z-button
+            *ngIf="vitalsMode"
+            type="button"
+            [disabled]="
+              !patientMedicalForm.controls['patientVitalsForm'].dirty &&
+              !enableUpdateButtonInVitals
+            "
+            (click)="updatePatientVitals()">
+            {{ currentLanguageSet?.common?.update }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Examination -->
+      <div *ngIf="activeStepKey === 'examination'">
+        <app-nurse-examination
+          [examinationMode]="examinationMode"
+          [visitCategory]="visitCategory"
+          [patientExaminationDataForm]="
+            patientExaminationForm
+          "></app-nurse-examination>
+        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+          <button
+            z-button
+            type="button"
+            *ngIf="!showRefer"
+            [disabled]="disableSubmitButton"
+            (click)="submitPatientMedicalDetailsForm(patientMedicalForm)">
+            {{ currentLanguageSet?.common?.submit }}
+          </button>
+          <button
+            z-button
+            *ngIf="showCaseRecord"
+            type="button"
+            (click)="nextStep()">
+            {{ currentLanguageSet?.common?.next }}
+          </button>
+          <button z-button zType="outline" type="button" (click)="previousStep()">
+            {{ currentLanguageSet?.common?.back }}
+          </button>
+          <button
+            z-button
+            *ngIf="examinationMode"
+            type="button"
+            [disabled]="!patientExaminationForm.dirty"
+            (click)="updatePatientExamination()">
+            {{ currentLanguageSet?.common?.update }}
+          </button>
+        </div>
+      </div>
+
+      <!-- NCD Screening (IDRS) -->
+      <div *ngIf="activeStepKey === 'ncdScreening'">
+        <app-idrs
+          [ncdScreeningMode]="ncdScreeningMode"
+          [patientMedicalForm]="patientMedicalForm"
+          (IDRSChanged)="idrsChange($event)"
+          [idrsScreeningForm]="idrsScreeningForm"></app-idrs>
+        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+          <button
+            z-button
+            *ngIf="!ncdScreeningMode"
+            type="button"
+            [disabled]="disableSubmitButton"
+            (click)="submitPatientMedicalDetailsForm(patientMedicalForm)">
+            {{ currentLanguageSet?.common?.submit }}
+          </button>
+          <button
+            z-button
+            *ngIf="showCaseRecord"
+            type="button"
+            (click)="nextStep()">
+            {{ currentLanguageSet?.common?.next }}
+          </button>
+          <button z-button zType="outline" type="button" (click)="previousStep()">
+            {{ currentLanguageSet?.common?.back }}
+          </button>
+          <button
+            z-button
+            *ngIf="ncdScreeningMode"
+            type="button"
+            [disabled]="enableIDRSUpdate"
+            (click)="updatePatientNcdScreening()">
+            {{ currentLanguageSet?.common?.update }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Case Record -->
+      <div *ngIf="activeStepKey === 'caseRecord'">
+        <app-case-record
+          [caseRecordMode]="caseRecordMode"
+          [visitCategory]="visitCategory"
+          [pregnancyStatus]="pregnancyStatus"
+          [findings]="findings"
+          [currentVitals]="currentVitals"
+          [patientCaseRecordForm]="patientCaseRecordForm"></app-case-record>
+        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+          <button
+            z-button
+            *ngIf="showExamination || showHistory"
+            type="button"
+            (click)="nextStep()">
+            {{ currentLanguageSet?.common?.next }}
+          </button>
+          <button z-button zType="outline" type="button" (click)="previousStep()">
+            {{ currentLanguageSet?.common?.back }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Consult -->
+      <div *ngIf="activeStepKey === 'quickConsult'">
+        <app-doctor-quick-consult
+          [quickConsultMode]="quickConsultMode"
+          [patientQuickConsultForm]="
+            patientQuickConsultForm
+          "></app-doctor-quick-consult>
+        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+          <button z-button type="button" (click)="nextStep()">
+            {{ currentLanguageSet?.common?.next }}
+          </button>
+          <button z-button zType="outline" type="button" (click)="previousStep()">
+            {{ currentLanguageSet?.common?.back }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Refer -->
+      <div *ngIf="activeStepKey === 'refer'">
+        <app-refer
+          [referMode]="referMode"
+          [visitCategory]="visitCategory"
+          [patientReferForm]="patientReferForm"></app-refer>
+        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+          <button
+            z-button
+            *ngIf="doctorFlag === 1"
+            type="submit"
+            [disabled]="disableSubmitButton"
+            (click)="submitDoctorDiagnosisForm()">
+            {{ currentLanguageSet?.common?.submit }}
+          </button>
+          <button
+            z-button
+            *ngIf="doctorFlag !== 1 && visitCategory !== 'General OPD (QC)'"
+            type="submit"
+            (click)="updateDoctorDiagnosisForm()">
+            {{ doctorUpdateAndTCSubmit }}
+          </button>
+          <button
+            z-button
+            *ngIf="doctorFlag !== 1 && visitCategory === 'General OPD (QC)'"
+            type="submit"
+            (click)="updateQuickConsultDiagnosisForm()">
+            {{ doctorUpdateAndTCSubmit }}
+          </button>
+          <button z-button zType="outline" type="button" (click)="previousStep()">
+            {{ currentLanguageSet?.common?.back }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
