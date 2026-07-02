@@ -1,10 +1,10 @@
 <z-accordion
   [formGroup]="generalCaseRecordForm"
   zType="multiple"
-  class="flex flex-col gap-2">
-  <z-accordion-item zValue="significantFindings" class="rounded-lg border">
+  class="flex flex-col gap-4">
+  <z-accordion-item zValue="significantFindings" class="rounded-lg border border-border bg-card">
     <z-accordion-trigger class="px-4">
-      <span class="font-bold text-foreground">
+      <span class="text-sm font-semibold text-foreground">
         {{
           current_language_set?.Significantfindingsdetails
             ?.previoussignificantfindings
@@ -16,9 +16,9 @@
     </z-accordion-content>
   </z-accordion-item>
 
-  <z-accordion-item zValue="previousVisit" class="rounded-lg border">
+  <z-accordion-item zValue="previousVisit" class="rounded-lg border border-border bg-card">
     <z-accordion-trigger class="px-4">
-      <span class="font-bold text-foreground">
+      <span class="text-sm font-semibold text-foreground">
         {{ current_language_set?.previousvisit?.Previousvisitdetails }}
       </span>
     </z-accordion-trigger>
@@ -28,9 +28,9 @@
     </z-accordion-content>
   </z-accordion-item>
 
-  <z-accordion-item zValue="findings" class="rounded-lg border">
+  <z-accordion-item zValue="findings" class="rounded-lg border border-border bg-card">
     <z-accordion-trigger class="px-4">
-      <span class="font-bold text-foreground">
+      <span class="text-sm font-semibold text-foreground">
         {{ current_language_set?.Find?.findings }}
       </span>
     </z-accordion-trigger>
@@ -42,9 +42,9 @@
     </z-accordion-content>
   </z-accordion-item>
 
-  <z-accordion-item zValue="diagnosis" class="rounded-lg border">
+  <z-accordion-item zValue="diagnosis" class="rounded-lg border border-border bg-card">
     <z-accordion-trigger class="px-4">
-      <span class="font-bold text-foreground">
+      <span class="text-sm font-semibold text-foreground">
         {{ current_language_set?.casesheet?.diagnosis }}
       </span>
     </z-accordion-trigger>
@@ -56,9 +56,9 @@
     </z-accordion-content>
   </z-accordion-item>
 
-  <z-accordion-item zValue="investigations" class="rounded-lg border">
+  <z-accordion-item zValue="investigations" class="rounded-lg border border-border bg-card">
     <z-accordion-trigger class="px-4">
-      <span class="font-bold text-foreground">
+      <span class="text-sm font-semibold text-foreground">
         {{
           current_language_set?.nurseData?.investigationsDetails?.investigations
         }}
@@ -74,9 +74,9 @@
     </z-accordion-content>
   </z-accordion-item>
 
-  <z-accordion-item zValue="prescription" class="rounded-lg border">
+  <z-accordion-item zValue="prescription" class="rounded-lg border border-border bg-card">
     <z-accordion-trigger class="px-4">
-      <span class="font-bold text-foreground">
+      <span class="text-sm font-semibold text-foreground">
         {{ current_language_set?.casesheet?.prescribe }}
       </span>
     </z-accordion-trigger>
@@ -87,9 +87,9 @@
     </z-accordion-content>
   </z-accordion-item>
 
-  <z-accordion-item zValue="report" class="rounded-lg border">
+  <z-accordion-item zValue="report" class="rounded-lg border border-border bg-card">
     <z-accordion-trigger class="px-4">
-      <span class="font-bold text-foreground">
+      <span class="text-sm font-semibold text-foreground">
         {{ current_language_set?.common?.report }}
       </span>
     </z-accordion-trigger>
