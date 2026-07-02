@@ -430,9 +430,7 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
   ) {
     const selected = Array.isArray(value) ? value[0] : value;
     const source =
-      (this.pastIllnessSelectList && this.pastIllnessSelectList[i]) ||
-      this.illnessMasterData ||
-      [];
+      this.pastIllnessSelectList?.[i] || this.illnessMasterData || [];
     const matchedIllness =
       source.find((item: any) => item.illnessType === selected) ?? null;
 
@@ -588,9 +586,7 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
   ) {
     const selected = Array.isArray(value) ? value[0] : value;
     const source =
-      (this.pastSurgerySelectList && this.pastSurgerySelectList[i]) ||
-      this.surgeryMasterData ||
-      [];
+      this.pastSurgerySelectList?.[i] || this.surgeryMasterData || [];
     const matchedSurgery =
       source.find((item: any) => item.surgeryType === selected) ?? null;
 
