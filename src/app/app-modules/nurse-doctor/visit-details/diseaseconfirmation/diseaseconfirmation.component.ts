@@ -119,12 +119,17 @@ export class DiseaseconfirmationComponent implements OnInit {
     if (this.diseaseFormsGroup.value) {
       this.diseasearray =
         this.diseaseFormsGroup.get('diseaseFormsArray')?.value;
-      const ar: any = [];
-      this.diseasearray.forEach((value: any) => {
-        if (value.selected !== false) ar.push(value.diseaseName);
-      });
+      const ar = this.getSelectedDiseaseNames();
       console.log('diseasearray', ar);
-      if (!checkedState) {
+      if (checkedState) {
+        if (item.value.diseaseName === 'Hypertension') {
+          this.idrsScoreService.setHypertensionSelected();
+        }
+        if (item.value.diseaseName === 'Diabetes') {
+          this.idrsScoreService.setConfirmedDiabeticSelected();
+        }
+        this.idrsScoreService.setDiseasesSelected(ar);
+      } else {
         if (item.value.diseaseName === 'Hypertension') {
           this.idrsScoreService.clearHypertensionSelected();
         }
@@ -132,17 +137,16 @@ export class DiseaseconfirmationComponent implements OnInit {
           this.idrsScoreService.clearConfirmedDiabeticSelected();
         }
         this.idrsScoreService.setUnchecked(item.value.diseaseName);
-      } else {
-        if (item.value.diseaseName === 'Hypertension') {
-          this.idrsScoreService.setHypertensionSelected();
-        }
-        if (item.value.diseaseName === 'Diabetes') {
-          this.idrsScoreService.setConfirmedDiabeticSelected();
-        }
-
-        this.idrsScoreService.setDiseasesSelected(ar);
       }
     }
+  }
+
+  private getSelectedDiseaseNames(): any[] {
+    const ar: any = [];
+    (this.diseasearray || []).forEach((value: any) => {
+      if (value.selected !== false) ar.push(value.diseaseName);
+    });
+    return ar;
   }
   nurseMasterDataSubscription: any;
   IDRSDetailsSubscription: any;

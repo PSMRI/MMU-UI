@@ -112,14 +112,10 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
       });
   }
 
-  stringifyId(procedureID: any): string {
-    return String(procedureID);
-  }
-
   private syncSelectedIdsFromControl() {
     const selectedObjects = this.laboratoryList.value;
     const ids = Array.isArray(selectedObjects)
-      ? selectedObjects.map((item: any) => this.stringifyId(item.procedureID))
+      ? selectedObjects.map((item: any) => String(item.procedureID))
       : [];
     // Assign a new reference only when the set actually changed, to avoid a
     // ngModel/valueChanges feedback loop.
@@ -136,7 +132,7 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
     // Resolve the selected id strings back to the full procedure objects so
     // the form control keeps storing objects (its stored value type).
     const selectedObjects = (this.selectLabTest || []).filter((item: any) =>
-      ids.includes(this.stringifyId(item.procedureID))
+      ids.includes(String(item.procedureID))
     );
     this.laboratoryList.setValue(selectedObjects);
     this.checkTestName(selectedObjects);

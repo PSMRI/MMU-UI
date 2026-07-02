@@ -14,7 +14,7 @@
         (zSelectionChange)="onLaboratorySelectionChange($event)">
         <z-select-item
           *ngFor="let laboratary of selectLabTest"
-          [zValue]="stringifyId(laboratary.procedureID)"
+          [zValue]="$any(laboratary.procedureID).toString()"
           [zDisabled]="canDisable(laboratary)">
           {{ laboratary.procedureName }}
         </z-select-item>
