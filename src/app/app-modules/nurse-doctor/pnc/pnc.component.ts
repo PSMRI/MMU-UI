@@ -28,7 +28,12 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import {
@@ -38,85 +43,33 @@ import {
 } from '../shared/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
-import {
-  MomentDateAdapter,
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-} from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import {
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
-import {
-  MatFormField,
-  MatLabel,
-  MatSelect,
-  MatSuffix,
-} from '@angular/material/select';
 import { NgFor, NgIf } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
 import { NullDefaultValueDirective } from '../../core/directives/null-default-value.directive';
-import {
-  MatDatepickerInput,
-  MatDatepickerToggle,
-  MatDatepicker,
-} from '@angular/material/datepicker';
 import { StringValidatorDirective } from '../../core/directives/stringValidator.directive';
 import { NumberValidatorDirective } from '../../core/directives/numberValidator.directive';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardDatePickerComponent } from 'Common-UI/v2/ui/date-picker';
 
 @Component({
   selector: 'app-nurse-pnc',
   templateUrl: './pnc.component.html',
-  styleUrls: ['./pnc.component.css'],
-  providers: [
-    {
-      provide: MAT_DATE_LOCALE,
-      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
-    },
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    },
-    {
-      provide: MAT_DATE_FORMATS,
-      useValue: {
-        parse: {
-          dateInput: 'LL',
-        },
-        display: {
-          dateInput: 'DD/MM/YYYY', // Set the desired display format
-          monthYearLabel: 'MMM YYYY',
-          dateA11yLabel: 'LL',
-          monthYearA11yLabel: 'MMMM YYYY',
-        },
-      },
-    },
-  ],
   imports: [
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
     ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatSelect,
+    FormsModule,
     NgFor,
-    MatOption,
     NgIf,
-    MatInput,
     NullDefaultValueDirective,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-    MatSuffix,
-    MatDatepicker,
     StringValidatorDirective,
     NumberValidatorDirective,
+    ...cardImports,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
+    ZardDatePickerComponent,
   ],
 })
 export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
@@ -163,6 +116,9 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
   today = new Date();
   minimumDeliveryDate = new Date();
   dob = new Date();
+  // z-date-picker is Date-valued; the reactive-form control keeps its original
+  // ISO-string value, so this model is kept decoupled and synced via dateChange.
+  deliveryDateModel: Date | null = null;
 
   ngOnChanges() {
     if (
@@ -255,6 +211,9 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
 
         const patchPNCdata = Object.assign({}, tempPNCData);
         this.patientPNCDataForm.patchValue(tempPNCData);
+        this.deliveryDateModel = tempPNCData.dDate
+          ? new Date(tempPNCData.dDate)
+          : null;
       });
   }
 
@@ -407,6 +366,93 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
 
   get otherPostNatalComplication() {
     return this.patientPNCDataForm.controls['otherPostNatalComplication'].value;
+  }
+
+  // --- Zard control adapters. z-select is string-valued and z-date-picker is
+  // Date-valued, but the reactive-form controls keep their original master-data
+  // objects / ISO-string value so the submission contract is unchanged. Each
+  // handler maps the emitted display string back to the master object. ---
+  private singleValue(value: string | string[]): string {
+    return Array.isArray(value) ? value[0] : value;
+  }
+
+  onDeliveryPlaceChange(value: string | string[]): void {
+    const v = this.singleValue(value);
+    const place = (this.masterData?.deliveryPlaces || []).find(
+      (p: any) => p.deliveryPlace === v
+    );
+    this.patientPNCDataForm.controls['deliveryPlace'].setValue(place ?? null);
+    this.patientPNCDataForm.controls['deliveryPlace'].markAsDirty();
+    this.resetOtherPlaceOfDelivery();
+  }
+
+  onDeliveryTypeChange(value: string | string[]): void {
+    const v = this.singleValue(value);
+    const type = (this.selectDeliveryTypes || []).find(
+      (t: any) => t.deliveryType === v
+    );
+    this.patientPNCDataForm.controls['deliveryType'].setValue(type ?? null);
+    this.patientPNCDataForm.controls['deliveryType'].markAsDirty();
+  }
+
+  onDeliveryComplicationChange(value: string | string[]): void {
+    const v = this.singleValue(value);
+    const complication = (
+      this.masterData?.deliveryComplicationTypes || []
+    ).find((item: any) => item.deliveryComplicationType === v);
+    this.patientPNCDataForm.controls['deliveryComplication'].setValue(
+      complication ?? null
+    );
+    this.patientPNCDataForm.controls['deliveryComplication'].markAsDirty();
+    this.resetOtherDeliveryComplication();
+  }
+
+  onPregOutcomeChange(value: string | string[]): void {
+    const v = this.singleValue(value);
+    const outcome = (this.masterData?.pregOutcomes || []).find(
+      (item: any) => item.pregOutcome === v
+    );
+    this.patientPNCDataForm.controls['pregOutcome'].setValue(outcome ?? null);
+    this.patientPNCDataForm.controls['pregOutcome'].markAsDirty();
+  }
+
+  onPostNatalComplicationChange(value: string | string[]): void {
+    const v = this.singleValue(value);
+    const complication = (this.masterData?.postNatalComplications || []).find(
+      (item: any) => item.complicationValue === v
+    );
+    this.patientPNCDataForm.controls['postNatalComplication'].setValue(
+      complication ?? null
+    );
+    this.patientPNCDataForm.controls['postNatalComplication'].markAsDirty();
+    this.resetOtherPostNatalComplication();
+  }
+
+  onGestationChange(value: string | string[]): void {
+    const v = this.singleValue(value);
+    const gestation = (this.masterData?.gestation || []).find(
+      (item: any) => item.name === v
+    );
+    this.patientPNCDataForm.controls['gestationName'].setValue(
+      gestation ?? null
+    );
+    this.patientPNCDataForm.controls['gestationName'].markAsDirty();
+  }
+
+  onNewBornHealthStatusChange(value: string | string[]): void {
+    const v = this.singleValue(value);
+    const status = (this.masterData?.newbornHealthStatuses || []).find(
+      (item: any) => item.newBornHealthStatus === v
+    );
+    this.patientPNCDataForm.controls['newBornHealthStatus'].setValue(
+      status ?? null
+    );
+    this.patientPNCDataForm.controls['newBornHealthStatus'].markAsDirty();
+  }
+
+  onDeliveryDateChange(date: Date | null): void {
+    this.patientPNCDataForm.controls['dDate'].setValue(date ?? null);
+    this.patientPNCDataForm.controls['dDate'].markAsDirty();
   }
 
   private normalizeToUTCMidnight(date: Date | null | undefined): string | null {
