@@ -27,7 +27,7 @@ import {
   EventEmitter,
   DoCheck,
 } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogRef } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
 import {
@@ -121,7 +121,7 @@ export class CommonDialogComponent implements OnInit, DoCheck {
   confirmCareContext: any;
 
   constructor(
-    public dialogRef: MatDialogRef<CommonDialogComponent>,
+    public dialogRef: ZardDialogRef<CommonDialogComponent>,
     public httpServiceService: HttpServiceService
   ) {}
 

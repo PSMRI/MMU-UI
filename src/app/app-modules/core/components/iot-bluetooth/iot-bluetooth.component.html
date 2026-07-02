@@ -29,7 +29,7 @@
       zSize="icon"
       class="p-0"
       aria-label="Close"
-      [matDialogClose]="true">
+      (click)="dialogRef.close(true)">
       <ng-icon name="lucideX"></ng-icon>
     </button>
   </div>
