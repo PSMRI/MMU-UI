@@ -27,17 +27,20 @@ import { HttpServiceService } from '../../core/services/http-service.service';
 import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgIf, NgClass } from '@angular/common';
-import { MatIcon } from '@angular/material/icon';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 import { CancerCaseSheetComponent } from './cancer-case-sheet/cancer-case-sheet.component';
 import { GeneralCaseSheetComponent } from './general-case-sheet/general-case-sheet.component';
 
 @Component({
   selector: 'app-case-sheet',
   templateUrl: './case-sheet.component.html',
-  styleUrls: ['./case-sheet.component.css'],
+  viewProviders: [provideIcons({ lucideX })],
   imports: [
     NgIf,
-    MatIcon,
+    NgIcon,
+    ZardButtonComponent,
     MatDialogClose,
     NgClass,
     CancerCaseSheetComponent,

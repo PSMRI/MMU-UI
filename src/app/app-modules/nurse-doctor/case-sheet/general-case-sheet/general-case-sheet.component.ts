@@ -32,8 +32,15 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { PrintPageSelectComponent } from '../../print-page-select/print-page-select.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideLayoutGrid,
+  lucideArrowUp,
+  lucidePrinter,
+  lucideChevronLeft,
+} from '@ng-icons/lucide';
 import { DoctorDiagnosisCaseSheetComponent } from './doctor-diagnosis-case-sheet/doctor-diagnosis-case-sheet.component';
 import { AncCaseSheetComponent } from './anc-case-sheet/anc-case-sheet.component';
 import { PncCaseSheetComponent } from './pnc-case-sheet/pnc-case-sheet.component';
@@ -43,11 +50,19 @@ import { ExaminationCaseSheetComponent } from './examination-case-sheet/examinat
 @Component({
   selector: 'app-general-case-sheet',
   templateUrl: './general-case-sheet.component.html',
-  styleUrls: ['./general-case-sheet.component.css'],
+  viewProviders: [
+    provideIcons({
+      lucideLayoutGrid,
+      lucideArrowUp,
+      lucidePrinter,
+      lucideChevronLeft,
+    }),
+  ],
   imports: [
     NgIf,
-    MatTooltip,
-    MatIcon,
+    ZardButtonComponent,
+    NgIcon,
+    ...tooltipImports,
     DoctorDiagnosisCaseSheetComponent,
     AncCaseSheetComponent,
     PncCaseSheetComponent,

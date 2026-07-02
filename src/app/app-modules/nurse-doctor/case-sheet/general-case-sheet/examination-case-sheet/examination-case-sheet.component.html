@@ -1,1419 +1,1451 @@
-<div class="container">
-  <div class="row col-xs-12">
-    <h2 class="text-center">
-      {{ currentLanguageSet?.ExaminationData?.examination }}
-    </h2>
-    <hr />
-  </div>
-  <!-- General Examination -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
+<div class="bg-background pb-12">
+  <z-card class="border-0 shadow-none">
+    <z-card-header class="px-0">
+      <z-card-title class="text-center text-xl">
+        {{ currentLanguageSet?.ExaminationData?.examination }}
+      </z-card-title>
+    </z-card-header>
+
+    <z-card-content class="px-0">
+      <hr class="mb-6 border-border" />
+
+      <!-- General Examination -->
+      <p class="mb-4 text-base font-semibold text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
             ?.genExamination?.generalExamination
         }}
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="generalExaminationTbl">
-        <tbody>
-          <tr>
-            <th id="consciousness">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.consciousness
-              }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.consciousness }}
-            </td>
-            <th id="coherence">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.coherence
-              }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.coherence }}
-            </td>
-          </tr>
+      </p>
 
-          <tr>
-            <th id="cooperation">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.cooperation
-              }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.cooperation }}
-            </td>
-            <th id="built">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.built
-              }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.builtAndAppearance }}
-            </td>
-          </tr>
+      <dl class="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.consciousness
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.consciousness }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="comfortness">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.comfortness
-              }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.comfortness }}
-            </td>
-            <th id="gait">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.gait
-              }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.gait }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.coherence
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.coherence }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="dangersigns">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.dangersigns
-              }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.dangerSigns }}
-            </td>
-            <th id="typeOfDangerSigns">
-              {{ currentLanguageSet?.casesheet?.typeOfDanger }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.typeOfDangerSigns }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.cooperation
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.cooperation }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="pallor">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.pallor
-              }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.pallor }}
-            </td>
-            <th id="jaundice">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.jaundice
-              }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.jaundice }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.built
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.builtAndAppearance }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="cyanosis">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.cyanosis
-              }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.cyanosis }}
-            </td>
-            <th id="clubbing">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.clubbing
-              }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.clubbing }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.comfortness
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.comfortness }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="lymphadenopathy">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.lymphadenopathy
-              }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.lymphadenopathy }}
-            </td>
-            <td colspan="2"></td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.gait
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.gait }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="lymph">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.lymph
-              }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.lymphnodesInvolved }}
-            </td>
-            <th id="typeofLymphadenopathy">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.typeofLymphadenopathy
-              }}:
-            </th>
-            <td>
-              {{
-                generalExamination && generalExamination.typeOfLymphadenopathy
-              }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.dangersigns
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.dangerSigns }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="edema">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.edema
-              }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.edema }}
-            </td>
-            <td colspan="2"></td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{ currentLanguageSet?.casesheet?.typeOfDanger }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.typeOfDangerSigns }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="extentofEdema">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.extentofEdema
-              }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.extentOfEdema }}
-            </td>
-            <th id="typeofEdema">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.typeofEdema
-              }}
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.edemaType }}
-            </td>
-          </tr>
-          <tr *ngIf="visitCategory === 'ANC'">
-            <th id="Quickening">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.quickening
-              }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.quickening }}
-            </td>
-            <th id="fMovements">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.genExamination?.foetalmovements
-              }}:
-            </th>
-            <td>
-              {{ generalExamination && generalExamination.foetalMovements }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.pallor
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.pallor }}
+          </dd>
+        </div>
 
-  <!-- Head to Toe Examination -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.jaundice
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.jaundice }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.cyanosis
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.cyanosis }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.clubbing
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.clubbing }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.lymphadenopathy
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.lymphadenopathy }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.lymph
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.lymphnodesInvolved }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.typeofLymphadenopathy
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.typeOfLymphadenopathy }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.edema
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.edema }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.extentofEdema
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.extentOfEdema }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.typeofEdema
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.edemaType }}
+          </dd>
+        </div>
+
+        <div *ngIf="visitCategory === 'ANC'" class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.quickening
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.quickening }}
+          </dd>
+        </div>
+
+        <div *ngIf="visitCategory === 'ANC'" class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.genExamination?.foetalmovements
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ generalExamination && generalExamination.foetalMovements }}
+          </dd>
+        </div>
+      </dl>
+
+      <!-- Head to Toe Examination -->
+      <p class="mb-4 mt-8 text-base font-semibold text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
             ?.headexamination
         }}
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="headexaminationTbl">
-        <tbody>
-          <tr>
-            <th id="headexamination">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.headToToe?.headexamination
-              }}:
-            </th>
-            <td>
-              {{ headToToeExamination && headToToeExamination.headtoToeExam }}
-            </td>
-            <td colspan="2"></td>
-          </tr>
+      </p>
 
-          <tr>
-            <th id="Head">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.headToToe?.head
-              }}:
-            </th>
-            <td>
-              {{ headToToeExamination && headToToeExamination.head }}
-            </td>
-            <th id="Eyes">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.headToToe?.eyes
-              }}:
-            </th>
-            <td>
-              {{ headToToeExamination && headToToeExamination.eyes }}
-            </td>
-          </tr>
+      <dl class="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.headToToe?.headexamination
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ headToToeExamination && headToToeExamination.headtoToeExam }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="Ears">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.headToToe?.ears
-              }}:
-            </th>
-            <td>
-              {{ headToToeExamination && headToToeExamination.ears }}
-            </td>
-            <th id="Nose">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.headToToe?.nose
-              }}:
-            </th>
-            <td>
-              {{ headToToeExamination && headToToeExamination.nose }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.headToToe?.head
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ headToToeExamination && headToToeExamination.head }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="Oralcavity">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.headToToe?.oralcavity
-              }}:
-            </th>
-            <td>
-              {{ headToToeExamination && headToToeExamination.oralCavity }}
-            </td>
-            <th id="Throat">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.headToToe?.throat
-              }}:
-            </th>
-            <td>
-              {{ headToToeExamination && headToToeExamination.throat }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.headToToe?.eyes
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ headToToeExamination && headToToeExamination.eyes }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="Breast">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.headToToe?.breast
-              }}:
-            </th>
-            <td>
-              {{
-                headToToeExamination && headToToeExamination.breastAndNipples
-              }}
-            </td>
-            <th id="Trunk">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.headToToe?.trunk
-              }}:
-            </th>
-            <td>
-              {{ headToToeExamination && headToToeExamination.trunk }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.headToToe?.ears
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ headToToeExamination && headToToeExamination.ears }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="upperlimbs">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.headToToe?.upperlimbs
-              }}:
-            </th>
-            <td>
-              {{ headToToeExamination && headToToeExamination.upperLimbs }}
-            </td>
-            <th id="lowerlimbs">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.headToToe?.lowerlimbs
-              }}:
-            </th>
-            <td>
-              {{ headToToeExamination && headToToeExamination.lowerLimbs }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.headToToe?.nose
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ headToToeExamination && headToToeExamination.nose }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="Skin">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.headToToe?.skin
-              }}:
-            </th>
-            <td>
-              {{ headToToeExamination && headToToeExamination.skin }}
-            </td>
-            <th id="Hairs">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.headToToe?.hairs
-              }}:
-            </th>
-            <td>
-              {{ headToToeExamination && headToToeExamination.hair }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.headToToe?.oralcavity
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ headToToeExamination && headToToeExamination.oralCavity }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="Nails">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.headToToe?.nails
-              }}:
-            </th>
-            <td>
-              {{ headToToeExamination && headToToeExamination.nails }}
-            </td>
-            <td colspan="2"></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.headToToe?.throat
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ headToToeExamination && headToToeExamination.throat }}
+          </dd>
+        </div>
 
-  <!-- Systemic Examination -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.headToToe?.breast
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ headToToeExamination && headToToeExamination.breastAndNipples }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.headToToe?.trunk
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ headToToeExamination && headToToeExamination.trunk }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.headToToe?.upperlimbs
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ headToToeExamination && headToToeExamination.upperLimbs }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.headToToe?.lowerlimbs
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ headToToeExamination && headToToeExamination.lowerLimbs }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.headToToe?.skin
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ headToToeExamination && headToToeExamination.skin }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.headToToe?.hairs
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ headToToeExamination && headToToeExamination.hair }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.headToToe?.nails
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ headToToeExamination && headToToeExamination.nails }}
+          </dd>
+        </div>
+      </dl>
+
+      <!-- Systemic Examination -->
+      <p class="mb-4 mt-8 text-base font-semibold text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
             ?.systemicExamination
         }}
-      </h4>
-    </div>
-  </div>
+      </p>
 
-  <!-- Gastro Intestinal System -->
-  <div *ngIf="visitCategory !== 'ANC'" class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-            ?.Gastro?.gastroIntestinalSystem
-        }}
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="GastroIntestinalSystemTbl">
-        <tbody>
-          <tr>
-            <th id="inspection">
+      <!-- Gastro Intestinal System -->
+      <div *ngIf="visitCategory !== 'ANC'">
+        <p class="mb-4 mt-8 text-sm font-semibold text-foreground">
+          {{
+            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+              ?.systemic?.Gastro?.gastroIntestinalSystem
+          }}
+        </p>
+
+        <dl
+          class="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="flex flex-col gap-1 sm:col-span-2 lg:col-span-4">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.Gastro?.inspection
-              }}:
-            </th>
-            <td colspan="3">
+              }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{
                 gastroIntestinalExamination &&
                   gastroIntestinalExamination.inspection
               }}
-            </td>
-          </tr>
+            </dd>
+          </div>
 
-          <tr>
-            <th id="abdomenTexture">
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.Gastro?.abdomenTexture
-              }}:
-            </th>
-            <td>
+              }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{
                 gastroIntestinalExamination &&
                   gastroIntestinalExamination.palpation_AbdomenTexture
               }}
-            </td>
-            <th id="liver">
+            </dd>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.Gastro?.liver
-              }}:
-            </th>
-            <td>
+              }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{
                 gastroIntestinalExamination &&
                   gastroIntestinalExamination.palpation_Liver
               }}
-            </td>
-          </tr>
+            </dd>
+          </div>
 
-          <tr>
-            <th id="spleen">
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.Gastro?.spleen
-              }}:
-            </th>
-            <td>
+              }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{
                 gastroIntestinalExamination &&
                   gastroIntestinalExamination.palpation_Spleen
               }}
-            </td>
-            <td colspan="2"></td>
-          </tr>
+            </dd>
+          </div>
 
-          <tr>
-            <th id="tenderness">
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.Gastro?.tenderness
-              }}:
-            </th>
-            <td>
+              }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{
                 gastroIntestinalExamination &&
                   gastroIntestinalExamination.palpation_Tenderness
               }}
-            </td>
-            <th id="location">
+            </dd>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.Gastro?.location
-              }}:
-            </th>
-            <td>
+              }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{
                 gastroIntestinalExamination &&
                   gastroIntestinalExamination.palpation_LocationOfTenderness
               }}
-            </td>
-          </tr>
+            </dd>
+          </div>
 
-          <tr>
-            <th id="percussion">
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.Gastro?.percussion
-              }}:
-            </th>
-            <td>
+              }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{
                 gastroIntestinalExamination &&
                   gastroIntestinalExamination.percussion
               }}
-            </td>
-            <th id="auscultation">
+            </dd>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.Gastro?.auscultation
-              }}:
-            </th>
-            <td>
+              }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{
                 gastroIntestinalExamination &&
                   gastroIntestinalExamination.auscultation
               }}
-            </td>
-          </tr>
+            </dd>
+          </div>
 
-          <tr>
-            <th id="analregion">
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.Gastro?.analregion
-              }}:
-            </th>
-            <td>
+              }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{
                 gastroIntestinalExamination &&
                   gastroIntestinalExamination.analRegion
               }}
-            </td>
-            <td colspan="2"></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+            </dd>
+          </div>
+        </dl>
+      </div>
 
-  <!-- Cardio Vascular System -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
+      <!-- Cardio Vascular System -->
+      <p class="mb-4 mt-8 text-sm font-semibold text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
             ?.cardioForANC_OPD_PNC?.cardioSystem
         }}
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="CardioVascularSystemTbl">
-        <tbody>
-          <tr>
-            <th id="jugularVenousPressure">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.cardioForANC_OPD_PNC?.jugularVenousPressure
-              }}:
-            </th>
-            <td>
-              {{
-                cardioVascularExamination &&
-                  cardioVascularExamination.jugularVenousPulse_JVP
-              }}
-            </td>
-            <th id="apexBeatLocation">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.cardioForANC_OPD_PNC?.apexBeatLocation
-              }}:
-            </th>
-            <td>
-              {{
-                cardioVascularExamination &&
-                  cardioVascularExamination.apexbeatLocation
-              }}
-            </td>
-          </tr>
+      </p>
 
-          <tr>
-            <th id="apexBeatType">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.cardioForANC_OPD_PNC?.apexBeatType
-              }}:
-            </th>
-            <td>
-              {{
-                cardioVascularExamination &&
-                  cardioVascularExamination.apexbeatType
-              }}
-            </td>
+      <dl class="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.cardioForANC_OPD_PNC?.jugularVenousPressure
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              cardioVascularExamination &&
+                cardioVascularExamination.jugularVenousPulse_JVP
+            }}
+          </dd>
+        </div>
 
-            <th id="firstHeartSound">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.cardioForANC_OPD_PNC?.firstHeartSound
-              }}:
-            </th>
-            <td>
-              {{
-                cardioVascularExamination &&
-                  cardioVascularExamination.firstHeartSound_S1
-              }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.cardioForANC_OPD_PNC?.apexBeatLocation
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              cardioVascularExamination &&
+                cardioVascularExamination.apexbeatLocation
+            }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="secondHeartSound">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.cardioForANC_OPD_PNC?.secondHeartSound
-              }}:
-            </th>
-            <td>
-              {{
-                cardioVascularExamination &&
-                  cardioVascularExamination.secondHeartSound_S2
-              }}
-            </td>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.cardioForANC_OPD_PNC?.apexBeatType
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              cardioVascularExamination && cardioVascularExamination.apexbeatType
+            }}
+          </dd>
+        </div>
 
-            <th id="otherHeartSounds">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.cardioForANC_OPD_PNC?.otherHeartSounds
-              }}:
-            </th>
-            <td>
-              {{
-                cardioVascularExamination &&
-                  cardioVascularExamination.additionalHeartSounds
-              }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.cardioForANC_OPD_PNC?.firstHeartSound
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              cardioVascularExamination &&
+                cardioVascularExamination.firstHeartSound_S1
+            }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="murmurs">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.cardioForANC_OPD_PNC?.murmurs
-              }}:
-            </th>
-            <td>
-              {{
-                cardioVascularExamination && cardioVascularExamination.murmurs
-              }}
-            </td>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.cardioForANC_OPD_PNC?.secondHeartSound
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              cardioVascularExamination &&
+                cardioVascularExamination.secondHeartSound_S2
+            }}
+          </dd>
+        </div>
 
-            <th id="pericardialrub">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.cardioForANC_OPD_PNC?.pericardialrub
-              }}:
-            </th>
-            <td>
-              {{
-                cardioVascularExamination &&
-                  cardioVascularExamination.pericardialRub
-              }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.cardioForANC_OPD_PNC?.otherHeartSounds
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              cardioVascularExamination &&
+                cardioVascularExamination.additionalHeartSounds
+            }}
+          </dd>
+        </div>
 
-  <!-- Respiratory System -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.cardioForANC_OPD_PNC?.murmurs
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ cardioVascularExamination && cardioVascularExamination.murmurs }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.cardioForANC_OPD_PNC?.pericardialrub
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              cardioVascularExamination &&
+                cardioVascularExamination.pericardialRub
+            }}
+          </dd>
+        </div>
+      </dl>
+
+      <!-- Respiratory System -->
+      <p class="mb-4 mt-8 text-sm font-semibold text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
             ?.respiratoryANC_OPD_PNC?.respiratorySystem
         }}
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="RespiratorySystemTbl">
-        <tbody>
-          <tr>
-            <th id="trachea">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.respiratoryANC_OPD_PNC?.trachea
-              }}:
-            </th>
-            <td>
-              {{
-                respiratorySystemExamination &&
-                  respiratorySystemExamination.trachea
-              }}
-            </td>
-            <th id="inspection">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.respiratoryANC_OPD_PNC?.inspection
-              }}:
-            </th>
-            <td>
-              {{
-                respiratorySystemExamination &&
-                  respiratorySystemExamination.inspection
-              }}
-            </td>
-          </tr>
+      </p>
 
-          <tr>
-            <th id="signsDistress">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.respiratoryANC_OPD_PNC?.signsDistress
-              }}:
-            </th>
-            <td>
-              {{
-                respiratorySystemExamination &&
-                  respiratorySystemExamination.signsOfRespiratoryDistress
-              }}
-            </td>
+      <dl class="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.respiratoryANC_OPD_PNC?.trachea
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              respiratorySystemExamination &&
+                respiratorySystemExamination.trachea
+            }}
+          </dd>
+        </div>
 
-            <th id="palpation">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.respiratoryANC_OPD_PNC?.palpation
-              }}:
-            </th>
-            <td>
-              {{
-                respiratorySystemExamination &&
-                  respiratorySystemExamination.palpation
-              }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.respiratoryANC_OPD_PNC?.inspection
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              respiratorySystemExamination &&
+                respiratorySystemExamination.inspection
+            }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="stridor">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.respiratoryANC_OPD_PNC?.stridor
-              }}:
-            </th>
-            <td>
-              {{
-                respiratorySystemExamination &&
-                  respiratorySystemExamination.auscultation_Stridor
-              }}
-            </td>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.respiratoryANC_OPD_PNC?.signsDistress
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              respiratorySystemExamination &&
+                respiratorySystemExamination.signsOfRespiratoryDistress
+            }}
+          </dd>
+        </div>
 
-            <th id="breathsounds">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.respiratoryANC_OPD_PNC?.breathsounds
-              }}:
-            </th>
-            <td>
-              {{
-                respiratorySystemExamination &&
-                  respiratorySystemExamination.auscultation_BreathSounds
-              }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.respiratoryANC_OPD_PNC?.palpation
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              respiratorySystemExamination &&
+                respiratorySystemExamination.palpation
+            }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="crepitations">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.respiratoryANC_OPD_PNC?.crepitations
-              }}:
-            </th>
-            <td>
-              {{
-                respiratorySystemExamination &&
-                  respiratorySystemExamination.auscultation_Crepitations
-              }}
-            </td>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.respiratoryANC_OPD_PNC?.stridor
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              respiratorySystemExamination &&
+                respiratorySystemExamination.auscultation_Stridor
+            }}
+          </dd>
+        </div>
 
-            <th id="wheezing">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.respiratoryANC_OPD_PNC?.wheezing
-              }}:
-            </th>
-            <td>
-              {{
-                respiratorySystemExamination &&
-                  respiratorySystemExamination.auscultation_Wheezing
-              }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.respiratoryANC_OPD_PNC?.breathsounds
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              respiratorySystemExamination &&
+                respiratorySystemExamination.auscultation_BreathSounds
+            }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="pleuralRub">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.respiratoryANC_OPD_PNC?.pleuralRub
-              }}:
-            </th>
-            <td>
-              {{
-                respiratorySystemExamination &&
-                  respiratorySystemExamination.auscultation_PleuralRub
-              }}
-            </td>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.respiratoryANC_OPD_PNC?.crepitations
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              respiratorySystemExamination &&
+                respiratorySystemExamination.auscultation_Crepitations
+            }}
+          </dd>
+        </div>
 
-            <th id="conductedSounds">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.respiratoryANC_OPD_PNC?.conductedSounds
-              }}:
-            </th>
-            <td>
-              {{
-                respiratorySystemExamination &&
-                  respiratorySystemExamination.auscultation_ConductedSounds
-              }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.respiratoryANC_OPD_PNC?.wheezing
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              respiratorySystemExamination &&
+                respiratorySystemExamination.auscultation_Wheezing
+            }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="percussion">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.respiratoryANC_OPD_PNC?.percussion
-              }}:
-            </th>
-            <td>
-              {{
-                respiratorySystemExamination &&
-                  respiratorySystemExamination.percussion
-              }}
-            </td>
-            <td colspan="2"></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.respiratoryANC_OPD_PNC?.pleuralRub
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              respiratorySystemExamination &&
+                respiratorySystemExamination.auscultation_PleuralRub
+            }}
+          </dd>
+        </div>
 
-  <!-- Central Nervous System -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.respiratoryANC_OPD_PNC?.conductedSounds
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              respiratorySystemExamination &&
+                respiratorySystemExamination.auscultation_ConductedSounds
+            }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.respiratoryANC_OPD_PNC?.percussion
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              respiratorySystemExamination &&
+                respiratorySystemExamination.percussion
+            }}
+          </dd>
+        </div>
+      </dl>
+
+      <!-- Central Nervous System -->
+      <p class="mb-4 mt-8 text-sm font-semibold text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
             ?.centralANC_OPD_PNC?.centralNervousSystem
         }}
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="CentralNervousSystemTbl">
-        <tbody>
-          <tr>
-            <th id="handedness">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.centralANC_OPD_PNC?.handedness
-              }}:
-            </th>
-            <td>
-              {{
-                centralNervousSystemExamination &&
-                  centralNervousSystemExamination.handedness
-              }}
-            </td>
-            <th id="cranial">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.centralANC_OPD_PNC?.cranial
-              }}:
-            </th>
-            <td>
-              {{
-                centralNervousSystemExamination &&
-                  centralNervousSystemExamination.cranialNervesExamination
-              }}
-            </td>
-          </tr>
+      </p>
 
-          <tr>
-            <th id="motorsystem">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.centralANC_OPD_PNC?.motorsystem
-              }}:
-            </th>
-            <td>
-              {{
-                centralNervousSystemExamination &&
-                  centralNervousSystemExamination.motorSystem
-              }}
-            </td>
-            <th id="sensorysystem">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.centralANC_OPD_PNC?.sensorysystem
-              }}:
-            </th>
-            <td>
-              {{
-                centralNervousSystemExamination &&
-                  centralNervousSystemExamination.sensorySystem
-              }}
-            </td>
-          </tr>
+      <dl class="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.centralANC_OPD_PNC?.handedness
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              centralNervousSystemExamination &&
+                centralNervousSystemExamination.handedness
+            }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="autonomicsystem">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.centralANC_OPD_PNC?.autonomicsystem
-              }}:
-            </th>
-            <td>
-              {{
-                centralNervousSystemExamination &&
-                  centralNervousSystemExamination.autonomicSystem
-              }}
-            </td>
-            <th id="cerebellarsigns">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.centralANC_OPD_PNC?.cerebellarsigns
-              }}:
-            </th>
-            <td>
-              {{
-                centralNervousSystemExamination &&
-                  centralNervousSystemExamination.cerebellarSigns
-              }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.centralANC_OPD_PNC?.cranial
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              centralNervousSystemExamination &&
+                centralNervousSystemExamination.cranialNervesExamination
+            }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="signsofMeningealIrritation">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.centralANC_OPD_PNC?.signsofMeningealIrritation
-              }}:
-            </th>
-            <td>
-              {{
-                centralNervousSystemExamination &&
-                  centralNervousSystemExamination.signsOfMeningealIrritation
-              }}
-            </td>
-            <th id="skull">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.centralANC_OPD_PNC?.skull
-              }}:
-            </th>
-            <td>
-              {{
-                centralNervousSystemExamination &&
-                  centralNervousSystemExamination.skull
-              }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.centralANC_OPD_PNC?.motorsystem
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              centralNervousSystemExamination &&
+                centralNervousSystemExamination.motorSystem
+            }}
+          </dd>
+        </div>
 
-  <!-- Musculoskeletal System -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.centralANC_OPD_PNC?.sensorysystem
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              centralNervousSystemExamination &&
+                centralNervousSystemExamination.sensorySystem
+            }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.centralANC_OPD_PNC?.autonomicsystem
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              centralNervousSystemExamination &&
+                centralNervousSystemExamination.autonomicSystem
+            }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.centralANC_OPD_PNC?.cerebellarsigns
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              centralNervousSystemExamination &&
+                centralNervousSystemExamination.cerebellarSigns
+            }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.centralANC_OPD_PNC?.signsofMeningealIrritation
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              centralNervousSystemExamination &&
+                centralNervousSystemExamination.signsOfMeningealIrritation
+            }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.centralANC_OPD_PNC?.skull
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              centralNervousSystemExamination &&
+                centralNervousSystemExamination.skull
+            }}
+          </dd>
+        </div>
+      </dl>
+
+      <!-- Musculoskeletal System -->
+      <p class="mb-4 mt-8 text-sm font-semibold text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
             ?.musculoskeletalANC_OPD_PNC?.musculoskeletalSystem
         }}
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="MusculoskeletalSystemTbl">
-        <tbody>
-          <tr>
-            <th colspan="4" id="joints">
-              <h4>
-                {{
-                  currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                    ?.systemic?.musculoskeletalANC_OPD_PNC?.joints
-                }}
-              </h4>
-            </th>
-          </tr>
-          <tr>
-            <th id="typeofJoint">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.musculoskeletalANC_OPD_PNC?.typeofJoint
-              }}:
-            </th>
-            <td>
-              {{
-                musculoskeletalSystemExamination &&
-                  musculoskeletalSystemExamination.joint_TypeOfJoint
-              }}
-            </td>
-            <th id="laterality">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.musculoskeletalANC_OPD_PNC?.laterality
-              }}:
-            </th>
-            <td>
-              {{
-                musculoskeletalSystemExamination &&
-                  musculoskeletalSystemExamination.joint_Laterality
-              }}
-            </td>
-          </tr>
+      </p>
 
-          <tr>
-            <th id="abnormality">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.musculoskeletalANC_OPD_PNC?.abnormality
-              }}:
-            </th>
-            <td>
-              {{
-                musculoskeletalSystemExamination &&
-                  musculoskeletalSystemExamination.joint_Abnormality
-              }}
-            </td>
-            <td colspan="2"></td>
-          </tr>
+      <p class="mb-3 text-sm font-semibold text-foreground">
+        {{
+          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+            ?.musculoskeletalANC_OPD_PNC?.joints
+        }}
+      </p>
 
-          <tr>
-            <th colspan="4" id="upperLimbs">
-              <h4>
-                {{
-                  currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                    ?.systemic?.musculoskeletalANC_OPD_PNC?.upperLimbs
-                }}:
-              </h4>
-            </th>
-          </tr>
+      <dl class="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.musculoskeletalANC_OPD_PNC?.typeofJoint
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              musculoskeletalSystemExamination &&
+                musculoskeletalSystemExamination.joint_TypeOfJoint
+            }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="laterality">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.musculoskeletalANC_OPD_PNC?.laterality
-              }}:
-            </th>
-            <td>
-              {{
-                musculoskeletalSystemExamination &&
-                  musculoskeletalSystemExamination.upperLimb_Laterality
-              }}
-            </td>
-            <th id="abnormality">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.musculoskeletalANC_OPD_PNC?.abnormality
-              }}:
-            </th>
-            <td>
-              {{
-                musculoskeletalSystemExamination &&
-                  musculoskeletalSystemExamination.upperLimb_Abnormality
-              }}
-            </td>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.musculoskeletalANC_OPD_PNC?.laterality
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              musculoskeletalSystemExamination &&
+                musculoskeletalSystemExamination.joint_Laterality
+            }}
+          </dd>
+        </div>
 
-          <tr>
-            <th colspan="4" id="lowerLimbs">
-              <h4>
-                {{
-                  currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                    ?.systemic?.musculoskeletalANC_OPD_PNC?.lowerLimbs
-                }}:
-              </h4>
-            </th>
-          </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.musculoskeletalANC_OPD_PNC?.abnormality
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              musculoskeletalSystemExamination &&
+                musculoskeletalSystemExamination.joint_Abnormality
+            }}
+          </dd>
+        </div>
+      </dl>
 
-          <tr>
-            <th id="laterality">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.musculoskeletalANC_OPD_PNC?.laterality
-              }}:
-            </th>
-            <td>
-              {{
-                musculoskeletalSystemExamination &&
-                  musculoskeletalSystemExamination.lowerLimb_Laterality
-              }}
-            </td>
-            <th id="abnormality">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.musculoskeletalANC_OPD_PNC?.abnormality
-              }}:
-            </th>
-            <td>
-              {{
-                musculoskeletalSystemExamination &&
-                  musculoskeletalSystemExamination.lowerLimb_Abnormality
-              }}
-            </td>
-          </tr>
+      <p class="mb-3 mt-8 text-sm font-semibold text-foreground">
+        {{
+          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+            ?.musculoskeletalANC_OPD_PNC?.upperLimbs
+        }}
+      </p>
 
-          <tr>
-            <th colspan="4" id="observation">
-              <h4>
-                {{
-                  currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                    ?.systemic?.musculoskeletalANC_OPD_PNC?.observation
-                }}:
-              </h4>
-            </th>
-          </tr>
+      <dl class="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.musculoskeletalANC_OPD_PNC?.laterality
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              musculoskeletalSystemExamination &&
+                musculoskeletalSystemExamination.upperLimb_Laterality
+            }}
+          </dd>
+        </div>
 
-          <tr>
-            <th id="chestwall">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.musculoskeletalANC_OPD_PNC?.chestwall
-              }}:
-            </th>
-            <td>
-              {{
-                musculoskeletalSystemExamination &&
-                  musculoskeletalSystemExamination.chestWall
-              }}
-            </td>
-            <th id="spine">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.musculoskeletalANC_OPD_PNC?.spine
-              }}:
-            </th>
-            <td>
-              {{
-                musculoskeletalSystemExamination &&
-                  musculoskeletalSystemExamination.spine
-              }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.musculoskeletalANC_OPD_PNC?.abnormality
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              musculoskeletalSystemExamination &&
+                musculoskeletalSystemExamination.upperLimb_Abnormality
+            }}
+          </dd>
+        </div>
+      </dl>
 
-  <!-- Genito Urinary System -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
+      <p class="mb-3 mt-8 text-sm font-semibold text-foreground">
+        {{
+          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+            ?.musculoskeletalANC_OPD_PNC?.lowerLimbs
+        }}
+      </p>
+
+      <dl class="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.musculoskeletalANC_OPD_PNC?.laterality
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              musculoskeletalSystemExamination &&
+                musculoskeletalSystemExamination.lowerLimb_Laterality
+            }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.musculoskeletalANC_OPD_PNC?.abnormality
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              musculoskeletalSystemExamination &&
+                musculoskeletalSystemExamination.lowerLimb_Abnormality
+            }}
+          </dd>
+        </div>
+      </dl>
+
+      <p class="mb-3 mt-8 text-sm font-semibold text-foreground">
+        {{
+          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+            ?.musculoskeletalANC_OPD_PNC?.observation
+        }}
+      </p>
+
+      <dl class="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.musculoskeletalANC_OPD_PNC?.chestwall
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              musculoskeletalSystemExamination &&
+                musculoskeletalSystemExamination.chestWall
+            }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.musculoskeletalANC_OPD_PNC?.spine
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              musculoskeletalSystemExamination &&
+                musculoskeletalSystemExamination.spine
+            }}
+          </dd>
+        </div>
+      </dl>
+
+      <!-- Genito Urinary System -->
+      <p class="mb-4 mt-8 text-sm font-semibold text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
             ?.genitoANC_OPD_PNC?.genitoUrinarySystem
         }}
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="GenitoUrinarySystemTbl">
-        <tbody>
-          <tr>
-            <th id="RenalAngle">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.genitoANC_OPD_PNC?.renalAngle
-              }}:
-            </th>
-            <td>
-              {{
-                genitoUrinarySystemExamination &&
-                  genitoUrinarySystemExamination.renalAngle
-              }}
-            </td>
-            <th id="Suprapubicregion">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.genitoANC_OPD_PNC?.suprapubicregion
-              }}:
-            </th>
-            <td>
-              {{
-                genitoUrinarySystemExamination &&
-                  genitoUrinarySystemExamination.suprapubicRegion
-              }}
-            </td>
-          </tr>
+      </p>
 
-          <tr>
-            <th id="Externalgenitalia">
-              {{
-                currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
-                  ?.systemic?.genitoANC_OPD_PNC?.externalgenitalia
-              }}:
-            </th>
-            <td>
-              {{
-                genitoUrinarySystemExamination &&
-                  genitoUrinarySystemExamination.externalGenitalia
-              }}
-            </td>
-            <td colspan="2"></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+      <dl class="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.genitoANC_OPD_PNC?.renalAngle
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              genitoUrinarySystemExamination &&
+                genitoUrinarySystemExamination.renalAngle
+            }}
+          </dd>
+        </div>
 
-  <!-- Obstetric Examination -->
-  <div *ngIf="visitCategory === 'ANC'" class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-            ?.obstetric?.obstetricExamination
-        }}
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="ObstetricexaminationTbl">
-        <tbody>
-          <tr>
-            <th id="fundalHeight">
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.genitoANC_OPD_PNC?.suprapubicregion
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              genitoUrinarySystemExamination &&
+                genitoUrinarySystemExamination.suprapubicRegion
+            }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{
+              currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+                ?.systemic?.genitoANC_OPD_PNC?.externalgenitalia
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{
+              genitoUrinarySystemExamination &&
+                genitoUrinarySystemExamination.externalGenitalia
+            }}
+          </dd>
+        </div>
+      </dl>
+
+      <!-- Obstetric Examination -->
+      <div *ngIf="visitCategory === 'ANC'">
+        <p class="mb-4 mt-8 text-sm font-semibold text-foreground">
+          {{
+            currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
+              ?.systemic?.obstetric?.obstetricExamination
+          }}
+        </p>
+
+        <dl
+          class="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.obstetric?.fundalHeight
-              }}:
-            </th>
-            <td>
+              }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{ obstetricExamination && obstetricExamination.fundalHeight }}
-            </td>
-            <th id="fHandPOAStatus">
+            </dd>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.obstetric?.fHandPOAStatus
-              }}:
-            </th>
-            <td>
+              }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{ obstetricExamination && obstetricExamination.fHAndPOA_Status }}
-            </td>
-          </tr>
+            </dd>
+          </div>
 
-          <tr>
-            <th id="interpretationFHandPOA">
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.obstetric?.interpretationFHandPOA
-              }}:
-            </th>
-            <td>
+              }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{
                 obstetricExamination &&
                   obstetricExamination.fHAndPOA_Interpretation
               }}
-            </td>
-            <th id="fetalMovements">
+            </dd>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.obstetric?.fetalMovements
-              }}:
-            </th>
-            <td>
+              }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{ obstetricExamination && obstetricExamination.fetalMovements }}
-            </td>
-          </tr>
+            </dd>
+          </div>
 
-          <tr>
-            <th id="fetalHeartsounds">
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.obstetric?.fetalHeartsounds
-              }}:
-            </th>
-            <td>
-              {{
-                obstetricExamination && obstetricExamination.fetalHeartSounds
               }}
-            </td>
-            <th id="fetalHeartRate">
+            </dt>
+            <dd class="text-sm text-foreground">
+              {{ obstetricExamination && obstetricExamination.fetalHeartSounds }}
+            </dd>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.obstetric?.fetalHeartRate
-              }}:
-            </th>
-            <td>
+              }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{
                 obstetricExamination &&
                   obstetricExamination.fetalHeartRate_BeatsPerMinute
               }}
-            </td>
-          </tr>
+            </dd>
+          </div>
 
-          <tr>
-            <th id="fetalposition">
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.obstetric?.fetalposition
-              }}:
-            </th>
-            <td>
+              }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{
                 obstetricExamination && obstetricExamination.fetalPositionOrLie
               }}
-            </td>
-            <th id="fetalPresentation">
+            </dd>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.obstetric?.fetalPresentation
-              }}:
-            </th>
-            <td>
+              }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{
                 obstetricExamination && obstetricExamination.fetalPresentation
               }}
-            </td>
-          </tr>
+            </dd>
+          </div>
 
-          <tr>
-            <th id="abdominalScars">
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
               {{
                 currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
                   ?.systemic?.obstetric?.abdominalScars
-              }}:
-            </th>
-            <td>
+              }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{ obstetricExamination && obstetricExamination.abdominalScars }}
-            </td>
-            <th id="sfhcms">{{ currentLanguageSet?.sfhCms }}:</th>
-            <td>
+            </dd>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <dt class="text-sm font-medium text-muted-foreground">
+              {{ currentLanguageSet?.sfhCms }}
+            </dt>
+            <dd class="text-sm text-foreground">
               {{ obstetricExamination && obstetricExamination.sfh }}
-            </td>
-            <td colspan="2"></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </z-card-content>
+  </z-card>
 </div>
-<div class="container">
-  <div class="row col-xs-12">
-    <h2 class="text-center">
-      {{ currentLanguageSet?.Referdetails?.revisitAndRefer }}
-    </h2>
-    <hr />
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="RevisitReferTbl">
-        <tbody>
-          <tr>
-            <th id="HHC">
-              {{ currentLanguageSet?.Referdetails?.higherhealthcarecenter }}:
-            </th>
-            <td>{{ referDetails?.referredToInstituteName }}</td>
-          </tr>
-          <tr>
-            <th id="AServices">
-              {{ currentLanguageSet?.Referdetails?.additionalservices }}:
-            </th>
-            <td>{{ serviceList }}</td>
-          </tr>
-          <tr>
-            <th id="Referralreason">
-              {{ currentLanguageSet?.Referdetails?.referralReason }}:
-            </th>
-            <td>{{ referDetails?.referralReason }}</td>
-          </tr>
-          <tr>
-            <th id="Revisitdate">{{ currentLanguageSet?.revisitDate }}:</th>
-            <td>{{ referDetails?.revisitDate }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+
+<div class="bg-background pb-12">
+  <z-card class="border-0 shadow-none">
+    <z-card-header class="px-0">
+      <z-card-title class="text-center text-xl">
+        {{ currentLanguageSet?.Referdetails?.revisitAndRefer }}
+      </z-card-title>
+    </z-card-header>
+
+    <z-card-content class="px-0">
+      <hr class="mb-6 border-border" />
+
+      <dl class="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{ currentLanguageSet?.Referdetails?.higherhealthcarecenter }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ referDetails?.referredToInstituteName }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{ currentLanguageSet?.Referdetails?.additionalservices }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ serviceList }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{ currentLanguageSet?.Referdetails?.referralReason }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ referDetails?.referralReason }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{ currentLanguageSet?.revisitDate }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ referDetails?.revisitDate }}
+          </dd>
+        </div>
+      </dl>
+    </z-card-content>
+  </z-card>
 </div>
