@@ -145,7 +145,7 @@ export class GeneralPersonalHistoryComponent
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
-    private injector: Injector,
+    private readonly injector: Injector,
     private nurseService: NurseService,
     private doctorService: DoctorService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
