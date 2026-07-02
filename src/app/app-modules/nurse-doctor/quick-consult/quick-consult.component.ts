@@ -1328,8 +1328,13 @@ export class QuickConsultComponent
     return Array.isArray(val) ? val.map((r: any) => r?.procedureName) : [];
   }
 
+  private toStringArray(value: string | string[]): string[] {
+    if (Array.isArray(value)) return value;
+    return value ? [value] : [];
+  }
+
   onTestChange(value: string | string[]): void {
-    const names = Array.isArray(value) ? value : value ? [value] : [];
+    const names = this.toStringArray(value);
     const selected = (this.nonRadiologyMaster || []).filter((t: any) =>
       names.includes(t.procedureName)
     );
@@ -1339,7 +1344,7 @@ export class QuickConsultComponent
   }
 
   onRadiologyChange(value: string | string[]): void {
-    const names = Array.isArray(value) ? value : value ? [value] : [];
+    const names = this.toStringArray(value);
     const selected = (this.radiologyMaster || []).filter((r: any) =>
       names.includes(r.procedureName)
     );
