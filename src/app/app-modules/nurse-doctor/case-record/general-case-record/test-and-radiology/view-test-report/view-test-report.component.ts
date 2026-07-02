@@ -20,49 +20,29 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Inject, ViewChild, DoCheck } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogTitle,
-  MatDialogClose,
-} from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
+import { Component, OnInit, Inject, DoCheck } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { NgIf } from '@angular/common';
+import { NgIf, NgFor } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { cardImports } from 'Common-UI/v2/ui/card';
 @Component({
   selector: 'app-view-test-report',
   templateUrl: './view-test-report.component.html',
-  styleUrls: ['./view-test-report.component.css'],
+  standalone: true,
   imports: [
     NgIf,
-    MatDialogTitle,
-    MatDialogClose,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
+    NgFor,
+    NgIcon,
+    ZardButtonComponent,
+    ...ZardTableImports,
+    ...cardImports,
   ],
+  viewProviders: [provideIcons({ lucideX })],
 })
 export class ViewTestReportComponent implements OnInit, DoCheck {
   current_language_set: any;
@@ -74,8 +54,7 @@ export class ViewTestReportComponent implements OnInit, DoCheck {
     'unit',
   ];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
+  dataSource: { data: any[] } = { data: [] };
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,

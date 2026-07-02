@@ -24,11 +24,7 @@ import { Component, Input, DoCheck } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
+import { ZardAccordionImports } from 'Common-UI/v2/ui/accordion';
 import { PreviousSignificiantFindingsComponent } from './previous-significiant-findings/previous-significiant-findings.component';
 import { PreviousVisitDetailsComponent } from './previous-visit-details/previous-visit-details.component';
 import { FindingsComponent } from './findings/findings.component';
@@ -39,12 +35,9 @@ import { TestAndRadiologyComponent } from './test-and-radiology/test-and-radiolo
 @Component({
   selector: 'app-general-case-record',
   templateUrl: './general-case-record.component.html',
-  styleUrls: ['./general-case-record.component.css'],
   imports: [
-    MatAccordion,
+    ...ZardAccordionImports,
     ReactiveFormsModule,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
     PreviousSignificiantFindingsComponent,
     PreviousVisitDetailsComponent,
     FindingsComponent,
