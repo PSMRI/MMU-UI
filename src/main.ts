@@ -12,18 +12,12 @@ import { HttpInterceptorService } from './app/app-modules/core/services/http-int
 import { CommonModule } from '@angular/common';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withHashLocation } from '@angular/router';
 import { routes } from './app/app.routes';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { WebcamModule } from 'ngx-webcam';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgChartsModule } from 'ng2-charts';
-import { MatChipsModule } from '@angular/material/chips';
 import { TrackingModule } from 'Common-UI/v2/tracking';
 import { provideZard } from 'Common-UI/v2/ui/provider';
 import { AppComponent } from './app/app.component';
@@ -52,16 +46,10 @@ bootstrapApplication(AppComponent, {
       CommonModule,
       BrowserModule,
       FormsModule,
-      MatIconModule,
       ReactiveFormsModule,
-      MatFormFieldModule,
-      MatInputModule,
-      MatSelectModule,
-      MatGridListModule,
       WebcamModule,
       NgxPaginationModule,
       NgChartsModule,
-      MatChipsModule,
       TrackingModule.forRoot()
     ),
     provideRouter(routes, withHashLocation()),
