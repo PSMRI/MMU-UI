@@ -390,7 +390,7 @@
       <table z-table class="w-full" aria-describedby="questions">
         <thead z-table-header>
           <tr z-table-row>
-            <th z-table-head>
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.casesheet?.serialNo }}
             </th>
             <th z-table-head id="Question">
@@ -611,6 +611,7 @@
             </td>
             <th
               z-table-head
+              scope="rowgroup"
               [rowSpan]="procedure.componentList.length + 1">
               {{ procedure?.procedureName }}
             </th>
@@ -709,6 +710,7 @@
             </td>
             <th
               z-table-head
+              scope="rowgroup"
               [rowSpan]="procedure.componentList.length + 1">
               {{ procedure?.procedureName }}
             </th>
@@ -855,7 +857,7 @@
 
           <ng-container *ngIf="caseRecords?.diagnosis?.isMaternalDeath">
             <tr z-table-row>
-              <th z-table-head>
+              <th z-table-head scope="col">
                 {{ currentLanguageSet?.casesheet?.dateOfDeath }}:
               </th>
               <td z-table-cell>
@@ -865,7 +867,7 @@
                     caseRecords.diagnosis.dateOfDeath
                 }}
               </td>
-              <th z-table-head>
+              <th z-table-head scope="col">
                 {{ currentLanguageSet?.casesheet?.placeOfDeath }}:
               </th>
               <td z-table-cell>
@@ -933,7 +935,7 @@
           </tr>
           <ng-container *ngIf="caseRecords?.diagnosis?.isMaternalDeath">
             <tr z-table-row>
-              <th z-table-head>
+              <th z-table-head scope="col">
                 {{ currentLanguageSet?.casesheet?.dateOfDeath }}:
               </th>
               <td z-table-cell>
@@ -943,7 +945,7 @@
                     caseRecords.diagnosis.dateOfDeath
                 }}
               </td>
-              <th z-table-head>
+              <th z-table-head scope="col">
                 {{ currentLanguageSet?.casesheet?.placeOfDeath }}:
               </th>
               <td z-table-cell>

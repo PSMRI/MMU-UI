@@ -22,7 +22,7 @@
         aria-describedby="PastIllnessStartsTbl">
         <thead z-table-header>
           <tr z-table-row>
-            <th z-table-head>
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.casesheet?.serialNo }}
             </th>
             <th z-table-head id="illness">
@@ -31,10 +31,10 @@
                   ?.pastIllnessDataANC_OPD_NCD_PNC?.illness
               }}
             </th>
-            <th z-table-head>
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.DurationData?.duration }}
             </th>
-            <th z-table-head>
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.DurationData?.durationUnit }}
             </th>
           </tr>
@@ -84,16 +84,16 @@
       <table z-table zType="bordered" aria-describedby="PastSurgeryTbl">
         <thead z-table-header>
           <tr z-table-row>
-            <th z-table-head>
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.casesheet?.serialNo }}
             </th>
             <th z-table-head id="surgery">
               {{ currentLanguageSet?.common?.surgery }}
             </th>
-            <th z-table-head>
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.DurationData?.duration }}
             </th>
-            <th z-table-head>
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.DurationData?.durationUnit }}
             </th>
           </tr>
@@ -256,7 +256,7 @@
         aria-describedby="ChildOptionalVaccineTbl">
         <thead z-table-header>
           <tr z-table-row>
-            <th z-table-head>
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.casesheet?.serialNo }}
             </th>
             <th z-table-head id="vaccine">
@@ -332,7 +332,7 @@
         aria-describedby="ComorbidconditionTbl">
         <thead z-table-header>
           <tr z-table-row>
-            <th z-table-head>
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.casesheet?.serialNo }}
             </th>
             <th z-table-head id="comoridCond">
@@ -341,10 +341,10 @@
                   ?.combordityANC_OPD_NCD_PNC?.comorbidConditions
               }}
             </th>
-            <th z-table-head>
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.DurationData?.duration }}
             </th>
-            <th z-table-head>
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.DurationData?.durationUnit }}
             </th>
           </tr>
@@ -405,7 +405,7 @@
         aria-describedby="MedicationHistoryTbl">
         <thead z-table-header>
           <tr z-table-row>
-            <th z-table-head>
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.casesheet?.serialNo }}
             </th>
             <th z-table-head id="medicationHistory">
@@ -414,10 +414,10 @@
                   ?.medicationANC_OPD_NCD_PNC?.medicationHistory
               }}
             </th>
-            <th z-table-head>
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.DurationData?.duration }}
             </th>
-            <th z-table-head>
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.DurationData?.durationUnit }}
             </th>
           </tr>
@@ -704,7 +704,7 @@
       <table z-table aria-describedby="PerinatalHistoryTbl">
         <tbody z-table-body>
           <tr z-table-row>
-            <th z-table-head>
+            <th z-table-head scope="col">
               {{
                 currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
                   ?.placeofDelivery
@@ -1203,7 +1203,7 @@
                 }}:
               </th>
               <td z-table-cell>{{ femaleObstetricHistory.durationType }}</td>
-              <th z-table-head>
+              <th z-table-head scope="col">
                 {{
                   currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
                     ?.placeofDelivery
