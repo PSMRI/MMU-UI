@@ -281,7 +281,7 @@ export class WorkareaComponent
     private route: ActivatedRoute,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private mdDialog: MatDialog,
-    private injector: Injector,
+    private readonly injector: Injector,
     readonly sessionstorage: SessionStorageService,
     private idrsScoreService: IdrsscoreService,
     private languageComponent: SetLanguageComponent
