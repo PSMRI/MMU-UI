@@ -605,17 +605,11 @@
       <tbody z-table-body *ngIf="caseRecords && caseRecords.LabReport">
         <ng-container
           *ngFor="let procedure of caseRecords.LabReport; let i = index">
-          <tr z-table-row>
-            <td z-table-cell [rowSpan]="procedure.componentList.length + 1">
-              {{ i + 1 }}
-            </td>
-            <th
-              z-table-head
-              scope="rowgroup"
-              [rowSpan]="procedure.componentList.length + 1">
-              {{ procedure?.procedureName }}
-            </th>
-          </tr>
+          <ng-container
+            *ngTemplateOutlet="
+              labReportProcedureRow;
+              context: { procedure: procedure, i: i }
+            "></ng-container>
           <tr z-table-row *ngFor="let report of procedure.componentList">
             <td z-table-cell>{{ report?.componentName }}</td>
             <td z-table-cell>{{ report?.loincName }}</td>
@@ -704,17 +698,11 @@
       <tbody z-table-body *ngIf="MMUcaseRecords && MMUcaseRecords.LabReport">
         <ng-container
           *ngFor="let procedure of MMUcaseRecords.LabReport; let i = index">
-          <tr z-table-row>
-            <td z-table-cell [rowSpan]="procedure.componentList.length + 1">
-              {{ i + 1 }}
-            </td>
-            <th
-              z-table-head
-              scope="rowgroup"
-              [rowSpan]="procedure.componentList.length + 1">
-              {{ procedure?.procedureName }}
-            </th>
-          </tr>
+          <ng-container
+            *ngTemplateOutlet="
+              labReportProcedureRow;
+              context: { procedure: procedure, i: i }
+            "></ng-container>
           <tr z-table-row *ngFor="let report of procedure.componentList">
             <td z-table-cell>{{ report?.componentName }}</td>
             <td z-table-cell>{{ report?.loincName }}</td>
@@ -855,48 +843,8 @@
             <td z-table-cell colspan="2"></td>
           </tr>
 
-          <ng-container *ngIf="caseRecords?.diagnosis?.isMaternalDeath">
-            <tr z-table-row>
-              <th z-table-head scope="col">
-                {{ currentLanguageSet?.casesheet?.dateOfDeath }}:
-              </th>
-              <td z-table-cell>
-                {{
-                  caseRecords &&
-                    caseRecords.diagnosis &&
-                    caseRecords.diagnosis.dateOfDeath
-                }}
-              </td>
-              <th z-table-head scope="col">
-                {{ currentLanguageSet?.casesheet?.placeOfDeath }}:
-              </th>
-              <td z-table-cell>
-                {{
-                  caseRecords &&
-                    caseRecords.diagnosis &&
-                    caseRecords.diagnosis.placeOfDeath
-                }}
-              </td>
-            </tr>
-
-            <tr z-table-row>
-              <th z-table-head colspan="4">
-                {{ currentLanguageSet?.casesheet?.causeOfDeath }}:
-              </th>
-            </tr>
-
-            <tr z-table-row>
-              <td z-table-cell colspan="4">
-                <div class="min-h-[100px] rounded-md border border-input p-2">
-                  {{
-                    caseRecords &&
-                      caseRecords.diagnosis &&
-                      caseRecords.diagnosis.causeOfDeath
-                  }}
-                </div>
-              </td>
-            </tr>
-          </ng-container>
+          <ng-container
+            *ngTemplateOutlet="maternalDeathDetails"></ng-container>
         </tbody>
       </table>
     </div>
@@ -905,22 +853,16 @@
     <div *ngIf="visitCategory === 'PNC'">
       <table z-table class="w-full" aria-describedby="PNCDiagnosisTbl">
         <tbody z-table-body>
-          <tr z-table-row>
-            <th z-table-head colspan="4">
-              {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
-            </th>
-          </tr>
-          <tr z-table-row>
-            <td z-table-cell colspan="4">
-              <div class="min-h-[100px] rounded-md border border-input p-2">
-                {{
+          <ng-container
+            *ngTemplateOutlet="
+              provisionalDiagRows;
+              context: {
+                value:
                   caseRecords &&
-                    caseRecords.diagnosis &&
-                    caseRecords.diagnosis.provisionalDiagnosis
-                }}
-              </div>
-            </td>
-          </tr>
+                  caseRecords.diagnosis &&
+                  caseRecords.diagnosis.provisionalDiagnosis
+              }
+            "></ng-container>
           <tr z-table-row>
             <th z-table-head id="matDeath">
               {{ currentLanguageSet?.casesheet?.matDeath }}:
@@ -933,46 +875,8 @@
             </td>
             <td z-table-cell colspan="2"></td>
           </tr>
-          <ng-container *ngIf="caseRecords?.diagnosis?.isMaternalDeath">
-            <tr z-table-row>
-              <th z-table-head scope="col">
-                {{ currentLanguageSet?.casesheet?.dateOfDeath }}:
-              </th>
-              <td z-table-cell>
-                {{
-                  caseRecords &&
-                    caseRecords.diagnosis &&
-                    caseRecords.diagnosis.dateOfDeath
-                }}
-              </td>
-              <th z-table-head scope="col">
-                {{ currentLanguageSet?.casesheet?.placeOfDeath }}:
-              </th>
-              <td z-table-cell>
-                {{
-                  caseRecords &&
-                    caseRecords.diagnosis &&
-                    caseRecords.diagnosis.placeOfDeath
-                }}
-              </td>
-            </tr>
-            <tr z-table-row>
-              <th z-table-head colspan="4">
-                {{ currentLanguageSet?.casesheet?.causeOfDeath }}:
-              </th>
-            </tr>
-            <tr z-table-row>
-              <td z-table-cell colspan="4">
-                <div class="min-h-[100px] rounded-md border border-input p-2">
-                  {{
-                    caseRecords &&
-                      caseRecords.diagnosis &&
-                      caseRecords.diagnosis.causeOfDeath
-                  }}
-                </div>
-              </td>
-            </tr>
-          </ng-container>
+          <ng-container
+            *ngTemplateOutlet="maternalDeathDetails"></ng-container>
         </tbody>
       </table>
     </div>
@@ -1087,22 +991,16 @@
             </td>
           </tr>
 
-          <tr z-table-row>
-            <th z-table-head colspan="4">
-              {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
-            </th>
-          </tr>
-          <tr z-table-row>
-            <td z-table-cell colspan="4">
-              <div class="min-h-[100px] rounded-md border border-input p-2">
-                {{
+          <ng-container
+            *ngTemplateOutlet="
+              provisionalDiagRows;
+              context: {
+                value:
                   caseRecords &&
-                    caseRecords.diagnosis &&
-                    caseRecords.diagnosis.diagnosisProvided
-                }}
-              </div>
-            </td>
-          </tr>
+                  caseRecords.diagnosis &&
+                  caseRecords.diagnosis.diagnosisProvided
+              }
+            "></ng-container>
 
           <tr z-table-row class="hidden">
             <th z-table-head id="typeOfComplication" colspan="4">
@@ -1128,22 +1026,16 @@
     <div *ngIf="visitCategory === 'General OPD'">
       <table z-table class="w-full" aria-describedby="GeneralOPDDiagnosisTbl">
         <tbody z-table-body>
-          <tr z-table-row>
-            <th z-table-head colspan="4">
-              {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
-            </th>
-          </tr>
-          <tr z-table-row>
-            <td z-table-cell colspan="4">
-              <div class="min-h-[100px] rounded-md border border-input p-2">
-                {{
+          <ng-container
+            *ngTemplateOutlet="
+              provisionalDiagRows;
+              context: {
+                value:
                   caseRecords &&
-                    caseRecords.diagnosis &&
-                    caseRecords.diagnosis.diagnosisProvided
-                }}
-              </div>
-            </td>
-          </tr>
+                  caseRecords.diagnosis &&
+                  caseRecords.diagnosis.diagnosisProvided
+              }
+            "></ng-container>
         </tbody>
       </table>
     </div>
@@ -1152,22 +1044,16 @@
     <div *ngIf="visitCategory === 'NCD screening'">
       <table z-table class="w-full" aria-describedby="FinalDiagnosisTbl">
         <tbody z-table-body>
-          <tr z-table-row>
-            <th z-table-head colspan="4">
-              {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
-            </th>
-          </tr>
-          <tr z-table-row>
-            <td z-table-cell colspan="4">
-              <div class="min-h-[100px] rounded-md border border-input p-2">
-                {{
+          <ng-container
+            *ngTemplateOutlet="
+              provisionalDiagRows;
+              context: {
+                value:
                   caseRecords &&
-                    caseRecords.diagnosis &&
-                    caseRecords.diagnosis.diagnosisProvided
-                }}
-              </div>
-            </td>
-          </tr>
+                  caseRecords.diagnosis &&
+                  caseRecords.diagnosis.diagnosisProvided
+              }
+            "></ng-container>
           <tr z-table-row *ngIf="tmCaseSheet === 'true'">
             <th z-table-head colspan="4" id="finalDiagnosis">
               {{ currentLanguageSet?.finalDiagnosis }}:
@@ -1190,22 +1076,16 @@
     <div *ngIf="visitCategory === 'General OPD (QC)'">
       <table z-table class="w-full" aria-describedby="GeneralOPDQCDiagnosisTbl">
         <tbody z-table-body>
-          <tr z-table-row>
-            <th z-table-head colspan="4">
-              {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
-            </th>
-          </tr>
-          <tr z-table-row>
-            <td z-table-cell colspan="4">
-              <div class="min-h-[100px] rounded-md border border-input p-2">
-                {{
+          <ng-container
+            *ngTemplateOutlet="
+              provisionalDiagRows;
+              context: {
+                value:
                   caseRecords &&
-                    caseRecords.diagnosis &&
-                    caseRecords.diagnosis.provisionalDiagnosis
-                }}
-              </div>
-            </td>
-          </tr>
+                  caseRecords.diagnosis &&
+                  caseRecords.diagnosis.provisionalDiagnosis
+              }
+            "></ng-container>
         </tbody>
       </table>
     </div>
@@ -1275,16 +1155,11 @@
         <tr
           z-table-row
           *ngFor="let drug of caseRecords.prescription; let i = index">
-          <td z-table-cell>{{ i + 1 }}</td>
-          <td z-table-cell>{{ drug.drugName }} {{ drug.drugStrength }}</td>
-          <td z-table-cell>{{ drug.isEDL ? 'EDL' : 'Non-EDL' }}</td>
-          <td z-table-cell>{{ drug.formName }}</td>
-          <td z-table-cell>{{ drug.dose }}</td>
-          <td z-table-cell>{{ drug.frequency }}</td>
-          <td z-table-cell>{{ drug.duration }}</td>
-          <td z-table-cell>{{ drug.unit }}</td>
-          <td z-table-cell>{{ drug.qtyPrescribed }}</td>
-          <td z-table-cell>{{ drug.instructions }}</td>
+          <ng-container
+            *ngTemplateOutlet="
+              prescriptionDrugRow;
+              context: { drug: drug, i: i }
+            "></ng-container>
         </tr>
       </tbody>
     </table>
@@ -1394,16 +1269,11 @@
         <tr
           z-table-row
           *ngFor="let drug of MMUcaseRecords.prescription; let i = index">
-          <td z-table-cell>{{ i + 1 }}</td>
-          <td z-table-cell>{{ drug.drugName }} {{ drug.drugStrength }}</td>
-          <td z-table-cell>{{ drug.isEDL ? 'EDL' : 'Non-EDL' }}</td>
-          <td z-table-cell>{{ drug.formName }}</td>
-          <td z-table-cell>{{ drug.dose }}</td>
-          <td z-table-cell>{{ drug.frequency }}</td>
-          <td z-table-cell>{{ drug.duration }}</td>
-          <td z-table-cell>{{ drug.unit }}</td>
-          <td z-table-cell>{{ drug.qtyPrescribed }}</td>
-          <td z-table-cell>{{ drug.instructions }}</td>
+          <ng-container
+            *ngTemplateOutlet="
+              prescriptionDrugRow;
+              context: { drug: drug, i: i }
+            "></ng-container>
         </tr>
       </tbody>
     </table>
@@ -1466,3 +1336,89 @@
   </div>
   <!-- End of Doctor's Sign -->
 </div>
+
+<!-- Reusable print-view templates (extracted to remove duplicated markup) -->
+<ng-template #maternalDeathDetails>
+  <ng-container *ngIf="caseRecords?.diagnosis?.isMaternalDeath">
+    <tr z-table-row>
+      <th z-table-head scope="col">
+        {{ currentLanguageSet?.casesheet?.dateOfDeath }}:
+      </th>
+      <td z-table-cell>
+        {{
+          caseRecords &&
+            caseRecords.diagnosis &&
+            caseRecords.diagnosis.dateOfDeath
+        }}
+      </td>
+      <th z-table-head scope="col">
+        {{ currentLanguageSet?.casesheet?.placeOfDeath }}:
+      </th>
+      <td z-table-cell>
+        {{
+          caseRecords &&
+            caseRecords.diagnosis &&
+            caseRecords.diagnosis.placeOfDeath
+        }}
+      </td>
+    </tr>
+    <tr z-table-row>
+      <th z-table-head colspan="4">
+        {{ currentLanguageSet?.casesheet?.causeOfDeath }}:
+      </th>
+    </tr>
+    <tr z-table-row>
+      <td z-table-cell colspan="4">
+        <div class="min-h-[100px] rounded-md border border-input p-2">
+          {{
+            caseRecords &&
+              caseRecords.diagnosis &&
+              caseRecords.diagnosis.causeOfDeath
+          }}
+        </div>
+      </td>
+    </tr>
+  </ng-container>
+</ng-template>
+
+<ng-template #labReportProcedureRow let-procedure="procedure" let-i="i">
+  <tr z-table-row>
+    <td z-table-cell [rowSpan]="procedure.componentList.length + 1">
+      {{ i + 1 }}
+    </td>
+    <th
+      z-table-head
+      scope="rowgroup"
+      [rowSpan]="procedure.componentList.length + 1">
+      {{ procedure?.procedureName }}
+    </th>
+  </tr>
+</ng-template>
+
+<ng-template #prescriptionDrugRow let-drug="drug" let-i="i">
+  <td z-table-cell>{{ i + 1 }}</td>
+  <td z-table-cell>{{ drug.drugName }} {{ drug.drugStrength }}</td>
+  <td z-table-cell>{{ drug.isEDL ? 'EDL' : 'Non-EDL' }}</td>
+  <td z-table-cell>{{ drug.formName }}</td>
+  <td z-table-cell>{{ drug.dose }}</td>
+  <td z-table-cell>{{ drug.frequency }}</td>
+  <td z-table-cell>{{ drug.duration }}</td>
+  <td z-table-cell>{{ drug.unit }}</td>
+  <td z-table-cell>{{ drug.qtyPrescribed }}</td>
+  <td z-table-cell>{{ drug.instructions }}</td>
+</ng-template>
+
+<ng-template #provisionalDiagRows let-value="value">
+  <tr z-table-row>
+    <th z-table-head colspan="4">
+      {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
+    </th>
+  </tr>
+  <tr z-table-row>
+    <td z-table-cell colspan="4">
+      <div class="min-h-[100px] rounded-md border border-input p-2">
+        {{ value }}
+      </div>
+    </td>
+  </tr>
+</ng-template>

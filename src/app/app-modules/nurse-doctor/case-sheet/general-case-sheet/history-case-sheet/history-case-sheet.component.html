@@ -53,21 +53,11 @@
             <td z-table-cell>{{ i + 1 }}</td>
             <td z-table-cell>{{ pastIllness.illnessType }}</td>
             <td z-table-cell>{{ pastIllness.timePeriodAgo }}</td>
-            <td z-table-cell>
-              {{
-                pastIllness.timePeriodUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : pastIllness.timePeriodUnit === 'Days'
-                    ? 'Day(s)'
-                    : pastIllness.timePeriodUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : pastIllness.timePeriodUnit === 'Months'
-                        ? 'Month(s)'
-                        : pastIllness.timePeriodUnit === 'Years'
-                          ? 'Year(s)'
-                          : pastIllness.timePeriodUnit
-              }}
-            </td>
+            <ng-container
+              *ngTemplateOutlet="
+                durationUnitCell;
+                context: { unit: pastIllness.timePeriodUnit }
+              "></ng-container>
           </tr>
         </tbody>
       </table>
@@ -112,21 +102,11 @@
             <td z-table-cell>{{ i + 1 }}</td>
             <td z-table-cell>{{ pastSurgery.surgeryType }}</td>
             <td z-table-cell>{{ pastSurgery.timePeriodAgo }}</td>
-            <td z-table-cell>
-              {{
-                pastSurgery.timePeriodUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : pastSurgery.timePeriodUnit === 'Days'
-                    ? 'Day(s)'
-                    : pastSurgery.timePeriodUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : pastSurgery.timePeriodUnit === 'Months'
-                        ? 'Month(s)'
-                        : pastSurgery.timePeriodUnit === 'Years'
-                          ? 'Year(s)'
-                          : pastSurgery.timePeriodUnit
-              }}
-            </td>
+            <ng-container
+              *ngTemplateOutlet="
+                durationUnitCell;
+                context: { unit: pastSurgery.timePeriodUnit }
+              "></ng-container>
           </tr>
         </tbody>
       </table>
@@ -368,21 +348,11 @@
             <td z-table-cell>{{ i + 1 }}</td>
             <td z-table-cell>{{ comorbidityConditions.comorbidCondition }}</td>
             <td z-table-cell>{{ comorbidityConditions.timePeriodAgo }}</td>
-            <td z-table-cell>
-              {{
-                comorbidityConditions.timePeriodUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : comorbidityConditions.timePeriodUnit === 'Days'
-                    ? 'Day(s)'
-                    : comorbidityConditions.timePeriodUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : comorbidityConditions.timePeriodUnit === 'Months'
-                        ? 'Month(s)'
-                        : comorbidityConditions.timePeriodUnit === 'Years'
-                          ? 'Year(s)'
-                          : comorbidityConditions.timePeriodUnit
-              }}
-            </td>
+            <ng-container
+              *ngTemplateOutlet="
+                durationUnitCell;
+                context: { unit: comorbidityConditions.timePeriodUnit }
+              "></ng-container>
           </tr>
         </tbody>
       </table>
@@ -441,21 +411,11 @@
             <td z-table-cell>{{ i + 1 }}</td>
             <td z-table-cell>{{ medicationHistory.currentMedication }}</td>
             <td z-table-cell>{{ medicationHistory.timePeriodAgo }}</td>
-            <td z-table-cell>
-              {{
-                medicationHistory.timePeriodUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : medicationHistory.timePeriodUnit === 'Days'
-                    ? 'Day(s)'
-                    : medicationHistory.timePeriodUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : medicationHistory.timePeriodUnit === 'Months'
-                        ? 'Month(s)'
-                        : medicationHistory.timePeriodUnit === 'Years'
-                          ? 'Year(s)'
-                          : medicationHistory.timePeriodUnit
-              }}
-            </td>
+            <ng-container
+              *ngTemplateOutlet="
+                durationUnitCell;
+                context: { unit: medicationHistory.timePeriodUnit }
+              "></ng-container>
           </tr>
         </tbody>
       </table>
@@ -1020,21 +980,11 @@
             <td z-table-cell>{{ tobacco.tobaccoUseType }}</td>
             <td z-table-cell>{{ tobacco.numberperDay }}</td>
             <td z-table-cell>{{ tobacco.duration }}</td>
-            <td z-table-cell>
-              {{
-                tobacco.durationUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : tobacco.durationUnit === 'Days'
-                    ? 'Day(s)'
-                    : tobacco.durationUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : tobacco.durationUnit === 'Months'
-                        ? 'Month(s)'
-                        : tobacco.durationUnit === 'Years'
-                          ? 'Year(s)'
-                          : tobacco.durationUnit
-              }}
-            </td>
+            <ng-container
+              *ngTemplateOutlet="
+                durationUnitCell;
+                context: { unit: tobacco.durationUnit }
+              "></ng-container>
           </tr>
         </tbody>
       </table>
@@ -1113,21 +1063,11 @@
             <td z-table-cell>{{ alcohol.alcoholIntakeFrequency }}</td>
             <td z-table-cell>{{ alcohol.avgAlcoholConsumption }}</td>
             <td z-table-cell>{{ alcohol.duration }}</td>
-            <td z-table-cell>
-              {{
-                alcohol.durationUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : alcohol.durationUnit === 'Days'
-                    ? 'Day(s)'
-                    : alcohol.durationUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : alcohol.durationUnit === 'Months'
-                        ? 'Month(s)'
-                        : alcohol.durationUnit === 'Years'
-                          ? 'Year(s)'
-                          : alcohol.durationUnit
-              }}
-            </td>
+            <ng-container
+              *ngTemplateOutlet="
+                durationUnitCell;
+                context: { unit: alcohol.durationUnit }
+              "></ng-container>
           </tr>
         </tbody>
       </table>
@@ -1509,3 +1449,22 @@
 
   <!--END MMU-WDF-Revisit&Refer-->
 </div>
+
+<!-- Reusable print-view template (extracted to remove duplicated markup) -->
+<ng-template #durationUnitCell let-unit="unit">
+  <td z-table-cell>
+    {{
+      unit === 'Hours'
+        ? 'Hour(s)'
+        : unit === 'Days'
+          ? 'Day(s)'
+          : unit === 'Weeks'
+            ? 'Week(s)'
+            : unit === 'Months'
+              ? 'Month(s)'
+              : unit === 'Years'
+                ? 'Year(s)'
+                : unit
+    }}
+  </td>
+</ng-template>
