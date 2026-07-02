@@ -2,7 +2,12 @@
 <div
   [formGroup]="cancerPatientPerosnalHistoryForm"
   class="flex flex-col gap-6">
-  <div class="flex items-center justify-end gap-2">
+  <div
+    class="flex items-center gap-2 self-end"
+    zPosition="top"
+    [zTooltip]="
+      currentLanguageSet?.alerts?.previousHistoryDetailsAlert?.previousHabit
+    ">
     <span class="text-sm font-semibold text-foreground">{{
       currentLanguageSet?.historyData?.personalhabit?.personalhabithistroy
     }}</span>
@@ -13,9 +18,6 @@
       type="button"
       id="PreviousCancerPersonalHabitHistory"
       class="text-primary"
-      [zTooltip]="
-        currentLanguageSet?.alerts?.previousHistoryDetailsAlert?.previousHabit
-      "
       [attr.aria-label]="
         currentLanguageSet?.alerts?.previousHistoryDetailsAlert?.previousHabit
       "
@@ -280,7 +282,12 @@
     </z-form-field>
   </div>
 
-  <div class="flex items-center justify-end gap-2">
+  <div
+    class="flex items-center gap-2 self-end"
+    zPosition="top"
+    [zTooltip]="
+      currentLanguageSet?.alerts?.previousHistoryDetailsAlert?.previousDiet
+    ">
     <span class="text-sm font-semibold text-foreground">{{
       currentLanguageSet?.historyData?.personalhistory?.personaldiethistory
     }}</span>
@@ -291,9 +298,6 @@
       type="button"
       id="previousCancerPersonalDietHistory"
       class="text-primary"
-      [zTooltip]="
-        currentLanguageSet?.alerts?.previousHistoryDetailsAlert?.previousDiet
-      "
       [attr.aria-label]="
         currentLanguageSet?.alerts?.previousHistoryDetailsAlert?.previousDiet
       "

@@ -58,6 +58,7 @@ import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
     ZardPaginatorComponent,
     ...tooltipImports,
   ],
+  providers: [MasterdataService],
   viewProviders: [
     provideIcons({
       lucideX,

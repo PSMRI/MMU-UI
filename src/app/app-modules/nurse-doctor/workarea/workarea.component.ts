@@ -29,6 +29,7 @@ import {
   OnDestroy,
   AfterViewChecked,
   AfterViewInit,
+  Injector,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
@@ -280,6 +281,7 @@ export class WorkareaComponent
     private route: ActivatedRoute,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private mdDialog: MatDialog,
+    private readonly injector: Injector,
     readonly sessionstorage: SessionStorageService,
     private idrsScoreService: IdrsscoreService,
     private languageComponent: SetLanguageComponent
@@ -2681,6 +2683,7 @@ export class WorkareaComponent
     const dialogRef = this.mdDialog.open(SmsNotificationComponent, {
       width: '900px',
       disableClose: true,
+      injector: this.injector,
       data: prescriptionSmsObject,
     });
 
@@ -3917,10 +3920,9 @@ export class WorkareaComponent
   openBenPreviousisitDetails() {
     this.mdDialog.open(OpenPreviousVisitDetailsComponent, {
       disableClose: true,
-      width: '100%',
-      height: 'auto',
-      maxWidth: '90vw',
+      width: '95%',
       panelClass: 'preview-casesheet',
+      injector: this.injector,
       data: {
         previous: true,
       },

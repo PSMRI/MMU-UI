@@ -238,7 +238,10 @@ export class DiseaseconfirmationComponent implements OnInit {
                     this.questionArray = [];
                     let suspect1 = [];
                     // this.suspect = [];
-                    if (value.data.IDRSDetail.confirmedDisease !== null)
+                    if (
+                      value.data.IDRSDetail.confirmedDisease !== undefined &&
+                      value.data.IDRSDetail.confirmedDisease !== null
+                    )
                       suspect1 =
                         value.data.IDRSDetail.confirmedDisease.split(',');
                     if (
