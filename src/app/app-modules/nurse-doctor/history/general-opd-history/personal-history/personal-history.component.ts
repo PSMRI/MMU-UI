@@ -27,6 +27,7 @@ import {
   DoCheck,
   OnDestroy,
   ChangeDetectorRef,
+  Injector,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -144,6 +145,7 @@ export class GeneralPersonalHistoryComponent
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
+    private injector: Injector,
     private nurseService: NurseService,
     private doctorService: DoctorService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
@@ -1186,6 +1188,7 @@ export class GeneralPersonalHistoryComponent
       searchTerm.length > 2
     ) {
       const dialogRef = this.dialog.open(AllergenSearchComponent, {
+        injector: this.injector,
         data: { searchTerm: searchTerm },
       });
 
