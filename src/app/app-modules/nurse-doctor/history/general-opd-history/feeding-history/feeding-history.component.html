@@ -1,121 +1,117 @@
-<div class="row" [formGroup]="feedingHistoryForm">
-  <div class="col-12" style="text-align: end">
-    <span class="font-history-label">{{
+<div [formGroup]="feedingHistoryForm" class="flex flex-col gap-4">
+  <div class="flex items-center justify-end gap-2">
+    <span class="text-sm font-semibold text-foreground">{{
       currentLanguageSet?.historyData?.Feedinghistorydetails
         ?.previousfeedinghistory
     }}</span>
     <button
+      z-button
+      zType="ghost"
+      zSize="icon-sm"
       type="button"
-      mat-icon-button
-      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
       id="previousFeedingHistory"
-      class="mat_icon_blue"
-      color="primary"
+      class="text-primary"
+      [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
+      [attr.aria-label]="currentLanguageSet?.DurationData?.previousDetails"
       (click)="getPreviousFeedingHistory()">
-      <mat-icon class="md-18">history</mat-icon>
+      <ng-icon name="lucideHistory"></ng-icon>
     </button>
   </div>
-  <div>
-    <div class="box col-xs-12 col-sm-6 col-md-6 col-lg-6">
-      <mat-form-field>
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
-            ?.typeofFeeds
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
+
+  <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="typeOfFeed">{{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding?.typeofFeeds
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full bg-background"
+          id="typeOfFeed"
           name="typeOfFeedsDuringFirst6Months"
           formControlName="typeOfFeed">
-          <mat-option
+          <z-select-item
             *ngFor="let feedsAge of masterData?.feedTypes"
-            [value]="feedsAge.value"
-            >{{ feedsAge.value }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
+            [zValue]="feedsAge.value">
+            {{ feedsAge.value }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
 
-    <div class="clearfix"></div>
-
-    <div class="box col-xs-12 col-sm-6 col-md-6 col-lg-6" *ngIf="age > 6">
-      <mat-form-field>
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
-            ?.ageatweaning
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
+    <z-form-field class="gap-1.5" *ngIf="age > 6">
+      <label z-form-label for="compFeedStartAge">{{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding?.ageatweaning
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full bg-background"
+          id="compFeedStartAge"
           name="ageAtWeaningFeedIntroduced"
           formControlName="compFeedStartAge"
-          (selectionChange)="resetNoOfCompFeedPerDay()">
-          <mat-option
+          (zSelectionChange)="resetNoOfCompFeedPerDay()">
+          <z-select-item
             *ngFor="let feedType of masterData?.compFeedAges"
-            [value]="feedType.value"
-            >{{ feedType.value }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
+            [zValue]="feedType.value">
+            {{ feedType.value }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
 
-    <div
-      class="box col-xs-12 col-sm-6 col-md-6 col-lg-6"
-      *ngIf="compFeedStartAge">
-      <mat-form-field>
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
-            ?.numberofComplimentaryfoodservings
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
+    <z-form-field class="gap-1.5" *ngIf="compFeedStartAge">
+      <label z-form-label for="noOfCompFeedPerDay">{{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
+          ?.numberofComplimentaryfoodservings
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full bg-background"
+          id="noOfCompFeedPerDay"
           name="complimentaryFoodNumber"
           formControlName="noOfCompFeedPerDay">
-          <mat-option
+          <z-select-item
             *ngFor="let feedsNumber of masterData?.compFeedServings"
-            [value]="feedsNumber.value"
-            >{{ feedsNumber.value }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
+            [zValue]="feedsNumber.value">
+            {{ feedsNumber.value }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
 
-    <div class="clearfix"></div>
-
-    <div class="box col-xs-12 col-sm-6 col-md-6 col-lg-6">
-      <label class="control-label" for="foodIntoleranceStatus">{{
+    <div class="flex flex-col gap-1.5">
+      <label z-form-label for="foodIntoleranceStatus">{{
         currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
           ?.foodIntoleranceStatus
       }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
+      <z-radio-group
+        id="foodIntoleranceStatus"
         name="foodIntoleranceStatus"
         formControlName="foodIntoleranceStatus"
-        (change)="resetTypeofFoodIntolerance()">
-        <mat-radio-button color="primary" [value]="true">{{
-          currentLanguageSet?.common?.yes
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" [value]="false" class="radio-btn">{{
-          currentLanguageSet?.common?.no
-        }}</mat-radio-button>
-      </mat-radio-group>
+        zOrientation="horizontal"
+        class="flex-wrap gap-6"
+        (zChange)="resetTypeofFoodIntolerance()">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.yes }}</z-radio>
+        <z-radio [value]="false">{{ currentLanguageSet?.common?.no }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div
-      class="box col-xs-12 col-sm-6 col-md-6 col-lg-6"
-      *ngIf="foodIntoleranceStatus">
-      <mat-form-field>
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
-            ?.typeofFoodIntolerance
-        }}</mat-label>
+    <z-form-field class="gap-1.5" *ngIf="foodIntoleranceStatus">
+      <label z-form-label for="typeofFoodIntolerance">{{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
+          ?.typeofFoodIntolerance
+      }}</label>
+      <z-form-control>
         <input
+          z-input
+          class="w-full bg-background"
           autocomplete="off"
-          matInput
           appDefaultNull
           maxlength="50"
           allowText="alphaspace"
-          formControlName="typeofFoodIntolerance"
-          name="foodIntoleranceType" />
-      </mat-form-field>
-    </div>
+          id="typeofFoodIntolerance"
+          name="foodIntoleranceType"
+          formControlName="typeofFoodIntolerance" />
+      </z-form-control>
+    </z-form-field>
   </div>
 </div>

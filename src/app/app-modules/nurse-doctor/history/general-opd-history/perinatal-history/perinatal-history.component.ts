@@ -33,30 +33,31 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
 import { NgFor, NgIf } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory } from '@ng-icons/lucide';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 import { NumberValidatorDirective } from '../../../../core/directives/numberValidator.directive';
 @Component({
   selector: 'app-general-perinatal-history',
   templateUrl: './perinatal-history.component.html',
-  styleUrls: ['./perinatal-history.component.css'],
+  viewProviders: [provideIcons({ lucideHistory })],
   imports: [
     ReactiveFormsModule,
-    MatTooltip,
-    MatIcon,
-    MatFormField,
-    MatLabel,
-    MatSelect,
     NgFor,
-    MatOption,
     NgIf,
-    MatInput,
+    NgIcon,
+    ...tooltipImports,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ...ZardSelectImports,
     NullDefaultValueDirective,
     StringValidatorDirective,
     NumberValidatorDirective,
@@ -193,6 +194,60 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
 
   get complicationAtBirth() {
     return this.perinatalHistoryForm.controls['complicationAtBirth'].value;
+  }
+
+  get typeOfDelivery() {
+    return this.perinatalHistoryForm.controls['typeOfDelivery'].value;
+  }
+
+  /* --- Zard select adapters ---
+   * z-select is a string-valued control, but placeOfDelivery, typeOfDelivery
+   * and complicationAtBirth each store a full master-data OBJECT in their
+   * reactive-form control. These handlers reconstruct the object from the
+   * chosen label and setValue() it back into the control — so the stored
+   * value TYPE and the submission contract are unchanged — then run the
+   * original reset side-effects. */
+  private mapNameToObject(
+    value: string | string[],
+    source: any[],
+    key: string
+  ): any {
+    const name = Array.isArray(value) ? value[0] : value;
+    return (source || []).find((item: any) => item[key] === name) ?? null;
+  }
+
+  onPlaceOfDeliveryChange(value: string | string[]) {
+    const selected = this.mapNameToObject(
+      value,
+      this.masterData?.deliveryPlaces,
+      'deliveryPlace'
+    );
+    this.perinatalHistoryForm.controls['placeOfDelivery'].setValue(selected);
+    this.perinatalHistoryForm.controls['placeOfDelivery'].markAsDirty();
+    this.resetOtherPlaceOfDelivery();
+  }
+
+  onTypeOfDeliveryChange(value: string | string[]) {
+    const selected = this.mapNameToObject(
+      value,
+      this.selectDeliveryTypes,
+      'deliveryType'
+    );
+    this.perinatalHistoryForm.controls['typeOfDelivery'].setValue(selected);
+    this.perinatalHistoryForm.controls['typeOfDelivery'].markAsDirty();
+  }
+
+  onComplicationAtBirthChange(value: string | string[]) {
+    const selected = this.mapNameToObject(
+      value,
+      this.masterData?.birthComplications,
+      'complicationValue'
+    );
+    this.perinatalHistoryForm.controls['complicationAtBirth'].setValue(
+      selected
+    );
+    this.perinatalHistoryForm.controls['complicationAtBirth'].markAsDirty();
+    this.resetOtherComplicationAtBirth();
   }
 
   resetOtherPlaceOfDelivery() {
