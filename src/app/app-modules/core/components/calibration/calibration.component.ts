@@ -22,61 +22,48 @@
 
 //SH20094090,calibration integration,09-06-2021
 
-import { Component, Inject, OnInit, DoCheck, ViewChild } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogContent,
-} from '@angular/material/dialog';
+import { Component, Inject, OnInit, DoCheck } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MasterdataService } from 'src/app/app-modules/nurse-doctor/shared/services';
 import { ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
-import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { CdkScrollable } from '@angular/cdk/scrolling';
-import { MatFormField, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import { DatePipe } from '@angular/common';
+import { NgIf, NgFor, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX, lucideSearch } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardLoaderComponent } from 'Common-UI/v2/ui/loader';
+import { ZardPaginatorComponent } from 'Common-UI/v2/ui/paginator';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-calibration',
+  standalone: true,
   templateUrl: './calibration.component.html',
-  styleUrls: ['./calibration.component.css'],
   imports: [
-    MatTooltip,
-    MatIcon,
-    CdkScrollable,
-    MatDialogContent,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
-    MatPaginator,
+    NgIf,
+    NgFor,
     DatePipe,
+    FormsModule,
+    NgIcon,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ...ZardTableImports,
+    ZardLoaderComponent,
+    ZardPaginatorComponent,
+    ...tooltipImports,
+  ],
+  providers: [MasterdataService],
+  viewProviders: [
+    provideIcons({
+      lucideX,
+      lucideSearch,
+    }),
   ],
 })
 export class CalibrationComponent implements OnInit, DoCheck {
@@ -85,23 +72,13 @@ export class CalibrationComponent implements OnInit, DoCheck {
   message = '';
   pageCount: any;
   selectedComponentsList = [];
-  currentPage = 1;
-  pager: any = {
-    totalItems: 0,
-    currentPage: 0,
-    totalPages: 0,
-    startPage: 0,
-    endPage: 0,
-    pages: 0,
-  };
-  pagedItems = [];
   placeHolderSearch: any;
-  dataList = [];
-  filteredDataList = [];
+  dataList: any[] = [];
+  filteredDataList: any[] = [];
   current_language_set: any;
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  components = new MatTableDataSource<any>();
   displayedColumns: any = ['sno', 'SCode', 'ExpiryDate'];
+  showProgressBar = false;
+  pagedItems: any[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public input: any,
@@ -126,29 +103,30 @@ export class CalibrationComponent implements OnInit, DoCheck {
   }
 
   masterData(providerServiceMapID: any, pageNo: any) {
+    this.showProgressBar = true;
     this.masterdataService
       .fetchCalibrationStrips(providerServiceMapID, pageNo)
       .subscribe(
         (res: any) => {
+          this.showProgressBar = false;
           if (res.statusCode === 200) {
             if (
               res.data &&
               res.data.calibrationData !== undefined &&
               res.data.calibrationData.length > 0
             ) {
-              this.components.data = res.data.calibrationData;
               this.dataList = res.data.calibrationData;
-              this.components.paginator = this.paginator;
+              this.filteredDataList = res.data.calibrationData;
             } else {
               this.message = this.current_language_set.common.noRecordFound;
-              this.components.data = [];
-              this.components.paginator = this.paginator;
+              this.resetData();
             }
           } else {
             this.resetData();
           }
         },
         err => {
+          this.showProgressBar = false;
           this.resetData();
         }
       );
@@ -186,23 +164,20 @@ export class CalibrationComponent implements OnInit, DoCheck {
   }
 
   resetData() {
-    this.components.data = [];
-    this.components.paginator = this.paginator;
+    this.dataList = [];
+    this.filteredDataList = [];
   }
 
   filterPreviousData(searchTerm: any) {
     if (!searchTerm) {
-      this.components.data = this.dataList;
-      this.components.paginator = this.paginator;
+      this.filteredDataList = this.dataList;
     } else {
-      this.components.data = [];
-      this.components.paginator = this.paginator;
+      this.filteredDataList = [];
       this.dataList.forEach(item => {
         for (const key in item) {
           const value: string = '' + item[key];
           if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-            this.components.data.push(item);
-            this.components.paginator = this.paginator;
+            this.filteredDataList.push(item);
             break;
           }
         }

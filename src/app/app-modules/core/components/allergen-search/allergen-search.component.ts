@@ -20,63 +20,46 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, Inject, OnInit, DoCheck, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, DoCheck } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogRef,
   MatDialogClose,
-  MatDialogContent,
 } from '@angular/material/dialog';
 import { MasterdataService } from 'src/app/app-modules/nurse-doctor/shared/services';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
-import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
-import { MatIcon } from '@angular/material/icon';
-import { MatTooltip } from '@angular/material/tooltip';
-import { NgIf } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { CdkScrollable } from '@angular/cdk/scrolling';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { NgIf, NgFor } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardLoaderComponent } from 'Common-UI/v2/ui/loader';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardPaginatorComponent } from 'Common-UI/v2/ui/paginator';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-allergen-search',
+  standalone: true,
   templateUrl: './allergen-search.component.html',
-  styleUrls: ['./allergen-search.component.css'],
   imports: [
-    MatIcon,
-    MatDialogClose,
-    MatTooltip,
     NgIf,
-    MatProgressSpinner,
-    CdkScrollable,
-    MatDialogContent,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatRadioGroup,
-    MatRadioButton,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
-    MatPaginator,
+    NgFor,
+    FormsModule,
+    NgIcon,
+    MatDialogClose,
+    ZardButtonComponent,
+    ZardLoaderComponent,
+    ...ZardTableImports,
+    ZardRadioComponent,
+    ZardRadioGroupComponent,
+    ZardPaginatorComponent,
+    ...tooltipImports,
   ],
+  viewProviders: [provideIcons({ lucideX })],
 })
 export class AllergenSearchComponent implements OnInit, DoCheck {
   searchTerm!: string;
@@ -91,8 +74,8 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
   selectedItem: any;
   displayedColumns: any = ['ConceptID', 'term', 'empty'];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  components = new MatTableDataSource<any>();
+  componentsData: any[] = [];
+  pagedItems: any[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public input: any,
@@ -121,6 +104,10 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
     this.selectedComponent = component;
     this.selectedItem = component;
   }
+
+  onSelectElement(element: any) {
+    this.selectComponentName(element?.conceptID, element?.term);
+  }
   submitComponentList() {
     const reqObj = {
       componentNo: this.selectedComponentNo,
@@ -139,10 +126,10 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
             if (res.statusCode === 200) {
               this.showProgressBar = false;
               if (res.data && res.data.sctMaster.length > 0) {
-                this.components.data = res.data.sctMaster;
-                this.components.paginator = this.paginator;
+                this.componentsData = res.data.sctMaster;
               } else {
                 this.message = this.current_language_set.common.noRecordFound;
+                this.resetData();
               }
             } else {
               this.resetData();
@@ -158,7 +145,6 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
   }
 
   resetData() {
-    this.components.data = [];
-    this.components.paginator = this.paginator;
+    this.componentsData = [];
   }
 }

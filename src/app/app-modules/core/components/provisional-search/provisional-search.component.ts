@@ -20,70 +20,49 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Inject, DoCheck, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, DoCheck } from '@angular/core';
 import { MasterdataService } from '../../../nurse-doctor/shared/services/masterdata.service';
 import { SpinnerService } from '../../services/spinner.service';
 import { HttpServiceService } from '../../services/http-service.service';
-import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
 import { SetLanguageComponent } from '../set-language.component';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogClose,
-  MatDialogContent,
-} from '@angular/material/dialog';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { CdkScrollable } from '@angular/cdk/scrolling';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { NgIf, NgFor } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX, lucideSearch } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardCheckboxComponent } from 'Common-UI/v2/ui/checkbox';
+import { ZardLoaderComponent } from 'Common-UI/v2/ui/loader';
+import { ZardPaginatorComponent } from 'Common-UI/v2/ui/paginator';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-provisional-search',
+  standalone: true,
   templateUrl: './provisional-search.component.html',
-  styleUrls: ['./provisional-search.component.css'],
   imports: [
-    MatDialogClose,
-    MatTooltip,
-    MatIcon,
-    MatFormField,
-    MatLabel,
-    MatInput,
+    NgIf,
+    NgFor,
     ReactiveFormsModule,
     FormsModule,
-    NgIf,
-    MatProgressSpinner,
-    CdkScrollable,
-    MatDialogContent,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatCheckbox,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
-    MatPaginator,
+    NgIcon,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ...ZardTableImports,
+    ZardCheckboxComponent,
+    ZardLoaderComponent,
+    ZardPaginatorComponent,
+    ...tooltipImports,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideX,
+      lucideSearch,
+    }),
   ],
 })
 export class ProvisionalSearchComponent implements OnInit, DoCheck {
@@ -93,8 +72,8 @@ export class ProvisionalSearchComponent implements OnInit, DoCheck {
   disableDiagnosisList: any = [];
   current_language_set: any;
   displayedColumns: any = ['ConceptID', 'term', 'empty'];
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  diagnosis = new MatTableDataSource<any>();
+  diagnosisData: any[] = [];
+  pagedItems: any[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public input: any,
@@ -120,15 +99,15 @@ export class ProvisionalSearchComponent implements OnInit, DoCheck {
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
 
-  selectDiagnosis(event: any, item: any) {
-    if (event.checked) {
-      item.selected = true;
-      this.selectedDiagnosisList.push(item);
-    } else {
-      const index = this.selectedDiagnosisList.indexOf(item);
-      this.selectedDiagnosisList.splice(index, 1);
-      item.selected = false;
-    }
+  addDiagnosis(item: any) {
+    item.selected = true;
+    this.selectedDiagnosisList.push(item);
+  }
+
+  removeDiagnosis(item: any) {
+    const index = this.selectedDiagnosisList.indexOf(item);
+    this.selectedDiagnosisList.splice(index, 1);
+    item.selected = false;
   }
 
   disableSelection(item: any) {
@@ -189,8 +168,7 @@ export class ProvisionalSearchComponent implements OnInit, DoCheck {
               this.showProgressBar = false;
               if (res.data && res.data.sctMaster.length > 0) {
                 this.showProgressBar = false;
-                this.diagnosis.data = res.data.sctMaster;
-                this.diagnosis.paginator = this.paginator;
+                this.diagnosisData = res.data.sctMaster;
               }
             } else {
               this.resetData();
@@ -206,7 +184,6 @@ export class ProvisionalSearchComponent implements OnInit, DoCheck {
   }
 
   resetData() {
-    this.diagnosis.data = [];
-    this.diagnosis.paginator = this.paginator;
+    this.diagnosisData = [];
   }
 }

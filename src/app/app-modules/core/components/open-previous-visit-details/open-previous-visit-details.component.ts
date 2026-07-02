@@ -26,14 +26,26 @@ import { ConfirmationService } from '../../services/confirmation.service';
 import { SetLanguageComponent } from '../set-language.component';
 import { DoctorService } from 'src/app/app-modules/nurse-doctor/shared/services';
 import { MatDialogClose } from '@angular/material/dialog';
-import { MatIcon } from '@angular/material/icon';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
 
 @Component({
   selector: 'app-open-previous-visit-details',
+  standalone: true,
   templateUrl: './open-previous-visit-details.component.html',
-  styleUrls: ['./open-previous-visit-details.component.css'],
-  imports: [MatDialogClose, MatIcon, NgIf, NgFor, DatePipe],
+  imports: [
+    MatDialogClose,
+    NgIf,
+    NgFor,
+    DatePipe,
+    NgIcon,
+    ZardButtonComponent,
+    ...ZardTableImports,
+  ],
+  viewProviders: [provideIcons({ lucideX })],
 })
 export class OpenPreviousVisitDetailsComponent implements OnInit {
   currentLanguageSet: any;
