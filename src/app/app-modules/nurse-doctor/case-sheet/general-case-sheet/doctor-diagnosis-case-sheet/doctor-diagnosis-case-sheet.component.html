@@ -390,7 +390,7 @@
       <table z-table class="w-full" aria-describedby="questions">
         <thead z-table-header>
           <tr z-table-row>
-            <th z-table-head id="sno">
+            <th z-table-head>
               {{ currentLanguageSet?.casesheet?.serialNo }}
             </th>
             <th z-table-head id="Question">
@@ -438,7 +438,7 @@
     <table z-table class="w-full" aria-describedby="chiefComplaint">
       <thead z-table-header>
         <tr z-table-row>
-          <th z-table-head class="w-[5%]" id="serialNo">
+          <th z-table-head class="w-[5%]">
             {{ currentLanguageSet?.casesheet?.serialNo }}
           </th>
           <th z-table-head class="w-1/4" id="chiefComplaints">
@@ -563,13 +563,13 @@
     <table z-table class="w-full" aria-describedby="investigations">
       <thead z-table-header>
         <tr z-table-row>
-          <th z-table-head class="w-[5%]" id="serialNo">
+          <th z-table-head class="w-[5%]">
             {{ currentLanguageSet?.casesheet?.serialNo }}
           </th>
-          <th z-table-head class="w-[15%]" id="procedureName">
+          <th z-table-head class="w-[15%]">
             {{ currentLanguageSet?.casesheet?.procedureName }}
           </th>
-          <th z-table-head class="w-[15%]" id="componentName">
+          <th z-table-head class="w-[15%]">
             {{ currentLanguageSet?.casesheet?.componentName }}
           </th>
           <th z-table-head class="w-[10%]" id="LCode">
@@ -581,10 +581,10 @@
           <th z-table-head class="w-1/5" id="testResult">
             {{ currentLanguageSet?.Reports?.testresult }}
           </th>
-          <th z-table-head class="w-[10%]" id="unit">
+          <th z-table-head class="w-[10%]">
             {{ currentLanguageSet?.casesheet?.unit }}
           </th>
-          <th z-table-head class="w-1/4" id="remarks">
+          <th z-table-head class="w-1/4">
             {{ currentLanguageSet?.common?.remarks }}
           </th>
         </tr>
@@ -611,7 +611,6 @@
             </td>
             <th
               z-table-head
-              id="procedureName"
               [rowSpan]="procedure.componentList.length + 1">
               {{ procedure?.procedureName }}
             </th>
@@ -662,13 +661,13 @@
     <table z-table class="w-full" aria-describedby="LabTest">
       <thead z-table-header>
         <tr z-table-row>
-          <th z-table-head class="w-[5%]" id="serialNo">
+          <th z-table-head class="w-[5%]">
             {{ currentLanguageSet?.casesheet?.serialNo }}
           </th>
-          <th z-table-head class="w-[15%]" id="procedureName">
+          <th z-table-head class="w-[15%]">
             {{ currentLanguageSet?.casesheet?.procedureName }}
           </th>
-          <th z-table-head class="w-[15%]" id="componentName">
+          <th z-table-head class="w-[15%]">
             {{ currentLanguageSet?.casesheet?.componentName }}
           </th>
           <th z-table-head class="w-[10%]" id="loincode">
@@ -680,10 +679,10 @@
           <th z-table-head class="w-[10%]" id="testresult">
             {{ currentLanguageSet?.Reports?.testresult }}
           </th>
-          <th z-table-head class="w-[10%]" id="unit">
+          <th z-table-head class="w-[10%]">
             {{ currentLanguageSet?.Reports?.unit }}
           </th>
-          <th z-table-head class="w-1/4" id="remarks">
+          <th z-table-head class="w-1/4">
             {{ currentLanguageSet?.common?.remarks }}
           </th>
         </tr>
@@ -710,7 +709,6 @@
             </td>
             <th
               z-table-head
-              id="procedureName"
               [rowSpan]="procedure.componentList.length + 1">
               {{ procedure?.procedureName }}
             </th>
@@ -857,7 +855,7 @@
 
           <ng-container *ngIf="caseRecords?.diagnosis?.isMaternalDeath">
             <tr z-table-row>
-              <th z-table-head id="dateOfDeath">
+              <th z-table-head>
                 {{ currentLanguageSet?.casesheet?.dateOfDeath }}:
               </th>
               <td z-table-cell>
@@ -867,7 +865,7 @@
                     caseRecords.diagnosis.dateOfDeath
                 }}
               </td>
-              <th z-table-head id="placeOfDeath">
+              <th z-table-head>
                 {{ currentLanguageSet?.casesheet?.placeOfDeath }}:
               </th>
               <td z-table-cell>
@@ -880,7 +878,7 @@
             </tr>
 
             <tr z-table-row>
-              <th z-table-head id="causeOfDeath" colspan="4">
+              <th z-table-head colspan="4">
                 {{ currentLanguageSet?.casesheet?.causeOfDeath }}:
               </th>
             </tr>
@@ -906,7 +904,7 @@
       <table z-table class="w-full" aria-describedby="PNCDiagnosisTbl">
         <tbody z-table-body>
           <tr z-table-row>
-            <th z-table-head colspan="4" id="provisionalDiag">
+            <th z-table-head colspan="4">
               {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
             </th>
           </tr>
@@ -935,7 +933,7 @@
           </tr>
           <ng-container *ngIf="caseRecords?.diagnosis?.isMaternalDeath">
             <tr z-table-row>
-              <th z-table-head id="dateOfDeath">
+              <th z-table-head>
                 {{ currentLanguageSet?.casesheet?.dateOfDeath }}:
               </th>
               <td z-table-cell>
@@ -945,7 +943,7 @@
                     caseRecords.diagnosis.dateOfDeath
                 }}
               </td>
-              <th z-table-head id="placeOfDeath">
+              <th z-table-head>
                 {{ currentLanguageSet?.casesheet?.placeOfDeath }}:
               </th>
               <td z-table-cell>
@@ -957,7 +955,7 @@
               </td>
             </tr>
             <tr z-table-row>
-              <th z-table-head colspan="4" id="causeOfDeath">
+              <th z-table-head colspan="4">
                 {{ currentLanguageSet?.casesheet?.causeOfDeath }}:
               </th>
             </tr>
@@ -1088,7 +1086,7 @@
           </tr>
 
           <tr z-table-row>
-            <th z-table-head colspan="4" id="provisionalDiag1">
+            <th z-table-head colspan="4">
               {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
             </th>
           </tr>
@@ -1129,7 +1127,7 @@
       <table z-table class="w-full" aria-describedby="GeneralOPDDiagnosisTbl">
         <tbody z-table-body>
           <tr z-table-row>
-            <th z-table-head colspan="4" id="provisionalDiag1">
+            <th z-table-head colspan="4">
               {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
             </th>
           </tr>
@@ -1153,7 +1151,7 @@
       <table z-table class="w-full" aria-describedby="FinalDiagnosisTbl">
         <tbody z-table-body>
           <tr z-table-row>
-            <th z-table-head colspan="4" id="provisionalDiag">
+            <th z-table-head colspan="4">
               {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
             </th>
           </tr>
@@ -1191,7 +1189,7 @@
       <table z-table class="w-full" aria-describedby="GeneralOPDQCDiagnosisTbl">
         <tbody z-table-body>
           <tr z-table-row>
-            <th z-table-head colspan="4" id="provisionalDiag1">
+            <th z-table-head colspan="4">
               {{ currentLanguageSet?.casesheet?.provisionalDiag }}:
             </th>
           </tr>
@@ -1221,7 +1219,7 @@
     <table z-table class="w-full" aria-describedby="PrescriptionTbl">
       <thead z-table-header>
         <tr z-table-row>
-          <th z-table-head class="w-[5%]" id="serialNo">
+          <th z-table-head class="w-[5%]">
             {{ currentLanguageSet?.casesheet?.serialNo }}
           </th>
           <th z-table-head class="w-[15%]" id="nameAndStrength">
@@ -1338,7 +1336,7 @@
     <table z-table class="w-full" aria-describedby="mmuPrescription">
       <thead z-table-header>
         <tr z-table-row>
-          <th z-table-head class="w-[5%]" id="sno">
+          <th z-table-head class="w-[5%]">
             {{ currentLanguageSet?.casesheet?.serialNo }}
           </th>
           <th z-table-head class="w-[15%]" id="mmuNameAndStrength">
