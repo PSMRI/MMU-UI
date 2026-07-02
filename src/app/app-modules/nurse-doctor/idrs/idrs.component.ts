@@ -31,7 +31,12 @@ import {
   DoCheck,
   OnChanges,
 } from '@angular/core';
-import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  ReactiveFormsModule,
+  FormsModule,
+} from '@angular/forms';
 import { Observable, Subscription, mergeMap, of } from 'rxjs';
 import {
   NurseService,
@@ -49,43 +54,35 @@ import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { PreviousDetailsComponent } from '../../core/components/previous-details/previous-details.component';
-import { MatTableDataSource } from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import {
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
 import { NgFor, NgIf } from '@angular/common';
-import { MatLabel } from '@angular/material/select';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import {
-  MatCard,
-  MatCardHeader,
-  MatCardTitle,
-  MatCardContent,
-} from '@angular/material/card';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory } from '@ng-icons/lucide';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardBadgeComponent } from 'Common-UI/v2/ui/badge';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
 
 @Component({
   selector: 'app-idrs',
   templateUrl: './idrs.component.html',
-  styleUrls: ['./idrs.component.css'],
+  viewProviders: [provideIcons({ lucideHistory })],
   imports: [
     ReactiveFormsModule,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
+    FormsModule,
     NgFor,
-    MatLabel,
-    MatTooltip,
-    MatIcon,
     NgIf,
-    MatCard,
-    MatCardHeader,
-    MatCardTitle,
-    MatCardContent,
-    MatRadioGroup,
-    MatRadioButton,
+    NgIcon,
+    ZardButtonComponent,
+    ZardBadgeComponent,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
+    ...cardImports,
+    ...ZardTableImports,
+    ...tooltipImports,
   ],
 })
 export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
@@ -145,10 +142,6 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   visitDiseaseSubscription!: Subscription;
   IdrsScoreFlagSubscription!: Subscription;
   idrsWaistSubscription!: Subscription;
-
-  // displayedColumns: any = ['sno', 'question', 'answer'];
-
-  // dataSource = new MatTableDataSource<any>();
 
   constructor(
     private beneficiaryDetailsService: BeneficiaryDetailsService,
@@ -1062,6 +1055,26 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
       });
     console.log('checking', this.questions1);
   }
+  /**
+   * Maps the stored string answer ('yes'/'no'/null) to the boolean value the
+   * z-radio items carry, so the matching option renders selected. This is a
+   * read-only view mapping — it does not change the stored answer type.
+   */
+  idrsAnswer(q: any): boolean | null {
+    if (q?.answer === 'yes') return true;
+    if (q?.answer === 'no') return false;
+    return null;
+  }
+
+  /**
+   * Bridges the z-radio-group (zChange) output — which emits the selected
+   * boolean — to the original radioChange(question, 'yes'|'no', disease)
+   * handler so downstream logic is unchanged.
+   */
+  onIdrsAnswerChange(q: any, value: unknown, d: any) {
+    this.radioChange(q, value === true ? 'yes' : 'no', d);
+  }
+
   radioChange(q: any, value: any, d: any) {
     this.IDRSChanged.emit(false);
     for (const question of this.questions1) {
