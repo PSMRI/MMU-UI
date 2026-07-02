@@ -27,7 +27,7 @@ import {
   ElementRef,
   OnInit,
   DoCheck,
-  Injector,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   FormArray,
@@ -38,7 +38,7 @@ import {
 import { GeneralUtils } from '../../nurse-doctor/shared/utility/general-utility';
 import { SetLanguageComponent } from '../components/set-language.component';
 import { HttpServiceService } from '../services/http-service.service';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { ProvisionalSearchComponent } from '../components/provisional-search/provisional-search.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 @Directive({ selector: '[appConfirmatoryDiagnosis]' })
@@ -63,8 +63,8 @@ export class ConfirmatoryDiagnosisDirective implements OnInit, DoCheck {
   constructor(
     private fb: FormBuilder,
     private el: ElementRef,
-    private dialog: MatDialog,
-    private readonly injector: Injector,
+    private dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     readonly sessionstorage: SessionStorageService,
     private httpServiceService: HttpServiceService
   ) {}
@@ -76,16 +76,20 @@ export class ConfirmatoryDiagnosisDirective implements OnInit, DoCheck {
   openDialog(): void {
     const searchTerm = this.diagnosisListForm.value.confirmatoryDiagnosis;
     if (searchTerm.length > 2) {
-      const dialogRef = this.dialog.open(ProvisionalSearchComponent, {
-        width: '800px',
-        injector: this.injector,
-        // panelClass: 'fit-screen',
-        data: {
-          searchTerm: searchTerm,
-          addedDiagnosis: this.previousSelected,
-          diagonasisType: this.currentLanguageSet.confirmDiagnosis,
-        },
-      });
+      const dialogRef = this.dialog.create<ProvisionalSearchComponent, unknown>(
+        {
+          zContent: ProvisionalSearchComponent,
+          zWidth: '800px',
+          zData: {
+            searchTerm: searchTerm,
+            addedDiagnosis: this.previousSelected,
+            diagonasisType: this.currentLanguageSet.confirmDiagnosis,
+          },
+          zHideFooter: true,
+          zClosable: false,
+          zViewContainerRef: this.viewContainerRef,
+        }
+      );
 
       dialogRef.afterClosed().subscribe(result => {
         console.log('result', result);

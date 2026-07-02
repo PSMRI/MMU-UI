@@ -21,30 +21,36 @@
  */
 
 import { Injectable, ViewContainerRef, Inject, DOCUMENT } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { Observable } from 'rxjs';
 import { CameraDialogComponent } from '../components/camera-dialog/camera-dialog.component';
 
 @Injectable()
 export class CameraService {
   constructor(
-    private dialog: MatDialog,
+    private dialog: ZardDialogService,
     @Inject(DOCUMENT) doc: any
   ) {}
 
   public capture(titleAlign = 'center'): Observable<any> {
-    const config = new MatDialogConfig();
-    const dialogRef = this.dialog.open(CameraDialogComponent, config);
-    dialogRef.componentInstance.capture = true;
-    dialogRef.componentInstance.imageCode = false;
+    const dialogRef = this.dialog.create<CameraDialogComponent, unknown>({
+      zContent: CameraDialogComponent,
+      zHideFooter: true,
+      zClosable: false,
+    });
+    dialogRef.componentInstance!.capture = true;
+    dialogRef.componentInstance!.imageCode = false;
     return dialogRef.afterClosed();
   }
 
   public viewImage(benImageCode: string, titleAlign = 'center'): void {
-    const config = new MatDialogConfig();
-    const dialogRef = this.dialog.open(CameraDialogComponent, config);
-    dialogRef.componentInstance.capture = false;
-    dialogRef.componentInstance.imageCode = benImageCode;
+    const dialogRef = this.dialog.create<CameraDialogComponent, unknown>({
+      zContent: CameraDialogComponent,
+      zHideFooter: true,
+      zClosable: false,
+    });
+    dialogRef.componentInstance!.capture = false;
+    dialogRef.componentInstance!.imageCode = benImageCode;
   }
 
   public annotate(
@@ -53,25 +59,31 @@ export class CameraService {
     currentLanguage: any,
     titleAlign = 'center'
   ): Observable<any> {
-    const dialogRef = this.dialog.open(CameraDialogComponent, {
-      width: '80%',
+    const dialogRef = this.dialog.create<CameraDialogComponent, unknown>({
+      zContent: CameraDialogComponent,
+      zWidth: '80%',
+      zHideFooter: true,
+      zClosable: false,
     });
-    dialogRef.componentInstance.capture = false;
-    dialogRef.componentInstance.imageCode = false;
-    dialogRef.componentInstance.annotate = image;
-    dialogRef.componentInstance.current_language_set = currentLanguage;
-    dialogRef.componentInstance.availablePoints = points;
+    dialogRef.componentInstance!.capture = false;
+    dialogRef.componentInstance!.imageCode = false;
+    dialogRef.componentInstance!.annotate = image;
+    dialogRef.componentInstance!.current_language_set = currentLanguage;
+    dialogRef.componentInstance!.availablePoints = points;
     return dialogRef.afterClosed();
   }
 
   public ViewGraph(graph: any): void {
-    const dialogRef = this.dialog.open(CameraDialogComponent, {
-      width: '80%',
+    const dialogRef = this.dialog.create<CameraDialogComponent, unknown>({
+      zContent: CameraDialogComponent,
+      zWidth: '80%',
+      zHideFooter: true,
+      zClosable: false,
     });
-    dialogRef.componentInstance.capture = false;
-    dialogRef.componentInstance.imageCode = false;
-    dialogRef.componentInstance.annotate = false;
-    dialogRef.componentInstance.availablePoints = false;
-    dialogRef.componentInstance.graph = graph;
+    dialogRef.componentInstance!.capture = false;
+    dialogRef.componentInstance!.imageCode = false;
+    dialogRef.componentInstance!.annotate = false;
+    dialogRef.componentInstance!.availablePoints = false;
+    dialogRef.componentInstance!.graph = graph;
   }
 }

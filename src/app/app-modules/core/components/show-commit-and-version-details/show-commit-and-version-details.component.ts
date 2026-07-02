@@ -21,7 +21,7 @@
  */
 
 import { Component, OnInit, Inject, DoCheck } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -39,9 +39,9 @@ export class ShowCommitAndVersionDetailsComponent implements OnInit, DoCheck {
   current_language_set: any;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public input: any,
+    @Inject(Z_MODAL_DATA) public input: any,
     public httpServiceService: HttpServiceService,
-    public dialogRef: MatDialogRef<ShowCommitAndVersionDetailsComponent>
+    public dialogRef: ZardDialogRef<ShowCommitAndVersionDetailsComponent>
   ) {}
 
   ngOnInit() {

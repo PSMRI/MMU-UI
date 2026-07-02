@@ -20,12 +20,18 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Inject, DoCheck } from '@angular/core';
 import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+  Component,
+  OnInit,
+  Inject,
+  DoCheck,
+  ViewContainerRef,
+} from '@angular/core';
+import {
+  Z_MODAL_DATA,
+  ZardDialogService,
+  ZardDialogRef,
+} from 'Common-UI/v2/ui/dialog';
 import { ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
 import { IotService } from '../../services/iot.service';
@@ -73,13 +79,14 @@ export class IotcomponentComponent implements OnInit, DoCheck {
   stripShowMsg = false;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public input: any,
+    @Inject(Z_MODAL_DATA) public input: any,
     public httpServiceService: HttpServiceService,
-    public dialogRef: MatDialogRef<IotcomponentComponent>,
+    public dialogRef: ZardDialogRef<IotcomponentComponent>,
     public service: IotService,
     private confirmationService: ConfirmationService,
     readonly sessionstorage: SessionStorageService,
-    private dialog: MatDialog
+    private dialog: ZardDialogService,
+    private viewContainerRef: ViewContainerRef
   ) {}
 
   ngOnInit() {
@@ -102,10 +109,14 @@ export class IotcomponentComponent implements OnInit, DoCheck {
       this.procedure.value.calibrationStartAPI !== undefined &&
       this.procedure.value.calibrationStartAPI !== null
     ) {
-      const dialogRef = this.dialog.open(CalibrationComponent, {
-        width: '600px',
-        disableClose: true,
-        data: { providerServiceMapID: providerServiceMapID },
+      const dialogRef = this.dialog.create<CalibrationComponent, unknown>({
+        zContent: CalibrationComponent,
+        zWidth: '600px',
+        zMaskClosable: false,
+        zData: { providerServiceMapID: providerServiceMapID },
+        zHideFooter: true,
+        zClosable: false,
+        zViewContainerRef: this.viewContainerRef,
       });
 
       dialogRef.afterClosed().subscribe(result => {

@@ -1,9 +1,5 @@
 import { Injectable, ViewContainerRef, Inject, DOCUMENT } from '@angular/core';
-import {
-  MatDialog,
-  MatDialogConfig,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { ZardDialogService, ZardDialogRef } from 'Common-UI/v2/ui/dialog';
 
 import { Observable } from 'rxjs';
 import { CommonDialogComponent } from '../components/common-dialog/common-dialog.component';
@@ -11,7 +7,7 @@ import { CommonDialogComponent } from '../components/common-dialog/common-dialog
 @Injectable()
 export class ConfirmationService {
   constructor(
-    public dialog: MatDialog,
+    public dialog: ZardDialogService,
     @Inject(DOCUMENT) doc: any
   ) {}
 
@@ -21,19 +17,23 @@ export class ConfirmationService {
     btnOkText = 'OK',
     btnCancelText = 'Cancel'
   ): Observable<boolean> {
-    const dialogRef = this.dialog.open(CommonDialogComponent, {
-      width: '420px',
-      disableClose: false,
+    const dialogRef = this.dialog.create<CommonDialogComponent, unknown>({
+      zContent: CommonDialogComponent,
+      zWidth: '420px',
+      zMaskClosable: false,
+      zHideFooter: true,
+      zClosable: false,
     });
-    dialogRef.componentInstance.title = title;
-    dialogRef.componentInstance.message = message;
-    dialogRef.componentInstance.btnOkText = btnOkText;
-    dialogRef.componentInstance.btnCancelText = btnCancelText;
-    dialogRef.componentInstance.confirmAlert = true;
-    dialogRef.componentInstance.confirmcalibration = false;
-    dialogRef.componentInstance.alert = false;
-    dialogRef.componentInstance.remarks = false;
-    dialogRef.componentInstance.editRemarks = false;
+    const instance = dialogRef.componentInstance!;
+    instance.title = title;
+    instance.message = message;
+    instance.btnOkText = btnOkText;
+    instance.btnCancelText = btnCancelText;
+    instance.confirmAlert = true;
+    instance.confirmcalibration = false;
+    instance.alert = false;
+    instance.remarks = false;
+    instance.editRemarks = false;
     dialogRef.disableClose = true;
 
     return dialogRef.afterClosed();
@@ -44,19 +44,22 @@ export class ConfirmationService {
     message: string,
     btnOkText = 'OK'
   ): Observable<boolean> {
-    const config = new MatDialogConfig();
-    const dialogRef = this.dialog.open(CommonDialogComponent, {
-      width: '420px',
-      disableClose: false,
+    const dialogRef = this.dialog.create<CommonDialogComponent, unknown>({
+      zContent: CommonDialogComponent,
+      zWidth: '420px',
+      zMaskClosable: false,
+      zHideFooter: true,
+      zClosable: false,
     });
-    dialogRef.componentInstance.title = title;
-    dialogRef.componentInstance.message = message;
-    dialogRef.componentInstance.btnOkText = btnOkText;
-    dialogRef.componentInstance.confirmHealthID = true;
-    dialogRef.componentInstance.confirmcalibration = false;
-    dialogRef.componentInstance.alert = false;
-    dialogRef.componentInstance.remarks = false;
-    dialogRef.componentInstance.editRemarks = false;
+    const instance = dialogRef.componentInstance!;
+    instance.title = title;
+    instance.message = message;
+    instance.btnOkText = btnOkText;
+    instance.confirmHealthID = true;
+    instance.confirmcalibration = false;
+    instance.alert = false;
+    instance.remarks = false;
+    instance.editRemarks = false;
     dialogRef.disableClose = true;
 
     return dialogRef.afterClosed();
@@ -66,19 +69,23 @@ export class ConfirmationService {
     message: string,
     status = 'info',
     btnOkText = 'OK'
-  ): MatDialogRef<CommonDialogComponent> {
-    const config = {
-      width: '420px',
-    };
-    const dialogRef = this.dialog.open(CommonDialogComponent, config);
-    dialogRef.componentInstance.message = message;
-    dialogRef.componentInstance.status = status.toLowerCase();
-    dialogRef.componentInstance.btnOkText = btnOkText;
-    dialogRef.componentInstance.confirmAlert = false;
-    dialogRef.componentInstance.confirmcalibration = false;
-    dialogRef.componentInstance.alert = true;
-    dialogRef.componentInstance.remarks = false;
-    dialogRef.componentInstance.editRemarks = false;
+  ): ZardDialogRef<CommonDialogComponent> {
+    const dialogRef = this.dialog.create<CommonDialogComponent, unknown>({
+      zContent: CommonDialogComponent,
+      zWidth: '420px',
+      zMaskClosable: true,
+      zHideFooter: true,
+      zClosable: false,
+    });
+    const instance = dialogRef.componentInstance!;
+    instance.message = message;
+    instance.status = status.toLowerCase();
+    instance.btnOkText = btnOkText;
+    instance.confirmAlert = false;
+    instance.confirmcalibration = false;
+    instance.alert = true;
+    instance.remarks = false;
+    instance.editRemarks = false;
 
     return dialogRef;
   }
@@ -90,18 +97,22 @@ export class ConfirmationService {
     btnOkText = 'Submit',
     btnCancelText = 'Cancel'
   ): Observable<any> {
-    const config = {
-      width: '420px',
-    };
-    const dialogRef = this.dialog.open(CommonDialogComponent, config);
-    dialogRef.componentInstance.message = message;
-    dialogRef.componentInstance.btnOkText = btnOkText;
-    dialogRef.componentInstance.confirmAlert = false;
-    dialogRef.componentInstance.confirmcalibration = false;
-    dialogRef.componentInstance.alert = false;
-    dialogRef.componentInstance.remarks = true;
-    dialogRef.componentInstance.editRemarks = false;
-    dialogRef.componentInstance.btnCancelText = btnCancelText;
+    const dialogRef = this.dialog.create<CommonDialogComponent, unknown>({
+      zContent: CommonDialogComponent,
+      zWidth: '420px',
+      zMaskClosable: true,
+      zHideFooter: true,
+      zClosable: false,
+    });
+    const instance = dialogRef.componentInstance!;
+    instance.message = message;
+    instance.btnOkText = btnOkText;
+    instance.confirmAlert = false;
+    instance.confirmcalibration = false;
+    instance.alert = false;
+    instance.remarks = true;
+    instance.editRemarks = false;
+    instance.btnCancelText = btnCancelText;
 
     return dialogRef.afterClosed();
   }
@@ -114,16 +125,23 @@ export class ConfirmationService {
     btnOkText = 'Submit',
     btnCancelText = 'Cancel'
   ): Observable<any> {
-    const dialogRef = this.dialog.open(CommonDialogComponent, { width: '60%' });
-    dialogRef.componentInstance.message = message;
-    dialogRef.componentInstance.btnOkText = btnOkText;
-    dialogRef.componentInstance.confirmAlert = false;
-    dialogRef.componentInstance.confirmcalibration = false;
-    dialogRef.componentInstance.alert = false;
-    dialogRef.componentInstance.remarks = false;
-    dialogRef.componentInstance.editRemarks = true;
-    dialogRef.componentInstance.comments = comments;
-    dialogRef.componentInstance.btnCancelText = btnCancelText;
+    const dialogRef = this.dialog.create<CommonDialogComponent, unknown>({
+      zContent: CommonDialogComponent,
+      zWidth: '60%',
+      zMaskClosable: true,
+      zHideFooter: true,
+      zClosable: false,
+    });
+    const instance = dialogRef.componentInstance!;
+    instance.message = message;
+    instance.btnOkText = btnOkText;
+    instance.confirmAlert = false;
+    instance.confirmcalibration = false;
+    instance.alert = false;
+    instance.remarks = false;
+    instance.editRemarks = true;
+    instance.comments = comments;
+    instance.btnCancelText = btnCancelText;
 
     return dialogRef.afterClosed();
   }
@@ -135,19 +153,23 @@ export class ConfirmationService {
     messageAlign = 'center',
     btnOkText = 'OK'
   ): Observable<any> {
-    const config = {
-      width: '420px',
-    };
-    const dialogRef = this.dialog.open(CommonDialogComponent, config);
-    dialogRef.componentInstance.message = message;
-    dialogRef.componentInstance.btnOkText = btnOkText;
-    dialogRef.componentInstance.confirmAlert = false;
-    dialogRef.componentInstance.confirmcalibration = false;
-    dialogRef.componentInstance.alert = false;
-    dialogRef.componentInstance.remarks = false;
-    dialogRef.componentInstance.editRemarks = false;
-    dialogRef.componentInstance.notify = true;
-    dialogRef.componentInstance.mandatories = mandatories;
+    const dialogRef = this.dialog.create<CommonDialogComponent, unknown>({
+      zContent: CommonDialogComponent,
+      zWidth: '420px',
+      zMaskClosable: true,
+      zHideFooter: true,
+      zClosable: false,
+    });
+    const instance = dialogRef.componentInstance!;
+    instance.message = message;
+    instance.btnOkText = btnOkText;
+    instance.confirmAlert = false;
+    instance.confirmcalibration = false;
+    instance.alert = false;
+    instance.remarks = false;
+    instance.editRemarks = false;
+    instance.notify = true;
+    instance.mandatories = mandatories;
     return dialogRef.afterClosed();
   }
 
@@ -159,21 +181,25 @@ export class ConfirmationService {
     btnOkText = 'Confirm',
     btnCancelText = 'Cancel'
   ): Observable<any> {
-    const config = {
-      width: '420px',
-    };
-    const dialogRef = this.dialog.open(CommonDialogComponent, config);
-    dialogRef.componentInstance.message = message;
-    dialogRef.componentInstance.btnOkText = btnOkText;
-    dialogRef.componentInstance.btnCancelText = btnCancelText;
-    dialogRef.componentInstance.confirmAlert = false;
-    dialogRef.componentInstance.confirmcalibration = false;
-    dialogRef.componentInstance.alert = false;
-    dialogRef.componentInstance.remarks = false;
-    dialogRef.componentInstance.editRemarks = false;
-    dialogRef.componentInstance.notify = false;
-    dialogRef.componentInstance.choice = true;
-    dialogRef.componentInstance.values = values;
+    const dialogRef = this.dialog.create<CommonDialogComponent, unknown>({
+      zContent: CommonDialogComponent,
+      zWidth: '420px',
+      zMaskClosable: true,
+      zHideFooter: true,
+      zClosable: false,
+    });
+    const instance = dialogRef.componentInstance!;
+    instance.message = message;
+    instance.btnOkText = btnOkText;
+    instance.btnCancelText = btnCancelText;
+    instance.confirmAlert = false;
+    instance.confirmcalibration = false;
+    instance.alert = false;
+    instance.remarks = false;
+    instance.editRemarks = false;
+    instance.notify = false;
+    instance.choice = true;
+    instance.values = values;
     return dialogRef.afterClosed();
   }
 
@@ -184,21 +210,25 @@ export class ConfirmationService {
     btnOkText = 'Continue',
     btnCancelText = 'Cancel'
   ): Observable<any> {
-    const dialogRef = this.dialog.open(CommonDialogComponent, {
-      width: '420px',
-      disableClose: true,
+    const dialogRef = this.dialog.create<CommonDialogComponent, unknown>({
+      zContent: CommonDialogComponent,
+      zWidth: '420px',
+      zMaskClosable: false,
+      zHideFooter: true,
+      zClosable: false,
     });
-    dialogRef.componentInstance.title = title;
-    dialogRef.componentInstance.message = message;
-    dialogRef.componentInstance.btnOkText = btnOkText;
-    dialogRef.componentInstance.btnCancelText = btnCancelText;
-    dialogRef.componentInstance.confirmAlert = false;
-    dialogRef.componentInstance.confirmcalibration = false;
-    dialogRef.componentInstance.alert = false;
-    dialogRef.componentInstance.remarks = false;
-    dialogRef.componentInstance.editRemarks = false;
-    dialogRef.componentInstance.sessionTimeout = true;
-    dialogRef.componentInstance.updateTimer(timer);
+    const instance = dialogRef.componentInstance!;
+    instance.title = title;
+    instance.message = message;
+    instance.btnOkText = btnOkText;
+    instance.btnCancelText = btnCancelText;
+    instance.confirmAlert = false;
+    instance.confirmcalibration = false;
+    instance.alert = false;
+    instance.remarks = false;
+    instance.editRemarks = false;
+    instance.sessionTimeout = true;
+    instance.updateTimer(timer);
 
     return dialogRef.afterClosed();
   }
@@ -211,22 +241,26 @@ export class ConfirmationService {
     btnOkText = 'Proceed',
     btnCancelText = 'Cancel'
   ): Observable<any> {
-    const config = {
-      width: '420px',
-    };
-    const dialogRef = this.dialog.open(CommonDialogComponent, config);
-    dialogRef.componentInstance.message = message;
-    dialogRef.componentInstance.btnOkText = btnOkText;
-    dialogRef.componentInstance.btnCancelText = btnCancelText;
-    dialogRef.componentInstance.confirmAlert = false;
-    dialogRef.componentInstance.confirmcalibration = false;
-    dialogRef.componentInstance.alert = false;
-    dialogRef.componentInstance.remarks = false;
-    dialogRef.componentInstance.editRemarks = false;
-    dialogRef.componentInstance.notify = false;
-    dialogRef.componentInstance.choice = false;
-    dialogRef.componentInstance.choiceSelect = true;
-    dialogRef.componentInstance.values = values;
+    const dialogRef = this.dialog.create<CommonDialogComponent, unknown>({
+      zContent: CommonDialogComponent,
+      zWidth: '420px',
+      zMaskClosable: true,
+      zHideFooter: true,
+      zClosable: false,
+    });
+    const instance = dialogRef.componentInstance!;
+    instance.message = message;
+    instance.btnOkText = btnOkText;
+    instance.btnCancelText = btnCancelText;
+    instance.confirmAlert = false;
+    instance.confirmcalibration = false;
+    instance.alert = false;
+    instance.remarks = false;
+    instance.editRemarks = false;
+    instance.notify = false;
+    instance.choice = false;
+    instance.choiceSelect = true;
+    instance.values = values;
     return dialogRef.afterClosed();
   }
 
@@ -245,17 +279,21 @@ export class ConfirmationService {
     status = 'Fetosense Device',
     btnOkText = 'OK'
   ): void {
-    const config = {
-      width: '420px',
-    };
-    const dialogRef = this.dialog.open(CommonDialogComponent, config);
-    dialogRef.componentInstance.message = message;
-    dialogRef.componentInstance.status = status;
-    dialogRef.componentInstance.btnOkText = btnOkText;
-    dialogRef.componentInstance.confirmAlert = false;
-    dialogRef.componentInstance.alertFetsenseMessage = true;
-    dialogRef.componentInstance.remarks = false;
-    dialogRef.componentInstance.editRemarks = false;
+    const dialogRef = this.dialog.create<CommonDialogComponent, unknown>({
+      zContent: CommonDialogComponent,
+      zWidth: '420px',
+      zMaskClosable: true,
+      zHideFooter: true,
+      zClosable: false,
+    });
+    const instance = dialogRef.componentInstance!;
+    instance.message = message;
+    instance.status = status;
+    instance.btnOkText = btnOkText;
+    instance.confirmAlert = false;
+    instance.alertFetsenseMessage = true;
+    instance.remarks = false;
+    instance.editRemarks = false;
   }
   /*END*/
   public confirmCalibration(
@@ -264,19 +302,23 @@ export class ConfirmationService {
     btnOkText = 'Yes',
     btnCancelText = 'No'
   ): Observable<boolean> {
-    const dialogRef = this.dialog.open(CommonDialogComponent, {
-      width: '420px',
-      disableClose: false,
+    const dialogRef = this.dialog.create<CommonDialogComponent, unknown>({
+      zContent: CommonDialogComponent,
+      zWidth: '420px',
+      zMaskClosable: true,
+      zHideFooter: true,
+      zClosable: false,
     });
-    dialogRef.componentInstance.title = title;
-    dialogRef.componentInstance.message = message;
-    dialogRef.componentInstance.btnOkText = btnOkText;
-    dialogRef.componentInstance.btnCancelText = btnCancelText;
-    dialogRef.componentInstance.confirmAlert = false;
-    dialogRef.componentInstance.confirmcalibration = true;
-    dialogRef.componentInstance.alert = false;
-    dialogRef.componentInstance.remarks = false;
-    dialogRef.componentInstance.editRemarks = false;
+    const instance = dialogRef.componentInstance!;
+    instance.title = title;
+    instance.message = message;
+    instance.btnOkText = btnOkText;
+    instance.btnCancelText = btnCancelText;
+    instance.confirmAlert = false;
+    instance.confirmcalibration = true;
+    instance.alert = false;
+    instance.remarks = false;
+    instance.editRemarks = false;
 
     return dialogRef.afterClosed();
   }
@@ -287,21 +329,25 @@ export class ConfirmationService {
     btnOkText = 'OK',
     btnCancelText = 'Cancel'
   ): Observable<boolean> {
-    const dialogRef = this.dialog.open(CommonDialogComponent, {
-      width: '420px',
-      disableClose: false,
+    const dialogRef = this.dialog.create<CommonDialogComponent, unknown>({
+      zContent: CommonDialogComponent,
+      zWidth: '420px',
+      zMaskClosable: true,
+      zHideFooter: true,
+      zClosable: false,
     });
-    dialogRef.componentInstance.title = title;
-    dialogRef.componentInstance.message = message;
-    dialogRef.componentInstance.btnOkText = btnOkText;
-    dialogRef.componentInstance.btnCancelText = btnCancelText;
-    dialogRef.componentInstance.confirmAlert = false;
-    dialogRef.componentInstance.confirmCBAC = true;
-    dialogRef.componentInstance.confirmcalibration = false;
-    dialogRef.componentInstance.alert = false;
-    dialogRef.componentInstance.remarks = false;
-    dialogRef.componentInstance.editRemarks = false;
-    dialogRef.componentInstance.cbacData = data;
+    const instance = dialogRef.componentInstance!;
+    instance.title = title;
+    instance.message = message;
+    instance.btnOkText = btnOkText;
+    instance.btnCancelText = btnCancelText;
+    instance.confirmAlert = false;
+    instance.confirmCBAC = true;
+    instance.confirmcalibration = false;
+    instance.alert = false;
+    instance.remarks = false;
+    instance.editRemarks = false;
+    instance.cbacData = data;
 
     return dialogRef.afterClosed();
   }
@@ -312,21 +358,25 @@ export class ConfirmationService {
     btnOkText = 'Yes',
     btnCancelText = 'No'
   ): Observable<boolean> {
-    const dialogRef = this.dialog.open(CommonDialogComponent, {
-      width: '420px',
-      disableClose: false,
+    const dialogRef = this.dialog.create<CommonDialogComponent, unknown>({
+      zContent: CommonDialogComponent,
+      zWidth: '420px',
+      zMaskClosable: false,
+      zHideFooter: true,
+      zClosable: false,
     });
-    dialogRef.componentInstance.title = title;
-    dialogRef.componentInstance.message = message;
-    dialogRef.componentInstance.btnOkText = btnOkText;
-    dialogRef.componentInstance.btnCancelText = btnCancelText;
-    dialogRef.componentInstance.confirmAlert = false;
-    dialogRef.componentInstance.confirmCareContext = true;
-    dialogRef.componentInstance.confirmCBAC = false;
-    dialogRef.componentInstance.confirmcalibration = false;
-    dialogRef.componentInstance.alert = false;
-    dialogRef.componentInstance.remarks = false;
-    dialogRef.componentInstance.editRemarks = false;
+    const instance = dialogRef.componentInstance!;
+    instance.title = title;
+    instance.message = message;
+    instance.btnOkText = btnOkText;
+    instance.btnCancelText = btnCancelText;
+    instance.confirmAlert = false;
+    instance.confirmCareContext = true;
+    instance.confirmCBAC = false;
+    instance.confirmcalibration = false;
+    instance.alert = false;
+    instance.remarks = false;
+    instance.editRemarks = false;
     dialogRef.disableClose = true;
 
     return dialogRef.afterClosed();

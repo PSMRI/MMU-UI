@@ -20,11 +20,11 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewContainerRef } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import packageJson from '../../../../../../package.json';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { AuthService, ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
 import { IotService } from '../../services/iot.service';
@@ -128,7 +128,8 @@ export class AppHeaderComponent implements OnInit {
   isConnected = true;
   status!: any;
   constructor(
-    private dialog: MatDialog,
+    private dialog: ZardDialogService,
+    private viewContainerRef: ViewContainerRef,
     private router: Router,
     private auth: AuthService,
     private confirmationService: ConfirmationService,
@@ -345,14 +346,22 @@ export class AppHeaderComponent implements OnInit {
     }
   }
   showData(versionData: any) {
-    this.dialog.open(ShowCommitAndVersionDetailsComponent, {
-      data: versionData,
+    this.dialog.create({
+      zContent: ShowCommitAndVersionDetailsComponent,
+      zData: versionData,
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
   }
 
   openIOT() {
-    this.dialog.open(IotBluetoothComponent, {
-      width: '600px',
+    this.dialog.create({
+      zContent: IotBluetoothComponent,
+      zWidth: '600px',
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
   }
 }

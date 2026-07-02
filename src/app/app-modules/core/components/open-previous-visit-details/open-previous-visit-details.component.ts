@@ -25,7 +25,7 @@ import { HttpServiceService } from '../../services/http-service.service';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { SetLanguageComponent } from '../set-language.component';
 import { DoctorService } from 'src/app/app-modules/nurse-doctor/shared/services';
-import { MatDialogClose } from '@angular/material/dialog';
+import { ZardDialogRef } from 'Common-UI/v2/ui/dialog';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideX } from '@ng-icons/lucide';
@@ -37,7 +37,6 @@ import { ZardTableImports } from 'Common-UI/v2/ui/table';
   standalone: true,
   templateUrl: './open-previous-visit-details.component.html',
   imports: [
-    MatDialogClose,
     NgIf,
     NgFor,
     DatePipe,
@@ -57,7 +56,8 @@ export class OpenPreviousVisitDetailsComponent implements OnInit {
   constructor(
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    public dialogRef: ZardDialogRef<OpenPreviousVisitDetailsComponent>
   ) {}
   ngOnInit(): void {
     this.assignSelectedLanguage();

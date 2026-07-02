@@ -25,7 +25,7 @@ import { Router } from '@angular/router';
 
 import * as CryptoJS from 'crypto-js';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from '../set-language.component';
 import { ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
@@ -101,8 +101,8 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.dialogRef = this.injector.get(MatDialogRef, null);
-    this.data = this.injector.get(MAT_DIALOG_DATA, null);
+    this.dialogRef = this.injector.get(ZardDialogRef, null);
+    this.data = this.injector.get(Z_MODAL_DATA, null);
   }
 
   ngDoCheck() {
