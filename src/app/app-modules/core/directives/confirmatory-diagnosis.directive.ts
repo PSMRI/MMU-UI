@@ -27,6 +27,7 @@ import {
   ElementRef,
   OnInit,
   DoCheck,
+  Injector,
 } from '@angular/core';
 import {
   FormArray,
@@ -63,6 +64,7 @@ export class ConfirmatoryDiagnosisDirective implements OnInit, DoCheck {
     private fb: FormBuilder,
     private el: ElementRef,
     private dialog: MatDialog,
+    private injector: Injector,
     readonly sessionstorage: SessionStorageService,
     private httpServiceService: HttpServiceService
   ) {}
@@ -76,6 +78,7 @@ export class ConfirmatoryDiagnosisDirective implements OnInit, DoCheck {
     if (searchTerm.length > 2) {
       const dialogRef = this.dialog.open(ProvisionalSearchComponent, {
         width: '800px',
+        injector: this.injector,
         // panelClass: 'fit-screen',
         data: {
           searchTerm: searchTerm,
