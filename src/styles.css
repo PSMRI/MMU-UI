@@ -905,3 +905,14 @@ input.mat-input-element {
       height: auto !important;
   }
 }
+
+/* Case-sheet print page setup (page-level rules have no Tailwind utility equivalent). */
+@media print {
+  body {
+    background: white;
+    font-size: 14px;
+  }
+  @page {
+    margin: 1.3cm;
+  }
+}

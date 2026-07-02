@@ -26,11 +26,11 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { NgIf, NgFor } from '@angular/common';
 import { ImageToCanvasComponent } from '../image-to-canvas/image-to-canvas.component';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
 @Component({
   selector: 'app-cancer-examination-case-sheet',
   templateUrl: './cancer-examination-case-sheet.component.html',
-  styleUrls: ['./cancer-examination-case-sheet.component.css'],
-  imports: [NgIf, NgFor, ImageToCanvasComponent],
+  imports: [NgIf, NgFor, ImageToCanvasComponent, ...ZardTableImports],
 })
 export class CancerExaminationCaseSheetComponent
   implements OnInit, OnChanges, DoCheck

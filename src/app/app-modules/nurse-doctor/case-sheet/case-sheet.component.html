@@ -1,17 +1,20 @@
-<div class="col-12 title row" *ngIf="previous">
-  <div class="col-6">
-    <h4>{{ currentLanguageSet?.nurseData?.visitDetails }}</h4>
-  </div>
-  <div class="col-6">
-    <mat-icon
-      class="pull-right exit md-24"
-      style="text-align: end"
-      [matDialogClose]="false"
-      >close</mat-icon
-    >
-  </div>
+<div
+  *ngIf="previous"
+  class="mb-3 flex items-center justify-between rounded-md bg-muted px-3 py-2">
+  <p class="text-lg font-medium leading-8 text-foreground">
+    {{ currentLanguageSet?.nurseData?.visitDetails }}
+  </p>
+  <button
+    type="button"
+    z-button
+    zType="ghost"
+    zSize="icon"
+    [matDialogClose]="false"
+    aria-label="Close">
+    <ng-icon name="lucideX"></ng-icon>
+  </button>
 </div>
-<div [ngClass]="{ 'scrolling-content': previous }">
+<div [ngClass]="{ 'max-h-[75vh] overflow-auto': previous }">
   <app-cancer-case-sheet
     *ngIf="CancerScreening"
     [previous]="previous"

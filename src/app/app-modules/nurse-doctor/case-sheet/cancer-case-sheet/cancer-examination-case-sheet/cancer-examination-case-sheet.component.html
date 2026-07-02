@@ -1,33 +1,31 @@
-<div class="container">
-  <div class="row col-xs-12">
-    <h2 class="text-center">
+<div class="bg-card text-card-foreground pb-12">
+  <div class="mb-4">
+    <p
+      class="text-center text-xl font-semibold tracking-tight text-foreground">
       {{ currentLanguageSet?.ExaminationData?.examination }}
-    </h2>
-    <hr />
+    </p>
+    <hr class="mt-2 border-border" />
   </div>
+
   <!-- Symptoms -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.symptoms?.symptoms
-        }}
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="casesheet-table">
-        <tbody>
-          <tr>
-            <th id="shortnessofbreath">
+  <div class="mt-4">
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{
+        currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+          ?.symptoms?.symptoms
+      }}
+    </p>
+    <div class="overflow-x-auto">
+      <table z-table aria-describedby="casesheet-table">
+        <tbody z-table-body>
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="shortnessofbreath">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.symptoms?.shortnessofbreath
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="signsAndSymptoms?.shortnessOfBreath === true">
                 {{ currentLanguageSet?.covid?.yES }}
               </span>
@@ -35,13 +33,13 @@
                 {{ currentLanguageSet?.common?.no }}
               </span>
             </td>
-            <th id="coughweeks">
+            <th z-table-head class="w-1/4" id="coughweeks">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.symptoms?.coughweeks
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="signsAndSymptoms?.coughgt2Weeks === true">
                 {{ currentLanguageSet?.covid?.yES }}
               </span>
@@ -51,14 +49,14 @@
             </td>
           </tr>
 
-          <tr>
-            <th id="bloodinsputum">
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="bloodinsputum">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.symptoms?.bloodinsputum
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="signsAndSymptoms?.bloodInSputum === true">
                 {{ currentLanguageSet?.covid?.yES }}
               </span>
@@ -66,13 +64,13 @@
                 {{ currentLanguageSet?.common?.no }}
               </span>
             </td>
-            <th id="difficultyinopeningmouth">
+            <th z-table-head class="w-1/4" id="difficultyinopeningmouth">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.symptoms?.difficultyinopeningmouth
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="signsAndSymptoms?.difficultyInOpeningMouth === true">
                 {{ currentLanguageSet?.covid?.yES }}
               </span>
@@ -83,14 +81,14 @@
             </td>
           </tr>
 
-          <tr>
-            <th id="changeInTheToneOfVoice">
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="changeInTheToneOfVoice">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.symptoms?.changeInTheToneOfVoice
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="signsAndSymptoms?.changeInTheToneOfVoice === true">
                 {{ currentLanguageSet?.covid?.yES }}
               </span>
@@ -98,13 +96,13 @@
                 {{ currentLanguageSet?.common?.no }}
               </span>
             </td>
-            <th id="nonhealing">
+            <th z-table-head class="w-1/4" id="nonhealing">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.symptoms?.nonhealing
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span
                 *ngIf="
                   signsAndSymptoms?.nonHealingUlcerOrPatchOrGrowth === true
@@ -120,14 +118,14 @@
             </td>
           </tr>
 
-          <tr>
-            <th id="breastEnlargement">
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="breastEnlargement">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.symptoms?.breastEnlargement
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="signsAndSymptoms?.breastEnlargement === true">
                 {{ currentLanguageSet?.covid?.yES }}
               </span>
@@ -135,13 +133,13 @@
                 {{ currentLanguageSet?.common?.no }}
               </span>
             </td>
-            <th id="bloodstaineddischargefromnipple">
+            <th z-table-head class="w-1/4" id="bloodstaineddischargefromnipple">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.symptoms?.bloodstaineddischargefromnipple
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span
                 *ngIf="
                   signsAndSymptoms?.bloodStainedDischargeFromNipple === true
@@ -158,19 +156,20 @@
           </tr>
 
           <tr
+            z-table-row
             *ngIf="
               beneficiaryDetails && beneficiaryDetails.genderName === 'Female'
             ">
-            <th id="vaginalbleedingbetweenperiods">
+            <th z-table-head class="w-1/4" id="vaginalbleedingbetweenperiods">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.symptoms?.vaginalbleedingbetweenperiods
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span
                 *ngIf="signsAndSymptoms?.vaginalBleedingBetweenPeriods === true"
-                >>{{ currentLanguageSet?.common?.yes }}</span
+                >{{ currentLanguageSet?.common?.yes }}</span
               >
               <span
                 *ngIf="
@@ -179,16 +178,16 @@
                 >{{ currentLanguageSet?.common?.no }}</span
               >
             </td>
-            <th id="foulsmellingvaginaldischarge">
+            <th z-table-head class="w-1/4" id="foulsmellingvaginaldischarge">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.symptoms?.foulsmellingvaginaldischarge
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span
                 *ngIf="signsAndSymptoms?.foulSmellingVaginalDischarge === true"
-                >>{{ currentLanguageSet?.common?.yes }}</span
+                >{{ currentLanguageSet?.common?.yes }}</span
               >
               <span
                 *ngIf="signsAndSymptoms?.foulSmellingVaginalDischarge === false"
@@ -197,14 +196,14 @@
             </td>
           </tr>
 
-          <tr>
-            <th id="changeinshapeandsizeofbreasts">
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="changeinshapeandsizeofbreasts">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.symptoms?.changeinshapeandsizeofbreasts
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span
                 *ngIf="signsAndSymptoms?.changeInShapeAndSizeOfBreasts === true"
                 >{{ currentLanguageSet?.common?.yes }}</span
@@ -216,13 +215,13 @@
                 >{{ currentLanguageSet?.common?.no }}</span
               >
             </td>
-            <th id="lumpinbreast">
+            <th z-table-head class="w-1/4" id="lumpinbreast">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.symptoms?.lumpinbreast
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="signsAndSymptoms?.lumpInTheBreast === true">{{
                 currentLanguageSet?.common?.yes
               }}</span>
@@ -236,96 +235,88 @@
     </div>
   </div>
 
-  <div class="row m-t-10" *ngIf="signsAndSymptoms?.lymphNode_Enlarged === true">
-    <div class="col-xs-12">
-      <h5>
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.symptoms?.lymphnodes
-        }}
-      </h5>
-      <div class="row m-t-10">
-        <div class="col-xs-12">
-          <table
-            class="table table-striped table-bordered"
-            aria-describedby="BenCancerLymphNodeTbl">
-            <thead>
-              <tr>
-                <th id="sizeRight">
-                  {{ currentLanguageSet?.casesheet?.sizeRight }}
-                </th>
-                <th id="mobilityRight">
-                  {{ currentLanguageSet?.casesheet?.mobilityRight }}
-                </th>
-                <th id="lymphName">
-                  {{ currentLanguageSet?.casesheet?.lymphName }}
-                </th>
-                <th id="mobiltyLeft">
-                  {{ currentLanguageSet?.casesheet?.mobiltyLeft }}
-                </th>
-                <th id="sizeLeft">
-                  {{ currentLanguageSet?.casesheet?.sizeLeft }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let lymphNodes of BenCancerLymphNodeDetails">
-                <td>{{ lymphNodes.size_Right }}</td>
-                <td>
-                  {{
-                    lymphNodes.mobility_Right === undefined
-                      ? null
-                      : lymphNodes.mobility_Right
-                        ? '+'
-                        : '-'
-                  }}
-                </td>
-                <td>{{ lymphNodes.lymphNodeName }}</td>
-                <td>
-                  {{
-                    lymphNodes.mobility_Left === undefined
-                      ? null
-                      : lymphNodes.mobility_Left
-                        ? '+'
-                        : '-'
-                  }}
-                </td>
-                <td>{{ lymphNodes.size_Left }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+  <div class="mt-4" *ngIf="signsAndSymptoms?.lymphNode_Enlarged === true">
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{
+        currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+          ?.symptoms?.lymphnodes
+      }}
+    </p>
+    <div class="mt-4 overflow-x-auto">
+      <table z-table zType="bordered" aria-describedby="BenCancerLymphNodeTbl">
+        <thead z-table-header>
+          <tr z-table-row>
+            <th z-table-head id="sizeRight">
+              {{ currentLanguageSet?.casesheet?.sizeRight }}
+            </th>
+            <th z-table-head id="mobilityRight">
+              {{ currentLanguageSet?.casesheet?.mobilityRight }}
+            </th>
+            <th z-table-head id="lymphName">
+              {{ currentLanguageSet?.casesheet?.lymphName }}
+            </th>
+            <th z-table-head id="mobiltyLeft">
+              {{ currentLanguageSet?.casesheet?.mobiltyLeft }}
+            </th>
+            <th z-table-head id="sizeLeft">
+              {{ currentLanguageSet?.casesheet?.sizeLeft }}
+            </th>
+          </tr>
+        </thead>
+        <tbody z-table-body>
+          <tr z-table-row *ngFor="let lymphNodes of BenCancerLymphNodeDetails">
+            <td z-table-cell>{{ lymphNodes.size_Right }}</td>
+            <td z-table-cell>
+              {{
+                lymphNodes.mobility_Right === undefined
+                  ? null
+                  : lymphNodes.mobility_Right
+                    ? '+'
+                    : '-'
+              }}
+            </td>
+            <td z-table-cell>{{ lymphNodes.lymphNodeName }}</td>
+            <td z-table-cell>
+              {{
+                lymphNodes.mobility_Left === undefined
+                  ? null
+                  : lymphNodes.mobility_Left
+                    ? '+'
+                    : '-'
+              }}
+            </td>
+            <td z-table-cell>{{ lymphNodes.size_Left }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
   <!-- Oral Examination -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.oralExamination }}</h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="casesheetTbl">
-        <tbody>
-          <tr>
-            <th id="limitedmouthopening">
+  <div class="mt-4">
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{ currentLanguageSet?.casesheet?.oralExamination }}
+    </p>
+    <div class="overflow-x-auto">
+      <table z-table aria-describedby="casesheetTbl">
+        <tbody z-table-body>
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="limitedmouthopening">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.oral?.limitedmouthopening
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               {{ oralExamination?.limitedMouthOpening }}
             </td>
-            <th id="premalignantLesions">
+            <th z-table-head class="w-1/4" id="premalignantLesions">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.oral?.premalignantLesions
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="oralExamination?.premalignantLesions === true">{{
                 currentLanguageSet?.covid?.yES
               }}</span>
@@ -335,23 +326,23 @@
             </td>
           </tr>
 
-          <tr>
-            <th id="typeofPremalignantLesions">
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="typeofPremalignantLesions">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.oral?.typeofPremalignantLesions
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               {{ oralExamination?.preMalignantLesionType }}
             </td>
-            <th id="prolongedirritation">
+            <th z-table-head class="w-1/4" id="prolongedirritation">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.oral?.prolongedirritation
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="oralExamination?.prolongedIrritation === true">{{
                 currentLanguageSet?.covid?.yES
               }}</span>
@@ -361,14 +352,14 @@
             </td>
           </tr>
 
-          <tr>
-            <th id="chronicburningsensation">
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="chronicburningsensation">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.oral?.chronicburningsensation
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="oralExamination?.chronicBurningSensation === true">{{
                 currentLanguageSet?.covid?.yES
               }}</span>
@@ -376,14 +367,14 @@
                 {{ currentLanguageSet?.common?.no }}</span
               >
             </td>
-            <th id="emp">&nbsp;</th>
-            <td>&nbsp;</td>
+            <th z-table-head class="w-1/4" id="emp">&nbsp;</th>
+            <td z-table-cell class="w-1/4">&nbsp;</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div class="col-xs-12">
+    <div class="mt-4">
       <app-image-to-canvas
         [imgUrl]="oralImageUrl"
         [annotatedMarker]="
@@ -394,35 +385,32 @@
 
   <!-- Breast Examination -->
   <div
-    class="row m-t-10"
+    class="mt-4"
     *ngIf="
       (beneficiaryDetails && beneficiaryDetails.genderName === 'Female') ||
       signsAndSymptoms?.breastEnlargement === true
     ">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.breast?.breastExamination
-        }}
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="breastexamTbl">
-        <tbody>
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{
+        currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+          ?.breast?.breastExamination
+      }}
+    </p>
+    <div class="overflow-x-auto">
+      <table z-table aria-describedby="breastexamTbl">
+        <tbody z-table-body>
           <tr
+            z-table-row
             *ngIf="
               beneficiaryDetails && beneficiaryDetails.genderName === 'Female'
             ">
-            <th id="everbreastfedachild">
+            <th z-table-head class="w-1/4" id="everbreastfedachild">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.breast?.everbreastfedachild
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="breastExamination?.everBreastFed === true">{{
                 currentLanguageSet?.covid?.yES
               }}</span>
@@ -430,13 +418,13 @@
                 currentLanguageSet?.common?.no
               }}</span>
             </td>
-            <th id="durationofbreastfeeding">
+            <th z-table-head class="w-1/4" id="durationofbreastfeeding">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.breast?.durationofbreastfeeding
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span
                 *ngIf="
                   breastExamination?.breastFeedingDurationGTE6months === true
@@ -458,11 +446,11 @@
             </td>
           </tr>
 
-          <tr>
-            <th id="breastsappearnormal">
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="breastsappearnormal">
               {{ currentLanguageSet?.casesheet?.brestFeed }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="breastExamination?.breastsAppear_Normal === true">{{
                 currentLanguageSet?.covid?.yES
               }}</span>
@@ -470,13 +458,13 @@
                 currentLanguageSet?.common?.no
               }}</span>
             </td>
-            <th id="anyrashonthebreast">
+            <th z-table-head class="w-1/4" id="anyrashonthebreast">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.breast?.anyrashonthebreast
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="breastExamination?.rashOnBreast === true">{{
                 currentLanguageSet?.covid?.yES
               }}</span>
@@ -486,14 +474,14 @@
             </td>
           </tr>
 
-          <tr>
-            <th id="anydimplingofskinonthebreast">
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="anydimplingofskinonthebreast">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.breast?.anydimplingofskinonthebreast
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="breastExamination?.dimplingSkinOnBreast === true">{{
                 currentLanguageSet?.covid?.yES
               }}</span>
@@ -501,13 +489,13 @@
                 currentLanguageSet?.common?.no
               }}</span>
             </td>
-            <th id="anydischargefromthenipple">
+            <th z-table-head class="w-1/4" id="anydischargefromthenipple">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.breast?.anydischargefromthenipple
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="breastExamination?.dischargeFromNipple === true">{{
                 currentLanguageSet?.covid?.yES
               }}</span>
@@ -517,14 +505,14 @@
             </td>
           </tr>
 
-          <tr>
-            <th id="peaudorange">
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="peaudorange">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.breast?.peaudorange
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="breastExamination?.peaudOrange === true">{{
                 currentLanguageSet?.covid?.yES
               }}</span>
@@ -532,13 +520,13 @@
                 currentLanguageSet?.common?.no
               }}</span>
             </td>
-            <th id="anylumpinbreast">
+            <th z-table-head class="w-1/4" id="anylumpinbreast">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.breast?.anylumpinbreast
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="breastExamination?.lumpInBreast === true">{{
                 currentLanguageSet?.covid?.yES
               }}</span>
@@ -548,43 +536,47 @@
             </td>
           </tr>
 
-          <tr>
-            <th id="lumpSize">
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="lumpSize">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.breast?.lumpSize
               }}:
             </th>
-            <td>{{ breastExamination?.lumpSize }}</td>
-            <th id="lumpTexture">
+            <td z-table-cell class="w-1/4">{{ breastExamination?.lumpSize }}</td>
+            <th z-table-head class="w-1/4" id="lumpTexture">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.breast?.lumpTexture
               }}:
             </th>
-            <td>{{ breastExamination?.lumpTexture }}</td>
+            <td z-table-cell class="w-1/4">
+              {{ breastExamination?.lumpTexture }}
+            </td>
           </tr>
 
-          <tr>
-            <th id="lumpshape">
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="lumpshape">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.breast?.lumpShape
               }}:
             </th>
-            <td>{{ breastExamination?.lumpShape }}</td>
-            <th id="empty1">&nbsp;</th>
-            <td>&nbsp;</td>
+            <td z-table-cell class="w-1/4">
+              {{ breastExamination?.lumpShape }}
+            </td>
+            <th z-table-head class="w-1/4" id="empty1">&nbsp;</th>
+            <td z-table-cell class="w-1/4">&nbsp;</td>
           </tr>
 
-          <tr>
-            <th id="referredtoMammogram">
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="referredtoMammogram">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.breast?.referredtoMammogram
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="breastExamination?.referredToMammogram === true">{{
                 currentLanguageSet?.covid?.yES
               }}</span>
@@ -592,14 +584,16 @@
                 {{ currentLanguageSet?.common?.no }}</span
               >
             </td>
-            <th id="">&nbsp;</th>
-            <td>&nbsp;</td>
+            <th z-table-head class="w-1/4" id="referredtoMammogramEmpty">
+              &nbsp;
+            </th>
+            <td z-table-cell class="w-1/4">&nbsp;</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div class="col-xs-12">
+    <div class="mt-4">
       <app-image-to-canvas
         [imgUrl]="breastImageUrl"
         [annotatedMarker]="
@@ -609,28 +603,24 @@
   </div>
 
   <!-- Abdominal Examination -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.abdominal?.abdominalExamination
-        }}
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="cancerscreenTbl">
-        <tbody>
-          <tr>
-            <th id="abdominalInspection">
+  <div class="mt-4">
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{
+        currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+          ?.abdominal?.abdominalExamination
+      }}
+    </p>
+    <div class="overflow-x-auto">
+      <table z-table aria-describedby="cancerscreenTbl">
+        <tbody z-table-body>
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="abdominalInspection">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.abdominal?.abdominalInspection
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span
                 *ngIf="
                   abdominalExamination?.abdominalInspection_Normal === true
@@ -645,25 +635,25 @@
                 >{{ currentLanguageSet?.common?.abnormal }}
               </span>
             </td>
-            <th id="liver">
+            <th z-table-head class="w-1/4" id="liver">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.abdominal?.liver
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               {{ abdominalExamination?.liver }}
             </td>
           </tr>
 
-          <tr>
-            <th id="ascites">
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="ascites">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.abdominal?.ascites
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="abdominalExamination?.ascites_Present === true">{{
                 currentLanguageSet?.common?.present
               }}</span>
@@ -671,13 +661,13 @@
                 currentLanguageSet?.common?.absent
               }}</span>
             </td>
-            <th id="anyOtherMass">
+            <th z-table-head class="w-1/4" id="anyOtherMass">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.abdominal?.anyOtherMass
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span
                 *ngIf="abdominalExamination?.anyOtherMass_Present === true"
                 >{{ currentLanguageSet?.common?.present }}</span
@@ -689,14 +679,14 @@
             </td>
           </tr>
 
-          <tr>
-            <th id="lymphnode">
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="lymphnodeAbdominal">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.abdominal?.lymphnode
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="abdominalExamination?.lymphNodes_Enlarged === true">
                 {{ currentLanguageSet?.common?.enlarged }}
               </span>
@@ -704,31 +694,31 @@
                 {{ currentLanguageSet?.common?.notEnlarged }}
               </span>
             </td>
-            <th id="">&nbsp;</th>
-            <td>&nbsp;</td>
+            <th z-table-head class="w-1/4" id="lymphnodeAbdominalEmpty">
+              &nbsp;
+            </th>
+            <td z-table-cell class="w-1/4">&nbsp;</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-striped table-bordered"
-        aria-describedby="abdominal">
-        <thead>
-          <tr>
-            <th id="rightPalpable">
+    <div class="mt-4 overflow-x-auto">
+      <table z-table zType="bordered" aria-describedby="abdominal">
+        <thead z-table-header>
+          <tr z-table-row>
+            <th z-table-head id="rightPalpable">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.abdominal?.rightPalpable
               }}
             </th>
-            <th id="lymphnode">
+            <th z-table-head id="lymphnodeAbdominalHead">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.abdominal?.lymphnode
               }}
             </th>
-            <th id="leftPalpable">
+            <th z-table-head id="leftPalpable">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.abdominal?.leftPalpable
@@ -736,9 +726,9 @@
             </th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>
+        <tbody z-table-body>
+          <tr z-table-row>
+            <td z-table-cell>
               {{
                 abdominalExamination?.lymphNode_Inguinal_Right === undefined
                   ? null
@@ -747,13 +737,13 @@
                     : '-'
               }}
             </td>
-            <td>
+            <td z-table-cell>
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.abdominal?.inguinal
               }}
             </td>
-            <td>
+            <td z-table-cell>
               {{
                 abdominalExamination?.lymphNode_Inguinal_Left === undefined
                   ? null
@@ -763,8 +753,8 @@
               }}
             </td>
           </tr>
-          <tr>
-            <td>
+          <tr z-table-row>
+            <td z-table-cell>
               {{
                 abdominalExamination?.lymphNode_ExternalIliac_Right ===
                 undefined
@@ -774,13 +764,13 @@
                     : '-'
               }}
             </td>
-            <td>
+            <td z-table-cell>
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.abdominal?.externalIliac
               }}
             </td>
-            <td>
+            <td z-table-cell>
               {{
                 abdominalExamination?.lymphNode_ExternalIliac_Left === undefined
                   ? null
@@ -790,8 +780,8 @@
               }}
             </td>
           </tr>
-          <tr>
-            <td>
+          <tr z-table-row>
+            <td z-table-cell>
               {{
                 abdominalExamination?.lymphNode_ParaAortic_Right === undefined
                   ? null
@@ -800,13 +790,13 @@
                     : '-'
               }}
             </td>
-            <td>
+            <td z-table-cell>
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.abdominal?.paraAortic
               }}
             </td>
-            <td>
+            <td z-table-cell>
               {{
                 abdominalExamination?.lymphNode_ParaAortic_Left === undefined
                   ? null
@@ -822,7 +812,7 @@
 
     <div class="page-break"></div>
 
-    <div class="col-xs-12">
+    <div class="mt-4">
       <app-image-to-canvas
         [imgUrl]="abdominalImageUrl"
         [annotatedMarker]="
@@ -833,50 +823,46 @@
 
   <!-- Gynecological Examination -->
   <div
-    class="row m-t-10"
+    class="mt-4"
     *ngIf="beneficiaryDetails && beneficiaryDetails.genderName === 'Female'">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.gynecological?.gynecologicalExamination
-        }}
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="cancerScreeningExaminationTbl">
-        <tbody>
-          <tr>
-            <th id="appearanceunderAceticAcid">
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{
+        currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+          ?.gynecological?.gynecologicalExamination
+      }}
+    </p>
+    <div class="overflow-x-auto">
+      <table z-table aria-describedby="cancerScreeningExaminationTbl">
+        <tbody z-table-body>
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="appearanceunderAceticAcid">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.gynecological?.appearanceunderAceticAcid
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               {{ gynecologicalExamination?.appearanceOfCervix }}
             </td>
-            <th id="typeoflesion">
+            <th z-table-head class="w-1/4" id="typeoflesion">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.gynecological?.typeoflesion
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               {{ gynecologicalExamination?.typeOfLesion }}
             </td>
           </tr>
 
-          <tr>
-            <th id="vulvalInvolvement">
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="vulvalInvolvement">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.gynecological?.vulvalInvolvement
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span
                 *ngIf="gynecologicalExamination?.vulvalInvolvement === true"
                 >{{ currentLanguageSet?.common?.involved }}</span
@@ -886,16 +872,16 @@
                 >{{ currentLanguageSet?.common?.noInvolved }}</span
               >
             </td>
-            <th id="vaginalInvolvement">
+            <th z-table-head class="w-1/4" id="vaginalInvolvement">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.gynecological?.vaginalInvolvement
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span
                 *ngIf="gynecologicalExamination?.vaginalInvolvement === true"
-                >{{currentLanguageSet?.common?.involved}</span
+                >{{ currentLanguageSet?.common?.involved }}</span
               >
               <span
                 *ngIf="gynecologicalExamination?.vaginalInvolvement === false"
@@ -904,14 +890,14 @@
             </td>
           </tr>
 
-          <tr>
-            <th id="uterus">
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="uterus">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.gynecological?.uterus
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span *ngIf="gynecologicalExamination?.uterus_Normal === true">{{
                 currentLanguageSet?.common?.normal
               }}</span>
@@ -919,13 +905,13 @@
                 currentLanguageSet?.common?.enlarged
               }}</span>
             </td>
-            <th id="sufferedfromanyRTI">
+            <th z-table-head class="w-1/4" id="sufferedfromanyRTI">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.gynecological?.sufferedfromanyRTI
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span
                 *ngIf="gynecologicalExamination?.sufferedFromRTIOrSTI === true"
                 >{{ currentLanguageSet?.covid?.yES }}</span
@@ -937,21 +923,23 @@
             </td>
           </tr>
 
-          <tr>
-            <th id="specify">
+          <tr z-table-row>
+            <th z-table-head class="w-1/4" id="specify">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.gynecological?.specify
               }}:
             </th>
-            <td>{{ gynecologicalExamination?.rTIOrSTIDetail }}</td>
-            <th id="experiencedPostcoitalbleeding">
+            <td z-table-cell class="w-1/4">
+              {{ gynecologicalExamination?.rTIOrSTIDetail }}
+            </td>
+            <th z-table-head class="w-1/4" id="experiencedPostcoitalbleeding">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
                   ?.gynecological?.experiencedPostcoitalbleeding
               }}:
             </th>
-            <td>
+            <td z-table-cell class="w-1/4">
               <span
                 *ngIf="
                   gynecologicalExamination?.experiencedPostCoitalBleeding ===
@@ -972,7 +960,7 @@
       </table>
     </div>
 
-    <div class="col-xs-12">
+    <div class="mt-4">
       <app-image-to-canvas
         [imgUrl]="gynecologicalImageUrl"
         [annotatedMarker]="
@@ -981,40 +969,39 @@
     </div>
   </div>
 </div>
-<div class="container">
-  <div class="row col-xs-12">
-    <h2 class="text-center">
+<div class="bg-card text-card-foreground pb-12">
+  <div>
+    <p
+      class="text-center text-xl font-semibold tracking-tight text-foreground">
       {{ currentLanguageSet?.Referdetails?.revisitAndRefer }}
-    </h2>
-    <hr />
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="diagnosisTbl">
-        <tbody>
-          <tr>
-            <th id="hhc">
+    </p>
+    <hr class="mt-2 border-border" />
+    <div class="mt-4 overflow-x-auto">
+      <table z-table aria-describedby="diagnosisTbl">
+        <tbody z-table-body>
+          <tr z-table-row>
+            <th z-table-head id="hhc">
               {{ currentLanguageSet?.Referdetails?.referredtoinstitute }}:
             </th>
-            <td>{{ diagnosisdetails?.referredToInstituteName }}</td>
+            <td z-table-cell>{{ diagnosisdetails?.referredToInstituteName }}</td>
           </tr>
-          <tr>
-            <th id="Additionalservice">
+          <tr z-table-row>
+            <th z-table-head id="Additionalservice">
               {{ currentLanguageSet?.Referdetails?.additionalservices }}:
             </th>
-            <td>{{ diagnosisdetails?.refrredToAdditionalService }}</td>
+            <td z-table-cell>{{ diagnosisdetails?.refrredToAdditionalService }}</td>
           </tr>
-          <tr>
-            <th id="Referralreason">
+          <tr z-table-row>
+            <th z-table-head id="Referralreason">
               {{ currentLanguageSet?.Referdetails?.referralReason }}:
             </th>
-            <td>{{ diagnosisdetails?.referralReason }}</td>
+            <td z-table-cell>{{ diagnosisdetails?.referralReason }}</td>
           </tr>
-          <tr>
-            <th id="RevisitDate">
+          <tr z-table-row>
+            <th z-table-head id="RevisitDate">
               {{ currentLanguageSet?.Referdetails?.revisitAndRefer }}:
             </th>
-            <td>{{ diagnosisdetails?.revisitDate }}</td>
+            <td z-table-cell>{{ diagnosisdetails?.revisitDate }}</td>
           </tr>
         </tbody>
       </table>
