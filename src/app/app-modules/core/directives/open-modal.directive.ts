@@ -65,7 +65,7 @@ export class OpenModalDirective implements OnInit, DoCheck {
     private fb: FormBuilder,
     private el: ElementRef,
     private dialog: MatDialog,
-    private injector: Injector,
+    private readonly injector: Injector,
     readonly sessionstorage: SessionStorageService,
     private httpServiceService: HttpServiceService
   ) {}
