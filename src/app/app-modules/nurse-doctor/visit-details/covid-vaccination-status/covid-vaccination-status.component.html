@@ -1,113 +1,142 @@
-<div class="row m-t-20" [formGroup]="covidVaccineStatusForm">
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field [style.width]="'100%'">
-      <mat-label class="mat-label-text">{{
+<div
+  class="mt-5 flex flex-col gap-6"
+  [formGroup]="covidVaccineStatusForm">
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="ageGroup">{{
         currentLanguageSet?.ageGroup
-      }}</mat-label>
-      <mat-select
-        matInput
-        class="input-full-width"
-        formControlName="ageGroup"
-        name="ageGroup"
-        (selectionChange)="setIsApplicable()">
-        <mat-option *ngFor="let ageGroups of ageGroupsList" [value]="ageGroups">
-          {{ ageGroups }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field [style.width]="'100%'">
-      <mat-label class="mat-label-text">{{
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="ageGroup"
+          name="ageGroup"
+          formControlName="ageGroup"
+          [zDisabled]="covidVaccineStatusForm.controls['ageGroup'].disabled"
+          [zPlaceholder]="currentLanguageSet?.ageGroup || ''"
+          (zSelectionChange)="setIsApplicable()">
+          <z-select-item
+            *ngFor="let ageGroups of ageGroupsList"
+            [zValue]="ageGroups">
+            {{ ageGroups }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="isApplicableForVaccine">{{
         currentLanguageSet?.isApplicableForVaccine
-      }}</mat-label>
-      <mat-select
-        matInput
-        class="input-full-width"
-        formControlName="isApplicableForVaccine"
-        name="isApplicableForVaccine">
-        <mat-option
-          *ngFor="
-            let applicableForVaccineStatus of applicableForVaccineStatusList
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="isApplicableForVaccine"
+          name="isApplicableForVaccine"
+          formControlName="isApplicableForVaccine"
+          [zDisabled]="
+            covidVaccineStatusForm.controls['isApplicableForVaccine'].disabled
           "
-          [value]="applicableForVaccineStatus">
-          {{ applicableForVaccineStatus }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+          [zPlaceholder]="currentLanguageSet?.isApplicableForVaccine || ''">
+          <z-select-item
+            *ngFor="
+              let applicableForVaccineStatus of applicableForVaccineStatusList
+            "
+            [zValue]="applicableForVaccineStatus">
+            {{ applicableForVaccineStatus }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field
+      class="gap-1.5"
+      *ngIf="enableVaccinationStatusFields">
+      <label
+        z-form-label
+        [zRequired]="enableVaccinationStatusFields === true"
+        for="vaccineStatus"
+        >{{ currentLanguageSet?.vaccineStatus }}</label
+      >
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="vaccineStatus"
+          name="vaccineStatus"
+          formControlName="vaccineStatus"
+          [zPlaceholder]="currentLanguageSet?.vaccineStatus || ''"
+          (zSelectionChange)="enableVaccineTypeAndDoseTaken()">
+          <z-select-item zValue="YES">YES</z-select-item>
+          <z-select-item zValue="NO">NO</z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field
+      class="gap-1.5"
+      *ngIf="enableVaccineTypeAndDoseTakenFlag">
+      <label
+        z-form-label
+        [zRequired]="enableVaccineTypeAndDoseTakenFlag === true"
+        for="vaccineTypes"
+        >{{ currentLanguageSet?.vaccineTypes }}</label
+      >
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="vaccineTypes"
+          name="vaccineTypes"
+          formControlName="vaccineTypes"
+          [zPlaceholder]="currentLanguageSet?.vaccineTypes || ''"
+          (zSelectionChange)="
+            covidVaccineStatusForm.controls['vaccineTypes'].setValue(+$event);
+            enableSaveButtonInForm()
+          ">
+          <z-select-item
+            *ngFor="let vaccineType of vaccineTypeList"
+            [zValue]="vaccineType.covidVaccineTypeID.toString()">
+            {{ vaccineType.vaccineType }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field
+      class="gap-1.5"
+      *ngIf="enableVaccineTypeAndDoseTakenFlag">
+      <label
+        z-form-label
+        [zRequired]="enableVaccineTypeAndDoseTakenFlag === true"
+        for="doseTaken"
+        >{{ currentLanguageSet?.doseTaken }}</label
+      >
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="doseTaken"
+          name="doseTaken"
+          formControlName="doseTaken"
+          [zPlaceholder]="currentLanguageSet?.doseTaken || ''"
+          (zSelectionChange)="
+            covidVaccineStatusForm.controls['doseTaken'].setValue(+$event);
+            enableSaveButtonInForm()
+          ">
+          <z-select-item
+            *ngFor="let doseType of doseTypeList"
+            [zValue]="doseType.covidDoseTypeID.toString()">
+            {{ doseType.doseType }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
   </div>
 
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    *ngIf="enableVaccinationStatusFields">
-    <mat-form-field [style.width]="'100%'">
-      <mat-label class="mat-label-text">{{
-        currentLanguageSet?.vaccineStatus
-      }}</mat-label>
-      <mat-select
-        matInput
-        class="input-full-width"
-        formControlName="vaccineStatus"
-        name="vaccineStatus"
-        (selectionChange)="enableVaccineTypeAndDoseTaken()"
-        [required]="enableVaccinationStatusFields === true">
-        <mat-option value="YES">YES</mat-option>
-        <mat-option value="NO">NO</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    *ngIf="enableVaccineTypeAndDoseTakenFlag">
-    <mat-form-field [style.width]="'100%'">
-      <mat-label class="mat-label-text">{{
-        currentLanguageSet?.vaccineTypes
-      }}</mat-label>
-      <mat-select
-        matInput
-        class="input-full-width"
-        formControlName="vaccineTypes"
-        name="vaccineTypes"
-        [required]="enableVaccineTypeAndDoseTakenFlag === true"
-        (selectionChange)="enableSaveButtonInForm()">
-        <mat-option
-          *ngFor="let vaccineType of vaccineTypeList"
-          [value]="vaccineType.covidVaccineTypeID">
-          {{ vaccineType.vaccineType }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    *ngIf="enableVaccineTypeAndDoseTakenFlag">
-    <mat-form-field [style.width]="'100%'">
-      <mat-label class="mat-label-text">{{
-        currentLanguageSet?.doseTaken
-      }}</mat-label>
-      <mat-select
-        matInput
-        class="input-full-width"
-        formControlName="doseTaken"
-        name="doseTaken"
-        [required]="enableVaccineTypeAndDoseTakenFlag === true"
-        (selectionChange)="enableSaveButtonInForm()">
-        <mat-option
-          *ngFor="let doseType of doseTypeList"
-          [value]="doseType.covidDoseTypeID">
-          {{ doseType.doseType }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-
-  <div class="col-xs-12">
+  <div class="flex justify-end">
     <button
-      class="pull-right mat_blue"
-      style="margin-bottom: 10px !important"
+      z-button
+      type="button"
       (click)="saveBenCovidVaccinationDetails()"
-      [disabled]="enableSaveButton"
-      color="primary">
+      [disabled]="enableSaveButton">
       {{ currentLanguageSet?.coreComponents?.save }}
     </button>
   </div>

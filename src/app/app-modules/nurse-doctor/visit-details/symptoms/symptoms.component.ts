@@ -45,23 +45,21 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgIf, NgFor } from '@angular/common';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
 
 @Component({
   selector: 'app-symptoms',
   templateUrl: './symptoms.component.html',
-  styleUrls: ['./symptoms.component.css'],
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     NgIf,
-    MatFormField,
-    MatLabel,
-    MatSelect,
     NgFor,
-    MatOption,
-    MatInput,
+    ...ZardFormImports,
+    ...ZardSelectImports,
+    ZardInputDirective,
   ],
 })
 export class SymptomsComponent
