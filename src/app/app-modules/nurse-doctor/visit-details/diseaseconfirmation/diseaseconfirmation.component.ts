@@ -122,22 +122,30 @@ export class DiseaseconfirmationComponent implements OnInit {
       const ar = this.getSelectedDiseaseNames();
       console.log('diseasearray', ar);
       if (checkedState) {
-        if (item.value.diseaseName === 'Hypertension') {
-          this.idrsScoreService.setHypertensionSelected();
-        }
-        if (item.value.diseaseName === 'Diabetes') {
-          this.idrsScoreService.setConfirmedDiabeticSelected();
-        }
+        this.applyDiseaseSelected(item.value.diseaseName);
         this.idrsScoreService.setDiseasesSelected(ar);
       } else {
-        if (item.value.diseaseName === 'Hypertension') {
-          this.idrsScoreService.clearHypertensionSelected();
-        }
-        if (item.value.diseaseName === 'Diabetes') {
-          this.idrsScoreService.clearConfirmedDiabeticSelected();
-        }
+        this.applyDiseaseUnselected(item.value.diseaseName);
         this.idrsScoreService.setUnchecked(item.value.diseaseName);
       }
+    }
+  }
+
+  private applyDiseaseSelected(diseaseName: string) {
+    if (diseaseName === 'Hypertension') {
+      this.idrsScoreService.setHypertensionSelected();
+    }
+    if (diseaseName === 'Diabetes') {
+      this.idrsScoreService.setConfirmedDiabeticSelected();
+    }
+  }
+
+  private applyDiseaseUnselected(diseaseName: string) {
+    if (diseaseName === 'Hypertension') {
+      this.idrsScoreService.clearHypertensionSelected();
+    }
+    if (diseaseName === 'Diabetes') {
+      this.idrsScoreService.clearConfirmedDiabeticSelected();
     }
   }
 
