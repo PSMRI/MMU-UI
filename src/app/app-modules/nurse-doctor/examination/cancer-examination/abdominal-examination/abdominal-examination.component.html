@@ -1,282 +1,269 @@
-<div class="row m-t-10" [formGroup]="abdominalExaminationForm">
-  <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
-    <div class="col-12 row">
-      <div class="col-6 custom-cell cell_postion">
-        <span>{{
+<div
+  class="mt-2.5 flex flex-col gap-6 lg:flex-row"
+  [formGroup]="abdominalExaminationForm">
+  <div class="flex flex-col gap-4 lg:w-7/12">
+    <!-- Abdominal inspection -->
+    <div
+      class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <label z-form-label for="abdominalInspection_Normal">
+        {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.abdominal?.abdominalInspection
-        }}</span>
-      </div>
-
-      <div class="col-6 custom-cell">
-        <mat-radio-group
-          name="abdominalInspection_Normal"
-          formControlName="abdominalInspection_Normal">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.normal }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.abnormal }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
+        }}
+      </label>
+      <z-radio-group
+        name="abdominalInspection_Normal"
+        id="abdominalInspection_Normal"
+        formControlName="abdominalInspection_Normal"
+        zOrientation="horizontal"
+        class="gap-6">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.normal }}</z-radio>
+        <z-radio [value]="false">{{
+          currentLanguageSet?.common?.abnormal
+        }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="clo-12 row">
-      <div class="col-6 custom-cell cell_postion">
-        <span>{{
+    <!-- Liver -->
+    <div
+      class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <label z-form-label for="liver">
+        {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.abdominal?.liver
-        }}</span>
-      </div>
-
-      <div class="col-6 custom-cell">
-        <mat-form-field>
-          <mat-label>{{ currentLanguageSet?.common?.select }}</mat-label>
-          <mat-select
-            name="liver"
-            floatPlaceholder="never"
-            formControlName="liver">
-            <mat-option value="Not palpable"> Not palpable </mat-option>
-            <mat-option value="Palpable and smooth">
-              Palpable and smooth
-            </mat-option>
-            <mat-option value="Palpable and nodular"
-              >Palpable and nodular
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+        }}
+      </label>
+      <z-select
+        id="liver"
+        name="liver"
+        class="w-full sm:w-64"
+        formControlName="liver"
+        [zPlaceholder]="currentLanguageSet?.common?.select || ''">
+        <z-select-item zValue="Not palpable">Not palpable</z-select-item>
+        <z-select-item zValue="Palpable and smooth"
+          >Palpable and smooth</z-select-item
+        >
+        <z-select-item zValue="Palpable and nodular"
+          >Palpable and nodular</z-select-item
+        >
+      </z-select>
     </div>
 
-    <div class="col-12 row">
-      <div class="col-6 custom-cell cell_postion">
-        <span>
-          {{
-            currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-              ?.abdominal?.ascites
-          }}
-        </span>
-      </div>
-
-      <div class="col-6 custom-cell">
-        <mat-radio-group
-          name="ascites_Present"
-          formControlName="ascites_Present">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.present }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.absent }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
+    <!-- Ascites -->
+    <div
+      class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <label z-form-label for="ascites_Present">
+        {{
+          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+            ?.abdominal?.ascites
+        }}
+      </label>
+      <z-radio-group
+        name="ascites_Present"
+        id="ascites_Present"
+        formControlName="ascites_Present"
+        zOrientation="horizontal"
+        class="gap-6">
+        <z-radio [value]="true">{{
+          currentLanguageSet?.common?.present
+        }}</z-radio>
+        <z-radio [value]="false">{{
+          currentLanguageSet?.common?.absent
+        }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-12 row">
-      <div class="col-6 custom-cell cell_postion">
-        <span>
-          {{
-            currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-              ?.abdominal?.anyOtherMass
-          }}
-        </span>
-      </div>
-
-      <div class="col-6 custom-cell">
-        <mat-radio-group
-          name="anyOtherMass_Present"
-          formControlName="anyOtherMass_Present">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.present }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.absent }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
+    <!-- Any other mass -->
+    <div
+      class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <label z-form-label for="anyOtherMass_Present">
+        {{
+          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+            ?.abdominal?.anyOtherMass
+        }}
+      </label>
+      <z-radio-group
+        name="anyOtherMass_Present"
+        id="anyOtherMass_Present"
+        formControlName="anyOtherMass_Present"
+        zOrientation="horizontal"
+        class="gap-6">
+        <z-radio [value]="true">{{
+          currentLanguageSet?.common?.present
+        }}</z-radio>
+        <z-radio [value]="false">{{
+          currentLanguageSet?.common?.absent
+        }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-12 row">
-      <div class="col-6 custom-cell cell_postion">
-        <span>{{
+    <!-- Lymph nodes -->
+    <div
+      class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <label z-form-label for="lymphNodes_Enlarged">
+        {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.symptoms?.lymphnodes
-        }}</span>
-      </div>
-
-      <div class="col-6 custom-cell">
-        <mat-radio-group
-          name="lymphNodes_Enlarged"
-          formControlName="lymphNodes_Enlarged"
-          (change)="checkWithLymphNodes()">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.enlarged }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.notEnlarged }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
+        }}
+      </label>
+      <z-radio-group
+        name="lymphNodes_Enlarged"
+        id="lymphNodes_Enlarged"
+        formControlName="lymphNodes_Enlarged"
+        zOrientation="horizontal"
+        class="gap-6"
+        (zChange)="checkWithLymphNodes()">
+        <z-radio [value]="true">{{
+          currentLanguageSet?.common?.enlarged
+        }}</z-radio>
+        <z-radio [value]="false">{{
+          currentLanguageSet?.common?.notEnlarged
+        }}</z-radio>
+      </z-radio-group>
     </div>
   </div>
 
-  <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
-    <div class="image-placeholder">
-      <small>{{ currentLanguageSet?.common?.kindlyMark }}</small>
-      <br />
-      <!-- eslint-disable-next-line  @angular-eslint/template/click-events-have-key-events -->
-      <a (click)="annotateImage()" tabindex="{0}" id="annotateAbdominalImg"
-        ><img
-          #abdominalImage
-          src="assets/images/abdominalExamination.png"
-          alt="Abdominal Examination"
-      /></a>
-    </div>
+  <div class="flex flex-col items-center gap-2 lg:w-5/12">
+    <small class="text-muted-foreground">{{
+      currentLanguageSet?.common?.kindlyMark
+    }}</small>
+    <!-- eslint-disable-next-line  @angular-eslint/template/click-events-have-key-events -->
+    <a
+      (click)="annotateImage()"
+      tabindex="{0}"
+      id="annotateAbdominalImg"
+      class="cursor-pointer"
+      ><img
+        #abdominalImage
+        src="assets/images/abdominalExamination.png"
+        alt="Abdominal Examination"
+        class="mt-1 h-52 w-52"
+    /></a>
   </div>
 
   <div
-    class="col-xs-12"
+    class="w-full"
     *ngIf="lymphNodes_Enlarged && lymphNodes_Enlarged.value">
-    <table
-      class="table"
-      id="lymphNodesTable"
-      aria-describedby="abdominalExamination">
-      <th id=""></th>
-      <!--Added to resolve sonarqube error-->
-      <tr>
-        <td>
-          {{
-            currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-              ?.abdominal?.leftPalpable
-          }}
-        </td>
-        <td>
-          {{
-            currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-              ?.abdominal?.lymphnode
-          }}
-        </td>
-        <td>
-          {{
-            currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-              ?.abdominal?.rightPalpable
-          }}
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <mat-button-toggle-group
-            name="lymphNode_Inguinal_Left"
-            formControlName="lymphNode_Inguinal_Left">
-            <mat-button-toggle [value]="true"> + </mat-button-toggle>
-            <mat-button-toggle [value]="false"> - </mat-button-toggle>
-          </mat-button-toggle-group>
-        </td>
-        <td>
-          {{
-            currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-              ?.abdominal?.inguinal
-          }}
-        </td>
-        <td>
-          <mat-button-toggle-group
-            name="lymphNode_Inguinal_Right"
-            formControlName="lymphNode_Inguinal_Right">
-            <mat-button-toggle [value]="true"> + </mat-button-toggle>
-            <mat-button-toggle [value]="false"> - </mat-button-toggle>
-          </mat-button-toggle-group>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <mat-button-toggle-group
-            name="lymphNode_ExternalIliac_Left"
-            formControlName="lymphNode_ExternalIliac_Left">
-            <mat-button-toggle [value]="true"> + </mat-button-toggle>
-            <mat-button-toggle [value]="false"> - </mat-button-toggle>
-          </mat-button-toggle-group>
-        </td>
-        <td>
-          {{
-            currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-              ?.abdominal?.externalIliac
-          }}
-        </td>
-        <td>
-          <mat-button-toggle-group
-            name="lymphNode_ExternalIliac_Right"
-            formControlName="lymphNode_ExternalIliac_Right">
-            <mat-button-toggle [value]="true"> + </mat-button-toggle>
-            <mat-button-toggle [value]="false"> - </mat-button-toggle>
-          </mat-button-toggle-group>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <mat-button-toggle-group
-            name="lymphNode_ParaAortic_Left"
-            formControlName="lymphNode_ParaAortic_Left">
-            <mat-button-toggle [value]="true"> + </mat-button-toggle>
-            <mat-button-toggle [value]="false"> - </mat-button-toggle>
-          </mat-button-toggle-group>
-        </td>
-        <td>
-          {{
-            currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-              ?.abdominal?.paraAortic
-          }}
-        </td>
-        <td>
-          <mat-button-toggle-group
-            name="lymphNode_ParaAortic_Right"
-            formControlName="lymphNode_ParaAortic_Right">
-            <mat-button-toggle [value]="true"> + </mat-button-toggle>
-            <mat-button-toggle [value]="false"> - </mat-button-toggle>
-          </mat-button-toggle-group>
-        </td>
-      </tr>
-    </table>
+    <div class="overflow-x-auto">
+      <table
+        class="w-full border-collapse"
+        id="lymphNodesTable"
+        aria-describedby="abdominalExamination">
+        <th id=""></th>
+        <!--Added to resolve sonarqube error-->
+        <tr>
+          <td class="p-2 text-center align-middle text-sm">
+            {{
+              currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+                ?.abdominal?.leftPalpable
+            }}
+          </td>
+          <td class="p-2 text-center align-middle text-sm font-medium">
+            {{
+              currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+                ?.abdominal?.lymphnode
+            }}
+          </td>
+          <td class="p-2 text-center align-middle text-sm">
+            {{
+              currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+                ?.abdominal?.rightPalpable
+            }}
+          </td>
+        </tr>
+        <tr>
+          <td class="p-2 text-center align-middle">
+            <z-toggle-group
+              name="lymphNode_Inguinal_Left"
+              formControlName="lymphNode_Inguinal_Left">
+              <z-toggle-group-item [zValue]="true">+</z-toggle-group-item>
+              <z-toggle-group-item [zValue]="false">-</z-toggle-group-item>
+            </z-toggle-group>
+          </td>
+          <td class="p-2 text-center align-middle text-sm">
+            {{
+              currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+                ?.abdominal?.inguinal
+            }}
+          </td>
+          <td class="p-2 text-center align-middle">
+            <z-toggle-group
+              name="lymphNode_Inguinal_Right"
+              formControlName="lymphNode_Inguinal_Right">
+              <z-toggle-group-item [zValue]="true">+</z-toggle-group-item>
+              <z-toggle-group-item [zValue]="false">-</z-toggle-group-item>
+            </z-toggle-group>
+          </td>
+        </tr>
+        <tr>
+          <td class="p-2 text-center align-middle">
+            <z-toggle-group
+              name="lymphNode_ExternalIliac_Left"
+              formControlName="lymphNode_ExternalIliac_Left">
+              <z-toggle-group-item [zValue]="true">+</z-toggle-group-item>
+              <z-toggle-group-item [zValue]="false">-</z-toggle-group-item>
+            </z-toggle-group>
+          </td>
+          <td class="p-2 text-center align-middle text-sm">
+            {{
+              currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+                ?.abdominal?.externalIliac
+            }}
+          </td>
+          <td class="p-2 text-center align-middle">
+            <z-toggle-group
+              name="lymphNode_ExternalIliac_Right"
+              formControlName="lymphNode_ExternalIliac_Right">
+              <z-toggle-group-item [zValue]="true">+</z-toggle-group-item>
+              <z-toggle-group-item [zValue]="false">-</z-toggle-group-item>
+            </z-toggle-group>
+          </td>
+        </tr>
+        <tr>
+          <td class="p-2 text-center align-middle">
+            <z-toggle-group
+              name="lymphNode_ParaAortic_Left"
+              formControlName="lymphNode_ParaAortic_Left">
+              <z-toggle-group-item [zValue]="true">+</z-toggle-group-item>
+              <z-toggle-group-item [zValue]="false">-</z-toggle-group-item>
+            </z-toggle-group>
+          </td>
+          <td class="p-2 text-center align-middle text-sm">
+            {{
+              currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+                ?.abdominal?.paraAortic
+            }}
+          </td>
+          <td class="p-2 text-center align-middle">
+            <z-toggle-group
+              name="lymphNode_ParaAortic_Right"
+              formControlName="lymphNode_ParaAortic_Right">
+              <z-toggle-group-item [zValue]="true">+</z-toggle-group-item>
+              <z-toggle-group-item [zValue]="false">-</z-toggle-group-item>
+            </z-toggle-group>
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
 
-  <div class="col-xs-12">
-    <mat-form-field class="form-textarea">
-      <mat-label>{{
+  <div class="w-full">
+    <z-form-field>
+      <label z-form-label for="observation">{{
         currentLanguageSet?.ExaminationData?.cancerScreeningExamination
           ?.abdominal?.observation
-      }}</mat-label>
-      <textarea
-        matInput
-        allowText="textAreaValidator"
-        defaultNull
-        matTextareaAutosize
-        maxlength="500"
-        name="observation"
-        formControlName="observation"></textarea>
-    </mat-form-field>
+      }}</label>
+      <z-form-control>
+        <textarea
+          z-input
+          id="observation"
+          allowText="textAreaValidator"
+          defaultNull
+          rows="3"
+          maxlength="500"
+          name="observation"
+          formControlName="observation"></textarea>
+      </z-form-control>
+    </z-form-field>
   </div>
 </div>

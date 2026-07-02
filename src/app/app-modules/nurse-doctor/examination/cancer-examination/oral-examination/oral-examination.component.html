@@ -1,205 +1,181 @@
-<div class="row custom-table m-t-10" [formGroup]="oralExaminationForm">
-  <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-    <div class="col-xs-6 custom-cell">
-      <span>{{
-        currentLanguageSet?.ExaminationData?.cancerScreeningExamination?.oral
-          ?.limitedmouthopening
-      }}</span>
+<div
+  class="mt-2.5 flex flex-col gap-6 lg:flex-row"
+  [formGroup]="oralExaminationForm">
+  <div class="flex flex-col gap-4 lg:w-1/2">
+    <!-- Limited mouth opening -->
+    <div
+      class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <label z-form-label for="limitedMouthOpening">
+        {{
+          currentLanguageSet?.ExaminationData?.cancerScreeningExamination?.oral
+            ?.limitedmouthopening
+        }}
+      </label>
+      <z-select
+        id="limitedMouthOpening"
+        name="limitedMouthOpening"
+        class="w-full sm:w-64"
+        formControlName="limitedMouthOpening"
+        [zPlaceholder]="currentLanguageSet?.common?.select || ''">
+        <z-select-item zValue="none">None</z-select-item>
+        <z-select-item zValue="+">+</z-select-item>
+        <z-select-item zValue="++">++</z-select-item>
+        <z-select-item zValue="+++">+++</z-select-item>
+      </z-select>
     </div>
 
-    <div class="col-xs-6 custom-cell">
-      <mat-form-field>
-        <mat-label>{{ currentLanguageSet?.common?.select }}</mat-label>
-        <mat-select
-          floatPlaceholder="never"
-          name="limitedMouthOpening"
-          formControlName="limitedMouthOpening">
-          <mat-option value="none"> None </mat-option>
-          <mat-option value="+"> + </mat-option>
-          <mat-option value="++"> ++ </mat-option>
-          <mat-option value="+++"> +++ </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="col-12 row">
-      <div class="col-6 custom-cell cell_postion">
-        <span>{{
+    <!-- Pre-malignant lesions -->
+    <div
+      class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <label z-form-label for="premalignantLesions">
+        {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination?.oral
             ?.premalignantLesions
-        }}</span>
-      </div>
-
-      <div class="col-6 custom-cell">
-        <mat-radio-group
-          name="premalignantLesions"
-          formControlName="premalignantLesions"
-          (change)="checkWithPremalignantLesion()">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
+        }}
+      </label>
+      <z-radio-group
+        name="premalignantLesions"
+        id="premalignantLesions"
+        formControlName="premalignantLesions"
+        zOrientation="horizontal"
+        class="gap-6"
+        (zChange)="checkWithPremalignantLesion()">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.yes }}</z-radio>
+        <z-radio [value]="false">{{ currentLanguageSet?.common?.no }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-12 row">
-      <div
-        class="col-6 custom-cell cell_postion"
-        *ngIf="premalignantLesions && premalignantLesions.value">
-        <span>{{
+    <!-- Type of pre-malignant lesions -->
+    <div
+      *ngIf="premalignantLesions && premalignantLesions.value"
+      class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <label z-form-label for="preMalignantLesionTypeList">
+        {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination?.oral
             ?.typeofPremalignantLesions
-        }}</span>
-      </div>
-
-      <div
-        class="col-6 custom-cell"
-        *ngIf="premalignantLesions && premalignantLesions.value">
-        <mat-form-field>
-          <mat-label>{{ currentLanguageSet?.common?.select }}</mat-label>
-          <mat-select
-            multiple
-            floatPlaceholder="never"
-            name="preMalignantLesionTypeList"
-            id="preMalignantLesionTypeList"
-            formControlName="preMalignantLesionTypeList">
-            <mat-option value="Leukoplakia"> Leukoplakia </mat-option>
-            <mat-option value="Sub muscus fibrosis">
-              Sub muscus fibrosis
-            </mat-option>
-            <mat-option value="Melanoplakia"> Melanoplakia </mat-option>
-            <mat-option value="Erythroplakia"> Erythroplakia </mat-option>
-            <mat-option value="Non healing mouth ulcer(>2 weeks)">
-              Non healing mouth ulcer(>2 weeks)</mat-option
-            >
-            <mat-option value="Any other lesion"> Any other lesion</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+        }}
+      </label>
+      <z-select
+        id="preMalignantLesionTypeList"
+        name="preMalignantLesionTypeList"
+        class="w-full sm:w-64"
+        [zMultiple]="true"
+        formControlName="preMalignantLesionTypeList"
+        [zPlaceholder]="currentLanguageSet?.common?.select || ''">
+        <z-select-item zValue="Leukoplakia">Leukoplakia</z-select-item>
+        <z-select-item zValue="Sub muscus fibrosis"
+          >Sub muscus fibrosis</z-select-item
+        >
+        <z-select-item zValue="Melanoplakia">Melanoplakia</z-select-item>
+        <z-select-item zValue="Erythroplakia">Erythroplakia</z-select-item>
+        <z-select-item zValue="Non healing mouth ulcer(>2 weeks)"
+          >Non healing mouth ulcer(&gt;2 weeks)</z-select-item
+        >
+        <z-select-item zValue="Any other lesion">Any other lesion</z-select-item>
+      </z-select>
     </div>
 
-    <div class="col-12 row">
-      <div
-        class="col-6 custom-cell cell_postion"
-        *ngIf="premalignantLesions && premalignantLesions.value && showOther">
-        <span>{{
+    <!-- Other lesion -->
+    <div
+      *ngIf="premalignantLesions && premalignantLesions.value && showOther"
+      class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <label z-form-label for="otherLesionType">
+        {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination?.oral
             ?.otherlesion
-        }}</span>
-      </div>
-      <div
-        class="col-6 custom-cell other"
-        *ngIf="premalignantLesions && premalignantLesions.value && showOther">
-        <mat-form-field>
-          <mat-label>{{
-            currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-              ?.oral?.otherlesion
-          }}</mat-label>
+        }}
+      </label>
+      <z-form-field class="w-full sm:w-64">
+        <z-form-control>
           <input
+            z-input
             autocomplete="off"
             allowText="textAreaValidator"
-            matInput
             defaultNull
             maxlength="50"
             name="otherLesionType"
             id="otherLesionType"
             formControlName="otherLesionType" />
-        </mat-form-field>
-      </div>
+        </z-form-control>
+      </z-form-field>
     </div>
-    <div class="col-12 row">
-      <div class="col-6 custom-cell cell_postion">
-        <span>{{
+
+    <!-- Prolonged irritation -->
+    <div
+      class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <label z-form-label for="prolongedIrritation">
+        {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination?.oral
             ?.prolongedirritation
-        }}</span>
-      </div>
-
-      <div class="col-6 custom-cell">
-        <mat-radio-group
-          name="prolongedIrritation"
-          formControlName="prolongedIrritation">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
+        }}
+      </label>
+      <z-radio-group
+        name="prolongedIrritation"
+        id="prolongedIrritation"
+        formControlName="prolongedIrritation"
+        zOrientation="horizontal"
+        class="gap-6">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.yes }}</z-radio>
+        <z-radio [value]="false">{{ currentLanguageSet?.common?.no }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-12 row">
-      <div class="col-6 custom-cell cell_postion">
-        <span>{{
+    <!-- Chronic burning sensation -->
+    <div
+      class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <label z-form-label for="chronicBurningSensation">
+        {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination?.oral
             ?.chronicburningsensation
-        }}</span>
-      </div>
-
-      <div class="col-6 custom-cell">
-        <mat-radio-group
-          name="chronicBurningSensation"
-          formControlName="chronicBurningSensation">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
+        }}
+      </label>
+      <z-radio-group
+        name="chronicBurningSensation"
+        id="chronicBurningSensation"
+        formControlName="chronicBurningSensation"
+        zOrientation="horizontal"
+        class="gap-6">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.yes }}</z-radio>
+        <z-radio [value]="false">{{ currentLanguageSet?.common?.no }}</z-radio>
+      </z-radio-group>
     </div>
   </div>
 
-  <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-    <div class="image-placeholder">
-      <small>{{ currentLanguageSet?.common?.kindlyMark }}</small>
-      <br />
-      <!-- eslint-disable-next-line  @angular-eslint/template/click-events-have-key-events -->
-      <a (click)="annotateImage()" tabindex="{0}" id="annotateOralImg"
-        ><img
-          #mouthImage
-          src="assets/images/oralExamination.png"
-          alt="oral examination"
-      /></a>
-    </div>
+  <div class="flex flex-col items-center gap-2 lg:w-1/2">
+    <small class="text-muted-foreground">{{
+      currentLanguageSet?.common?.kindlyMark
+    }}</small>
+    <!-- eslint-disable-next-line  @angular-eslint/template/click-events-have-key-events -->
+    <a
+      (click)="annotateImage()"
+      tabindex="{0}"
+      id="annotateOralImg"
+      class="cursor-pointer"
+      ><img
+        #mouthImage
+        src="assets/images/oralExamination.png"
+        alt="oral examination"
+        class="mt-1 h-52 w-52"
+    /></a>
   </div>
 
-  <div class="col-xs-12 textarea-full-height">
-    <mat-form-field class="form-textarea col-xs-12">
-      <mat-label>{{
+  <div class="w-full">
+    <z-form-field>
+      <label z-form-label for="observation">{{
         currentLanguageSet?.ExaminationData?.cancerScreeningExamination
           ?.abdominal?.observation
-      }}</mat-label>
-      <textarea
-        matInput
-        allowText="textAreaValidator"
-        defaultNull
-        maxlength="500"
-        matTextareaAutosize
-        name="observation"
-        formControlName="observation"></textarea>
-    </mat-form-field>
+      }}</label>
+      <z-form-control>
+        <textarea
+          z-input
+          id="observation"
+          allowText="textAreaValidator"
+          defaultNull
+          rows="3"
+          maxlength="500"
+          name="observation"
+          formControlName="observation"></textarea>
+      </z-form-control>
+    </z-form-field>
   </div>
 </div>
