@@ -89,8 +89,8 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
   isOtherSelected = false;
 
   constructor(
-    private dialog: ZardDialogService,
-    private viewContainerRef: ViewContainerRef,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private nurseService: NurseService,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,

@@ -189,8 +189,8 @@ export class WorkareaComponent
   constructor(
     private fb: FormBuilder,
     private confirmationService: ConfirmationService,
-    private dialog: ZardDialogService,
-    private viewContainerRef: ViewContainerRef,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private router: Router,
     private masterdataService: MasterDataService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,

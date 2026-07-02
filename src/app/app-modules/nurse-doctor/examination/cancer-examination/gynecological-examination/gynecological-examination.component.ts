@@ -105,8 +105,8 @@ export class GynecologicalExaminationComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     readonly sessionstorage: SessionStorageService,
     private doctorService: DoctorService,
-    private dialog: ZardDialogService,
-    private viewContainerRef: ViewContainerRef
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef
   ) {}
 
   ngOnInit() {

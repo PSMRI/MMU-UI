@@ -100,8 +100,8 @@ export class ComorbidityConcurrentConditionsComponent
   currentLanguageSet: any;
   constructor(
     private fb: FormBuilder,
-    private dialog: ZardDialogService,
-    private viewContainerRef: ViewContainerRef,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private nurseService: NurseService,
     private doctorService: DoctorService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,

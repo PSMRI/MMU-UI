@@ -95,8 +95,8 @@ export class MedicationHistoryComponent implements OnInit, OnDestroy, DoCheck {
 
   constructor(
     private fb: FormBuilder,
-    private dialog: ZardDialogService,
-    private viewContainerRef: ViewContainerRef,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private nurseService: NurseService,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,

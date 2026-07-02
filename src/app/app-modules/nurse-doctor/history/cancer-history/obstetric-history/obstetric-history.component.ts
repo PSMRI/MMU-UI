@@ -96,8 +96,8 @@ export class ObstetricHistoryComponent
   constructor(
     private fb: FormBuilder,
     private confirmationService: ConfirmationService,
-    private dialog: ZardDialogService,
-    private viewContainerRef: ViewContainerRef,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private httpServiceService: HttpServiceService,
     private nurseService: NurseService,
     private masterdataService: MasterdataService,

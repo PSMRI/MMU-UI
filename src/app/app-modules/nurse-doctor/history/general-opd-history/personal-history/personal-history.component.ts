@@ -144,7 +144,7 @@ export class GeneralPersonalHistoryComponent
 
   constructor(
     private fb: FormBuilder,
-    private dialog: ZardDialogService,
+    private readonly dialog: ZardDialogService,
     private readonly viewContainerRef: ViewContainerRef,
     private nurseService: NurseService,
     private doctorService: DoctorService,

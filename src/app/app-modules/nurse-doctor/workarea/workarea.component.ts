@@ -280,7 +280,7 @@ export class WorkareaComponent
     private doctorService: DoctorService,
     private route: ActivatedRoute,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
-    private mdDialog: ZardDialogService,
+    private readonly mdDialog: ZardDialogService,
     private readonly viewContainerRef: ViewContainerRef,
     readonly sessionstorage: SessionStorageService,
     private idrsScoreService: IdrsscoreService,

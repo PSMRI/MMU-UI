@@ -88,8 +88,8 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
     private masterdataService: MasterdataService,
     private nurseService: NurseService,
     private doctorService: DoctorService,
-    private dialog: ZardDialogService,
-    private viewContainerRef: ViewContainerRef,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
     readonly sessionstorage: SessionStorageService

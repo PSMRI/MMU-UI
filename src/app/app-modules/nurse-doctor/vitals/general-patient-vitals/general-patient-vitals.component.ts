@@ -176,8 +176,8 @@ export class GeneralPatientVitalsComponent
   attendant: any;
 
   constructor(
-    private dialog: ZardDialogService,
-    private viewContainerRef: ViewContainerRef,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private confirmationService: ConfirmationService,
     private httpServiceService: HttpServiceService,
     private doctorService: DoctorService,

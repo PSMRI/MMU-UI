@@ -127,7 +127,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   constructor(
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
-    private dialog: ZardDialogService,
+    private readonly dialog: ZardDialogService,
     private readonly viewContainerRef: ViewContainerRef,
     private httpServiceService: HttpServiceService,
     readonly sessionstorage: SessionStorageService,

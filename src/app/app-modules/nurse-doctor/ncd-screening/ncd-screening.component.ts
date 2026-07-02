@@ -123,7 +123,7 @@ export class NcdScreeningComponent
 
   constructor(
     private fb: FormBuilder,
-    private dialog: ZardDialogService,
+    private readonly dialog: ZardDialogService,
     private readonly viewContainerRef: ViewContainerRef,
     private confirmationService: ConfirmationService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,

@@ -85,8 +85,8 @@ export class PersonalHistoryComponent implements OnInit, OnDestroy, DoCheck {
   constructor(
     private fb: FormBuilder,
     private confirmationService: ConfirmationService,
-    private dialog: ZardDialogService,
-    private viewContainerRef: ViewContainerRef,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private nurseService: NurseService,
     private httpServiceService: HttpServiceService,
     private masterdataService: MasterdataService,

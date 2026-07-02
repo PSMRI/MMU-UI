@@ -106,7 +106,7 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
     private router: Router,
     private nurseService: NurseService,
     private doctorService: DoctorService,
-    private dialog: ZardDialogService,
+    private readonly dialog: ZardDialogService,
     private readonly viewContainerRef: ViewContainerRef,
     private idrsScoreService: IdrsscoreService,
     readonly sessionstorage: SessionStorageService,

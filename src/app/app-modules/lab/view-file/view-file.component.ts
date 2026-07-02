@@ -49,7 +49,7 @@ export class ViewFileComponent implements OnInit, DoCheck {
   current_language_set: any;
   constructor(
     @Inject(Z_MODAL_DATA) public input: any,
-    private dialogRef: ZardDialogRef<ViewFileComponent>,
+    private readonly dialogRef: ZardDialogRef<ViewFileComponent>,
     private confirmationService: ConfirmationService,
     private httpServiceService: HttpServiceService
   ) {

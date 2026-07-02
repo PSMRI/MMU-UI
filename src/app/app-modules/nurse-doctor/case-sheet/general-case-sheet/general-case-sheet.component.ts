@@ -101,7 +101,7 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
 
   constructor(
     private location: Location,
-    private dialog: ZardDialogService,
+    private readonly dialog: ZardDialogService,
     private readonly viewContainerRef: ViewContainerRef,
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,

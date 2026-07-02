@@ -96,8 +96,8 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
     private confirmationService: ConfirmationService,
     private doctorService: DoctorService,
     readonly sessionstorage: SessionStorageService,
-    private dialog: ZardDialogService,
-    private viewContainerRef: ViewContainerRef,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private trackingService: AmritTrackingService
   ) {}
 

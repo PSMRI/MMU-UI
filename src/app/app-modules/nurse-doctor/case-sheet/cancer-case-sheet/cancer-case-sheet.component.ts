@@ -94,7 +94,7 @@ export class CancerCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
 
   constructor(
     private doctorService: DoctorService,
-    private dialog: ZardDialogService,
+    private readonly dialog: ZardDialogService,
     private readonly viewContainerRef: ViewContainerRef,
     private location: Location,
     private route: ActivatedRoute,

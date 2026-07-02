@@ -106,8 +106,8 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private fb: FormBuilder,
-    private dialog: ZardDialogService,
-    private viewContainerRef: ViewContainerRef,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private confirmationService: ConfirmationService,
     private nurseService: NurseService,

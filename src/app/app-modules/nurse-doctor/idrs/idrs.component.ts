@@ -147,7 +147,7 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   constructor(
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private route: ActivatedRoute,
-    private dialog: ZardDialogService,
+    private readonly dialog: ZardDialogService,
     private readonly viewContainerRef: ViewContainerRef,
     private confirmationService: ConfirmationService,
     private idrsScoreService: IdrsscoreService,

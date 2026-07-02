@@ -245,7 +245,7 @@ export class QuickConsultComponent
     private confirmationService: ConfirmationService,
     private httpServices: HttpServiceService,
     private nurseService: NurseService,
-    private dialog: ZardDialogService,
+    private readonly dialog: ZardDialogService,
     private readonly viewContainerRef: ViewContainerRef,
     readonly sessionstorage: SessionStorageService,
     private testInVitalsService: TestInVitalsService

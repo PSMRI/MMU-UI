@@ -118,8 +118,8 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
     private masterdataService: MasterdataService,
     private idrsScoreService: IdrsscoreService,
     private nurseService: NurseService,
-    private dialog: ZardDialogService,
-    private viewContainerRef: ViewContainerRef,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private confirmationService: ConfirmationService,
     readonly sessionstorage: SessionStorageService,
     private httpServices: HttpServiceService

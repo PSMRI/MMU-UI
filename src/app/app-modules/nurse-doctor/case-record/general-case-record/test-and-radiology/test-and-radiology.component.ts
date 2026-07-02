@@ -82,7 +82,7 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
 
   constructor(
     private doctorService: DoctorService,
-    private dialog: ZardDialogService,
+    private readonly dialog: ZardDialogService,
     private readonly viewContainerRef: ViewContainerRef,
     private labService: LabService,
     private idrsScoreService: IdrsscoreService,

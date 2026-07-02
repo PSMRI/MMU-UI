@@ -87,8 +87,8 @@ export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
 
   constructor(
     private idrsScoreService: IdrsscoreService,
-    private dialog: ZardDialogService,
-    private viewContainerRef: ViewContainerRef,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
