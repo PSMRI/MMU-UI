@@ -36,28 +36,27 @@ import {
 } from '@angular/forms';
 import { GeneralUtils } from '../../shared/utility/general-utility';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
-import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogClose,
-  MatDialogContent,
-} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
-import { CdkScrollable } from '@angular/cdk/scrolling';
 import { NgIf, NgFor, NgClass, SlicePipe } from '@angular/common';
-import { MatLabel, MatSelect, MatFormField } from '@angular/material/select';
-import {
-  MatOption,
-  MatAutocompleteTrigger,
-  MatAutocomplete,
-} from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
 import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideX,
+  lucideCircleCheck,
+  lucideCircleX,
+  lucideTrash2,
+} from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardComboboxComponent } from 'Common-UI/v2/ui/combobox';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardPaginationImports } from 'Common-UI/v2/ui/pagination';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 interface prescribe {
   id: any;
   drugID: any;
@@ -81,28 +80,26 @@ interface prescribe {
 @Component({
   selector: 'app-prescribe-tm-medicine',
   templateUrl: './prescribe-tm-medicine.component.html',
-  styleUrls: ['./prescribe-tm-medicine.component.css'],
+  viewProviders: [
+    provideIcons({ lucideX, lucideCircleCheck, lucideCircleX, lucideTrash2 }),
+  ],
   imports: [
-    MatDialogClose,
-    MatTooltip,
-    MatIcon,
-    CdkScrollable,
-    MatDialogContent,
     NgIf,
     NgFor,
     ReactiveFormsModule,
     FormsModule,
-    MatLabel,
-    MatSelect,
-    MatOption,
-    MatFormField,
-    MatInput,
-    MatAutocompleteTrigger,
-    MatAutocomplete,
     NgClass,
     StringValidatorDirective,
-    MatPaginator,
     SlicePipe,
+    NgIcon,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ...ZardSelectImports,
+    ZardComboboxComponent,
+    ...ZardTableImports,
+    ...ZardPaginationImports,
+    ...tooltipImports,
   ],
 })
 export class PrescribeTmMedicineComponent implements OnInit, DoCheck {
@@ -114,7 +111,7 @@ export class PrescribeTmMedicineComponent implements OnInit, DoCheck {
   createdBy!: string;
 
   pageSize = 5;
-  pageEvent!: PageEvent;
+  currentPageIndex = 1;
   pageLimits: any = [];
   currentPrescription: prescribe = {
     id: null,
@@ -155,6 +152,13 @@ export class PrescribeTmMedicineComponent implements OnInit, DoCheck {
   tmPrescribedDrugs: any;
   tempform: any;
   tempDrugName: any;
+  tempMedicineId: any = null;
+  // String proxies for the number-valued duration/quantity z-selects (CVA emits
+  // strings). Kept in sync via onDurationChange/onQuantityChange so the numeric
+  // currentPrescription.duration / .qtyPrescribed contract is preserved, while
+  // [(ngModel)] + required registers each select as a gating NgForm control.
+  durationModel = '';
+  quantityModel = '';
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
   constructor(
@@ -181,6 +185,51 @@ export class PrescribeTmMedicineComponent implements OnInit, DoCheck {
   setLimits(pageNo = 0) {
     this.pageLimits[0] = +pageNo * +this.pageSize;
     this.pageLimits[1] = (+pageNo + 1) * +this.pageSize;
+  }
+
+  // --- Zard control adapters. The reactive form / template-driven models keep
+  // their original object / number / ISO value types; these thin adapters map
+  // the string-valued z-select and CVA z-combobox back onto them so the
+  // submission contract is unchanged. ---
+
+  /** Total pages for the prescribed-drugs z-pagination (1-based). */
+  get totalDrugPages(): number {
+    const length =
+      this.drugPrescriptionForm?.controls['prescribedDrugs']?.value?.length ??
+      0;
+    return Math.max(1, Math.ceil(length / this.pageSize));
+  }
+
+  /** z-pagination emits a 1-based page index; setLimits() expects 0-based. */
+  onPageChange(pageIndex: number) {
+    this.currentPageIndex = pageIndex;
+    this.setLimits(pageIndex - 1);
+  }
+
+  /** Medicine z-combobox: emits the selected itemID; reuse selectMedicineObject. */
+  onMedicineChange(itemID: any) {
+    if (itemID === null || itemID === undefined || itemID === '') {
+      return;
+    }
+    const option = (this.filteredDrugMaster || []).find(
+      (drug: any) => drug.itemID === itemID
+    );
+    if (option) {
+      this.selectMedicineObject({
+        isUserInput: true,
+        source: { value: option },
+      });
+    }
+  }
+
+  /** Duration z-select: number-valued control kept as a number. */
+  onDurationChange(value: number) {
+    this.currentPrescription.duration = value;
+  }
+
+  /** Quantity z-select: number-valued control kept as a number. */
+  onQuantityChange(value: number) {
+    this.currentPrescription.qtyPrescribed = value;
   }
   makeDurationMaster() {
     let i = 1;
@@ -210,6 +259,13 @@ export class PrescribeTmMedicineComponent implements OnInit, DoCheck {
       });
   }
   getFormValueChanged() {
+    // The form z-select is [(ngModel)]-bound to currentPrescription.formName
+    // (its zValue is item.itemFormName), so resolve the master object from the
+    // selected name before clearing, then let getFormDetails() set formID/formName.
+    const selected = (this.drugFormMaster || []).find(
+      (item: any) => item.itemFormName === this.currentPrescription.formName
+    );
+    this.tempform = selected ?? null;
     this.clearCurrentDetails();
     this.getFormDetails();
   }
@@ -325,6 +381,7 @@ export class PrescribeTmMedicineComponent implements OnInit, DoCheck {
             .subscribe(res => {
               if (!res) {
                 this.tempDrugName = null;
+                this.tempMedicineId = null;
                 this.currentPrescription['id'] = '';
                 this.currentPrescription['drugName'] = '';
                 this.currentPrescription['drugID'] = '';
@@ -385,6 +442,18 @@ export class PrescribeTmMedicineComponent implements OnInit, DoCheck {
       sctTerm: null,
     };
     this.tempDrugName = null;
+    this.tempMedicineId = null;
+    // Keep the string proxies in sync with the reset numeric fields.
+    this.durationModel =
+      this.currentPrescription.duration !== null &&
+      this.currentPrescription.duration !== undefined
+        ? this.currentPrescription.duration.toString()
+        : '';
+    this.quantityModel =
+      this.currentPrescription.qtyPrescribed !== null &&
+      this.currentPrescription.qtyPrescribed !== undefined
+        ? this.currentPrescription.qtyPrescribed.toString()
+        : '';
     this.prescriptionForm.form.markAsUntouched();
     this.isStockAvalable = '';
   }

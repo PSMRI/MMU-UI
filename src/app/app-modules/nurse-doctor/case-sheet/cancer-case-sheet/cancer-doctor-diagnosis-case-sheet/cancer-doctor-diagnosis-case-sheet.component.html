@@ -1,306 +1,379 @@
-<div class="container">
-  <div class="row m-t-10">
-    <div class="col-xs-12 text-right">
-      <p>
-        <strong> {{ currentLanguageSet?.common?.date }}: </strong> {{ date }}
-      </p>
-    </div>
-    <div class="col-xs-12 text-center">
-      <img id="logo" src="assets/images/Swasthya.png" alt="Piramal" />
-    </div>
+<div class="bg-white pb-12">
+  <div class="mt-3 flex items-center justify-end">
+    <p class="text-sm text-foreground">
+      <strong>{{ currentLanguageSet?.common?.date }}:</strong> {{ date }}
+    </p>
+  </div>
+  <div class="flex justify-center">
+    <img class="w-[90px]" src="assets/images/Swasthya.png" alt="Piramal" />
   </div>
 
-  <div class="row m-t-20">
-    <div class="col-xs-6 text-left">
-      <p>
-        <strong> {{ currentLanguageSet?.bendetails?.visitCategory }}: </strong>
-        {{ beneficiaryDetails?.VisitCategory }}
-      </p>
-    </div>
-    <div class="col-xs-6 text-right" *ngIf="caseSheetData?.serviceID === 2">
-      <p>
-        <strong> {{ currentLanguageSet?.casesheet?.servicePoint }}: </strong>
-        {{ servicePointName }}
-      </p>
-    </div>
+  <div class="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
+    <p class="text-sm text-foreground">
+      <strong>{{ currentLanguageSet?.bendetails?.visitCategory }}:</strong>
+      {{ beneficiaryDetails?.VisitCategory }}
+    </p>
+    <p
+      class="text-sm text-foreground sm:text-right"
+      *ngIf="caseSheetData?.serviceID === 2">
+      <strong>{{ currentLanguageSet?.casesheet?.servicePoint }}:</strong>
+      {{ servicePointName }}
+    </p>
   </div>
 
   <!-- Beneficiary Details -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <fieldset>
-        <legend>{{ currentLanguageSet?.casesheet?.beneficiaryDetails }}</legend>
-        <table
-          class="table table-no-border casesheet-table"
-          aria-describedby="benDetails">
-          <tr>
-            <th id="beneficiaryID">
-              {{ currentLanguageSet?.bendetails?.beneficiaryID }}:
-            </th>
-            <td>
-              {{ beneficiaryDetails && beneficiaryDetails.beneficiaryID }}
-            </td>
-            <th id="visitCode">
-              {{ currentLanguageSet?.casesheet?.visitCode }}:
-            </th>
-            <td>{{ beneficiaryDetails && beneficiaryDetails.visitCode }}</td>
-          </tr>
-          <tr>
-            <th id="name">{{ currentLanguageSet?.casesheet?.name }}:</th>
-            <td colspan="3">
-              {{ beneficiaryDetails && beneficiaryDetails.beneficiaryName }}
-            </td>
-          </tr>
-          <tr>
-            <th id="gender">{{ currentLanguageSet?.bendetails?.gender }}:</th>
-            <td>{{ beneficiaryDetails && beneficiaryDetails.genderName }}</td>
-            <th id="visitDate">
-              {{ currentLanguageSet?.bendetails?.visitDate }}:
-            </th>
-            <td>{{ beneficiaryDetails && beneficiaryDetails.serviceDate }}</td>
-          </tr>
-          <tr>
-            <th id="age">{{ currentLanguageSet?.bendetails?.age }}:</th>
-            <td>{{ beneficiaryDetails && beneficiaryDetails.age }}</td>
-            <th id="consultDate">
-              {{ currentLanguageSet?.casesheet?.consultDate }}:
-            </th>
-            <td>
-              {{ beneficiaryDetails && beneficiaryDetails.consultationDate }}
-            </td>
-          </tr>
-        </table>
-      </fieldset>
-    </div>
-  </div>
+  <z-card class="mt-6 block">
+    <z-card-header class="pt-6">
+      <z-card-title>
+        {{ currentLanguageSet?.casesheet?.beneficiaryDetails }}
+      </z-card-title>
+    </z-card-header>
+    <z-card-content class="pt-4">
+      <dl class="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.bendetails?.beneficiaryID }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ beneficiaryDetails && beneficiaryDetails.beneficiaryID }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.casesheet?.visitCode }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ beneficiaryDetails && beneficiaryDetails.visitCode }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm sm:col-span-2">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.casesheet?.name }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ beneficiaryDetails && beneficiaryDetails.beneficiaryName }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.bendetails?.gender }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ beneficiaryDetails && beneficiaryDetails.genderName }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.bendetails?.visitDate }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ beneficiaryDetails && beneficiaryDetails.serviceDate }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.bendetails?.age }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ beneficiaryDetails && beneficiaryDetails.age }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.casesheet?.consultDate }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ beneficiaryDetails && beneficiaryDetails.consultationDate }}
+          </dd>
+        </div>
+      </dl>
+    </z-card-content>
+  </z-card>
   <!-- End of Beneficiary Details -->
 
   <!-- Current Vitals -->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <fieldset>
-        <legend>{{ currentLanguageSet?.casesheet?.currentVitals }}</legend>
-        <table
-          class="table table-no-border casesheet-table"
-          aria-describedby="printPagePreviewTbl">
-          <tr>
-            <th id="height">{{ currentLanguageSet?.casesheet?.height }}:</th>
-            <td>{{ currentVitals && currentVitals.height_cm }}</td>
-            <th id="weight">{{ currentLanguageSet?.casesheet?.weight }}:</th>
-            <td>{{ currentVitals && currentVitals.weight_Kg }}</td>
-          </tr>
-          <tr>
-            <th id="weightCircumference">
-              {{ currentLanguageSet?.casesheet?.weightCircumference }}:
-            </th>
-            <td>{{ currentVitals && currentVitals.waistCircumference_cm }}</td>
-            <th id="empty">&nbsp;</th>
-            <td>&nbsp;</td>
-          </tr>
-          <tr>
-            <th id="spo2">{{ currentLanguageSet?.sPOTwoWithUnit }}:</th>
-            <td>{{ currentVitals && currentVitals.sPO2 }}</td>
-            <th id="rbs">{{ currentLanguageSet?.rbs }}:</th>
-            <td>{{ currentVitals && currentVitals.rbsTestResult }}</td>
-          </tr>
-          <tr>
-            <td colspan="4">
-              <h5>{{ currentLanguageSet?.rbsRemarks }}:</h5>
-              <div class="textarea">
-                {{ currentVitals && currentVitals.rbsTestRemarks }}
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th id="bpSystolic">
-              {{ currentLanguageSet?.casesheet?.bpSystolic }}:
-            </th>
-            <td>{{ currentVitals && currentVitals.systolicBP_1stReading }}</td>
-            <th id="bpDiastolic">
-              {{ currentLanguageSet?.casesheet?.bpDiastolic }}:
-            </th>
-            <td>{{ currentVitals && currentVitals.diastolicBP_1stReading }}</td>
-          </tr>
-          <tr>
-            <th id="sugarFasting">
-              {{ currentLanguageSet?.casesheet?.sugarFasting }}:
-            </th>
-            <td>{{ currentVitals && currentVitals.bloodGlucose_Fasting }}</td>
-            <th id="sugarRandom">
-              {{ currentLanguageSet?.casesheet?.sugarRandom }}:
-            </th>
-            <td>{{ currentVitals && currentVitals.bloodGlucose_Random }}</td>
-          </tr>
-          <tr>
-            <th id="sugarPp">{{ currentLanguageSet?.casesheet?.sugarPp }}:</th>
-            <td>
-              {{ currentVitals && currentVitals.bloodGlucose_2HrPostPrandial }}
-            </td>
-            <td colspan="2"></td>
-          </tr>
-          <tr>
-            <th id="hba1c">{{ currentLanguageSet?.casesheet?.hba1c }}:</th>
-            <td>{{ currentVitals && currentVitals.hbA1C }}</td>
-            <th id="hb">{{ currentLanguageSet?.casesheet?.hb }}:</th>
-            <td>{{ currentVitals && currentVitals.hemoglobin }}</td>
-          </tr>
-        </table>
-      </fieldset>
-    </div>
-  </div>
+  <z-card class="mt-6 block">
+    <z-card-header class="pt-6">
+      <z-card-title>
+        {{ currentLanguageSet?.casesheet?.currentVitals }}
+      </z-card-title>
+    </z-card-header>
+    <z-card-content class="pt-4">
+      <dl class="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.casesheet?.height }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ currentVitals && currentVitals.height_cm }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.casesheet?.weight }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ currentVitals && currentVitals.weight_Kg }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.casesheet?.weightCircumference }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ currentVitals && currentVitals.waistCircumference_cm }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.sPOTwoWithUnit }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ currentVitals && currentVitals.sPO2 }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.rbs }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ currentVitals && currentVitals.rbsTestResult }}
+          </dd>
+        </div>
+        <div class="text-sm sm:col-span-2">
+          <p class="mb-1 font-semibold text-foreground">
+            {{ currentLanguageSet?.rbsRemarks }}:
+          </p>
+          <div
+            class="min-h-[100px] whitespace-pre-wrap rounded-md border border-input p-2 text-muted-foreground">
+            {{ currentVitals && currentVitals.rbsTestRemarks }}
+          </div>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.casesheet?.bpSystolic }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ currentVitals && currentVitals.systolicBP_1stReading }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.casesheet?.bpDiastolic }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ currentVitals && currentVitals.diastolicBP_1stReading }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.casesheet?.sugarFasting }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ currentVitals && currentVitals.bloodGlucose_Fasting }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.casesheet?.sugarRandom }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ currentVitals && currentVitals.bloodGlucose_Random }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.casesheet?.sugarPp }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ currentVitals && currentVitals.bloodGlucose_2HrPostPrandial }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.casesheet?.hba1c }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ currentVitals && currentVitals.hbA1C }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.casesheet?.hb }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ currentVitals && currentVitals.hemoglobin }}
+          </dd>
+        </div>
+      </dl>
+    </z-card-content>
+  </z-card>
   <!-- End of Current Vitals -->
 
   <!-- Covid Vaccination Details -->
-  <div class="row m-t-10" *ngIf="isCovidVaccinationStatusVisible">
-    <div class="col-xs-12">
-      <fieldset>
-        <legend>{{ currentLanguageSet?.covidVaccinationStatus }}:</legend>
-        <table
-          class="table table-no-border casesheet-table"
-          aria-describedby="CovidVaccinationDetails">
-          <tr>
-            <th id="ageGroup">{{ currentLanguageSet?.ageGroup }}:</th>
-            <td>
-              {{
-                beneficiaryDetails && beneficiaryDetails.ageVal >= 12
-                  ? '>=12 years'
-                  : ageValidationForVaccination
-              }}
-            </td>
-            <th id="isApplicableForVaccine">
-              {{ currentLanguageSet?.isApplicableForVaccine }}:
-            </th>
-            <td>
-              {{
-                beneficiaryDetails && beneficiaryDetails.ageVal >= 12
-                  ? 'Applicable for Vaccination'
-                  : 'Not Applicable for Vaccination'
-              }}
-            </td>
-          </tr>
-          <tr>
-            <th id="vaccineStatus">{{ currentLanguageSet?.vaccineStatus }}:</th>
-            <td>
-              {{ covidVaccineDetails && covidVaccineDetails.vaccineStatus }}
-            </td>
-            <th id="vaccineTypes">{{ currentLanguageSet?.vaccineTypes }}:</th>
-            <td>
-              {{
-                covidVaccineDetails &&
-                  covidVaccineDetails.covidVaccineTypeID &&
-                  covidVaccineDetails.covidVaccineTypeID[0].vaccineType
-              }}
-            </td>
-          </tr>
-          <tr>
-            <th id="doseTaken">{{ currentLanguageSet?.doseTaken }}:</th>
-            <td>
-              {{
-                covidVaccineDetails &&
-                  covidVaccineDetails.doseTypeID &&
-                  covidVaccineDetails.doseTypeID[0].doseType
-              }}
-            </td>
-          </tr>
-        </table>
-      </fieldset>
-    </div>
-  </div>
+  <z-card class="mt-6 block" *ngIf="isCovidVaccinationStatusVisible">
+    <z-card-header class="pt-6">
+      <z-card-title>
+        {{ currentLanguageSet?.covidVaccinationStatus }}:
+      </z-card-title>
+    </z-card-header>
+    <z-card-content class="pt-4">
+      <dl class="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.ageGroup }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{
+              beneficiaryDetails && beneficiaryDetails.ageVal >= 12
+                ? '>=12 years'
+                : ageValidationForVaccination
+            }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.isApplicableForVaccine }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{
+              beneficiaryDetails && beneficiaryDetails.ageVal >= 12
+                ? 'Applicable for Vaccination'
+                : 'Not Applicable for Vaccination'
+            }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.vaccineStatus }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{ covidVaccineDetails && covidVaccineDetails.vaccineStatus }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.vaccineTypes }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{
+              covidVaccineDetails &&
+                covidVaccineDetails.covidVaccineTypeID &&
+                covidVaccineDetails.covidVaccineTypeID[0].vaccineType
+            }}
+          </dd>
+        </div>
+        <div class="flex gap-2 text-sm">
+          <dt class="font-semibold text-foreground">
+            {{ currentLanguageSet?.doseTaken }}:
+          </dt>
+          <dd class="text-muted-foreground">
+            {{
+              covidVaccineDetails &&
+                covidVaccineDetails.doseTypeID &&
+                covidVaccineDetails.doseTypeID[0].doseType
+            }}
+          </dd>
+        </div>
+      </dl>
+    </z-card-content>
+  </z-card>
   <!-- End of Covid Vaccination details -->
 
-  <h4>
+  <p
+    class="mt-6 text-lg font-bold text-foreground"
+    role="heading"
+    aria-level="2">
     {{
       currentLanguageSet?.ExaminationData?.cancerScreeningExamination?.oral
         ?.observations
     }}
-  </h4>
+  </p>
 
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h5>
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.symptoms?.briefHistory
-        }}:
-      </h5>
-      <div class="textarea">
-        {{ caseSheetData?.nurseData?.signsAndSymptoms?.observation }}
-      </div>
+  <div class="mt-4">
+    <p class="mb-1 font-semibold text-foreground">
+      {{
+        currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+          ?.symptoms?.briefHistory
+      }}:
+    </p>
+    <div
+      class="min-h-[100px] whitespace-pre-wrap rounded-md border border-input p-2 text-muted-foreground">
+      {{ caseSheetData?.nurseData?.signsAndSymptoms?.observation }}
     </div>
   </div>
 
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h5>{{ currentLanguageSet?.casesheet?.oralExamination }}:</h5>
-      <div class="textarea">
-        {{ caseSheetData?.nurseData?.oralExamination?.observation }}
-      </div>
+  <div class="mt-4">
+    <p class="mb-1 font-semibold text-foreground">
+      {{ currentLanguageSet?.casesheet?.oralExamination }}:
+    </p>
+    <div
+      class="min-h-[100px] whitespace-pre-wrap rounded-md border border-input p-2 text-muted-foreground">
+      {{ caseSheetData?.nurseData?.oralExamination?.observation }}
     </div>
   </div>
 
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h5>
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.abdominal?.abdominalExamination
-        }}:
-      </h5>
-      <div class="textarea">
-        {{ caseSheetData?.nurseData?.abdominalExamination?.observation }}
-      </div>
+  <div class="mt-4">
+    <p class="mb-1 font-semibold text-foreground">
+      {{
+        currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+          ?.abdominal?.abdominalExamination
+      }}:
+    </p>
+    <div
+      class="min-h-[100px] whitespace-pre-wrap rounded-md border border-input p-2 text-muted-foreground">
+      {{ caseSheetData?.nurseData?.abdominalExamination?.observation }}
     </div>
   </div>
 
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h5>
-        {{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.gynecological?.gynecologicalExamination
-        }}:
-      </h5>
-      <div class="textarea">
-        {{ caseSheetData?.nurseData?.gynecologicalExamination?.observation }}
-      </div>
+  <div class="mt-4">
+    <p class="mb-1 font-semibold text-foreground">
+      {{
+        currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+          ?.gynecological?.gynecologicalExamination
+      }}:
+    </p>
+    <div
+      class="min-h-[100px] whitespace-pre-wrap rounded-md border border-input p-2 text-muted-foreground">
+      {{ caseSheetData?.nurseData?.gynecologicalExamination?.observation }}
     </div>
   </div>
 
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.provisionalDiagnosis }}</h4>
-      <div class="textarea">
-        {{ caseSheetDiagnosisData?.provisionalDiagnosisPrimaryDoctor }}
-      </div>
+  <div class="mt-4">
+    <p class="mb-1 text-lg font-bold text-foreground">
+      {{ currentLanguageSet?.casesheet?.provisionalDiagnosis }}
+    </p>
+    <div
+      class="min-h-[100px] whitespace-pre-wrap rounded-md border border-input p-2 text-muted-foreground">
+      {{ caseSheetDiagnosisData?.provisionalDiagnosisPrimaryDoctor }}
     </div>
   </div>
 
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.remarksPrimaryDoctor }}</h4>
-      <div class="textarea">
-        {{ caseSheetDiagnosisData?.remarks }}
-      </div>
+  <div class="mt-4">
+    <p class="mb-1 text-lg font-bold text-foreground">
+      {{ currentLanguageSet?.casesheet?.remarksPrimaryDoctor }}
+    </p>
+    <div
+      class="min-h-[100px] whitespace-pre-wrap rounded-md border border-input p-2 text-muted-foreground">
+      {{ caseSheetDiagnosisData?.remarks }}
     </div>
   </div>
 
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.oncologistObservation }}</h4>
-      <div class="textarea">
-        {{ caseSheetDiagnosisData?.provisionalDiagnosisOncologist }}
-      </div>
+  <div class="mt-4">
+    <p class="mb-1 text-lg font-bold text-foreground">
+      {{ currentLanguageSet?.casesheet?.oncologistObservation }}
+    </p>
+    <div
+      class="min-h-[100px] whitespace-pre-wrap rounded-md border border-input p-2 text-muted-foreground">
+      {{ caseSheetDiagnosisData?.provisionalDiagnosisOncologist }}
     </div>
   </div>
 
   <!-- Doctor's Sign -->
-  <div class="row m-t-50" *ngIf="enableDoctorSign === true">
-    <div class="col-xs-6">&nbsp;</div>
-    <div class="col-xs-6">
-      <p>
-        <strong> {{ currentLanguageSet?.casesheet?.docSign }}: </strong>
-      </p>
-    </div>
+  <div class="mt-16 flex justify-end" *ngIf="enableDoctorSign === true">
+    <p class="text-sm text-foreground">
+      <strong>{{ currentLanguageSet?.casesheet?.docSign }}:</strong>
+    </p>
   </div>
   <!-- End of Doctor's Sign -->
 </div>

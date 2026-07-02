@@ -33,14 +33,23 @@ import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-s
 import { get } from 'jquery';
 import { map, Observable } from 'rxjs';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
-import { MatFormField, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardBadgeComponent } from 'Common-UI/v2/ui/badge';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
 
 @Component({
   selector: 'app-doctor-diagnosis-case-sheet',
   templateUrl: './doctor-diagnosis-case-sheet.component.html',
-  styleUrls: ['./doctor-diagnosis-case-sheet.component.css'],
-  imports: [NgIf, NgFor, MatFormField, MatInput, MatLabel, DatePipe],
+  imports: [
+    NgIf,
+    NgFor,
+    DatePipe,
+    ...ZardTableImports,
+    ZardBadgeComponent,
+    ...ZardFormImports,
+    ZardInputDirective,
+  ],
 })
 export class DoctorDiagnosisCaseSheetComponent
   implements OnInit, OnChanges, DoCheck

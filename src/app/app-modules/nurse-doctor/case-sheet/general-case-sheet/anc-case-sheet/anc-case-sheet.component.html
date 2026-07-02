@@ -1,23 +1,24 @@
-<div class="container">
-  <div class="row col-xs-12">
-    <h2 class="text-center">{{ currentLanguageSet?.ancData?.anc }}</h2>
-    <hr />
-  </div>
+<div class="bg-background pb-12">
+  <z-card class="border-0 shadow-none">
+    <z-card-header class="px-0">
+      <z-card-title class="text-center text-xl">
+        {{ currentLanguageSet?.ancData?.anc }}
+      </z-card-title>
+    </z-card-header>
 
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.ancData?.ancDetails }}</h4>
-    </div>
+    <z-card-content class="px-0">
+      <hr class="mb-6 border-border" />
 
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="ancDetails">
-        <tr>
-          <th id="primiGravida">
-            {{ currentLanguageSet?.ancData?.ancDataDetails?.primiGravida }}:
-          </th>
-          <td>
+      <p class="mb-4 text-base font-semibold text-foreground">
+        {{ currentLanguageSet?.ancData?.ancDetails }}
+      </p>
+
+      <dl class="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{ currentLanguageSet?.ancData?.ancDataDetails?.primiGravida }}
+          </dt>
+          <dd class="text-sm text-foreground">
             {{
               aNCDetailsAndFormula?.primiGravida === undefined
                 ? null
@@ -25,139 +26,182 @@
                   ? 'Yes'
                   : 'No'
             }}
-          </td>
-          <th id="lastMenstrualPeriod">
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
             {{
               currentLanguageSet?.ancData?.ancDataDetails?.lastMenstrualPeriod
-            }}:
-          </th>
-          <td>{{ aNCDetailsAndFormula?.lastMenstrualPeriod_LMP }}</td>
-        </tr>
+            }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ aNCDetailsAndFormula?.lastMenstrualPeriod_LMP }}
+          </dd>
+        </div>
 
-        <tr>
-          <th id="gestationalAge">
-            {{ currentLanguageSet?.casesheet?.gestationalAge }}:
-          </th>
-          <td>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{ currentLanguageSet?.casesheet?.gestationalAge }}
+          </dt>
+          <dd class="text-sm text-foreground">
             {{ aNCDetailsAndFormula?.gestationalAgeOrPeriodofAmenorrhea_POA }}
-          </td>
-          <th id="expectedDate">
-            {{ currentLanguageSet?.casesheet?.expectedDate }}:
-          </th>
-          <td>{{ aNCDetailsAndFormula?.expectedDateofDelivery }}</td>
-        </tr>
+          </dd>
+        </div>
 
-        <tr>
-          <th id="periodOfPregnancy">
-            {{ currentLanguageSet?.casesheet?.periodOfPregnancy }}:
-          </th>
-          <td>{{ aNCDetailsAndFormula?.duration }}</td>
-          <th id="trimesterNo">
-            {{ currentLanguageSet?.casesheet?.trimesterNo }}:
-          </th>
-          <td>{{ aNCDetailsAndFormula?.trimesterNumber }}</td>
-        </tr>
-      </table>
-    </div>
-  </div>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{ currentLanguageSet?.casesheet?.expectedDate }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ aNCDetailsAndFormula?.expectedDateofDelivery }}
+          </dd>
+        </div>
 
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.obstetricFormula }}</h4>
-    </div>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{ currentLanguageSet?.casesheet?.periodOfPregnancy }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ aNCDetailsAndFormula?.duration }}
+          </dd>
+        </div>
 
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="gravida">
-        <tr>
-          <th id="gravida">{{ currentLanguageSet?.casesheet?.gravida }}:</th>
-          <td>{{ aNCDetailsAndFormula?.gravida_G }}</td>
-          <th id="termDeliveries">
-            {{ currentLanguageSet?.casesheet?.termDeliveries }}:
-          </th>
-          <td>{{ aNCDetailsAndFormula?.termDeliveries_T }}</td>
-        </tr>
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{ currentLanguageSet?.casesheet?.trimesterNo }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ aNCDetailsAndFormula?.trimesterNumber }}
+          </dd>
+        </div>
+      </dl>
 
-        <tr>
-          <th id="preTermDeliveries">
-            {{ currentLanguageSet?.casesheet?.preTermDeliveries }}:
-          </th>
-          <td>{{ aNCDetailsAndFormula?.pretermDeliveries_P }}</td>
-          <th id="abortion">{{ currentLanguageSet?.casesheet?.abortion }}:</th>
-          <td>{{ aNCDetailsAndFormula?.abortions_A }}</td>
-        </tr>
-        <tr>
-          <th id="stillbirth">{{ currentLanguageSet?.stillBirth }}:</th>
-          <td>{{ aNCDetailsAndFormula?.stillBirth }}</td>
-        </tr>
-        <tr>
-          <th id="liveBirths">
-            {{ currentLanguageSet?.casesheet?.liveBirths }}:
-          </th>
-          <td>{{ aNCDetailsAndFormula?.livebirths_L }}</td>
-          <th id="bloodGroupType">
-            {{ currentLanguageSet?.ancData?.obstetricDeatils?.bloodGroupType }}:
-          </th>
-          <td>{{ aNCDetailsAndFormula?.bloodGroup }}</td>
-        </tr>
-      </table>
-    </div>
-  </div>
+      <p class="mb-4 mt-8 text-base font-semibold text-foreground">
+        {{ currentLanguageSet?.casesheet?.obstetricFormula }}
+      </p>
 
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.ancData?.ancImmune?.ancImmunization }}</h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered table-striped"
-        aria-describedby="facility">
-        <thead>
-          <tr>
-            <th id="serialNo">{{ currentLanguageSet?.casesheet?.serialNo }}</th>
-            <th id="ttName">{{ currentLanguageSet?.casesheet?.ttName }}</th>
-            <th id="ttStatus">{{ currentLanguageSet?.casesheet?.ttStatus }}</th>
-            <th id="dateOfRecieved">
-              {{ currentLanguageSet?.casesheet?.dateOfRecieved }}
-            </th>
-            <th id="facilityName">
-              {{ currentLanguageSet?.ancData?.ancImmune?.facilityName }}
-            </th>
-          </tr>
-        </thead>
-        <ng-container>
-          <tbody>
-            <tr>
-              <th id="1">1</th>
-              <th id="tt1Status">
+      <dl class="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{ currentLanguageSet?.casesheet?.gravida }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ aNCDetailsAndFormula?.gravida_G }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{ currentLanguageSet?.casesheet?.termDeliveries }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ aNCDetailsAndFormula?.termDeliveries_T }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{ currentLanguageSet?.casesheet?.preTermDeliveries }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ aNCDetailsAndFormula?.pretermDeliveries_P }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{ currentLanguageSet?.casesheet?.abortion }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ aNCDetailsAndFormula?.abortions_A }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{ currentLanguageSet?.stillBirth }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ aNCDetailsAndFormula?.stillBirth }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{ currentLanguageSet?.casesheet?.liveBirths }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ aNCDetailsAndFormula?.livebirths_L }}
+          </dd>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <dt class="text-sm font-medium text-muted-foreground">
+            {{ currentLanguageSet?.ancData?.obstetricDeatils?.bloodGroupType }}
+          </dt>
+          <dd class="text-sm text-foreground">
+            {{ aNCDetailsAndFormula?.bloodGroup }}
+          </dd>
+        </div>
+      </dl>
+
+      <p class="mb-4 mt-8 text-base font-semibold text-foreground">
+        {{ currentLanguageSet?.ancData?.ancImmune?.ancImmunization }}
+      </p>
+
+      <div class="overflow-x-auto">
+        <table z-table aria-describedby="ancImmunization">
+          <thead z-table-header>
+            <tr z-table-row>
+              <th z-table-head id="serialNo">
+                {{ currentLanguageSet?.casesheet?.serialNo }}
+              </th>
+              <th z-table-head id="ttName">
+                {{ currentLanguageSet?.casesheet?.ttName }}
+              </th>
+              <th z-table-head id="ttStatus">
+                {{ currentLanguageSet?.casesheet?.ttStatus }}
+              </th>
+              <th z-table-head id="dateOfRecieved">
+                {{ currentLanguageSet?.casesheet?.dateOfRecieved }}
+              </th>
+              <th z-table-head id="facilityName">
+                {{ currentLanguageSet?.ancData?.ancImmune?.facilityName }}
+              </th>
+            </tr>
+          </thead>
+          <tbody z-table-body>
+            <tr z-table-row>
+              <td z-table-cell>1</td>
+              <td z-table-cell>
                 {{ currentLanguageSet?.ancData?.ancImmune?.tt1Status }}
-              </th>
-              <td>{{ aNCImmunization?.tT_1Status }}</td>
-              <td>{{ aNCImmunization?.dateReceivedForTT_1 }}</td>
-              <td>{{ aNCImmunization?.facilityNameOfTT_1 }}</td>
+              </td>
+              <td z-table-cell>{{ aNCImmunization?.tT_1Status }}</td>
+              <td z-table-cell>{{ aNCImmunization?.dateReceivedForTT_1 }}</td>
+              <td z-table-cell>{{ aNCImmunization?.facilityNameOfTT_1 }}</td>
             </tr>
-            <tr>
-              <th id="2">2</th>
-              <th id="tt2Status">
+            <tr z-table-row>
+              <td z-table-cell>2</td>
+              <td z-table-cell>
                 {{ currentLanguageSet?.ancData?.ancImmune?.tt2Status }}
-              </th>
-              <td>{{ aNCImmunization?.tT_2Status }}</td>
-              <td>{{ aNCImmunization?.dateReceivedForTT_2 }}</td>
-              <td>{{ aNCImmunization?.facilityNameOfTT_2 }}</td>
+              </td>
+              <td z-table-cell>{{ aNCImmunization?.tT_2Status }}</td>
+              <td z-table-cell>{{ aNCImmunization?.dateReceivedForTT_2 }}</td>
+              <td z-table-cell>{{ aNCImmunization?.facilityNameOfTT_2 }}</td>
             </tr>
-            <tr>
-              <th id="3">3</th>
-              <th id="ttBoster">
+            <tr z-table-row>
+              <td z-table-cell>3</td>
+              <td z-table-cell>
                 {{ currentLanguageSet?.casesheet?.ttBoster }}
-              </th>
-              <td>{{ aNCImmunization?.tT_3Status }}</td>
-              <td>{{ aNCImmunization?.dateReceivedForTT_3 }}</td>
-              <td>{{ aNCImmunization?.facilityNameOfTT_3 }}</td>
+              </td>
+              <td z-table-cell>{{ aNCImmunization?.tT_3Status }}</td>
+              <td z-table-cell>{{ aNCImmunization?.dateReceivedForTT_3 }}</td>
+              <td z-table-cell>{{ aNCImmunization?.facilityNameOfTT_3 }}</td>
             </tr>
           </tbody>
-        </ng-container>
-      </table>
-    </div>
-  </div>
+        </table>
+      </div>
+    </z-card-content>
+  </z-card>
 </div>

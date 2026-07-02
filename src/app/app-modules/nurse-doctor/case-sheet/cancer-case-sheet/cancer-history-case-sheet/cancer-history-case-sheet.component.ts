@@ -25,12 +25,12 @@ import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { NgIf, NgFor } from '@angular/common';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
 
 @Component({
   selector: 'app-cancer-history-case-sheet',
   templateUrl: './cancer-history-case-sheet.component.html',
-  styleUrls: ['./cancer-history-case-sheet.component.css'],
-  imports: [NgIf, NgFor],
+  imports: [NgIf, NgFor, ...ZardTableImports],
 })
 export class CancerHistoryCaseSheetComponent
   implements OnInit, OnChanges, DoCheck
