@@ -25,7 +25,6 @@ import {
   MAT_DIALOG_DATA,
   MatDialog,
   MatDialogRef,
-  MatDialogContent,
 } from '@angular/material/dialog';
 import { ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
@@ -34,21 +33,28 @@ import { SetLanguageComponent } from '../set-language.component';
 import { CalibrationComponent } from '../calibration/calibration.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgClass, NgIf } from '@angular/common';
-import { MatIcon } from '@angular/material/icon';
-import { MatTooltip } from '@angular/material/tooltip';
-import { CdkScrollable } from '@angular/cdk/scrolling';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardLoaderComponent } from 'Common-UI/v2/ui/loader';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-iotcomponent',
+  standalone: true,
   templateUrl: './iotcomponent.component.html',
-  styleUrls: ['./iotcomponent.component.css'],
   imports: [
     NgClass,
-    MatIcon,
-    MatTooltip,
-    CdkScrollable,
-    MatDialogContent,
     NgIf,
+    NgIcon,
+    ZardButtonComponent,
+    ZardLoaderComponent,
+    ...tooltipImports,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideX,
+    }),
   ],
 })
 export class IotcomponentComponent implements OnInit, DoCheck {

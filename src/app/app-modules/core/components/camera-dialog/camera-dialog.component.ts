@@ -30,13 +30,7 @@ import {
   DoCheck,
   AfterViewInit,
 } from '@angular/core';
-import {
-  MatDialogRef,
-  MatDialogContent,
-  MatDialogActions,
-  MatDialogTitle,
-  MatDialogClose,
-} from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
 import { ConfirmationService } from '../../services';
 import { SetLanguageComponent } from '../set-language.component';
@@ -48,11 +42,13 @@ import { Observable } from 'rxjs';
 import { saveAs } from 'file-saver';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgIf, NgFor } from '@angular/common';
-import { CdkScrollable } from '@angular/cdk/scrolling';
-import { MatFormField } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
 
 interface Mark {
   xCord: any;
@@ -63,22 +59,24 @@ interface Mark {
 
 @Component({
   selector: 'app-camera-dialog',
+  standalone: true,
   templateUrl: './camera-dialog.component.html',
-  styleUrls: ['./camera-dialog.component.css'],
   imports: [
     NgIf,
-    CdkScrollable,
-    MatDialogContent,
-    WebcamModule,
-    MatDialogActions,
-    MatDialogTitle,
-    MatDialogClose,
     NgFor,
-    MatFormField,
-    MatInput,
+    WebcamModule,
     ReactiveFormsModule,
     FormsModule,
     NgChartsModule,
+    NgIcon,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideX,
+    }),
   ],
 })
 export class CameraDialogComponent implements OnInit, DoCheck, AfterViewInit {
