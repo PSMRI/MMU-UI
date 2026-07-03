@@ -29,7 +29,7 @@ import { Router } from '@angular/router';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { BeneficiaryPlatformHistoryComponent } from '../../beneficiary-platform-history/beneficiary-platform-history.component';
 import { NgClass, NgIf } from '@angular/common';
-import { NgChartsModule } from 'ng2-charts';
+import { BaseChartDirective } from 'ng2-charts';
 import { cardImports } from 'Common-UI/v2/ui/card';
 @Component({
   selector: 'app-previous-visit-details',
@@ -38,7 +38,7 @@ import { cardImports } from 'Common-UI/v2/ui/card';
     BeneficiaryPlatformHistoryComponent,
     NgClass,
     NgIf,
-    NgChartsModule,
+    BaseChartDirective,
     ...cardImports,
   ],
 })

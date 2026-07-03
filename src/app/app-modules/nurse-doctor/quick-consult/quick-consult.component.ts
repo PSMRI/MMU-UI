@@ -29,6 +29,7 @@ import {
   ViewEncapsulation,
   ViewChild,
   DoCheck,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -57,9 +58,9 @@ import { QuickConsultUtils } from '../shared/utility';
 import { TestInVitalsService } from '../shared/services/test-in-vitals.service';
 import { environment } from 'src/environments/environment';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
-import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
+import { openIotDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgIf, NgFor, NgClass, SlicePipe } from '@angular/common';
 import { StringValidatorDirective } from '../../core/directives/stringValidator.directive';
@@ -244,7 +245,8 @@ export class QuickConsultComponent
     private confirmationService: ConfirmationService,
     private httpServices: HttpServiceService,
     private nurseService: NurseService,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     readonly sessionstorage: SessionStorageService,
     private testInVitalsService: TestInVitalsService
   ) {}
@@ -289,11 +291,8 @@ export class QuickConsultComponent
   }
   openIOTRBSModel() {
     this.rbsPopup = true;
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startRBSTest },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startRBSTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       this.rbsPopup = false;

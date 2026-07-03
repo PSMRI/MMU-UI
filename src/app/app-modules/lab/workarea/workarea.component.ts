@@ -27,6 +27,7 @@ import {
   ViewChild,
   DoCheck,
   AfterViewChecked,
+  ViewContainerRef,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import {
@@ -43,13 +44,15 @@ import { BeneficiaryDetailsService } from '../../core/services/beneficiary-detai
 import { LabUtils } from './../shared/utility/lab-utility';
 import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard.service';
 import { ViewFileComponent } from './../view-file/view-file.component';
-import { ViewRadiologyUploadedFilesComponent } from '../../core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
+import {
+  openViewRadiologyDialog,
+  openIotDialog,
+} from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { environment } from 'src/environments/environment';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { Observable, of } from 'rxjs';
-import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import {
   NgIf,
@@ -188,7 +191,8 @@ export class WorkareaComponent
   constructor(
     private fb: FormBuilder,
     private confirmationService: ConfirmationService,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private router: Router,
     private masterdataService: MasterDataService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
@@ -774,12 +778,16 @@ export class WorkareaComponent
     return kmFileManager;
   }
   openToViewFile(procedureID: any) {
-    const dialogRef = this.dialog.open(ViewFileComponent, {
-      width: '50%',
-      data: {
+    const dialogRef = this.dialog.create<ViewFileComponent, unknown>({
+      zContent: ViewFileComponent,
+      zWidth: '50%',
+      zData: {
         viewFileObj: this.fileObj,
         procedureID: procedureID,
       },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       this.fileObj = result;
@@ -1078,12 +1086,13 @@ export class WorkareaComponent
 
   viewFileContent(fileIDs: any) {
     console.log(fileIDs);
-    const dialogRef = this.dialog.open(ViewRadiologyUploadedFilesComponent, {
-      width: '40%',
-      data: {
+    const dialogRef = openViewRadiologyDialog(
+      this.dialog,
+      this.viewContainerRef,
+      {
         filesDetails: fileIDs,
-      },
-    });
+      }
+    );
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
         this.labService.viewFileContent(result).subscribe((res: any) => {
@@ -1110,15 +1119,10 @@ export class WorkareaComponent
       output.push(element.componentCode);
     });
     console.log('calibration', api);
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '200px',
-      disableClose: true,
-      data: {
-        startAPI: api.value.procedureStartAPI,
-        output: output,
-        procedure: api,
-      },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: api.value.procedureStartAPI,
+      output: output,
+      procedure: api,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('he;;p', result, result['result']);

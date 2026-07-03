@@ -28,6 +28,7 @@ import {
   OnChanges,
   Output,
   DoCheck,
+  ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { NurseService } from '../../shared/services/nurse.service';
@@ -36,9 +37,9 @@ import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-de
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { LabService } from 'src/app/app-modules/lab/shared/services';
-import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
+import { openViewRadiologyDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
 import { NgIf, NgFor } from '@angular/common';
@@ -95,7 +96,8 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
     private confirmationService: ConfirmationService,
     private doctorService: DoctorService,
     readonly sessionstorage: SessionStorageService,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private trackingService: AmritTrackingService
   ) {}
 
@@ -293,16 +295,14 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
   viewNurseSelectedFiles() {
     console.log('this.doc', this.doctorService.fileIDs);
     const file_Ids = this.doctorService.fileIDs;
-    const ViewTestReport = this.dialog.open(
-      ViewRadiologyUploadedFilesComponent,
+    const ViewTestReport = openViewRadiologyDialog(
+      this.dialog,
+      this.viewContainerRef,
       {
-        width: '40%',
-        data: {
-          filesDetails: file_Ids,
-          // width: 0.8 * window.innerWidth + "px",
-          panelClass: 'dialog-width',
-          disableClose: false,
-        },
+        filesDetails: file_Ids,
+        // width: 0.8 * window.innerWidth + "px",
+        panelClass: 'dialog-width',
+        disableClose: false,
       }
     );
     ViewTestReport.afterClosed().subscribe(result => {

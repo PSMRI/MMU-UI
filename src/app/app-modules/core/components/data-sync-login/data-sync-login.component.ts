@@ -102,6 +102,10 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
   ngOnInit() {
     this.assignSelectedLanguage();
     this.dialogRef = this.injector.get(ZardDialogRef, null);
+    // Preserve the original MatDialog disableClose:true behaviour.
+    if (this.dialogRef) {
+      this.dialogRef.disableClose = true;
+    }
     this.data = this.injector.get(Z_MODAL_DATA, null);
   }
 

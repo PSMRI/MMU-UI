@@ -28,6 +28,7 @@ import {
   ElementRef,
   DoCheck,
   EventEmitter,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -42,8 +43,8 @@ import { DoctorService, NurseService } from '../../../shared/services';
 import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
+import { openViewRadiologyDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { NgIf, NgFor } from '@angular/common';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -104,7 +105,8 @@ export class GynecologicalExaminationComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     readonly sessionstorage: SessionStorageService,
     private doctorService: DoctorService,
-    private dialog: MatDialog
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef
   ) {}
 
   ngOnInit() {
@@ -325,16 +327,14 @@ export class GynecologicalExaminationComponent implements OnInit, DoCheck {
   }
 
   viewNurseSelectedFiles() {
-    const ViewTestReport = this.dialog.open(
-      ViewRadiologyUploadedFilesComponent,
+    const ViewTestReport = openViewRadiologyDialog(
+      this.dialog,
+      this.viewContainerRef,
       {
-        width: '40%',
-        data: {
-          filesDetails: this.viewFiles,
-          // width: 0.8 * window.innerWidth + "px",
-          panelClass: 'dialog-width',
-          disableClose: false,
-        },
+        filesDetails: this.viewFiles,
+        // width: 0.8 * window.innerWidth + "px",
+        panelClass: 'dialog-width',
+        disableClose: false,
       }
     );
     ViewTestReport.afterClosed().subscribe(result => {

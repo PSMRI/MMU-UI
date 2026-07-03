@@ -21,7 +21,7 @@
  */
 
 import { Component, OnInit, Inject, DoCheck } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { NgIf, NgFor } from '@angular/common';
@@ -57,8 +57,8 @@ export class ViewTestReportComponent implements OnInit, DoCheck {
   dataSource: { data: any[] } = { data: [] };
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    public matDialogRef: MatDialogRef<ViewTestReportComponent>,
+    @Inject(Z_MODAL_DATA) public data: any,
+    public matDialogRef: ZardDialogRef<ViewTestReportComponent>,
     private httpServiceService: HttpServiceService
   ) {}
 

@@ -87,7 +87,11 @@ export class IotcomponentComponent implements OnInit, DoCheck {
     readonly sessionstorage: SessionStorageService,
     private readonly dialog: ZardDialogService,
     private readonly viewContainerRef: ViewContainerRef
-  ) {}
+  ) {
+    // Preserve the original MatDialog disableClose:true behaviour (this dialog
+    // is opened non-dismissibly from vitals / ncd-screening / quick-consult).
+    this.dialogRef.disableClose = true;
+  }
 
   ngOnInit() {
     this.assignSelectedLanguage();

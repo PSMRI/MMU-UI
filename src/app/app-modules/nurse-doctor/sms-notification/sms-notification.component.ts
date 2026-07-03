@@ -1,16 +1,11 @@
 import { Component, Inject, OnInit, DoCheck } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialog,
-} from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { SmsTemplateService } from '../smsTemplate/sms-template.service';
 import { ConfirmationService } from '../../core/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { map, switchMap } from 'rxjs';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgIf, NgFor } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -54,15 +49,16 @@ export class SmsNotificationComponent implements OnInit, DoCheck {
   currentLanguageSet: any;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialog: MatDialog,
-    private snackBar: MatSnackBar,
+    @Inject(Z_MODAL_DATA) public data: any,
     private _smsService: SmsTemplateService,
     private alertMessage: ConfirmationService,
-    public dialogRef: MatDialogRef<SmsNotificationComponent>,
+    public dialogRef: ZardDialogRef<SmsNotificationComponent>,
     public httpServices: HttpServiceService,
     readonly sessionstorage: SessionStorageService
-  ) {}
+  ) {
+    // Preserve the original MatDialog disableClose:true behaviour.
+    this.dialogRef.disableClose = true;
+  }
 
   ngOnInit() {
     this.assignSelectedLanguage();
@@ -142,20 +138,11 @@ export class SmsNotificationComponent implements OnInit, DoCheck {
         )
         .subscribe({
           next: () => {
-            this.snackBar.open('SMS sent successfully', 'Close', {
-              duration: 3000,
-              verticalPosition: 'top',
-              panelClass: ['snackbar-success'],
-            });
             this.alertMessage.alert('Data saved successfully', 'success');
           },
           error: err => {
             console.error('Error sending SMS:', err);
-            this.snackBar.open('SMS not sent', 'Close', {
-              duration: 3000,
-              verticalPosition: 'top',
-              panelClass: ['snackbar-error'],
-            });
+            this.alertMessage.alert('SMS not sent', 'error');
           },
         });
 
