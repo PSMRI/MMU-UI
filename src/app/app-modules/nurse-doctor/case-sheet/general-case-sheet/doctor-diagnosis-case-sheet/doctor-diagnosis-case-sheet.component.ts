@@ -30,7 +30,6 @@ import {
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import * as moment from 'moment';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { get } from 'jquery';
 import { map, Observable } from 'rxjs';
 import { NgIf, NgFor, DatePipe, NgTemplateOutlet } from '@angular/common';
 import { ZardTableImports } from 'Common-UI/v2/ui/table';
