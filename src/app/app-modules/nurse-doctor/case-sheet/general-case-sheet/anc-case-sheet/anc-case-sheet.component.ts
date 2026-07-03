@@ -23,11 +23,13 @@
 import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
 
 @Component({
   selector: 'app-anc-case-sheet',
   templateUrl: './anc-case-sheet.component.html',
-  styleUrls: ['./anc-case-sheet.component.css'],
+  imports: [...cardImports, ...ZardTableImports],
 })
 export class AncCaseSheetComponent implements OnInit, OnChanges, DoCheck {
   @Input()

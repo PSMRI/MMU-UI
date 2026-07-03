@@ -21,20 +21,27 @@
  */
 
 import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
-import { DatePipe, NgIf, NgFor } from '@angular/common';
+import { DatePipe, NgIf, NgFor, NgTemplateOutlet } from '@angular/common';
 import * as moment from 'moment';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { DoctorService } from '../../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { ZardCheckboxComponent } from 'Common-UI/v2/ui/checkbox/checkbox.component';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
 
 @Component({
   selector: 'app-history-case-sheet',
   templateUrl: './history-case-sheet.component.html',
-  styleUrls: ['./history-case-sheet.component.css'],
   providers: [DatePipe],
-  imports: [NgIf, NgFor, MatCheckbox, DatePipe],
+  imports: [
+    NgIf,
+    NgFor,
+    NgTemplateOutlet,
+    ZardCheckboxComponent,
+    ...ZardTableImports,
+    DatePipe,
+  ],
 })
 export class HistoryCaseSheetComponent implements OnInit, OnChanges, DoCheck {
   @Input()

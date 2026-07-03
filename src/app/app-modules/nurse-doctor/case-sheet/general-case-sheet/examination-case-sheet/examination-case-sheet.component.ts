@@ -25,13 +25,13 @@ import { DatePipe, NgIf } from '@angular/common';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { cardImports } from 'Common-UI/v2/ui/card';
 
 @Component({
   selector: 'app-examination-case-sheet',
   templateUrl: './examination-case-sheet.component.html',
-  styleUrls: ['./examination-case-sheet.component.css'],
   providers: [DatePipe],
-  imports: [NgIf],
+  imports: [NgIf, ...cardImports],
 })
 export class ExaminationCaseSheetComponent
   implements OnInit, OnChanges, DoCheck

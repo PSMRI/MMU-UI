@@ -30,8 +30,16 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideChevronLeft,
+  lucideArrowUp,
+  lucidePrinter,
+  lucideLayoutGrid,
+  lucidePencil,
+} from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 import { CancerDoctorDiagnosisCaseSheetComponent } from './cancer-doctor-diagnosis-case-sheet/cancer-doctor-diagnosis-case-sheet.component';
 import { CancerHistoryCaseSheetComponent } from './cancer-history-case-sheet/cancer-history-case-sheet.component';
 import { CancerExaminationCaseSheetComponent } from './cancer-examination-case-sheet/cancer-examination-case-sheet.component';
@@ -39,11 +47,20 @@ import { CancerExaminationCaseSheetComponent } from './cancer-examination-case-s
 @Component({
   selector: 'app-cancer-case-sheet',
   templateUrl: './cancer-case-sheet.component.html',
-  styleUrls: ['./cancer-case-sheet.component.css'],
+  viewProviders: [
+    provideIcons({
+      lucideChevronLeft,
+      lucideArrowUp,
+      lucidePrinter,
+      lucideLayoutGrid,
+      lucidePencil,
+    }),
+  ],
   imports: [
     NgIf,
-    MatTooltip,
-    MatIcon,
+    NgIcon,
+    ZardButtonComponent,
+    ...tooltipImports,
     CancerDoctorDiagnosisCaseSheetComponent,
     CancerHistoryCaseSheetComponent,
     CancerExaminationCaseSheetComponent,

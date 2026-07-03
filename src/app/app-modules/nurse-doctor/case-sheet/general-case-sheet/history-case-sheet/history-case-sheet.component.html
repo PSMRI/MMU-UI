@@ -1,66 +1,63 @@
-<div class="container">
-  <div class="row col-xs-12">
-    <h2 class="text-center">{{ currentLanguageSet?.common?.history }}</h2>
-    <hr />
+<div class="bg-card text-card-foreground pb-12">
+  <div class="mb-4">
+    <p
+      class="text-center text-xl font-semibold tracking-tight text-foreground">
+      {{ currentLanguageSet?.common?.history }}
+    </p>
+    <hr class="mt-2 border-border" />
   </div>
+
   <!--Past Illness Starts-->
-  <div class="row m-t-10" *ngIf="visitCategory !== 'NCD screening'">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.pastIllnessDataANC_OPD_NCD_PNC?.pastIllness
-        }}:
-      </h4>
-    </div>
-    <div class="col-xs-12">
+  <div class="mt-4" *ngIf="visitCategory !== 'NCD screening'">
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{
+        currentLanguageSet?.historyData?.ancHistory
+          ?.pastIllnessDataANC_OPD_NCD_PNC?.pastIllness
+      }}:
+    </p>
+    <div class="overflow-x-auto">
       <table
-        class="table table-bordered table-striped casesheet-table"
+        z-table
+        zType="bordered"
         aria-describedby="PastIllnessStartsTbl">
-        <thead>
-          <tr>
-            <th id="serialNo">{{ currentLanguageSet?.casesheet?.serialNo }}</th>
-            <th id="illness">
+        <thead z-table-header>
+          <tr z-table-row>
+            <th z-table-head scope="col">
+              {{ currentLanguageSet?.casesheet?.serialNo }}
+            </th>
+            <th z-table-head id="illness">
               {{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.pastIllnessDataANC_OPD_NCD_PNC?.illness
               }}
             </th>
-            <th id="duration">
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.DurationData?.duration }}
             </th>
-            <th id="unitOfDuration">
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.DurationData?.durationUnit }}
             </th>
           </tr>
         </thead>
-        <tbody *ngIf="!pastIllnessList">
-          <tr>
-            <td class="text-center" colspan="4">
+        <tbody z-table-body *ngIf="!pastIllnessList">
+          <tr z-table-row>
+            <td z-table-cell class="text-center" colspan="4">
               {{ currentLanguageSet?.casesheet?.noRecordFound }}
             </td>
           </tr>
         </tbody>
-        <tbody *ngIf="pastIllnessList">
-          <tr *ngFor="let pastIllness of pastIllnessList; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ pastIllness.illnessType }}</td>
-            <td>{{ pastIllness.timePeriodAgo }}</td>
-            <td>
-              {{
-                pastIllness.timePeriodUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : pastIllness.timePeriodUnit === 'Days'
-                    ? 'Day(s)'
-                    : pastIllness.timePeriodUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : pastIllness.timePeriodUnit === 'Months'
-                        ? 'Month(s)'
-                        : pastIllness.timePeriodUnit === 'Years'
-                          ? 'Year(s)'
-                          : pastIllness.timePeriodUnit
-              }}
-            </td>
+        <tbody z-table-body *ngIf="pastIllnessList">
+          <tr
+            z-table-row
+            *ngFor="let pastIllness of pastIllnessList; let i = index">
+            <td z-table-cell>{{ i + 1 }}</td>
+            <td z-table-cell>{{ pastIllness.illnessType }}</td>
+            <td z-table-cell>{{ pastIllness.timePeriodAgo }}</td>
+            <ng-container
+              *ngTemplateOutlet="
+                durationUnitCell;
+                context: { unit: pastIllness.timePeriodUnit }
+              "></ng-container>
           </tr>
         </tbody>
       </table>
@@ -69,53 +66,47 @@
   <!--Past Illness ends-->
 
   <!--Past Surgery Starts-->
-  <div class="row m-t-10" *ngIf="visitCategory !== 'NCD screening'">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.pastSurgery }}:</h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered table-striped casesheet-table"
-        aria-describedby="PastSurgeryTbl">
-        <thead>
-          <tr>
-            <th id="serialNo">{{ currentLanguageSet?.casesheet?.serialNo }}</th>
-            <th id="surgery">{{ currentLanguageSet?.common?.surgery }}</th>
-            <th id="duration">
+  <div class="mt-4" *ngIf="visitCategory !== 'NCD screening'">
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{ currentLanguageSet?.casesheet?.pastSurgery }}:
+    </p>
+    <div class="overflow-x-auto">
+      <table z-table zType="bordered" aria-describedby="PastSurgeryTbl">
+        <thead z-table-header>
+          <tr z-table-row>
+            <th z-table-head scope="col">
+              {{ currentLanguageSet?.casesheet?.serialNo }}
+            </th>
+            <th z-table-head id="surgery">
+              {{ currentLanguageSet?.common?.surgery }}
+            </th>
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.DurationData?.duration }}
             </th>
-            <th id="unitOfDuration">
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.DurationData?.durationUnit }}
             </th>
           </tr>
         </thead>
-        <tbody *ngIf="!pastSurgeryList">
-          <tr>
-            <td class="text-center" colspan="4">
+        <tbody z-table-body *ngIf="!pastSurgeryList">
+          <tr z-table-row>
+            <td z-table-cell class="text-center" colspan="4">
               {{ currentLanguageSet?.casesheet?.noRecordFound }}
             </td>
           </tr>
         </tbody>
-        <tbody *ngIf="pastSurgeryList">
-          <tr *ngFor="let pastSurgery of pastSurgeryList; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ pastSurgery.surgeryType }}</td>
-            <td>{{ pastSurgery.timePeriodAgo }}</td>
-            <td>
-              {{
-                pastSurgery.timePeriodUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : pastSurgery.timePeriodUnit === 'Days'
-                    ? 'Day(s)'
-                    : pastSurgery.timePeriodUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : pastSurgery.timePeriodUnit === 'Months'
-                        ? 'Month(s)'
-                        : pastSurgery.timePeriodUnit === 'Years'
-                          ? 'Year(s)'
-                          : pastSurgery.timePeriodUnit
-              }}
-            </td>
+        <tbody z-table-body *ngIf="pastSurgeryList">
+          <tr
+            z-table-row
+            *ngFor="let pastSurgery of pastSurgeryList; let i = index">
+            <td z-table-cell>{{ i + 1 }}</td>
+            <td z-table-cell>{{ pastSurgery.surgeryType }}</td>
+            <td z-table-cell>{{ pastSurgery.timePeriodAgo }}</td>
+            <ng-container
+              *ngTemplateOutlet="
+                durationUnitCell;
+                context: { unit: pastSurgery.timePeriodUnit }
+              "></ng-container>
           </tr>
         </tbody>
       </table>
@@ -124,28 +115,24 @@
   <!--Past Surgery Ends-->
 
   <!--Family History Starts-->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.familyHistoryDataANC_OPD_NCD_PNC?.familyHistory
-        }}:
-      </h4>
-    </div>
-    <div class="col-xs-12">
-      <table
-        class="table table-bordered table-striped"
-        aria-describedby="FamilyHistoryTbl">
-        <thead>
-          <tr>
-            <th style="width: 10%" id="serialNo">
+  <div class="mt-4">
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{
+        currentLanguageSet?.historyData?.ancHistory
+          ?.familyHistoryDataANC_OPD_NCD_PNC?.familyHistory
+      }}:
+    </p>
+    <div class="overflow-x-auto">
+      <table z-table zType="bordered" aria-describedby="FamilyHistoryTbl">
+        <thead z-table-header>
+          <tr z-table-row>
+            <th z-table-head class="w-[10%]">
               {{ currentLanguageSet?.casesheet?.serialNo }}
             </th>
-            <th style="width: 20%" id="disease">
+            <th z-table-head class="w-[20%]" id="disease">
               {{ currentLanguageSet?.common?.disease }}
             </th>
-            <th style="width: 40%" id="fMembers">
+            <th z-table-head class="w-[40%]" id="fMembers">
               {{
                 currentLanguageSet?.historyData?.cancerScreeningHistory
                   ?.familyMedical?.familyMembers
@@ -154,76 +141,78 @@
           </tr>
         </thead>
         <tbody
+          z-table-body
           *ngIf="
             !familyHistory?.familyDiseaseList ||
             familyHistory?.familyDiseaseList.length === 0
           ">
-          <tr>
-            <td class="text-center" colspan="3">
+          <tr z-table-row>
+            <td z-table-cell class="text-center" colspan="3">
               {{ currentLanguageSet?.casesheet?.noRecordFound }}
             </td>
           </tr>
         </tbody>
-        <tbody *ngIf="familyHistory?.familyDiseaseList">
+        <tbody z-table-body *ngIf="familyHistory?.familyDiseaseList">
           <tr
+            z-table-row
             *ngFor="
               let familyDisease of familyHistory?.familyDiseaseList;
               let i = index
             ">
-            <td>{{ i + 1 }}</td>
-            <td>{{ familyDisease.diseaseType }}</td>
-            <td>{{ familyDisease.familyMembers }}</td>
+            <td z-table-cell>{{ i + 1 }}</td>
+            <td z-table-cell>{{ familyDisease.diseaseType }}</td>
+            <td z-table-cell>{{ familyDisease.familyMembers }}</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div class="col-xs-12 m-t-10" *ngIf="visitCategory !== 'NCD screening'">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="ancHistoryTbl">
-        <tr>
-          <th id="H_geneticDisorders">
-            {{
-              currentLanguageSet?.historyData?.ancHistory
-                ?.familyHistoryDataANC_OPD_NCD_PNC?.H_geneticDisorders
-            }}:
-          </th>
-          <td>
-            {{
-              familyHistory?.isGeneticDisorder === undefined
-                ? null
-                : familyHistory?.isGeneticDisorder
-                  ? 'Yes'
-                  : 'No'
-            }}
-          </td>
-          <th id="geneticDisorders">
-            {{
-              currentLanguageSet?.historyData?.ancHistory
-                ?.familyHistoryDataANC_OPD_NCD_PNC?.geneticDisorders
-            }}:
-          </th>
-          <td>{{ familyHistory?.geneticDisorder }}</td>
-        </tr>
-        <tr>
-          <th id="consanguineousMarriage">
-            {{
-              currentLanguageSet?.historyData?.ancHistory
-                ?.familyHistoryDataANC_OPD_NCD_PNC?.consanguineousMarriage
-            }}:
-          </th>
-          <td>
-            {{
-              familyHistory?.isConsanguineousMarrige === undefined
-                ? null
-                : familyHistory?.isConsanguineousMarrige
-                  ? 'Yes'
-                  : 'No'
-            }}
-          </td>
-          <td colspan="2"></td>
-        </tr>
+    <div class="mt-4 overflow-x-auto" *ngIf="visitCategory !== 'NCD screening'">
+      <table z-table aria-describedby="ancHistoryTbl">
+        <tbody z-table-body>
+          <tr z-table-row>
+            <th z-table-head id="H_geneticDisorders">
+              {{
+                currentLanguageSet?.historyData?.ancHistory
+                  ?.familyHistoryDataANC_OPD_NCD_PNC?.H_geneticDisorders
+              }}:
+            </th>
+            <td z-table-cell>
+              {{
+                familyHistory?.isGeneticDisorder === undefined
+                  ? null
+                  : familyHistory?.isGeneticDisorder
+                    ? 'Yes'
+                    : 'No'
+              }}
+            </td>
+            <th z-table-head id="geneticDisorders">
+              {{
+                currentLanguageSet?.historyData?.ancHistory
+                  ?.familyHistoryDataANC_OPD_NCD_PNC?.geneticDisorders
+              }}:
+            </th>
+            <td z-table-cell>{{ familyHistory?.geneticDisorder }}</td>
+          </tr>
+          <tr z-table-row>
+            <th z-table-head id="consanguineousMarriage">
+              {{
+                currentLanguageSet?.historyData?.ancHistory
+                  ?.familyHistoryDataANC_OPD_NCD_PNC?.consanguineousMarriage
+              }}:
+            </th>
+            <td z-table-cell>
+              {{
+                familyHistory?.isConsanguineousMarrige === undefined
+                  ? null
+                  : familyHistory?.isConsanguineousMarrige
+                    ? 'Yes'
+                    : 'No'
+              }}
+            </td>
+            <td z-table-cell colspan="2"></td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
@@ -231,41 +220,44 @@
 
   <!--Child Optional Vaccine Starts-->
   <div
-    class="row m-t-10"
+    class="mt-4"
     *ngIf="
       beneficiary &&
       beneficiary?.ageVal <= 16 &&
       visitCategory !== 'NCD screening'
     ">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.childVaccine }}</h4>
-    </div>
-    <div class="col-xs-12">
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{ currentLanguageSet?.casesheet?.childVaccine }}
+    </p>
+    <div class="overflow-x-auto">
       <table
-        class="table table-bordered table-striped casesheet-table"
+        z-table
+        zType="bordered"
         aria-describedby="ChildOptionalVaccineTbl">
-        <thead>
-          <tr>
-            <th id="serialNo">{{ currentLanguageSet?.casesheet?.serialNo }}</th>
-            <th id="vaccine">
+        <thead z-table-header>
+          <tr z-table-row>
+            <th z-table-head scope="col">
+              {{ currentLanguageSet?.casesheet?.serialNo }}
+            </th>
+            <th z-table-head id="vaccine">
               {{
                 currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
                   ?.vaccine
               }}
             </th>
-            <th id="otherVaccineName">
+            <th z-table-head id="otherVaccineName">
               {{
                 currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
                   ?.otherVaccineName
               }}
             </th>
-            <th id="ageatReceived">
+            <th z-table-head id="ageatReceived">
               {{
                 currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
                   ?.ageatReceived
               }}
             </th>
-            <th id="facilityName">
+            <th z-table-head id="facilityName">
               {{
                 currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
                   ?.facilityName
@@ -274,26 +266,30 @@
           </tr>
         </thead>
         <tbody
+          z-table-body
           *ngIf="
             !childOptionalVaccineList || childOptionalVaccineList.length === 0
           ">
-          <tr>
-            <td class="text-center" colspan="6">
+          <tr z-table-row>
+            <td z-table-cell class="text-center" colspan="6">
               {{ currentLanguageSet?.casesheet?.noRecordFound }}
             </td>
           </tr>
         </tbody>
-        <tbody *ngIf="childOptionalVaccineList">
+        <tbody z-table-body *ngIf="childOptionalVaccineList">
           <tr
+            z-table-row
             *ngFor="
               let childOptionalVaccine of childOptionalVaccineList;
               let i = index
             ">
-            <td>{{ i + 1 }}</td>
-            <td>{{ childOptionalVaccine.vaccineName }}</td>
-            <td>{{ childOptionalVaccine.otherVaccineName }}</td>
-            <td>{{ childOptionalVaccine.actualReceivingAge }}</td>
-            <td>{{ childOptionalVaccine.receivedFacilityName }}</td>
+            <td z-table-cell>{{ i + 1 }}</td>
+            <td z-table-cell>{{ childOptionalVaccine.vaccineName }}</td>
+            <td z-table-cell>{{ childOptionalVaccine.otherVaccineName }}</td>
+            <td z-table-cell>{{ childOptionalVaccine.actualReceivingAge }}</td>
+            <td z-table-cell>
+              {{ childOptionalVaccine.receivedFacilityName }}
+            </td>
           </tr>
         </tbody>
       </table>
@@ -302,68 +298,61 @@
   <!--Child Optional Vaccine Ends-->
 
   <!--Comorbid condition Starts-->
-  <div class="row m-t-10" *ngIf="visitCategory !== 'NCD screening'">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.ancHistory?.combordityANC_OPD_NCD_PNC
-            ?.comorbidConditions
-        }}:
-      </h4>
-    </div>
-    <div class="col-xs-12">
+  <div class="mt-4" *ngIf="visitCategory !== 'NCD screening'">
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{
+        currentLanguageSet?.historyData?.ancHistory?.combordityANC_OPD_NCD_PNC
+          ?.comorbidConditions
+      }}:
+    </p>
+    <div class="overflow-x-auto">
       <table
-        class="table table-bordered table-striped casesheet-table"
+        z-table
+        zType="bordered"
         aria-describedby="ComorbidconditionTbl">
-        <thead>
-          <tr>
-            <th id="serialNo">{{ currentLanguageSet?.casesheet?.serialNo }}</th>
-            <th id="comoridCond">
+        <thead z-table-header>
+          <tr z-table-row>
+            <th z-table-head scope="col">
+              {{ currentLanguageSet?.casesheet?.serialNo }}
+            </th>
+            <th z-table-head id="comoridCond">
               {{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.combordityANC_OPD_NCD_PNC?.comorbidConditions
               }}
             </th>
-            <th id="duration">
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.DurationData?.duration }}
             </th>
-            <th id="unitOfDuration">
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.DurationData?.durationUnit }}
             </th>
           </tr>
         </thead>
         <tbody
+          z-table-body
           *ngIf="!comorbidConditionList || comorbidConditionList.length === 0">
-          <tr>
-            <td class="text-center" colspan="4">
+          <tr z-table-row>
+            <td z-table-cell class="text-center" colspan="4">
               {{ currentLanguageSet?.casesheet?.noRecordFound }}
             </td>
           </tr>
         </tbody>
-        <tbody *ngIf="comorbidConditionList">
+        <tbody z-table-body *ngIf="comorbidConditionList">
           <tr
+            z-table-row
             *ngFor="
               let comorbidityConditions of comorbidConditionList;
               let i = index
             ">
-            <td>{{ i + 1 }}</td>
-            <td>{{ comorbidityConditions.comorbidCondition }}</td>
-            <td>{{ comorbidityConditions.timePeriodAgo }}</td>
-            <td>
-              {{
-                comorbidityConditions.timePeriodUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : comorbidityConditions.timePeriodUnit === 'Days'
-                    ? 'Day(s)'
-                    : comorbidityConditions.timePeriodUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : comorbidityConditions.timePeriodUnit === 'Months'
-                        ? 'Month(s)'
-                        : comorbidityConditions.timePeriodUnit === 'Years'
-                          ? 'Year(s)'
-                          : comorbidityConditions.timePeriodUnit
-              }}
-            </td>
+            <td z-table-cell>{{ i + 1 }}</td>
+            <td z-table-cell>{{ comorbidityConditions.comorbidCondition }}</td>
+            <td z-table-cell>{{ comorbidityConditions.timePeriodAgo }}</td>
+            <ng-container
+              *ngTemplateOutlet="
+                durationUnitCell;
+                context: { unit: comorbidityConditions.timePeriodUnit }
+              "></ng-container>
           </tr>
         </tbody>
       </table>
@@ -372,68 +361,61 @@
   <!--Comorbid condition Ends-->
 
   <!--Medication History Starts-->
-  <div class="row m-t-10" *ngIf="visitCategory !== 'NCD screening'">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.ancHistory?.medicationANC_OPD_NCD_PNC
-            ?.medicationHistory
-        }}:
-      </h4>
-    </div>
-    <div class="col-xs-12">
+  <div class="mt-4" *ngIf="visitCategory !== 'NCD screening'">
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{
+        currentLanguageSet?.historyData?.ancHistory?.medicationANC_OPD_NCD_PNC
+          ?.medicationHistory
+      }}:
+    </p>
+    <div class="overflow-x-auto">
       <table
-        class="table table-bordered table-striped casesheet-table"
+        z-table
+        zType="bordered"
         aria-describedby="MedicationHistoryTbl">
-        <thead>
-          <tr>
-            <th id="serialNo">{{ currentLanguageSet?.casesheet?.serialNo }}</th>
-            <th id="medicationHistory">
+        <thead z-table-header>
+          <tr z-table-row>
+            <th z-table-head scope="col">
+              {{ currentLanguageSet?.casesheet?.serialNo }}
+            </th>
+            <th z-table-head id="medicationHistory">
               {{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.medicationANC_OPD_NCD_PNC?.medicationHistory
               }}
             </th>
-            <th id="duration">
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.DurationData?.duration }}
             </th>
-            <th id="unitOfDuration">
+            <th z-table-head scope="col">
               {{ currentLanguageSet?.DurationData?.durationUnit }}
             </th>
           </tr>
         </thead>
         <tbody
+          z-table-body
           *ngIf="!medicationHistoryList || medicationHistoryList.length === 0">
-          <tr>
-            <td class="text-center" colspan="4">
+          <tr z-table-row>
+            <td z-table-cell class="text-center" colspan="4">
               {{ currentLanguageSet?.casesheet?.noRecordFound }}
             </td>
           </tr>
         </tbody>
-        <tbody *ngIf="medicationHistoryList">
+        <tbody z-table-body *ngIf="medicationHistoryList">
           <tr
+            z-table-row
             *ngFor="
               let medicationHistory of medicationHistoryList;
               let i = index
             ">
-            <td>{{ i + 1 }}</td>
-            <td>{{ medicationHistory.currentMedication }}</td>
-            <td>{{ medicationHistory.timePeriodAgo }}</td>
-            <td>
-              {{
-                medicationHistory.timePeriodUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : medicationHistory.timePeriodUnit === 'Days'
-                    ? 'Day(s)'
-                    : medicationHistory.timePeriodUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : medicationHistory.timePeriodUnit === 'Months'
-                        ? 'Month(s)'
-                        : medicationHistory.timePeriodUnit === 'Years'
-                          ? 'Year(s)'
-                          : medicationHistory.timePeriodUnit
-              }}
-            </td>
+            <td z-table-cell>{{ i + 1 }}</td>
+            <td z-table-cell>{{ medicationHistory.currentMedication }}</td>
+            <td z-table-cell>{{ medicationHistory.timePeriodAgo }}</td>
+            <ng-container
+              *ngTemplateOutlet="
+                durationUnitCell;
+                context: { unit: medicationHistory.timePeriodUnit }
+              "></ng-container>
           </tr>
         </tbody>
       </table>
@@ -443,76 +425,76 @@
 
   <!--Menstrual History Starts-->
   <div
-    class="row m-t-10"
+    class="mt-4"
     *ngIf="
       beneficiary &&
       beneficiary?.ageVal >= 8 &&
       beneficiary?.genderName !== 'Male' &&
       visitCategory !== 'NCD screening'
     ">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-            ?.menstrualHistory
-        }}:
-      </h4>
-    </div>
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
+          ?.menstrualHistory
+      }}:
+    </p>
 
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="MenstrualHistoryTbl">
-        <tr>
-          <th id="menstrualCycleStatus">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-                ?.menstrualCycleStatus
-            }}:
-          </th>
-          <td>{{ menstrualHistory?.menstrualCycleStatus }}</td>
-          <th id="regularityofMenstrualCycle">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-                ?.regularityofMenstrualCycles
-            }}:
-          </th>
-          <td>{{ menstrualHistory?.regularity }}</td>
-        </tr>
+    <div class="overflow-x-auto">
+      <table z-table aria-describedby="MenstrualHistoryTbl">
+        <tbody z-table-body>
+          <tr z-table-row>
+            <th z-table-head id="menstrualCycleStatus">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
+                  ?.menstrualCycleStatus
+              }}:
+            </th>
+            <td z-table-cell>{{ menstrualHistory?.menstrualCycleStatus }}</td>
+            <th z-table-head id="regularityofMenstrualCycle">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
+                  ?.regularityofMenstrualCycles
+              }}:
+            </th>
+            <td z-table-cell>{{ menstrualHistory?.regularity }}</td>
+          </tr>
 
-        <tr>
-          <th id="lengthofMenstrualCycle">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-                ?.lengthofMenstrualCycle
-            }}:
-          </th>
-          <td>{{ menstrualHistory?.cycleLength }}</td>
-          <th id="menstrualFlowduration">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-                ?.menstrualBloodFlowDuration
-            }}:
-          </th>
-          <td>{{ menstrualHistory?.bloodFlowDuration }}</td>
-        </tr>
+          <tr z-table-row>
+            <th z-table-head id="lengthofMenstrualCycle">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
+                  ?.lengthofMenstrualCycle
+              }}:
+            </th>
+            <td z-table-cell>{{ menstrualHistory?.cycleLength }}</td>
+            <th z-table-head id="menstrualFlowduration">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
+                  ?.menstrualBloodFlowDuration
+              }}:
+            </th>
+            <td z-table-cell>{{ menstrualHistory?.bloodFlowDuration }}</td>
+          </tr>
 
-        <tr>
-          <th id="menstrualProblems">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-                ?.menstrualProblems
-            }}:
-          </th>
-          <td>{{ menstrualHistory?.problemName }}</td>
-          <th id="lastMenstrualPeriod">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-                ?.lastMenstrualPeriod
-            }}:
-          </th>
-          <td>{{ menstrualHistory?.lMPDate | date: 'dd/MM/yyyy' }}</td>
-        </tr>
+          <tr z-table-row>
+            <th z-table-head id="menstrualProblems">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
+                  ?.menstrualProblems
+              }}:
+            </th>
+            <td z-table-cell>{{ menstrualHistory?.problemName }}</td>
+            <th z-table-head id="lastMenstrualPeriod">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
+                  ?.lastMenstrualPeriod
+              }}:
+            </th>
+            <td z-table-cell>
+              {{ menstrualHistory?.lMPDate | date: 'dd/MM/yyyy' }}
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
@@ -520,69 +502,67 @@
 
   <!--Developmental History Starts-->
   <div
-    class="row m-t-10"
+    class="mt-4"
     *ngIf="
       beneficiary &&
       beneficiary?.ageVal <= 2 &&
       visitCategory !== 'NCD screening'
     ">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-            ?.developmentHistory
-        }}
-      </h4>
-    </div>
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
+          ?.developmentHistory
+      }}
+    </p>
 
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="DevelopmentalHistoryTbl">
-        <tr>
-          <th id="grossMotorMilestone">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-                ?.grossMotorMilestone
-            }}:
-          </th>
-          <td>{{ developmentalHistory?.grossMotorMilestone }}</td>
-          <th id="fineMotorMilestone">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-                ?.fineMotorMilestone
-            }}:
-          </th>
-          <td>{{ developmentalHistory?.fineMotorMilestone }}</td>
-        </tr>
+    <div class="overflow-x-auto">
+      <table z-table aria-describedby="DevelopmentalHistoryTbl">
+        <tbody z-table-body>
+          <tr z-table-row>
+            <th z-table-head id="grossMotorMilestone">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
+                  ?.grossMotorMilestone
+              }}:
+            </th>
+            <td z-table-cell>{{ developmentalHistory?.grossMotorMilestone }}</td>
+            <th z-table-head id="fineMotorMilestone">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
+                  ?.fineMotorMilestone
+              }}:
+            </th>
+            <td z-table-cell>{{ developmentalHistory?.fineMotorMilestone }}</td>
+          </tr>
 
-        <tr>
-          <th id="socialMilestone">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-                ?.socialMilestone
-            }}:
-          </th>
-          <td>{{ developmentalHistory?.socialMilestone }}</td>
-          <th id="languageMilestone">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-                ?.languageMilestone
-            }}:
-          </th>
-          <td>{{ developmentalHistory?.languageMilestone }}</td>
-        </tr>
+          <tr z-table-row>
+            <th z-table-head id="socialMilestone">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
+                  ?.socialMilestone
+              }}:
+            </th>
+            <td z-table-cell>{{ developmentalHistory?.socialMilestone }}</td>
+            <th z-table-head id="languageMilestone">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
+                  ?.languageMilestone
+              }}:
+            </th>
+            <td z-table-cell>{{ developmentalHistory?.languageMilestone }}</td>
+          </tr>
 
-        <tr>
-          <th id="developmentalProblems">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
-                ?.developmentalProblems
-            }}:
-          </th>
-          <td>{{ developmentalHistory?.developmentProblem }}</td>
-          <td colspan="2"></td>
-        </tr>
+          <tr z-table-row>
+            <th z-table-head id="developmentalProblems">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
+                  ?.developmentalProblems
+              }}:
+            </th>
+            <td z-table-cell>{{ developmentalHistory?.developmentProblem }}</td>
+            <td z-table-cell colspan="2"></td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
@@ -590,78 +570,76 @@
 
   <!--Feeding History Starts-->
   <div
-    class="row m-t-10"
+    class="mt-4"
     *ngIf="
       beneficiary &&
       beneficiary?.ageVal <= 6 &&
       visitCategory !== 'NCD screening'
     ">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
-            ?.feedingHistory
-        }}
-      </h4>
-    </div>
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
+          ?.feedingHistory
+      }}
+    </p>
 
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="FeedingHistoryTbl">
-        <tr>
-          <th id="typeofFeeds">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
-                ?.typeofFeeds
-            }}:
-          </th>
-          <td>{{ feedingHistory?.typeOfFeed }}</td>
-          <th id="ageatweaning">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
-                ?.ageatweaning
-            }}:
-          </th>
-          <td>{{ feedingHistory?.compFeedStartAge }}</td>
-        </tr>
+    <div class="overflow-x-auto">
+      <table z-table aria-describedby="FeedingHistoryTbl">
+        <tbody z-table-body>
+          <tr z-table-row>
+            <th z-table-head id="typeofFeeds">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
+                  ?.typeofFeeds
+              }}:
+            </th>
+            <td z-table-cell>{{ feedingHistory?.typeOfFeed }}</td>
+            <th z-table-head id="ageatweaning">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
+                  ?.ageatweaning
+              }}:
+            </th>
+            <td z-table-cell>{{ feedingHistory?.compFeedStartAge }}</td>
+          </tr>
 
-        <tr>
-          <th id="numberofComplimentaryfoodservings">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
-                ?.numberofComplimentaryfoodservings
-            }}:
-          </th>
-          <td>{{ feedingHistory?.noOfCompFeedPerDay }}</td>
-          <th id="foodIntoleranceStatus">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
-                ?.foodIntoleranceStatus
-            }}:
-          </th>
-          <td>{{ feedingHistory?.foodIntoleranceStatus }}</td>
-        </tr>
+          <tr z-table-row>
+            <th z-table-head id="numberofComplimentaryfoodservings">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
+                  ?.numberofComplimentaryfoodservings
+              }}:
+            </th>
+            <td z-table-cell>{{ feedingHistory?.noOfCompFeedPerDay }}</td>
+            <th z-table-head id="foodIntoleranceStatus">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
+                  ?.foodIntoleranceStatus
+              }}:
+            </th>
+            <td z-table-cell>{{ feedingHistory?.foodIntoleranceStatus }}</td>
+          </tr>
 
-        <tr>
-          <th id="typeofFoodIntolerance">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
-                ?.typeofFoodIntolerance
-            }}:
-          </th>
-          <td>
-            {{
-              feedingHistory?.typeofFoodIntolerance === undefined
-                ? null
-                : feedingHistory?.typeofFoodIntolerance
-                  ? 'Yes'
-                  : 'No'
-            }}
-          </td>
-          <td></td>
-          <td></td>
-        </tr>
+          <tr z-table-row>
+            <th z-table-head id="typeofFoodIntolerance">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
+                  ?.typeofFoodIntolerance
+              }}:
+            </th>
+            <td z-table-cell>
+              {{
+                feedingHistory?.typeofFoodIntolerance === undefined
+                  ? null
+                  : feedingHistory?.typeofFoodIntolerance
+                    ? 'Yes'
+                    : 'No'
+              }}
+            </td>
+            <td z-table-cell></td>
+            <td z-table-cell></td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
@@ -669,70 +647,68 @@
 
   <!--Perinatal History Starts-->
   <div
-    class="row m-t-10"
+    class="mt-4"
     *ngIf="
       beneficiary &&
       beneficiary?.ageVal <= 1 &&
       visitCategory !== 'NCD screening'
     ">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
-            ?.perintalHistory
-        }}
-      </h4>
-    </div>
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
+          ?.perintalHistory
+      }}
+    </p>
 
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="PerinatalHistoryTbl">
-        <tr>
-          <th id="placeofDelivery">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
-                ?.placeofDelivery
-            }}:
-          </th>
-          <td>{{ perinatalHistory?.placeOfDelivery }}</td>
-          <th id="typeofDelivery">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
-                ?.typeofDelivery
-            }}:
-          </th>
-          <td>{{ perinatalHistory?.typeOfDelivery }}</td>
-        </tr>
+    <div class="overflow-x-auto">
+      <table z-table aria-describedby="PerinatalHistoryTbl">
+        <tbody z-table-body>
+          <tr z-table-row>
+            <th z-table-head scope="col">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
+                  ?.placeofDelivery
+              }}:
+            </th>
+            <td z-table-cell>{{ perinatalHistory?.placeOfDelivery }}</td>
+            <th z-table-head id="typeofDelivery">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
+                  ?.typeofDelivery
+              }}:
+            </th>
+            <td z-table-cell>{{ perinatalHistory?.typeOfDelivery }}</td>
+          </tr>
 
-        <tr>
-          <th id="complicationatBirth">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
-                ?.complicationatBirth
-            }}:
-          </th>
-          <td>{{ perinatalHistory?.complicationAtBirth }}</td>
-          <th id="gestation">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
-                ?.gestation
-            }}:
-          </th>
-          <td>{{ perinatalHistory?.gestation }}</td>
-        </tr>
+          <tr z-table-row>
+            <th z-table-head id="complicationatBirth">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
+                  ?.complicationatBirth
+              }}:
+            </th>
+            <td z-table-cell>{{ perinatalHistory?.complicationAtBirth }}</td>
+            <th z-table-head id="gestation">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
+                  ?.gestation
+              }}:
+            </th>
+            <td z-table-cell>{{ perinatalHistory?.gestation }}</td>
+          </tr>
 
-        <tr>
-          <th id="birthWeight">
-            {{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
-                ?.birthWeight
-            }}:
-          </th>
-          <td>{{ perinatalHistory?.birthWeight_kg }}</td>
-          <td></td>
-          <td></td>
-        </tr>
+          <tr z-table-row>
+            <th z-table-head id="birthWeight">
+              {{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
+                  ?.birthWeight
+              }}:
+            </th>
+            <td z-table-cell>{{ perinatalHistory?.birthWeight_kg }}</td>
+            <td z-table-cell></td>
+            <td z-table-cell></td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
@@ -740,40 +716,39 @@
 
   <!--Immunization History Starts-->
   <div
-    class="row m-t-10"
+    class="mt-4"
     *ngIf="
       beneficiary &&
       beneficiary?.ageVal <= 16 &&
       visitCategory !== 'NCD screening'
     ">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.immunization
-            ?.ImmunizationHistory
-        }}
-      </h4>
-    </div>
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.immunization
+          ?.ImmunizationHistory
+      }}
+    </p>
 
-    <div class="col-xs-12">
+    <div class="overflow-x-auto">
       <table
-        class="table table-bordered table-striped casesheet-table"
+        z-table
+        zType="bordered"
         aria-describedby="ImmunizationHistoryTbl">
-        <thead>
-          <tr>
-            <th id="age">
+        <thead z-table-header>
+          <tr z-table-row>
+            <th z-table-head id="age">
               {{
                 currentLanguageSet?.historyData?.opdNCDPNCHistory?.immunization
                   ?.age
               }}
             </th>
-            <th id="Vaccines">
+            <th z-table-head id="Vaccines">
               {{
                 currentLanguageSet?.historyData?.opdNCDPNCHistory?.immunization
                   ?.Vaccines
               }}
             </th>
-            <th id="Status">
+            <th z-table-head id="Status">
               {{
                 currentLanguageSet?.historyData?.opdNCDPNCHistory?.immunization
                   ?.Status
@@ -782,32 +757,32 @@
           </tr>
         </thead>
         <tbody
+          z-table-body
           *ngIf="
             !immunizationHistory ||
             immunizationHistory?.immunizationList.length === 0
           ">
-          <tr>
-            <td class="text-center" colspan="5">
+          <tr z-table-row>
+            <td z-table-cell class="text-center" colspan="5">
               {{ currentLanguageSet?.common?.noRecordFound }}
             </td>
           </tr>
         </tbody>
-        <tbody *ngIf="immunizationHistory">
+        <tbody z-table-body *ngIf="immunizationHistory">
           <ng-container
             *ngFor="let immunization of immunizationHistory?.immunizationList">
-            <tr>
+            <tr z-table-row>
               <th
+                z-table-head
                 [attr.rowspan]="immunization.vaccines.length + 1"
                 id="defaultReceivingAge">
                 {{ immunization.defaultReceivingAge }}
               </th>
             </tr>
-            <tr *ngFor="let vaccine of immunization?.vaccines">
-              <td>{{ vaccine.vaccine }}</td>
-              <td>
-                <mat-checkbox
-                  [checked]="vaccine.status"
-                  disabled></mat-checkbox>
+            <tr z-table-row *ngFor="let vaccine of immunization?.vaccines">
+              <td z-table-cell>{{ vaccine.vaccine }}</td>
+              <td z-table-cell>
+                <z-checkbox [zChecked]="vaccine.status" disabled></z-checkbox>
               </td>
             </tr>
           </ng-container>
@@ -818,102 +793,96 @@
   <!--Immunization History Ends-->
 
   <!--Personal History Starts-->
-  <div class="row m-t-10">
-    <div class="col-xs-12">
-      <h4>
-        {{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.personalHistoryANC_OPD_NCD_PNC?.personalHistoryData
-        }}:
-      </h4>
-    </div>
+  <div class="mt-4">
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{
+        currentLanguageSet?.historyData?.ancHistory
+          ?.personalHistoryANC_OPD_NCD_PNC?.personalHistoryData
+      }}:
+    </p>
 
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="PersonalHistoryTbl">
-        <tr>
-          <th id="dietaryType">
-            {{
-              currentLanguageSet?.historyData?.ancHistory
-                ?.personalHistoryANC_OPD_NCD_PNC?.dietaryType
-            }}:
-          </th>
-          <td>{{ personalHistory?.dietaryType }}</td>
-          <th id="physicalActivityType">
-            {{
-              currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                ?.physicalActivityType
-            }}:
-          </th>
-          <td>{{ personalHistory?.physicalActivityType }}</td>
-        </tr>
+    <div class="overflow-x-auto">
+      <table z-table aria-describedby="PersonalHistoryTbl">
+        <tbody z-table-body>
+          <tr z-table-row>
+            <th z-table-head id="dietaryType">
+              {{
+                currentLanguageSet?.historyData?.ancHistory
+                  ?.personalHistoryANC_OPD_NCD_PNC?.dietaryType
+              }}:
+            </th>
+            <td z-table-cell>{{ personalHistory?.dietaryType }}</td>
+            <th z-table-head id="physicalActivityType">
+              {{
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.physicalActivityType
+              }}:
+            </th>
+            <td z-table-cell>{{ personalHistory?.physicalActivityType }}</td>
+          </tr>
 
-        <tr *ngIf="beneficiary && beneficiary?.ageVal >= 18">
-          <th id="riskySexualPracticesStatus">
-            {{
-              currentLanguageSet?.historyData?.ancHistory
-                ?.personalHistoryANC_OPD_NCD_PNC?.riskySexualPracticesStatus
-            }}:
-          </th>
+          <tr z-table-row *ngIf="beneficiary && beneficiary?.ageVal >= 18">
+            <th z-table-head id="riskySexualPracticesStatus">
+              {{
+                currentLanguageSet?.historyData?.ancHistory
+                  ?.personalHistoryANC_OPD_NCD_PNC?.riskySexualPracticesStatus
+              }}:
+            </th>
 
-          <td>
-            {{
-              personalHistory?.riskySexualPracticesStatus === undefined
-                ? null
-                : personalHistory?.riskySexualPracticesStatus
-                  ? 'Yes'
-                  : 'No'
-            }}
-          </td>
-          <td colspan="2"></td>
-        </tr>
+            <td z-table-cell>
+              {{
+                personalHistory?.riskySexualPracticesStatus === undefined
+                  ? null
+                  : personalHistory?.riskySexualPracticesStatus
+                    ? 'Yes'
+                    : 'No'
+              }}
+            </td>
+            <td z-table-cell colspan="2"></td>
+          </tr>
+        </tbody>
       </table>
     </div>
 
-    <div class="col-xs-12 m-t-10">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="allergicStatus">
-        <tbody>
-          <tr>
-            <th id="allergicStatus">
+    <div class="mt-4 overflow-x-auto">
+      <table z-table aria-describedby="allergicStatus">
+        <tbody z-table-body>
+          <tr z-table-row>
+            <th z-table-head id="allergicStatus">
               {{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus
                   ?.allergicStatus
               }}:
             </th>
-            <td>{{ personalHistory?.allergyStatus }}</td>
-            <td></td>
-            <td></td>
+            <td z-table-cell>{{ personalHistory?.allergyStatus }}</td>
+            <td z-table-cell></td>
+            <td z-table-cell></td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div class="col-xs-12 m-t-10">
-      <table
-        class="table table-bordered table-striped"
-        aria-describedby="personalHistory">
-        <thead>
-          <tr>
-            <th style="width: 5%" id="serialNo">
+    <div class="mt-4 overflow-x-auto">
+      <table z-table zType="bordered" aria-describedby="personalHistory">
+        <thead z-table-header>
+          <tr z-table-row>
+            <th z-table-head class="w-[5%]">
               {{ currentLanguageSet?.casesheet?.serialNo }}
             </th>
-            <th style="width: 10%" id="allergyType">
+            <th z-table-head class="w-[10%]" id="allergyType">
               {{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus?.allergyType
               }}
             </th>
-            <th style="width: 20%" id="allergenName">
+            <th z-table-head class="w-[20%]" id="allergenName">
               {{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus?.allergenName
               }}
             </th>
-            <th style="width: 35%" id="typeOfReaction">
+            <th z-table-head class="w-[35%]" id="typeOfReaction">
               {{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.allergicStatus
@@ -922,208 +891,183 @@
             </th>
           </tr>
         </thead>
-        <tbody *ngIf="personalHistory?.allergicList?.length === 0">
-          <tr>
-            <td class="text-center" colspan="4">
+        <tbody z-table-body *ngIf="personalHistory?.allergicList?.length === 0">
+          <tr z-table-row>
+            <td z-table-cell class="text-center" colspan="4">
               {{ currentLanguageSet?.casesheet?.noRecordFound }}
             </td>
           </tr>
         </tbody>
-        <tbody *ngIf="personalHistory?.allergicList">
+        <tbody z-table-body *ngIf="personalHistory?.allergicList">
           <tr
+            z-table-row
             *ngFor="
               let allergy of personalHistory?.allergicList;
               let i = index
             ">
-            <td>{{ i + 1 }}</td>
-            <td>{{ allergy.allergyType }}</td>
-            <td>{{ allergy.snomedTerm }}</td>
-            <td>{{ allergy.allergicReactionType }}</td>
+            <td z-table-cell>{{ i + 1 }}</td>
+            <td z-table-cell>{{ allergy.allergyType }}</td>
+            <td z-table-cell>{{ allergy.snomedTerm }}</td>
+            <td z-table-cell>{{ allergy.allergicReactionType }}</td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <div
-      class="col-xs-12 m-t-10"
+      class="mt-4 overflow-x-auto"
       *ngIf="beneficiary && beneficiary?.ageVal >= 13">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="tobaccoStatus">
-        <tbody>
-          <tr>
-            <th id="tobaccoUseStatus">
+      <table z-table aria-describedby="tobaccoStatus">
+        <tbody z-table-body>
+          <tr z-table-row>
+            <th z-table-head id="tobaccoUseStatus">
               {{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData
                   ?.tobaccoUseStatus
               }}:
             </th>
-            <td>{{ personalHistory?.tobaccoUseStatus }}</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
+            <td z-table-cell>{{ personalHistory?.tobaccoUseStatus }}</td>
+            <td z-table-cell>&nbsp;</td>
+            <td z-table-cell>&nbsp;</td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <div
-      class="col-xs-12 m-t-10"
+      class="mt-4 overflow-x-auto"
       *ngIf="beneficiary && beneficiary?.ageVal >= 13">
-      <table
-        class="table table-bordered table-striped"
-        aria-describedby="tobaccosage">
-        <thead>
-          <tr>
-            <th style="width: 5%" id="serialNo">
+      <table z-table zType="bordered" aria-describedby="tobaccosage">
+        <thead z-table-header>
+          <tr z-table-row>
+            <th z-table-head class="w-[5%]">
               {{ currentLanguageSet?.casesheet?.serialNo }}
             </th>
-            <th style="width: 20%" id="typeofTobaccoUse">
+            <th z-table-head class="w-[20%]" id="typeofTobaccoUse">
               {{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData
                   ?.typeofTobaccoUse
               }}
             </th>
-            <th style="width: 25%" id="numberPerDay">
+            <th z-table-head class="w-[25%]" id="numberPerDay">
               {{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData?.numberPerDay
               }}
             </th>
-            <th style="width: 25%" id="duration1">
+            <th z-table-head class="w-[25%]" id="duration1">
               {{ currentLanguageSet?.DurationData?.duration }}
             </th>
-            <th style="width: 25%" id="unitOfDuration1">
+            <th z-table-head class="w-[25%]" id="unitOfDuration1">
               {{ currentLanguageSet?.DurationData?.durationUnit }}
             </th>
           </tr>
         </thead>
-        <tbody *ngIf="personalHistory?.tobaccoList?.length === 0">
-          <tr>
-            <td class="text-center" colspan="5">
+        <tbody z-table-body *ngIf="personalHistory?.tobaccoList?.length === 0">
+          <tr z-table-row>
+            <td z-table-cell class="text-center" colspan="5">
               {{ currentLanguageSet?.casesheet?.noRecordFound }}
             </td>
           </tr>
         </tbody>
-        <tbody *ngIf="personalHistory?.tobaccoList">
+        <tbody z-table-body *ngIf="personalHistory?.tobaccoList">
           <tr
+            z-table-row
             *ngFor="let tobacco of personalHistory?.tobaccoList; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ tobacco.tobaccoUseType }}</td>
-            <td>{{ tobacco.numberperDay }}</td>
-            <td>{{ tobacco.duration }}</td>
-            <td>
-              {{
-                tobacco.durationUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : tobacco.durationUnit === 'Days'
-                    ? 'Day(s)'
-                    : tobacco.durationUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : tobacco.durationUnit === 'Months'
-                        ? 'Month(s)'
-                        : tobacco.durationUnit === 'Years'
-                          ? 'Year(s)'
-                          : tobacco.durationUnit
-              }}
-            </td>
+            <td z-table-cell>{{ i + 1 }}</td>
+            <td z-table-cell>{{ tobacco.tobaccoUseType }}</td>
+            <td z-table-cell>{{ tobacco.numberperDay }}</td>
+            <td z-table-cell>{{ tobacco.duration }}</td>
+            <ng-container
+              *ngTemplateOutlet="
+                durationUnitCell;
+                context: { unit: tobacco.durationUnit }
+              "></ng-container>
           </tr>
         </tbody>
       </table>
     </div>
 
     <div
-      class="col-xs-12 m-t-10"
+      class="mt-4 overflow-x-auto"
       *ngIf="beneficiary && beneficiary?.ageVal >= 13">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="alcoholIntakeStatus">
-        <tbody>
-          <tr>
-            <th id="alcoholUseStatus">
+      <table z-table aria-describedby="alcoholIntakeStatus">
+        <tbody z-table-body>
+          <tr z-table-row>
+            <th z-table-head id="alcoholUseStatus">
               {{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData
                   ?.alcoholUseStatus
               }}:
             </th>
-            <td>{{ personalHistory?.alcoholIntakeStatus }}</td>
-            <td></td>
-            <td></td>
+            <td z-table-cell>{{ personalHistory?.alcoholIntakeStatus }}</td>
+            <td z-table-cell></td>
+            <td z-table-cell></td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <div
-      class="col-xs-12 m-t-10"
+      class="mt-4 overflow-x-auto"
       *ngIf="beneficiary && beneficiary?.ageVal >= 13">
-      <table
-        class="table table-bordered table-striped"
-        aria-describedby="alcoholData">
-        <thead>
-          <tr>
-            <th style="width: 5%" id="serialNo">
+      <table z-table zType="bordered" aria-describedby="alcoholData">
+        <thead z-table-header>
+          <tr z-table-row>
+            <th z-table-head class="w-[5%]">
               {{ currentLanguageSet?.casesheet?.serialNo }}
             </th>
-            <th style="width: 20%" id="typeofAlcohol3">
+            <th z-table-head class="w-[20%]" id="typeofAlcohol3">
               {{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.typeofAlcohol
               }}
             </th>
-            <th style="width: 25%" id="freqofAlcohol2">
+            <th z-table-head class="w-[25%]" id="freqofAlcohol2">
               {{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData?.freqofAlcohol
               }}
             </th>
-            <th style="width: 20%" id="qtyofAlcoholintake">
+            <th z-table-head class="w-[20%]" id="qtyofAlcoholintake">
               {{
                 currentLanguageSet?.historyData?.ancHistory
                   ?.personalHistoryANC_OPD_NCD_PNC?.alcoholData
                   ?.qtyofAlcoholintake
               }}
             </th>
-            <th style="width: 15%" id="duration2">
+            <th z-table-head class="w-[15%]" id="duration2">
               {{ currentLanguageSet?.DurationData?.duration }}
             </th>
-            <th style="width: 15%" id="unitOfDuration2">
+            <th z-table-head class="w-[15%]" id="unitOfDuration2">
               {{ currentLanguageSet?.DurationData?.durationUnit }}
             </th>
           </tr>
         </thead>
-        <tbody *ngIf="personalHistory?.alcoholList?.length === 0">
-          <tr>
-            <td class="text-center" colspan="6">
+        <tbody z-table-body *ngIf="personalHistory?.alcoholList?.length === 0">
+          <tr z-table-row>
+            <td z-table-cell class="text-center" colspan="6">
               {{ currentLanguageSet?.casesheet?.noRecordFound }}
             </td>
           </tr>
         </tbody>
-        <tbody *ngIf="personalHistory?.alcoholList">
+        <tbody z-table-body *ngIf="personalHistory?.alcoholList">
           <tr
+            z-table-row
             *ngFor="let alcohol of personalHistory?.alcoholList; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ alcohol.alcoholType }}</td>
-            <td>{{ alcohol.alcoholIntakeFrequency }}</td>
-            <td>{{ alcohol.avgAlcoholConsumption }}</td>
-            <td>{{ alcohol.duration }}</td>
-            <td>
-              {{
-                alcohol.durationUnit === 'Hours'
-                  ? 'Hour(s)'
-                  : alcohol.durationUnit === 'Days'
-                    ? 'Day(s)'
-                    : alcohol.durationUnit === 'Weeks'
-                      ? 'Week(s)'
-                      : alcohol.durationUnit === 'Months'
-                        ? 'Month(s)'
-                        : alcohol.durationUnit === 'Years'
-                          ? 'Year(s)'
-                          : alcohol.durationUnit
-              }}
-            </td>
+            <td z-table-cell>{{ i + 1 }}</td>
+            <td z-table-cell>{{ alcohol.alcoholType }}</td>
+            <td z-table-cell>{{ alcohol.alcoholIntakeFrequency }}</td>
+            <td z-table-cell>{{ alcohol.avgAlcoholConsumption }}</td>
+            <td z-table-cell>{{ alcohol.duration }}</td>
+            <ng-container
+              *ngTemplateOutlet="
+                durationUnitCell;
+                context: { unit: alcohol.durationUnit }
+              "></ng-container>
           </tr>
         </tbody>
       </table>
@@ -1133,7 +1077,7 @@
 
   <!--Female Obstetric History Starts-->
   <div
-    class="row m-t-10"
+    class="mt-4"
     *ngIf="
       beneficiary &&
       beneficiary?.ageVal >= 12 &&
@@ -1141,170 +1085,197 @@
       !ANCDetailsAndFormula?.primiGravida &&
       visitCategory !== 'NCD screening'
     ">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.casesheet?.femaleObstetric }}:</h4>
-    </div>
-    <div class="col-xs-12">
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{ currentLanguageSet?.casesheet?.femaleObstetric }}:
+    </p>
+    <div class="overflow-x-auto">
       <table
-        class="table table-responsive table-bordered"
+        z-table
+        zType="bordered"
         aria-describedby="FemaleObstetricHistoryTbl">
         <tbody
+          z-table-body
           *ngIf="
             !femaleObstetricHistory?.femaleObstetricHistoryList ||
             femaleObstetricHistory?.femaleObstetricHistoryList.length === 0
           ">
-          <tr>
-            <td class="text-center" colspan="11">
+          <tr z-table-row>
+            <td z-table-cell class="text-center" colspan="11">
               {{ currentLanguageSet?.common?.noRecordFound }}
             </td>
           </tr>
         </tbody>
-        <tbody *ngIf="femaleObstetricHistory?.femaleObstetricHistoryList">
+        <tbody
+          z-table-body
+          *ngIf="femaleObstetricHistory?.femaleObstetricHistoryList">
           <ng-container
             *ngFor="
               let femaleObstetricHistory of femaleObstetricHistory?.femaleObstetricHistoryList;
               let i = index
             ">
-            <tr>
-              <th id="pregOrder">
+            <tr z-table-row>
+              <th z-table-head id="pregOrder">
                 {{ currentLanguageSet?.casesheet?.pregOrder }}:
               </th>
-              <td>{{ femaleObstetricHistory.pregOrder }}</td>
-              <th id="pregComp">
+              <td z-table-cell>{{ femaleObstetricHistory.pregOrder }}</td>
+              <th z-table-head id="pregComp">
                 {{ currentLanguageSet?.casesheet?.pregComp }}:
               </th>
-              <td>{{ femaleObstetricHistory.pregComplicationType }}</td>
+              <td z-table-cell>
+                {{ femaleObstetricHistory.pregComplicationType }}
+              </td>
             </tr>
-            <tr *ngIf="femaleObstetricHistory?.otherPregComplication">
-              <th colspan="2" id="otherPregComp">
+            <tr
+              z-table-row
+              *ngIf="femaleObstetricHistory?.otherPregComplication">
+              <th z-table-head colspan="2" id="otherPregComp">
                 {{ currentLanguageSet?.casesheet?.otherPregComp }}:
               </th>
-              <td colspan="2">
+              <td z-table-cell colspan="2">
                 {{ femaleObstetricHistory?.otherPregComplication }}
               </td>
             </tr>
-            <tr>
-              <th id="durationofPregnancy">
+            <tr z-table-row>
+              <th z-table-head id="durationofPregnancy">
                 {{
                   currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
                     ?.durationofPregnancy
                 }}:
               </th>
-              <td>{{ femaleObstetricHistory.durationType }}</td>
-              <th id="placeofDelivery">
+              <td z-table-cell>{{ femaleObstetricHistory.durationType }}</td>
+              <th z-table-head scope="col">
                 {{
                   currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
                     ?.placeofDelivery
                 }}:
               </th>
-              <td>{{ femaleObstetricHistory.deliveryPlace }}</td>
+              <td z-table-cell>{{ femaleObstetricHistory.deliveryPlace }}</td>
             </tr>
-            <tr>
-              <th id="deliveryType">
+            <tr z-table-row>
+              <th z-table-head id="deliveryType">
                 {{
                   currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
                     ?.deliveryType
                 }}:
               </th>
-              <td>{{ femaleObstetricHistory.deliveryType }}</td>
-              <th id="deliveryComplication">
+              <td z-table-cell>{{ femaleObstetricHistory.deliveryType }}</td>
+              <th z-table-head id="deliveryComplication">
                 {{
                   currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
                     ?.deliveryComplication
                 }}:
               </th>
-              <td>{{ femaleObstetricHistory.deliveryComplicationType }}</td>
+              <td z-table-cell>
+                {{ femaleObstetricHistory.deliveryComplicationType }}
+              </td>
             </tr>
-            <tr *ngIf="femaleObstetricHistory?.otherDeliveryComplication">
-              <th colspan="2" id="otherdeliverycomplication">
+            <tr
+              z-table-row
+              *ngIf="femaleObstetricHistory?.otherDeliveryComplication">
+              <th z-table-head colspan="2" id="otherdeliverycomplication">
                 {{
                   currentLanguageSet?.historyData?.obstetrichistory
                     ?.otherdeliverycomplication
                 }}:
               </th>
-              <td colspan="2">
+              <td z-table-cell colspan="2">
                 {{ femaleObstetricHistory?.otherDeliveryComplication }}
               </td>
             </tr>
-            <tr>
-              <th id="PregOutcome">
+            <tr z-table-row>
+              <th z-table-head id="PregOutcome">
                 {{
                   currentLanguageSet?.historyData?.obstetrichistory
                     ?.PregOutcome
                 }}:
               </th>
-              <td>{{ femaleObstetricHistory.pregOutcome }}</td>
-              <th id="postpartumComplication">
+              <td z-table-cell>{{ femaleObstetricHistory.pregOutcome }}</td>
+              <th z-table-head id="postpartumComplication">
                 {{
                   currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
                     ?.postpartumComplication
                 }}:
               </th>
-              <td>{{ femaleObstetricHistory.postpartumComplicationType }}</td>
+              <td z-table-cell>
+                {{ femaleObstetricHistory.postpartumComplicationType }}
+              </td>
             </tr>
-            <tr *ngIf="femaleObstetricHistory?.otherPostpartumCompType">
-              <th id="otherpostpartumcompType">
+            <tr
+              z-table-row
+              *ngIf="femaleObstetricHistory?.otherPostpartumCompType">
+              <th z-table-head id="otherpostpartumcompType">
                 {{
                   currentLanguageSet?.historyData?.obstetrichistory
                     ?.otherpostpartumcompType
                 }}:
               </th>
-              <td>
+              <td z-table-cell>
                 {{ femaleObstetricHistory?.otherPostpartumCompType }}
               </td>
             </tr>
-            <tr>
-              <th id="newBornComplication">
+            <tr z-table-row>
+              <th z-table-head id="newBornComplication">
                 {{
                   currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
                     ?.newBornComplication
                 }}:
               </th>
-              <td>{{ femaleObstetricHistory.newBornComplication }}</td>
-              <th id="congenitalAnomalies">
+              <td z-table-cell>
+                {{ femaleObstetricHistory.newBornComplication }}
+              </td>
+              <th z-table-head id="congenitalAnomalies">
                 {{
                   currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
                     ?.congenitalAnomalies
                 }}:
               </th>
-              <td>{{ femaleObstetricHistory.congenitalAnomalies }}</td>
+              <td z-table-cell>
+                {{ femaleObstetricHistory.congenitalAnomalies }}
+              </td>
             </tr>
-            <tr>
-              <th id="typeOfAbortion">
+            <tr z-table-row>
+              <th z-table-head id="typeOfAbortion">
                 {{
                   currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
                     ?.typeOfAbortion
                 }}:
               </th>
-              <td>{{ femaleObstetricHistory.typeOfAbortionValue }}</td>
-              <th id="typeofFacility">
+              <td z-table-cell>
+                {{ femaleObstetricHistory.typeOfAbortionValue }}
+              </td>
+              <th z-table-head id="typeofFacility">
                 {{
                   currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
                     ?.typeofFacility
                 }}:
               </th>
-              <td>{{ femaleObstetricHistory.serviceFacilityValue }}</td>
+              <td z-table-cell>
+                {{ femaleObstetricHistory.serviceFacilityValue }}
+              </td>
             </tr>
-            <tr>
-              <th id="noOfcompletedWeeks1">
+            <tr z-table-row>
+              <th z-table-head id="noOfcompletedWeeks1">
                 {{
                   currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
                     ?.noOfcompletedWeeks
                 }}:
               </th>
-              <td>{{ femaleObstetricHistory.pregDuration }}</td>
-              <th complicationPostAbortion id="complicationPostAbortion">
+              <td z-table-cell>{{ femaleObstetricHistory.pregDuration }}</td>
+              <th
+                z-table-head
+                complicationPostAbortion
+                id="complicationPostAbortion">
                 {{
                   currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
                     ?.complicationPostAbortion
                 }}:
               </th>
-              <td>
+              <td z-table-cell>
                 {{ femaleObstetricHistory.postAbortionComplicationsValues }}
               </td>
             </tr>
-            <tr>
-              <td class="text-center" colspan="11"></td>
+            <tr z-table-row>
+              <td z-table-cell class="text-center" colspan="11"></td>
             </tr>
           </ng-container>
         </tbody>
@@ -1314,35 +1285,36 @@
   <!--Female Obstetric History Ends-->
 
   <!--Physical Activity History Starts-->
-  <div class="row m-t-10" *ngIf="visitCategory === 'NCD screening'">
-    <div class="col-xs-12">
-      <h4>{{ currentLanguageSet?.physicalActivity }}</h4>
-    </div>
-    <div class="col-xs-12">
+  <div class="mt-4" *ngIf="visitCategory === 'NCD screening'">
+    <p class="mb-2 text-base font-bold text-foreground">
+      {{ currentLanguageSet?.physicalActivity }}
+    </p>
+    <div class="overflow-x-auto">
       <table
-        class="table table-bordered table-striped casesheet-table"
+        z-table
+        zType="bordered"
         aria-describedby="PhysicalActivityHistory">
-        <thead>
-          <tr>
-            <th style="width: 10%" id="sno">
+        <thead z-table-header>
+          <tr z-table-row>
+            <th z-table-head class="w-[10%]" id="sno">
               {{ currentLanguageSet?.casesheet?.serialNo }}
             </th>
-            <th style="width: 30%" id="pat">
+            <th z-table-head class="w-[30%]" id="pat">
               {{
                 currentLanguageSet?.historyData?.cancerScreeningHistory
                   ?.personal?.physicalActivityType
               }}
             </th>
-            <th style="width: 60%" id="ActivityType">
+            <th z-table-head class="w-[60%]" id="ActivityType">
               {{ currentLanguageSet?.activityType }}
             </th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>{{ previousPhysicalList?.physicalActivityType }}</td>
-            <td>{{ previousPhysicalList?.activityType }}</td>
+        <tbody z-table-body>
+          <tr z-table-row>
+            <td z-table-cell>1</td>
+            <td z-table-cell>{{ previousPhysicalList?.physicalActivityType }}</td>
+            <td z-table-cell>{{ previousPhysicalList?.activityType }}</td>
           </tr>
         </tbody>
       </table>
@@ -1352,76 +1324,80 @@
 </div>
 <div
   *ngIf="visitCategory === 'NCD care' || visitCategory === 'COVID-19 Screening'"
-  class="container">
-  <div class="row col-xs-12">
-    <h2 class="text-center">
+  class="bg-card text-card-foreground pb-12">
+  <div>
+    <p
+      class="text-center text-xl font-semibold tracking-tight text-foreground">
       {{ currentLanguageSet?.Referdetails?.revisitAndRefer }}
-    </h2>
-    <hr />
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="revisitAndRefer">
-        <tbody>
-          <tr>
-            <th id="referredToInstituteName">
+    </p>
+    <hr class="mt-2 border-border" />
+    <div class="mt-4 overflow-x-auto">
+      <table z-table aria-describedby="revisitAndRefer">
+        <tbody z-table-body>
+          <tr z-table-row>
+            <th z-table-head id="referredToInstituteName">
               {{ currentLanguageSet?.Referdetails?.higherhealthcarecenter }}:
             </th>
-            <td>{{ referDetails?.referredToInstituteName }}</td>
+            <td z-table-cell>{{ referDetails?.referredToInstituteName }}</td>
           </tr>
-          <tr>
-            <th id="serviceList">
+          <tr z-table-row>
+            <th z-table-head id="serviceList">
               {{ currentLanguageSet?.Referdetails?.additionalservices }}:
             </th>
-            <td>{{ serviceList }}</td>
+            <td z-table-cell>{{ serviceList }}</td>
           </tr>
-          <tr>
-            <th id="referralReason">
+          <tr z-table-row>
+            <th z-table-head id="referralReason">
               {{ currentLanguageSet?.Referdetails?.referralReason }}:
             </th>
-            <td>{{ referDetails?.referralReason }}</td>
+            <td z-table-cell>{{ referDetails?.referralReason }}</td>
           </tr>
-          <tr>
-            <th id="revisitDate">{{ currentLanguageSet?.revisitDate }}:</th>
-            <td>{{ referDetails?.revisitDate }}</td>
+          <tr z-table-row>
+            <th z-table-head id="revisitDate">
+              {{ currentLanguageSet?.revisitDate }}:
+            </th>
+            <td z-table-cell>{{ referDetails?.revisitDate }}</td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
-<div *ngIf="visitCategory === 'NCD screening'" class="container">
-  <div class="row col-xs-12">
-    <h2 class="text-center">
+<div
+  *ngIf="visitCategory === 'NCD screening'"
+  class="bg-card text-card-foreground pb-12">
+  <div>
+    <p
+      class="text-center text-xl font-semibold tracking-tight text-foreground">
       {{ currentLanguageSet?.Referdetails?.revisitAndRefer }}
-    </h2>
-    <hr />
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="referDetails">
-        <tbody>
-          <tr>
-            <th id="ncdHigherhealthcarecenter">
+    </p>
+    <hr class="mt-2 border-border" />
+    <div class="mt-4 overflow-x-auto">
+      <table z-table aria-describedby="referDetails">
+        <tbody z-table-body>
+          <tr z-table-row>
+            <th z-table-head id="ncdHigherhealthcarecenter">
               {{ currentLanguageSet?.Referdetails?.higherhealthcarecenter }}:
             </th>
-            <td>{{ referDetails?.referredToInstituteName }}</td>
+            <td z-table-cell>{{ referDetails?.referredToInstituteName }}</td>
           </tr>
-          <tr>
-            <th id="ncdAdditionalservices">
+          <tr z-table-row>
+            <th z-table-head id="ncdAdditionalservices">
               {{ currentLanguageSet?.Referdetails?.additionalservices }}:
             </th>
-            <td>{{ serviceList }}</td>
+            <td z-table-cell>{{ serviceList }}</td>
           </tr>
-          <tr>
-            <th id="ncdReferralReason">
+          <tr z-table-row>
+            <th z-table-head id="ncdReferralReason">
               {{ currentLanguageSet?.Referdetails?.referralReason }}:
             </th>
-            <td>{{ referDetails?.referralReason }}</td>
+            <td z-table-cell>{{ referDetails?.referralReason }}</td>
           </tr>
-          <tr>
-            <th id="ncdRevisitDate">{{ currentLanguageSet?.revisitDate }}:</th>
-            <td>{{ referDetails?.revisitDate }}</td>
+          <tr z-table-row>
+            <th z-table-head id="ncdRevisitDate">
+              {{ currentLanguageSet?.revisitDate }}:
+            </th>
+            <td z-table-cell>{{ referDetails?.revisitDate }}</td>
           </tr>
         </tbody>
       </table>
@@ -1429,39 +1405,38 @@
   </div>
 
   <!--MMU-WDF-Revisit&Refer-->
-  <div class="row col-xs-12" *ngIf="enableTCReferredMMUData === true">
-    <h2 class="text-center" style="margin-left: 50px">
+  <div class="mt-4" *ngIf="enableTCReferredMMUData === true">
+    <p
+      class="ml-12 text-center text-xl font-semibold tracking-tight text-foreground">
       {{ currentLanguageSet?.mmuRevisitRefer }}
-    </h2>
-    <hr />
-    <div class="col-xs-12">
-      <table
-        class="table table-no-border casesheet-table"
-        aria-describedby="wdfRevisit">
-        <tbody>
-          <tr>
-            <th id="mmuReferredtoinstitute">
+    </p>
+    <hr class="mt-2 border-border" />
+    <div class="mt-4 overflow-x-auto">
+      <table z-table aria-describedby="wdfRevisit">
+        <tbody z-table-body>
+          <tr z-table-row>
+            <th z-table-head id="mmuReferredtoinstitute">
               {{ currentLanguageSet?.Referdetails?.referredtoinstitute }}:
             </th>
-            <td>{{ MMUReferDetails?.referredToInstituteName }}</td>
+            <td z-table-cell>{{ MMUReferDetails?.referredToInstituteName }}</td>
           </tr>
-          <tr>
-            <th id="mmuadditionalservices">
+          <tr z-table-row>
+            <th z-table-head id="mmuadditionalservices">
               {{ currentLanguageSet?.Referdetails?.additionalservices }}:
             </th>
-            <td>{{ mmuServiceList }}</td>
+            <td z-table-cell>{{ mmuServiceList }}</td>
           </tr>
-          <tr>
-            <th id="mmuReferralReason">
+          <tr z-table-row>
+            <th z-table-head id="mmuReferralReason">
               {{ currentLanguageSet?.Referdetails?.referralReason }}:
             </th>
-            <td>{{ MMUReferDetails?.referralReason }}</td>
+            <td z-table-cell>{{ MMUReferDetails?.referralReason }}</td>
           </tr>
-          <tr>
-            <th id="mmurevisitDate">
+          <tr z-table-row>
+            <th z-table-head id="mmurevisitDate">
               {{ currentLanguageSet?.Referdetails?.revisitDate }}:
             </th>
-            <td>
+            <td z-table-cell>
               {{
                 mmuCaseSheetData?.referDetails?.revisitDate | date: 'dd/MM/yyyy'
               }}
@@ -1474,3 +1449,22 @@
 
   <!--END MMU-WDF-Revisit&Refer-->
 </div>
+
+<!-- Reusable print-view template (extracted to remove duplicated markup) -->
+<ng-template #durationUnitCell let-unit="unit">
+  <td z-table-cell>
+    {{
+      unit === 'Hours'
+        ? 'Hour(s)'
+        : unit === 'Days'
+          ? 'Day(s)'
+          : unit === 'Weeks'
+            ? 'Week(s)'
+            : unit === 'Months'
+              ? 'Month(s)'
+              : unit === 'Years'
+                ? 'Year(s)'
+                : unit
+    }}
+  </td>
+</ng-template>
