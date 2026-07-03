@@ -17,7 +17,7 @@ import { provideRouter, withHashLocation } from '@angular/router';
 import { routes } from './app/app.routes';
 import { WebcamModule } from 'ngx-webcam';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { NgChartsModule } from 'ng2-charts';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { TrackingModule } from 'Common-UI/v2/tracking';
 import { provideZard } from 'Common-UI/v2/ui/provider';
 import { AppComponent } from './app/app.component';
@@ -49,9 +49,9 @@ bootstrapApplication(AppComponent, {
       ReactiveFormsModule,
       WebcamModule,
       NgxPaginationModule,
-      NgChartsModule,
       TrackingModule.forRoot()
     ),
+    provideCharts(withDefaultRegisterables()),
     provideRouter(routes, withHashLocation()),
     // Zard custom event-manager plugins ({key} multi-key + .debounce template syntax).
     provideZard(),
