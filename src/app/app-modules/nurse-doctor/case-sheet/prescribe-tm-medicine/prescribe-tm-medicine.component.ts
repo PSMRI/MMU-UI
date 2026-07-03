@@ -37,7 +37,7 @@ import {
 import { GeneralUtils } from '../../shared/utility/general-utility';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgIf, NgFor, NgClass, SlicePipe } from '@angular/common';
@@ -162,8 +162,8 @@ export class PrescribeTmMedicineComponent implements OnInit, DoCheck {
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
   constructor(
-    @Inject(MAT_DIALOG_DATA) public input: any,
-    public dialogRef: MatDialogRef<PrescribeTmMedicineComponent>,
+    @Inject(Z_MODAL_DATA) public input: any,
+    public dialogRef: ZardDialogRef<PrescribeTmMedicineComponent>,
     private masterdataService: MasterdataService,
     private fb: FormBuilder,
     public httpServiceService: HttpServiceService,

@@ -21,11 +21,7 @@
  */
 
 import { Component, Inject, OnInit, DoCheck } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogClose,
-} from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { MasterdataService } from 'src/app/app-modules/nurse-doctor/shared/services';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
@@ -50,7 +46,6 @@ import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
     NgFor,
     FormsModule,
     NgIcon,
-    MatDialogClose,
     ZardButtonComponent,
     ZardLoaderComponent,
     ...ZardTableImports,
@@ -78,10 +73,10 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
   pagedItems: any[] = [];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public input: any,
+    @Inject(Z_MODAL_DATA) public input: any,
     private masterdataService: MasterdataService,
     public httpServiceService: HttpServiceService,
-    public dialogRef: MatDialogRef<AllergenSearchComponent>
+    public dialogRef: ZardDialogRef<AllergenSearchComponent>
   ) {}
 
   ngOnInit() {

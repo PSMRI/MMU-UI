@@ -8,7 +8,7 @@
       zType="ghost"
       zSize="icon"
       class="p-0"
-      matDialogClose
+      (click)="dialogRef.close()"
       [zTooltip]="current_language_set?.common?.close"
       zPosition="bottom"
       aria-label="Close">

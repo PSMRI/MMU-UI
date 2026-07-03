@@ -25,7 +25,7 @@ import { MasterdataService } from '../../../nurse-doctor/shared/services/masterd
 import { SpinnerService } from '../../services/spinner.service';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgIf, NgFor } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -76,8 +76,8 @@ export class ProvisionalSearchComponent implements OnInit, DoCheck {
   pagedItems: any[] = [];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public input: any,
-    public dialogRef: MatDialogRef<ProvisionalSearchComponent>,
+    @Inject(Z_MODAL_DATA) public input: any,
+    public dialogRef: ZardDialogRef<ProvisionalSearchComponent>,
     private masterdataService: MasterdataService,
     public httpServiceService: HttpServiceService,
     private spinnerService: SpinnerService

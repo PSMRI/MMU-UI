@@ -29,7 +29,7 @@ import {
   OnDestroy,
   AfterViewChecked,
   AfterViewInit,
-  Injector,
+  ViewContainerRef,
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
@@ -56,7 +56,10 @@ import { SetLanguageComponent } from '../../core/components/set-language.compone
 import { Observable, Subscription, of } from 'rxjs';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { IdrsscoreService } from '../shared/services/idrsscore.service';
-import { MatDialog } from '@angular/material/dialog';
+import { WorkareaValidationService } from './workarea-validation.service';
+import { WorkareaSubmissionService } from './workarea-submission.service';
+import { WorkareaLoaderService } from './workarea-loader.service';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { environment } from 'src/environments/environment';
 import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard.service';
 import { OpenPreviousVisitDetailsComponent } from '../../core/components/open-previous-visit-details/open-previous-visit-details.component';
@@ -270,21 +273,24 @@ export class WorkareaComponent
   idrsScreeningForm!: FormGroup;
 
   constructor(
-    private router: Router,
+    public router: Router,
     private fb: FormBuilder,
     private httpServiceService: HttpServiceService,
     private changeDetectorRef: ChangeDetectorRef,
-    private masterdataService: MasterdataService,
-    private nurseService: NurseService,
-    private confirmationService: ConfirmationService,
-    private doctorService: DoctorService,
+    public masterdataService: MasterdataService,
+    public nurseService: NurseService,
+    public confirmationService: ConfirmationService,
+    public doctorService: DoctorService,
     private route: ActivatedRoute,
-    private beneficiaryDetailsService: BeneficiaryDetailsService,
-    private mdDialog: MatDialog,
-    private readonly injector: Injector,
+    public beneficiaryDetailsService: BeneficiaryDetailsService,
+    private readonly mdDialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     readonly sessionstorage: SessionStorageService,
     private idrsScoreService: IdrsscoreService,
-    private languageComponent: SetLanguageComponent
+    private languageComponent: SetLanguageComponent,
+    private readonly workareaValidation: WorkareaValidationService,
+    private readonly workareaSubmission: WorkareaSubmissionService,
+    private readonly workareaLoader: WorkareaLoaderService
   ) {}
   isSpecialist = false;
   doctorUpdateAndTCSubmit: any;
@@ -395,20 +401,7 @@ export class WorkareaComponent
   }
 
   checkMandatory() {
-    if (this.visitCategory === null || this.visitCategory === undefined) {
-      this.confirmationService.alert(
-        this.currentLanguageSet.alerts.info.proceedFurther
-      );
-    }
-    if (
-      this.nurseService.fileData !== undefined &&
-      this.nurseService.fileData.length > 0
-    ) {
-      this.confirmationService.alert(
-        this.currentLanguageSet.common.kindlyuploadthefiles
-      );
-      this.nurseService.fileData = null;
-    }
+    return this.workareaValidation.checkMandatory(this);
   }
 
   getVisitType() {
@@ -1055,52 +1048,10 @@ export class WorkareaComponent
   }
 
   submitPatientMedicalDetailsForm(medicalForm: any) {
-    this.disableSubmitButton = true;
-    this.showProgressBar = true;
-
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
-    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
-    const serviceID = this.sessionstorage.getItem('serviceID');
-    const createdBy = this.sessionstorage.getItem('userName');
-    const benVisitDetails = {
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
-      parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
-      serviceID: serviceID,
-      createdBy: createdBy,
-    };
-    const temp = {
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
-    };
-    if (this.visitCategory === 'Cancer Screening')
-      this.submitNurseCancerVisitDetails(medicalForm);
-
-    if (this.visitCategory === 'NCD screening')
-      this.submitNurseNCDScreeningVisitDetails(medicalForm);
-
-    if (this.visitCategory === 'General OPD (QC)')
-      this.submitNurseQuickConsultVisitDetails(medicalForm);
-
-    if (this.visitCategory === 'ANC')
-      this.submitNurseANCVisitDetails(medicalForm);
-
-    if (this.visitCategory === 'PNC')
-      this.submitPatientMedicalDetailsPNC(medicalForm);
-
-    if (this.visitCategory === 'General OPD')
-      this.submitNurseGeneralOPDVisitDetails(medicalForm);
-
-    if (this.visitCategory === 'NCD care')
-      this.submitNurseNCDcareVisitDetails(medicalForm);
-
-    if (this.visitCategory === 'COVID-19 Screening')
-      this.submitNurseCovidcareVisitDetails(medicalForm);
+    return this.workareaSubmission.submitPatientMedicalDetailsForm(
+      medicalForm,
+      this
+    );
   }
 
   removeBeneficiaryDataForNurseVisit() {
@@ -1111,29 +1062,7 @@ export class WorkareaComponent
   }
 
   submitDoctorDiagnosisForm() {
-    this.disableSubmitButton = true;
-    // this.showProgressBar = true;
-
-    if (this.visitCategory === 'Cancer Screening')
-      this.submitCancerDiagnosisForm();
-
-    if (this.visitCategory === 'General OPD (QC)')
-      this.submitQuickConsultDiagnosisForm();
-
-    if (this.visitCategory === 'ANC') this.submitANCDiagnosisForm();
-
-    if (this.visitCategory === 'PNC') this.submitPNCDiagnosisForm();
-
-    if (this.visitCategory === 'General OPD')
-      this.submitGeneralOPDDiagnosisForm();
-
-    if (this.visitCategory === 'NCD care') this.submitNCDCareDiagnosisForm();
-
-    if (this.visitCategory === 'COVID-19 Screening')
-      this.submitCovidCareDiagnosisForm();
-
-    if (this.visitCategory === 'NCD screening')
-      this.submitNCDScreeningDiagnosisForm();
+    return this.workareaSubmission.submitDoctorDiagnosisForm(this);
   }
 
   removeBeneficiaryDataForDoctorVisit() {
@@ -1151,154 +1080,7 @@ export class WorkareaComponent
   }
 
   updateDoctorDiagnosisForm() {
-    this.disableSubmitButton = true;
-    this.showProgressBar = true;
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
-
-    const visitCategory = this.sessionstorage.getItem('visitCategory');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
-    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
-    const otherDetails = {
-      beneficiaryRegID: this.beneficiaryRegID,
-      benVisitID: this.visitID,
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      isSpecialist: this.isSpecialist,
-    };
-
-    const prescribedDrugs = this.getLabandPrescriptionData();
-
-    if (visitCategory === 'Cancer Screening') {
-      if (this.checkCancerRequiredData(this.patientMedicalForm)) {
-        this.doctorService
-          .saveSpecialistCancerObservation(
-            this.patientMedicalForm,
-            otherDetails,
-            this.doctorSignatureFlag
-          )
-          .subscribe(
-            (res: any) => {
-              if (res.statusCode === 200 && res.data !== null) {
-                this.patientMedicalForm.reset();
-                this.confirmationService.alert(res.data.message, 'success');
-                // if (prescribedDrugs.length > 0) {
-                //   const prescriptionSmsObject = this.SMSObjectCreation(
-                //     [],
-                //     prescribedDrugs,
-                //     res.data.prescribedDrugIDs
-                //   );
-                //   this.sendPrescriptionSms(prescriptionSmsObject);
-                // }
-                this.confirmationService.alert(res.data.message, 'success');
-                if (this.isSpecialist) {
-                  this.router.navigate(['/common/tcspecialist-worklist']);
-                } else {
-                  this.router.navigate(['/nurse-doctor/doctor-worklist']);
-                }
-              } else {
-                this.resetSpinnerandEnableTheSubmitButton();
-                this.confirmationService.alert(res.errorMessage, 'error');
-              }
-            },
-            err => {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(err, 'error');
-            }
-          );
-      }
-    } else if (visitCategory === 'NCD screening') {
-      if (this.checkNCDScreeningRequiredData(this.patientMedicalForm)) {
-        this.doctorService
-          .updateDoctorDiagnosisDetails(
-            this.patientMedicalForm,
-            visitCategory,
-            otherDetails,
-            this.schedulerData,
-            this.doctorSignatureFlag
-          )
-          .subscribe(
-            (res: any) => {
-              if (res.statusCode === 200 && res.data !== null) {
-                this.patientMedicalForm.reset();
-                sessionStorage.removeItem('instFlag');
-                sessionStorage.removeItem('suspectFlag');
-
-                // if (prescribedDrugs.length > 0) {
-                //   const prescriptionSmsObject = this.SMSObjectCreation(
-                //     [],
-                //     prescribedDrugs,
-                //     res.data.prescribedDrugIDs
-                //   );
-                //   this.sendPrescriptionSms(prescriptionSmsObject);
-                // } else {
-                this.confirmationService.alert(res.data.message, 'success');
-                if (this.isSpecialist) {
-                  this.router.navigate(['/common/tcspecialist-worklist']);
-                } else {
-                  this.router.navigate(['/nurse-doctor/doctor-worklist']);
-                }
-                // }
-              } else {
-                this.resetSpinnerandEnableTheSubmitButton();
-                this.confirmationService.alert(res.errorMessage, 'error');
-              }
-            },
-            err => {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(err, 'error');
-            }
-          );
-      }
-    } else {
-      if (this.checkNurseRequirements(this.patientMedicalForm)) {
-        this.doctorService
-          .updateDoctorDiagnosisDetails(
-            this.patientMedicalForm,
-            visitCategory,
-            otherDetails,
-            this.schedulerData,
-            this.doctorSignatureFlag
-          )
-          .subscribe(
-            (res: any) => {
-              if (res.statusCode === 200 && res.data !== null) {
-                this.patientMedicalForm.reset();
-
-                // if (prescribedDrugs.length > 0) {
-                //   const prescriptionSmsObject = this.SMSObjectCreation(
-                //     [],
-                //     prescribedDrugs,
-                //     res.data.prescribedDrugIDs
-                //   );
-                //   this.sendPrescriptionSms(prescriptionSmsObject);
-                // } else {
-                this.confirmationService.alert(res.data.message, 'success');
-                if (this.isSpecialist) {
-                  this.router.navigate(['/common/tcspecialist-worklist']);
-                } else {
-                  this.router.navigate(['/nurse-doctor/doctor-worklist']);
-                }
-                // }
-              } else {
-                this.resetSpinnerandEnableTheSubmitButton();
-                this.confirmationService.alert(res.errorMessage, 'error');
-              }
-            },
-            err => {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(err, 'error');
-            }
-          );
-      }
-    }
+    return this.workareaSubmission.updateDoctorDiagnosisForm(this);
   }
 
   idrsChange(value: any) {
@@ -1309,49 +1091,10 @@ export class WorkareaComponent
    * Submit Nurse Cancer Details
    */
   submitNurseCancerVisitDetails(medicalForm: any) {
-    if (this.checkCancerRequiredData(medicalForm)) {
-      // check if the form is valid
-      const imageCoordiantes = this.getImageCoordinates(medicalForm);
-      this.showProgressBar = false;
-
-      this.confirmationService
-        .confirm(
-          `info`,
-          this.currentLanguageSet.alerts.info.doctorVisit,
-          'Yes',
-          'No'
-        )
-        .subscribe(result => {
-          if (result !== undefined && result !== null)
-            this.nurseService
-              .postNurseCancerVisitForm(medicalForm, imageCoordiantes, result)
-              .subscribe(
-                (res: any) => {
-                  if (res.statusCode === 200 && res.data !== null) {
-                    this.patientMedicalForm.reset();
-                    this.removeBeneficiaryDataForNurseVisit();
-                    this.confirmationService.alert(
-                      res.data.response,
-                      'success'
-                    );
-                    this.router.navigate(['/nurse-doctor/nurse-worklist']);
-                  } else if (res.statusCode === 9999) {
-                    this.patientMedicalForm.reset();
-                    this.removeBeneficiaryDataForNurseVisit();
-                    this.confirmationService.alert(res.errorMessage, 'info');
-                    this.router.navigate(['/nurse-doctor/nurse-worklist']);
-                  } else {
-                    this.resetSpinnerandEnableTheSubmitButton();
-                    this.confirmationService.alert(res.errorMessage, 'error');
-                  }
-                },
-                err => {
-                  this.resetSpinnerandEnableTheSubmitButton();
-                  this.confirmationService.alert(err, 'error');
-                }
-              );
-        });
-    }
+    return this.workareaSubmission.submitNurseCancerVisitDetails(
+      medicalForm,
+      this
+    );
   }
 
   resetSpinnerandEnableTheSubmitButton() {
@@ -1419,1246 +1162,54 @@ export class WorkareaComponent
    * Submit Doctor Cancer Details
    */
   submitCancerDiagnosisForm() {
-    if (this.checkCancerRequiredData(this.patientMedicalForm)) {
-      // check if the form is valid
-      this.doctorService
-        .postDoctorCancerVisitDetails(
-          this.patientMedicalForm,
-          this.schedulerData,
-          this.doctorSignatureFlag
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              this.confirmationService.alert(res.data.message, 'success');
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitCancerDiagnosisForm(this);
   }
 
   checkNurseRequirements(medicalForm: any) {
-    const vitalsForm = <FormGroup>medicalForm.controls['patientVitalsForm'];
-    const examinationForm = <FormGroup>(
-      this.patientMedicalForm.controls['patientExaminationForm']
-    );
-    const pncForm = <FormGroup>(
-      this.patientMedicalForm.controls['patientPNCForm']
-    );
-    const ancForm = <FormGroup>(
-      this.patientMedicalForm.controls['patientANCForm']
-    );
-    const covidForm = <FormGroup>medicalForm.controls['patientVisitForm'];
-    const covidForm2 = <FormGroup>covidForm.controls['patientCovidForm'];
-    const referForm = <FormGroup>medicalForm.controls['patientReferForm'];
-    const historyForm = <FormGroup>medicalForm.controls['patientHistoryForm'];
-
-    const required = [];
-
-    if (environment.isMMUOfflineSync) {
-      if (
-        this.enableLungAssessment === true &&
-        this.beneficiaryAge >= 18 &&
-        this.nurseService.isAssessmentDone === false
-      ) {
-        required.push('Please perform Lung Assessment');
-      }
-    }
-
-    console.log('pncForm', pncForm);
-
-    if (this.visitCategory === 'PNC') {
-      if (pncForm.controls['deliveryPlace'].errors) {
-        required.push(this.currentLanguageSet.pncData.placeofDelivery);
-      }
-      if (pncForm.controls['deliveryType'].errors) {
-        required.push(this.currentLanguageSet.pncData.typeofDelivery);
-      }
-    }
-
-    if (this.visitCategory === 'ANC') {
-      const ancdetailsForm = <FormGroup>(
-        ancForm.controls['patientANCDetailsForm']
-      );
-      const ANCVitalsForm = <FormGroup>(
-        medicalForm.controls['patientVitalsForm']
-      );
-      console.log('ANCCaseRecordForm', ANCVitalsForm);
-      if (ancdetailsForm.controls['primiGravida'].errors) {
-        required.push(
-          this.currentLanguageSet.ancData.ancDataDetails.primiGravida
-        );
-      }
-      if (ancdetailsForm.controls['lmpDate'].errors) {
-        required.push(
-          this.currentLanguageSet.ancData.ancDataDetails.lastMenstrualPeriod
-        );
-      }
-
-      if (this.attendantType === 'doctor') {
-        const ANCCaseRecordForm = <FormGroup>(
-          medicalForm.controls['patientCaseRecordForm']
-        );
-        if (this.rbsPresent > 0) {
-          let investigationCount = 0;
-          const labTestArray =
-            ANCCaseRecordForm.controls['generalDoctorInvestigationForm'].value
-              .labTest;
-          if (
-            labTestArray !== undefined &&
-            labTestArray !== null &&
-            labTestArray.length > 0
-          ) {
-            labTestArray.forEach((element: any) => {
-              if (
-                element.procedureName !== null &&
-                element.procedureName.toLowerCase() ===
-                  environment.RBSTest.toLowerCase()
-              ) {
-                investigationCount++;
-              }
-            });
-          }
-
-          if (
-            investigationCount === 0 &&
-            ANCVitalsForm.controls['rbsTestResult'].value === null
-          ) {
-            required.push(
-              this.currentLanguageSet.pleaseSelectRBSTestInInvestigation
-            );
-          }
-        }
-        if (this.heamoglobinPresent > 0) {
-          let investigationCount = 0;
-          const labTestArray =
-            ANCCaseRecordForm.controls['generalDoctorInvestigationForm'].value
-              .labTest;
-          if (
-            labTestArray !== null &&
-            labTestArray !== undefined &&
-            labTestArray.length > 0
-          ) {
-            labTestArray.forEach((element: any) => {
-              if (
-                element.procedureName !== null &&
-                element.procedureName.toLowerCase() ===
-                  environment.haemoglobinTest.toLowerCase()
-              ) {
-                investigationCount++;
-              }
-            });
-          }
-
-          if (investigationCount === 0) {
-            required.push(
-              this.currentLanguageSet.pleaseSelectHeamoglobinTestInInvestigation
-            );
-          }
-        }
-      }
-    }
-
-    if (this.visitCategory !== 'General OPD (QC)') {
-      const pregForm = <FormGroup>medicalForm.controls['patientHistoryForm'];
-      const pregForm1 = <FormGroup>pregForm.controls['pastObstericHistory'];
-      const pregForm2 = <FormGroup>(
-        pregForm1.controls['pastObstericHistoryList']
-      );
-      if (this.attendantType === 'nurse') {
-        if (pregForm2.controls) {
-          const score1 = Number(pregForm2.controls['length']);
-          for (let i = 0; i < score1; i++) {
-            const pregForm3 = <FormGroup>pregForm2.controls[i];
-            if (
-              pregForm3.controls['pregOutcome'].value &&
-              pregForm3.controls['pregOutcome'].value.pregOutcome === 'Abortion'
-            ) {
-              if (
-                pregForm3.controls['abortionType'].value &&
-                pregForm3.controls['abortionType'].value.complicationValue ===
-                  'Induced' &&
-                pregForm3.controls['typeofFacility'].errors
-              ) {
-                required.push(
-                  this.currentLanguageSet.historyData.opdNCDPNCHistory.obstetric
-                    .typeofFacility +
-                    '-' +
-                    this.currentLanguageSet.historyData.opdNCDPNCHistory
-                      .obstetric.orderofPregnancy +
-                    ' ' +
-                    pregForm3.value.pregOrder
-                );
-              }
-              if (pregForm3.controls['postAbortionComplication'].errors) {
-                required.push(
-                  this.currentLanguageSet.historyData.opdNCDPNCHistory.obstetric
-                    .complicationPostAbortion +
-                    '-' +
-                    this.currentLanguageSet.historyData.opdNCDPNCHistory
-                      .obstetric.orderofPregnancy +
-                    ' ' +
-                    pregForm3.value.pregOrder
-                );
-              }
-              if (pregForm3.controls['abortionType'].errors) {
-                required.push(
-                  this.currentLanguageSet.historyData.opdNCDPNCHistory.obstetric
-                    .typeOfAbortion +
-                    '-' +
-                    this.currentLanguageSet.historyData.opdNCDPNCHistory
-                      .obstetric.orderofPregnancy +
-                    ' ' +
-                    pregForm3.value.pregOrder
-                );
-              }
-              if (pregForm3.controls['pregDuration'].errors) {
-                required.push(
-                  this.currentLanguageSet.historyData.opdNCDPNCHistory.obstetric
-                    .noOfcompletedWeeks +
-                    '-' +
-                    this.currentLanguageSet.historyData.opdNCDPNCHistory
-                      .obstetric.orderofPregnancy +
-                    ' ' +
-                    pregForm3.value.pregOrder
-                );
-              }
-            }
-          }
-        }
-      }
-    }
-
-    if (this.visitCategory === 'COVID-19 Screening') {
-      const historyForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientHistoryForm']
-      );
-      console.log('HistoryForm', historyForm);
-      const historyForm2 = <FormGroup>(
-        historyForm.controls['comorbidityHistory']
-      );
-      const historyForm3 = <FormArray>(
-        historyForm2.controls['comorbidityConcurrentConditionsList']
-      );
-      const historyForm4 = <FormGroup>historyForm3.controls[0];
-      if (historyForm4.controls['comorbidConditions'].errors) {
-        required.push(
-          this.currentLanguageSet.historyData.ancHistory
-            .combordityANC_OPD_NCD_PNC.comorbidConditions
-        );
-      }
-      if (covidForm2.controls['contactStatus'].errors) {
-        required.push(this.currentLanguageSet.contactHistory);
-      }
-
-      if (covidForm2.controls['travelStatus'].errors) {
-        required.push(this.currentLanguageSet.covid.travelHistory);
-      }
-      if (covidForm2.controls['symptom'].errors) {
-        required.push(
-          this.currentLanguageSet.ExaminationData.cancerScreeningExamination
-            .symptoms.symptoms
-        );
-      }
-    }
-    if (
-      this.visitCategory === 'General OPD' &&
-      this.attendantType === 'doctor'
-    ) {
-      const diagForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientCaseRecordForm']
-      );
-      const diagForm1 = <FormGroup>diagForm.controls['generalDiagnosisForm'];
-      const diagForm2 = <FormArray>(
-        diagForm1.controls['provisionalDiagnosisList']
-      );
-      const diagForm3 = <FormGroup>diagForm2.controls[0];
-      if (diagForm3.controls['provisionalDiagnosis'].errors) {
-        required.push(
-          this.currentLanguageSet.DiagnosisDetails.provisionaldiagnosis
-        );
-      }
-
-      if (!diagForm3.controls['provisionalDiagnosis'].errors) {
-        diagForm2.value.filter((item: any) => {
-          if (
-            item.provisionalDiagnosis &&
-            (item.conceptID === null ||
-              item.conceptID === undefined ||
-              item.conceptID === '')
-          )
-            required.push(
-              this.currentLanguageSet.provisionalDiagnosisIsNotValid
-            );
-        });
-      }
-    }
-    if (this.visitCategory === 'PNC' && this.attendantType === 'doctor') {
-      const diagForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientCaseRecordForm']
-      );
-      const diagForm1 = <FormGroup>diagForm.controls['generalDiagnosisForm'];
-      const diagForm2 = <FormArray>(
-        diagForm1.controls['provisionalDiagnosisList']
-      );
-      const diagForm3 = <FormGroup>diagForm2.controls[0];
-      if (diagForm3.controls['provisionalDiagnosis'].errors) {
-        required.push(
-          this.currentLanguageSet.DiagnosisDetails.provisionaldiagnosis
-        );
-      }
-
-      if (!diagForm3.controls['provisionalDiagnosis'].errors) {
-        diagForm2.value.filter((item: any) => {
-          if (
-            item.provisionalDiagnosis &&
-            (item.conceptID === null ||
-              item.conceptID === undefined ||
-              item.conceptID === '')
-          )
-            required.push(
-              this.currentLanguageSet.provisionalDiagnosisIsNotValid
-            );
-        });
-      }
-
-      const confirmatorydiagForm = <FormArray>(
-        diagForm1.controls['confirmatoryDiagnosisList']
-      );
-
-      confirmatorydiagForm.value.filter((item: any) => {
-        if (
-          item.confirmatoryDiagnosis &&
-          (item.conceptID === null ||
-            item.conceptID === undefined ||
-            item.conceptID === '')
-        )
-          required.push(
-            this.currentLanguageSet.confirmatoryDiagnosisIsNotValid
-          );
-      });
-    }
-    if (
-      this.visitCategory === 'Cancer Screening' &&
-      this.attendantType === 'doctor'
-    ) {
-      const diagForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientCaseRecordForm']
-      );
-      const diagForm1 = <FormGroup>diagForm.controls['diagnosisForm'];
-      if (diagForm1.controls['provisionalDiagnosisPrimaryDoctor'].errors) {
-        required.push(
-          this.currentLanguageSet.DiagnosisDetails.provisionaldiagnosis
-        );
-      }
-    }
-    if (
-      this.visitCategory === 'COVID-19 Screening' &&
-      this.attendantType === 'doctor'
-    ) {
-      const diagForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientCaseRecordForm']
-      );
-      const diagForm1 = <FormGroup>diagForm.controls['generalDiagnosisForm'];
-      console.log('diag', diagForm1);
-      if (diagForm1.controls['doctorDiagnosis'].errors) {
-        required.push(this.currentLanguageSet.doctorDiagnosis);
-      }
-    }
-
-    if (this.visitCategory !== 'General OPD (QC)') {
-      const personalHistory = historyForm.controls['personalHistory'];
-      const allergyList = personalHistory.value.allergicList;
-
-      let snomedTermNotMapped = false;
-
-      if (allergyList.length > 0) {
-        for (let i = 0; i < allergyList.length; i++) {
-          if (allergyList[i].allergyType !== null) {
-            if (
-              allergyList[i].snomedCode === null &&
-              allergyList[i].snomedTerm !== null
-            ) {
-              snomedTermNotMapped = true;
-            } else if (
-              allergyList[i].snomedCode !== null &&
-              allergyList[i].snomedTerm === null
-            ) {
-              snomedTermNotMapped = true;
-            }
-          }
-        }
-      }
-
-      if (snomedTermNotMapped) {
-        required.push(this.currentLanguageSet.allergyNameIsNotValid);
-      }
-    }
-    if (vitalsForm !== undefined && vitalsForm !== null) {
-      if (vitalsForm.controls['systolicBP_1stReading'].errors) {
-        required.push(
-          this.currentLanguageSet.vitalsDetails.vitalsDataANC_OPD_NCD_PNC
-            .systolicBP
-        );
-      }
-      if (vitalsForm.controls['diastolicBP_1stReading'].errors) {
-        required.push(
-          this.currentLanguageSet.vitalsDetails.vitalsDataANC_OPD_NCD_PNC
-            .diastolicBP
-        );
-      }
-
-      if (vitalsForm.controls['height_cm'].errors) {
-        required.push(
-          this.currentLanguageSet.vitalsDetails.AnthropometryDataANC_OPD_NCD_PNC
-            .height
-        );
-      }
-      if (vitalsForm.controls['weight_Kg'].errors) {
-        required.push(
-          this.currentLanguageSet.vitalsDetails.AnthropometryDataANC_OPD_NCD_PNC
-            .weight
-        );
-      }
-      if (vitalsForm.controls['temperature'].errors) {
-        required.push(
-          this.currentLanguageSet.vitalsDetails.vitalsDataANC_OPD_NCD_PNC
-            .temperature
-        );
-      }
-      if (vitalsForm.controls['pulseRate'].errors) {
-        required.push(
-          this.currentLanguageSet.vitalsDetails.vitalsDataANC_OPD_NCD_PNC
-            .pulseRate
-        );
-      }
-    }
-    if (this.visitCategory === 'NCD care') {
-      const diagnosisForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientCaseRecordForm']
-      );
-      if (diagnosisForm !== undefined) {
-        const diagnosisForm1 = <FormGroup>(
-          diagnosisForm.controls['generalDiagnosisForm']
-        );
-        if (diagnosisForm1 !== undefined) {
-          const temp =
-            diagnosisForm1.controls['ncdScreeningConditionArray'].value;
-          if (diagnosisForm1.controls['ncdScreeningConditionArray'].errors) {
-            required.push(this.currentLanguageSet.casesheet.ncdCondition);
-          }
-          let flag = false;
-          if (temp !== undefined && temp !== null && temp.length > 0) {
-            temp.forEach((element: any) => {
-              if (element === 'Other') flag = true;
-            });
-          }
-
-          console.log(
-            diagnosisForm1.controls['ncdScreeningConditionOther'].value
-          );
-          if (
-            flag &&
-            diagnosisForm1.controls['ncdScreeningConditionOther'].value === null
-          )
-            required.push(this.currentLanguageSet.nCDConditionOther);
-        }
-      }
-    }
-    console.log('referForm', referForm);
-    if (this.attendantType === 'doctor') {
-      const referForm = <FormGroup>medicalForm.controls['patientReferForm'];
-      if (
-        referForm.controls['referredToInstituteName'].value === null &&
-        sessionStorage.getItem('instFlag') === 'true' &&
-        sessionStorage.getItem('suspectFlag') === 'true'
-      ) {
-        required.push(
-          'this.currentLanguageSet.Referdetails.higherhealthcarecenter'
-        );
-      }
-
-      if (referForm.controls['refrredToAdditionalServiceList'].value !== null) {
-        if (
-          referForm.controls['refrredToAdditionalServiceList'].value.length > 0
-        ) {
-          if (referForm.controls['referralReason'].errors) {
-            required.push(this.currentLanguageSet.Referdetails.referralReason);
-          }
-        } else if (
-          referForm.controls['referredToInstituteName'].value !== null
-        ) {
-          if (referForm.controls['referralReason'].errors) {
-            required.push(this.currentLanguageSet.Referdetails.referralReason);
-          }
-        }
-      } else if (referForm.controls['referredToInstituteName'].value !== null) {
-        if (referForm.controls['referralReason'].errors) {
-          required.push(this.currentLanguageSet.Referdetails.referralReason);
-        }
-      }
-    }
-    console.log(examinationForm, 'examinationForm');
-    if (examinationForm !== undefined && examinationForm !== null) {
-      const generalExaminationForm = <FormGroup>(
-        examinationForm.controls['generalExaminationForm']
-      );
-      if (generalExaminationForm.controls['typeOfDangerSigns'].errors) {
-        required.push(
-          this.currentLanguageSet.ExaminationData.ANC_OPD_PNCExamination
-            .genExamination.dangersigns
-        );
-      }
-      if (generalExaminationForm.controls['lymphnodesInvolved'].errors) {
-        required.push(
-          this.currentLanguageSet.ExaminationData.ANC_OPD_PNCExamination
-            .genExamination.lymph
-        );
-      }
-      if (generalExaminationForm.controls['typeOfLymphadenopathy'].errors) {
-        required.push(
-          this.currentLanguageSet.ExaminationData.ANC_OPD_PNCExamination
-            .genExamination.typeofLymphadenopathy
-        );
-      }
-      if (generalExaminationForm.controls['extentOfEdema'].errors) {
-        required.push(
-          this.currentLanguageSet.ExaminationData.ANC_OPD_PNCExamination
-            .genExamination.extentofEdema
-        );
-      }
-      if (generalExaminationForm.controls['edemaType'].errors) {
-        required.push(
-          this.currentLanguageSet.ExaminationData.ANC_OPD_PNCExamination
-            .genExamination.typeofEdema
-        );
-      }
-    }
-
-    // Ensure doctor has added at least one prescription
-    if (this.attendantType === 'doctor') {
-      try {
-        const caseRecordForm = <FormGroup>(
-          medicalForm.controls['patientCaseRecordForm']
-        );
-        const drugPrescriptionForm = <FormGroup>(
-          (caseRecordForm && caseRecordForm.controls
-            ? caseRecordForm.controls['drugPrescriptionForm']
-            : null)
-        );
-        if (drugPrescriptionForm) {
-          let prescribedDrugs =
-            drugPrescriptionForm.value &&
-            drugPrescriptionForm.value.prescribedDrugs
-              ? drugPrescriptionForm.value.prescribedDrugs
-              : [];
-          prescribedDrugs = prescribedDrugs.filter((d: any) => !!d.createdBy);
-          if (!prescribedDrugs || prescribedDrugs.length === 0) {
-            required.push(
-              this.currentLanguageSet?.Prescription?.prescriptionRequired ||
-                'Please add at least one prescription'
-            );
-          }
-        }
-      } catch (err) {
-        console.warn('Error validating prescription presence', err);
-      }
-    }
-
-    if (required.length) {
-      this.confirmationService.notify(
-        this.currentLanguageSet.alerts.info.mandatoryFields,
-        required
-      );
-      this.resetSpinnerandEnableTheSubmitButton();
-      return 0;
-    } else {
-      return 1;
-    }
+    return this.workareaValidation.checkNurseRequirements(medicalForm, this);
   }
 
   checkCancerRequiredData(medicalForm: any) {
-    const vitalsForm = <FormGroup>medicalForm.controls['patientVitalsForm'];
-    const referForm = <FormGroup>medicalForm.controls['patientReferForm'];
-    const required = [];
-
-    if (vitalsForm !== undefined && vitalsForm !== null) {
-      if (vitalsForm.controls['height_cm'].errors) {
-        required.push(
-          this.currentLanguageSet.vitalsDetails.AnthropometryDataANC_OPD_NCD_PNC
-            .height
-        );
-      }
-      if (vitalsForm.controls['weight_Kg'].errors) {
-        required.push(
-          this.currentLanguageSet.vitalsDetails.AnthropometryDataANC_OPD_NCD_PNC
-            .weight
-        );
-      }
-      if (vitalsForm.controls['systolicBP_1stReading'].errors) {
-        required.push(
-          this.currentLanguageSet.vitalsDetails.vitalsDataANC_OPD_NCD_PNC
-            .systolicBP
-        );
-      }
-      if (vitalsForm.controls['diastolicBP_1stReading'].errors) {
-        required.push(
-          this.currentLanguageSet.vitalsDetails.vitalsDataANC_OPD_NCD_PNC
-            .diastolicBP
-        );
-      }
-    }
-
-    if (
-      this.visitCategory === 'Cancer Screening' &&
-      this.attendantType === 'doctor'
-    ) {
-      const diagForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientCaseRecordForm']
-      );
-      if (diagForm.controls['provisionalDiagnosisPrimaryDoctor'].errors) {
-        required.push(
-          this.currentLanguageSet.DiagnosisDetails.provisionaldiagnosis
-        );
-      }
-    }
-
-    if (this.attendantType === 'doctor') {
-      if (referForm.controls['refrredToAdditionalServiceList'].value !== null) {
-        if (
-          referForm.controls['refrredToAdditionalServiceList'].value.length > 0
-        ) {
-          if (referForm.controls['referralReason'].errors) {
-            required.push(this.currentLanguageSet.Referdetails.referralReason);
-          }
-        } else if (referForm.controls['referredToInstituteID'].value !== null) {
-          if (referForm.controls['referralReason'].errors) {
-            required.push(this.currentLanguageSet.Referdetails.referralReason);
-          }
-        }
-      } else if (referForm.controls['referredToInstituteID'].value !== null) {
-        if (referForm.controls['referralReason'].errors) {
-          required.push(this.currentLanguageSet.Referdetails.referralReason);
-        }
-      }
-    }
-
-    if (required.length) {
-      this.confirmationService.notify(
-        this.currentLanguageSet.alerts.info.mandatoryFields,
-        required
-      );
-      this.resetSpinnerandEnableTheSubmitButton();
-      return false;
-    } else {
-      return true;
-    }
+    return this.workareaValidation.checkCancerRequiredData(medicalForm, this);
   }
   submitTMPatientVisitForm(medicalForm: any) {
-    if (this.checkTMVisitDetailsRequiredData(medicalForm)) {
-      const tmVisitForm = <FormGroup>medicalForm.controls['patientVisitForm'];
-      const tmPatientVisitDetails = <FormGroup>(
-        tmVisitForm.controls['tmcConfirmationForm'].value
-      );
-      const temp = {
-        beneficiaryRegID: this.beneficiaryRegID,
-        benVisitID: this.visitID,
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        createdBy: this.sessionstorage.getItem('userName'),
-      };
-      console.log(
-        'TM Patient Visit Details',
-        JSON.stringify(tmPatientVisitDetails)
-      );
-      this.doctorService
-        .postTMReferedNurseDetails(
-          this.patientMedicalForm,
-          temp,
-          this.schedulerData
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              this.confirmationService.alert(res.data.response, 'success');
-              this.doctorService.prescribedDrugData = null;
-              this.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitTMPatientVisitForm(medicalForm, this);
   }
   checkTMVisitDetailsRequiredData(medicalForm: any) {
-    const required = [];
-    const tmVisitForm = <FormGroup>medicalForm.controls['patientVisitForm'];
-    const tmVisitForm2 = <FormGroup>tmVisitForm.controls['tmcConfirmationForm'];
-    if (tmVisitForm2.controls['refrredToAdditionalServiceList'].errors) {
-      required.push(this.currentLanguageSet.Referdetails.referredtoinstitute);
-    }
-    console.log('tmVisitForm2', tmVisitForm2);
-    if (
-      tmVisitForm2.value !== undefined &&
-      tmVisitForm2.value.isTMCConfirmed !== undefined &&
-      tmVisitForm2.value.isTMCConfirmed === true
-    )
-      tmVisitForm2.patchValue({ refrredToAdditionalServiceList: null });
-    if (tmVisitForm2.controls['tmcConfirmed'].errors) {
-      required.push(this.currentLanguageSet.tmcConfirmed);
-    }
-    console.log('tmVisitForm2', tmVisitForm2);
-    if (required.length) {
-      this.confirmationService.notify(
-        this.currentLanguageSet.alerts.info.mandatoryFields,
-        required
-      );
-      return false;
-    } else {
-      return true;
-    }
+    return this.workareaValidation.checkTMVisitDetailsRequiredData(
+      medicalForm,
+      this
+    );
   }
   checkNCDScreeningRequiredData(medicalForm: any) {
-    //WDF requirement
-    // let NCDScreeningForm = <FormGroup>medicalForm.controls['NCDScreeningForm'];
-    const NCDScreeningForm = <FormGroup>(
-      medicalForm.controls['patientVitalsForm']
+    return this.workareaValidation.checkNCDScreeningRequiredData(
+      medicalForm,
+      this
     );
-    const ncdIDRSScreeningForm = <FormGroup>(
-      medicalForm.controls['idrsScreeningForm']
-    );
-    const required = [];
-
-    if (environment.isMMUOfflineSync) {
-      if (
-        this.enableLungAssessment === true &&
-        this.beneficiaryAge >= 18 &&
-        this.nurseService.isAssessmentDone === false
-      ) {
-        required.push('Please perform Lung Assessment');
-      }
-    }
-
-    let count = 0;
-    const physicalActivityMandatory = <FormGroup>(
-      medicalForm.controls['patientHistoryForm'].controls[
-        'physicalActivityHistory'
-      ]
-    );
-    if (
-      this.attendantType === 'nurse' &&
-      this.diabetesSelected === 1 &&
-      NCDScreeningForm.controls['rbsCheckBox'].value === true &&
-      NCDScreeningForm.controls['rbsTestResult'].value === null
-    ) {
-      required.push('Please perform RBS Test under Vitals');
-    }
-    if (this.beneficiary.ageVal >= 30) {
-      const familyDiseaseList =
-        medicalForm.controls.patientHistoryForm.controls.familyHistory.controls
-          .familyDiseaseList.value;
-      familyDiseaseList.forEach((element: any) => {
-        if (
-          element.diseaseType !== null &&
-          element.deleted === false &&
-          element.diseaseType.diseaseType === 'Diabetes Mellitus'
-        ) {
-          count++;
-        }
-      });
-      if (count === 0) {
-        required.push(
-          this.currentLanguageSet.pleaseSelectDiabetesMellitusInFamilyHistory
-        );
-      }
-      if (physicalActivityMandatory.controls['activityType'].errors) {
-        required.push(this.currentLanguageSet.physicalActivity);
-      }
-    }
-    let familyMember = 0;
-    const familyDiseasesList =
-      medicalForm.controls.patientHistoryForm.controls.familyHistory.controls
-        .familyDiseaseList.value;
-    let familyDiseasesLength = familyDiseasesList.length;
-    for (let element = 0; element < familyDiseasesList.length; element++) {
-      if (
-        familyDiseasesList[element].diseaseType !== null &&
-        familyDiseasesList[element].deleted === false
-      ) {
-        if (
-          familyDiseasesList[element].familyMembers !== null &&
-          familyDiseasesList[element].familyMembers.length > 0
-        ) {
-          familyMember++;
-        }
-      } else {
-        familyDiseasesLength--;
-      }
-    }
-    if (familyMember !== familyDiseasesLength) {
-      required.push(this.currentLanguageSet.familyMemberInFamilyHistory);
-    }
-    if (ncdIDRSScreeningForm.controls['requiredList'].value !== null) {
-      const ar = ncdIDRSScreeningForm.controls['requiredList'].value;
-      for (let i = 0; i < ar.length; i++) {
-        if (ar[i] !== 'Hypertension') {
-          required.push(ar[i]);
-        }
-      }
-    }
-
-    //WDF requirement -> to check whether RBS test is prescribed or not
-    if (this.attendantType === 'doctor') {
-      const NCDScreeningCaseRecordForm = <FormGroup>(
-        medicalForm.controls['patientCaseRecordForm']
-      );
-      if (this.rbsPresent > 0 && this.diabetesSelected > 0) {
-        let investigationCount = 0;
-        const labTestArray =
-          NCDScreeningCaseRecordForm.controls['generalDoctorInvestigationForm']
-            .value.labTest;
-        if (
-          labTestArray !== undefined &&
-          labTestArray !== null &&
-          labTestArray.length > 0
-        ) {
-          labTestArray.forEach((element: any) => {
-            if (
-              element.procedureName !== null &&
-              element.procedureName.toLowerCase() ===
-                environment.RBSTest.toLowerCase()
-            ) {
-              investigationCount++;
-            }
-          });
-        }
-
-        if (
-          investigationCount === 0 &&
-          this.diabetesSelected === 1 &&
-          NCDScreeningForm.controls['rbsCheckBox'].value === true &&
-          NCDScreeningForm.controls['rbsTestResult'].value === null
-        ) {
-          required.push('Please select RBS Test under Vitals or Investigation');
-        }
-        if (
-          investigationCount === 0 &&
-          this.diabetesSelected === 1 &&
-          NCDScreeningForm.controls['rbsCheckBox'].value === false &&
-          NCDScreeningForm.controls['rbsTestResult'].value === null
-        ) {
-          required.push('Please select RBS Test under Investigation');
-        }
-      }
-      if (this.visualAcuityPresent > 0 && this.visualAcuityMandatory > 0) {
-        let investigationVisualCount = 0;
-        const labTestArray =
-          NCDScreeningCaseRecordForm.controls['generalDoctorInvestigationForm']
-            .value.labTest;
-        if (
-          labTestArray !== null &&
-          labTestArray !== undefined &&
-          labTestArray.length > 0
-        ) {
-          labTestArray.forEach((element: any) => {
-            if (
-              element.procedureName !== null &&
-              element.procedureName.toLowerCase() ===
-                environment.visualAcuityTest.toLowerCase()
-            ) {
-              investigationVisualCount++;
-            }
-          });
-        }
-
-        if (investigationVisualCount === 0) {
-          required.push(
-            this.currentLanguageSet.pleaseSelectVisualAcuityTestInInvestigation
-          );
-        }
-      }
-    }
-    //WDF requirement
-    if (NCDScreeningForm.controls['height_cm'].errors) {
-      required.push(
-        this.currentLanguageSet.vitalsDetails.AnthropometryDataANC_OPD_NCD_PNC
-          .height
-      );
-    }
-    if (NCDScreeningForm.controls['weight_Kg'].errors) {
-      required.push(
-        this.currentLanguageSet.vitalsDetails.AnthropometryDataANC_OPD_NCD_PNC
-          .weight
-      );
-    }
-    if (NCDScreeningForm.controls['waistCircumference_cm'].errors) {
-      required.push(
-        this.currentLanguageSet.vitalsDetails.vitalsCancerscreening_QC
-          .waistCircumference
-      );
-    }
-    console.log('ncdTemp', this.ncdTemperature);
-    if (
-      NCDScreeningForm.controls['temperature'].errors &&
-      this.ncdTemperature === true
-    ) {
-      required.push(
-        this.currentLanguageSet.vitalsDetails.vitalsDataANC_OPD_NCD_PNC
-          .temperature
-      );
-    }
-    if (NCDScreeningForm.controls['pulseRate'].errors) {
-      required.push(
-        this.currentLanguageSet.vitalsDetails.vitalsDataANC_OPD_NCD_PNC
-          .pulseRate
-      );
-    }
-    if (NCDScreeningForm.controls['systolicBP_1stReading'].errors) {
-      required.push(
-        this.currentLanguageSet.vitalsDetails.vitalsDataANC_OPD_NCD_PNC
-          .systolicBP
-      );
-    }
-    if (NCDScreeningForm.controls['diastolicBP_1stReading'].errors) {
-      required.push(
-        this.currentLanguageSet.vitalsDetails.vitalsDataANC_OPD_NCD_PNC
-          .diastolicBP
-      );
-    }
-    if (this.attendantType === 'doctor') {
-      const diagForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientCaseRecordForm']
-      );
-      const diagForm1 = <FormGroup>diagForm.controls['generalDiagnosisForm'];
-      const diagForm2 = <FormArray>(
-        diagForm1.controls['provisionalDiagnosisList']
-      );
-      const diagForm3 = <FormGroup>diagForm2.controls[0];
-      if (
-        diagForm3.controls['provisionalDiagnosis'].errors &&
-        this.enableProvisionalDiag === true
-      ) {
-        required.push(
-          this.currentLanguageSet.DiagnosisDetails.provisionaldiagnosis
-        );
-      }
-
-      if (!diagForm3.controls['provisionalDiagnosis'].errors) {
-        diagForm2.value.filter((item: any) => {
-          if (
-            item.provisionalDiagnosis &&
-            (item.conceptID === null ||
-              item.conceptID === undefined ||
-              item.conceptID === '')
-          )
-            required.push(
-              this.currentLanguageSet.provisionalDiagnosisIsNotValid
-            );
-        });
-      }
-    }
-
-    if (this.attendantType === 'doctor') {
-      const referForm = <FormGroup>medicalForm.controls['patientReferForm'];
-      if (
-        referForm.controls['referredToInstituteName'].value === null &&
-        sessionStorage.getItem('instFlag') === 'true' &&
-        sessionStorage.getItem('suspectFlag') === 'true'
-      ) {
-        required.push(
-          this.currentLanguageSet.Referdetails.higherhealthcarecenter
-        );
-      }
-      if (referForm.controls['refrredToAdditionalServiceList'].value !== null) {
-        if (
-          referForm.controls['refrredToAdditionalServiceList'].value.length > 0
-        ) {
-          if (referForm.controls['referralReason'].errors) {
-            required.push(this.currentLanguageSet.Referdetails.referralReason);
-          }
-        } else if (
-          referForm.controls['referredToInstituteName'].value !== null
-        ) {
-          if (referForm.controls['referralReason'].errors) {
-            required.push(this.currentLanguageSet.Referdetails.referralReason);
-          }
-        }
-      } else if (referForm.controls['referredToInstituteName'].value !== null) {
-        if (referForm.controls['referralReason'].errors) {
-          required.push(this.currentLanguageSet.Referdetails.referralReason);
-        }
-      }
-    }
-
-    if (required.length) {
-      this.confirmationService.notify(
-        this.currentLanguageSet.alerts.info.mandatoryFields,
-        required
-      );
-      this.resetSpinnerandEnableTheSubmitButton();
-      return false;
-    } else {
-      return true;
-    }
   }
 
   /**
    * Submit NURSE GENERAL QUICK CONSULT
    */
   submitNurseQuickConsultVisitDetails(medicalForm: any) {
-    if (this.checkNurseRequirements(medicalForm)) {
-      this.nurseService.postNurseGeneralQCVisitForm(medicalForm).subscribe(
-        (res: any) => {
-          if (res.statusCode === 200 && res.data !== null) {
-            this.patientMedicalForm.reset();
-            this.removeBeneficiaryDataForNurseVisit();
-            this.confirmationService.alert(res.data.response, 'success');
-            this.router.navigate(['/nurse-doctor/nurse-worklist']);
-          } else {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(res.errorMessage, 'error');
-          }
-        },
-        err => {
-          this.resetSpinnerandEnableTheSubmitButton();
-          this.confirmationService.alert(err, 'error');
-        }
-      );
-    }
+    return this.workareaSubmission.submitNurseQuickConsultVisitDetails(
+      medicalForm,
+      this
+    );
   }
 
   checkQuickConsultDoctorData(patientMedicalForm: any) {
-    const form = <FormGroup>(
-      this.patientMedicalForm.controls['patientQuickConsultForm']
+    return this.workareaValidation.checkQuickConsultDoctorData(
+      patientMedicalForm,
+      this
     );
-
-    const referForm = <FormGroup>(
-      patientMedicalForm.controls['patientReferForm']
-    );
-
-    const required = [];
-
-    if (form.controls['chiefComplaintList'].errors) {
-      required.push(
-        this.currentLanguageSet.nurseData.chiefComplaintsDetails.chiefComplaints
-      );
-    }
-    if (form.controls['clinicalObservation'].errors) {
-      required.push(this.currentLanguageSet.casesheet.clinicalObs);
-    }
-    if (form.controls['provisionalDiagnosisList'].errors) {
-      required.push(
-        this.currentLanguageSet.DiagnosisDetails.provisionaldiagnosis
-      );
-    }
-    if (
-      this.visitCategory === 'General OPD (QC)' &&
-      this.attendantType === 'doctor'
-    ) {
-      const diagForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientQuickConsultForm']
-      );
-      const diagForm2 = <FormArray>(
-        diagForm.controls['provisionalDiagnosisList']
-      );
-      console.log('diagForm2', diagForm2);
-      const diagForm3 = <FormGroup>diagForm2.controls[0];
-      if (diagForm3.controls['provisionalDiagnosis'].errors) {
-        required.push(
-          this.currentLanguageSet.DiagnosisDetails.provisionaldiagnosis
-        );
-      }
-
-      if (!diagForm3.controls['provisionalDiagnosis'].errors) {
-        diagForm2.value.filter((item: any) => {
-          if (
-            item.provisionalDiagnosis &&
-            (item.conceptID === null ||
-              item.conceptID === undefined ||
-              item.conceptID === '')
-          )
-            required.push(
-              this.currentLanguageSet.provisionalDiagnosisIsNotValid
-            );
-        });
-      }
-    }
-
-    if (referForm.controls['refrredToAdditionalServiceList'].value !== null) {
-      if (
-        referForm.controls['refrredToAdditionalServiceList'].value.length > 0
-      ) {
-        if (referForm.controls['referralReason'].errors) {
-          required.push(this.currentLanguageSet.Referdetails.referralReason);
-        }
-      } else if (referForm.controls['referredToInstituteName'].value !== null) {
-        if (referForm.controls['referralReason'].errors) {
-          required.push(this.currentLanguageSet.Referdetails.referralReason);
-        }
-      }
-    } else if (referForm.controls['referredToInstituteName'].value !== null) {
-      if (this.visitCategory === 'FP & Contraceptive Services') {
-        if (referForm.controls['referralReasonList'].errors) {
-          required.push(this.currentLanguageSet.Referdetails.referralReason);
-        }
-      } else {
-        if (referForm.controls['referralReason'].errors) {
-          required.push(this.currentLanguageSet.Referdetails.referralReason);
-        }
-      }
-    }
-
-    // For quick consult doctor flow, ensure at least one prescription exists
-    if (this.attendantType === 'doctor') {
-      try {
-        const quickConsultCaseRecordForm = <FormGroup>(
-          this.patientMedicalForm.controls['patientCaseRecordForm']
-        );
-        const prescription =
-          quickConsultCaseRecordForm && quickConsultCaseRecordForm.controls
-            ? quickConsultCaseRecordForm.controls['drugPrescriptionForm']
-            : null;
-        if (prescription) {
-          let prescribedDrugs =
-            prescription.value && prescription.value.prescribedDrugs
-              ? prescription.value.prescribedDrugs
-              : [];
-          prescribedDrugs = prescribedDrugs.filter((d: any) => !!d.createdBy);
-          if (!prescribedDrugs || prescribedDrugs.length === 0) {
-            required.push(
-              this.currentLanguageSet?.Prescription?.prescriptionRequired ||
-                'Please add at least one prescription'
-            );
-          }
-        }
-      } catch (err) {
-        console.warn(
-          'Error validating quick consult prescription presence',
-          err
-        );
-      }
-    }
-
-    if (required.length) {
-      this.confirmationService.notify(
-        this.currentLanguageSet.alerts.info.mandatoryFields,
-        required
-      );
-      this.resetSpinnerandEnableTheSubmitButton();
-      return 0;
-    } else {
-      return 1;
-    }
   }
 
   /**
    * Submit DOCTOR GENERAL QUICK CONSULT
    */
   submitQuickConsultDiagnosisForm() {
-    const otherQcDetails = {
-      beneficiaryRegID: this.beneficiaryRegID,
-      benVisitID: this.visitID,
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
-    };
-
-    const valid = this.checkQuickConsultDoctorData(this.patientMedicalForm);
-    if (valid) {
-      const patientQuickConsultForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientQuickConsultForm']
-      );
-      const patientQuickConsultFormValue = JSON.parse(
-        JSON.stringify(patientQuickConsultForm.value)
-      );
-      console.log(patientQuickConsultFormValue, 'formValue');
-      const chiefComplaintList =
-        patientQuickConsultFormValue.chiefComplaintList;
-      chiefComplaintList.forEach((element: any) => {
-        if (element.chiefComplaint) {
-          element.chiefComplaintID = element.chiefComplaint.chiefComplaintID;
-          element.chiefComplaint = element.chiefComplaint.chiefComplaint;
-        }
-      });
-
-      let prescribedDrugs =
-        patientQuickConsultFormValue.prescription.prescribedDrugs;
-      prescribedDrugs = prescribedDrugs.filter((item: any) => !!item.createdBy);
-      patientQuickConsultFormValue.prescription = prescribedDrugs;
-
-      let labTestOrders = [];
-      if (
-        patientQuickConsultFormValue.test !== null &&
-        patientQuickConsultFormValue.radiology !== null
-      ) {
-        labTestOrders = patientQuickConsultFormValue.test.concat(
-          patientQuickConsultFormValue.radiology
-        );
-      } else if (patientQuickConsultFormValue.test !== null) {
-        labTestOrders = Object.assign([], patientQuickConsultFormValue.test);
-      } else {
-        labTestOrders = Object.assign(
-          [],
-          patientQuickConsultFormValue.radiology
-        );
-      }
-
-      patientQuickConsultFormValue.labTestOrders = labTestOrders;
-      patientQuickConsultFormValue.test = undefined;
-      patientQuickConsultFormValue.radiology = undefined;
-      patientQuickConsultFormValue.refer = this.doctorService.postGeneralRefer(
-        this.patientReferForm,
-        otherQcDetails
-      );
-
-      this.doctorService
-        .postQuickConsultDetails(
-          { quickConsultation: patientQuickConsultFormValue },
-          this.schedulerData,
-          this.doctorSignatureFlag
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = this.SMSObjectCreation(
-              //     [],
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   this.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              this.confirmationService.alert(res.data.message, 'success');
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitQuickConsultDiagnosisForm(this);
   }
 
   SMSObjectCreation(
@@ -2680,11 +1231,14 @@ export class WorkareaComponent
   }
 
   sendPrescriptionSms(prescriptionSmsObject: any) {
-    const dialogRef = this.mdDialog.open(SmsNotificationComponent, {
-      width: '900px',
-      disableClose: true,
-      injector: this.injector,
-      data: prescriptionSmsObject,
+    const dialogRef = this.mdDialog.create<SmsNotificationComponent, unknown>({
+      zContent: SmsNotificationComponent,
+      zWidth: '900px',
+      zMaskClosable: false,
+      zData: prescriptionSmsObject,
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -2697,473 +1251,78 @@ export class WorkareaComponent
   }
 
   updateQuickConsultDiagnosisForm() {
-    const patientQuickConsultDetails = this.mapDoctorQuickConsultDetails();
-    const prescribedDrugs = patientQuickConsultDetails.prescription || [];
-    this.doctorService
-      .updateQuickConsultDetails(
-        { quickConsultation: patientQuickConsultDetails },
-        this.schedulerData,
-        this.isSpecialist,
-        this.doctorSignatureFlag
-      )
-      .subscribe(
-        (res: any) => {
-          if (res.statusCode === 200 && res.data !== null) {
-            this.patientMedicalForm.reset();
-            // if (prescribedDrugs.length > 0) {
-            //   const prescriptionSmsObject = this.SMSObjectCreation(
-            //     [],
-            //     prescribedDrugs,
-            //     res.data.prescribedDrugIDs
-            //   );
-            //   this.sendPrescriptionSms(prescriptionSmsObject);
-            // } else {
-            this.confirmationService.alert(res.data.message, 'success');
-            if (this.isSpecialist) {
-              this.router.navigate(['/common/tcspecialist-worklist']);
-            } else {
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-            }
-            // }
-          } else {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(res.errorMessage, 'error');
-          }
-        },
-        err => {
-          this.resetSpinnerandEnableTheSubmitButton();
-          this.confirmationService.alert(err, 'error');
-        }
-      );
+    return this.workareaSubmission.updateQuickConsultDiagnosisForm(this);
   }
 
   mapDoctorQuickConsultDetails() {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
-    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
-    const otherQcDetails = {
-      beneficiaryRegID: this.beneficiaryRegID,
-      benVisitID: this.visitID,
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      isSpecialist: this.isSpecialist,
-    };
-    const patientQuickConsultForm = <FormGroup>(
-      this.patientMedicalForm.controls['patientQuickConsultForm']
-    );
-    const patientQuickConsultDetails = JSON.parse(
-      JSON.stringify(patientQuickConsultForm.value)
-    );
-    let prescribedDrugs =
-      patientQuickConsultDetails.prescription.prescribedDrugs;
-    prescribedDrugs = prescribedDrugs.filter((item: any) => !!item.createdBy);
-    patientQuickConsultDetails.prescription = prescribedDrugs;
-
-    const chiefComplaintList = patientQuickConsultDetails.chiefComplaintList;
-    chiefComplaintList.forEach((element: any) => {
-      if (element.chiefComplaint) {
-        element.chiefComplaintID = element.chiefComplaint.chiefComplaintID;
-        element.chiefComplaint = element.chiefComplaint.chiefComplaint;
-      }
-    });
-
-    let labTestOrders = [];
-    if (
-      patientQuickConsultDetails.test !== null &&
-      patientQuickConsultDetails.radiology !== null
-    ) {
-      labTestOrders = patientQuickConsultDetails.test.concat(
-        patientQuickConsultDetails.radiology
-      );
-    } else if (patientQuickConsultDetails.test !== null) {
-      labTestOrders = Object.assign([], patientQuickConsultDetails.test);
-    } else {
-      labTestOrders = Object.assign([], patientQuickConsultDetails.radiology);
-    }
-    labTestOrders = labTestOrders.filter((test: any) => !test.disabled);
-
-    patientQuickConsultDetails.labTestOrders = labTestOrders;
-    patientQuickConsultDetails.chiefComplaintList = chiefComplaintList;
-    patientQuickConsultDetails.prescribedDrugs = prescribedDrugs;
-    patientQuickConsultDetails.test = undefined;
-    patientQuickConsultDetails.radiology = undefined;
-    this.patientReferForm = this.patientMedicalForm.get(
-      'patientReferForm'
-    ) as FormGroup;
-    patientQuickConsultDetails.refer = this.doctorService.postGeneralRefer(
-      this.patientReferForm,
-      otherQcDetails
-    );
-
-    return patientQuickConsultDetails;
+    return this.workareaSubmission.mapDoctorQuickConsultDetails(this);
   }
   /**
    * Submit NURSE ANC Details
    */
   submitNurseANCVisitDetails(medicalForm: any) {
-    if (this.checkNurseRequirements(medicalForm)) {
-      this.nurseService
-        .postNurseANCVisitForm(
-          medicalForm,
-          null,
-          this.visitCategory,
-          this.beneficiary.ageVal
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForNurseVisit();
-              this.confirmationService.alert(res.data.response, 'success');
-              this.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitNurseANCVisitDetails(
+      medicalForm,
+      this
+    );
   }
 
   /**
    * Submit DOCTOR ANC Details
    */
   submitANCDiagnosisForm() {
-    if (this.checkNurseRequirements(this.patientMedicalForm)) {
-      const temp = {
-        beneficiaryRegID: this.beneficiaryRegID,
-        benVisitID: this.visitID,
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        createdBy: this.sessionstorage.getItem('userName'),
-      };
-      const prescribedDrugs = this.getLabandPrescriptionData();
-      this.doctorService
-        .postDoctorANCDetails(
-          this.patientMedicalForm,
-          temp,
-          this.schedulerData,
-          this.doctorSignatureFlag
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = this.SMSObjectCreation(
-              //     [],
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   this.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              this.confirmationService.alert(res.data.message, 'success');
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitANCDiagnosisForm(this);
   }
 
   /**
    * Submit Function for NCD Care
    */
   submitNurseNCDcareVisitDetails(medicalForm: any) {
-    if (this.checkNurseRequirements(medicalForm)) {
-      this.nurseService
-        .postNurseNCDCareVisitForm(
-          medicalForm,
-          this.visitCategory,
-          this.beneficiary
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForNurseVisit();
-              this.confirmationService.alert(res.data.response, 'success');
-              this.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitNurseNCDcareVisitDetails(
+      medicalForm,
+      this
+    );
   }
 
   /**
    * Submit Function for Covid
    */
   submitNurseCovidcareVisitDetails(medicalForm: any) {
-    if (this.checkNurseRequirements(medicalForm)) {
-      this.nurseService
-        .postNurseCovidCareVisitForm(
-          medicalForm,
-          this.visitCategory,
-          this.beneficiary
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForNurseVisit();
-              this.confirmationService.alert(res.data.response, 'success');
-              this.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitNurseCovidcareVisitDetails(
+      medicalForm,
+      this
+    );
   }
 
   /**
    * Submit Nurse NCD Screening
    */
   submitNurseNCDScreeningVisitDetails(medicalForm: any) {
-    if (this.checkNCDScreeningRequiredData(medicalForm)) {
-      this.nurseService
-        .postNCDScreeningForm(medicalForm, this.visitCategory)
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForNurseVisit();
-              this.confirmationService.alert(res.data.response, 'success');
-              this.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitNurseNCDScreeningVisitDetails(
+      medicalForm,
+      this
+    );
   }
 
   submitNCDCareDiagnosisForm() {
-    if (this.checkNurseRequirements(this.patientMedicalForm)) {
-      const temp = {
-        beneficiaryRegID: this.beneficiaryRegID,
-        benVisitID: this.visitID,
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        createdBy: this.sessionstorage.getItem('userName'),
-      };
-
-      const patientVisitForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientCaseRecordForm']
-      );
-      const prescribedDrugs = this.getLabandPrescriptionData();
-
-      this.doctorService
-        .postDoctorNCDCareDetails(
-          this.patientMedicalForm,
-          temp,
-          this.schedulerData,
-          this.doctorSignatureFlag
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = this.SMSObjectCreation(
-              //     JSON.parse(
-              //       JSON.stringify(
-              //         (
-              //           patientVisitForm.get(
-              //             'generalDiagnosisForm.provisionalDiagnosisList'
-              //           ) as FormArray
-              //         ).value
-              //       )
-              //     ),
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   this.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              this.confirmationService.alert(res.data.message, 'success');
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitNCDCareDiagnosisForm(this);
   }
 
   submitCovidCareDiagnosisForm() {
-    if (this.checkNurseRequirements(this.patientMedicalForm)) {
-      const temp = {
-        beneficiaryRegID: this.beneficiaryRegID,
-        benVisitID: this.visitID,
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        createdBy: this.sessionstorage.getItem('userName'),
-      };
-
-      const patientVisitForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientCaseRecordForm']
-      );
-
-      this.doctorService
-        .postDoctorCovidCareDetails(
-          this.patientMedicalForm,
-          temp,
-          this.schedulerData
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              this.confirmationService.alert(res.data.response, 'success');
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitCovidCareDiagnosisForm(this);
   }
   submitNCDScreeningDiagnosisForm() {
-    if (this.checkNCDScreeningRequiredData(this.patientMedicalForm)) {
-      const temp = {
-        beneficiaryRegID: this.beneficiaryRegID,
-        benVisitID: this.visitID,
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        createdBy: this.sessionstorage.getItem('userName'),
-      };
-
-      const patientVisitForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientCaseRecordForm']
-      );
-
-      const prescribedDrugs = this.getLabandPrescriptionData();
-
-      this.doctorService
-        .postDoctorNCDScreeningDetails(
-          this.patientMedicalForm,
-          temp,
-          this.schedulerData,
-          this.doctorSignatureFlag
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              sessionStorage.removeItem('instFlag');
-              sessionStorage.removeItem('suspectFlag');
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = this.SMSObjectCreation(
-              //     JSON.parse(
-              //       JSON.stringify(
-              //         (
-              //           patientVisitForm.get(
-              //             'generalDiagnosisForm.provisionalDiagnosisList'
-              //           ) as FormArray
-              //         ).value
-              //       )
-              //     ),
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   this.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              this.confirmationService.alert(res.data.message, 'success');
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitNCDScreeningDiagnosisForm(this);
   }
   /**
    * Submit Function for PNC
    *
    */
   submitPatientMedicalDetailsPNC(medicalForm: any) {
-    if (this.checkNurseRequirements(medicalForm)) {
-      this.nurseService
-        .postNursePNCVisitForm(
-          medicalForm,
-          this.visitCategory,
-          this.beneficiary
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForNurseVisit();
-              this.confirmationService.alert(res.data.response, 'success');
-              this.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitPatientMedicalDetailsPNC(
+      medicalForm,
+      this
+    );
   }
 
   /**
@@ -3171,145 +1330,18 @@ export class WorkareaComponent
    *
    */
   submitNurseGeneralOPDVisitDetails(medicalForm: any) {
-    if (this.checkNurseRequirements(medicalForm)) {
-      this.nurseService
-        .postNurseGeneralOPDVisitForm(
-          medicalForm,
-          this.visitCategory,
-          this.beneficiary
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForNurseVisit();
-              this.confirmationService.alert(res.data.response, 'success');
-              this.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitNurseGeneralOPDVisitDetails(
+      medicalForm,
+      this
+    );
   }
 
   submitGeneralOPDDiagnosisForm() {
-    if (this.checkNurseRequirements(this.patientMedicalForm)) {
-      const temp = {
-        beneficiaryRegID: this.beneficiaryRegID,
-        benVisitID: this.visitID,
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        createdBy: this.sessionstorage.getItem('userName'),
-      };
-      const patientVisitForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientCaseRecordForm']
-      );
-
-      const prescribedDrugs = this.getLabandPrescriptionData();
-
-      this.doctorService
-        .postDoctorGeneralOPDDetails(
-          this.patientMedicalForm,
-          temp,
-          this.schedulerData,
-          this.doctorSignatureFlag
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = this.SMSObjectCreation(
-              //     JSON.parse(
-              //       JSON.stringify(
-              //         (
-              //           patientVisitForm.get(
-              //             'generalDiagnosisForm.provisionalDiagnosisList'
-              //           ) as FormArray
-              //         ).value
-              //       )
-              //     ),
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   this.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              this.confirmationService.alert(res.data.message, 'success');
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitGeneralOPDDiagnosisForm(this);
   }
 
   submitPNCDiagnosisForm() {
-    if (this.checkNurseRequirements(this.patientMedicalForm)) {
-      const temp = {
-        beneficiaryRegID: this.beneficiaryRegID,
-        benVisitID: this.visitID,
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        createdBy: this.sessionstorage.getItem('userName'),
-      };
-
-      const prescribedDrugs = this.getLabandPrescriptionData();
-      this.doctorService
-        .postDoctorPNCDetails(
-          this.patientMedicalForm,
-          temp,
-          this.schedulerData,
-          this.doctorSignatureFlag
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = this.SMSObjectCreation(
-              //     JSON.parse(
-              //       JSON.stringify(
-              //         (
-              //           this.patientVisitForm.get(
-              //             'generalDiagnosisForm.provisionalDiagnosisList'
-              //           ) as FormArray
-              //         ).value
-              //       )
-              //     ),
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   this.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              this.confirmationService.alert(res.data.message, 'success');
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitPNCDiagnosisForm(this);
   }
 
   getLabandPrescriptionData() {
@@ -3352,170 +1384,14 @@ export class WorkareaComponent
     }
   }
   checkNCDScreeningHistory(historyForm: any) {
-    const required = [];
-
-    let count = 0;
-    const familyDiseaseList =
-      historyForm.controls.patientHistoryForm.controls.familyHistory.controls
-        .familyDiseaseList.value;
-    familyDiseaseList.forEach((element: any) => {
-      if (
-        element.diseaseType !== null &&
-        element.deleted === false &&
-        element.diseaseType.diseaseType === 'Diabetes Mellitus'
-      ) {
-        count++;
-      }
-    });
-    if (this.beneficiaryAge < 30) {
-      count++;
-    }
-
-    if (count === 0) {
-      required.push(
-        this.currentLanguageSet.pleaseSelectDiabetesMellitusInFamilyHistory
-      );
-    }
-    let familyMember = 0;
-    const familyDiseasesList =
-      historyForm.controls.patientHistoryForm.controls.familyHistory.controls
-        .familyDiseaseList.value;
-    let familyDiseasesLength = familyDiseasesList.length;
-    for (let element = 0; element < familyDiseasesList.length; element++) {
-      if (
-        familyDiseasesList[element].diseaseType !== null &&
-        familyDiseasesList[element].deleted === false
-      ) {
-        if (
-          familyDiseasesList[element].familyMembers !== null &&
-          familyDiseasesList[element].familyMembers.length > 0
-        ) {
-          familyMember++;
-        }
-      } else {
-        familyDiseasesLength--;
-      }
-    }
-    if (familyMember !== familyDiseasesLength) {
-      required.push(this.currentLanguageSet.familyMemberInFamilyHistory);
-    }
-
-    if (required.length) {
-      this.confirmationService.notify(
-        this.currentLanguageSet.alerts.info.mandatoryFields,
-        required
-      );
-      return 0;
-    } else {
-      return 1;
-    }
+    return this.workareaValidation.checkNCDScreeningHistory(historyForm, this);
   }
 
   checkPastObstericHistory(generalOPDHistory: any) {
-    const vitalsForm = <FormGroup>(
-      generalOPDHistory.controls['patientHistoryForm']
+    return this.workareaValidation.checkPastObstericHistory(
+      generalOPDHistory,
+      this
     );
-    const pregForm1 = <FormGroup>vitalsForm.controls['pastObstericHistory'];
-    const pregForm2 = <FormGroup>pregForm1.controls['pastObstericHistoryList'];
-    const historyForm = <FormGroup>(
-      generalOPDHistory.controls['patientHistoryForm']
-    );
-    const required = [];
-    if (pregForm2.controls) {
-      const score1 = Number(pregForm2.controls['length']);
-      for (let i = 0; i < score1; i++) {
-        const pregForm3 = <FormGroup>pregForm2.controls[i];
-        if (
-          pregForm3.controls['pregOutcome'].value &&
-          pregForm3.controls['pregOutcome'].value.pregOutcome === 'Abortion'
-        ) {
-          if (
-            pregForm3.controls['abortionType'].value &&
-            pregForm3.controls['abortionType'].value.complicationValue ===
-              'Induced' &&
-            pregForm3.controls['typeofFacility'].errors
-          ) {
-            required.push(
-              this.currentLanguageSet.historyData.opdNCDPNCHistory.obstetric
-                .typeofFacility +
-                '-' +
-                this.currentLanguageSet.historyData.opdNCDPNCHistory.obstetric
-                  .orderofPregnancy +
-                ' ' +
-                pregForm3.value.pregOrder
-            );
-          }
-          if (pregForm3.controls['postAbortionComplication'].errors) {
-            required.push(
-              this.currentLanguageSet.historyData.opdNCDPNCHistory.obstetric
-                .complicationPostAbortion +
-                '-' +
-                this.currentLanguageSet.historyData.opdNCDPNCHistory.obstetric
-                  .orderofPregnancy +
-                ' ' +
-                pregForm3.value.pregOrder
-            );
-          }
-          if (pregForm3.controls['abortionType'].errors) {
-            required.push(
-              this.currentLanguageSet.historyData.opdNCDPNCHistory.obstetric
-                .typeOfAbortion +
-                '-' +
-                this.currentLanguageSet.historyData.opdNCDPNCHistory.obstetric
-                  .orderofPregnancy +
-                ' ' +
-                pregForm3.value.pregOrder
-            );
-          }
-          if (pregForm3.controls['pregDuration'].errors) {
-            required.push(
-              this.currentLanguageSet.historyData.opdNCDPNCHistory.obstetric
-                .noOfcompletedWeeks +
-                '-' +
-                this.currentLanguageSet.historyData.opdNCDPNCHistory.obstetric
-                  .orderofPregnancy +
-                ' ' +
-                pregForm3.value.pregOrder
-            );
-          }
-        }
-      }
-    }
-    const personalHistory = historyForm.controls['personalHistory'];
-    const allergyList = personalHistory.value.allergicList;
-
-    let snomedTermNotMapped = false;
-
-    if (allergyList.length > 0) {
-      for (let i = 0; i < allergyList.length; i++) {
-        if (allergyList[i].allergyType !== null) {
-          if (
-            allergyList[i].snomedCode === null &&
-            allergyList[i].snomedTerm !== null
-          ) {
-            snomedTermNotMapped = true;
-          } else if (
-            allergyList[i].snomedCode !== null &&
-            allergyList[i].snomedTerm === null
-          ) {
-            snomedTermNotMapped = true;
-          }
-        }
-      }
-    }
-
-    if (snomedTermNotMapped) {
-      required.push(this.currentLanguageSet.allergyNameIsNotValid);
-    }
-    if (required.length) {
-      this.confirmationService.notify(
-        this.currentLanguageSet.alerts.info.mandatoryFields,
-        required
-      );
-      return 0;
-    } else {
-      return 1;
-    }
   }
 
   updatePatientExamination() {
@@ -3575,167 +1451,56 @@ export class WorkareaComponent
 
   beneficiaryDetailsSubscription: any;
   getBeneficiaryDetails() {
-    this.beneficiaryDetailsSubscription =
-      this.beneficiaryDetailsService.beneficiaryDetails$.subscribe(
-        beneficiary => {
-          if (beneficiary) {
-            this.beneficiary = beneficiary;
-            this.beneficiaryAge = beneficiary.ageVal;
-            console.log('beneficiary', beneficiary);
-          }
-        }
-      );
+    return this.workareaLoader.getBeneficiaryDetails(this);
   }
 
   visitDetailMasterDataSubscription: any;
   getVisitReasonAndCategory() {
-    this.masterdataService.getVisitDetailMasterData();
-    this.visitDetailMasterDataSubscription =
-      this.masterdataService.visitDetailMasterData$.subscribe(visitDetails => {
-        if (visitDetails) {
-          this.visitCategoryList = visitDetails.visitCategories;
-          console.log('Visit Details Master Data', visitDetails);
-
-          if (this.visitCategory) {
-            this.getNurseMasterData(this.visitCategory);
-            this.getDoctorMasterData(this.visitCategory);
-          }
-        }
-      });
+    return this.workareaLoader.getVisitReasonAndCategory(this);
   }
 
   getNurseMasterData(visitCategory: string) {
-    const visitID = this.getVisitCategoryID(visitCategory);
-    const serviceProviderID = this.sessionstorage.getItem('providerServiceID');
-
-    if (visitID)
-      this.masterdataService.getNurseMasterData(visitID, serviceProviderID);
+    return this.workareaLoader.getNurseMasterData(visitCategory, this);
   }
 
   getDoctorMasterData(visitCategory: string) {
-    const visitID = this.getVisitCategoryID(visitCategory);
-    const serviceProviderID = this.sessionstorage.getItem('providerServiceID');
-
-    if (visitID)
-      this.masterdataService.getDoctorMasterData(visitID, serviceProviderID);
+    return this.workareaLoader.getDoctorMasterData(visitCategory, this);
   }
 
   getVisitCategoryID(visitCategory: string) {
-    if (visitCategory && this.visitCategoryList) {
-      const temp = this.visitCategoryList.filter((category: any) => {
-        return category.visitCategory === visitCategory;
-      });
-      if (temp.length > 0) return temp[0].visitCategoryID;
-    }
-    return null;
+    return this.workareaLoader.getVisitCategoryID(visitCategory, this);
   }
 
   getPregnancyStatus() {
-    const pg = <FormGroup>this.patientMedicalForm.controls['patientVisitForm'];
-    pg.controls['patientVisitDetailsForm'].valueChanges.subscribe(value => {
-      if (value.pregnancyStatus) {
-        this.pregnancyStatus = value.pregnancyStatus;
-      } else {
-        this.pregnancyStatus = null;
-      }
-    });
+    return this.workareaLoader.getPregnancyStatus(this);
   }
 
   patchGravidaValue() {
-    const af = this.patientMedicalForm.controls['patientANCForm'] as FormGroup;
-    const pof = (<FormGroup>(
-      this.patientMedicalForm.controls['patientHistoryForm']
-    )).controls['pastObstericHistory'] as FormGroup;
-
-    (<FormGroup>af.controls['obstetricFormulaForm']).controls[
-      'gravida_G'
-    ].valueChanges.subscribe(value => {
-      if (pof && value && value > 1)
-        pof.controls['totalNoOfPreg'].setValue(value);
-    });
+    return this.workareaLoader.patchGravidaValue(this);
   }
 
   getCurrentVitals() {
-    this.patientMedicalForm.controls[
-      'patientVitalsForm'
-    ].valueChanges.subscribe(value => {
-      if (value) {
-        this.currentVitals = value;
-      }
-    });
+    return this.workareaLoader.getCurrentVitals(this);
   }
 
   patchCancerFindings() {
-    this.patientMedicalForm.valueChanges.subscribe(
-      (patientMedicalForm: any) => {
-        this.findings = {
-          briefHistory:
-            patientMedicalForm.patientExaminationForm.signsForm.observation,
-          oralExamination:
-            patientMedicalForm.patientExaminationForm.oralExaminationForm
-              .observation,
-          abdominalExamination:
-            patientMedicalForm.patientExaminationForm.abdominalExaminationForm
-              .observation,
-          gynecologicalExamination:
-            patientMedicalForm.patientExaminationForm
-              .gynecologicalExaminationForm.observation,
-        };
-      }
-    );
+    return this.workareaLoader.patchCancerFindings(this);
   }
 
   getANCDiagnosis() {
-    const ANCForm = <FormGroup>(
-      this.patientMedicalForm.controls['patientANCForm']
-    );
-    const CaseRecordForm = <FormGroup>(
-      this.patientMedicalForm.controls['patientCaseRecordForm']
-    );
-
-    ANCForm.controls['obstetricFormulaForm'].valueChanges.subscribe(value => {
-      CaseRecordForm.controls['generalDiagnosisForm'].patchValue(value);
-    });
-    ANCForm.controls['patientANCDetailsForm'].valueChanges.subscribe(value => {
-      CaseRecordForm.controls['generalDiagnosisForm'].patchValue(value);
-    });
+    return this.workareaLoader.getANCDiagnosis(this);
   }
 
   getPrimeGravidaStatus() {
-    const ANCForm = <FormGroup>(
-      this.patientMedicalForm.controls['patientANCForm']
-    );
-    (<FormGroup>ANCForm.controls['patientANCDetailsForm']).controls[
-      'primiGravida'
-    ].valueChanges.subscribe(value => {
-      this.primeGravidaStatus = value;
-    });
+    return this.workareaLoader.getPrimeGravidaStatus(this);
   }
 
   patchLMPDate() {
-    const patientANCDetailsForm = (<FormGroup>(
-      this.patientMedicalForm.controls['patientANCForm']
-    )).controls['patientANCDetailsForm'];
-    const menstrualHistoryForm = (<FormGroup>(
-      this.patientMedicalForm.controls['patientHistoryForm']
-    )).controls['menstrualHistory'];
-
-    patientANCDetailsForm.valueChanges.subscribe(value => {
-      if (value.lmpDate) {
-        const temp = new Date(value.lmpDate);
-        menstrualHistoryForm.patchValue({ lMPDate: temp });
-      }
-    });
+    return this.workareaLoader.patchLMPDate(this);
   }
 
   patchGeneralFinding() {
-    const patientChiefComplaintsForm = (<FormGroup>(
-      this.patientMedicalForm.controls['patientVisitForm']
-    )).controls['patientChiefComplaintsForm'];
-
-    patientChiefComplaintsForm.valueChanges.subscribe(value => {
-      this.findings = value;
-    });
+    return this.workareaLoader.patchGeneralFinding(this);
   }
 
   ngAfterViewChecked() {
@@ -3918,14 +1683,16 @@ export class WorkareaComponent
   }
 
   openBenPreviousisitDetails() {
-    this.mdDialog.open(OpenPreviousVisitDetailsComponent, {
-      disableClose: true,
-      width: '95%',
-      panelClass: 'preview-casesheet',
-      injector: this.injector,
-      data: {
+    this.mdDialog.create<OpenPreviousVisitDetailsComponent, unknown>({
+      zContent: OpenPreviousVisitDetailsComponent,
+      zWidth: '95%',
+      zMaskClosable: false,
+      zData: {
         previous: true,
       },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
   }
   //--End--

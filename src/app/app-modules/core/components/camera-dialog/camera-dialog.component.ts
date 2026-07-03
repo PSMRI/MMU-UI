@@ -30,7 +30,7 @@ import {
   DoCheck,
   AfterViewInit,
 } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogRef } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
 import { ConfirmationService } from '../../services';
 import { SetLanguageComponent } from '../set-language.component';
@@ -43,7 +43,7 @@ import { saveAs } from 'file-saver';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgIf, NgFor } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { NgChartsModule } from 'ng2-charts';
+import { BaseChartDirective } from 'ng2-charts';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideX } from '@ng-icons/lucide';
 import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
@@ -67,7 +67,7 @@ interface Mark {
     WebcamModule,
     ReactiveFormsModule,
     FormsModule,
-    NgChartsModule,
+    BaseChartDirective,
     NgIcon,
     ZardButtonComponent,
     ZardInputDirective,
@@ -119,7 +119,7 @@ export class CameraDialogComponent implements OnInit, DoCheck, AfterViewInit {
   };
 
   constructor(
-    public dialogRef: MatDialogRef<CameraDialogComponent>,
+    public dialogRef: ZardDialogRef<CameraDialogComponent>,
     public httpServiceService: HttpServiceService,
     readonly sessionstorage: SessionStorageService,
     private confirmationService: ConfirmationService

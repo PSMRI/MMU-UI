@@ -21,11 +21,7 @@
  */
 
 import { Component, OnInit, Inject, DoCheck } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialogClose,
-} from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { NgIf, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -43,7 +39,6 @@ import { ZardPaginatorComponent } from 'Common-UI/v2/ui/paginator';
   templateUrl: './beneficiary-mcts-call-history.component.html',
   standalone: true,
   imports: [
-    MatDialogClose,
     NgIf,
     NgFor,
     FormsModule,
@@ -61,8 +56,8 @@ export class BeneficiaryMctsCallHistoryComponent implements OnInit, DoCheck {
   filterTerm = '';
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialogRef: MatDialogRef<BeneficiaryMctsCallHistoryComponent>,
+    @Inject(Z_MODAL_DATA) public data: any,
+    public dialogRef: ZardDialogRef<BeneficiaryMctsCallHistoryComponent>,
     private httpServiceService: HttpServiceService
   ) {}
 

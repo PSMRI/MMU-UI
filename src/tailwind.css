@@ -1,18 +1,17 @@
-/* ===== AMRIT Tailwind v4 + ZardUI theme (coexistence mode) =====
+/* ===== AMRIT Tailwind v4 + ZardUI theme =====
    Loaded as its own entry in angular.json so it doesn't pull existing app CSS
    (custom.css/layout.css) through Tailwind's @import bundler.
-   Preflight (Tailwind's global reset) is intentionally NOT imported and there is
-   no global `*` base reset, so existing Bootstrap/Material screens render
-   unchanged. Tailwind utilities live in @layer utilities (lower priority than the
-   unlayered app CSS), so they only affect new ZardUI markup. AMRIT blue + white
-   tokens drive ZardUI components from Common-UI/v2/ui. */
-
-/* Bootstrap is wrapped in the lowest cascade layer (see src/bootstrap.layer.css)
-   so Tailwind utilities win over Bootstrap's global element rules — letting us
-   style migrated screens with utility classes instead of component CSS.
-   Un-migrated screens are unaffected (no Tailwind utilities compete there). */
-@layer bootstrap, theme, components, utilities;
+   Bootstrap and Angular Material are removed, so Tailwind's Preflight (the global
+   base reset) is now enabled in the low-priority `base` layer. Cascade order:
+   base < components < utilities < unlayered legacy CSS (custom.css/layout.css/
+   styles.css) — so legacy screens keep their explicit styling, utilities win on
+   migrated markup, and Preflight only supplies the base reset for bare elements
+   (normalising buttons, lists, headings, tables) that previously relied on the
+   browser default or the removed Material/Bootstrap resets.
+   AMRIT blue + white tokens drive ZardUI components from Common-UI/v2/ui. */
+@layer theme, base, components, utilities;
 @import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
 @import 'tailwindcss/utilities.css' layer(utilities);
 @plugin 'tailwindcss-animate';
 @source '../Common-UI/v2/ui';

@@ -24,7 +24,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { DataSyncService } from './../shared/service/data-sync.service';
-import { MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogRef } from 'Common-UI/v2/ui/dialog';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgIf, NgFor } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -42,7 +42,7 @@ export class MasterDownloadComponent implements OnInit {
   constructor(
     private router: Router,
     private changeDetectorRef: ChangeDetectorRef,
-    public dialogRef: MatDialogRef<MasterDownloadComponent>,
+    public dialogRef: ZardDialogRef<MasterDownloadComponent>,
     private confirmationService: ConfirmationService,
     private dataSyncService: DataSyncService,
     readonly sessionstorage: SessionStorageService

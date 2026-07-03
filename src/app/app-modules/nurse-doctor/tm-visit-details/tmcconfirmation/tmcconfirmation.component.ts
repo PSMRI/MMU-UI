@@ -24,9 +24,9 @@ import {
   Component,
   Input,
   OnInit,
-  Injector,
   DoCheck,
   OnDestroy,
+  ViewContainerRef,
 } from '@angular/core';
 import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -34,7 +34,7 @@ import { NurseService, DoctorService } from '../../shared/services';
 import { MasterdataService } from '../../shared/services/masterdata.service';
 import { IdrsscoreService } from '../../shared/services/idrsscore.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogService, ZardDialogRef } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { DataSyncLoginComponent } from 'src/app/app-modules/core/components/data-sync-login/data-sync-login.component';
@@ -106,7 +106,8 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
     private router: Router,
     private nurseService: NurseService,
     private doctorService: DoctorService,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private idrsScoreService: IdrsscoreService,
     readonly sessionstorage: SessionStorageService,
     private httpServices: HttpServiceService
@@ -420,17 +421,17 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
   routeToCaseSheet() {
     this.router.navigate(['/nurse-doctor/print/' + 'MMU' + '/' + 'current']);
   }
-  loginDialogRef!: MatDialogRef<DataSyncLoginComponent>;
+  loginDialogRef!: ZardDialogRef<DataSyncLoginComponent>;
   openDialog() {
-    this.loginDialogRef = this.dialog.open(DataSyncLoginComponent, {
-      hasBackdrop: true,
-      disableClose: true,
-      panelClass: 'fit-screen',
-      backdropClass: 'backdrop',
-      position: { top: '20px' },
-      data: {
+    this.loginDialogRef = this.dialog.create<DataSyncLoginComponent, unknown>({
+      zContent: DataSyncLoginComponent,
+      zMaskClosable: false,
+      zData: {
         provideAuthorizationToViewTmCS: true,
       },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     this.loginDialogRef.afterClosed().subscribe(result => {
       if (
