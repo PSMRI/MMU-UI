@@ -1,149 +1,179 @@
-<div class="col-12" style="text-align: end">
-  <span class="font-history-label">{{
+<div class="flex items-center justify-end gap-2">
+  <span class="text-sm font-medium text-foreground">{{
     currentLanguageSet?.historyData?.Previousmenstrualhistory
       ?.previousmenstrualhistory
   }}</span>
   <button
     type="button"
-    mat-icon-button
-    matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+    z-button
+    zType="ghost"
+    zSize="icon-sm"
     id="previousANCMenstrualHistory"
-    class="mat_icon_blue"
-    color="primary"
+    [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
+    zPosition="top"
+    [attr.aria-label]="currentLanguageSet?.DurationData?.previousDetails"
     (click)="getPreviousMenstrualHistory()">
-    <mat-icon class="md-18">history</mat-icon>
+    <ng-icon name="lucideHistory"></ng-icon>
   </button>
 </div>
-<div class="row m-t-10" [formGroup]="menstrualHistoryForm">
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field class="select-full-width">
-      <mat-label class="mat-label-text">{{
+
+<div
+  class="flex flex-col gap-6"
+  [formGroup]="menstrualHistoryForm">
+  <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+    <z-form-field class="w-full">
+      <label z-form-label for="menstrualCycleStatus">{{
         currentLanguageSet?.historyData?.ancHistory?.menstrualHistoryANC
           ?.menstrualCycleStatus
-      }}</mat-label>
-      <mat-select
-        name="menstrualCycleStatus"
-        formControlName="menstrualCycleStatus"
-        (selectionChange)="checkMenstrualCycleStatus()">
-        <mat-option
-          *ngFor="let status of masterData?.menstrualCycleStatus"
-          [value]="status"
-          >{{ status.name }}</mat-option
-        >
-      </mat-select>
-    </mat-form-field>
-  </div>
-
-  <ng-template [ngIf]="menstrualCycleStatus?.name === 'Active'">
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <label class="control-label" for="regularityOfMenstrualCycles">{{
-        currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-          ?.regularityofMenstrualCycles
       }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        name="regularity"
-        formControlName="regularity"
-        style="margin-left: -9px">
-        <mat-radio-button color="primary" value="Regular">{{
-          currentLanguageSet?.common?.regular
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" value="Irregular">{{
-          currentLanguageSet?.common?.irregular
-        }}</mat-radio-button>
-      </mat-radio-group>
-    </div>
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="menstrualCycleStatus"
+          name="menstrualCycleStatus"
+          [zPlaceholder]="
+            currentLanguageSet?.historyData?.ancHistory?.menstrualHistoryANC
+              ?.menstrualCycleStatus || ''
+          "
+          [zValue]="getMenstrualCycleStatusLabel()"
+          (zSelectionChange)="onMenstrualCycleStatusChange($event)">
+          <z-select-item
+            *ngFor="let status of masterData?.menstrualCycleStatus"
+            [zValue]="status.name">
+            {{ status.name }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
 
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="select-full-width">
-        <mat-label class="mat-label-text">{{
+    <ng-container *ngIf="menstrualCycleStatus?.name === 'Active'">
+      <div class="flex flex-col gap-1.5">
+        <label z-form-label for="regularityOfMenstrualCycles">{{
+          currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
+            ?.regularityofMenstrualCycles
+        }}</label>
+        <z-radio-group
+          id="regularityOfMenstrualCycles"
+          name="regularity"
+          formControlName="regularity"
+          zOrientation="horizontal"
+          class="flex-wrap gap-6">
+          <z-radio value="Regular">{{
+            currentLanguageSet?.common?.regular
+          }}</z-radio>
+          <z-radio value="Irregular">{{
+            currentLanguageSet?.common?.irregular
+          }}</z-radio>
+        </z-radio-group>
+      </div>
+
+      <z-form-field class="w-full">
+        <label z-form-label for="cycleLength">{{
           currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
             ?.lengthofMenstrualCycle
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          name="cycleLength"
-          formControlName="cycleLength">
-          <mat-option
-            *ngFor="let cycleLength of masterData?.menstrualCycleLengths"
-            [value]="cycleLength"
-            >{{ cycleLength.menstrualCycleRange }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
+        }}</label>
+        <z-form-control>
+          <z-select
+            class="w-full"
+            id="cycleLength"
+            name="cycleLength"
+            [zPlaceholder]="
+              currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
+                ?.lengthofMenstrualCycle || ''
+            "
+            [zValue]="getCycleLengthLabel()"
+            (zSelectionChange)="onCycleLengthChange($event)">
+            <z-select-item
+              *ngFor="let cycleLength of masterData?.menstrualCycleLengths"
+              [zValue]="cycleLength.menstrualCycleRange">
+              {{ cycleLength.menstrualCycleRange }}
+            </z-select-item>
+          </z-select>
+        </z-form-control>
+      </z-form-field>
 
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="select-full-width">
-        <mat-label class="mat-label-text">{{
+      <z-form-field class="w-full">
+        <label z-form-label for="bloodFlowDuration">{{
           currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
             ?.menstrualBloodFlowDuration
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
-          name="bloodFlowDuration"
-          formControlName="bloodFlowDuration">
-          <mat-option
-            *ngFor="
-              let cycleDuration of masterData?.menstrualCycleBloodFlowDuration
+        }}</label>
+        <z-form-control>
+          <z-select
+            class="w-full"
+            id="bloodFlowDuration"
+            name="bloodFlowDuration"
+            [zPlaceholder]="
+              currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
+                ?.menstrualBloodFlowDuration || ''
             "
-            [value]="cycleDuration"
-            >{{ cycleDuration.menstrualCycleRange }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </ng-template>
+            [zValue]="getBloodFlowDurationLabel()"
+            (zSelectionChange)="onBloodFlowDurationChange($event)">
+            <z-select-item
+              *ngFor="
+                let cycleDuration of masterData?.menstrualCycleBloodFlowDuration
+              "
+              [zValue]="cycleDuration.menstrualCycleRange">
+              {{ cycleDuration.menstrualCycleRange }}
+            </z-select-item>
+          </z-select>
+        </z-form-control>
+      </z-form-field>
+    </ng-container>
 
-  <ng-template
-    [ngIf]="
-      menstrualCycleStatus?.name === 'Active' ||
-      menstrualCycleStatus?.name === 'Amenorrhea'
-    ">
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-      <mat-form-field class="select-full-width">
-        <mat-label class="mat-label-text">{{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-            ?.menstrualProblems
-        }}</mat-label>
-        <mat-select
-          multiple
-          class="select-full-width"
+    <z-form-field
+      class="w-full"
+      *ngIf="
+        menstrualCycleStatus?.name === 'Active' ||
+        menstrualCycleStatus?.name === 'Amenorrhea'
+      ">
+      <label z-form-label for="menstrualProblemList">{{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
+          ?.menstrualProblems
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="menstrualProblemList"
           name="problemName"
-          formControlName="menstrualProblemList"
-          (selectionChange)="resetOtherMenstrualProblems()">
-          <mat-option
+          [zMultiple]="true"
+          [zPlaceholder]="
+            currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
+              ?.menstrualProblems || ''
+          "
+          [zValue]="getMenstrualProblemValues()"
+          (zSelectionChange)="onMenstrualProblemChange($event)">
+          <z-select-item
             *ngFor="let problem of masterData?.menstrualProblem"
-            [value]="problem"
-            [disabled]="
+            [zValue]="problem.problemName"
+            [zDisabled]="
               (isNoneSelected && problem.problemName !== 'None') ||
               (isOtherSelected && problem.problemName === 'None')
             ">
             {{ problem.problemName }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </ng-template>
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <mat-form-field class="select-full-width">
-      <mat-label class="mat-label-text"
-        >{{
-          currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
-            ?.lastMenstrualPeriod
-        }}
-      </mat-label>
-      <input
-        matInput
-        name="lMPDate"
-        formControlName="lMPDate"
-        [min]="minimumLMPDate"
-        [max]="today"
-        [matDatepicker]="lmpPicker" />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="lmpPicker"></mat-datepicker-toggle>
-      <mat-datepicker #lmpPicker></mat-datepicker>
-    </mat-form-field>
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field class="w-full">
+      <label z-form-label for="lMPDate">{{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
+          ?.lastMenstrualPeriod
+      }}</label>
+      <z-form-control>
+        <z-date-picker
+          class="w-full"
+          id="lMPDate"
+          name="lMPDate"
+          formControlName="lMPDate"
+          zFormat="dd/MM/yyyy"
+          [placeholder]="
+            currentLanguageSet?.historyData?.opdNCDPNCHistory?.menstrual
+              ?.lastMenstrualPeriod || ''
+          "
+          [minDate]="minimumLMPDate"
+          [maxDate]="today" />
+      </z-form-control>
+    </z-form-field>
   </div>
 </div>

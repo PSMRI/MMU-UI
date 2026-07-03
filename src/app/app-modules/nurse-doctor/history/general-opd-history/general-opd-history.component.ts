@@ -27,6 +27,8 @@ import {
   DoCheck,
   OnChanges,
   OnDestroy,
+  AfterViewChecked,
+  ViewChild,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
@@ -36,10 +38,9 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
+  ZardAccordionImports,
+  ZardAccordionComponent,
+} from 'Common-UI/v2/ui/accordion';
 import { NgIf } from '@angular/common';
 import { PastHistoryComponent } from './past-history/past-history.component';
 import { ComorbidityConcurrentConditionsComponent } from './comorbidity-concurrent-conditions/comorbidity-concurrent-conditions.component';
@@ -59,12 +60,9 @@ import { PhysicalActivityHistoryComponent } from './physical-activity-history/ph
 @Component({
   selector: 'app-nurse-general-opd-history',
   templateUrl: './general-opd-history.component.html',
-  styleUrls: ['./general-opd-history.component.css'],
   imports: [
-    MatAccordion,
+    ...ZardAccordionImports,
     NgIf,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
     PastHistoryComponent,
     ComorbidityConcurrentConditionsComponent,
     MedicationHistoryComponent,
@@ -82,8 +80,13 @@ import { PhysicalActivityHistoryComponent } from './physical-activity-history/ph
   ],
 })
 export class GeneralOpdHistoryComponent
-  implements OnInit, DoCheck, OnChanges, OnDestroy
+  implements OnInit, DoCheck, OnChanges, OnDestroy, AfterViewChecked
 {
+  @ViewChild(ZardAccordionComponent)
+  historyAccordion?: ZardAccordionComponent;
+
+  private defaultPanelExpanded = false;
+
   @Input()
   nurseGeneralHistoryForm!: FormGroup;
 
@@ -136,6 +139,23 @@ export class GeneralOpdHistoryComponent
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
+
+  ngAfterViewChecked() {
+    // The Zard accordion has no controlled-open input, so the default panel
+    // (previously Material's expanded="true") is expanded imperatively once
+    // the accordion exists. Done once so the user can freely collapse it.
+    if (!this.defaultPanelExpanded && this.historyAccordion) {
+      const defaultPanel =
+        this.visitCategory === 'NCD screening'
+          ? 'ncdFamilyHistory'
+          : 'pastHistory';
+      if (!this.historyAccordion.isOpen(defaultPanel)) {
+        this.historyAccordion.toggle(defaultPanel);
+      }
+      this.defaultPanelExpanded = true;
+    }
+  }
+
   assignSelectedLanguage() {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();

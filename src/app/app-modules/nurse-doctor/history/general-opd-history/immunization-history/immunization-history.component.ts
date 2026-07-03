@@ -34,13 +34,18 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgFor } from '@angular/common';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { ZardCheckboxComponent } from 'Common-UI/v2/ui/checkbox';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
 
 @Component({
   selector: 'app-general-immunization-history',
   templateUrl: './immunization-history.component.html',
-  styleUrls: ['./immunization-history.component.css'],
-  imports: [ReactiveFormsModule, NgFor, MatCheckbox],
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    ZardCheckboxComponent,
+    ...ZardTableImports,
+  ],
 })
 export class ImmunizationHistoryComponent
   implements OnInit, DoCheck, OnDestroy

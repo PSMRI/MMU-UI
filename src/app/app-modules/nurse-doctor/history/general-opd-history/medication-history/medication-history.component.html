@@ -1,25 +1,26 @@
-<div [formGroup]="medicationHistoryForm">
-  <div class="col-xs-12" formArrayName="medicationHistoryList">
-    <div class="col-12" style="text-align: end">
-      <span class="font-history-label">{{
+<div [formGroup]="medicationHistoryForm" class="flex flex-col gap-4">
+  <div formArrayName="medicationHistoryList" class="flex flex-col gap-4">
+    <div class="flex items-center justify-end gap-2">
+      <span class="text-sm font-semibold text-foreground">{{
         currentLanguageSet?.historyData?.ancHistory?.medicationANC_OPD_NCD_PNC
           ?.PreviousHistory
       }}</span>
       <button
+        z-button
+        zType="ghost"
+        zSize="icon-sm"
         type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
         id="previousANCMedicationHistory"
-        class="mat_icon_blue"
-        color="primary"
+        class="text-primary"
+        [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
+        [attr.aria-label]="currentLanguageSet?.DurationData?.previousDetails"
         (click)="getPreviousMedicationHistory()">
-        <mat-icon class="md-18">history</mat-icon>
+        <ng-icon name="lucideHistory"></ng-icon>
       </button>
     </div>
 
     <div
-      class="col-12 row multi_row_select"
-      style="margin: 15px 0px 15px 0px; background-color: #f0f5f5"
+      class="rounded-lg bg-muted/40 p-4"
       *ngFor="
         let medicationHistory of getMedicationHistory();
         let i = index;
@@ -28,81 +29,93 @@
       "
       [ngClass]="{ odd: !isOdd }">
       <ng-container [formGroupName]="i">
-        <div class="col-3">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
+        <div
+          class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+          <z-form-field class="gap-1.5">
+            <label z-form-label for="currentMedication-{{ i }}">{{
               currentLanguageSet?.historyData?.ancHistory
                 ?.medicationANC_OPD_NCD_PNC?.currentMedication
-            }}</mat-label>
-            <input
-              autocomplete="off"
-              matInput
-              appDefaultNull
-              allowText="inputFieldValidator"
-              maxlength="50"
-              formControlName="currentMedication"
-              name="currentMedication"
-              (input)="enableDuration(medicationHistory)" />
-          </mat-form-field>
-        </div>
+            }}</label>
+            <z-form-control>
+              <input
+                z-input
+                class="w-full bg-background"
+                autocomplete="off"
+                appDefaultNull
+                allowText="inputFieldValidator"
+                maxlength="50"
+                id="currentMedication-{{ i }}"
+                formControlName="currentMedication"
+                name="currentMedication"
+                (input)="enableDuration(medicationHistory)" />
+            </z-form-control>
+          </z-form-field>
 
-        <div class="col-3">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
+          <z-form-field class="gap-1.5">
+            <label z-form-label for="timePeriodAgo-{{ i }}">{{
               currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
-            }}</mat-label>
-            <input
-              autocomplete="off"
-              matInput
-              appDefaultNull
-              allowText="number"
-              maxlength="2"
-              formControlName="timePeriodAgo"
-              name="timePeriodAgo"
-              (change)="validateDuration(medicationHistory)" />
-          </mat-form-field>
-        </div>
+            }}</label>
+            <z-form-control>
+              <input
+                z-input
+                class="w-full bg-background"
+                autocomplete="off"
+                appDefaultNull
+                allowText="number"
+                maxlength="2"
+                id="timePeriodAgo-{{ i }}"
+                formControlName="timePeriodAgo"
+                name="timePeriodAgo"
+                (change)="validateDuration(medicationHistory)" />
+            </z-form-control>
+          </z-form-field>
 
-        <div class="col-3">
-          <mat-form-field class="select-full-width">
-            <mat-label class="mat-label-text">{{
+          <z-form-field class="gap-1.5">
+            <label z-form-label for="timePeriodUnit-{{ i }}">{{
               currentLanguageSet?.DurationData?.durationUnit
-            }}</mat-label>
-            <mat-select
-              formControlName="timePeriodUnit"
-              name="timePeriodAgoUnit"
-              (selectionChange)="validateDuration(medicationHistory)">
-              <mat-option value="Days">Day(s)</mat-option>
-              <mat-option value="Weeks">Week(s)</mat-option>
-              <mat-option value="Months">Month(s)</mat-option>
-              <mat-option value="Years">Year(s)</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+            }}</label>
+            <z-form-control>
+              <z-select
+                class="w-full bg-background"
+                id="timePeriodUnit-{{ i }}"
+                formControlName="timePeriodUnit"
+                name="timePeriodAgoUnit"
+                (zSelectionChange)="validateDuration(medicationHistory)">
+                <z-select-item [zValue]="'Days'">Day(s)</z-select-item>
+                <z-select-item [zValue]="'Weeks'">Week(s)</z-select-item>
+                <z-select-item [zValue]="'Months'">Month(s)</z-select-item>
+                <z-select-item [zValue]="'Years'">Year(s)</z-select-item>
+              </z-select>
+            </z-form-control>
+          </z-form-field>
 
-        <div class="col-sm-3 box action-btn-container" style="text-align: end">
-          <button
-            mat-mini-fab
-            color="warn"
-            class="mat_warn_circle"
-            style="margin-right: 5px"
-            *ngIf="
-              i !== 0 ||
-              (i === 0 &&
-                (medicationHistory.touched || medicationHistory.dirty))
-            "
-            (click)="removeMedicationHistory(i, medicationHistory)">
-            <mat-icon class="md-18">close</mat-icon>
-          </button>
-          <button
-            md-mini-fab
-            color="primary"
-            class="mat_blue_circle"
-            *ngIf="isLast"
-            [disabled]="checkValidity(medicationHistory)"
-            (click)="addMedicationHistory()">
-            <mat-icon class="md-18">add</mat-icon>
-          </button>
+          <div class="flex items-end justify-end gap-2">
+            <button
+              z-button
+              zType="destructive"
+              zSize="icon"
+              type="button"
+              *ngIf="
+                i !== 0 ||
+                (i === 0 &&
+                  (medicationHistory.touched || medicationHistory.dirty))
+              "
+              [attr.aria-label]="currentLanguageSet?.common?.remove"
+              (click)="removeMedicationHistory(i, medicationHistory)">
+              <ng-icon name="lucideX"></ng-icon>
+            </button>
+            <button
+              z-button
+              zType="default"
+              zSize="icon"
+              type="button"
+              *ngIf="isLast"
+              [disabled]="checkValidity(medicationHistory)"
+              [attr.aria-label]="currentLanguageSet?.common?.add"
+              (click)="addMedicationHistory()">
+              <ng-icon name="lucidePlus"></ng-icon>
+            </button>
+          </div>
         </div>
       </ng-container>
     </div>

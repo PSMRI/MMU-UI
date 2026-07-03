@@ -1,24 +1,28 @@
-<div [formGroup]="comorbidityConcurrentConditionsForm">
-  <div class="col-xs-12" formArrayName="comorbidityConcurrentConditionsList">
-    <div class="col-12" style="text-align: end">
-      <span class="font-history-label">{{
+<div [formGroup]="comorbidityConcurrentConditionsForm" class="flex flex-col gap-6">
+  <div
+    formArrayName="comorbidityConcurrentConditionsList"
+    class="flex flex-col gap-4">
+    <div class="flex items-center justify-end gap-2">
+      <span class="text-sm font-semibold text-foreground">{{
         currentLanguageSet?.historyData?.ancHistory?.combordityANC_OPD_NCD_PNC
           ?.PreviousDetails
       }}</span>
       <button
+        z-button
+        zType="ghost"
+        zSize="icon-sm"
         type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
         id="previousANCComorbidityHistory"
-        class="mat_icon_blue"
-        color="primary"
+        class="text-primary"
+        [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
+        [attr.aria-label]="currentLanguageSet?.DurationData?.previousDetails"
         (click)="getPreviousComorbidityHistory()">
-        <mat-icon class="md-18">history</mat-icon>
+        <ng-icon name="lucideHistory"></ng-icon>
       </button>
     </div>
+
     <div
-      class="col-12 row multi_row_select"
-      style="margin: 15px 0px 15px 0px; background-color: #f0f5f5"
+      class="rounded-lg bg-muted/40 p-4"
       *ngFor="
         let comorbidityConcurrentConditions of getcomorbidityConcurrentConditions();
         let i = index;
@@ -27,116 +31,135 @@
       "
       [ngClass]="{ odd: !isOdd }">
       <ng-container [formGroupName]="i">
-        <div class="col-3 box">
-          <mat-form-field class="select-full-width">
-            <mat-label>{{
+        <div
+          class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+          <z-form-field class="gap-1.5">
+            <label z-form-label for="comorbidConditions-{{ i }}">{{
               currentLanguageSet?.historyData?.ancHistory
                 ?.combordityANC_OPD_NCD_PNC?.comorbidConditions
-            }}</mat-label>
-            <mat-select
-              formControlName="comorbidConditions"
-              name="comorbidConditions"
-              (selectionChange)="
-                filterComorbidityConcurrentConditionsType(
-                  $event.value,
+            }}</label>
+            <z-form-control>
+              <z-select
+                class="w-full bg-background"
+                id="comorbidConditions-{{ i }}"
+                name="comorbidConditions"
+                [attr.required]="ComorbidStatus"
+                [zValue]="
+                  comorbidityConcurrentConditions.value.comorbidConditions
+                    ?.comorbidCondition
+                "
+                (zSelectionChange)="
+                  onComorbidConditionsChange(
+                    $event,
+                    i,
+                    comorbidityConcurrentConditions
+                  )
+                ">
+                <z-select-item
+                  *ngFor="let comorbidCondition of comorbiditySelectList[i]"
+                  [zValue]="comorbidCondition.comorbidCondition">
+                  {{ comorbidCondition.comorbidCondition }}</z-select-item
+                >
+              </z-select>
+            </z-form-control>
+          </z-form-field>
+
+          <z-form-field
+            class="gap-1.5"
+            *ngIf="
+              comorbidityConcurrentConditions.value.comorbidConditions
+                ?.comorbidCondition === 'Other'
+            ">
+            <label z-form-label for="otherComorbidCondition-{{ i }}">{{
+              currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                ?.others
+            }}</label>
+            <z-form-control>
+              <input
+                z-input
+                class="w-full bg-background"
+                autocomplete="off"
+                appDefaultNull
+                maxlength="50"
+                allowText="alphaspace"
+                id="otherComorbidCondition-{{ i }}"
+                name="otherComorbidCondition"
+                formControlName="otherComorbidCondition" />
+            </z-form-control>
+          </z-form-field>
+
+          <z-form-field class="gap-1.5">
+            <label z-form-label for="comorbidTimePeriodAgo-{{ i }}">{{
+              currentLanguageSet?.DurationData?.duration
+            }}</label>
+            <z-form-control>
+              <input
+                z-input
+                class="w-full bg-background"
+                autocomplete="off"
+                appDefaultNull
+                maxlength="2"
+                allowText="number"
+                id="comorbidTimePeriodAgo-{{ i }}"
+                name="timePeriodAgo"
+                formControlName="timePeriodAgo"
+                (change)="validateDuration(comorbidityConcurrentConditions)" />
+            </z-form-control>
+          </z-form-field>
+
+          <z-form-field class="gap-1.5">
+            <label z-form-label for="comorbidTimePeriodUnit-{{ i }}">{{
+              currentLanguageSet?.DurationData?.durationUnit
+            }}</label>
+            <z-form-control>
+              <z-select
+                class="w-full bg-background"
+                id="comorbidTimePeriodUnit-{{ i }}"
+                name="timePeriodUnit"
+                formControlName="timePeriodUnit"
+                (zSelectionChange)="
+                  validateDuration(comorbidityConcurrentConditions)
+                ">
+                <z-select-item [zValue]="'Days'">Day(s)</z-select-item>
+                <z-select-item [zValue]="'Weeks'">Week(s)</z-select-item>
+                <z-select-item [zValue]="'Months'">Month(s)</z-select-item>
+                <z-select-item [zValue]="'Years'">Year(s)</z-select-item>
+              </z-select>
+            </z-form-control>
+          </z-form-field>
+
+          <div class="flex items-end justify-end gap-2">
+            <button
+              z-button
+              zType="destructive"
+              zSize="icon"
+              type="button"
+              id="removeComorbidityConcurrentConditions"
+              *ngIf="
+                i !== 0 || (i === 0 && comorbidityConcurrentConditions.touched)
+              "
+              [attr.aria-label]="currentLanguageSet?.common?.remove"
+              (click)="
+                removeComorbidityConcurrentConditions(
                   i,
                   comorbidityConcurrentConditions
                 )
-              "
-              required="{{ ComorbidStatus }}">
-              <mat-option
-                *ngFor="let comorbidCondition of comorbiditySelectList[i]"
-                [value]="comorbidCondition"
-                >{{ comorbidCondition.comorbidCondition }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        <div
-          class="col-3 box"
-          *ngIf="
-            comorbidityConcurrentConditions.value.comorbidConditions
-              ?.comorbidCondition === 'Other'
-          ">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                ?.others
-            }}</mat-label>
-            <input
-              autocomplete="off"
-              matInput
-              appDefaultNull
-              maxlength="50"
-              allowText="alphaspace"
-              name="otherComorbidCondition"
-              formControlName="otherComorbidCondition" />
-          </mat-form-field>
-        </div>
-
-        <div class="col-3 box">
-          <mat-form-field class="input-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.DurationData?.duration
-            }}</mat-label>
-            <input
-              autocomplete="off"
-              matInput
-              appDefaultNull
-              maxlength="2"
-              allowText="number"
-              name="timePeriodAgo"
-              formControlName="timePeriodAgo"
-              (change)="validateDuration(comorbidityConcurrentConditions)" />
-          </mat-form-field>
-        </div>
-
-        <div class="col-3 box">
-          <mat-form-field class="select-full-width">
-            <mat-label class="mat-label-text">{{
-              currentLanguageSet?.DurationData?.durationUnit
-            }}</mat-label>
-            <mat-select
-              name="timePeriodUnit"
-              formControlName="timePeriodUnit"
-              (change)="validateDuration(comorbidityConcurrentConditions)">
-              <mat-option value="Days">Day(s)</mat-option>
-              <mat-option value="Weeks">Week(s)</mat-option>
-              <mat-option value="Months">Month(s)</mat-option>
-              <mat-option value="Years">Year(s)</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        <div class="col-3 box action-btn-container" style="text-align: end">
-          <button
-            mat-mini-fab
-            color="warn"
-            class="mat_warn_circle"
-            style="margin-right: 3px"
-            id="removeComorbidityConcurrentConditions"
-            *ngIf="
-              i !== 0 || (i === 0 && comorbidityConcurrentConditions.touched)
-            "
-            (click)="
-              removeComorbidityConcurrentConditions(
-                i,
-                comorbidityConcurrentConditions
-              )
-            ">
-            <mat-icon class="md-18">close</mat-icon>
-          </button>
-          <button
-            md-mini-fab
-            color="primary"
-            class="mat_blue_circle"
-            *ngIf="isLast"
-            [disabled]="checkValidity(comorbidityConcurrentConditions)"
-            id="addComorbidityConcurrentConditions"
-            (click)="addComorbidityConcurrentConditions()">
-            <mat-icon class="md-18">add</mat-icon>
-          </button>
+              ">
+              <ng-icon name="lucideX"></ng-icon>
+            </button>
+            <button
+              z-button
+              zType="default"
+              zSize="icon"
+              type="button"
+              *ngIf="isLast"
+              [disabled]="checkValidity(comorbidityConcurrentConditions)"
+              id="addComorbidityConcurrentConditions"
+              [attr.aria-label]="currentLanguageSet?.common?.add"
+              (click)="addComorbidityConcurrentConditions()">
+              <ng-icon name="lucidePlus"></ng-icon>
+            </button>
+          </div>
         </div>
       </ng-container>
     </div>

@@ -1,175 +1,181 @@
-<div [formGroup]="pastHistoryForm">
-  <div>
-    <div class="col-12" style="float: right; text-align: end">
-      <span class="font-history-label">{{
+<div [formGroup]="pastHistoryForm" class="flex flex-col gap-6">
+  <div formArrayName="pastIllness" class="flex flex-col gap-4">
+    <div class="flex items-center justify-end gap-2">
+      <span class="text-sm font-semibold text-foreground">{{
         currentLanguageSet?.historyData?.Previousillness
           ?.previousillnessandsurgery
       }}</span>
       <button
+        z-button
+        zType="ghost"
+        zSize="icon-sm"
         type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
         id="previousANCPastHistory"
-        class="mat_icon_blue"
-        color="primary"
+        class="text-primary"
+        [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
+        [attr.aria-label]="currentLanguageSet?.DurationData?.previousDetails"
         (click)="
           getPreviousPastHistory();
           trackFieldInteraction('Previous Past History Button')
         ">
-        <mat-icon class="md-18">history</mat-icon>
+        <ng-icon name="lucideHistory"></ng-icon>
       </button>
     </div>
-    <div class="col-xs-12" formArrayName="pastIllness">
-      <header class="description">
-        <h4 style="font-size: 18px">
-          <strong>{{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.pastIllnessDataANC_OPD_NCD_PNC?.pastIllness
-          }}</strong>
-        </h4>
-      </header>
-      <div
-        class="row multi_row_select col-12"
-        style="margin: 65px 0px 15px 0px; background-color: #f0f5f5"
-        *ngFor="
-          let pastIllness of getPastIllness();
-          let i = index;
-          let isLast = last;
-          let isOdd = odd
-        "
-        [ngClass]="{ odd: !isOdd }">
-        <ng-container [formGroupName]="i">
-          <div class="col-md-3 box">
-            <mat-form-field [style.width]="'100%'">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.historyData?.ancHistory
-                  ?.pastIllnessDataANC_OPD_NCD_PNC?.illness
-              }}</mat-label>
-              <mat-select
-                class="select-full-width"
+
+    <p class="text-lg font-semibold tracking-tight text-foreground">
+      {{
+        currentLanguageSet?.historyData?.ancHistory
+          ?.pastIllnessDataANC_OPD_NCD_PNC?.pastIllness
+      }}
+    </p>
+
+    <div
+      class="rounded-lg bg-muted/40 p-4"
+      *ngFor="
+        let pastIllness of getPastIllness();
+        let i = index;
+        let isLast = last;
+        let isOdd = odd
+      "
+      [ngClass]="{ odd: !isOdd }">
+      <ng-container [formGroupName]="i">
+        <div
+          class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+          <z-form-field class="gap-1.5">
+            <label z-form-label for="illnessType-{{ i }}">{{
+              currentLanguageSet?.historyData?.ancHistory
+                ?.pastIllnessDataANC_OPD_NCD_PNC?.illness
+            }}</label>
+            <z-form-control>
+              <z-select
+                class="w-full bg-background"
+                id="illnessType-{{ i }}"
                 name="pastAcuteIllness"
-                formControlName="illnessType"
-                (selectionChange)="
-                  filterPastIllnessType($event.value, i, pastIllness);
+                [zValue]="pastIllness.value.illnessType?.illnessType"
+                (zSelectionChange)="
+                  onIllnessTypeChange($event, i, pastIllness);
                   trackFieldInteraction('Illness')
                 ">
-                <mat-option
+                <z-select-item
                   *ngFor="let illness of pastIllnessSelectList[i]"
-                  [value]="illness">
-                  {{ illness.illnessType }}</mat-option
+                  [zValue]="illness.illnessType">
+                  {{ illness.illnessType }}</z-select-item
                 >
-              </mat-select>
-            </mat-form-field>
-          </div>
+              </z-select>
+            </z-form-control>
+          </z-form-field>
 
-          <div
-            class="col-2 box"
+          <z-form-field
+            class="gap-1.5"
             *ngIf="pastIllness.value.illnessType?.illnessType === 'Other'">
-            <mat-form-field [style.width]="'100%'" class="input-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                  ?.others
-              }}</mat-label>
+            <label z-form-label for="otherIllnessType-{{ i }}">{{
+              currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                ?.others
+            }}</label>
+            <z-form-control>
               <input
+                z-input
+                class="w-full bg-background"
                 autocomplete="off"
-                matInput
                 appDefaultNull
                 maxlength="50"
                 allowText="alphaspace"
+                id="otherIllnessType-{{ i }}"
                 name="otherIllnessType"
                 formControlName="otherIllnessType"
                 (focus)="trackFieldInteraction('Other Illness Type')" />
-            </mat-form-field>
-          </div>
+            </z-form-control>
+          </z-form-field>
 
-          <div class="col-2 box">
-            <mat-form-field [style.width]="'100%'" class="input-full-width">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
-              }}</mat-label>
+          <z-form-field class="gap-1.5">
+            <label z-form-label for="illnessTimePeriodAgo-{{ i }}">{{
+              currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
+            }}</label>
+            <z-form-control>
               <input
+                z-input
+                class="w-full bg-background"
                 autocomplete="off"
-                class="mat_border_style"
-                matInput
                 appDefaultNull
                 allowText="number"
                 maxlength="2"
+                id="illnessTimePeriodAgo-{{ i }}"
                 name="timePeriodAgo"
                 formControlName="timePeriodAgo"
                 (change)="validateDuration(pastIllness)"
                 (focus)="trackFieldInteraction('Duration')" />
-            </mat-form-field>
-          </div>
+            </z-form-control>
+          </z-form-field>
 
-          <div class="col-3 box">
-            <mat-form-field [style.width]="'100%'" style="width: 100%">
-              <mat-label class="mat-label-text">{{
-                currentLanguageSet?.DurationData?.timeperiodAgo
-              }}</mat-label>
-              <mat-select
-                class="select-full-width mat_border_style"
+          <z-form-field class="gap-1.5">
+            <label z-form-label for="illnessTimePeriodUnit-{{ i }}">{{
+              currentLanguageSet?.DurationData?.timeperiodAgo
+            }}</label>
+            <z-form-control>
+              <z-select
+                class="w-full bg-background"
+                id="illnessTimePeriodUnit-{{ i }}"
                 name="timePeriodUnit"
                 formControlName="timePeriodUnit"
-                (selectionChange)="
+                (zSelectionChange)="
                   validateDuration(pastIllness);
                   trackFieldInteraction('Time Period Unit')
                 ">
-                <mat-option value="Days">Day(s)</mat-option>
-                <mat-option value="Weeks">Week(s)</mat-option>
-                <mat-option value="Months">Month(s)</mat-option>
-                <mat-option value="Years">Year(s)</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+                <z-select-item [zValue]="'Days'">Day(s)</z-select-item>
+                <z-select-item [zValue]="'Weeks'">Week(s)</z-select-item>
+                <z-select-item [zValue]="'Months'">Month(s)</z-select-item>
+                <z-select-item [zValue]="'Years'">Year(s)</z-select-item>
+              </z-select>
+            </z-form-control>
+          </z-form-field>
 
-          <div class="col-2 box" style="margin-top: 10px">
+          <div class="flex items-end justify-end gap-2">
             <button
-              style="margin-right: 5px"
-              mat-mini-fab
-              color="warn"
-              class="mat_warn_circle"
+              z-button
+              zType="destructive"
+              zSize="icon"
+              type="button"
               *ngIf="
                 i !== 0 ||
                 (i === 0 && (pastIllness.touched || pastIllness.dirty))
               "
+              [attr.aria-label]="currentLanguageSet?.common?.remove"
               (click)="
                 removePastIllness(i, pastIllness);
                 trackFieldInteraction('Remove Past Illness Button')
               ">
-              <mat-icon class="md-18">close</mat-icon>
+              <ng-icon name="lucideX"></ng-icon>
             </button>
             <button
-              mat-mini-fab
-              color="primary"
-              class="mat_blue_circle"
+              z-button
+              zType="default"
+              zSize="icon"
+              type="button"
               *ngIf="isLast"
               [disabled]="checkIllnessValidity(pastIllness)"
+              [attr.aria-label]="currentLanguageSet?.common?.add"
               (click)="
                 addPastIllness();
                 trackFieldInteraction('Add Past Illness Button')
               ">
-              <mat-icon class="md-18">add</mat-icon>
+              <ng-icon name="lucidePlus"></ng-icon>
             </button>
           </div>
-        </ng-container>
-      </div>
+        </div>
+      </ng-container>
     </div>
   </div>
 
-  <div class="col-xs-12" formArrayName="pastSurgery">
-    <header class="description">
-      <h4 style="font-size: 18px">
-        <strong
-          >{{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.pastHOSurgeryANC_OPD_NCD_PNC?.pastSurgery
-          }}
-        </strong>
-      </h4>
-    </header>
+  <div formArrayName="pastSurgery" class="flex flex-col gap-4">
+    <p class="text-lg font-semibold tracking-tight text-foreground">
+      {{
+        currentLanguageSet?.historyData?.ancHistory
+          ?.pastHOSurgeryANC_OPD_NCD_PNC?.pastSurgery
+      }}
+    </p>
+
     <div
-      class="row multi_row_select col-12"
-      style="margin: 65px 0px 15px 0px; background-color: #f0f5f5"
+      class="rounded-lg bg-muted/40 p-4"
       *ngFor="
         let pastSurgery of getPastSurgery();
         let i = index;
@@ -178,117 +184,128 @@
       "
       [ngClass]="{ odd: !isOdd }">
       <ng-container [formGroupName]="i">
-        <div class="col-3 box">
-          <mat-form-field [style.width]="'100%'">
-            <mat-label class="mat-label-text">{{
+        <div
+          class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+          <z-form-field class="gap-1.5">
+            <label z-form-label for="surgeryType-{{ i }}">{{
               currentLanguageSet?.historyData?.ancHistory
                 ?.pastHOSurgeryANC_OPD_NCD_PNC?.hoSurgery
-            }}</mat-label>
-            <mat-select
-              class="select-full-width"
-              formControlName="surgeryType"
-              name="surgeryType"
-              (selectionChange)="
-                filterPastSurgeryType($event.value, i, pastSurgery);
-                trackFieldInteraction('Surgery Type')
-              ">
-              <mat-option
-                *ngFor="let surgery of pastSurgerySelectList[i]"
-                [value]="surgery"
-                >{{ surgery.surgeryType }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-        </div>
+            }}</label>
+            <z-form-control>
+              <z-select
+                class="w-full bg-background"
+                id="surgeryType-{{ i }}"
+                name="surgeryType"
+                [zValue]="pastSurgery.value.surgeryType?.surgeryType"
+                (zSelectionChange)="
+                  onSurgeryTypeChange($event, i, pastSurgery);
+                  trackFieldInteraction('Surgery Type')
+                ">
+                <z-select-item
+                  *ngFor="let surgery of pastSurgerySelectList[i]"
+                  [zValue]="surgery.surgeryType">
+                  {{ surgery.surgeryType }}</z-select-item
+                >
+              </z-select>
+            </z-form-control>
+          </z-form-field>
 
-        <div
-          class="col-2 box"
-          *ngIf="pastSurgery.value.surgeryType?.surgeryType === 'Other'">
-          <mat-form-field [style.width]="'100%'" class="input-full-width">
-            <mat-label class="mat-label-text">{{
+          <z-form-field
+            class="gap-1.5"
+            *ngIf="pastSurgery.value.surgeryType?.surgeryType === 'Other'">
+            <label z-form-label for="otherSurgeryType-{{ i }}">{{
               currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
                 ?.others
-            }}</mat-label>
-            <input
-              autocomplete="off"
-              matInput
-              appDefaultNull
-              maxlength="50"
-              allowText="alphaspace"
-              name="otherSurgeryType"
-              formControlName="otherSurgeryType"
-              (focus)="trackFieldInteraction('Other Surgery Type')" />
-          </mat-form-field>
-        </div>
+            }}</label>
+            <z-form-control>
+              <input
+                z-input
+                class="w-full bg-background"
+                autocomplete="off"
+                appDefaultNull
+                maxlength="50"
+                allowText="alphaspace"
+                id="otherSurgeryType-{{ i }}"
+                name="otherSurgeryType"
+                formControlName="otherSurgeryType"
+                (focus)="trackFieldInteraction('Other Surgery Type')" />
+            </z-form-control>
+          </z-form-field>
 
-        <div class="col-2 box">
-          <mat-form-field [style.width]="'100%'" class="input-full-width">
-            <mat-label class="mat-label-text">{{
+          <z-form-field class="gap-1.5">
+            <label z-form-label for="surgeryTimePeriodAgo-{{ i }}">{{
               currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
-            }}</mat-label>
-            <input
-              autocomplete="off"
-              class="mat_border_style"
-              matInput
-              appDefaultNull
-              allowText="number"
-              maxlength="2"
-              name="timePeriodAgo"
-              formControlName="timePeriodAgo"
-              (change)="validateDuration(pastSurgery)"
-              (focus)="trackFieldInteraction('Duration')" />
-          </mat-form-field>
-        </div>
+            }}</label>
+            <z-form-control>
+              <input
+                z-input
+                class="w-full bg-background"
+                autocomplete="off"
+                appDefaultNull
+                allowText="number"
+                maxlength="2"
+                id="surgeryTimePeriodAgo-{{ i }}"
+                name="timePeriodAgo"
+                formControlName="timePeriodAgo"
+                (change)="validateDuration(pastSurgery)"
+                (focus)="trackFieldInteraction('Duration')" />
+            </z-form-control>
+          </z-form-field>
 
-        <div class="col-3 box">
-          <mat-form-field [style.width]="'100%'">
-            <mat-label class="mat-label-text">{{
+          <z-form-field class="gap-1.5">
+            <label z-form-label for="surgeryTimePeriodUnit-{{ i }}">{{
               currentLanguageSet?.DurationData?.timeperiodAgo
-            }}</mat-label>
-            <mat-select
-              class="select-full-width"
-              formControlName="timePeriodUnit"
-              name="timePeriodUnit"
-              (selectionChange)="
-                validateDuration(pastSurgery);
-                trackFieldInteraction('Time Period Unit')
-              ">
-              <mat-option value="Days">Day(s)</mat-option>
-              <mat-option value="Weeks">Week(s)</mat-option>
-              <mat-option value="Months">Month(s)</mat-option>
-              <mat-option value="Years">Year(s)</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+            }}</label>
+            <z-form-control>
+              <z-select
+                class="w-full bg-background"
+                id="surgeryTimePeriodUnit-{{ i }}"
+                name="timePeriodUnit"
+                formControlName="timePeriodUnit"
+                (zSelectionChange)="
+                  validateDuration(pastSurgery);
+                  trackFieldInteraction('Time Period Unit')
+                ">
+                <z-select-item [zValue]="'Days'">Day(s)</z-select-item>
+                <z-select-item [zValue]="'Weeks'">Week(s)</z-select-item>
+                <z-select-item [zValue]="'Months'">Month(s)</z-select-item>
+                <z-select-item [zValue]="'Years'">Year(s)</z-select-item>
+              </z-select>
+            </z-form-control>
+          </z-form-field>
 
-        <div class="col-2 box" style="margin-top: 10px">
-          <button
-            md-mini-fab
-            color="warn"
-            style="margin-right: 5px"
-            class="mat_warn_circle"
-            id="removePastSurgery"
-            *ngIf="
-              i !== 0 || (i === 0 && (pastSurgery.touched || pastSurgery.dirty))
-            "
-            (click)="
-              removePastSurgery(i, pastSurgery);
-              trackFieldInteraction('Remove Past Surgery Button')
-            ">
-            <mat-icon class="md-18">close</mat-icon>
-          </button>
-          <button
-            md-mini-fab
-            color="primary"
-            class="mat_blue_circle"
-            *ngIf="isLast"
-            [disabled]="checkSurgeryValidity(pastSurgery)"
-            id="addPastSurgery"
-            (click)="
-              addPastSurgery(); trackFieldInteraction('Add Past Surgery Button')
-            ">
-            <mat-icon class="md-18">add</mat-icon>
-          </button>
+          <div class="flex items-end justify-end gap-2">
+            <button
+              z-button
+              zType="destructive"
+              zSize="icon"
+              type="button"
+              id="removePastSurgery"
+              *ngIf="
+                i !== 0 || (i === 0 && (pastSurgery.touched || pastSurgery.dirty))
+              "
+              [attr.aria-label]="currentLanguageSet?.common?.remove"
+              (click)="
+                removePastSurgery(i, pastSurgery);
+                trackFieldInteraction('Remove Past Surgery Button')
+              ">
+              <ng-icon name="lucideX"></ng-icon>
+            </button>
+            <button
+              z-button
+              zType="default"
+              zSize="icon"
+              type="button"
+              *ngIf="isLast"
+              [disabled]="checkSurgeryValidity(pastSurgery)"
+              id="addPastSurgery"
+              [attr.aria-label]="currentLanguageSet?.common?.add"
+              (click)="
+                addPastSurgery(); trackFieldInteraction('Add Past Surgery Button')
+              ">
+              <ng-icon name="lucidePlus"></ng-icon>
+            </button>
+          </div>
         </div>
       </ng-container>
     </div>

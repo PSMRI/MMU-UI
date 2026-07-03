@@ -1,45 +1,55 @@
-<div class="col-12" style="text-align: end">
-  <span class="font-history-label">{{
+<div class="flex items-center justify-end gap-2">
+  <span class="text-sm font-medium text-foreground">{{
     currentLanguageSet?.historyData?.obstetrichistory?.previousObstetricHist
   }}</span>
   <button
     type="button"
-    mat-icon-button
-    matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+    z-button
+    zType="ghost"
+    zSize="icon-sm"
     id="previousANCPastObstetricHistory"
-    class="mat_icon_blue"
-    color="primary"
+    [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
+    zPosition="top"
+    aria-label="{{ currentLanguageSet?.DurationData?.previousDetails }}"
     (click)="getPreviousObstetricHistory()">
-    <mat-icon class="md-18">history</mat-icon>
+    <ng-icon name="lucideHistory"></ng-icon>
   </button>
 </div>
-<div class="row" [formGroup]="pastObstericHistoryForm">
-  <div class="col-xs-12 col-sm-4 box">
-    <mat-form-field class="input-full-width">
-      <mat-label class="mat-label-text">{{
+
+<div
+  class="flex flex-col gap-6"
+  [formGroup]="pastObstericHistoryForm">
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <z-form-field class="w-full">
+      <label z-form-label for="totalNoOfPreg">{{
         currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
           ?.totalNumberofPregnancies
-      }}</mat-label>
-      <input
-        autocomplete="off"
-        matInput
-        appDefaultNull
-        name="totalNoOfPreg "
-        allowText="number"
-        allowMax="10"
-        [attr.readonly]="visitCategory === 'ANC' ? 'readonly' : null"
-        formControlName="totalNoOfPreg"
-        (blur)="checkTotalPregnancy(totalNoOfPreg)" />
-    </mat-form-field>
+      }}</label>
+      <z-form-control>
+        <input
+          z-input
+          class="w-full"
+          id="totalNoOfPreg"
+          autocomplete="off"
+          appDefaultNull
+          name="totalNoOfPreg "
+          allowText="number"
+          allowMax="10"
+          [attr.readonly]="visitCategory === 'ANC' ? 'readonly' : null"
+          formControlName="totalNoOfPreg"
+          (blur)="checkTotalPregnancy(totalNoOfPreg)" />
+      </z-form-control>
+    </z-form-field>
   </div>
 
-  <div class="col-xs-12 col-sm-6" *ngIf="totalNoOfPreg > 0">
-    <span class="control-label">{{
+  <div *ngIf="totalNoOfPreg > 0" class="flex flex-col gap-2">
+    <span class="text-sm font-medium text-foreground">{{
       currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
         ?.orderofPregnancy
     }}</span>
-    <div class="clearfix"></div>
-    <div class="checkbox-group" formArrayName="complicationPregList">
+    <div
+      class="flex flex-wrap items-center gap-x-6 gap-y-2"
+      formArrayName="complicationPregList">
       <ng-container
         *ngFor="
           let number of getComplicationPregList();
@@ -47,550 +57,601 @@
           trackBy: trackComplication
         "
         [formGroupName]="i">
-        <mat-checkbox
+        <z-checkbox
           formControlName="value"
-          class="checkbox"
-          color="primary"
-          (change)="togglePastObstericHistory($event, i + 1)">
+          name="complicationPreg"
+          (zCheckedChange)="togglePastObstericHistory({ checked: $event }, i + 1)">
           {{ i + 1 }}
-        </mat-checkbox>
+        </z-checkbox>
       </ng-container>
     </div>
   </div>
 
-  <div class="col-xs-12" formArrayName="pastObstericHistoryList">
-    <mat-card
-      class="row"
-      style="border-bottom: 15px"
+  <div class="flex flex-col gap-4" formArrayName="pastObstericHistoryList">
+    <z-card
+      class="w-full"
       *ngFor="
         let pastObstericHistory of getPastObstericHistoryList();
         let i = index
       ">
-      <ng-container [formGroupName]="i">
-        <mat-card-content>
-          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                  ?.number
-              }}</mat-label>
+      <z-card-content class="p-6" [formGroupName]="i">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <z-form-field class="w-full">
+            <label z-form-label [attr.for]="'pregOrder' + i">{{
+              currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                ?.number
+            }}</label>
+            <z-form-control>
               <input
+                z-input
+                class="w-full"
+                [id]="'pregOrder' + i"
                 autocomplete="off"
-                matInput
                 appDefaultNull
                 name="pregOrder"
                 formControlName="pregOrder"
                 [readonly]="true" />
-            </mat-form-field>
-          </div>
+            </z-form-control>
+          </z-form-field>
 
-          <div class="row" style="display: flex">
-            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-              <mat-form-field class="input-full-width">
-                <mat-label class="mat-label-text">{{
+          <z-form-field class="w-full">
+            <label z-form-label [attr.for]="'complicationDuringPregnancy' + i">{{
+              currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                ?.complicationduringPregnancy
+            }}</label>
+            <z-form-control>
+              <z-select
+                class="w-full"
+                [id]="'complicationDuringPregnancy' + i"
+                name="complicationDuringPregnancy"
+                [zMultiple]="true"
+                [zPlaceholder]="
                   currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.complicationduringPregnancy
-                }}</mat-label>
-                <mat-select
-                  name="complicationDuringPregnancy"
-                  formControlName="pregComplicationList"
-                  (selectionChange)="
-                    resetOtherPregnancyComplication(pastObstericHistory, i)
+                    ?.complicationduringPregnancy || ''
+                "
+                [zValue]="getPregComplicationValues(pastObstericHistory)"
+                (zSelectionChange)="
+                  onPregComplicationChange(pastObstericHistory, $event, i)
+                ">
+                <z-select-item
+                  *ngFor="
+                    let complication of masterData?.pregComplicationTypes
                   "
-                  multiple>
-                  <ng-container
-                    *ngFor="
-                      let complication of masterData?.pregComplicationTypes
-                    ">
-                    <mat-option
-                      [value]="complication"
-                      [disabled]="
+                  [zValue]="complication.pregComplicationType"
+                  [zDisabled]="
+                    !complicationOptionConstraints[i]
+                      .showAllPregComplication &&
+                    ((complication?.pregComplicationType === 'None' &&
+                      complicationOptionConstraints[i]
+                        ?.disableNonePregnancyComplication) ||
+                      (complication?.pregComplicationType !== 'None' &&
                         !complicationOptionConstraints[i]
-                          .showAllPregComplication &&
-                        ((complication?.pregComplicationType === 'None' &&
-                          complicationOptionConstraints[i]
-                            ?.disableNonePregnancyComplication) ||
-                          (complication?.pregComplicationType !== 'None' &&
-                            !complicationOptionConstraints[i]
-                              .disableNonePregnancyComplication))
-                      ">
-                      {{ complication.pregComplicationType }}
-                    </mat-option>
-                  </ng-container>
-                </mat-select>
-              </mat-form-field>
-            </div>
-
-            <div
-              class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-              *ngIf="
-                complicationOptionConstraints[i]?.showOtherPregnancyComplication
-              ">
-              <mat-form-field class="input-full-width">
-                <mat-label>{{
-                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.others
-                }}</mat-label>
-                <input
-                  autocomplete="off"
-                  matInput
-                  appDefaultNull
-                  allowText="alphaspace"
-                  maxlength="50"
-                  name="others"
-                  formControlName="otherPregComplication" />
-              </mat-form-field>
-            </div>
-
-            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-              <mat-form-field class="input-full-width">
-                <mat-label class="mat-label-text">{{
-                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.outcomeofpregnancy
-                }}</mat-label>
-                <mat-select
-                  name="outcomeOfPregnancy"
-                  formControlName="pregOutcome"
-                  (selectionChange)="
-                    checkPregnancyOutcome(pastObstericHistory)
+                          .disableNonePregnancyComplication))
                   ">
-                  <mat-option
-                    *ngFor="let outcome of masterData?.pregOutcomes"
-                    [value]="outcome">
-                    {{ outcome.pregOutcome }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
+                  {{ complication.pregComplicationType }}
+                </z-select-item>
+              </z-select>
+            </z-form-control>
+          </z-form-field>
 
-            <ng-container
-              *ngIf="
-                pastObstericHistory.value.pregOutcome?.pregOutcome ===
-                'Abortion'
-              ">
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-                <mat-form-field class="input-full-width">
-                  <mat-label class="mat-label-text">{{
-                    currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                      ?.typeOfAbortion
-                  }}</mat-label>
-                  <mat-select
-                    name="typeOfAbortion"
-                    formControlName="abortionType"
-                    [required]="
-                      pastObstericHistory.value.pregOutcome?.pregOutcome ===
-                      'Abortion'
-                    ">
-                    <mat-option
-                      *ngFor="let abortion of masterData?.typeOfAbortion"
-                      (click)="
-                        onAbortionType(
-                          pastObstericHistory,
-                          abortion.complicationValue
-                        )
-                      "
-                      [value]="abortion">
-                      {{ abortion.complicationValue }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div
-                class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-                *ngIf="
-                  pastObstericHistory.value.abortionType?.complicationValue ===
-                  'Induced'
-                ">
-                <mat-form-field class="input-full-width">
-                  <mat-label class="mat-label-text">{{
-                    currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                      ?.typeofFacility
-                  }}</mat-label>
-                  <mat-select
-                    name="typeofFacility"
-                    formControlName="typeofFacility"
-                    [required]="
-                      pastObstericHistory.value.pregOutcome?.pregOutcome ===
-                        'Abortion' &&
-                      pastObstericHistory.value.abortionType
-                        ?.complicationValue === 'Induced'
-                    ">
-                    <mat-option
-                      *ngFor="let type of masterData?.serviceFacilities"
-                      [value]="type">
-                      {{ type.facilityName }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-                <mat-form-field class="input-full-width">
-                  <mat-label class="mat-label-text">{{
-                    currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                      ?.noOfcompletedWeeks
-                  }}</mat-label>
-                  <input
-                    autocomplete="off"
-                    (change)="checkDurationType(pastObstericHistory)"
-                    matInput
-                    name="durationOfType"
-                    allowText="number"
-                    formControlName="pregDuration"
-                    [required]="
-                      pastObstericHistory.value.pregOutcome?.pregOutcome ===
-                      'Abortion'
-                    " />
-                </mat-form-field>
-              </div>
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-                <mat-form-field class="input-full-width">
-                  <mat-label class="mat-label-text">{{
-                    currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                      ?.complicationPostAbortion
-                  }}</mat-label>
-                  <mat-select
-                    name="complicationPostAbortion"
-                    formControlName="postAbortionComplication"
-                    (selectionChange)="
-                      resetPostComplicationType(pastObstericHistory, i)
-                    "
-                    multiple
-                    [required]="
-                      pastObstericHistory.value.pregOutcome?.pregOutcome ===
-                      'Abortion'
-                    ">
-                    <mat-option
-                      *ngFor="
-                        let complicationAbortion of masterData?.postAbortionComplications
-                      "
-                      [disabled]="
-                        !complicationOptionConstraints[i]
-                          .showAllPostComplication &&
-                        (((complicationAbortion?.complicationValue === 'None' ||
-                          complicationAbortion?.complicationValue === 'Nil') &&
-                          complicationOptionConstraints[i]
-                            ?.disableNonePostComplication) ||
-                          (complicationAbortion?.complicationValue !== 'None' &&
-                            complicationAbortion?.complicationValue !== 'Nil' &&
-                            !complicationOptionConstraints[i]
-                              .disableNonePostComplication))
-                      "
-                      [value]="complicationAbortion">
-                      {{ complicationAbortion.complicationValue }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-            </ng-container>
+          <z-form-field
+            class="w-full"
+            *ngIf="
+              complicationOptionConstraints[i]?.showOtherPregnancyComplication
+            ">
+            <label z-form-label [attr.for]="'otherPregComplication' + i">{{
+              currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                ?.others
+            }}</label>
+            <z-form-control>
+              <input
+                z-input
+                class="w-full"
+                [id]="'otherPregComplication' + i"
+                autocomplete="off"
+                appDefaultNull
+                allowText="alphaspace"
+                maxlength="50"
+                name="others"
+                formControlName="otherPregComplication" />
+            </z-form-control>
+          </z-form-field>
 
-            <div
-              class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-              *ngIf="
-                pastObstericHistory.value.pregOutcome?.pregOutcome !==
-                'Abortion'
-              ">
-              <mat-form-field class="input-full-width">
-                <mat-label class="mat-label-text">{{
+          <z-form-field class="w-full">
+            <label z-form-label [attr.for]="'outcomeOfPregnancy' + i">{{
+              currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                ?.outcomeofpregnancy
+            }}</label>
+            <z-form-control>
+              <z-select
+                class="w-full"
+                [id]="'outcomeOfPregnancy' + i"
+                name="outcomeOfPregnancy"
+                [zPlaceholder]="
                   currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.durationofPregnancy
-                }}</mat-label>
-                <mat-select
-                  name="durationOfPregnancy"
-                  formControlName="durationType">
-                  <mat-option
-                    *ngFor="let duration of masterData?.pregDuration"
-                    [value]="duration">
-                    {{ duration.durationType }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-
-            <ng-container
-              *ngIf="
-                pastObstericHistory.value.pregOutcome?.pregOutcome !==
-                'Abortion'
-              ">
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-                <mat-form-field class="input-full-width">
-                  <mat-label class="mat-label-text">{{
-                    currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                      ?.placeofDelivery
-                  }}</mat-label>
-                  <mat-select
-                    name="placeOfDelivery"
-                    formControlName="deliveryPlace"
-                    (selectionChange)="
-                      resetOtherDeliveryPlace(pastObstericHistory)
-                    ">
-                    <mat-option
-                      *ngFor="let place of masterData?.deliveryPlaces"
-                      [value]="place">
-                      {{ place.deliveryPlace }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-
-              <div
-                class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-                *ngIf="
-                  pastObstericHistory.value.deliveryPlace?.deliveryPlace ===
-                  'Other'
+                    ?.outcomeofpregnancy || ''
+                "
+                [zValue]="getPregOutcomeLabel(pastObstericHistory)"
+                (zSelectionChange)="
+                  onPregOutcomeChange(pastObstericHistory, $event)
                 ">
-                <mat-form-field class="input-full-width">
-                  <mat-label class="mat-label-text">{{
-                    currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                      ?.others
-                  }}</mat-label>
-                  <input
-                    autocomplete="off"
-                    matInput
-                    appDefaultNull
-                    maxlength="50"
-                    allowText="alphaspace"
-                    name="otherPlaceOfDelivery"
-                    formControlName="otherDeliveryPlace" />
-                </mat-form-field>
-              </div>
-            </ng-container>
+                <z-select-item
+                  *ngFor="let outcome of masterData?.pregOutcomes"
+                  [zValue]="outcome.pregOutcome">
+                  {{ outcome.pregOutcome }}
+                </z-select-item>
+              </z-select>
+            </z-form-control>
+          </z-form-field>
 
-            <div
-              class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-              *ngIf="
-                pastObstericHistory.value.pregOutcome?.pregOutcome !==
-                'Abortion'
-              ">
-              <mat-form-field class="input-full-width">
-                <mat-label class="mat-label-text">{{
-                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.deliveryType
-                }}</mat-label>
-                <mat-select
-                  name="typeOfDelivery"
-                  formControlName="deliveryType"
-                  [disabled]="!pastObstericHistory.value.deliveryPlace">
-                  <ng-container *ngFor="let type of selectDeliveryTypes">
-                    <mat-option
-                      [disabled]="
-                        pastObstericHistory.value?.deliveryPlace
-                          ?.deliveryPlace === 'Subcentre' &&
-                        type.deliveryType === 'Cesarean Section (LSCS)'
-                      "
-                      [value]="type">
-                      {{ type.deliveryType }}
-                    </mat-option>
-                  </ng-container>
-                </mat-select>
-              </mat-form-field>
-            </div>
-
-            <ng-container
-              *ngIf="
-                pastObstericHistory.value.pregOutcome?.pregOutcome !==
-                'Abortion'
-              ">
-              <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-                <mat-form-field class="input-full-width">
-                  <mat-label class="mat-label-text">{{
+          <ng-container
+            *ngIf="
+              pastObstericHistory.value.pregOutcome?.pregOutcome === 'Abortion'
+            ">
+            <z-form-field class="w-full">
+              <label z-form-label [attr.for]="'typeOfAbortion' + i">{{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                  ?.typeOfAbortion
+              }}</label>
+              <z-form-control>
+                <z-select
+                  class="w-full"
+                  [id]="'typeOfAbortion' + i"
+                  name="typeOfAbortion"
+                  [zPlaceholder]="
                     currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                      ?.deliveryComplication
-                  }}</mat-label>
-                  <mat-select
-                    name="deliveryComplication"
-                    formControlName="deliveryComplicationList"
-                    (selectionChange)="
-                      resetOtherDeliveryComplication(pastObstericHistory, i)
+                      ?.typeOfAbortion || ''
+                  "
+                  [zValue]="getAbortionTypeLabel(pastObstericHistory)"
+                  (zSelectionChange)="
+                    onAbortionTypeChange(pastObstericHistory, $event)
+                  ">
+                  <z-select-item
+                    *ngFor="let abortion of masterData?.typeOfAbortion"
+                    [zValue]="abortion.complicationValue">
+                    {{ abortion.complicationValue }}
+                  </z-select-item>
+                </z-select>
+              </z-form-control>
+            </z-form-field>
+
+            <z-form-field
+              class="w-full"
+              *ngIf="
+                pastObstericHistory.value.abortionType?.complicationValue ===
+                'Induced'
+              ">
+              <label z-form-label [attr.for]="'typeofFacility' + i">{{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                  ?.typeofFacility
+              }}</label>
+              <z-form-control>
+                <z-select
+                  class="w-full"
+                  [id]="'typeofFacility' + i"
+                  name="typeofFacility"
+                  [zPlaceholder]="
+                    currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                      ?.typeofFacility || ''
+                  "
+                  [zValue]="getTypeofFacilityLabel(pastObstericHistory)"
+                  (zSelectionChange)="
+                    onTypeofFacilityChange(pastObstericHistory, $event)
+                  ">
+                  <z-select-item
+                    *ngFor="let type of masterData?.serviceFacilities"
+                    [zValue]="type.facilityName">
+                    {{ type.facilityName }}
+                  </z-select-item>
+                </z-select>
+              </z-form-control>
+            </z-form-field>
+
+            <z-form-field class="w-full">
+              <label z-form-label [attr.for]="'durationOfType' + i">{{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                  ?.noOfcompletedWeeks
+              }}</label>
+              <z-form-control>
+                <input
+                  z-input
+                  class="w-full"
+                  [id]="'durationOfType' + i"
+                  autocomplete="off"
+                  (change)="checkDurationType(pastObstericHistory)"
+                  name="durationOfType"
+                  allowText="number"
+                  formControlName="pregDuration"
+                  [required]="
+                    pastObstericHistory.value.pregOutcome?.pregOutcome ===
+                    'Abortion'
+                  " />
+              </z-form-control>
+            </z-form-field>
+
+            <z-form-field class="w-full">
+              <label z-form-label [attr.for]="'complicationPostAbortion' + i">{{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                  ?.complicationPostAbortion
+              }}</label>
+              <z-form-control>
+                <z-select
+                  class="w-full"
+                  [id]="'complicationPostAbortion' + i"
+                  name="complicationPostAbortion"
+                  [zMultiple]="true"
+                  [zPlaceholder]="
+                    currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                      ?.complicationPostAbortion || ''
+                  "
+                  [zValue]="getPostAbortionValues(pastObstericHistory)"
+                  (zSelectionChange)="
+                    onPostAbortionChange(pastObstericHistory, $event, i)
+                  ">
+                  <z-select-item
+                    *ngFor="
+                      let complicationAbortion of masterData?.postAbortionComplications
                     "
-                    multiple>
-                    <ng-container
-                      *ngFor="
-                        let complication of masterData?.deliveryComplicationTypes
-                      ">
-                      <mat-option
-                        [value]="complication"
-                        [disabled]="
+                    [zValue]="complicationAbortion.complicationValue"
+                    [zDisabled]="
+                      !complicationOptionConstraints[i]
+                        .showAllPostComplication &&
+                      (((complicationAbortion?.complicationValue === 'None' ||
+                        complicationAbortion?.complicationValue === 'Nil') &&
+                        complicationOptionConstraints[i]
+                          ?.disableNonePostComplication) ||
+                        (complicationAbortion?.complicationValue !== 'None' &&
+                          complicationAbortion?.complicationValue !== 'Nil' &&
                           !complicationOptionConstraints[i]
-                            .showAllDeliveryComplication &&
-                          (((complication?.deliveryComplicationType ===
-                            'None' ||
-                            complication?.deliveryComplicationType === 'Nil') &&
-                            complicationOptionConstraints[i]
-                              ?.disableNoneDeliveryComplication) ||
-                            (complication?.deliveryComplicationType !==
-                              'None' &&
-                              complication?.deliveryComplicationType !==
-                                'Nil' &&
-                              !complicationOptionConstraints[i]
-                                .disableNoneDeliveryComplication))
-                        ">
-                        {{ complication.deliveryComplicationType }}
-                      </mat-option>
-                    </ng-container>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-
-              <div
-                class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-                *ngIf="
-                  complicationOptionConstraints[i]
-                    ?.showOtherDeliveryComplication
-                ">
-                <mat-form-field class="input-full-width">
-                  <mat-label class="mat-label-text">{{
-                    currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                      ?.others
-                  }}</mat-label>
-                  <input
-                    autocomplete="off"
-                    matInput
-                    appDefaultNull
-                    maxlength="50"
-                    allowText="alphaspace"
-                    name="othersDeliveryComplication"
-                    formControlName="otherDeliveryComplication" />
-                </mat-form-field>
-              </div>
-            </ng-container>
-
-            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-              <mat-form-field class="input-full-width">
-                <mat-label class="mat-label-text">{{
-                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.postpartumComplication
-                }}</mat-label>
-                <mat-select
-                  name="postpartumComplication"
-                  formControlName="postpartumComplicationList"
-                  (selectionChange)="
-                    resetOtherPostpartumComplicationType(pastObstericHistory, i)
-                  "
-                  multiple>
-                  <ng-container
-                    *ngFor="
-                      let complication of masterData?.postpartumComplicationTypes
+                            .disableNonePostComplication))
                     ">
-                    <mat-option
-                      [value]="complication"
-                      [disabled]="
-                        !complicationOptionConstraints[i]
-                          .showAllPostpartumComplication &&
-                        (((complication?.postpartumComplicationType ===
-                          'None' ||
-                          complication?.postpartumComplicationType === 'Nil') &&
-                          complicationOptionConstraints[i]
-                            ?.disableNonePostpartumComplication) ||
-                          (complication?.postpartumComplicationType !==
-                            'None' &&
-                            complication?.postpartumComplicationType !==
-                              'Nil' &&
-                            !complicationOptionConstraints[i]
-                              .disableNonePostpartumComplication))
-                      ">
-                      {{ complication.postpartumComplicationType }}
-                    </mat-option>
-                  </ng-container>
-                </mat-select>
-              </mat-form-field>
-            </div>
+                    {{ complicationAbortion.complicationValue }}
+                  </z-select-item>
+                </z-select>
+              </z-form-control>
+            </z-form-field>
+          </ng-container>
 
-            <div
-              class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-              *ngIf="
-                complicationOptionConstraints[i]
-                  ?.showOtherPostpartumComplication
-              ">
-              <mat-form-field class="input-full-width">
-                <mat-label class="mat-label-text">{{
+          <z-form-field
+            class="w-full"
+            *ngIf="
+              pastObstericHistory.value.pregOutcome?.pregOutcome !== 'Abortion'
+            ">
+            <label z-form-label [attr.for]="'durationOfPregnancy' + i">{{
+              currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                ?.durationofPregnancy
+            }}</label>
+            <z-form-control>
+              <z-select
+                class="w-full"
+                [id]="'durationOfPregnancy' + i"
+                name="durationOfPregnancy"
+                [zPlaceholder]="
                   currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.others
-                }}</mat-label>
-                <input
-                  autocomplete="off"
-                  matInput
-                  appDefaultNull
-                  maxlength="50"
-                  allowText="alphaspace"
-                  name="otherPostpartumComplication"
-                  formControlName="otherPostpartumCompType" />
-              </mat-form-field>
-            </div>
+                    ?.durationofPregnancy || ''
+                "
+                [zValue]="getDurationTypeLabel(pastObstericHistory)"
+                (zSelectionChange)="
+                  onDurationTypeChange(pastObstericHistory, $event)
+                ">
+                <z-select-item
+                  *ngFor="let duration of masterData?.pregDuration"
+                  [zValue]="duration.durationType">
+                  {{ duration.durationType }}
+                </z-select-item>
+              </z-select>
+            </z-form-control>
+          </z-form-field>
 
-            <div
-              class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-              *ngIf="
-                pastObstericHistory.value.pregOutcome?.pregOutcome ===
-                'Live Birth'
-              ">
-              <mat-form-field class="input-full-width">
-                <mat-label class="mat-label-text">{{
-                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.newBornComplication
-                }}</mat-label>
-                <mat-select
-                  name="newBornComplications"
-                  formControlName="newBornComplication"
-                  (selectionChange)="
-                    resetOtherNewBornComplications(pastObstericHistory)
+          <ng-container
+            *ngIf="
+              pastObstericHistory.value.pregOutcome?.pregOutcome !== 'Abortion'
+            ">
+            <z-form-field class="w-full">
+              <label z-form-label [attr.for]="'placeOfDelivery' + i">{{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                  ?.placeofDelivery
+              }}</label>
+              <z-form-control>
+                <z-select
+                  class="w-full"
+                  [id]="'placeOfDelivery' + i"
+                  name="placeOfDelivery"
+                  [zPlaceholder]="
+                    currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                      ?.placeofDelivery || ''
+                  "
+                  [zValue]="getDeliveryPlaceLabel(pastObstericHistory)"
+                  (zSelectionChange)="
+                    onDeliveryPlaceChange(pastObstericHistory, $event)
                   ">
-                  <mat-option
+                  <z-select-item
+                    *ngFor="let place of masterData?.deliveryPlaces"
+                    [zValue]="place.deliveryPlace">
+                    {{ place.deliveryPlace }}
+                  </z-select-item>
+                </z-select>
+              </z-form-control>
+            </z-form-field>
+
+            <z-form-field
+              class="w-full"
+              *ngIf="
+                pastObstericHistory.value.deliveryPlace?.deliveryPlace ===
+                'Other'
+              ">
+              <label z-form-label [attr.for]="'otherPlaceOfDelivery' + i">{{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                  ?.others
+              }}</label>
+              <z-form-control>
+                <input
+                  z-input
+                  class="w-full"
+                  [id]="'otherPlaceOfDelivery' + i"
+                  autocomplete="off"
+                  appDefaultNull
+                  maxlength="50"
+                  allowText="alphaspace"
+                  name="otherPlaceOfDelivery"
+                  formControlName="otherDeliveryPlace" />
+              </z-form-control>
+            </z-form-field>
+          </ng-container>
+
+          <z-form-field
+            class="w-full"
+            *ngIf="
+              pastObstericHistory.value.pregOutcome?.pregOutcome !== 'Abortion'
+            ">
+            <label z-form-label [attr.for]="'typeOfDelivery' + i">{{
+              currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                ?.deliveryType
+            }}</label>
+            <z-form-control>
+              <z-select
+                class="w-full"
+                [id]="'typeOfDelivery' + i"
+                name="typeOfDelivery"
+                [zDisabled]="!pastObstericHistory.value.deliveryPlace"
+                [zPlaceholder]="
+                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                    ?.deliveryType || ''
+                "
+                [zValue]="getDeliveryTypeLabel(pastObstericHistory)"
+                (zSelectionChange)="
+                  onDeliveryTypeChange(pastObstericHistory, $event)
+                ">
+                <z-select-item
+                  *ngFor="let type of selectDeliveryTypes"
+                  [zValue]="type.deliveryType"
+                  [zDisabled]="
+                    pastObstericHistory.value?.deliveryPlace?.deliveryPlace ===
+                      'Subcentre' &&
+                    type.deliveryType === 'Cesarean Section (LSCS)'
+                  ">
+                  {{ type.deliveryType }}
+                </z-select-item>
+              </z-select>
+            </z-form-control>
+          </z-form-field>
+
+          <ng-container
+            *ngIf="
+              pastObstericHistory.value.pregOutcome?.pregOutcome !== 'Abortion'
+            ">
+            <z-form-field class="w-full">
+              <label z-form-label [attr.for]="'deliveryComplication' + i">{{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                  ?.deliveryComplication
+              }}</label>
+              <z-form-control>
+                <z-select
+                  class="w-full"
+                  [id]="'deliveryComplication' + i"
+                  name="deliveryComplication"
+                  [zMultiple]="true"
+                  [zPlaceholder]="
+                    currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                      ?.deliveryComplication || ''
+                  "
+                  [zValue]="getDeliveryComplicationValues(pastObstericHistory)"
+                  (zSelectionChange)="
+                    onDeliveryComplicationChange(pastObstericHistory, $event, i)
+                  ">
+                  <z-select-item
                     *ngFor="
-                      let complication of masterData?.newBornComplications
+                      let complication of masterData?.deliveryComplicationTypes
                     "
-                    [value]="complication">
-                    {{ complication.complicationValue }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
+                    [zValue]="complication.deliveryComplicationType"
+                    [zDisabled]="
+                      !complicationOptionConstraints[i]
+                        .showAllDeliveryComplication &&
+                      (((complication?.deliveryComplicationType === 'None' ||
+                        complication?.deliveryComplicationType === 'Nil') &&
+                        complicationOptionConstraints[i]
+                          ?.disableNoneDeliveryComplication) ||
+                        (complication?.deliveryComplicationType !== 'None' &&
+                          complication?.deliveryComplicationType !== 'Nil' &&
+                          !complicationOptionConstraints[i]
+                            .disableNoneDeliveryComplication))
+                    ">
+                    {{ complication.deliveryComplicationType }}
+                  </z-select-item>
+                </z-select>
+              </z-form-control>
+            </z-form-field>
 
-            <div
-              class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+            <z-form-field
+              class="w-full"
               *ngIf="
-                pastObstericHistory.value.newBornComplication
-                  ?.complicationValue === 'Other'
+                complicationOptionConstraints[i]?.showOtherDeliveryComplication
               ">
-              <mat-form-field class="input-full-width">
-                <mat-label class="mat-label-text">{{
-                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.others
-                }}</mat-label>
+              <label z-form-label [attr.for]="'othersDeliveryComplication' + i">{{
+                currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                  ?.others
+              }}</label>
+              <z-form-control>
                 <input
+                  z-input
+                  class="w-full"
+                  [id]="'othersDeliveryComplication' + i"
                   autocomplete="off"
-                  matInput
                   appDefaultNull
                   maxlength="50"
                   allowText="alphaspace"
-                  name="otherNewBornComplication"
-                  formControlName="otherNewBornComplication" />
-              </mat-form-field>
-            </div>
+                  name="othersDeliveryComplication"
+                  formControlName="otherDeliveryComplication" />
+              </z-form-control>
+            </z-form-field>
+          </ng-container>
 
-            <div
-              class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-              *ngIf="
-                pastObstericHistory.value.pregOutcome?.pregOutcome ===
-                'Live Birth'
-              ">
-              <mat-form-field class="input-full-width">
-                <mat-label class="mat-label-text">{{
+          <z-form-field class="w-full">
+            <label z-form-label [attr.for]="'postpartumComplication' + i">{{
+              currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                ?.postpartumComplication
+            }}</label>
+            <z-form-control>
+              <z-select
+                class="w-full"
+                [id]="'postpartumComplication' + i"
+                name="postpartumComplication"
+                [zMultiple]="true"
+                [zPlaceholder]="
                   currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
-                    ?.congenitalAnomalies
-                }}</mat-label>
-                <input
-                  autocomplete="off"
-                  matInput
-                  appDefaultNull
-                  maxlength="50"
-                  allowText="alphaspace"
-                  name="congenitalAnomalies"
-                  formControlName="congenitalAnomalies" />
-              </mat-form-field>
-            </div>
-          </div>
-        </mat-card-content>
-      </ng-container>
-    </mat-card>
+                    ?.postpartumComplication || ''
+                "
+                [zValue]="getPostpartumComplicationValues(pastObstericHistory)"
+                (zSelectionChange)="
+                  onPostpartumComplicationChange(pastObstericHistory, $event, i)
+                ">
+                <z-select-item
+                  *ngFor="
+                    let complication of masterData?.postpartumComplicationTypes
+                  "
+                  [zValue]="complication.postpartumComplicationType"
+                  [zDisabled]="
+                    !complicationOptionConstraints[i]
+                      .showAllPostpartumComplication &&
+                    (((complication?.postpartumComplicationType === 'None' ||
+                      complication?.postpartumComplicationType === 'Nil') &&
+                      complicationOptionConstraints[i]
+                        ?.disableNonePostpartumComplication) ||
+                      (complication?.postpartumComplicationType !== 'None' &&
+                        complication?.postpartumComplicationType !== 'Nil' &&
+                        !complicationOptionConstraints[i]
+                          .disableNonePostpartumComplication))
+                  ">
+                  {{ complication.postpartumComplicationType }}
+                </z-select-item>
+              </z-select>
+            </z-form-control>
+          </z-form-field>
+
+          <z-form-field
+            class="w-full"
+            *ngIf="
+              complicationOptionConstraints[i]?.showOtherPostpartumComplication
+            ">
+            <label z-form-label [attr.for]="'otherPostpartumComplication' + i">{{
+              currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                ?.others
+            }}</label>
+            <z-form-control>
+              <input
+                z-input
+                class="w-full"
+                [id]="'otherPostpartumComplication' + i"
+                autocomplete="off"
+                appDefaultNull
+                maxlength="50"
+                allowText="alphaspace"
+                name="otherPostpartumComplication"
+                formControlName="otherPostpartumCompType" />
+            </z-form-control>
+          </z-form-field>
+
+          <z-form-field
+            class="w-full"
+            *ngIf="
+              pastObstericHistory.value.pregOutcome?.pregOutcome ===
+              'Live Birth'
+            ">
+            <label z-form-label [attr.for]="'newBornComplications' + i">{{
+              currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                ?.newBornComplication
+            }}</label>
+            <z-form-control>
+              <z-select
+                class="w-full"
+                [id]="'newBornComplications' + i"
+                name="newBornComplications"
+                [zPlaceholder]="
+                  currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                    ?.newBornComplication || ''
+                "
+                [zValue]="getNewBornComplicationLabel(pastObstericHistory)"
+                (zSelectionChange)="
+                  onNewBornComplicationChange(pastObstericHistory, $event)
+                ">
+                <z-select-item
+                  *ngFor="let complication of masterData?.newBornComplications"
+                  [zValue]="complication.complicationValue">
+                  {{ complication.complicationValue }}
+                </z-select-item>
+              </z-select>
+            </z-form-control>
+          </z-form-field>
+
+          <z-form-field
+            class="w-full"
+            *ngIf="
+              pastObstericHistory.value.newBornComplication
+                ?.complicationValue === 'Other'
+            ">
+            <label z-form-label [attr.for]="'otherNewBornComplication' + i">{{
+              currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                ?.others
+            }}</label>
+            <z-form-control>
+              <input
+                z-input
+                class="w-full"
+                [id]="'otherNewBornComplication' + i"
+                autocomplete="off"
+                appDefaultNull
+                maxlength="50"
+                allowText="alphaspace"
+                name="otherNewBornComplication"
+                formControlName="otherNewBornComplication" />
+            </z-form-control>
+          </z-form-field>
+
+          <z-form-field
+            class="w-full"
+            *ngIf="
+              pastObstericHistory.value.pregOutcome?.pregOutcome ===
+              'Live Birth'
+            ">
+            <label z-form-label [attr.for]="'congenitalAnomalies' + i">{{
+              currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
+                ?.congenitalAnomalies
+            }}</label>
+            <z-form-control>
+              <input
+                z-input
+                class="w-full"
+                [id]="'congenitalAnomalies' + i"
+                autocomplete="off"
+                appDefaultNull
+                maxlength="50"
+                allowText="alphaspace"
+                name="congenitalAnomalies"
+                formControlName="congenitalAnomalies" />
+            </z-form-control>
+          </z-form-field>
+        </div>
+      </z-card-content>
+    </z-card>
   </div>
 </div>

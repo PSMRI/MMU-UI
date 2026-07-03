@@ -40,37 +40,39 @@ import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatIcon } from '@angular/material/icon';
 import { NgFor, NgClass, NgIf } from '@angular/common';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory, lucidePlus, lucideX } from '@ng-icons/lucide';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
 
 @Component({
   selector: 'app-general-family-history',
   templateUrl: './family-history.component.html',
-  styleUrls: ['./family-history.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatTooltip,
-    MatIcon,
     NgFor,
     NgClass,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
     NgIf,
-    MatInput,
+    NgIcon,
+    ...tooltipImports,
+    ZardButtonComponent,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
     NullDefaultValueDirective,
     StringValidatorDirective,
-    MatRadioGroup,
-    MatRadioButton,
   ],
+  viewProviders: [provideIcons({ lucideHistory, lucidePlus, lucideX })],
 })
 export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
   @Input()
@@ -233,6 +235,18 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
       this.diseaseSelectList.push(result.slice());
     }
     familyDiseaseList.push(this.initFamilyDiseaseList());
+  }
+
+  onDiseaseTypeChange(
+    selectedType: string | string[],
+    i: any,
+    familyDiseaseForm: AbstractControl<any, any>
+  ) {
+    const matchedDisease = (this.diseaseSelectList[i] || []).find(
+      (disease: any) => disease.diseaseType === selectedType
+    );
+    familyDiseaseForm.get('diseaseType')?.setValue(matchedDisease ?? null);
+    this.filterFamilyDiseaseList(matchedDisease, i, familyDiseaseForm);
   }
 
   filterFamilyDiseaseList(
