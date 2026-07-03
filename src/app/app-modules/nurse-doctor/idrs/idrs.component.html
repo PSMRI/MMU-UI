@@ -1,187 +1,158 @@
 <div [formGroup]="idrsScreeningForm">
-  <mat-expansion-panel expanded="true">
-    <mat-expansion-panel-header>
-      <h5>
-        <strong>{{ currentLanguageSet?.idrs?.screening }}</strong>
-      </h5>
-    </mat-expansion-panel-header>
-    <div class="row m-t-20">
-      <div class="col-xs-12">
-        <div class="row m-t-10">
-          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-            <h5>
-              <strong>{{ currentLanguageSet?.idrs?.iDRSScore }} :</strong
-              >&nbsp;&nbsp;{{
-                idrsScore +
-                  idrsScoreWaist +
-                  idrsScoreFamily +
-                  IRDSscorePhysicalActivity
-              }}
-            </h5>
-          </div>
-        </div>
-        <div class="col-12 row m-t-10">
-          <div class="col-2 box">
-            <h5 style="margin-top: 15px">
-              <strong>{{ currentLanguageSet?.idrs?.confirmedFor }} :</strong>
-            </h5>
-          </div>
-          <div
-            class="btn-group col-10 row"
-            style="width: fit-content; margin-right: 10px"
-            *ngFor="let i of confirmDiseaseArray">
-            <button mat-raised-button disabled>{{ i }}</button>
-          </div>
-        </div>
+  <z-card>
+    <z-card-header>
+      <z-card-title>{{ currentLanguageSet?.idrs?.screening }}</z-card-title>
+    </z-card-header>
+    <z-card-content class="flex flex-col gap-6">
+      <!-- IDRS score -->
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-sm font-semibold text-foreground"
+          >{{ currentLanguageSet?.idrs?.iDRSScore }} :</span
+        >
+        <span class="text-sm font-semibold text-foreground">{{
+          idrsScore +
+            idrsScoreWaist +
+            idrsScoreFamily +
+            IRDSscorePhysicalActivity
+        }}</span>
+      </div>
 
-        <div class="col-12 row m-t-10">
-          <div class="col-2 box">
-            <h5 style="margin-top: 15px">
-              <strong>{{ currentLanguageSet?.idrs?.suspectedFor }} :</strong>
-            </h5>
-          </div>
-          <div
-            class="btn-group1 col-10 row"
-            style="width: fit-content; margin-right: 10px"
-            *ngFor="let i of suspect">
-            <button mat-raised-button disabled>{{ i }}</button>
-          </div>
-        </div>
+      <!-- Confirmed diseases -->
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-sm font-semibold text-foreground"
+          >{{ currentLanguageSet?.idrs?.confirmedFor }} :</span
+        >
+        <z-badge *ngFor="let i of confirmDiseaseArray" zType="destructive">{{
+          i
+        }}</z-badge>
+      </div>
 
-        <div class="col-12" style="text-align: end">
-          <mat-label class="mat-label-text" class="font-history-label m-t-10">{{
-            currentLanguageSet?.idrs?.previousDiabetesHistory
-          }}</mat-label>
-          <button
-            type="button"
-            mat-icon-button
-            matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-            id="previousDiabetesHistory"
-            class="mat_icon_blue"
-            color="primary"
-            (click)="getPreviousDiabetesHistory()">
-            <mat-icon class="md-18">history</mat-icon>
-          </button>
-        </div>
-        <div *ngFor="let d of diseases">
-          <mat-card class="row m-t-10" *ngIf="d.disease !== 'Hypertension'">
-            <mat-card-header>
-              <mat-card-title>
-                <h4 *ngIf="!d.flag || d.confirmed">
-                  <strong style="font-weight: unset">{{ d.disease }}</strong>
-                </h4>
-                <h4 *ngIf="!d.confirmed && d.flag">
-                  <strong
-                    >{{ d.disease }}<span style="color: red">*</span></strong
-                  >
-                </h4>
-              </mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="" style="margin: 15px; overflow-y: hidden">
-                <table class="table" aria-describedby="questions">
-                  <thead>
-                    <tr>
-                      <th scope="col">
+      <!-- Suspected diseases -->
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-sm font-semibold text-foreground"
+          >{{ currentLanguageSet?.idrs?.suspectedFor }} :</span
+        >
+        <z-badge *ngFor="let i of suspect" zType="success">{{ i }}</z-badge>
+      </div>
+
+      <!-- Previous diabetes history -->
+      <div class="flex items-center justify-end gap-2">
+        <span class="text-sm font-medium text-foreground">{{
+          currentLanguageSet?.idrs?.previousDiabetesHistory
+        }}</span>
+        <button
+          z-button
+          type="button"
+          zType="ghost"
+          zSize="icon"
+          id="previousDiabetesHistory"
+          [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
+          zPosition="bottom"
+          [attr.aria-label]="currentLanguageSet?.DurationData?.previousDetails"
+          (click)="getPreviousDiabetesHistory()">
+          <ng-icon name="lucideHistory"></ng-icon>
+        </button>
+      </div>
+
+      <!-- Disease question cards -->
+      <div class="flex flex-col gap-4">
+        <ng-container *ngFor="let d of diseases">
+          <z-card *ngIf="d.disease !== 'Hypertension'">
+            <z-card-header>
+              <z-card-title class="text-base font-semibold">
+                {{ d.disease
+                }}<span *ngIf="!d.confirmed && d.flag" class="text-destructive"
+                  >*</span
+                >
+              </z-card-title>
+            </z-card-header>
+            <z-card-content>
+              <div class="overflow-x-auto">
+                <table z-table aria-describedby="questions">
+                  <thead z-table-header>
+                    <tr z-table-row>
+                      <th z-table-head scope="col">
                         {{ currentLanguageSet?.coreComponents?.sno }}
                       </th>
-                      <th scope="col">
+                      <th z-table-head scope="col">
                         {{ currentLanguageSet?.common?.question }}
                       </th>
-                      <th scope="col">
+                      <th z-table-head scope="col">
                         {{ currentLanguageSet?.common?.answer }}
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody z-table-body>
                     <ng-container *ngFor="let q of questions1; let i = index">
-                      <tr *ngIf="q.diseaseQuestionType === d.disease">
-                        <td>{{ i + 1 }}</td>
-                        <td>{{ q.question }}</td>
-                        <td>
-                          <mat-radio-group *ngIf="d.confirmed || d.disabled">
-                            <mat-radio-button
-                              color="primary"
-                              class="radio-button"
-                              [value]="true"
-                              disabled
-                              [checked]="q.answer === 'yes'"
-                              >{{
-                                currentLanguageSet?.common?.yes
-                              }}</mat-radio-button
-                            >
-                            <mat-radio-button
-                              color="primary"
-                              class="radio-button"
-                              [value]="false"
-                              disabled
-                              [checked]="q.answer === 'no'"
-                              >{{
-                                currentLanguageSet?.common?.no
-                              }}</mat-radio-button
-                            >
-                          </mat-radio-group>
-                          <mat-radio-group
+                      <tr
+                        z-table-row
+                        *ngIf="q.diseaseQuestionType === d.disease">
+                        <td z-table-cell>{{ i + 1 }}</td>
+                        <td z-table-cell>{{ q.question }}</td>
+                        <td z-table-cell>
+                          <z-radio-group
+                            *ngIf="d.confirmed || d.disabled"
+                            zOrientation="horizontal"
+                            [disabled]="true"
+                            name="idrs-{{ q.idrsQuestionID }}"
+                            [ngModel]="idrsAnswer(q)"
+                            [ngModelOptions]="{ standalone: true }">
+                            <z-radio [value]="true">{{
+                              currentLanguageSet?.common?.yes
+                            }}</z-radio>
+                            <z-radio [value]="false">{{
+                              currentLanguageSet?.common?.no
+                            }}</z-radio>
+                          </z-radio-group>
+
+                          <z-radio-group
                             *ngIf="
                               !d.confirmed &&
                               !d.disabled &&
                               d.disease === 'Diabetes'
-                            ">
-                            <mat-radio-button
-                              color="primary"
-                              class="radio-button"
-                              [value]="true"
-                              (change)="radioChange(q, 'yes', d.disease)"
-                              [checked]="q.answer === 'yes'"
-                              >{{ currentLanguageSet?.common?.yes }}
-                            </mat-radio-button>
-                            <mat-radio-button
-                              color="primary"
-                              class="radio-button"
-                              [value]="false"
-                              (change)="radioChange(q, 'no', d.disease)"
-                              [checked]="q.answer === 'no'"
-                              >{{
-                                currentLanguageSet?.common?.no
-                              }}</mat-radio-button
-                            >
-                          </mat-radio-group>
-                          <mat-radio-group
+                            "
+                            zOrientation="horizontal"
+                            name="idrs-{{ q.idrsQuestionID }}"
+                            [ngModel]="idrsAnswer(q)"
+                            [ngModelOptions]="{ standalone: true }"
+                            (zChange)="onIdrsAnswerChange(q, $event, d.disease)">
+                            <z-radio [value]="true">{{
+                              currentLanguageSet?.common?.yes
+                            }}</z-radio>
+                            <z-radio [value]="false">{{
+                              currentLanguageSet?.common?.no
+                            }}</z-radio>
+                          </z-radio-group>
+
+                          <z-radio-group
                             *ngIf="
                               !d.confirmed &&
                               !d.disabled &&
                               d.disease !== 'Diabetes' &&
                               !revisit
-                            ">
-                            <mat-radio-button
-                              color="primary"
-                              class="radio-button"
-                              [value]="true"
-                              (change)="radioChange(q, 'yes', d.disease)"
-                              [checked]="q.answer === 'yes'"
-                              >{{ currentLanguageSet?.common?.yes }}
-                            </mat-radio-button>
-                            <mat-radio-button
-                              color="primary"
-                              class="radio-button"
-                              [value]="false"
-                              (change)="radioChange(q, 'no', d.disease)"
-                              [checked]="q.answer === 'no'"
-                              >{{
-                                currentLanguageSet?.common?.no
-                              }}</mat-radio-button
-                            >
-                          </mat-radio-group>
+                            "
+                            zOrientation="horizontal"
+                            name="idrs-{{ q.idrsQuestionID }}"
+                            [ngModel]="idrsAnswer(q)"
+                            [ngModelOptions]="{ standalone: true }"
+                            (zChange)="onIdrsAnswerChange(q, $event, d.disease)">
+                            <z-radio [value]="true">{{
+                              currentLanguageSet?.common?.yes
+                            }}</z-radio>
+                            <z-radio [value]="false">{{
+                              currentLanguageSet?.common?.no
+                            }}</z-radio>
+                          </z-radio-group>
                         </td>
                       </tr>
                     </ng-container>
                   </tbody>
                 </table>
               </div>
-            </mat-card-content>
-          </mat-card>
-        </div>
+            </z-card-content>
+          </z-card>
+        </ng-container>
       </div>
-    </div>
-  </mat-expansion-panel>
+    </z-card-content>
+  </z-card>
 </div>

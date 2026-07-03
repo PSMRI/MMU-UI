@@ -56,49 +56,31 @@ import {
 import { QuickConsultUtils } from '../shared/utility';
 import { TestInVitalsService } from '../shared/services/test-in-vitals.service';
 import { environment } from 'src/environments/environment';
-import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
 import { NgIf, NgFor, NgClass, SlicePipe } from '@angular/common';
-import {
-  MatFormField,
-  MatLabel,
-  MatSuffix,
-  MatSelect,
-} from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import {
-  MatAutocompleteTrigger,
-  MatAutocomplete,
-  MatOption,
-} from '@angular/material/autocomplete';
 import { StringValidatorDirective } from '../../core/directives/stringValidator.directive';
 import { NumberValidatorDirective } from '../../core/directives/numberValidator.directive';
-import { MatTooltip } from '@angular/material/tooltip';
-import { AutocompleteScrollerDirective } from '../shared/utility/autocomplete-scroller.directive';
-import { MatIcon } from '@angular/material/icon';
 import { TestAndRadiologyComponent } from '../case-record/general-case-record/test-and-radiology/test-and-radiology.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucidePlus,
+  lucideX,
+  lucideCircleCheck,
+  lucideCircleX,
+} from '@ng-icons/lucide';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardPaginationImports } from 'Common-UI/v2/ui/pagination';
+import { ZardAccordionImports } from 'Common-UI/v2/ui/accordion';
 
 interface prescribe {
   id: any;
@@ -123,43 +105,30 @@ interface prescribe {
 @Component({
   selector: 'app-doctor-quick-consult',
   templateUrl: './quick-consult.component.html',
-  styleUrls: ['./quick-consult.component.css'],
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [
+    provideIcons({ lucidePlus, lucideX, lucideCircleCheck, lucideCircleX }),
+  ],
   imports: [
-    MatAccordion,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
     ReactiveFormsModule,
-    NgIf,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
-    NgFor,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatAutocompleteTrigger,
-    MatAutocomplete,
-    MatOption,
-    StringValidatorDirective,
-    NgClass,
-    NumberValidatorDirective,
-    MatSuffix,
-    MatTooltip,
-    MatSelect,
-    AutocompleteScrollerDirective,
-    MatIcon,
     FormsModule,
-    MatPaginator,
-    TestAndRadiologyComponent,
+    NgIf,
+    NgFor,
+    NgClass,
     SlicePipe,
+    NgIcon,
+    StringValidatorDirective,
+    NumberValidatorDirective,
+    TestAndRadiologyComponent,
+    ...cardImports,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
+    ZardButtonComponent,
+    ...tooltipImports,
+    ...ZardTableImports,
+    ...ZardPaginationImports,
+    ...ZardAccordionImports,
   ],
 })
 export class QuickConsultComponent
@@ -180,8 +149,8 @@ export class QuickConsultComponent
   createdBy: any;
   startRBSTest = environment.startRBSurl;
   pageSize = 5;
-  pageEvent!: PageEvent;
   pageLimits: any = [];
+  currentDrugPage = 1;
   rbsPopup = false;
   currentPrescription: prescribe = {
     id: null,
@@ -242,10 +211,20 @@ export class QuickConsultComponent
   rbsTestResultCurrent: any;
   rbsTestResultCurrentSubscription: any;
 
-  displayedColumns: any = ['chiefcomplaint', 'ConceptID', 'description'];
-
-  dataSource = new MatTableDataSource<any>();
+  chiefComplaintTableList: any[] = [];
   suggestedDiagnosisList: any = [];
+
+  // --- Zard control-adapter state. z-select is string-valued and there is no
+  // Zard autocomplete yet, so the autocomplete inputs keep a decoupled display
+  // string while the reactive-form / prescription controls retain their
+  // original object / number values (submission contract unchanged). ---
+  chiefComplaintDisplay: string[] = [];
+  openChiefComplaintIndex: number | null = null;
+  medicineDisplay: any = null;
+  medicineOpen = false;
+  diagnosisDisplay: string[] = [];
+  openDiagnosisIndex: number | null = null;
+
   private readonly PAGE_BASE = 0;
 
   private readonly BOOTSTRAP_MAX_PAGES = 3; // when first page can't scroll, prefill up to this many extra pages
@@ -418,8 +397,10 @@ export class QuickConsultComponent
           if (result) {
             if (diagnosisListArray.length > 1) {
               diagnosisListArray.removeAt(index);
+              this.diagnosisDisplay.splice(index, 1);
             } else {
               diagnosisListForm.reset();
+              this.diagnosisDisplay[index] = '';
               (diagnosisListForm as FormGroup).controls[
                 'viewProvisionalDiagnosisProvided'
               ].enable();
@@ -430,8 +411,10 @@ export class QuickConsultComponent
     } else {
       if (diagnosisListArray.length > 1) {
         diagnosisListArray.removeAt(index);
+        this.diagnosisDisplay.splice(index, 1);
       } else {
         diagnosisListForm.reset();
+        this.diagnosisDisplay[index] = '';
         (diagnosisListForm as FormGroup).controls[
           'viewProvisionalDiagnosisProvided'
         ].enable();
@@ -576,6 +559,7 @@ export class QuickConsultComponent
             .subscribe(res => {
               if (!res) {
                 this.tempDrugName = null;
+                this.medicineDisplay = null;
                 this.currentPrescription['id'] = '';
                 this.currentPrescription['drugName'] = '';
                 this.currentPrescription['drugID'] = '';
@@ -618,6 +602,7 @@ export class QuickConsultComponent
       isEDL: false,
     };
     this.tempDrugName = null;
+    this.medicineDisplay = null;
     this.prescriptionForm.form.markAsUntouched();
     this.isStockAvalable = '';
   }
@@ -718,8 +703,8 @@ export class QuickConsultComponent
       const complaintDetails = response.findings;
       if (complaintDetails && complaintDetails.complaints) {
         this.benChiefComplaints = complaintDetails.complaints;
-        this.dataSource.data = complaintDetails.complaints;
-        this.dataSource.data.forEach(chiefComplaint => {
+        this.chiefComplaintTableList = complaintDetails.complaints;
+        this.chiefComplaintTableList.forEach(chiefComplaint => {
           this.filterInitialComplaints(chiefComplaint);
         });
       }
@@ -792,6 +777,9 @@ export class QuickConsultComponent
               term: i.term,
               viewProvisionalDiagnosisProvided: i.term,
             });
+            // Seed the decoupled display text so the input shows the term in
+            // view mode (mirrors the old mat-autocomplete [displayWith]).
+            this.diagnosisDisplay[j] = i.term;
             (<FormGroup>generalArray.at(j)).controls[
               'provisionalDiagnosis'
             ].disable();
@@ -1324,6 +1312,133 @@ export class QuickConsultComponent
       }
     });
   }
+
+  // ===================================================================
+  // Zard control adapters. z-select emits string procedureName(s); the
+  // reactive-form controls keep their original master-object arrays so the
+  // submission contract is unchanged (mirrors the old object mat-select).
+  // ===================================================================
+  get selectedTestNames(): string[] {
+    const val = this.patientQuickConsultForm.get('test')?.value;
+    return Array.isArray(val) ? val.map((t: any) => t?.procedureName) : [];
+  }
+
+  get selectedRadiologyNames(): string[] {
+    const val = this.patientQuickConsultForm.get('radiology')?.value;
+    return Array.isArray(val) ? val.map((r: any) => r?.procedureName) : [];
+  }
+
+  private toStringArray(value: string | string[]): string[] {
+    if (Array.isArray(value)) return value;
+    return value ? [value] : [];
+  }
+
+  onTestChange(value: string | string[]): void {
+    const names = this.toStringArray(value);
+    const selected = (this.nonRadiologyMaster || []).filter((t: any) =>
+      names.includes(t.procedureName)
+    );
+    this.patientQuickConsultForm.controls['test'].setValue(selected);
+    this.patientQuickConsultForm.controls['test'].markAsDirty();
+    this.checkTestName({ value: selected });
+  }
+
+  onRadiologyChange(value: string | string[]): void {
+    const names = this.toStringArray(value);
+    const selected = (this.radiologyMaster || []).filter((r: any) =>
+      names.includes(r.procedureName)
+    );
+    this.patientQuickConsultForm.controls['radiology'].setValue(selected);
+    this.patientQuickConsultForm.controls['radiology'].markAsDirty();
+  }
+
+  // Drug-form select is object-valued (tempform); map the emitted itemFormName
+  // string back to the master object and keep it, then run the original
+  // selection-change flow.
+  onFormChange(itemFormName: string | string[]): void {
+    const name = Array.isArray(itemFormName) ? itemFormName[0] : itemFormName;
+    if (!name) {
+      this.tempform = null;
+      return;
+    }
+    const match = (this.drugFormMaster || []).find(
+      (item: any) => item.itemFormName === name
+    );
+    this.tempform = match ?? null;
+    if (this.tempform) {
+      this.getFormValueChanged();
+    }
+  }
+
+  // --- Chief-complaint autocomplete (client-side, object-valued control). The
+  // control keeps the master object (parent reads .chiefComplaintID); the input
+  // shows a decoupled display string. ---
+  onChiefComplaintKeyup(value: string, i: number, complaintForm: any): void {
+    const group = complaintForm as FormGroup;
+    group.controls['chiefComplaint'].setValue(value);
+    group.controls['chiefComplaint'].markAsDirty();
+    this.suggestChiefComplaintList(group, i);
+    const v = group.controls['chiefComplaint'].value;
+    this.chiefComplaintDisplay[i] =
+      typeof v === 'string' ? v : v?.chiefComplaint || '';
+    this.openChiefComplaintIndex = i;
+  }
+
+  onChiefComplaintSelected(compl: any, i: number, complaintForm: any): void {
+    const group = complaintForm as FormGroup;
+    group.controls['chiefComplaint'].setValue(compl);
+    group.controls['chiefComplaint'].markAsDirty();
+    this.chiefComplaintDisplay[i] = this.displayChiefComplaint(compl);
+    this.filterComplaints(compl, i);
+    this.openChiefComplaintIndex = null;
+  }
+
+  onChiefComplaintBlur(i: number): void {
+    setTimeout(() => {
+      if (this.openChiefComplaintIndex === i) {
+        this.openChiefComplaintIndex = null;
+      }
+    });
+  }
+
+  // --- Medicine autocomplete (client-side). tempDrugName keeps the original
+  // string-while-typing / object-on-select value; medicineDisplay drives the
+  // input text. ---
+  onMedicineKeyup(value: string): void {
+    this.tempDrugName = value;
+    this.medicineDisplay = value;
+    this.filterMedicine(value);
+    this.medicineOpen = true;
+  }
+
+  onMedicineSelected(item: any): void {
+    this.tempDrugName = item;
+    this.medicineDisplay = this.displayFn(item);
+    this.medicineOpen = false;
+    this.selectMedicineObject({ isUserInput: true, source: { value: item } });
+  }
+
+  onMedicineBlur(): void {
+    this.reEnterMedicine();
+    this.medicineDisplay = this.tempDrugName
+      ? this.displayFn(this.tempDrugName)
+      : null;
+    setTimeout(() => (this.medicineOpen = false));
+  }
+
+  // --- Prescribed-drugs pagination (replaces mat-paginator; keeps the existing
+  // pageLimits/setLimits slicing). ---
+  get drugPageCount(): number {
+    const length =
+      this.drugPrescriptionForm.controls['prescribedDrugs'].value?.length || 0;
+    return Math.max(1, Math.ceil(length / this.pageSize));
+  }
+
+  onDrugPageChange(page: number): void {
+    this.currentDrugPage = page;
+    this.setLimits(page - 1);
+  }
+
   onDiagnosisInputKeyup(value: string, index: number) {
     const term = (value || '').trim();
 
@@ -1361,6 +1476,32 @@ export class QuickConsultComponent
       conceptID: selected?.conceptID || null,
       term: selected?.term || null,
     });
+
+    // Keep the visible input text in sync (mirrors old [displayWith]) and
+    // close the suggestion panel.
+    diagnosisFormGroup.markAsDirty();
+    this.diagnosisDisplay[index] = this.displayDiagnosis(selected);
+    this.openDiagnosisIndex = null;
+  }
+
+  // Close the diagnosis suggestion panel after a click has had a chance to
+  // commit (mousedown fires before blur).
+  onDiagnosisBlur(index: number): void {
+    setTimeout(() => {
+      if (this.openDiagnosisIndex === index) {
+        this.openDiagnosisIndex = null;
+      }
+    });
+  }
+
+  // Native-scroll adapter replacing appAutocompleteScroller's (nearEnd): when
+  // the suggestion panel is scrolled near its bottom, fetch the next page.
+  onDiagnosisPanelScroll(index: number, panelEl: HTMLElement): void {
+    const nearEnd =
+      panelEl.scrollTop + panelEl.clientHeight >= panelEl.scrollHeight - 24;
+    if (nearEnd) {
+      this.onAutoNearEnd(index);
+    }
   }
 
   onPanelReady(index: number, panelEl: HTMLElement) {
