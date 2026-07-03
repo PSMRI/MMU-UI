@@ -58,6 +58,7 @@ import { HttpServiceService } from '../../core/services/http-service.service';
 import { IdrsscoreService } from '../shared/services/idrsscore.service';
 import { WorkareaValidationService } from './workarea-validation.service';
 import { WorkareaSubmissionService } from './workarea-submission.service';
+import { WorkareaLoaderService } from './workarea-loader.service';
 import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { environment } from 'src/environments/environment';
 import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard.service';
@@ -276,19 +277,20 @@ export class WorkareaComponent
     private fb: FormBuilder,
     private httpServiceService: HttpServiceService,
     private changeDetectorRef: ChangeDetectorRef,
-    private masterdataService: MasterdataService,
+    public masterdataService: MasterdataService,
     public nurseService: NurseService,
     public confirmationService: ConfirmationService,
     public doctorService: DoctorService,
     private route: ActivatedRoute,
-    private beneficiaryDetailsService: BeneficiaryDetailsService,
+    public beneficiaryDetailsService: BeneficiaryDetailsService,
     private readonly mdDialog: ZardDialogService,
     private readonly viewContainerRef: ViewContainerRef,
     readonly sessionstorage: SessionStorageService,
     private idrsScoreService: IdrsscoreService,
     private languageComponent: SetLanguageComponent,
     private readonly workareaValidation: WorkareaValidationService,
-    private readonly workareaSubmission: WorkareaSubmissionService
+    private readonly workareaSubmission: WorkareaSubmissionService,
+    private readonly workareaLoader: WorkareaLoaderService
   ) {}
   isSpecialist = false;
   doctorUpdateAndTCSubmit: any;
@@ -1449,167 +1451,56 @@ export class WorkareaComponent
 
   beneficiaryDetailsSubscription: any;
   getBeneficiaryDetails() {
-    this.beneficiaryDetailsSubscription =
-      this.beneficiaryDetailsService.beneficiaryDetails$.subscribe(
-        beneficiary => {
-          if (beneficiary) {
-            this.beneficiary = beneficiary;
-            this.beneficiaryAge = beneficiary.ageVal;
-            console.log('beneficiary', beneficiary);
-          }
-        }
-      );
+    return this.workareaLoader.getBeneficiaryDetails(this);
   }
 
   visitDetailMasterDataSubscription: any;
   getVisitReasonAndCategory() {
-    this.masterdataService.getVisitDetailMasterData();
-    this.visitDetailMasterDataSubscription =
-      this.masterdataService.visitDetailMasterData$.subscribe(visitDetails => {
-        if (visitDetails) {
-          this.visitCategoryList = visitDetails.visitCategories;
-          console.log('Visit Details Master Data', visitDetails);
-
-          if (this.visitCategory) {
-            this.getNurseMasterData(this.visitCategory);
-            this.getDoctorMasterData(this.visitCategory);
-          }
-        }
-      });
+    return this.workareaLoader.getVisitReasonAndCategory(this);
   }
 
   getNurseMasterData(visitCategory: string) {
-    const visitID = this.getVisitCategoryID(visitCategory);
-    const serviceProviderID = this.sessionstorage.getItem('providerServiceID');
-
-    if (visitID)
-      this.masterdataService.getNurseMasterData(visitID, serviceProviderID);
+    return this.workareaLoader.getNurseMasterData(visitCategory, this);
   }
 
   getDoctorMasterData(visitCategory: string) {
-    const visitID = this.getVisitCategoryID(visitCategory);
-    const serviceProviderID = this.sessionstorage.getItem('providerServiceID');
-
-    if (visitID)
-      this.masterdataService.getDoctorMasterData(visitID, serviceProviderID);
+    return this.workareaLoader.getDoctorMasterData(visitCategory, this);
   }
 
   getVisitCategoryID(visitCategory: string) {
-    if (visitCategory && this.visitCategoryList) {
-      const temp = this.visitCategoryList.filter((category: any) => {
-        return category.visitCategory === visitCategory;
-      });
-      if (temp.length > 0) return temp[0].visitCategoryID;
-    }
-    return null;
+    return this.workareaLoader.getVisitCategoryID(visitCategory, this);
   }
 
   getPregnancyStatus() {
-    const pg = <FormGroup>this.patientMedicalForm.controls['patientVisitForm'];
-    pg.controls['patientVisitDetailsForm'].valueChanges.subscribe(value => {
-      if (value.pregnancyStatus) {
-        this.pregnancyStatus = value.pregnancyStatus;
-      } else {
-        this.pregnancyStatus = null;
-      }
-    });
+    return this.workareaLoader.getPregnancyStatus(this);
   }
 
   patchGravidaValue() {
-    const af = this.patientMedicalForm.controls['patientANCForm'] as FormGroup;
-    const pof = (<FormGroup>(
-      this.patientMedicalForm.controls['patientHistoryForm']
-    )).controls['pastObstericHistory'] as FormGroup;
-
-    (<FormGroup>af.controls['obstetricFormulaForm']).controls[
-      'gravida_G'
-    ].valueChanges.subscribe(value => {
-      if (pof && value && value > 1)
-        pof.controls['totalNoOfPreg'].setValue(value);
-    });
+    return this.workareaLoader.patchGravidaValue(this);
   }
 
   getCurrentVitals() {
-    this.patientMedicalForm.controls[
-      'patientVitalsForm'
-    ].valueChanges.subscribe(value => {
-      if (value) {
-        this.currentVitals = value;
-      }
-    });
+    return this.workareaLoader.getCurrentVitals(this);
   }
 
   patchCancerFindings() {
-    this.patientMedicalForm.valueChanges.subscribe(
-      (patientMedicalForm: any) => {
-        this.findings = {
-          briefHistory:
-            patientMedicalForm.patientExaminationForm.signsForm.observation,
-          oralExamination:
-            patientMedicalForm.patientExaminationForm.oralExaminationForm
-              .observation,
-          abdominalExamination:
-            patientMedicalForm.patientExaminationForm.abdominalExaminationForm
-              .observation,
-          gynecologicalExamination:
-            patientMedicalForm.patientExaminationForm
-              .gynecologicalExaminationForm.observation,
-        };
-      }
-    );
+    return this.workareaLoader.patchCancerFindings(this);
   }
 
   getANCDiagnosis() {
-    const ANCForm = <FormGroup>(
-      this.patientMedicalForm.controls['patientANCForm']
-    );
-    const CaseRecordForm = <FormGroup>(
-      this.patientMedicalForm.controls['patientCaseRecordForm']
-    );
-
-    ANCForm.controls['obstetricFormulaForm'].valueChanges.subscribe(value => {
-      CaseRecordForm.controls['generalDiagnosisForm'].patchValue(value);
-    });
-    ANCForm.controls['patientANCDetailsForm'].valueChanges.subscribe(value => {
-      CaseRecordForm.controls['generalDiagnosisForm'].patchValue(value);
-    });
+    return this.workareaLoader.getANCDiagnosis(this);
   }
 
   getPrimeGravidaStatus() {
-    const ANCForm = <FormGroup>(
-      this.patientMedicalForm.controls['patientANCForm']
-    );
-    (<FormGroup>ANCForm.controls['patientANCDetailsForm']).controls[
-      'primiGravida'
-    ].valueChanges.subscribe(value => {
-      this.primeGravidaStatus = value;
-    });
+    return this.workareaLoader.getPrimeGravidaStatus(this);
   }
 
   patchLMPDate() {
-    const patientANCDetailsForm = (<FormGroup>(
-      this.patientMedicalForm.controls['patientANCForm']
-    )).controls['patientANCDetailsForm'];
-    const menstrualHistoryForm = (<FormGroup>(
-      this.patientMedicalForm.controls['patientHistoryForm']
-    )).controls['menstrualHistory'];
-
-    patientANCDetailsForm.valueChanges.subscribe(value => {
-      if (value.lmpDate) {
-        const temp = new Date(value.lmpDate);
-        menstrualHistoryForm.patchValue({ lMPDate: temp });
-      }
-    });
+    return this.workareaLoader.patchLMPDate(this);
   }
 
   patchGeneralFinding() {
-    const patientChiefComplaintsForm = (<FormGroup>(
-      this.patientMedicalForm.controls['patientVisitForm']
-    )).controls['patientChiefComplaintsForm'];
-
-    patientChiefComplaintsForm.valueChanges.subscribe(value => {
-      this.findings = value;
-    });
+    return this.workareaLoader.patchGeneralFinding(this);
   }
 
   ngAfterViewChecked() {
