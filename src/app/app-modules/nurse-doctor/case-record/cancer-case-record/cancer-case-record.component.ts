@@ -38,7 +38,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { BeneficiaryPlatformHistoryComponent } from '../beneficiary-platform-history/beneficiary-platform-history.component';
 import { NgClass, NgIf } from '@angular/common';
-import { NgChartsModule } from 'ng2-charts';
+import { BaseChartDirective } from 'ng2-charts';
 import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideFile } from '@ng-icons/lucide';
@@ -55,7 +55,7 @@ import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
     BeneficiaryPlatformHistoryComponent,
     NgClass,
     NgIf,
-    NgChartsModule,
+    BaseChartDirective,
     StringValidatorDirective,
     NgIcon,
     ...ZardAccordionImports,
