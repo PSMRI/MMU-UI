@@ -22,7 +22,7 @@
 
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { DoctorService, NurseService } from '../shared/services';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
