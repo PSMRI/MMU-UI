@@ -56,7 +56,7 @@ export class OpenPreviousVisitDetailsComponent implements OnInit {
   constructor(
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
-    private confirmationService: ConfirmationService,
+    private readonly confirmationService: ConfirmationService,
     public dialogRef: ZardDialogRef<OpenPreviousVisitDetailsComponent>
   ) {}
   ngOnInit(): void {

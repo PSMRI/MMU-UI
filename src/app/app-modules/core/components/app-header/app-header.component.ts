@@ -128,8 +128,8 @@ export class AppHeaderComponent implements OnInit {
   isConnected = true;
   status!: any;
   constructor(
-    private dialog: ZardDialogService,
-    private viewContainerRef: ViewContainerRef,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private router: Router,
     private auth: AuthService,
     private confirmationService: ConfirmationService,

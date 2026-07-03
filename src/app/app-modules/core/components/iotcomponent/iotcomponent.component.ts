@@ -85,8 +85,8 @@ export class IotcomponentComponent implements OnInit, DoCheck {
     public service: IotService,
     private confirmationService: ConfirmationService,
     readonly sessionstorage: SessionStorageService,
-    private dialog: ZardDialogService,
-    private viewContainerRef: ViewContainerRef
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef
   ) {}
 
   ngOnInit() {

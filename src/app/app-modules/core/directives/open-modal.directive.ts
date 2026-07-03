@@ -64,7 +64,7 @@ export class OpenModalDirective implements OnInit, DoCheck {
   constructor(
     private fb: FormBuilder,
     private el: ElementRef,
-    private dialog: ZardDialogService,
+    private readonly dialog: ZardDialogService,
     private readonly viewContainerRef: ViewContainerRef,
     readonly sessionstorage: SessionStorageService,
     private httpServiceService: HttpServiceService

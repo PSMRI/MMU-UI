@@ -58,7 +58,7 @@ export class IotBluetoothComponent implements OnInit, DoCheck {
   constructor(
     public service: IotService,
     public httpServiceService: HttpServiceService,
-    private confirmationService: ConfirmationService,
+    private readonly confirmationService: ConfirmationService,
     public dialogRef: ZardDialogRef<IotBluetoothComponent>
   ) {}
 

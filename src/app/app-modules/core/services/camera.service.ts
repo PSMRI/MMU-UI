@@ -28,7 +28,7 @@ import { CameraDialogComponent } from '../components/camera-dialog/camera-dialog
 @Injectable()
 export class CameraService {
   constructor(
-    private dialog: ZardDialogService,
+    private readonly dialog: ZardDialogService,
     @Inject(DOCUMENT) doc: any
   ) {}
 
