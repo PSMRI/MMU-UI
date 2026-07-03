@@ -1,22 +1,43 @@
-<mat-accordion [formGroup]="patientVisitForm">
-  <mat-expansion-panel expanded="true">
-    <mat-expansion-panel-header>
-      <h5>{{ currentLanguageSet?.nurseData?.visitDetails }}</h5>
-    </mat-expansion-panel-header>
-    <app-patient-visit-details
-      [mode]="mode"
-      [patientVisitDetailsForm]="
-        patientVisitDetailsForm
-      "></app-patient-visit-details>
-  </mat-expansion-panel>
+<z-accordion
+  [formGroup]="patientVisitForm"
+  zType="single"
+  class="flex flex-col gap-4">
+  <z-accordion-item
+    zValue="visit"
+    class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
+        {{ currentLanguageSet?.nurseData?.visitDetails }}
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-patient-visit-details
+          [mode]="mode"
+          [patientVisitDetailsForm]="
+            patientVisitDetailsForm
+          "></app-patient-visit-details>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>{{ currentLanguageSet?.tmcConfirmation }}</h5>
-    </mat-expansion-panel-header>
-    <app-tmcconfirmation
-      [mode]="mode"
-      [tmcConfirmationFormsGroup]="tmcConfirmationForm"
-      [patientVisitDetailsForm]="patientVisitDetailsForm"></app-tmcconfirmation>
-  </mat-expansion-panel>
-</mat-accordion>
+  <z-accordion-item
+    zValue="tmc"
+    class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
+        {{ currentLanguageSet?.tmcConfirmation }}
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-tmcconfirmation
+          [mode]="mode"
+          [tmcConfirmationFormsGroup]="tmcConfirmationForm"
+          [patientVisitDetailsForm]="
+            patientVisitDetailsForm
+          "></app-tmcconfirmation>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
+</z-accordion>

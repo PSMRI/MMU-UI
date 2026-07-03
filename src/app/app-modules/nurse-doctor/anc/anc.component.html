@@ -1,34 +1,66 @@
-<mat-accordion [formGroup]="patientANCDataForm">
-  <mat-expansion-panel expanded="true">
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.ancData?.ancDetails }}</h5>
-    </mat-expansion-panel-header>
-    <app-nurse-anc-details
-      [patientANCDetailsForm]="patientANCDetailsForm"></app-nurse-anc-details>
-  </mat-expansion-panel>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>
-        {{ current_language_set?.ancData?.obstetricDeatils?.obstetricFormula }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-nurse-obstetric-formula
-      [gravidaStatus]="gravidaStatus"
-      [mode]="mode"
-      [obstetricFormulaForm]="
-        obstetricFormulaForm
-      "></app-nurse-obstetric-formula>
-  </mat-expansion-panel>
-  <mat-expansion-panel
-    *ngIf="gravidaStatus !== null && gravidaStatus !== undefined">
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.ancData?.ancImmune?.ancImmunization }}</h5>
-    </mat-expansion-panel-header>
-    <app-nurse-anc-immunization
-      [gravidaStatus]="gravidaStatus"
-      [mode]="mode"
-      [patientANCImmunizationForm]="
-        patientANCImmunizationForm
-      "></app-nurse-anc-immunization>
-  </mat-expansion-panel>
-</mat-accordion>
+<z-accordion
+  [formGroup]="patientANCDataForm"
+  class="flex flex-col gap-4">
+  <z-accordion-item
+    class="rounded-lg border border-border bg-card"
+    zValue="ancDetails">
+    <div class="flex items-center px-4">
+      <z-accordion-trigger class="flex-1 text-left">
+        <span class="text-sm font-semibold text-foreground">
+          {{ current_language_set?.ancData?.ancDetails }}
+        </span>
+      </z-accordion-trigger>
+    </div>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-nurse-anc-details
+          [patientANCDetailsForm]="patientANCDetailsForm"></app-nurse-anc-details>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
+
+  <z-accordion-item
+    class="rounded-lg border border-border bg-card"
+    zValue="obstetricFormula">
+    <div class="flex items-center px-4">
+      <z-accordion-trigger class="flex-1 text-left">
+        <span class="text-sm font-semibold text-foreground">
+          {{ current_language_set?.ancData?.obstetricDeatils?.obstetricFormula }}
+        </span>
+      </z-accordion-trigger>
+    </div>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-nurse-obstetric-formula
+          [gravidaStatus]="gravidaStatus"
+          [mode]="mode"
+          [obstetricFormulaForm]="
+            obstetricFormulaForm
+          "></app-nurse-obstetric-formula>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
+
+  <z-accordion-item
+    *ngIf="gravidaStatus !== null && gravidaStatus !== undefined"
+    class="rounded-lg border border-border bg-card"
+    zValue="ancImmunization">
+    <div class="flex items-center px-4">
+      <z-accordion-trigger class="flex-1 text-left">
+        <span class="text-sm font-semibold text-foreground">
+          {{ current_language_set?.ancData?.ancImmune?.ancImmunization }}
+        </span>
+      </z-accordion-trigger>
+    </div>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-nurse-anc-immunization
+          [gravidaStatus]="gravidaStatus"
+          [mode]="mode"
+          [patientANCImmunizationForm]="
+            patientANCImmunizationForm
+          "></app-nurse-anc-immunization>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
+</z-accordion>
