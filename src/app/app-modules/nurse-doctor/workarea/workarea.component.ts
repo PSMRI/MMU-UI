@@ -57,6 +57,7 @@ import { Observable, Subscription, of } from 'rxjs';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { IdrsscoreService } from '../shared/services/idrsscore.service';
 import { WorkareaValidationService } from './workarea-validation.service';
+import { WorkareaSubmissionService } from './workarea-submission.service';
 import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { environment } from 'src/environments/environment';
 import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard.service';
@@ -271,14 +272,14 @@ export class WorkareaComponent
   idrsScreeningForm!: FormGroup;
 
   constructor(
-    private router: Router,
+    public router: Router,
     private fb: FormBuilder,
     private httpServiceService: HttpServiceService,
     private changeDetectorRef: ChangeDetectorRef,
     private masterdataService: MasterdataService,
     public nurseService: NurseService,
     public confirmationService: ConfirmationService,
-    private doctorService: DoctorService,
+    public doctorService: DoctorService,
     private route: ActivatedRoute,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private readonly mdDialog: ZardDialogService,
@@ -286,7 +287,8 @@ export class WorkareaComponent
     readonly sessionstorage: SessionStorageService,
     private idrsScoreService: IdrsscoreService,
     private languageComponent: SetLanguageComponent,
-    private readonly workareaValidation: WorkareaValidationService
+    private readonly workareaValidation: WorkareaValidationService,
+    private readonly workareaSubmission: WorkareaSubmissionService
   ) {}
   isSpecialist = false;
   doctorUpdateAndTCSubmit: any;
@@ -1044,52 +1046,10 @@ export class WorkareaComponent
   }
 
   submitPatientMedicalDetailsForm(medicalForm: any) {
-    this.disableSubmitButton = true;
-    this.showProgressBar = true;
-
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
-    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
-    const serviceID = this.sessionstorage.getItem('serviceID');
-    const createdBy = this.sessionstorage.getItem('userName');
-    const benVisitDetails = {
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
-      parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
-      serviceID: serviceID,
-      createdBy: createdBy,
-    };
-    const temp = {
-      beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
-    };
-    if (this.visitCategory === 'Cancer Screening')
-      this.submitNurseCancerVisitDetails(medicalForm);
-
-    if (this.visitCategory === 'NCD screening')
-      this.submitNurseNCDScreeningVisitDetails(medicalForm);
-
-    if (this.visitCategory === 'General OPD (QC)')
-      this.submitNurseQuickConsultVisitDetails(medicalForm);
-
-    if (this.visitCategory === 'ANC')
-      this.submitNurseANCVisitDetails(medicalForm);
-
-    if (this.visitCategory === 'PNC')
-      this.submitPatientMedicalDetailsPNC(medicalForm);
-
-    if (this.visitCategory === 'General OPD')
-      this.submitNurseGeneralOPDVisitDetails(medicalForm);
-
-    if (this.visitCategory === 'NCD care')
-      this.submitNurseNCDcareVisitDetails(medicalForm);
-
-    if (this.visitCategory === 'COVID-19 Screening')
-      this.submitNurseCovidcareVisitDetails(medicalForm);
+    return this.workareaSubmission.submitPatientMedicalDetailsForm(
+      medicalForm,
+      this
+    );
   }
 
   removeBeneficiaryDataForNurseVisit() {
@@ -1100,29 +1060,7 @@ export class WorkareaComponent
   }
 
   submitDoctorDiagnosisForm() {
-    this.disableSubmitButton = true;
-    // this.showProgressBar = true;
-
-    if (this.visitCategory === 'Cancer Screening')
-      this.submitCancerDiagnosisForm();
-
-    if (this.visitCategory === 'General OPD (QC)')
-      this.submitQuickConsultDiagnosisForm();
-
-    if (this.visitCategory === 'ANC') this.submitANCDiagnosisForm();
-
-    if (this.visitCategory === 'PNC') this.submitPNCDiagnosisForm();
-
-    if (this.visitCategory === 'General OPD')
-      this.submitGeneralOPDDiagnosisForm();
-
-    if (this.visitCategory === 'NCD care') this.submitNCDCareDiagnosisForm();
-
-    if (this.visitCategory === 'COVID-19 Screening')
-      this.submitCovidCareDiagnosisForm();
-
-    if (this.visitCategory === 'NCD screening')
-      this.submitNCDScreeningDiagnosisForm();
+    return this.workareaSubmission.submitDoctorDiagnosisForm(this);
   }
 
   removeBeneficiaryDataForDoctorVisit() {
@@ -1140,154 +1078,7 @@ export class WorkareaComponent
   }
 
   updateDoctorDiagnosisForm() {
-    this.disableSubmitButton = true;
-    this.showProgressBar = true;
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
-
-    const visitCategory = this.sessionstorage.getItem('visitCategory');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
-    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
-    const otherDetails = {
-      beneficiaryRegID: this.beneficiaryRegID,
-      benVisitID: this.visitID,
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      isSpecialist: this.isSpecialist,
-    };
-
-    const prescribedDrugs = this.getLabandPrescriptionData();
-
-    if (visitCategory === 'Cancer Screening') {
-      if (this.checkCancerRequiredData(this.patientMedicalForm)) {
-        this.doctorService
-          .saveSpecialistCancerObservation(
-            this.patientMedicalForm,
-            otherDetails,
-            this.doctorSignatureFlag
-          )
-          .subscribe(
-            (res: any) => {
-              if (res.statusCode === 200 && res.data !== null) {
-                this.patientMedicalForm.reset();
-                this.confirmationService.alert(res.data.message, 'success');
-                // if (prescribedDrugs.length > 0) {
-                //   const prescriptionSmsObject = this.SMSObjectCreation(
-                //     [],
-                //     prescribedDrugs,
-                //     res.data.prescribedDrugIDs
-                //   );
-                //   this.sendPrescriptionSms(prescriptionSmsObject);
-                // }
-                this.confirmationService.alert(res.data.message, 'success');
-                if (this.isSpecialist) {
-                  this.router.navigate(['/common/tcspecialist-worklist']);
-                } else {
-                  this.router.navigate(['/nurse-doctor/doctor-worklist']);
-                }
-              } else {
-                this.resetSpinnerandEnableTheSubmitButton();
-                this.confirmationService.alert(res.errorMessage, 'error');
-              }
-            },
-            err => {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(err, 'error');
-            }
-          );
-      }
-    } else if (visitCategory === 'NCD screening') {
-      if (this.checkNCDScreeningRequiredData(this.patientMedicalForm)) {
-        this.doctorService
-          .updateDoctorDiagnosisDetails(
-            this.patientMedicalForm,
-            visitCategory,
-            otherDetails,
-            this.schedulerData,
-            this.doctorSignatureFlag
-          )
-          .subscribe(
-            (res: any) => {
-              if (res.statusCode === 200 && res.data !== null) {
-                this.patientMedicalForm.reset();
-                sessionStorage.removeItem('instFlag');
-                sessionStorage.removeItem('suspectFlag');
-
-                // if (prescribedDrugs.length > 0) {
-                //   const prescriptionSmsObject = this.SMSObjectCreation(
-                //     [],
-                //     prescribedDrugs,
-                //     res.data.prescribedDrugIDs
-                //   );
-                //   this.sendPrescriptionSms(prescriptionSmsObject);
-                // } else {
-                this.confirmationService.alert(res.data.message, 'success');
-                if (this.isSpecialist) {
-                  this.router.navigate(['/common/tcspecialist-worklist']);
-                } else {
-                  this.router.navigate(['/nurse-doctor/doctor-worklist']);
-                }
-                // }
-              } else {
-                this.resetSpinnerandEnableTheSubmitButton();
-                this.confirmationService.alert(res.errorMessage, 'error');
-              }
-            },
-            err => {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(err, 'error');
-            }
-          );
-      }
-    } else {
-      if (this.checkNurseRequirements(this.patientMedicalForm)) {
-        this.doctorService
-          .updateDoctorDiagnosisDetails(
-            this.patientMedicalForm,
-            visitCategory,
-            otherDetails,
-            this.schedulerData,
-            this.doctorSignatureFlag
-          )
-          .subscribe(
-            (res: any) => {
-              if (res.statusCode === 200 && res.data !== null) {
-                this.patientMedicalForm.reset();
-
-                // if (prescribedDrugs.length > 0) {
-                //   const prescriptionSmsObject = this.SMSObjectCreation(
-                //     [],
-                //     prescribedDrugs,
-                //     res.data.prescribedDrugIDs
-                //   );
-                //   this.sendPrescriptionSms(prescriptionSmsObject);
-                // } else {
-                this.confirmationService.alert(res.data.message, 'success');
-                if (this.isSpecialist) {
-                  this.router.navigate(['/common/tcspecialist-worklist']);
-                } else {
-                  this.router.navigate(['/nurse-doctor/doctor-worklist']);
-                }
-                // }
-              } else {
-                this.resetSpinnerandEnableTheSubmitButton();
-                this.confirmationService.alert(res.errorMessage, 'error');
-              }
-            },
-            err => {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(err, 'error');
-            }
-          );
-      }
-    }
+    return this.workareaSubmission.updateDoctorDiagnosisForm(this);
   }
 
   idrsChange(value: any) {
@@ -1298,49 +1089,10 @@ export class WorkareaComponent
    * Submit Nurse Cancer Details
    */
   submitNurseCancerVisitDetails(medicalForm: any) {
-    if (this.checkCancerRequiredData(medicalForm)) {
-      // check if the form is valid
-      const imageCoordiantes = this.getImageCoordinates(medicalForm);
-      this.showProgressBar = false;
-
-      this.confirmationService
-        .confirm(
-          `info`,
-          this.currentLanguageSet.alerts.info.doctorVisit,
-          'Yes',
-          'No'
-        )
-        .subscribe(result => {
-          if (result !== undefined && result !== null)
-            this.nurseService
-              .postNurseCancerVisitForm(medicalForm, imageCoordiantes, result)
-              .subscribe(
-                (res: any) => {
-                  if (res.statusCode === 200 && res.data !== null) {
-                    this.patientMedicalForm.reset();
-                    this.removeBeneficiaryDataForNurseVisit();
-                    this.confirmationService.alert(
-                      res.data.response,
-                      'success'
-                    );
-                    this.router.navigate(['/nurse-doctor/nurse-worklist']);
-                  } else if (res.statusCode === 9999) {
-                    this.patientMedicalForm.reset();
-                    this.removeBeneficiaryDataForNurseVisit();
-                    this.confirmationService.alert(res.errorMessage, 'info');
-                    this.router.navigate(['/nurse-doctor/nurse-worklist']);
-                  } else {
-                    this.resetSpinnerandEnableTheSubmitButton();
-                    this.confirmationService.alert(res.errorMessage, 'error');
-                  }
-                },
-                err => {
-                  this.resetSpinnerandEnableTheSubmitButton();
-                  this.confirmationService.alert(err, 'error');
-                }
-              );
-        });
-    }
+    return this.workareaSubmission.submitNurseCancerVisitDetails(
+      medicalForm,
+      this
+    );
   }
 
   resetSpinnerandEnableTheSubmitButton() {
@@ -1408,32 +1160,7 @@ export class WorkareaComponent
    * Submit Doctor Cancer Details
    */
   submitCancerDiagnosisForm() {
-    if (this.checkCancerRequiredData(this.patientMedicalForm)) {
-      // check if the form is valid
-      this.doctorService
-        .postDoctorCancerVisitDetails(
-          this.patientMedicalForm,
-          this.schedulerData,
-          this.doctorSignatureFlag
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              this.confirmationService.alert(res.data.message, 'success');
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitCancerDiagnosisForm(this);
   }
 
   checkNurseRequirements(medicalForm: any) {
@@ -1444,45 +1171,7 @@ export class WorkareaComponent
     return this.workareaValidation.checkCancerRequiredData(medicalForm, this);
   }
   submitTMPatientVisitForm(medicalForm: any) {
-    if (this.checkTMVisitDetailsRequiredData(medicalForm)) {
-      const tmVisitForm = <FormGroup>medicalForm.controls['patientVisitForm'];
-      const tmPatientVisitDetails = <FormGroup>(
-        tmVisitForm.controls['tmcConfirmationForm'].value
-      );
-      const temp = {
-        beneficiaryRegID: this.beneficiaryRegID,
-        benVisitID: this.visitID,
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        createdBy: this.sessionstorage.getItem('userName'),
-      };
-      console.log(
-        'TM Patient Visit Details',
-        JSON.stringify(tmPatientVisitDetails)
-      );
-      this.doctorService
-        .postTMReferedNurseDetails(
-          this.patientMedicalForm,
-          temp,
-          this.schedulerData
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              this.confirmationService.alert(res.data.response, 'success');
-              this.doctorService.prescribedDrugData = null;
-              this.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitTMPatientVisitForm(medicalForm, this);
   }
   checkTMVisitDetailsRequiredData(medicalForm: any) {
     return this.workareaValidation.checkTMVisitDetailsRequiredData(
@@ -1501,25 +1190,10 @@ export class WorkareaComponent
    * Submit NURSE GENERAL QUICK CONSULT
    */
   submitNurseQuickConsultVisitDetails(medicalForm: any) {
-    if (this.checkNurseRequirements(medicalForm)) {
-      this.nurseService.postNurseGeneralQCVisitForm(medicalForm).subscribe(
-        (res: any) => {
-          if (res.statusCode === 200 && res.data !== null) {
-            this.patientMedicalForm.reset();
-            this.removeBeneficiaryDataForNurseVisit();
-            this.confirmationService.alert(res.data.response, 'success');
-            this.router.navigate(['/nurse-doctor/nurse-worklist']);
-          } else {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(res.errorMessage, 'error');
-          }
-        },
-        err => {
-          this.resetSpinnerandEnableTheSubmitButton();
-          this.confirmationService.alert(err, 'error');
-        }
-      );
-    }
+    return this.workareaSubmission.submitNurseQuickConsultVisitDetails(
+      medicalForm,
+      this
+    );
   }
 
   checkQuickConsultDoctorData(patientMedicalForm: any) {
@@ -1533,95 +1207,7 @@ export class WorkareaComponent
    * Submit DOCTOR GENERAL QUICK CONSULT
    */
   submitQuickConsultDiagnosisForm() {
-    const otherQcDetails = {
-      beneficiaryRegID: this.beneficiaryRegID,
-      benVisitID: this.visitID,
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
-    };
-
-    const valid = this.checkQuickConsultDoctorData(this.patientMedicalForm);
-    if (valid) {
-      const patientQuickConsultForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientQuickConsultForm']
-      );
-      const patientQuickConsultFormValue = JSON.parse(
-        JSON.stringify(patientQuickConsultForm.value)
-      );
-      console.log(patientQuickConsultFormValue, 'formValue');
-      const chiefComplaintList =
-        patientQuickConsultFormValue.chiefComplaintList;
-      chiefComplaintList.forEach((element: any) => {
-        if (element.chiefComplaint) {
-          element.chiefComplaintID = element.chiefComplaint.chiefComplaintID;
-          element.chiefComplaint = element.chiefComplaint.chiefComplaint;
-        }
-      });
-
-      let prescribedDrugs =
-        patientQuickConsultFormValue.prescription.prescribedDrugs;
-      prescribedDrugs = prescribedDrugs.filter((item: any) => !!item.createdBy);
-      patientQuickConsultFormValue.prescription = prescribedDrugs;
-
-      let labTestOrders = [];
-      if (
-        patientQuickConsultFormValue.test !== null &&
-        patientQuickConsultFormValue.radiology !== null
-      ) {
-        labTestOrders = patientQuickConsultFormValue.test.concat(
-          patientQuickConsultFormValue.radiology
-        );
-      } else if (patientQuickConsultFormValue.test !== null) {
-        labTestOrders = Object.assign([], patientQuickConsultFormValue.test);
-      } else {
-        labTestOrders = Object.assign(
-          [],
-          patientQuickConsultFormValue.radiology
-        );
-      }
-
-      patientQuickConsultFormValue.labTestOrders = labTestOrders;
-      patientQuickConsultFormValue.test = undefined;
-      patientQuickConsultFormValue.radiology = undefined;
-      patientQuickConsultFormValue.refer = this.doctorService.postGeneralRefer(
-        this.patientReferForm,
-        otherQcDetails
-      );
-
-      this.doctorService
-        .postQuickConsultDetails(
-          { quickConsultation: patientQuickConsultFormValue },
-          this.schedulerData,
-          this.doctorSignatureFlag
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = this.SMSObjectCreation(
-              //     [],
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   this.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              this.confirmationService.alert(res.data.message, 'success');
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitQuickConsultDiagnosisForm(this);
   }
 
   SMSObjectCreation(
@@ -1663,473 +1249,78 @@ export class WorkareaComponent
   }
 
   updateQuickConsultDiagnosisForm() {
-    const patientQuickConsultDetails = this.mapDoctorQuickConsultDetails();
-    const prescribedDrugs = patientQuickConsultDetails.prescription || [];
-    this.doctorService
-      .updateQuickConsultDetails(
-        { quickConsultation: patientQuickConsultDetails },
-        this.schedulerData,
-        this.isSpecialist,
-        this.doctorSignatureFlag
-      )
-      .subscribe(
-        (res: any) => {
-          if (res.statusCode === 200 && res.data !== null) {
-            this.patientMedicalForm.reset();
-            // if (prescribedDrugs.length > 0) {
-            //   const prescriptionSmsObject = this.SMSObjectCreation(
-            //     [],
-            //     prescribedDrugs,
-            //     res.data.prescribedDrugIDs
-            //   );
-            //   this.sendPrescriptionSms(prescriptionSmsObject);
-            // } else {
-            this.confirmationService.alert(res.data.message, 'success');
-            if (this.isSpecialist) {
-              this.router.navigate(['/common/tcspecialist-worklist']);
-            } else {
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-            }
-            // }
-          } else {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(res.errorMessage, 'error');
-          }
-        },
-        err => {
-          this.resetSpinnerandEnableTheSubmitButton();
-          this.confirmationService.alert(err, 'error');
-        }
-      );
+    return this.workareaSubmission.updateQuickConsultDiagnosisForm(this);
   }
 
   mapDoctorQuickConsultDetails() {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
-    const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
-    const otherQcDetails = {
-      beneficiaryRegID: this.beneficiaryRegID,
-      benVisitID: this.visitID,
-      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-      createdBy: this.sessionstorage.getItem('userName'),
-      sessionID: this.sessionstorage.getItem('sessionID'),
-      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
-      parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
-      visitCode: this.sessionstorage.getItem('visitCode'),
-      serviceID: this.sessionstorage.getItem('serviceID'),
-      benFlowID: this.sessionstorage.getItem('benFlowID'),
-      isSpecialist: this.isSpecialist,
-    };
-    const patientQuickConsultForm = <FormGroup>(
-      this.patientMedicalForm.controls['patientQuickConsultForm']
-    );
-    const patientQuickConsultDetails = JSON.parse(
-      JSON.stringify(patientQuickConsultForm.value)
-    );
-    let prescribedDrugs =
-      patientQuickConsultDetails.prescription.prescribedDrugs;
-    prescribedDrugs = prescribedDrugs.filter((item: any) => !!item.createdBy);
-    patientQuickConsultDetails.prescription = prescribedDrugs;
-
-    const chiefComplaintList = patientQuickConsultDetails.chiefComplaintList;
-    chiefComplaintList.forEach((element: any) => {
-      if (element.chiefComplaint) {
-        element.chiefComplaintID = element.chiefComplaint.chiefComplaintID;
-        element.chiefComplaint = element.chiefComplaint.chiefComplaint;
-      }
-    });
-
-    let labTestOrders = [];
-    if (
-      patientQuickConsultDetails.test !== null &&
-      patientQuickConsultDetails.radiology !== null
-    ) {
-      labTestOrders = patientQuickConsultDetails.test.concat(
-        patientQuickConsultDetails.radiology
-      );
-    } else if (patientQuickConsultDetails.test !== null) {
-      labTestOrders = Object.assign([], patientQuickConsultDetails.test);
-    } else {
-      labTestOrders = Object.assign([], patientQuickConsultDetails.radiology);
-    }
-    labTestOrders = labTestOrders.filter((test: any) => !test.disabled);
-
-    patientQuickConsultDetails.labTestOrders = labTestOrders;
-    patientQuickConsultDetails.chiefComplaintList = chiefComplaintList;
-    patientQuickConsultDetails.prescribedDrugs = prescribedDrugs;
-    patientQuickConsultDetails.test = undefined;
-    patientQuickConsultDetails.radiology = undefined;
-    this.patientReferForm = this.patientMedicalForm.get(
-      'patientReferForm'
-    ) as FormGroup;
-    patientQuickConsultDetails.refer = this.doctorService.postGeneralRefer(
-      this.patientReferForm,
-      otherQcDetails
-    );
-
-    return patientQuickConsultDetails;
+    return this.workareaSubmission.mapDoctorQuickConsultDetails(this);
   }
   /**
    * Submit NURSE ANC Details
    */
   submitNurseANCVisitDetails(medicalForm: any) {
-    if (this.checkNurseRequirements(medicalForm)) {
-      this.nurseService
-        .postNurseANCVisitForm(
-          medicalForm,
-          null,
-          this.visitCategory,
-          this.beneficiary.ageVal
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForNurseVisit();
-              this.confirmationService.alert(res.data.response, 'success');
-              this.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitNurseANCVisitDetails(
+      medicalForm,
+      this
+    );
   }
 
   /**
    * Submit DOCTOR ANC Details
    */
   submitANCDiagnosisForm() {
-    if (this.checkNurseRequirements(this.patientMedicalForm)) {
-      const temp = {
-        beneficiaryRegID: this.beneficiaryRegID,
-        benVisitID: this.visitID,
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        createdBy: this.sessionstorage.getItem('userName'),
-      };
-      const prescribedDrugs = this.getLabandPrescriptionData();
-      this.doctorService
-        .postDoctorANCDetails(
-          this.patientMedicalForm,
-          temp,
-          this.schedulerData,
-          this.doctorSignatureFlag
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = this.SMSObjectCreation(
-              //     [],
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   this.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              this.confirmationService.alert(res.data.message, 'success');
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitANCDiagnosisForm(this);
   }
 
   /**
    * Submit Function for NCD Care
    */
   submitNurseNCDcareVisitDetails(medicalForm: any) {
-    if (this.checkNurseRequirements(medicalForm)) {
-      this.nurseService
-        .postNurseNCDCareVisitForm(
-          medicalForm,
-          this.visitCategory,
-          this.beneficiary
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForNurseVisit();
-              this.confirmationService.alert(res.data.response, 'success');
-              this.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitNurseNCDcareVisitDetails(
+      medicalForm,
+      this
+    );
   }
 
   /**
    * Submit Function for Covid
    */
   submitNurseCovidcareVisitDetails(medicalForm: any) {
-    if (this.checkNurseRequirements(medicalForm)) {
-      this.nurseService
-        .postNurseCovidCareVisitForm(
-          medicalForm,
-          this.visitCategory,
-          this.beneficiary
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForNurseVisit();
-              this.confirmationService.alert(res.data.response, 'success');
-              this.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitNurseCovidcareVisitDetails(
+      medicalForm,
+      this
+    );
   }
 
   /**
    * Submit Nurse NCD Screening
    */
   submitNurseNCDScreeningVisitDetails(medicalForm: any) {
-    if (this.checkNCDScreeningRequiredData(medicalForm)) {
-      this.nurseService
-        .postNCDScreeningForm(medicalForm, this.visitCategory)
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForNurseVisit();
-              this.confirmationService.alert(res.data.response, 'success');
-              this.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitNurseNCDScreeningVisitDetails(
+      medicalForm,
+      this
+    );
   }
 
   submitNCDCareDiagnosisForm() {
-    if (this.checkNurseRequirements(this.patientMedicalForm)) {
-      const temp = {
-        beneficiaryRegID: this.beneficiaryRegID,
-        benVisitID: this.visitID,
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        createdBy: this.sessionstorage.getItem('userName'),
-      };
-
-      const patientVisitForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientCaseRecordForm']
-      );
-      const prescribedDrugs = this.getLabandPrescriptionData();
-
-      this.doctorService
-        .postDoctorNCDCareDetails(
-          this.patientMedicalForm,
-          temp,
-          this.schedulerData,
-          this.doctorSignatureFlag
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = this.SMSObjectCreation(
-              //     JSON.parse(
-              //       JSON.stringify(
-              //         (
-              //           patientVisitForm.get(
-              //             'generalDiagnosisForm.provisionalDiagnosisList'
-              //           ) as FormArray
-              //         ).value
-              //       )
-              //     ),
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   this.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              this.confirmationService.alert(res.data.message, 'success');
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitNCDCareDiagnosisForm(this);
   }
 
   submitCovidCareDiagnosisForm() {
-    if (this.checkNurseRequirements(this.patientMedicalForm)) {
-      const temp = {
-        beneficiaryRegID: this.beneficiaryRegID,
-        benVisitID: this.visitID,
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        createdBy: this.sessionstorage.getItem('userName'),
-      };
-
-      const patientVisitForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientCaseRecordForm']
-      );
-
-      this.doctorService
-        .postDoctorCovidCareDetails(
-          this.patientMedicalForm,
-          temp,
-          this.schedulerData
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              this.confirmationService.alert(res.data.response, 'success');
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitCovidCareDiagnosisForm(this);
   }
   submitNCDScreeningDiagnosisForm() {
-    if (this.checkNCDScreeningRequiredData(this.patientMedicalForm)) {
-      const temp = {
-        beneficiaryRegID: this.beneficiaryRegID,
-        benVisitID: this.visitID,
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        createdBy: this.sessionstorage.getItem('userName'),
-      };
-
-      const patientVisitForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientCaseRecordForm']
-      );
-
-      const prescribedDrugs = this.getLabandPrescriptionData();
-
-      this.doctorService
-        .postDoctorNCDScreeningDetails(
-          this.patientMedicalForm,
-          temp,
-          this.schedulerData,
-          this.doctorSignatureFlag
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              sessionStorage.removeItem('instFlag');
-              sessionStorage.removeItem('suspectFlag');
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = this.SMSObjectCreation(
-              //     JSON.parse(
-              //       JSON.stringify(
-              //         (
-              //           patientVisitForm.get(
-              //             'generalDiagnosisForm.provisionalDiagnosisList'
-              //           ) as FormArray
-              //         ).value
-              //       )
-              //     ),
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   this.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              this.confirmationService.alert(res.data.message, 'success');
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitNCDScreeningDiagnosisForm(this);
   }
   /**
    * Submit Function for PNC
    *
    */
   submitPatientMedicalDetailsPNC(medicalForm: any) {
-    if (this.checkNurseRequirements(medicalForm)) {
-      this.nurseService
-        .postNursePNCVisitForm(
-          medicalForm,
-          this.visitCategory,
-          this.beneficiary
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForNurseVisit();
-              this.confirmationService.alert(res.data.response, 'success');
-              this.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitPatientMedicalDetailsPNC(
+      medicalForm,
+      this
+    );
   }
 
   /**
@@ -2137,145 +1328,18 @@ export class WorkareaComponent
    *
    */
   submitNurseGeneralOPDVisitDetails(medicalForm: any) {
-    if (this.checkNurseRequirements(medicalForm)) {
-      this.nurseService
-        .postNurseGeneralOPDVisitForm(
-          medicalForm,
-          this.visitCategory,
-          this.beneficiary
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForNurseVisit();
-              this.confirmationService.alert(res.data.response, 'success');
-              this.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitNurseGeneralOPDVisitDetails(
+      medicalForm,
+      this
+    );
   }
 
   submitGeneralOPDDiagnosisForm() {
-    if (this.checkNurseRequirements(this.patientMedicalForm)) {
-      const temp = {
-        beneficiaryRegID: this.beneficiaryRegID,
-        benVisitID: this.visitID,
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        createdBy: this.sessionstorage.getItem('userName'),
-      };
-      const patientVisitForm = <FormGroup>(
-        this.patientMedicalForm.controls['patientCaseRecordForm']
-      );
-
-      const prescribedDrugs = this.getLabandPrescriptionData();
-
-      this.doctorService
-        .postDoctorGeneralOPDDetails(
-          this.patientMedicalForm,
-          temp,
-          this.schedulerData,
-          this.doctorSignatureFlag
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = this.SMSObjectCreation(
-              //     JSON.parse(
-              //       JSON.stringify(
-              //         (
-              //           patientVisitForm.get(
-              //             'generalDiagnosisForm.provisionalDiagnosisList'
-              //           ) as FormArray
-              //         ).value
-              //       )
-              //     ),
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   this.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              this.confirmationService.alert(res.data.message, 'success');
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitGeneralOPDDiagnosisForm(this);
   }
 
   submitPNCDiagnosisForm() {
-    if (this.checkNurseRequirements(this.patientMedicalForm)) {
-      const temp = {
-        beneficiaryRegID: this.beneficiaryRegID,
-        benVisitID: this.visitID,
-        visitCode: this.sessionstorage.getItem('visitCode'),
-        providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
-        createdBy: this.sessionstorage.getItem('userName'),
-      };
-
-      const prescribedDrugs = this.getLabandPrescriptionData();
-      this.doctorService
-        .postDoctorPNCDetails(
-          this.patientMedicalForm,
-          temp,
-          this.schedulerData,
-          this.doctorSignatureFlag
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              this.patientMedicalForm.reset();
-              this.removeBeneficiaryDataForDoctorVisit();
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = this.SMSObjectCreation(
-              //     JSON.parse(
-              //       JSON.stringify(
-              //         (
-              //           this.patientVisitForm.get(
-              //             'generalDiagnosisForm.provisionalDiagnosisList'
-              //           ) as FormArray
-              //         ).value
-              //       )
-              //     ),
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   this.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              this.confirmationService.alert(res.data.message, 'success');
-              this.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              this.resetSpinnerandEnableTheSubmitButton();
-              this.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
-          }
-        );
-    }
+    return this.workareaSubmission.submitPNCDiagnosisForm(this);
   }
 
   getLabandPrescriptionData() {
