@@ -27,11 +27,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
+import { ZardAccordionImports } from 'Common-UI/v2/ui/accordion';
 import { NgIf } from '@angular/common';
 import { GastroIntestinalSystemComponent } from './gastro-intestinal-system/gastro-intestinal-system.component';
 import { CardioVascularSystemComponent } from './cardio-vascular-system/cardio-vascular-system.component';
@@ -44,12 +40,9 @@ import { ObstetricExaminationComponent } from './obstetric-examination/obstetric
 @Component({
   selector: 'app-nurse-systemic-examination',
   templateUrl: './systemic-examination.component.html',
-  styleUrls: ['./systemic-examination.component.css'],
   imports: [
-    MatAccordion,
+    ...ZardAccordionImports,
     NgIf,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
     GastroIntestinalSystemComponent,
     CardioVascularSystemComponent,
     RespiratorySystemComponent,
@@ -165,6 +158,30 @@ export class SystemicExaminationComponent
     this.currentLanguageSet = this.languageComponent.currentLanguageObject;
   }
   //--End--
+
+  private openAccordionValues: string[] = [];
+
+  private readonly accordionTrackingLabels: { [key: string]: string } = {
+    gastroIntestinalSystem: 'Gastro Intestinal System Panel',
+    cardioVascularSystem: 'Cardio Vascular System Panel',
+    respiratorySystem: 'Respiratory System Panel',
+    centralNervousSystem: 'Central Nervous System Panel',
+    musculoskeletalSystem: 'Musculoskeletal System Panel',
+    genitoUrinarySystem: 'Genito Urinary System Panel',
+    obstetricExamination: 'Obstetric Examination Panel',
+  };
+
+  onAccordionChange(openValues: string[]) {
+    openValues
+      .filter(value => !this.openAccordionValues.includes(value))
+      .forEach(value => {
+        const label = this.accordionTrackingLabels[value];
+        if (label) {
+          this.trackFieldInteraction(label);
+        }
+      });
+    this.openAccordionValues = openValues;
+  }
 
   trackFieldInteraction(fieldName: string) {
     this.trackingService.trackFieldInteraction(

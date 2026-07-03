@@ -1,15 +1,13 @@
-<div class="row m-t-10">
-  <div class="col-xs-12">
-    <app-nurse-general-opd-examination
-      *ngIf="showGeneralOPD"
-      [mode]="examinationMode"
-      [visitCategory]="visitCategory"
-      [patientExaminationForm]="
-        patientExaminationDataForm
-      "></app-nurse-general-opd-examination>
-    <app-cancer-examination
-      *ngIf="showCancer"
-      [mode]="examinationMode"
-      [cancerForm]="patientExaminationDataForm"></app-cancer-examination>
-  </div>
+<div class="mt-2.5 w-full">
+  <app-nurse-general-opd-examination
+    *ngIf="showGeneralOPD"
+    [mode]="examinationMode"
+    [visitCategory]="visitCategory"
+    [patientExaminationForm]="
+      patientExaminationDataForm
+    "></app-nurse-general-opd-examination>
+  <app-cancer-examination
+    *ngIf="showCancer"
+    [mode]="examinationMode"
+    [cancerForm]="patientExaminationDataForm"></app-cancer-examination>
 </div>

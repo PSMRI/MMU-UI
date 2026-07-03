@@ -1,55 +1,64 @@
-<div class="row m-t-20" [formGroup]="genitoUrinarySystemDataForm">
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <mat-form-field class="textarea-full-width">
-      <mat-label>{{
+<div class="mt-5 flex flex-col gap-6" [formGroup]="genitoUrinarySystemDataForm">
+  <div class="w-full">
+    <z-form-field>
+      <label z-form-label for="renalAngle">{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.genitoANC_OPD_PNC?.renalAngle
-      }}</mat-label>
-      <textarea
-        matInput
-        allowText="textAreaValidator"
-        defaultNull
-        matTextareaAutosize
-        name="renalAngle"
-        formControlName="renalAngle"
-        maxlength="300"
-        (focus)="trackFieldInteraction('Renal Angle')"></textarea>
-    </mat-form-field>
+      }}</label>
+      <z-form-control>
+        <textarea
+          z-input
+          id="renalAngle"
+          allowText="textAreaValidator"
+          defaultNull
+          rows="3"
+          name="renalAngle"
+          formControlName="renalAngle"
+          maxlength="300"
+          (focus)="trackFieldInteraction('Renal Angle')"></textarea>
+      </z-form-control>
+    </z-form-field>
   </div>
 
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <mat-form-field class="textarea-full-width">
-      <mat-label>{{
+  <div class="w-full">
+    <z-form-field>
+      <label z-form-label for="suprapubicRegion">{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.genitoANC_OPD_PNC?.suprapubicregion
-      }}</mat-label>
-      <textarea
-        matInput
-        allowText="textAreaValidator"
-        defaultNull
-        matTextareaAutosize
-        name="suprapubicRegion"
-        formControlName="suprapubicRegion"
-        maxlength="300"
-        (focus)="trackFieldInteraction('Suprapubic Region')"></textarea>
-    </mat-form-field>
+      }}</label>
+      <z-form-control>
+        <textarea
+          z-input
+          id="suprapubicRegion"
+          allowText="textAreaValidator"
+          defaultNull
+          rows="3"
+          name="suprapubicRegion"
+          formControlName="suprapubicRegion"
+          maxlength="300"
+          (focus)="trackFieldInteraction('Suprapubic Region')"></textarea>
+      </z-form-control>
+    </z-form-field>
   </div>
 
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <mat-form-field class="textarea-full-width">
-      <mat-label>{{
+  <div class="w-full">
+    <z-form-field>
+      <label z-form-label for="externalGenitalia">{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.genitoANC_OPD_PNC?.externalgenitalia
-      }}</mat-label>
-      <textarea
-        matInput
-        allowText="textAreaValidator"
-        defaultNull
-        matTextareaAutosize
-        name="externalGenitalia"
-        formControlName="externalGenitalia"
-        maxlength="300"
-        (focus)="trackFieldInteraction('External Genitalia')"></textarea>
-    </mat-form-field>
+      }}</label>
+      <z-form-control>
+        <textarea
+          z-input
+          id="externalGenitalia"
+          allowText="textAreaValidator"
+          defaultNull
+          rows="3"
+          name="externalGenitalia"
+          formControlName="externalGenitalia"
+          maxlength="300"
+          (focus)="trackFieldInteraction('External Genitalia')"></textarea>
+      </z-form-control>
+    </z-form-field>
   </div>
 </div>

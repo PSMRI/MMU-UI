@@ -31,7 +31,6 @@ import { CancerExaminationComponent } from './cancer-examination/cancer-examinat
 @Component({
   selector: 'app-nurse-examination',
   templateUrl: './examination.component.html',
-  styleUrls: ['./examination.component.css'],
   imports: [NgIf, GeneralOpdExaminationComponent, CancerExaminationComponent],
 })
 export class ExaminationComponent implements OnInit, DoCheck, OnChanges {

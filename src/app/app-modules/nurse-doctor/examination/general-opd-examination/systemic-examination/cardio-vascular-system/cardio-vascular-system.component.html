@@ -1,151 +1,161 @@
-<div class="row m-t-20" [formGroup]="cardioVascularSystemDataForm">
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <label class="control-label" for="cardioVascularSystem">{{
+<div
+  class="grid grid-cols-1 gap-6 pt-5 md:grid-cols-2 lg:grid-cols-3"
+  [formGroup]="cardioVascularSystemDataForm">
+  <div class="flex flex-col gap-3">
+    <label z-form-label for="jugularVenousPulse_JVP">{{
       currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
         ?.cardioForANC_OPD_PNC?.jugularVenousPressure
     }}</label>
-    <div class="clearfix"></div>
-    <mat-radio-group
-      style="margin-left: -9px"
+    <z-radio-group
+      id="jugularVenousPulse_JVP"
       name="jugularVenousPulse_JVP"
       formControlName="jugularVenousPulse_JVP"
-      (change)="trackFieldInteraction('Jugular Venous Pressure')">
-      <mat-radio-button color="primary" value="Normal">{{
+      zOrientation="horizontal"
+      class="gap-6"
+      (zChange)="trackFieldInteraction('Jugular Venous Pressure')">
+      <z-radio [value]="'Normal'">{{
         currentLanguageSet?.common?.normal
-      }}</mat-radio-button>
-      <mat-radio-button color="primary" value="Elevated">{{
+      }}</z-radio>
+      <z-radio [value]="'Elevated'">{{
         currentLanguageSet?.common?.elevated
-      }}</mat-radio-button>
-    </mat-radio-group>
+      }}</z-radio>
+    </z-radio-group>
   </div>
 
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <mat-form-field class="textarea-full-width">
-      <mat-label>{{
-        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-          ?.cardioForANC_OPD_PNC?.apexBeatLocation
-      }}</mat-label>
+  <z-form-field class="md:col-span-2 lg:col-span-3">
+    <label z-form-label for="apexbeatLocation">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+        ?.cardioForANC_OPD_PNC?.apexBeatLocation
+    }}</label>
+    <z-form-control>
       <textarea
-        matInput
+        z-input
+        id="apexbeatLocation"
+        class="w-full"
         allowText="textAreaValidator"
         defaultNull
-        matTextareaAutosize
         name="apexbeatLocation"
         formControlName="apexbeatLocation"
         maxlength="300"
         (focus)="trackFieldInteraction('Apex Beat Location')"></textarea>
-    </mat-form-field>
-  </div>
+    </z-form-control>
+  </z-form-field>
 
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <mat-form-field class="textarea-full-width">
-      <mat-label>{{
-        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-          ?.cardioForANC_OPD_PNC?.apexBeatType
-      }}</mat-label>
+  <z-form-field class="md:col-span-2 lg:col-span-3">
+    <label z-form-label for="apexbeatType">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+        ?.cardioForANC_OPD_PNC?.apexBeatType
+    }}</label>
+    <z-form-control>
       <textarea
-        matInput
+        z-input
+        id="apexbeatType"
+        class="w-full"
         allowText="textAreaValidator"
         defaultNull
-        matTextareaAutosize
         name="apexbeatType"
         formControlName="apexbeatType"
         maxlength="300"
         (focus)="trackFieldInteraction('Apex Beat Type')"></textarea>
-    </mat-form-field>
-  </div>
+    </z-form-control>
+  </z-form-field>
 
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <mat-form-field class="textarea-full-width">
-      <mat-label>{{
-        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-          ?.cardioForANC_OPD_PNC?.firstHeartSound
-      }}</mat-label>
+  <z-form-field class="md:col-span-2 lg:col-span-3">
+    <label z-form-label for="firstHeartSound_S1">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+        ?.cardioForANC_OPD_PNC?.firstHeartSound
+    }}</label>
+    <z-form-control>
       <textarea
-        matInput
+        z-input
+        id="firstHeartSound_S1"
+        class="w-full"
         allowText="textAreaValidator"
         defaultNull
-        matTextareaAutosize
         name="firstHeartSound_S1"
         formControlName="firstHeartSound_S1"
         maxlength="300"
         (focus)="trackFieldInteraction('First Heart Sound')"></textarea>
-    </mat-form-field>
-  </div>
+    </z-form-control>
+  </z-form-field>
 
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <mat-form-field class="textarea-full-width">
-      <mat-label>{{
-        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-          ?.cardioForANC_OPD_PNC?.secondHeartSound
-      }}</mat-label>
+  <z-form-field class="md:col-span-2 lg:col-span-3">
+    <label z-form-label for="secondHeartSound_S2">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+        ?.cardioForANC_OPD_PNC?.secondHeartSound
+    }}</label>
+    <z-form-control>
       <textarea
-        matInput
+        z-input
+        id="secondHeartSound_S2"
+        class="w-full"
         allowText="textAreaValidator"
         defaultNull
-        matTextareaAutosize
         name="secondHeartSound_S2"
         formControlName="secondHeartSound_S2"
         maxlength="300"
         (focus)="trackFieldInteraction('Second Heart Sound')"></textarea>
-    </mat-form-field>
-  </div>
+    </z-form-control>
+  </z-form-field>
 
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <mat-form-field class="textarea-full-width">
-      <mat-label>{{
-        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-          ?.cardioForANC_OPD_PNC?.otherHeartSounds
-      }}</mat-label>
+  <z-form-field class="md:col-span-2 lg:col-span-3">
+    <label z-form-label for="additionalHeartSounds">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+        ?.cardioForANC_OPD_PNC?.otherHeartSounds
+    }}</label>
+    <z-form-control>
       <textarea
-        matInput
+        z-input
+        id="additionalHeartSounds"
+        class="w-full"
         allowText="textAreaValidator"
         defaultNull
-        matTextareaAutosize
         name="additionalHeartSounds"
         formControlName="additionalHeartSounds"
         maxlength="300"
         (focus)="trackFieldInteraction('Additional Heart Sounds')"></textarea>
-    </mat-form-field>
-  </div>
+    </z-form-control>
+  </z-form-field>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <label class="control-label" for="cardioVascularSystem">{{
+  <div class="flex flex-col gap-3">
+    <label z-form-label for="murmurs">{{
       currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
         ?.cardioForANC_OPD_PNC?.murmurs
     }}</label>
-    <div class="clearfix"></div>
-    <mat-radio-group
-      style="margin-left: -9px"
+    <z-radio-group
+      id="murmurs"
       name="murmurs"
       formControlName="murmurs"
-      (change)="trackFieldInteraction('Murmurs')">
-      <mat-radio-button color="primary" value="Present">{{
+      zOrientation="horizontal"
+      class="gap-6"
+      (zChange)="trackFieldInteraction('Murmurs')">
+      <z-radio [value]="'Present'">{{
         currentLanguageSet?.common?.present
-      }}</mat-radio-button>
-      <mat-radio-button color="primary" value="Absent">{{
+      }}</z-radio>
+      <z-radio [value]="'Absent'">{{
         currentLanguageSet?.common?.absent
-      }}</mat-radio-button>
-    </mat-radio-group>
+      }}</z-radio>
+    </z-radio-group>
   </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
-    <label class="control-label" for="cardioVascularSystem">{{
+  <div class="flex flex-col gap-3">
+    <label z-form-label for="pericardialRub">{{
       currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
         ?.cardioForANC_OPD_PNC?.pericardialrub
     }}</label>
-    <div class="clearfix"></div>
-    <mat-radio-group
-      style="margin-left: -9px"
+    <z-radio-group
+      id="pericardialRub"
       name="pericardialRub"
       formControlName="pericardialRub"
-      (change)="trackFieldInteraction('Pericardial Rub')">
-      <mat-radio-button color="primary" value="Present">{{
+      zOrientation="horizontal"
+      class="gap-6"
+      (zChange)="trackFieldInteraction('Pericardial Rub')">
+      <z-radio [value]="'Present'">{{
         currentLanguageSet?.common?.present
-      }}</mat-radio-button>
-      <mat-radio-button color="primary" value="Absent">{{
+      }}</z-radio>
+      <z-radio [value]="'Absent'">{{
         currentLanguageSet?.common?.absent
-      }}</mat-radio-button>
-    </mat-radio-group>
+      }}</z-radio>
+    </z-radio-group>
   </div>
 </div>

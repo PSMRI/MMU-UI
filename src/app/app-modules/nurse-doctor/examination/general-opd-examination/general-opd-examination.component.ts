@@ -27,6 +27,8 @@ import {
   DoCheck,
   OnDestroy,
   OnChanges,
+  AfterViewInit,
+  ViewChild,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
@@ -35,10 +37,9 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
+  ZardAccordionComponent,
+  ZardAccordionImports,
+} from 'Common-UI/v2/ui/accordion';
 import { GeneralExaminationComponent } from './general-examination/general-examination.component';
 import { HeadToToeExaminationComponent } from './head-to-toe-examination/head-to-toe-examination.component';
 import { NgIf } from '@angular/common';
@@ -47,11 +48,8 @@ import { SystemicExaminationComponent } from './systemic-examination/systemic-ex
 @Component({
   selector: 'app-nurse-general-opd-examination',
   templateUrl: './general-opd-examination.component.html',
-  styleUrls: ['./general-opd-examination.component.css'],
   imports: [
-    MatAccordion,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
+    ...ZardAccordionImports,
     GeneralExaminationComponent,
     HeadToToeExaminationComponent,
     NgIf,
@@ -59,7 +57,7 @@ import { SystemicExaminationComponent } from './systemic-examination/systemic-ex
   ],
 })
 export class GeneralOpdExaminationComponent
-  implements OnInit, DoCheck, OnDestroy, OnChanges
+  implements OnInit, AfterViewInit, DoCheck, OnDestroy, OnChanges
 {
   @Input()
   visitCategory!: string;
@@ -69,6 +67,10 @@ export class GeneralOpdExaminationComponent
 
   @Input()
   mode!: string;
+
+  @ViewChild('examinationAccordion')
+  examinationAccordion!: ZardAccordionComponent;
+
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
   generalExaminationForm!: FormGroup;
@@ -85,6 +87,11 @@ export class GeneralOpdExaminationComponent
   ngOnInit() {
     this.fetchLanguageResponse();
     this.loadFormData();
+  }
+
+  ngAfterViewInit() {
+    // Preserve the Material `expanded="true"` default on the first panel.
+    this.examinationAccordion?.toggle('generalExamination');
   }
 
   ngOnDestroy() {

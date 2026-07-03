@@ -1,353 +1,246 @@
-<div class="row m-t-10" [formGroup]="breastExaminationForm">
-  <div class="col-xs-12 col-md-7">
-    <div class="col-12 row">
-      <div class="col-6 custom-cell cell_postion" *ngIf="female">
+<div
+  class="mt-4 flex flex-col gap-6 md:flex-row"
+  [formGroup]="breastExaminationForm">
+  <div class="flex flex-col gap-4 md:w-7/12">
+    <div
+      *ngIf="female"
+      class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <span class="text-sm font-medium text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.breast?.everbreastfedachild
         }}
-      </div>
-      <div class="col-6 custom-cell" *ngIf="female">
-        <mat-radio-group
-          name="everBreastFed"
-          formControlName="everBreastFed"
-          (change)="checkBreastFeed()">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
+      </span>
+      <z-radio-group
+        name="everBreastFed"
+        formControlName="everBreastFed"
+        zOrientation="horizontal"
+        (zChange)="checkBreastFeed()">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.yes }}</z-radio>
+        <z-radio [value]="false">{{ currentLanguageSet?.common?.no }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-12 row">
-      <div
-        class="col-6 custom-cell cell_postion"
-        *ngIf="everBreastFed && everBreastFed.value">
+    <div
+      *ngIf="everBreastFed && everBreastFed.value"
+      class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <span class="text-sm font-medium text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.breast?.durationofbreastfeeding
         }}
-      </div>
-      <div
-        class="col-6 custom-cell"
-        *ngIf="everBreastFed && everBreastFed.value">
-        <mat-radio-group
-          name="breastFeedingDurationGTE6months"
-          id="breastFeedingDurationGTE6months"
-          formControlName="breastFeedingDurationGTE6months">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true">
-            {{
-              currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                ?.breast?.less6months
-            }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false">
-            {{
-              currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-                ?.breast?.greater6months
-            }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
+      </span>
+      <z-radio-group
+        name="breastFeedingDurationGTE6months"
+        id="breastFeedingDurationGTE6months"
+        formControlName="breastFeedingDurationGTE6months"
+        zOrientation="horizontal">
+        <z-radio [value]="true">{{
+          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+            ?.breast?.less6months
+        }}</z-radio>
+        <z-radio [value]="false">{{
+          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
+            ?.breast?.greater6months
+        }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-12 row">
-      <div class="col-6 custom-cell cell_postion">
+    <div
+      class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <span class="text-sm font-medium text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.breast?.breastsappearnormal
         }}
-      </div>
-      <div class="col-6 custom-cell">
-        <mat-radio-group
-          name="breastsAppear_Normal"
-          formControlName="breastsAppear_Normal">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
+      </span>
+      <z-radio-group
+        name="breastsAppear_Normal"
+        formControlName="breastsAppear_Normal"
+        zOrientation="horizontal">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.yes }}</z-radio>
+        <z-radio [value]="false">{{ currentLanguageSet?.common?.no }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-12 row">
-      <div class="col-6 custom-cell cell_postion">
+    <div
+      class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <span class="text-sm font-medium text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.breast?.anyrashonthebreast
         }}
-      </div>
-      <div class="col-6 custom-cell">
-        <mat-radio-group name="rashOnBreast" formControlName="rashOnBreast">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
+      </span>
+      <z-radio-group
+        name="rashOnBreast"
+        formControlName="rashOnBreast"
+        zOrientation="horizontal">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.yes }}</z-radio>
+        <z-radio [value]="false">{{ currentLanguageSet?.common?.no }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-12 row">
-      <div class="col-6 custom-cell cell_postion">
+    <div
+      class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <span class="text-sm font-medium text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.breast?.anydimplingofskinonthebreast
         }}
-      </div>
-      <div class="col-6 custom-cell">
-        <mat-radio-group
-          name="dimplingSkinOnBreast"
-          formControlName="dimplingSkinOnBreast">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
+      </span>
+      <z-radio-group
+        name="dimplingSkinOnBreast"
+        formControlName="dimplingSkinOnBreast"
+        zOrientation="horizontal">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.yes }}</z-radio>
+        <z-radio [value]="false">{{ currentLanguageSet?.common?.no }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-12 row">
-      <div class="col-6 custom-cell cell_postion">
+    <div
+      class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <span class="text-sm font-medium text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.breast?.anydischargefromthenipple
         }}
-      </div>
-      <div class="col-6 custom-cell">
-        <mat-radio-group
-          name="dischargeFromNipple"
-          formControlName="dischargeFromNipple">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
+      </span>
+      <z-radio-group
+        name="dischargeFromNipple"
+        formControlName="dischargeFromNipple"
+        zOrientation="horizontal">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.yes }}</z-radio>
+        <z-radio [value]="false">{{ currentLanguageSet?.common?.no }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-12 row">
-      <div class="col-6 custom-cell cell_postion">
+    <div
+      class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <span class="text-sm font-medium text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.breast?.peaudorange
         }}
-      </div>
-      <div class="col-6 custom-cell">
-        <mat-radio-group name="peaudOrange" formControlName="peaudOrange">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
+      </span>
+      <z-radio-group
+        name="peaudOrange"
+        formControlName="peaudOrange"
+        zOrientation="horizontal">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.yes }}</z-radio>
+        <z-radio [value]="false">{{ currentLanguageSet?.common?.no }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-12 row">
-      <div class="col-6 custom-cell cell_postion">
+    <div
+      class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <span class="text-sm font-medium text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.breast?.anylumpinbreast
         }}
-      </div>
-      <div class="col-6 custom-cell">
-        <mat-radio-group
-          name="lumpInBreast"
-          formControlName="lumpInBreast"
-          (change)="checkLump()">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
+      </span>
+      <z-radio-group
+        name="lumpInBreast"
+        formControlName="lumpInBreast"
+        zOrientation="horizontal"
+        (zChange)="checkLump()">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.yes }}</z-radio>
+        <z-radio [value]="false">{{ currentLanguageSet?.common?.no }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div
-      class="col-xs-6 custom-cell"
-      *ngIf="lumpInBreast && lumpInBreast.value">
-      {{
+    <z-form-field *ngIf="lumpInBreast && lumpInBreast.value">
+      <label z-form-label for="lumpSize">{{
         currentLanguageSet?.ExaminationData?.cancerScreeningExamination?.breast
           ?.lumpSize
-      }}
-    </div>
-    <div
-      class="col-xs-6 custom-cell"
-      *ngIf="lumpInBreast && lumpInBreast.value">
-      <mat-form-field>
-        <mat-label>{{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.breast?.lumpSize
-        }}</mat-label>
+      }}</label>
+      <z-form-control>
         <input
+          z-input
+          class="w-full"
           autocomplete="off"
           allowText="inputFieldValidator"
-          allowText="inputFieldValidator"
-          matInput
           defaultNull
           maxlength="100"
           name="lumpSize"
           id="lumpSize"
           formControlName="lumpSize" />
-      </mat-form-field>
-    </div>
+      </z-form-control>
+    </z-form-field>
 
-    <div
-      class="col-xs-6 custom-cell"
-      *ngIf="lumpInBreast && lumpInBreast.value">
-      {{
+    <z-form-field *ngIf="lumpInBreast && lumpInBreast.value">
+      <label z-form-label for="lumpShape">{{
         currentLanguageSet?.ExaminationData?.cancerScreeningExamination?.breast
           ?.lumpShape
-      }}
-    </div>
-    <div
-      class="col-xs-6 custom-cell"
-      *ngIf="lumpInBreast && lumpInBreast.value">
-      <mat-form-field>
-        <mat-label>{{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.breast?.lumpShape
-        }}</mat-label>
+      }}</label>
+      <z-form-control>
         <input
+          z-input
+          class="w-full"
           autocomplete="off"
           allowText="inputFieldValidator"
-          matInput
           defaultNull
           maxlength="100"
           name="lumpShape"
           id="lumpShape"
           formControlName="lumpShape" />
-      </mat-form-field>
-    </div>
+      </z-form-control>
+    </z-form-field>
 
-    <div
-      class="col-xs-6 custom-cell"
-      *ngIf="lumpInBreast && lumpInBreast.value">
-      {{
+    <z-form-field *ngIf="lumpInBreast && lumpInBreast.value">
+      <label z-form-label for="lumpTexture">{{
         currentLanguageSet?.ExaminationData?.cancerScreeningExamination?.breast
           ?.lumpTexture
-      }}
-    </div>
-    <div
-      class="col-xs-6 custom-cell"
-      *ngIf="lumpInBreast && lumpInBreast.value">
-      <mat-form-field>
-        <mat-label>{{
-          currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-            ?.breast?.lumpTexture
-        }}</mat-label>
+      }}</label>
+      <z-form-control>
         <input
+          z-input
+          class="w-full"
           autocomplete="off"
           allowText="inputFieldValidator"
-          matInput
           defaultNull
           maxlength="100"
           name="lumpTexture"
           id="lumpTexture"
           formControlName="lumpTexture" />
-      </mat-form-field>
-    </div>
-    <div class="col-12 row">
-      <div class="col-6 custom-cell cell_postion">
+      </z-form-control>
+    </z-form-field>
+
+    <div
+      class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <span class="text-sm font-medium text-foreground">
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.breast?.referredtoMammogram
         }}
-      </div>
-      <div class="col-6 custom-cell">
-        <mat-radio-group
-          name="referredToMammogram"
-          formControlName="referredToMammogram">
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="true"
-            >{{ currentLanguageSet?.common?.yes }}</mat-radio-button
-          >
-          <mat-radio-button
-            color="primary"
-            class="form-radio-btn"
-            [value]="false"
-            >{{ currentLanguageSet?.common?.no }}</mat-radio-button
-          >
-        </mat-radio-group>
-      </div>
+      </span>
+      <z-radio-group
+        name="referredToMammogram"
+        formControlName="referredToMammogram"
+        zOrientation="horizontal">
+        <z-radio [value]="true">{{ currentLanguageSet?.common?.yes }}</z-radio>
+        <z-radio [value]="false">{{ currentLanguageSet?.common?.no }}</z-radio>
+      </z-radio-group>
     </div>
   </div>
 
-  <div class="col-xs-12 col-md-5">
-    <div class="image-placeholder">
-      <small>{{ currentLanguageSet?.common?.kindlyMark }}</small>
-      <br />
+  <div class="md:w-5/12">
+    <div class="flex flex-col items-center text-center">
+      <small class="text-muted-foreground">{{
+        currentLanguageSet?.common?.kindlyMark
+      }}</small>
       <!-- eslint-disable-next-line  @angular-eslint/template/click-events-have-key-events -->
-      <a (click)="annotateImage()" tabindex="{0}" id="annotateBreastImg"
-        ><img
+      <a
+        (click)="annotateImage()"
+        tabindex="{0}"
+        id="annotateBreastImg"
+        class="mt-1 inline-block cursor-pointer">
+        <img
           #breastsImage
           src="assets/images/breastExamination.png"
           alt="breast examination"
-      /></a>
+          class="h-48 w-48 max-w-full" />
+      </a>
     </div>
   </div>
 </div>
