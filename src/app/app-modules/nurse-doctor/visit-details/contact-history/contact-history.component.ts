@@ -39,22 +39,20 @@ import {
   NurseService,
 } from '../../shared/services';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatLabel, MatFormField, MatSelect } from '@angular/material/select';
 import { NgIf, NgFor } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 
 @Component({
   selector: 'app-contact-history',
   templateUrl: './contact-history.component.html',
-  styleUrls: ['./contact-history.component.css'],
+  standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatLabel,
     NgIf,
-    MatFormField,
-    MatSelect,
     NgFor,
-    MatOption,
+    ...ZardFormImports,
+    ...ZardSelectImports,
   ],
 })
 export class ContactHistoryComponent

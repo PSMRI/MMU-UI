@@ -20,14 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import {
-  Component,
-  OnInit,
-  Input,
-  DoCheck,
-  ViewChild,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -48,61 +41,39 @@ import { VisitDetailUtils } from '../../shared/utility/visit-detail-utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
-import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
-import { NgIf, NgFor, NgClass } from '@angular/common';
-import { MatFormField, MatLabel, MatSelect } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import {
-  MatAutocompleteTrigger,
-  MatAutocomplete,
-  MatOption,
-} from '@angular/material/autocomplete';
+import { NgIf, NgFor } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucidePlus, lucideX } from '@ng-icons/lucide';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardPaginatorComponent } from 'Common-UI/v2/ui/paginator';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { cardImports } from 'Common-UI/v2/ui/card';
 import { NullDefaultValueDirective } from '../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-patient-chief-complaints',
   templateUrl: './chief-complaints.component.html',
-  styleUrls: ['./chief-complaints.component.css'],
+  viewProviders: [provideIcons({ lucidePlus, lucideX })],
   imports: [
     NgIf,
     ReactiveFormsModule,
     NgFor,
-    NgClass,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatAutocompleteTrigger,
-    MatAutocomplete,
-    MatOption,
+    NgIcon,
+    ZardFormImports,
+    ZardInputDirective,
+    ZardSelectImports,
+    ZardTableImports,
+    ZardPaginatorComponent,
+    ZardButtonComponent,
+    cardImports,
     NullDefaultValueDirective,
     StringValidatorDirective,
-    MatSelect,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
   ],
 })
 export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
@@ -132,8 +103,8 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     'description',
   ];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
+  dataSource: { data: any[] } = { data: [] };
+  pagedComplaints: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -204,7 +175,6 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
             this.benChiefComplaints = visitComplaintDetail.BenChiefComplaints;
           this.dataSource.data = [];
           this.dataSource.data = visitComplaintDetail.BenChiefComplaints;
-          this.dataSource.paginator = this.paginator;
           let flag = false;
           this.enableLungAssessment = false;
           this.enableProvisionalDiag = false;
@@ -526,6 +496,14 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
 
   displayChiefComplaint(complaint: any) {
     return complaint?.chiefComplaint;
+  }
+
+  displayAndSelectChiefComplaint(complaint: any, i: number) {
+    const complaintFormArray = <FormArray>(
+      this.patientChiefComplaintsForm.controls['complaints']
+    );
+    complaintFormArray.at(i).patchValue({ chiefComplaint: complaint });
+    this.suggestedChiefComplaintList[i] = [];
   }
 
   suggestChiefComplaintList(complaintForm: AbstractControl, i: number) {

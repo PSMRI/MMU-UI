@@ -1,41 +1,44 @@
-<div class="row m-t-20" [formGroup]="patientCovidForm">
-  <div>
-    <h5 class="hbx">
-      {{ currentLanguageSet?.covid?.cOVID19ContactHistory }}
-    </h5>
-    <br />
-    <mat-label class="mat-label-text" class="hbx">{{
-      currentLanguageSet?.covid?.historyOfContactWithAPersonwho
-    }}</mat-label>
-    <br />
-    <br />
-    <span *ngIf="!contactFlag">
-      <mat-form-field>
-        <mat-label>{{ currentLanguageSet?.covid?.historyOfContact }}</mat-label>
-        <mat-select
-          class="input-full-width vox"
-          [multiple]="true"
-          name="contactStatus"
-          formControlName="contactStatus"
-          id="contactStatus"
-          (selectionChange)="contactSelected()"
-          required="{{ contactReqiured }}">
-          <mat-option
-            *ngFor="let contactStatus of contactData"
-            [value]="contactStatus"
-            >{{ contactStatus }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </span>
-    <br />
-    <span *ngIf="contactFlag" class="box">
-      <ul>
-        <li *ngFor="let history of contactResponseList">
-          {{ history }}
-          <strong>: {{ currentLanguageSet?.covid?.yES }}. </strong>
-        </li>
-      </ul>
-    </span>
-  </div>
+<div [formGroup]="patientCovidForm" class="mt-5 flex flex-col gap-4">
+  <p class="text-lg font-semibold tracking-tight text-foreground">
+    {{ currentLanguageSet?.covid?.cOVID19ContactHistory }}
+  </p>
+
+  <p class="text-sm font-medium text-foreground">
+    {{ currentLanguageSet?.covid?.historyOfContactWithAPersonwho }}
+  </p>
+
+  <z-form-field *ngIf="!contactFlag" class="max-w-md gap-1.5">
+    <label
+      z-form-label
+      for="contactStatus"
+      [zRequired]="contactReqiured === 'true'">
+      {{ currentLanguageSet?.covid?.historyOfContact }}
+    </label>
+    <z-form-control>
+      <z-select
+        class="w-full"
+        id="contactStatus"
+        [zMultiple]="true"
+        name="contactStatus"
+        formControlName="contactStatus"
+        (zSelectionChange)="contactSelected()">
+        <z-select-item
+          *ngFor="let contactStatus of contactData"
+          [zValue]="contactStatus">
+          {{ contactStatus }}
+        </z-select-item>
+      </z-select>
+    </z-form-control>
+  </z-form-field>
+
+  <ul
+    *ngIf="contactFlag"
+    class="flex flex-col gap-1 rounded-lg border border-border bg-card p-4 text-sm text-foreground">
+    <li *ngFor="let history of contactResponseList">
+      {{ history }}
+      <strong class="font-semibold"
+        >: {{ currentLanguageSet?.covid?.yES }}.</strong
+      >
+    </li>
+  </ul>
 </div>

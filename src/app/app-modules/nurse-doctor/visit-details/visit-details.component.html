@@ -1,129 +1,208 @@
-<mat-accordion [formGroup]="patientVisitDataForm">
-  <mat-expansion-panel expanded="true">
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.nurseData?.visitDetails }}</h5>
-    </mat-expansion-panel-header>
-    <app-patient-visit-details
-      [mode]="mode"
-      [patientVisitDetailsForm]="
-        patientVisitDetailsForm
-      "></app-patient-visit-details>
-  </mat-expansion-panel>
+<z-accordion
+  zType="multiple"
+  [formGroup]="patientVisitDataForm"
+  class="flex flex-col gap-4">
+  <z-accordion-item
+    zValue="visitDetails"
+    class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
+        {{ current_language_set?.nurseData?.visitDetails }}
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-patient-visit-details
+          [mode]="mode"
+          [patientVisitDetailsForm]="
+            patientVisitDetailsForm
+          "></app-patient-visit-details>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel *ngIf="isCovidVaccinationStatusVisible">
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.covidVaccinationStatus }}</h5>
-    </mat-expansion-panel-header>
-    <app-covid-vaccination-status
-      [covidVaccineStatusForm]="
-        covidVaccineStatusForm
-      "></app-covid-vaccination-status>
-  </mat-expansion-panel>
+  <z-accordion-item
+    *ngIf="isCovidVaccinationStatusVisible"
+    zValue="covidVaccinationStatus"
+    class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
+        {{ current_language_set?.covidVaccinationStatus }}
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-covid-vaccination-status
+          [covidVaccineStatusForm]="
+            covidVaccineStatusForm
+          "></app-covid-vaccination-status>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel
+  <z-accordion-item
     *ngIf="
       hideAll === true ||
       showANCVisit === true ||
       showNcdScreeningVisit === true ||
       showPNC === true
-    ">
-    <mat-expansion-panel-header>
-      <h5>
+    "
+    zValue="chiefComplaints"
+    class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
         {{
           current_language_set?.nurseData?.chiefComplaintsDetails
             ?.chiefComplaints
         }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-patient-chief-complaints
-      [mode]="mode"
-      [patientChiefComplaintsForm]="
-        patientChiefComplaintsForm
-      "></app-patient-chief-complaints>
-  </mat-expansion-panel>
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-patient-chief-complaints
+          [mode]="mode"
+          [patientChiefComplaintsForm]="
+            patientChiefComplaintsForm
+          "></app-patient-chief-complaints>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel
-    *ngIf="hideAll === true || showANCVisit === true || showNCDCare">
-    <mat-expansion-panel-header>
-      <h5>
+  <z-accordion-item
+    *ngIf="hideAll === true || showANCVisit === true || showNCDCare"
+    zValue="adherence"
+    class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
         {{ current_language_set?.nurseData?.adherenceDetails?.adherence }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-patient-adherence
-      [mode]="mode"
-      [patientAdherenceForm]="patientAdherenceForm"></app-patient-adherence>
-  </mat-expansion-panel>
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-patient-adherence
+          [mode]="mode"
+          [patientAdherenceForm]="patientAdherenceForm"></app-patient-adherence>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel
-    *ngIf="hideAll === true || showANCVisit === true || showNCDCare">
-    <mat-expansion-panel-header>
-      <h5>
+  <z-accordion-item
+    *ngIf="hideAll === true || showANCVisit === true || showNCDCare"
+    zValue="investigations"
+    class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
         {{
           current_language_set?.nurseData?.investigationsDetails?.investigations
         }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-patient-investigations
-      [mode]="mode"
-      [patientInvestigationsForm]="
-        patientInvestigationsForm
-      "></app-patient-investigations>
-  </mat-expansion-panel>
-  <mat-expansion-panel *ngIf="hideAll === true || showCOVID">
-    <mat-expansion-panel-header>
-      <h5>
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-patient-investigations
+          [mode]="mode"
+          [patientInvestigationsForm]="
+            patientInvestigationsForm
+          "></app-patient-investigations>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
+
+  <z-accordion-item
+    *ngIf="hideAll === true || showCOVID"
+    zValue="symptoms"
+    class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
         {{
           current_language_set?.ExaminationData?.cancerScreeningExamination
             ?.symptoms?.symptoms
         }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-symptoms
-      [mode]="mode"
-      [patientCovidForm]="patientCovidForm"></app-symptoms>
-  </mat-expansion-panel>
-  <mat-expansion-panel *ngIf="hideAll === true || showCOVID">
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.contactHistory }}</h5>
-    </mat-expansion-panel-header>
-    <app-contact-history
-      [mode]="mode"
-      [patientCovidForm]="patientCovidForm"></app-contact-history>
-  </mat-expansion-panel>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header *ngIf="hideAll === true || showCOVID">
-      <h5>{{ current_language_set?.covid?.travelHistory }}</h5>
-    </mat-expansion-panel-header>
-    <app-travel-history
-      [mode]="mode"
-      [patientCovidForm]="patientCovidForm"></app-travel-history>
-  </mat-expansion-panel>
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-symptoms
+          [mode]="mode"
+          [patientCovidForm]="patientCovidForm"></app-symptoms>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header *ngIf="visitCategory">
-      <h5>
+  <z-accordion-item
+    *ngIf="hideAll === true || showCOVID"
+    zValue="contactHistory"
+    class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
+        {{ current_language_set?.contactHistory }}
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-contact-history
+          [mode]="mode"
+          [patientCovidForm]="patientCovidForm"></app-contact-history>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
+
+  <z-accordion-item
+    *ngIf="hideAll === true || showCOVID"
+    zValue="travelHistory"
+    class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
+        {{ current_language_set?.covid?.travelHistory }}
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-travel-history
+          [mode]="mode"
+          [patientCovidForm]="patientCovidForm"></app-travel-history>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
+
+  <z-accordion-item
+    *ngIf="visitCategory"
+    zValue="uploadFiles"
+    class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
         {{ current_language_set?.nurseData?.visitDetailsForm?.uploadFiles }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-patient-upload-files
-      [mode]="mode"
-      [enableFileSelection]="enableFileSelection"
-      [patientFileUploadDetailsForm]="
-        patientFileUploadDetailsForm
-      "></app-patient-upload-files>
-  </mat-expansion-panel>
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-patient-upload-files
+          [mode]="mode"
+          [enableFileSelection]="enableFileSelection"
+          [patientFileUploadDetailsForm]="
+            patientFileUploadDetailsForm
+          "></app-patient-upload-files>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel
-    *ngIf="hideAll === true || showNcdScreeningVisit === true">
-    <mat-expansion-panel-header>
-      <h5>
+  <z-accordion-item
+    *ngIf="hideAll === true || showNcdScreeningVisit === true"
+    zValue="diseaseConfirmation"
+    class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
         {{
           current_language_set?.nurseData?.visitDetailsForm?.diseaseConfirmation
         }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-diseaseconfirmation
-      [mode]="mode"
-      [diseaseFormsGroup]="patientDiseaseForm"></app-diseaseconfirmation>
-  </mat-expansion-panel>
-</mat-accordion>
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content>
+      <div class="px-4">
+        <app-diseaseconfirmation
+          [mode]="mode"
+          [diseaseFormsGroup]="patientDiseaseForm"></app-diseaseconfirmation>
+      </div>
+    </z-accordion-content>
+  </z-accordion-item>
+</z-accordion>

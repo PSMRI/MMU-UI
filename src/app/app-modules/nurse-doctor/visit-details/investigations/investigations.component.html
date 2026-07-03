@@ -1,21 +1,24 @@
-<div class="row m-t-20" [formGroup]="patientInvestigationsForm">
-  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 box">
-    <mat-form-field class="input-full-width">
-      <mat-label>{{
-        currentLanguageSet?.nurseData?.investigationsDetails?.laboratory
-      }}</mat-label>
-      <mat-select
-        multiple
+<div class="mt-5" [formGroup]="patientInvestigationsForm">
+  <z-form-field class="max-w-md gap-1.5">
+    <label z-form-label for="laboratoryList">{{
+      currentLanguageSet?.nurseData?.investigationsDetails?.laboratory
+    }}</label>
+    <z-form-control>
+      <z-select
+        class="w-full"
+        id="laboratoryList"
         name="laboratoryList"
-        formControlName="laboratoryList"
-        (selectionChange)="checkTestName($event)">
-        <mat-option
+        [zMultiple]="true"
+        [(ngModel)]="selectedLabIds"
+        [ngModelOptions]="{ standalone: true }"
+        (zSelectionChange)="onLaboratorySelectionChange($event)">
+        <z-select-item
           *ngFor="let laboratary of selectLabTest"
-          [value]="laboratary"
-          [disabled]="canDisable(laboratary)">
+          [zValue]="$any(laboratary.procedureID).toString()"
+          [zDisabled]="canDisable(laboratary)">
           {{ laboratary.procedureName }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+        </z-select-item>
+      </z-select>
+    </z-form-control>
+  </z-form-field>
 </div>

@@ -41,27 +41,17 @@ import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
-import { NgIf, NgFor, NgClass } from '@angular/common';
-import {
-  MatChipListbox,
-  MatChip,
-  MatChipRemove,
-} from '@angular/material/chips';
-import { MatIcon } from '@angular/material/icon';
+import { NgIf, NgFor } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardBadgeComponent } from 'Common-UI/v2/ui/badge';
 
 @Component({
   selector: 'app-patient-upload-files',
   templateUrl: './upload-files.component.html',
-  styleUrls: ['./upload-files.component.css'],
-  imports: [
-    NgIf,
-    MatChipListbox,
-    NgFor,
-    MatChip,
-    NgClass,
-    MatIcon,
-    MatChipRemove,
-  ],
+  imports: [NgIf, NgFor, NgIcon, ZardButtonComponent, ZardBadgeComponent],
+  viewProviders: [provideIcons({ lucideX })],
 })
 export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
   fileList!: FileList;

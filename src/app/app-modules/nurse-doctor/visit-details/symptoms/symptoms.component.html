@@ -1,31 +1,41 @@
-<div class="row m-t-20" [formGroup]="patientCovidForm">
-  <div class="col-xs-12 col-sm-8 col-md-6 col-lg-5 box" *ngIf="!sympFlag">
-    <mat-form-field>
-      <mat-label>{{
+<div [formGroup]="patientCovidForm" class="mt-5 flex flex-col gap-4">
+  <z-form-field *ngIf="!sympFlag" class="max-w-md gap-1.5">
+    <label z-form-label for="symptom" [zRequired]="true">
+      {{
         currentLanguageSet?.ExaminationData?.cancerScreeningExamination
           ?.symptoms?.symptoms
-      }}</mat-label>
-      <mat-select
-        multiple
-        (selectionChange)="symptomSelected()"
+      }}
+    </label>
+    <z-form-control>
+      <z-select
+        class="w-full"
         id="symptom"
+        [zMultiple]="true"
         name="symptom"
         formControlName="symptom"
-        required="true">
-        <mat-option *ngFor="let symp of symptomsList" [value]="symp">
+        (zSelectionChange)="symptomSelected()">
+        <z-select-item *ngFor="let symp of symptomsList" [zValue]="symp">
           {{ symp }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+        </z-select-item>
+      </z-select>
+    </z-form-control>
+  </z-form-field>
 
-  <div class="col-xs-12 col-sm-8 col-md-6 col-lg-5 box" *ngIf="sympFlag">
-    <mat-form-field>
-      <mat-label>{{
+  <z-form-field *ngIf="sympFlag" class="max-w-md gap-1.5">
+    <label z-form-label for="symptomView">
+      {{
         currentLanguageSet?.ExaminationData?.cancerScreeningExamination
           ?.symptoms?.symptoms
-      }}</mat-label>
-      <input autocomplete="off" matInput value="{{ covidSymptoms }}" disabled />
-    </mat-form-field>
-  </div>
+      }}
+    </label>
+    <z-form-control>
+      <input
+        z-input
+        id="symptomView"
+        autocomplete="off"
+        class="w-full"
+        [value]="covidSymptoms"
+        disabled />
+    </z-form-control>
+  </z-form-field>
 </div>

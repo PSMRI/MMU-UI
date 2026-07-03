@@ -1,65 +1,73 @@
-<div class="row m-t-10">
-  <div class="col-xs-12">
-    <label for="upload-file" style="color: gray" *ngIf="!disableFileSelection">
-      {{ currentLanguageSet?.uploadFileSizeLimit }} :{{ maxFileSize }}
-      {{ currentLanguageSet?.mb }} ,
-      {{ currentLanguageSet?.supportedFileFormats }} )</label
-    >
-    <br />
-    <section style="margin-top: 30px">
+<div class="mt-2.5">
+  <label
+    for="upload-file"
+    class="text-sm text-muted-foreground"
+    *ngIf="!disableFileSelection">
+    {{ currentLanguageSet?.uploadFileSizeLimit }} :{{ maxFileSize }}
+    {{ currentLanguageSet?.mb }} ,
+    {{ currentLanguageSet?.supportedFileFormats }} )
+  </label>
+
+  <section class="mt-6 flex flex-wrap items-center gap-3">
+    <button
+      z-button
+      type="button"
+      [zDisabled]="disableFileSelection"
+      (click)="triggerLog($event); trackFieldInteraction('Select File Button')">
+      {{ currentLanguageSet?.nurseData?.visitDetailsForm?.selectFile }}
+    </button>
+
+    <input
+      autocomplete="off"
+      type="file"
+      id="fileUpload"
+      #filelist
+      class="sr-only"
+      (change)="uploadFile($event); trackFieldInteraction('File Input')" />
+
+    <button
+      z-button
+      type="button"
+      *ngIf="!disableFileSelection"
+      (click)="
+        checkForDuplicateUpload();
+        trackFieldInteraction('Upload Files Button')
+      ">
+      {{ currentLanguageSet?.nurseData?.visitDetailsForm?.uploadFiles }}
+    </button>
+
+    <button
+      z-button
+      zType="outline"
+      type="button"
+      *ngIf="disableFileSelection || enableForNCDScreening"
+      (click)="
+        viewNurseSelectedFiles(); trackFieldInteraction('View Files Button')
+      ">
+      {{ currentLanguageSet?.nurseData?.visitDetailsForm?.viewFiles }}
+    </button>
+  </section>
+
+  <div class="mt-5 flex flex-wrap gap-2" *ngIf="fileObj.length > 0">
+    <z-badge
+      *ngFor="let file of fileObj"
+      [zType]="file.isUploaded ? 'success' : 'secondary'"
+      class="gap-1.5">
+      {{ file.fileName }}
       <button
-        class="mat_blue"
-        [disabled]="disableFileSelection"
-        (click)="
-          triggerLog($event); trackFieldInteraction('Select File Button')
+        z-button
+        zType="ghost"
+        zSize="icon-xs"
+        type="button"
+        class="-mr-1 p-0"
+        *ngIf="!file.isUploaded"
+        [attr.aria-label]="'Remove ' + file.fileName"
+        (click)="remove(file); trackFieldInteraction('Remove File Button')"
+        (keydown.enter)="
+          remove(file); trackFieldInteraction('Remove File Button')
         ">
-        {{ currentLanguageSet?.nurseData?.visitDetailsForm?.selectFile }}
+        <ng-icon name="lucideX"></ng-icon>
       </button>
-      <span class="span-style">
-        <input
-          autocomplete="off"
-          type="file"
-          id="fileUpload"
-          #filelist
-          style="display: inline-block"
-          (change)="uploadFile($event); trackFieldInteraction('File Input')" />
-      </span>
-      <button
-        *ngIf="!disableFileSelection"
-        class="mat_blue pull-right"
-        mat-raised-button
-        (click)="
-          checkForDuplicateUpload();
-          trackFieldInteraction('Upload Files Button')
-        ">
-        {{ currentLanguageSet?.nurseData?.visitDetailsForm?.uploadFiles }}
-      </button>
-      <button
-        style="margin-left: 10px"
-        *ngIf="disableFileSelection || enableForNCDScreening"
-        class="mat_blue"
-        (click)="
-          viewNurseSelectedFiles(); trackFieldInteraction('View Files Button')
-        ">
-        {{ currentLanguageSet?.nurseData?.visitDetailsForm?.viewFiles }}
-      </button>
-      <div style="margin: 20px 0px 0px 0px">
-        <mat-chip-listbox *ngIf="fileObj.length > 0">
-          <mat-chip
-            *ngFor="let file of fileObj"
-            [ngClass]="{ chipEdit: file.isUploaded }"
-            >{{ file.fileName }}
-            <mat-icon
-              matChipRemove
-              *ngIf="!file.isUploaded"
-              (click)="
-                remove(file); trackFieldInteraction('Remove File Button')
-              "
-              >cancel</mat-icon
-            >
-          </mat-chip>
-        </mat-chip-listbox>
-      </div>
-    </section>
+    </z-badge>
   </div>
 </div>

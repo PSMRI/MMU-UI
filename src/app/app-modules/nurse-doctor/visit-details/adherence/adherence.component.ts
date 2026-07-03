@@ -26,31 +26,30 @@ import { DoctorService } from '../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { MatLabel, MatFormField, MatSelect } from '@angular/material/select';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
 import { NgIf, NgFor } from '@angular/common';
-import { MatInput } from '@angular/material/input';
 import { NullDefaultValueDirective } from '../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
-import { MatOption } from '@angular/material/autocomplete';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
 
 @Component({
   selector: 'app-patient-adherence',
   templateUrl: './adherence.component.html',
-  styleUrls: ['./adherence.component.css'],
+  standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatLabel,
-    MatRadioGroup,
-    MatRadioButton,
     NgIf,
-    MatFormField,
-    MatInput,
+    NgFor,
     NullDefaultValueDirective,
     StringValidatorDirective,
-    MatSelect,
-    NgFor,
-    MatOption,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
   ],
 })
 export class AdherenceComponent implements OnInit, DoCheck, OnChanges {
