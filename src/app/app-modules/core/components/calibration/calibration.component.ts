@@ -23,7 +23,7 @@
 //SH20094090,calibration integration,09-06-2021
 
 import { Component, Inject, OnInit, DoCheck } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { MasterdataService } from 'src/app/app-modules/nurse-doctor/shared/services';
 import { ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
@@ -81,11 +81,11 @@ export class CalibrationComponent implements OnInit, DoCheck {
   pagedItems: any[] = [];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public input: any,
+    @Inject(Z_MODAL_DATA) public input: any,
     private masterdataService: MasterdataService,
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
-    public dialogRef: MatDialogRef<CalibrationComponent>
+    public dialogRef: ZardDialogRef<CalibrationComponent>
   ) {}
 
   ngOnInit() {

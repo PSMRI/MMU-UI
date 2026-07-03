@@ -22,7 +22,7 @@
 
 import { Component, OnInit, Inject, DoCheck } from '@angular/core';
 import { HttpServiceService } from '../../services/http-service.service';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from '../set-language.component';
 import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
@@ -70,9 +70,9 @@ export class PreviousDetailsComponent implements OnInit, DoCheck {
   pagedItems: any[] = [];
 
   constructor(
-    public dialogRef: MatDialogRef<PreviousDetailsComponent>,
+    public dialogRef: ZardDialogRef<PreviousDetailsComponent>,
     public httpServiceService: HttpServiceService,
-    @Inject(MAT_DIALOG_DATA) public input: any
+    @Inject(Z_MODAL_DATA) public input: any
   ) {}
 
   ngOnInit() {

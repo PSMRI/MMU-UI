@@ -30,7 +30,7 @@ import {
   DoCheck,
   AfterViewInit,
 } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogRef } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
 import { ConfirmationService } from '../../services';
 import { SetLanguageComponent } from '../set-language.component';
@@ -119,7 +119,7 @@ export class CameraDialogComponent implements OnInit, DoCheck, AfterViewInit {
   };
 
   constructor(
-    public dialogRef: MatDialogRef<CameraDialogComponent>,
+    public dialogRef: ZardDialogRef<CameraDialogComponent>,
     public httpServiceService: HttpServiceService,
     readonly sessionstorage: SessionStorageService,
     private confirmationService: ConfirmationService
