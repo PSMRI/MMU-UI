@@ -20,7 +20,14 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnDestroy,
+  ViewContainerRef,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -39,8 +46,8 @@ import { IdrsscoreService } from '../../shared/services/idrsscore.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { MatDialog } from '@angular/material/dialog';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 import { ZardDatePickerComponent } from 'Common-UI/v2/ui/date-picker';
@@ -111,7 +118,8 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
     private masterdataService: MasterdataService,
     private idrsScoreService: IdrsscoreService,
     private nurseService: NurseService,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private confirmationService: ConfirmationService,
     readonly sessionstorage: SessionStorageService,
     private httpServices: HttpServiceService
@@ -393,11 +401,9 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   viewPreviousData(data: any) {
-    this.dialog.open(PreviousDetailsComponent, {
-      data: {
-        dataList: data,
-        title: this.currentLanguageSet.previousReferralHistoryDetails,
-      },
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title: this.currentLanguageSet.previousReferralHistoryDetails,
     });
   }
 }

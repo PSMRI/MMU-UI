@@ -58,7 +58,10 @@ export class OpenPreviousVisitDetailsComponent implements OnInit {
     private doctorService: DoctorService,
     private readonly confirmationService: ConfirmationService,
     public dialogRef: ZardDialogRef<OpenPreviousVisitDetailsComponent>
-  ) {}
+  ) {
+    // Preserve the original MatDialog disableClose:true behaviour.
+    this.dialogRef.disableClose = true;
+  }
   ngOnInit(): void {
     this.assignSelectedLanguage();
     this.loadPreviousVisitDetails();

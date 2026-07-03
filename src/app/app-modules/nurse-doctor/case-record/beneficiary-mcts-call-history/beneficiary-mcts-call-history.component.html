@@ -11,7 +11,7 @@
       type="button"
       class="cursor-pointer text-muted-foreground"
       [attr.aria-label]="current_language_set?.common?.close || 'Close'"
-      [matDialogClose]="false">
+      (click)="dialogRef.close(false)">
       <ng-icon name="lucideX"></ng-icon>
     </button>
   </div>

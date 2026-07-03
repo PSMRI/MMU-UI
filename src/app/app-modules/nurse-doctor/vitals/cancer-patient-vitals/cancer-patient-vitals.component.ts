@@ -27,6 +27,7 @@ import {
   OnChanges,
   OnDestroy,
   DoCheck,
+  ViewContainerRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
@@ -36,8 +37,8 @@ import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-de
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
-import { MatDialog } from '@angular/material/dialog';
-import { IotcomponentComponent } from 'src/app/app-modules/core/components/iotcomponent/iotcomponent.component';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
+import { openIotDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { ActivatedRoute } from '@angular/router';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
@@ -108,7 +109,8 @@ export class CancerPatientVitalsComponent
 
   constructor(
     private fb: FormBuilder,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private confirmationService: ConfirmationService,
     private httpServiceService: HttpServiceService,
     private nurseService: NurseService,
@@ -281,11 +283,8 @@ export class CancerPatientVitalsComponent
   }
   openIOTRBSModel() {
     this.rbsPopup = true;
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startRBSTest },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startRBSTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       this.rbsPopup = false;
@@ -307,11 +306,8 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTSPO2Model() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startPulseTest },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startPulseTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result !== null) {
@@ -776,11 +772,8 @@ export class CancerPatientVitalsComponent
     }
   }
   openIOTWeightModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startWeightTest },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startWeightTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('he;;p', result, result['result']);
@@ -794,11 +787,8 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTTempModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startTempTest },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startTempTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('temperature', result, result['temperature']);
@@ -812,11 +802,8 @@ export class CancerPatientVitalsComponent
   }
 
   openIOTPulseRateModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startPulseTest },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startPulseTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('pulse_oxymetery', result, result['pulseRate']);
@@ -829,11 +816,8 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTBP1Model() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBPTest },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startBPTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);
@@ -847,11 +831,8 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTBP2Model() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBPTest },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startBPTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);
@@ -865,11 +846,8 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTBP3Model() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBPTest },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startBPTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);
@@ -883,11 +861,8 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTHemoglobinModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startHemoglobinTest },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startHemoglobinTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);
@@ -900,11 +875,8 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTBGFastingModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBloodGlucose },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startBloodGlucose,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_glucose', result['sys'], result['dia']);
@@ -917,11 +889,8 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTBGRandomModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBloodGlucose },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startBloodGlucose,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_glucose', result['sys'], result['dia']);
@@ -934,11 +903,8 @@ export class CancerPatientVitalsComponent
     });
   }
   openIOTBGPostPrandialModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBloodGlucose },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startBloodGlucose,
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result !== null) {

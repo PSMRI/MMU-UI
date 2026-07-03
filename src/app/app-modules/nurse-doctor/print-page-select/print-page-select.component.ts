@@ -21,7 +21,7 @@
  */
 
 import { Component, OnInit, Inject, DoCheck } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { NgIf } from '@angular/common';
@@ -58,8 +58,8 @@ export class PrintPageSelectComponent implements OnInit, DoCheck {
   isCovidVaccinationStatusVisible = false;
 
   constructor(
-    public dialogRef: MatDialogRef<PrintPageSelectComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: ZardDialogRef<PrintPageSelectComponent>,
+    @Inject(Z_MODAL_DATA) public data: any,
     private httpServices: HttpServiceService
   ) {}
 

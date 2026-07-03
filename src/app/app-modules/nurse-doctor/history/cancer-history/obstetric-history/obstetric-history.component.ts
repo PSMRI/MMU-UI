@@ -27,6 +27,7 @@ import {
   OnChanges,
   OnDestroy,
   DoCheck,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -41,10 +42,10 @@ import {
   NurseService,
 } from '../../../shared/services';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgFor, NgIf } from '@angular/common';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
@@ -95,7 +96,8 @@ export class ObstetricHistoryComponent
   constructor(
     private fb: FormBuilder,
     private confirmationService: ConfirmationService,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private httpServiceService: HttpServiceService,
     private nurseService: NurseService,
     private masterdataService: MasterdataService,
@@ -303,11 +305,9 @@ export class ObstetricHistoryComponent
   }
 
   viewPreviousData(data: any) {
-    this.dialog.open(PreviousDetailsComponent, {
-      data: {
-        dataList: data,
-        title: this.currentLanguageSet.common.prevObsteric,
-      },
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title: this.currentLanguageSet.common.prevObsteric,
     });
   }
 

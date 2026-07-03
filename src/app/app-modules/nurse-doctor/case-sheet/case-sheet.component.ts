@@ -24,7 +24,7 @@ import { Component, OnInit, Injector, DoCheck } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgIf, NgClass } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -41,7 +41,6 @@ import { GeneralCaseSheetComponent } from './general-case-sheet/general-case-she
     NgIf,
     NgIcon,
     ZardButtonComponent,
-    MatDialogClose,
     NgClass,
     CancerCaseSheetComponent,
     GeneralCaseSheetComponent,
@@ -58,6 +57,7 @@ export class CaseSheetComponent implements OnInit, DoCheck {
   serviceType: any;
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
+  dialogRef: ZardDialogRef<CaseSheetComponent> | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -70,7 +70,13 @@ export class CaseSheetComponent implements OnInit, DoCheck {
     this.fetchLanguageResponse();
     this.caseSheetCategory();
     this.serviceType = this.route.snapshot.params['serviceType'];
-    const input = this.injector.get(MAT_DIALOG_DATA, null);
+    this.dialogRef = this.injector.get(ZardDialogRef, null);
+    // Preserve the original MatDialog disableClose:true behaviour when opened
+    // as a dialog (this component is also used as a routed print page).
+    if (this.dialogRef) {
+      this.dialogRef.disableClose = true;
+    }
+    const input = this.injector.get(Z_MODAL_DATA, null);
     if (input) {
       this.previous = input.previous;
       this.serviceType = input.serviceType;

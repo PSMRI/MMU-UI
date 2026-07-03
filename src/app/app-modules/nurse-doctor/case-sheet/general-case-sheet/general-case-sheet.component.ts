@@ -20,14 +20,21 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Input, OnDestroy, DoCheck } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnDestroy,
+  DoCheck,
+  ViewContainerRef,
+} from '@angular/core';
 import { DoctorService } from '../../shared/services/doctor.service';
 import { Location, NgIf } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { PrescribeTmMedicineComponent } from '../prescribe-tm-medicine/prescribe-tm-medicine.component';
 import { NurseService } from '../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { PrintPageSelectComponent } from '../../print-page-select/print-page-select.component';
@@ -94,7 +101,8 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
 
   constructor(
     private location: Location,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
     private route: ActivatedRoute,
@@ -240,15 +248,18 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   selectPrintPage() {
-    const matDialogRef: MatDialogRef<PrintPageSelectComponent> =
-      this.dialog.open(PrintPageSelectComponent, {
-        width: '420px',
-        disableClose: false,
-        data: {
-          printPagePreviewSelect: this.printPagePreviewSelect,
-          visitCategory: this.visitCategory,
-        },
-      });
+    const matDialogRef = this.dialog.create<PrintPageSelectComponent, unknown>({
+      zContent: PrintPageSelectComponent,
+      zWidth: '420px',
+      zMaskClosable: true,
+      zData: {
+        printPagePreviewSelect: this.printPagePreviewSelect,
+        visitCategory: this.visitCategory,
+      },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
+    });
 
     matDialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
@@ -285,13 +296,20 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
       this.caseSheetData !== null &&
       this.caseSheetData.doctorData.prescription.length > 0
     ) {
-      const dialogRef = this.dialog.open(PrescribeTmMedicineComponent, {
-        data: {
+      const dialogRef = this.dialog.create<
+        PrescribeTmMedicineComponent,
+        unknown
+      >({
+        zContent: PrescribeTmMedicineComponent,
+        zData: {
           height: '560px',
           weight: '680px',
           disableClose: true,
           tmPrescribedDrugs: this.caseSheetData.doctorData.prescription,
         },
+        zHideFooter: true,
+        zClosable: false,
+        zViewContainerRef: this.viewContainerRef,
       });
       dialogRef.afterClosed().subscribe(result => {
         if (result) {

@@ -86,7 +86,10 @@ export class CalibrationComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
     public dialogRef: ZardDialogRef<CalibrationComponent>
-  ) {}
+  ) {
+    // Preserve the original MatDialog disableClose:true behaviour.
+    this.dialogRef.disableClose = true;
+  }
 
   ngOnInit() {
     this.assignSelectedLanguage();
