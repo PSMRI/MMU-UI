@@ -35,7 +35,7 @@ import {
   AbstractControl,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import {
@@ -547,17 +547,10 @@ export class FamilyHistoryNcdscreeningComponent
   }
 
   viewPreviousData(data: any) {
-    this.dialog.create({
-      zContent: PreviousDetailsComponent,
-      zData: {
-        dataList: data,
-        title:
-          this.currentLanguageSet.historyData.familyhistory
-            .previousfamilyhistory,
-      },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title:
+        this.currentLanguageSet.historyData.familyhistory.previousfamilyhistory,
     });
   }
 

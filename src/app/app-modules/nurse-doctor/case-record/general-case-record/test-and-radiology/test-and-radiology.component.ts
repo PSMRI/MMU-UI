@@ -35,7 +35,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { environment } from 'src/environments/environment';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { TestInVitalsService } from '../../../shared/services/test-in-vitals.service';
-import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
+import { openViewRadiologyDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
@@ -297,21 +297,15 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   showTestResult(fileIDs: any) {
-    const ViewTestReport = this.dialog.create<
-      ViewRadiologyUploadedFilesComponent,
-      unknown
-    >({
-      zContent: ViewRadiologyUploadedFilesComponent,
-      zWidth: '40%',
-      zData: {
+    const ViewTestReport = openViewRadiologyDialog(
+      this.dialog,
+      this.viewContainerRef,
+      {
         filesDetails: fileIDs,
         panelClass: 'dialog-width',
         disableClose: false,
-      },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
-    });
+      }
+    );
     ViewTestReport.afterClosed().subscribe(result => {
       if (result) {
         this.labService.viewFileContent(result).subscribe((res: any) => {

@@ -43,8 +43,8 @@ import { DoctorService, NurseService } from '../../../shared/services';
 import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
+import { openViewRadiologyDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { NgIf, NgFor } from '@angular/common';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -327,22 +327,16 @@ export class GynecologicalExaminationComponent implements OnInit, DoCheck {
   }
 
   viewNurseSelectedFiles() {
-    const ViewTestReport = this.dialog.create<
-      ViewRadiologyUploadedFilesComponent,
-      unknown
-    >({
-      zContent: ViewRadiologyUploadedFilesComponent,
-      zWidth: '40%',
-      zData: {
+    const ViewTestReport = openViewRadiologyDialog(
+      this.dialog,
+      this.viewContainerRef,
+      {
         filesDetails: this.viewFiles,
         // width: 0.8 * window.innerWidth + "px",
         panelClass: 'dialog-width',
         disableClose: false,
-      },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
-    });
+      }
+    );
     ViewTestReport.afterClosed().subscribe(result => {
       if (result) {
         this.labService.viewFileContent(result).subscribe((res: any) => {

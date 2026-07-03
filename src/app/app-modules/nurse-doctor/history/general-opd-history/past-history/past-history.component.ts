@@ -36,7 +36,7 @@ import {
   AbstractControl,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import {
@@ -697,17 +697,10 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   viewPreviousData(data: any) {
-    this.dialog.create({
-      zContent: PreviousDetailsComponent,
-      zData: {
-        dataList: data,
-        title:
-          this.currentLanguageSet.historyData.Previousillness
-            .previouspasthistory,
-      },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title:
+        this.currentLanguageSet.historyData.Previousillness.previouspasthistory,
     });
   }
 

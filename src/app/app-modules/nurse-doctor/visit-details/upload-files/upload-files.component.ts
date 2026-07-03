@@ -39,7 +39,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { LabService } from 'src/app/app-modules/lab/shared/services';
-import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
+import { openViewRadiologyDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
 import { NgIf, NgFor } from '@angular/common';
@@ -295,22 +295,16 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
   viewNurseSelectedFiles() {
     console.log('this.doc', this.doctorService.fileIDs);
     const file_Ids = this.doctorService.fileIDs;
-    const ViewTestReport = this.dialog.create<
-      ViewRadiologyUploadedFilesComponent,
-      unknown
-    >({
-      zContent: ViewRadiologyUploadedFilesComponent,
-      zWidth: '40%',
-      zData: {
+    const ViewTestReport = openViewRadiologyDialog(
+      this.dialog,
+      this.viewContainerRef,
+      {
         filesDetails: file_Ids,
         // width: 0.8 * window.innerWidth + "px",
         panelClass: 'dialog-width',
         disableClose: false,
-      },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
-    });
+      }
+    );
     ViewTestReport.afterClosed().subscribe(result => {
       if (result) {
         this.labService.viewFileContent(result).subscribe((res: any) => {

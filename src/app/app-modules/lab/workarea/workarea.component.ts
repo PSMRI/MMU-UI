@@ -44,13 +44,15 @@ import { BeneficiaryDetailsService } from '../../core/services/beneficiary-detai
 import { LabUtils } from './../shared/utility/lab-utility';
 import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard.service';
 import { ViewFileComponent } from './../view-file/view-file.component';
-import { ViewRadiologyUploadedFilesComponent } from '../../core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
+import {
+  openViewRadiologyDialog,
+  openIotDialog,
+} from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { environment } from 'src/environments/environment';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { Observable, of } from 'rxjs';
-import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import {
   NgIf,
@@ -1084,19 +1086,13 @@ export class WorkareaComponent
 
   viewFileContent(fileIDs: any) {
     console.log(fileIDs);
-    const dialogRef = this.dialog.create<
-      ViewRadiologyUploadedFilesComponent,
-      unknown
-    >({
-      zContent: ViewRadiologyUploadedFilesComponent,
-      zWidth: '40%',
-      zData: {
+    const dialogRef = openViewRadiologyDialog(
+      this.dialog,
+      this.viewContainerRef,
+      {
         filesDetails: fileIDs,
-      },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
-    });
+      }
+    );
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
         this.labService.viewFileContent(result).subscribe((res: any) => {
@@ -1123,18 +1119,10 @@ export class WorkareaComponent
       output.push(element.componentCode);
     });
     console.log('calibration', api);
-    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
-      zContent: IotcomponentComponent,
-      zWidth: '600px',
-      zMaskClosable: false,
-      zData: {
-        startAPI: api.value.procedureStartAPI,
-        output: output,
-        procedure: api,
-      },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: api.value.procedureStartAPI,
+      output: output,
+      procedure: api,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('he;;p', result, result['result']);

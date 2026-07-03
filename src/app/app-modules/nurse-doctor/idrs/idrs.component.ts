@@ -54,7 +54,7 @@ import {
 import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
-import { PreviousDetailsComponent } from '../../core/components/previous-details/previous-details.component';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgFor, NgIf } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -1448,15 +1448,9 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   }
 
   viewPreviousData(data: any) {
-    this.dialog.create<PreviousDetailsComponent, unknown>({
-      zContent: PreviousDetailsComponent,
-      zData: {
-        dataList: data,
-        title: this.currentLanguageSet.previousDiabetesHistoryDetails,
-      },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title: this.currentLanguageSet.previousDiabetesHistoryDetails,
     });
   }
 }

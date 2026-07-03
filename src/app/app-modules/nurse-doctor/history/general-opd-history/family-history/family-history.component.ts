@@ -36,7 +36,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import {
   MasterdataService,
   NurseService,
@@ -381,17 +381,10 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   viewPreviousData(data: any) {
-    this.dialog.create({
-      zContent: PreviousDetailsComponent,
-      zData: {
-        dataList: data,
-        title:
-          this.currentLanguageSet.historyData.familyhistory
-            .previousfamilyhistory,
-      },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title:
+        this.currentLanguageSet.historyData.familyhistory.previousfamilyhistory,
     });
   }
 

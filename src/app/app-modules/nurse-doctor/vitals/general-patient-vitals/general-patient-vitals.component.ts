@@ -35,7 +35,7 @@ import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-de
 import { NurseService, DoctorService } from '../../shared/services';
 import { TestInVitalsService } from '../../shared/services/test-in-vitals.service';
 import { AudioRecordingService } from '../../shared/services/audio-recording.service';
-import { IotcomponentComponent } from 'src/app/app-modules/core/components/iotcomponent/iotcomponent.component';
+import { openIotDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
@@ -909,14 +909,8 @@ export class GeneralPatientVitalsComponent
     return this.patientVitalsForm.controls['rbsTestResult'].value;
   }
   openIOTWeightModel() {
-    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
-      zContent: IotcomponentComponent,
-      zWidth: '600px',
-      zMaskClosable: false,
-      zData: { startAPI: this.startWeightTest },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startWeightTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('he;;p', result, result['result']);
@@ -932,14 +926,8 @@ export class GeneralPatientVitalsComponent
 
   openIOTRBSModel() {
     this.rbsPopup = true;
-    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
-      zContent: IotcomponentComponent,
-      zWidth: '600px',
-      zMaskClosable: false,
-      zData: { startAPI: this.startRBSTest },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startRBSTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       this.rbsPopup = false;
@@ -989,14 +977,8 @@ export class GeneralPatientVitalsComponent
     }
   }
   openIOTTempModel() {
-    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
-      zContent: IotcomponentComponent,
-      zWidth: '600px',
-      zMaskClosable: false,
-      zData: { startAPI: this.startTempTest },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startTempTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('temperature', result, result['temperature']);
@@ -1009,14 +991,8 @@ export class GeneralPatientVitalsComponent
     });
   }
   openIOTPulseRateModel() {
-    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
-      zContent: IotcomponentComponent,
-      zWidth: '600px',
-      zMaskClosable: false,
-      zData: { startAPI: this.startPulseTest },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startPulseTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('pulse_oxymetery', result, result['pulseRate']);
@@ -1029,14 +1005,8 @@ export class GeneralPatientVitalsComponent
     });
   }
   openIOTSPO2Model() {
-    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
-      zContent: IotcomponentComponent,
-      zWidth: '600px',
-      zMaskClosable: false,
-      zData: { startAPI: this.startPulseTest },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startPulseTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result !== null) {
@@ -1049,14 +1019,8 @@ export class GeneralPatientVitalsComponent
   }
 
   openIOTBPModel() {
-    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
-      zContent: IotcomponentComponent,
-      zWidth: '600px',
-      zMaskClosable: false,
-      zData: { startAPI: this.startBPTest },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startBPTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);
@@ -1070,14 +1034,8 @@ export class GeneralPatientVitalsComponent
     });
   }
   openIOTBGFastingModel() {
-    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
-      zContent: IotcomponentComponent,
-      zWidth: '600px',
-      zMaskClosable: false,
-      zData: { startAPI: this.startBloodGlucose },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startBloodGlucose,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);
@@ -1090,14 +1048,8 @@ export class GeneralPatientVitalsComponent
     });
   }
   openIOTBGRandomModel() {
-    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
-      zContent: IotcomponentComponent,
-      zWidth: '600px',
-      zMaskClosable: false,
-      zData: { startAPI: this.startBloodGlucose },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startBloodGlucose,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);
@@ -1110,14 +1062,8 @@ export class GeneralPatientVitalsComponent
     });
   }
   openIOTBGPostPrandialModel() {
-    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
-      zContent: IotcomponentComponent,
-      zWidth: '600px',
-      zMaskClosable: false,
-      zData: { startAPI: this.startBloodGlucose },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startBloodGlucose,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);

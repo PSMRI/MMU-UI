@@ -42,7 +42,7 @@ import {
   NurseService,
 } from '../../../shared/services';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
@@ -305,15 +305,9 @@ export class ObstetricHistoryComponent
   }
 
   viewPreviousData(data: any) {
-    this.dialog.create<PreviousDetailsComponent, unknown>({
-      zContent: PreviousDetailsComponent,
-      zData: {
-        dataList: data,
-        title: this.currentLanguageSet.common.prevObsteric,
-      },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title: this.currentLanguageSet.common.prevObsteric,
     });
   }
 

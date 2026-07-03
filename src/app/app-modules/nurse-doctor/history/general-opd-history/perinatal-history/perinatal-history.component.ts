@@ -38,7 +38,7 @@ import {
 import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgFor, NgIf } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -324,17 +324,11 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   viewPreviousData(data: any) {
-    this.dialog.create({
-      zContent: PreviousDetailsComponent,
-      zData: {
-        dataList: data,
-        title:
-          this.currentLanguageSet.historyData.Perinatalhistorydetails
-            .developmentalhistorydetails,
-      },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title:
+        this.currentLanguageSet.historyData.Perinatalhistorydetails
+          .developmentalhistorydetails,
     });
   }
 }

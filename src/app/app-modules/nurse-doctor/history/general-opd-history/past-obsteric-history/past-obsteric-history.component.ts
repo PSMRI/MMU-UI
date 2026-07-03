@@ -47,7 +47,7 @@ import { GeneralUtils } from '../../../shared/utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
@@ -489,17 +489,11 @@ export class PastObstericHistoryComponent
   }
 
   viewPreviousData(data: any) {
-    this.dialog.create({
-      zContent: PreviousDetailsComponent,
-      zData: {
-        dataList: data,
-        title:
-          this.currentLanguageSet.historyData.obstetrichistory
-            .previousobstetrichistory,
-      },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title:
+        this.currentLanguageSet.historyData.obstetrichistory
+          .previousobstetrichistory,
     });
   }
 

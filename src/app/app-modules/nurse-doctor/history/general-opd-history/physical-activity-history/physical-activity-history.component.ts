@@ -41,7 +41,7 @@ import {
 } from '../../../shared/services';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgFor } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -228,15 +228,9 @@ export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
   }
 
   viewPreviousData(data: any) {
-    this.dialog.create({
-      zContent: PreviousDetailsComponent,
-      zData: {
-        dataList: data,
-        title: this.currentLanguageSet.previousPhyscialActivityHistoryDetails,
-      },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title: this.currentLanguageSet.previousPhyscialActivityHistoryDetails,
     });
   }
   getBeneficiaryDetails() {

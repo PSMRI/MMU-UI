@@ -60,7 +60,7 @@ import { environment } from 'src/environments/environment';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
-import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
+import { openIotDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgIf, NgFor, NgClass, SlicePipe } from '@angular/common';
 import { StringValidatorDirective } from '../../core/directives/stringValidator.directive';
@@ -291,14 +291,8 @@ export class QuickConsultComponent
   }
   openIOTRBSModel() {
     this.rbsPopup = true;
-    const dialogRef = this.dialog.create<IotcomponentComponent, unknown>({
-      zContent: IotcomponentComponent,
-      zWidth: '600px',
-      zMaskClosable: false,
-      zData: { startAPI: this.startRBSTest },
-      zHideFooter: true,
-      zClosable: false,
-      zViewContainerRef: this.viewContainerRef,
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startRBSTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       this.rbsPopup = false;
