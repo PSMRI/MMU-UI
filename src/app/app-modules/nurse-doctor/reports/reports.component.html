@@ -1,77 +1,108 @@
-<div class="container-fluid">
-  <div class="row m-t-20">
-    <form [formGroup]="reportForm" class="row">
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-        <mat-form-field [style.width]="'100%'">
-          <mat-label>{{ currentLanguageSet?.report }}</mat-label>
-          <mat-select
-            class="input-full-width"
-            name="report"
-            formControlName="report"
-            (selectionChange)="checkReport()"
-            (focus)="trackFieldInteraction('Report')"
-            required>
-            <mat-option *ngFor="let report of reportMaster" [value]="report">
-              {{ report.reportName }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-        <mat-form-field [style.width]="'100%'" class="mat_form_field_color">
-          <mat-label>Enter Date Range</mat-label>
-          <mat-date-range-input
-            [rangePicker]="picker"
-            [max]="today"
-            [min]="fromDate"
-            required>
-            <input
-              matStartDate
-              formControlName="fromDate"
-              placeholder="{{ currentLanguageSet?.fromDate }}"
-              (focus)="trackFieldInteraction('From Date')" />
-            <input
-              matEndDate
-              formControlName="toDate"
-              placeholder="{{ currentLanguageSet?.toDate }}"
-              (focus)="trackFieldInteraction('To Date')" />
-          </mat-date-range-input>
-          <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="picker"
-            (click)="trackFieldInteraction('Date Picker Button')"></mat-datepicker-toggle>
-          <mat-date-range-picker #picker></mat-date-range-picker>
-        </mat-form-field>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3 col-lg- box">
-        <mat-form-field [style.width]="'100%'">
-          <mat-label>{{ currentLanguageSet?.van }}</mat-label>
-          <mat-select
-            class="input-full-width"
-            name="van"
-            formControlName="van"
-            [disabled]="!toDate"
-            (focus)="trackFieldInteraction('Van')"
-            (selectionChange)="trackFieldInteraction('Van Selection')"
-            required>
-            <mat-option *ngFor="let van of vanMaster" [value]="van">
-              {{ van.vehicalNo }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </form>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <button
-        mat-raised-button
-        color="primary"
-        type="button"
-        class="pull-right mat_blue"
-        [disabled]="!reportForm.valid"
-        (click)="getReportData()">
-        {{ currentLanguageSet?.downloadReport }}
-      </button>
-    </div>
-  </div>
+<div class="px-6 pb-10 pt-6">
+  <z-card>
+    <z-card-header>
+      <z-card-title>{{ currentLanguageSet?.report || 'Reports' }}</z-card-title>
+      <z-card-description>{{
+        currentLanguageSet?.downloadReport || 'Download Report'
+      }}</z-card-description>
+    </z-card-header>
+
+    <z-card-content>
+      <form [formGroup]="reportForm" class="flex flex-col gap-6">
+        <div
+          class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+          <!-- Report -->
+          <z-form-field class="gap-1.5">
+            <label z-form-label zRequired for="report">{{
+              currentLanguageSet?.report
+            }}</label>
+            <z-form-control>
+              <z-select
+                id="report"
+                class="w-full"
+                name="report"
+                [zPlaceholder]="currentLanguageSet?.report || 'Report'"
+                (zSelectionChange)="onReportSelected($event)"
+                (focus)="trackFieldInteraction('Report')">
+                <z-select-item
+                  *ngFor="let report of reportMaster"
+                  [zValue]="report.reportID.toString()">
+                  {{ report.reportName }}
+                </z-select-item>
+              </z-select>
+            </z-form-control>
+          </z-form-field>
+
+          <!-- From Date -->
+          <z-form-field class="gap-1.5">
+            <label z-form-label zRequired for="fromDate">{{
+              currentLanguageSet?.fromDate || 'From Date'
+            }}</label>
+            <z-form-control>
+              <z-date-picker
+                id="fromDate"
+                class="w-full"
+                formControlName="fromDate"
+                zFormat="dd/MM/yyyy"
+                [placeholder]="currentLanguageSet?.fromDate || 'From Date'"
+                [maxDate]="today"
+                (dateChange)="trackFieldInteraction('From Date')" />
+            </z-form-control>
+          </z-form-field>
+
+          <!-- To Date -->
+          <z-form-field class="gap-1.5">
+            <label z-form-label zRequired for="toDate">{{
+              currentLanguageSet?.toDate || 'To Date'
+            }}</label>
+            <z-form-control>
+              <z-date-picker
+                id="toDate"
+                class="w-full"
+                formControlName="toDate"
+                zFormat="dd/MM/yyyy"
+                [placeholder]="currentLanguageSet?.toDate || 'To Date'"
+                [minDate]="fromDate"
+                [maxDate]="today"
+                (dateChange)="trackFieldInteraction('To Date')" />
+            </z-form-control>
+          </z-form-field>
+
+          <!-- Van -->
+          <z-form-field class="gap-1.5">
+            <label z-form-label zRequired for="van">{{
+              currentLanguageSet?.van
+            }}</label>
+            <z-form-control>
+              <z-select
+                id="van"
+                class="w-full"
+                name="van"
+                [zDisabled]="!toDate"
+                [zPlaceholder]="currentLanguageSet?.van || 'Van'"
+                (zSelectionChange)="onVanSelected($event)"
+                (focus)="trackFieldInteraction('Van')">
+                <z-select-item
+                  *ngFor="let van of vanMaster"
+                  [zValue]="van.vanID.toString()">
+                  {{ van.vehicalNo }}
+                </z-select-item>
+              </z-select>
+            </z-form-control>
+          </z-form-field>
+        </div>
+
+        <div class="flex justify-end">
+          <button
+            z-button
+            type="button"
+            [disabled]="!reportForm.valid"
+            (click)="getReportData()">
+            <ng-icon name="lucideDownload"></ng-icon>
+            {{ currentLanguageSet?.downloadReport }}
+          </button>
+        </div>
+      </form>
+    </z-card-content>
+  </z-card>
 </div>

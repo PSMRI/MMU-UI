@@ -17,6 +17,20 @@ z-select [role='combobox'] {
   border-radius: var(--radius);
 }
 
+/* z-accordion-trigger renders a bare <button> whose base classes never reset
+   appearance/border (they rely on Tailwind preflight, which is OFF here). So the
+   browser's native button border + Material's unlayered button{border-radius:0}
+   paint a square, boxed outline over the accordion item, making the rounded
+   border-border/bg-card item look like a black square. Zero the trigger button
+   so only the item's own rounded border shows. */
+z-accordion-trigger button,
+[z-accordion-trigger] button {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  background: transparent;
+}
+
 /* z-pagination-button is a wrapper <button> around the actual <z-button>.
    With preflight off, that bare wrapper shows the browser's native button
    border + background (appearance:none alone doesn't clear them, and unlike a

@@ -27,6 +27,7 @@ import {
   ElementRef,
   OnInit,
   DoCheck,
+  Injector,
 } from '@angular/core';
 import {
   FormArray,
@@ -64,6 +65,7 @@ export class OpenModalDirective implements OnInit, DoCheck {
     private fb: FormBuilder,
     private el: ElementRef,
     private dialog: MatDialog,
+    private readonly injector: Injector,
     readonly sessionstorage: SessionStorageService,
     private httpServiceService: HttpServiceService
   ) {}
@@ -78,6 +80,7 @@ export class OpenModalDirective implements OnInit, DoCheck {
       const dialogRef = this.dialog.open(ProvisionalSearchComponent, {
         width: '800px',
         hasBackdrop: false,
+        injector: this.injector,
         data: {
           searchTerm: searchTerm,
           addedDiagnosis: this.previousSelected,

@@ -25,79 +25,26 @@ import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MasterdataService, DoctorService } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
-import {
-  MomentDateAdapter,
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-} from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import {
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
-import {
-  MatLabel,
-  MatFormField,
-  MatSelect,
-  MatSuffix,
-} from '@angular/material/select';
 import { NgFor, NgIf } from '@angular/common';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
-import {
-  MatDatepickerInput,
-  MatDatepickerToggle,
-  MatDatepicker,
-} from '@angular/material/datepicker';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardDatePickerComponent } from 'Common-UI/v2/ui/date-picker';
 
 @Component({
   selector: 'app-cancer-refer',
   templateUrl: './cancer-refer.component.html',
-  styleUrls: ['./cancer-refer.component.css'],
-  providers: [
-    {
-      provide: MAT_DATE_LOCALE,
-      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
-    },
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    },
-    {
-      provide: MAT_DATE_FORMATS,
-      useValue: {
-        parse: {
-          dateInput: 'LL',
-        },
-        display: {
-          dateInput: 'DD/MM/YYYY', // Set the desired display format
-          monthYearLabel: 'MMM YYYY',
-          dateA11yLabel: 'LL',
-          monthYearA11yLabel: 'MMMM YYYY',
-        },
-      },
-    },
-  ],
   imports: [
-    MatExpansionPanel,
     ReactiveFormsModule,
-    MatExpansionPanelHeader,
-    MatLabel,
-    MatFormField,
-    MatSelect,
     NgFor,
-    MatOption,
     NgIf,
-    MatInput,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-    MatSuffix,
-    MatDatepicker,
+    ...cardImports,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
+    ZardDatePickerComponent,
   ],
 })
 export class CancerReferComponent implements OnInit, DoCheck, OnDestroy {
@@ -232,7 +179,8 @@ export class CancerReferComponent implements OnInit, DoCheck, OnDestroy {
     return this.referForm.get('referralReason');
   }
 
-  checkdate(revisitDate: Date) {
+  checkdate(revisitDate: Date | null) {
+    if (!revisitDate) return;
     this.today = new Date();
     const d = new Date();
     const checkdate = new Date();
@@ -276,7 +224,17 @@ export class CancerReferComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   public higherhealthcarecenter(selected: any): void {
-    this.selectValue = selected;
+    // z-select is string-valued; the form control originally held the numeric
+    // institutionID. Coerce back to a number so the persisted payload keeps
+    // its numeric id, then track the selection for the validator toggle.
+    const numericId =
+      selected !== undefined && selected !== null && selected !== ''
+        ? Number(selected)
+        : selected;
+    this.referForm
+      .get('referredToInstituteID')
+      ?.setValue(numericId, { emitEvent: false });
+    this.selectValue = numericId;
     this.toggleReferralReasonValidator();
     // should display the selected option.
   }

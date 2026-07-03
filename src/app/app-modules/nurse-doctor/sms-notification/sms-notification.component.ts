@@ -1,9 +1,8 @@
-import { Component, Inject, ViewChild, OnInit, DoCheck } from '@angular/core';
+import { Component, Inject, OnInit, DoCheck } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogRef,
   MatDialog,
-  MatDialogContent,
 } from '@angular/material/dialog';
 import { SmsTemplateService } from '../smsTemplate/sms-template.service';
 import { ConfirmationService } from '../../core/services';
@@ -12,34 +11,37 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { map, switchMap } from 'rxjs';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatToolbar } from '@angular/material/toolbar';
-import { MatIcon } from '@angular/material/icon';
-import { CdkScrollable } from '@angular/cdk/scrolling';
 import { NgIf, NgFor } from '@angular/common';
-import { MatCheckbox } from '@angular/material/checkbox';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MatFormField, MatLabel, MatError } from '@angular/material/select';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX, lucideSend } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardCheckboxComponent } from 'Common-UI/v2/ui/checkbox';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
 
 @Component({
   selector: 'app-sms-notification',
+  standalone: true,
   templateUrl: './sms-notification.component.html',
-  styleUrls: ['./sms-notification.component.css'],
   imports: [
-    MatToolbar,
-    MatIcon,
-    CdkScrollable,
-    MatDialogContent,
     NgIf,
     NgFor,
-    MatPaginator,
-    MatCheckbox,
     ReactiveFormsModule,
     FormsModule,
-    MatFormField,
-    MatLabel,
-    MatError,
+    NgIcon,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ZardCheckboxComponent,
+    ...ZardTableImports,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideX,
+      lucideSend,
+    }),
   ],
 })
 export class SmsNotificationComponent implements OnInit, DoCheck {
@@ -62,19 +64,7 @@ export class SmsNotificationComponent implements OnInit, DoCheck {
     readonly sessionstorage: SessionStorageService
   ) {}
 
-  displayedColumns: string[] = [
-    'prescriptionID',
-    'diagnosisProvided',
-    'drug',
-    'strength',
-    'frequency',
-    'noOfDays',
-    'remarks',
-  ];
-
-  dataSource!: MatTableDataSource<any>;
   ngOnInit() {
-    this.dataSource = new MatTableDataSource(this.data.prescribedDrugs);
     this.assignSelectedLanguage();
   }
 

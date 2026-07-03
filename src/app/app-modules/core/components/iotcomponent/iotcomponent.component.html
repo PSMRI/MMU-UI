@@ -1,71 +1,87 @@
-<div class="col-12 title" [ngClass]="{ warn: errorMsg !== undefined }">
-  <h4>{{ current_language_set?.common?.bluetoothDevice }}</h4>
-  <mat-icon
-    class="md-24 pull-right mat_icon_iot"
-    matTooltip="{{ current_language_set?.stopTest }}"
-    (click)="stop()"
-    mat-icon-button
-    >close</mat-icon
-  >
-</div>
-<div class="container-fluid">
-  <mat-dialog-content>
-    <div class="table-responsive">
-      <p class="msg" *ngIf="!msgCalibration">
-        {{
-          errorMsg === undefined ? 'Please wait. Test in Progress  ' : errorMsg
-        }}
-      </p>
-      <p class="msg" *ngIf="msgCalibration && !stripShowMsg">
-        {{
-          errorMsg === undefined
-            ? 'Please wait.Calibration Test in Progress  '
-            : errorMsg
-        }}
-      </p>
-      <p class="msg" *ngIf="msgCalibration && stripShowMsg">
-        {{
-          errorMsg === undefined
-            ? 'Please Insert Calibration Strip to proceed '
-            : errorMsg
-        }}
-      </p>
-      <p class="progressMsg">
-        {{
-          errorMsg === undefined && progressMsg !== undefined ? progressMsg : ''
-        }}
-      </p>
-      <div class="row" *ngIf="msgCalibration && startedCalibration">
-        <button
-          matTooltip="{{ current_language_set?.common?.startTest }}"
-          md-button
-          type="button"
-          class="pull-left exit"
-          [ngClass]="{
-            enable: statusCalibration === false,
-            disable: statusCalibration === true
-          }"
-          style="border-radius: 8px; margin-bottom: 5px; margin-left: 30px"
-          [disabled]="statusCalibration"
-          (click)="getCalibStatus()">
-          {{ current_language_set?.coreComponents?.start }}
-        </button>
-        <button
-          matTooltip="{{ current_language_set?.stopTest }}"
-          md-button
-          type="button"
-          class="pull-right exit"
-          style="
-            border-radius: 8px;
-            background-color: red;
-            margin-bottom: 5px;
-            margin-right: 30px;
-          "
-          [disabled]="stoppedCalibration"
-          (click)="calibStop()">
-          {{ current_language_set?.abort }}
-        </button>
-      </div>
-    </div>
-  </mat-dialog-content>
+<div class="flex flex-col gap-4 p-6">
+  <!-- Header: title + close -->
+  <div class="flex items-center justify-between gap-2">
+    <p
+      class="text-lg font-semibold"
+      [ngClass]="errorMsg !== undefined ? 'text-destructive' : 'text-foreground'">
+      {{ current_language_set?.common?.bluetoothDevice }}
+    </p>
+    <button
+      z-button
+      zType="ghost"
+      zSize="icon"
+      class="p-0"
+      type="button"
+      [zTooltip]="current_language_set?.stopTest"
+      zPosition="bottom"
+      aria-label="Close"
+      (click)="stop()">
+      <ng-icon name="lucideX"></ng-icon>
+    </button>
+  </div>
+
+  <!-- Body -->
+  <div class="flex flex-col items-center gap-2">
+    <z-loader
+      *ngIf="errorMsg === undefined && !statusCalibration"
+      zSize="lg"></z-loader>
+
+    <p
+      class="m-0 text-center text-base"
+      [ngClass]="errorMsg !== undefined ? 'text-destructive' : 'text-foreground'"
+      *ngIf="!msgCalibration">
+      {{
+        errorMsg === undefined ? 'Please wait. Test in Progress' : errorMsg
+      }}
+    </p>
+    <p
+      class="m-0 text-center text-base"
+      [ngClass]="errorMsg !== undefined ? 'text-destructive' : 'text-foreground'"
+      *ngIf="msgCalibration && !stripShowMsg">
+      {{
+        errorMsg === undefined
+          ? 'Please wait. Calibration Test in Progress'
+          : errorMsg
+      }}
+    </p>
+    <p
+      class="m-0 text-center text-base"
+      [ngClass]="errorMsg !== undefined ? 'text-destructive' : 'text-foreground'"
+      *ngIf="msgCalibration && stripShowMsg">
+      {{
+        errorMsg === undefined
+          ? 'Please Insert Calibration Strip to proceed'
+          : errorMsg
+      }}
+    </p>
+    <p class="m-0 text-center text-sm text-muted-foreground">
+      {{
+        errorMsg === undefined && progressMsg !== undefined ? progressMsg : ''
+      }}
+    </p>
+  </div>
+
+  <!-- Calibration actions -->
+  <div
+    class="flex justify-end gap-2"
+    *ngIf="msgCalibration && startedCalibration">
+    <button
+      z-button
+      zType="default"
+      type="button"
+      [zTooltip]="current_language_set?.common?.startTest"
+      [disabled]="statusCalibration"
+      (click)="getCalibStatus()">
+      {{ current_language_set?.coreComponents?.start }}
+    </button>
+    <button
+      z-button
+      zType="destructive"
+      type="button"
+      [zTooltip]="current_language_set?.stopTest"
+      [disabled]="stoppedCalibration"
+      (click)="calibStop()">
+      {{ current_language_set?.abort }}
+    </button>
+  </div>
 </div>

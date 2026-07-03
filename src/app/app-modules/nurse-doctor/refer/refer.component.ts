@@ -29,7 +29,6 @@ import { GeneralReferComponent } from './general-refer/general-refer.component';
 @Component({
   selector: 'app-refer',
   templateUrl: './refer.component.html',
-  styleUrls: ['./refer.component.css'],
   imports: [NgIf, CancerReferComponent, GeneralReferComponent],
 })
 export class ReferComponent implements OnInit {

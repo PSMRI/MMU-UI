@@ -26,24 +26,31 @@ import { IotService } from '../../services/iot.service';
 import { SetLanguageComponent } from '../set-language.component';
 import { ConfirmationService } from '../../services';
 import { NgClass, NgIf, NgFor } from '@angular/common';
-import { MatDialogClose, MatDialogContent } from '@angular/material/dialog';
-import { MatIcon } from '@angular/material/icon';
-import { MatTooltip } from '@angular/material/tooltip';
-import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatDialogClose } from '@angular/material/dialog';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX, lucideCheck, lucideBluetooth } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardLoaderComponent } from 'Common-UI/v2/ui/loader';
 
 @Component({
   selector: 'app-iot-bluetooth',
+  standalone: true,
   templateUrl: './iot-bluetooth.component.html',
-  styleUrls: ['./iot-bluetooth.component.css'],
   imports: [
     NgClass,
-    MatDialogClose,
-    MatIcon,
-    MatTooltip,
-    CdkScrollable,
-    MatDialogContent,
     NgIf,
     NgFor,
+    MatDialogClose,
+    NgIcon,
+    ZardButtonComponent,
+    ZardLoaderComponent,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideX,
+      lucideCheck,
+      lucideBluetooth,
+    }),
   ],
 })
 export class IotBluetoothComponent implements OnInit, DoCheck {

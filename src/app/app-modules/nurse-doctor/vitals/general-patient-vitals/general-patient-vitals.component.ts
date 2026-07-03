@@ -44,40 +44,59 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
 import { NullDefaultValueDirective } from '../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
 import { NumberValidatorDirective } from '../../../core/directives/numberValidator.directive';
 import { NgClass, NgIf } from '@angular/common';
-import { MatTooltip } from '@angular/material/tooltip';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideScale,
+  lucideThermometer,
+  lucideHeartPulse,
+  lucideActivity,
+  lucideDroplet,
+  lucideCircle,
+  lucideMic,
+  lucideSquare,
+  lucideTrash2,
+} from '@ng-icons/lucide';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardCheckboxComponent } from 'Common-UI/v2/ui/checkbox';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-nurse-general-patient-vitals',
   templateUrl: './general-patient-vitals.component.html',
-  styleUrls: ['./general-patient-vitals.component.css'],
   imports: [
     ReactiveFormsModule,
-    MatAccordion,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
-    MatFormField,
-    MatLabel,
-    MatInput,
     NullDefaultValueDirective,
     StringValidatorDirective,
     NumberValidatorDirective,
     NgClass,
-    MatSuffix,
-    MatTooltip,
     NgIf,
-    MatCheckbox,
+    NgIcon,
+    ...cardImports,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ZardButtonComponent,
+    ZardCheckboxComponent,
+    ...tooltipImports,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideScale,
+      lucideThermometer,
+      lucideHeartPulse,
+      lucideActivity,
+      lucideDroplet,
+      lucideCircle,
+      lucideMic,
+      lucideSquare,
+      lucideTrash2,
+    }),
   ],
 })
 export class GeneralPatientVitalsComponent

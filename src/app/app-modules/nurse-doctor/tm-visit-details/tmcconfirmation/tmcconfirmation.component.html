@@ -1,156 +1,156 @@
-<div class="row m-t-10 p-t-10" [formGroup]="tmcConfirmationFormsGroup">
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-t-8 p-t-8">
-    <div class="checkbox-group">
-      <mat-label class="mat-label-text" class="control-label m-r-20">{{
-        currentLanguageSet?.tmcConfirmed
-      }}</mat-label>
-      <mat-radio-group
+<div class="flex flex-col gap-6 pt-4" [formGroup]="tmcConfirmationFormsGroup">
+  <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div class="flex flex-col gap-1.5">
+      <label z-form-label for="isTMCConfirmed" zRequired>
+        {{ currentLanguageSet?.tmcConfirmed }}
+      </label>
+      <z-radio-group
+        id="isTMCConfirmed"
         name="isTMCConfirmed"
         formControlName="tmcConfirmed"
-        (change)="resetAdditionalServiceList($event)"
-        required>
-        <mat-radio-button color="primary" class="radio-button" [value]="true">
+        zOrientation="horizontal"
+        class="gap-4"
+        (zChange)="resetAdditionalServiceList({ value: $event })">
+        <z-radio [value]="true">
           {{ currentLanguageSet?.common?.yes }}
-        </mat-radio-button>
-        <mat-radio-button
-          color="primary"
-          [disabled]="disableNoOnSuccessOfYes"
-          class="radio-button"
-          [value]="false">
+        </z-radio>
+        <z-radio [value]="false" [disabled]="disableNoOnSuccessOfYes">
           {{ currentLanguageSet?.common?.no }}
-        </mat-radio-button>
-      </mat-radio-group>
-    </div>
-  </div>
-  <div *ngIf="showRadio">
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-t-8 p-t-8">
-      <div class="checkbox-group">
-        <mat-label class="mat-label-text" class="control-label">{{
-          currentLanguageSet?.isDiabetesconfirmed
-        }}</mat-label>
-        <mat-radio-group name="isDiabetic" formControlName="isDiabetic">
-          <mat-radio-button
-            color="primary"
-            class="radio-button"
-            [value]="true"
-            disabled>
-            {{ currentLanguageSet?.common?.yes }}
-          </mat-radio-button>
-          <mat-radio-button
-            color="primary"
-            class="radio-button"
-            [value]="false"
-            disabled>
-            {{ currentLanguageSet?.common?.no }}
-          </mat-radio-button>
-        </mat-radio-group>
-      </div>
+        </z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-t-8 p-t-8">
-      <div class="checkbox-group">
-        <mat-label class="mat-label-text" class="control-label">{{
-          currentLanguageSet?.isHypertensionconfirmed
-        }}</mat-label>
-        <mat-radio-group
-          name="isHypertensionConfirmed"
-          formControlName="isHypertensionConfirmed">
-          <mat-radio-button
-            color="primary"
-            class="radio-button"
-            [value]="true"
-            disabled>
+    <ng-container *ngIf="showRadio">
+      <div class="flex flex-col gap-1.5">
+        <label z-form-label for="isDiabetic">
+          {{ currentLanguageSet?.isDiabetesconfirmed }}
+        </label>
+        <z-radio-group
+          id="isDiabetic"
+          name="isDiabetic"
+          formControlName="isDiabetic"
+          zOrientation="horizontal"
+          class="gap-4">
+          <z-radio [value]="true" disabled>
             {{ currentLanguageSet?.common?.yes }}
-          </mat-radio-button>
-          <mat-radio-button
-            color="primary"
-            class="radio-button"
-            [value]="false"
-            disabled>
+          </z-radio>
+          <z-radio [value]="false" disabled>
             {{ currentLanguageSet?.common?.no }}
-          </mat-radio-button>
-        </mat-radio-group>
+          </z-radio>
+        </z-radio-group>
       </div>
+
+      <div class="flex flex-col gap-1.5">
+        <label z-form-label for="isHypertensionConfirmed">
+          {{ currentLanguageSet?.isHypertensionconfirmed }}
+        </label>
+        <z-radio-group
+          id="isHypertensionConfirmed"
+          name="isHypertensionConfirmed"
+          formControlName="isHypertensionConfirmed"
+          zOrientation="horizontal"
+          class="gap-4">
+          <z-radio [value]="true" disabled>
+            {{ currentLanguageSet?.common?.yes }}
+          </z-radio>
+          <z-radio [value]="false" disabled>
+            {{ currentLanguageSet?.common?.no }}
+          </z-radio>
+        </z-radio-group>
+      </div>
+    </ng-container>
+
+    <z-form-field
+      *ngIf="tmcConfirmationFormsGroup.value.tmcConfirmed === false"
+      class="gap-1.5">
+      <label z-form-label for="referredToInstituteName" zRequired>
+        {{ currentLanguageSet?.Referdetails?.referredtoinstitute }}
+      </label>
+      <z-form-control>
+        <z-select
+          class="w-full"
+          id="referredToInstituteName"
+          name="referredToInstituteName"
+          formControlName="refrredToAdditionalServiceList"
+          [zLabel]="selectedInstituteLabel"
+          [zPlaceholder]="currentLanguageSet?.Referdetails?.referredtoinstitute"
+          (zSelectionChange)="onReferInstituteChange($event)">
+          <z-select-item
+            *ngFor="let center of higherHealthcareCenter"
+            [zValue]="center.institutionID.toString()">
+            {{ center.institutionName }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+
+    <div
+      class="flex items-end"
+      *ngIf="tmcConfirmationFormsGroup.value.tmcConfirmed === true">
+      <button z-button zType="default" (click)="viewAndPrintCaseSheet()">
+        {{ currentLanguageSet?.viewTMCaseSheet }}
+      </button>
     </div>
   </div>
+
   <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-    *ngIf="tmcConfirmationFormsGroup.value.tmcConfirmed === false">
-    <mat-form-field>
-      <mat-label>{{
-        currentLanguageSet?.Referdetails?.referredtoinstitute
-      }}</mat-label>
-      <mat-select
-        (ngModelChange)="higherhealthcarecenter($event)"
-        name="referredToInstituteName"
-        formControlName="refrredToAdditionalServiceList"
-        required>
-        <mat-option
-          *ngFor="let center of higherHealthcareCenter"
-          [value]="center"
-          >{{ center.institutionName }}</mat-option
-        >
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div
-    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box p-t-10"
-    *ngIf="tmcConfirmationFormsGroup.value.tmcConfirmed === true">
-    <button mat-raised-button color="primary" (click)="viewAndPrintCaseSheet()">
-      {{ currentLanguageSet?.viewTMCaseSheet }}
-    </button>
-  </div>
-</div>
-<div
-  class="col-xs-12 col-sm-12 col-md-12 col-lg-12 m-t-10"
-  *ngIf="prescribedDrugDataFromCaseSheet?.length > 0">
-  <div class="table-responsive">
-    <table
-      class="table table-bordered table-striped"
-      aria-describedby="tmPrescribedDrugTable">
-      <thead>
-        <tr>
-          <th id="sno">{{ currentLanguageSet?.casesheet?.serialNo }}</th>
-          <th id="nameOfDrug">
+    class="w-full overflow-x-auto"
+    *ngIf="prescribedDrugDataFromCaseSheet?.length > 0">
+    <table z-table aria-describedby="tmPrescribedDrugTable">
+      <thead z-table-header>
+        <tr z-table-row>
+          <th z-table-head id="sno">
+            {{ currentLanguageSet?.casesheet?.serialNo }}
+          </th>
+          <th z-table-head id="nameOfDrug">
             {{ currentLanguageSet?.casesheet?.nameAndStrength }}
           </th>
-          <th id="drugType">{{ currentLanguageSet?.casesheet?.drugType }}</th>
-          <th id="form">{{ currentLanguageSet?.casesheet?.form }}</th>
-          <th id="dose">{{ currentLanguageSet?.casesheet?.dose }}</th>
-          <th id="frequency">{{ currentLanguageSet?.casesheet?.freq }}</th>
-          <th id="durationValue">
+          <th z-table-head id="drugType">
+            {{ currentLanguageSet?.casesheet?.drugType }}
+          </th>
+          <th z-table-head id="form">{{ currentLanguageSet?.casesheet?.form }}</th>
+          <th z-table-head id="dose">{{ currentLanguageSet?.casesheet?.dose }}</th>
+          <th z-table-head id="frequency">
+            {{ currentLanguageSet?.casesheet?.freq }}
+          </th>
+          <th z-table-head id="durationValue">
             {{ currentLanguageSet?.casesheet?.durValue }}
           </th>
-          <th id="durationUnit">
+          <th z-table-head id="durationUnit">
             {{ currentLanguageSet?.casesheet?.durUnit }}
           </th>
-          <th id="qtyPrescribed">
+          <th z-table-head id="qtyPrescribed">
             {{ currentLanguageSet?.casesheet?.qtypresc }}
           </th>
-          <th id="instructions">
+          <th z-table-head id="instructions">
             {{ currentLanguageSet?.casesheet?.instruct }}
           </th>
         </tr>
       </thead>
-      <tbody>
-        <tr *ngIf="prescribedDrugDataFromCaseSheet?.length === 0">
-          <td class="text-center" colspan="12">
+      <tbody z-table-body>
+        <tr
+          z-table-row
+          *ngIf="prescribedDrugDataFromCaseSheet?.length === 0">
+          <td
+            z-table-cell
+            class="h-24 text-center text-muted-foreground"
+            colspan="12">
             {{ currentLanguageSet?.common?.noRecordFound }}
           </td>
         </tr>
-      </tbody>
-      <tbody>
-        <tr *ngFor="let drug of prescribedDrugDataFromCaseSheet; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ drug.drugName }} {{ drug.drugStrength }}</td>
-          <td>{{ drug.isEDL ? 'EDL' : 'Non-EDL' }}</td>
-          <td>{{ drug.formName }}</td>
-          <td>{{ drug.dose }}</td>
-          <td>{{ drug.frequency }}</td>
-          <td>{{ drug.duration }}</td>
-          <td>{{ drug.unit }}</td>
-          <td>{{ drug.qtyPrescribed }}</td>
-          <td>{{ drug.instructions }}</td>
+        <tr
+          z-table-row
+          *ngFor="let drug of prescribedDrugDataFromCaseSheet; let i = index">
+          <td z-table-cell>{{ i + 1 }}</td>
+          <td z-table-cell>{{ drug.drugName }} {{ drug.drugStrength }}</td>
+          <td z-table-cell>{{ drug.isEDL ? 'EDL' : 'Non-EDL' }}</td>
+          <td z-table-cell>{{ drug.formName }}</td>
+          <td z-table-cell>{{ drug.dose }}</td>
+          <td z-table-cell>{{ drug.frequency }}</td>
+          <td z-table-cell>{{ drug.duration }}</td>
+          <td z-table-cell>{{ drug.unit }}</td>
+          <td z-table-cell>{{ drug.qtyPrescribed }}</td>
+          <td z-table-cell>{{ drug.instructions }}</td>
         </tr>
       </tbody>
     </table>

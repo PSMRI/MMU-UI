@@ -26,13 +26,14 @@ import { BeneficiaryDetailsService } from '../../services/beneficiary-details.se
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import { NgIf, DatePipe } from '@angular/common';
+import { NgIf, NgTemplateOutlet, DatePipe } from '@angular/common';
+import { cardImports } from 'Common-UI/v2/ui/card';
 
 @Component({
   selector: 'app-beneficiary-details',
   templateUrl: './beneficiary-details.component.html',
-  styleUrls: ['./beneficiary-details.component.css'],
-  imports: [NgIf, DatePipe],
+  standalone: true,
+  imports: [NgIf, NgTemplateOutlet, DatePipe, ...cardImports],
 })
 export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
   beneficiary: any;

@@ -1,18 +1,12 @@
-<div class="row m-t-10">
-  <div class="col-xs-12">
-    <app-nurse-cancer-patient-vitals
-      *ngIf="showCancer"
-      [pregnancyStatus]="pregnancyStatus"
-      [mode]="vitalsMode"
-      [patientVitalsForm]="
-        patientVitalsDataForm
-      "></app-nurse-cancer-patient-vitals>
-    <app-nurse-general-patient-vitals
-      *ngIf="showGeneralOPD"
-      [mode]="vitalsMode"
-      [visitCategory]="visitCategory"
-      [patientVitalsForm]="
-        patientVitalsDataForm
-      "></app-nurse-general-patient-vitals>
-  </div>
+<div class="mt-2.5 w-full">
+  <app-nurse-cancer-patient-vitals
+    *ngIf="showCancer"
+    [pregnancyStatus]="pregnancyStatus"
+    [mode]="vitalsMode"
+    [patientVitalsForm]="patientVitalsDataForm"></app-nurse-cancer-patient-vitals>
+  <app-nurse-general-patient-vitals
+    *ngIf="showGeneralOPD"
+    [mode]="vitalsMode"
+    [visitCategory]="visitCategory"
+    [patientVitalsForm]="patientVitalsDataForm"></app-nurse-general-patient-vitals>
 </div>

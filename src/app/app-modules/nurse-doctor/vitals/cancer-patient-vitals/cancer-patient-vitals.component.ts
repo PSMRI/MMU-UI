@@ -41,36 +41,36 @@ import { IotcomponentComponent } from 'src/app/app-modules/core/components/iotco
 import { ActivatedRoute } from '@angular/router';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
-import {
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
 import { NullDefaultValueDirective } from '../../../core/directives/null-default-value.directive';
 import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
 import { NumberValidatorDirective } from '../../../core/directives/numberValidator.directive';
-import { MatTooltip } from '@angular/material/tooltip';
 import { NgIf, NgClass } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideActivity, lucideCircle } from '@ng-icons/lucide';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-nurse-cancer-patient-vitals',
   templateUrl: './cancer-patient-vitals.component.html',
-  styleUrls: ['./cancer-patient-vitals.component.css'],
+  standalone: true,
+  viewProviders: [provideIcons({ lucideActivity, lucideCircle })],
   imports: [
     ReactiveFormsModule,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
-    MatFormField,
-    MatLabel,
-    MatInput,
     NullDefaultValueDirective,
     StringValidatorDirective,
     NumberValidatorDirective,
-    MatSuffix,
-    MatTooltip,
     NgIf,
     NgClass,
+    NgIcon,
+    ...cardImports,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ZardButtonComponent,
+    ...tooltipImports,
   ],
 })
 export class CancerPatientVitalsComponent
