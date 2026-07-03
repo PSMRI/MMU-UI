@@ -1,22 +1,26 @@
 <!-- {{ generalDiagnosisForm.value | json}} -->
-<div class="row" [formGroup]="generalDiagnosisForm">
-  <div class="col-xs-12 col-sm-6 m-t-6">
-    <header class="mat-expansion-panel-header">
-      <h4>{{ current_language_set?.doctorDiagnosis }}*</h4>
-    </header>
-    <mat-form-field>
-      <textarea
-        matInput
-        allowText="textAreaValidator"
-        defaultNull
-        matTextareaAutosize
-        maxlength="300"
-        name="doctorDiagnosis"
-        formControlName="doctorDiagnosis"
-        [readonly]="specialist"
-        required
-        >{{ doctorDiagnosis }} </textarea
-      >
-    </mat-form-field>
+<div class="grid grid-cols-1 gap-2 sm:grid-cols-2 mt-6" [formGroup]="generalDiagnosisForm">
+  <div class="flex flex-col gap-2">
+    <label
+      z-form-label
+      for="doctorDiagnosis"
+      class="rounded-md bg-muted px-3 py-2 text-sm font-semibold text-foreground">
+      {{ current_language_set?.doctorDiagnosis }}*
+    </label>
+    <z-form-field class="w-full">
+      <z-form-control>
+        <textarea
+          z-input
+          id="doctorDiagnosis"
+          class="min-h-20 w-full"
+          allowText="textAreaValidator"
+          defaultNull
+          maxlength="300"
+          name="doctorDiagnosis"
+          formControlName="doctorDiagnosis"
+          [readonly]="specialist"
+          required>{{ doctorDiagnosis }} </textarea>
+      </z-form-control>
+    </z-form-field>
   </div>
 </div>

@@ -1,484 +1,447 @@
-<mat-tab-group>
-  <mat-tab label="{{ current_language_set?.Reports?.labtestreports }}">
-    <div *ngIf="labResults?.length > 0" class="m-t-20">
-      <mat-form-field id="filterbox" class="pull-right">
-        <input
-          autocomplete="off"
-          matInput
-          placeholder="{{ current_language_set?.labTechnicianData?.testName }}"
-          #filterTerm
-          (keyup)="filterProcedures(filterTerm.value)" />
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
-    </div>
-
-    <div class="clearfix"></div>
-
-    <section class="m-t-20 overflow">
-      <table
-        mat-table
-        class="table table-bordered"
-        [dataSource]="filteredLabResults">
-        <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ current_language_set?.common?.date }}
-          </th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            style="
-              max-width: 100px;
-              vertical-align: middle;
-              border: 1px solid #ddd;
-            ">
-            {{ element?.createdDate | date: 'dd/MM/yyyy, h:mm a' }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="testName">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ current_language_set?.labTechnicianData?.testName }}
-          </th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            style="
-              max-width: 200px;
-              word-break: normal;
-              vertical-align: middle;
-              border: 1px solid #ddd;
-            ">
-            {{ element?.procedureName }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="componentName">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ current_language_set?.labTechnicianData?.componentName }}
-          </th>
-          <td mat-cell *matCellDef="let element" style="width: 110px; word-break: normal; vertical-align: top;">
-            <div *ngFor="let component of element.componentList">
-              {{ component?.componentName }}
+<z-tab-group>
+  <z-tab [label]="current_language_set?.Reports?.labtestreports || 'Lab Test Reports'">
+    <div class="mt-5 flex flex-col gap-5">
+      <div *ngIf="labResults?.length > 0" class="flex justify-end">
+        <z-form-field class="w-full sm:w-1/3">
+          <label z-form-label for="labFilter">{{
+            current_language_set?.labTechnicianData?.testName
+          }}</label>
+          <z-form-control>
+            <div class="relative">
+              <ng-icon
+                name="lucideSearch"
+                size="18"
+                class="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground">
+              </ng-icon>
+              <input
+                z-input
+                class="w-full bg-background pl-9"
+                autocomplete="off"
+                id="labFilter"
+                [placeholder]="current_language_set?.labTechnicianData?.testName"
+                #filterTerm
+                (keyup)="filterProcedures(filterTerm.value)" />
             </div>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="result">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ current_language_set?.common?.result }}
-          </th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            style="width: 110px; word-break: normal; vertical-align: middle">
-      <div *ngFor="let component of element.componentList">
-        {{ component.testResultValue }}
-      </div>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="measurementUnit">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ current_language_set?.labTechnicianData?.measurementUnit }}
-          </th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            style="width: 150px; word-break: normal; vertical-align: middle">
-            <div *ngFor="let component of element.componentList">
-              {{ component?.testResultUnit }}
-            </div>
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="remarks">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ current_language_set?.common?.remarks }}
-          </th>
-          <td
-            mat-cell
-            *matCellDef="let element"
-            style="
-              max-width: 150px;
-              word-break: normal;
-              vertical-align: middle;
-            ">
-            <div *ngFor="let component of element.componentList">
-              {{ component?.remarks }}
-            </div>
-          </td>
-        </ng-container>
-        <td colspan="2">
-          <div class="totalCount" *ngIf="filteredLabResults.data.length > 0">
-            {{ current_language_set?.common?.totalCount }} :
-            {{ filteredLabResults.data.length }}
-          </div>
-        </td>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
-      <div
-        class="pull-center"
-        [hidden]="filteredLabResults.data.length > 0"
-        style="margin-top: 5px; text-align: center">
-        <strong>{{ current_language_set?.Reports?.notestresultsfound }}</strong>
-      </div>
-      <div class="col-12">
-        <mat-paginator
-          style="display: unset"
-          [length]="filteredLabResults.data.length"
-          [pageSize]="5"
-          showFirstLastButtons
-          aria-label="Select patient in testRadiology">
-        </mat-paginator>
-      </div>
-    </section>
-  </mat-tab>
-
-  <mat-tab label="{{ current_language_set?.Reports?.radiologyreports }}">
-    <div class="m-t-20 overflow">
-      <table
-        class="table table-responsive table-bordered"
-        aria-describedby="testResults">
-        <tr>
-          <th style="width: 20%" id="testName">
-            {{ current_language_set?.labTechnicianData?.testName }}
-          </th>
-          <th style="width: 20%" id="componentName">
-            {{ current_language_set?.labTechnicianData?.componentName }}
-          </th>
-          <th style="width: 20%" id="remarks">
-            {{ current_language_set?.common?.remarks }}
-          </th>
-          <th style="width: 20%" id="report">
-            {{ current_language_set?.common?.report }}
-          </th>
-        </tr>
-        <tbody *ngIf="radiologyResults?.length === 0">
-          <tr>
-            <td colspan="4">
-              <h4 class="norecord">
-                {{ current_language_set?.Reports?.noradiologyreportsfound }}
-              </h4>
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="radiologyResults?.length > 0">
-          <ng-container
-            *ngFor="let radiologyReport of radiologyResults; let i = index">
-            <tr>
-              <td [attr.rowspan]="radiologyReport?.componentList.length + 1">
-                {{ radiologyReport.procedureName }}
-              </td>
-            </tr>
-            <tr *ngFor="let test of radiologyReport?.componentList">
-              <td
-                style="
-                  width: 300px;
-                  max-width: 120px;
-                  word-break: normal;
-                  vertical-align: middle;
-                ">
-                {{ test?.componentName }}
-              </td>
-              <td
-                style="
-                  max-width: 150px;
-                  word-break: normal;
-                  vertical-align: middle;
-                ">
-                {{ test?.remarks }}
-              </td>
-              <td
-                style="
-                  max-width: 150px;
-                  word-break: normal;
-                  vertical-align: middle;
-                ">
-                <button
-                  mat-raised-button
-                  color="primary"
-                  (click)="showTestResult(test.fileIDs)">
-                  {{
-                    current_language_set?.nurseData?.visitDetailsForm?.viewFiles
-                  }}
-                </button>
-              </td>
-            </tr>
-          </ng-container>
-        </tbody>
-      </table>
-    </div>
-  </mat-tab>
-
-  <mat-tab label="{{ current_language_set?.Reports?.archivedreports }}">
-    <div class="m-t-20 overflow">
-      <table
-        class="table table-responsive table-bordered"
-        aria-describedby="visitCode">
-        <tr>
-          <th id="date">{{ current_language_set?.casesheet?.date }}</th>
-          <th id="visitcode">{{ current_language_set?.Reports?.visitcode }}</th>
-          <th id="view">{{ current_language_set?.Reports?.view }}</th>
-        </tr>
-        <tbody *ngIf="archivedResults?.length === 0">
-          <tr>
-            <td colspan="3">
-              <h4 class="norecord">
-                {{ current_language_set?.Reports?.noarchivedreportsfound }}
-              </h4>
-            </td>
-          </tr>
-        </tbody>
-        <tbody *ngIf="archivedResults?.length > 0">
-          <tr *ngFor="let archivedReport of archivedResults">
-            <td>{{ archivedReport.date | date: 'dd/MM/yyyy' }}</td>
-            <td>{{ archivedReport.visitCode }}</td>
-            <td>
-              <!-- eslint-disable-next-line  @angular-eslint/template/click-events-have-key-events -->
-              <em
-                class="material-icons cursorPointer"
-                tabindex="{0}"
-                (click)="showArchivedTestResult(archivedReport)"
-                >visibility</em
-              >
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div *ngIf="enableArchiveView">
-      <div class="m-t-20">
-        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-          <header>
-            <h4>
-              <strong> {{ current_language_set?.Reports?.labreport }}</strong>
-            </h4>
-          </header>
-        </div>
-        <div
-          class="col-xs-12 col-sm-12 col-md-4 col-lg-4"
-          *ngIf="archivedLabResults?.length > 0">
-          <h4>
-            <strong> {{ current_language_set?.Reports?.visitcode }}: </strong
-            >{{ visitCode }}
-          </h4>
-        </div>
-
-        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 pull-right">
-          <mat-form-field id="filterbox" class="pull-right">
-            <input
-              autocomplete="off"
-              matInput
-              placeholder="{{
-                current_language_set?.labTechnicianData.testName
-              }}"
-              #filterTerm
-              (keyup)="filterArchivedProcedures(filterTerm.value)" />
-            <mat-icon matSuffix>search</mat-icon>
-          </mat-form-field>
-        </div>
+          </z-form-control>
+        </z-form-field>
       </div>
 
-      <div class="clearfix"></div>
-
-      <section class="m-t-20 overflow">
-        <table
-          class="table table-responsive table-bordered"
-          aria-describedby="componentDetails">
-          <thead>
-            <tr>
-              <th style="width: 20%" id="date1">
-                {{ current_language_set?.common?.date }}
-              </th>
-              <th style="width: 20%" id="testName1">
-                {{ current_language_set?.labTechnicianData?.testName }}
-              </th>
-              <th style="width: 20%" id="componentName1">
-                {{ current_language_set?.labTechnicianData?.componentName }}
-              </th>
-              <th style="width: 10%" id="result1">
-                {{ current_language_set?.common?.result }}
-              </th>
-              <th style="width: 10%" id="measurementUnit1">
-                {{ current_language_set?.labTechnicianData?.measurementUnit }}
-              </th>
-              <th style="width: 20%" id="remarks1">
-                {{ current_language_set?.common?.remarks }}
-              </th>
-            </tr>
-          </thead>
-          <tbody *ngIf="filteredArchivedLabResults?.length === 0">
-            <tr>
-              <td colspan="6">
-                <h4 class="norecord">
-                  {{ current_language_set?.Reports?.notestresultsfound }}
-                </h4>
-              </td>
-            </tr>
-          </tbody>
-          <tbody *ngIf="filteredArchivedLabResults?.length > 0">
-            <ng-container
-              *ngFor="let test of previousLabPagedList; let i = index">
-              <tr>
-                <td
-                  [attr.rowspan]="test?.componentList.length + 1"
-                  style="
-                    max-width: 100px;
-                    vertical-align: middle;
-                    border: 1px solid #ddd;
-                  ">
-                  {{ test?.createdDate | date: 'dd/MM/yyyy, h:mm a' }}
-                </td>
-                <td
-                  [attr.rowspan]="test?.componentList.length + 1"
-                  style="
-                    max-width: 200px;
-                    word-break: normal;
-                    vertical-align: middle;
-                    border: 1px solid #ddd;
-                  ">
-                  {{ test?.procedureName }}
-                </td>
-              </tr>
-              <tr *ngFor="let component of test?.componentList">
-                <td
-                  style="
-                    width: 300px;
-                    max-width: 120px;
-                    word-break: normal;
-                    vertical-align: middle;
-                  ">
-                  {{ component?.componentName }}
-                </td>
-                <td
-                  *ngIf="!component?.componentName?.includes('ECG')"
-                  style="
-                    width: 110px;
-                    word-break: normal;
-                    vertical-align: middle;
-                  ">
-                  {{ component?.testResultValue }}
-                </td>
-                <td
-                  *ngIf="
-                    component?.componentName?.includes('ECG') &&
-                    component?.testResultValue !== 'Abnormal'
-                  "
-                  style="
-                    width: 110px;
-                    word-break: normal;
-                    vertical-align: middle;
-                  ">
-                  {{ component?.testResultValue }}
-                </td>
-                <td
-                  *ngIf="
-                    component?.componentName?.includes('ECG') &&
-                    component?.testResultValue === 'Abnormal'
-                  "
-                  style="
-                    width: 110px;
-                    word-break: normal;
-                    vertical-align: middle;
-                  ">
-                  {{ component?.testResultValue }} -
-                  {{ component?.ecgAbnormalities.join(',') }}
-                </td>
-                <td
-                  style="
-                    width: 150px;
-                    word-break: normal;
-                    vertical-align: middle;
-                  ">
-                  {{ component?.testResultUnit }}
-                </td>
-                <td
-                  style="
-                    max-width: 150px;
-                    word-break: normal;
-                    vertical-align: middle;
-                  ">
-                  {{ component?.remarks }}
-                </td>
-              </tr>
-            </ng-container>
-          </tbody>
-          <tfoot>
-            <tr *ngIf="filteredArchivedLabResults.length > 0">
-              <td colspan="2">
-                <div class="totalCount">
-                  {{ current_language_set?.common?.totalCount }} :
-                  {{ filteredArchivedLabResults.length }}
-                </div>
-              </td>
-              <td colspan="7">
-                <mat-paginator
-                  class="pull-right"
-                  (pageChanged)="previousLabPageChanged($event)"
-                  *ngIf="filteredArchivedLabResults.length"
-                  previousText="&lsaquo;"
-                  nextText="&rsaquo;"
-                  firstText="&laquo;"
-                  lastText="&raquo;"></mat-paginator>
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-      </section>
-      <div>
-        <div class="m-t-20">
-          <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-            <header>
-              <h4>
-                <strong>{{
-                  current_language_set?.Reports?.radiologyreport
-                }}</strong>
-              </h4>
-            </header>
+      <z-card>
+        <z-card-content class="p-2">
+          <div class="w-full overflow-x-auto">
+            <table z-table aria-describedby="labTestResults">
+              <thead z-table-header>
+                <tr z-table-row>
+                  <th z-table-head>
+                    {{ current_language_set?.common?.date }}
+                  </th>
+                  <th z-table-head>
+                    {{ current_language_set?.labTechnicianData?.testName }}
+                  </th>
+                  <th z-table-head>
+                    {{ current_language_set?.labTechnicianData?.componentName }}
+                  </th>
+                  <th z-table-head>
+                    {{ current_language_set?.common?.result }}
+                  </th>
+                  <th z-table-head>
+                    {{
+                      current_language_set?.labTechnicianData?.measurementUnit
+                    }}
+                  </th>
+                  <th z-table-head>
+                    {{ current_language_set?.common?.remarks }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody z-table-body>
+                <tr z-table-row *ngFor="let element of pagedLabResults">
+                  <td z-table-cell class="max-w-[100px] align-middle">
+                    {{ element?.createdDate | date: 'dd/MM/yyyy, h:mm a' }}
+                  </td>
+                  <td z-table-cell class="max-w-[200px] break-normal align-middle">
+                    {{ element?.procedureName }}
+                  </td>
+                  <td z-table-cell class="w-[110px] break-normal align-top">
+                    <div *ngFor="let component of element.componentList">
+                      {{ component?.componentName }}
+                    </div>
+                  </td>
+                  <td z-table-cell class="w-[110px] break-normal align-middle">
+                    <div *ngFor="let component of element.componentList">
+                      {{ component.testResultValue }}
+                    </div>
+                  </td>
+                  <td z-table-cell class="w-[150px] break-normal align-middle">
+                    <div *ngFor="let component of element.componentList">
+                      {{ component?.testResultUnit }}
+                    </div>
+                  </td>
+                  <td z-table-cell class="max-w-[150px] break-normal align-middle">
+                    <div *ngFor="let component of element.componentList">
+                      {{ component?.remarks }}
+                    </div>
+                  </td>
+                </tr>
+                <tr z-table-row *ngIf="filteredLabResults.data.length === 0">
+                  <td
+                    z-table-cell
+                    colspan="6"
+                    class="h-24 text-center font-semibold text-muted-foreground">
+                    {{ current_language_set?.Reports?.notestresultsfound }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
           <div
-            class="col-xs-12 col-sm-12 col-md-4 col-lg-4"
-            *ngIf="archivedRadiologyResults.length > 0">
-            <h4>
-              <strong> {{ current_language_set?.Reports?.visitcode }} : </strong
-              >{{ visitCode }}
-            </h4>
+            *ngIf="filteredLabResults.data.length > 0"
+            class="mt-4 flex flex-wrap items-center justify-between gap-4">
+            <div class="text-sm text-muted-foreground">
+              {{ current_language_set?.common?.totalCount }} :
+              {{ filteredLabResults.data.length }}
+            </div>
+            <z-paginator
+              [zData]="filteredLabResults.data"
+              [zPageSizeOptions]="[5, 10, 20]"
+              (zPagedChange)="pagedLabResults = $event"></z-paginator>
           </div>
-        </div>
-        <div class="clearfix"></div>
-        <div class="m-t-20 overflow">
-          <table
-            class="table table-responsive table-bordered"
-            aria-describedby="archivedRadiologyResultTbl">
-            <tr>
-              <th id="testName3">
-                {{ current_language_set?.labTechnicianData?.testName }}
-              </th>
-              <th id="report3">{{ current_language_set?.common?.report }}</th>
-            </tr>
-            <tbody *ngIf="archivedRadiologyResults.length === 0">
-              <tr>
-                <td colspan="2">
-                  <h4 class="norecord">
-                    {{ current_language_set?.Reports?.noradiologyreportsfound }}
-                  </h4>
-                </td>
-              </tr>
-            </tbody>
-            <tbody *ngIf="archivedRadiologyResults.length > 0">
-              <tr *ngFor="let radiologyReport of archivedRadiologyResults">
-                <td>{{ radiologyReport.procedureName }}</td>
-                <td>
-                  <!-- eslint-disable-next-line  @angular-eslint/template/click-events-have-key-events -->
-                  <em
-                    class="material-icons"
-                    tabindex="{0}"
-                    (click)="showArchivedRadiologyTestResult(radiologyReport)"
-                    >visibility</em
-                  >
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+        </z-card-content>
+      </z-card>
     </div>
-  </mat-tab>
-</mat-tab-group>
+  </z-tab>
+
+  <z-tab [label]="current_language_set?.Reports?.radiologyreports || 'Radiology Reports'">
+    <div class="mt-5">
+      <z-card>
+        <z-card-content class="p-2">
+          <div class="w-full overflow-x-auto">
+            <table z-table aria-describedby="testResults">
+              <thead z-table-header>
+                <tr z-table-row>
+                  <th z-table-head class="w-1/5" id="testName">
+                    {{ current_language_set?.labTechnicianData?.testName }}
+                  </th>
+                  <th z-table-head class="w-1/5" id="componentName">
+                    {{ current_language_set?.labTechnicianData?.componentName }}
+                  </th>
+                  <th z-table-head class="w-1/5" id="remarks">
+                    {{ current_language_set?.common?.remarks }}
+                  </th>
+                  <th z-table-head class="w-1/5" id="report">
+                    {{ current_language_set?.common?.report }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody z-table-body *ngIf="radiologyResults?.length === 0">
+                <tr z-table-row>
+                  <td
+                    z-table-cell
+                    colspan="4"
+                    class="h-24 text-center font-semibold text-muted-foreground">
+                    {{ current_language_set?.Reports?.noradiologyreportsfound }}
+                  </td>
+                </tr>
+              </tbody>
+              <tbody z-table-body *ngIf="radiologyResults?.length > 0">
+                <ng-container
+                  *ngFor="let radiologyReport of radiologyResults; let i = index">
+                  <tr z-table-row>
+                    <td
+                      z-table-cell
+                      [attr.rowspan]="radiologyReport?.componentList.length + 1">
+                      {{ radiologyReport.procedureName }}
+                    </td>
+                  </tr>
+                  <tr z-table-row *ngFor="let test of radiologyReport?.componentList">
+                    <td z-table-cell class="w-[300px] max-w-[120px] break-normal align-middle">
+                      {{ test?.componentName }}
+                    </td>
+                    <td z-table-cell class="max-w-[150px] break-normal align-middle">
+                      {{ test?.remarks }}
+                    </td>
+                    <td z-table-cell class="max-w-[150px] break-normal align-middle">
+                      <button
+                        type="button"
+                        z-button
+                        zSize="sm"
+                        (click)="showTestResult(test.fileIDs)">
+                        {{
+                          current_language_set?.nurseData?.visitDetailsForm
+                            ?.viewFiles
+                        }}
+                      </button>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </z-card-content>
+      </z-card>
+    </div>
+  </z-tab>
+
+  <z-tab [label]="current_language_set?.Reports?.archivedreports || 'Archived Reports'">
+    <div class="mt-5">
+      <z-card>
+        <z-card-content class="p-2">
+          <div class="w-full overflow-x-auto">
+            <table z-table aria-describedby="visitCode">
+              <thead z-table-header>
+                <tr z-table-row>
+                  <th z-table-head id="date">
+                    {{ current_language_set?.casesheet?.date }}
+                  </th>
+                  <th z-table-head id="visitcode">
+                    {{ current_language_set?.Reports?.visitcode }}
+                  </th>
+                  <th z-table-head id="view">
+                    {{ current_language_set?.Reports?.view }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody z-table-body *ngIf="archivedResults?.length === 0">
+                <tr z-table-row>
+                  <td
+                    z-table-cell
+                    colspan="3"
+                    class="h-24 text-center font-semibold text-muted-foreground">
+                    {{ current_language_set?.Reports?.noarchivedreportsfound }}
+                  </td>
+                </tr>
+              </tbody>
+              <tbody z-table-body *ngIf="archivedResults?.length > 0">
+                <tr z-table-row *ngFor="let archivedReport of archivedResults">
+                  <td z-table-cell>
+                    {{ archivedReport.date | date: 'dd/MM/yyyy' }}
+                  </td>
+                  <td z-table-cell>{{ archivedReport.visitCode }}</td>
+                  <td z-table-cell>
+                    <button
+                      type="button"
+                      z-button
+                      zType="ghost"
+                      zSize="icon-sm"
+                      [attr.aria-label]="current_language_set?.Reports?.view || 'View'"
+                      (click)="showArchivedTestResult(archivedReport)">
+                      <ng-icon name="lucideEye"></ng-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </z-card-content>
+      </z-card>
+    </div>
+
+    <div *ngIf="enableArchiveView" class="mt-5 flex flex-col gap-5">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div class="flex flex-col gap-1">
+          <p class="text-base font-semibold text-foreground">
+            {{ current_language_set?.Reports?.labreport }}
+          </p>
+          <p
+            *ngIf="archivedLabResults?.length > 0"
+            class="text-sm text-muted-foreground">
+            <span class="font-semibold text-foreground">
+              {{ current_language_set?.Reports?.visitcode }}:
+            </span>
+            {{ visitCode }}
+          </p>
+        </div>
+
+        <z-form-field class="w-full sm:w-1/3">
+          <label z-form-label for="archivedLabFilter">{{
+            current_language_set?.labTechnicianData?.testName
+          }}</label>
+          <z-form-control>
+            <div class="relative">
+              <ng-icon
+                name="lucideSearch"
+                size="18"
+                class="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground">
+              </ng-icon>
+              <input
+                z-input
+                class="w-full bg-background pl-9"
+                autocomplete="off"
+                id="archivedLabFilter"
+                [placeholder]="current_language_set?.labTechnicianData?.testName"
+                #filterArchivedTerm
+                (keyup)="filterArchivedProcedures(filterArchivedTerm.value)" />
+            </div>
+          </z-form-control>
+        </z-form-field>
+      </div>
+
+      <z-card>
+        <z-card-content class="p-2">
+          <div class="w-full overflow-x-auto">
+            <table z-table aria-describedby="componentDetails">
+              <thead z-table-header>
+                <tr z-table-row>
+                  <th z-table-head class="w-1/5" id="date1">
+                    {{ current_language_set?.common?.date }}
+                  </th>
+                  <th z-table-head class="w-1/5" id="testName1">
+                    {{ current_language_set?.labTechnicianData?.testName }}
+                  </th>
+                  <th z-table-head class="w-1/5" id="componentName1">
+                    {{ current_language_set?.labTechnicianData?.componentName }}
+                  </th>
+                  <th z-table-head class="w-[10%]" id="result1">
+                    {{ current_language_set?.common?.result }}
+                  </th>
+                  <th z-table-head class="w-[10%]" id="measurementUnit1">
+                    {{ current_language_set?.labTechnicianData?.measurementUnit }}
+                  </th>
+                  <th z-table-head class="w-1/5" id="remarks1">
+                    {{ current_language_set?.common?.remarks }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody z-table-body *ngIf="filteredArchivedLabResults?.length === 0">
+                <tr z-table-row>
+                  <td
+                    z-table-cell
+                    colspan="6"
+                    class="h-24 text-center font-semibold text-muted-foreground">
+                    {{ current_language_set?.Reports?.notestresultsfound }}
+                  </td>
+                </tr>
+              </tbody>
+              <tbody z-table-body *ngIf="filteredArchivedLabResults?.length > 0">
+                <ng-container
+                  *ngFor="let test of previousLabPagedList; let i = index">
+                  <tr z-table-row>
+                    <td
+                      z-table-cell
+                      [attr.rowspan]="test?.componentList.length + 1"
+                      class="max-w-[100px] align-middle">
+                      {{ test?.createdDate | date: 'dd/MM/yyyy, h:mm a' }}
+                    </td>
+                    <td
+                      z-table-cell
+                      [attr.rowspan]="test?.componentList.length + 1"
+                      class="max-w-[200px] break-normal align-middle">
+                      {{ test?.procedureName }}
+                    </td>
+                  </tr>
+                  <tr z-table-row *ngFor="let component of test?.componentList">
+                    <td z-table-cell class="w-[300px] max-w-[120px] break-normal align-middle">
+                      {{ component?.componentName }}
+                    </td>
+                    <td
+                      *ngIf="!component?.componentName?.includes('ECG')"
+                      z-table-cell
+                      class="w-[110px] break-normal align-middle">
+                      {{ component?.testResultValue }}
+                    </td>
+                    <td
+                      *ngIf="
+                        component?.componentName?.includes('ECG') &&
+                        component?.testResultValue !== 'Abnormal'
+                      "
+                      z-table-cell
+                      class="w-[110px] break-normal align-middle">
+                      {{ component?.testResultValue }}
+                    </td>
+                    <td
+                      *ngIf="
+                        component?.componentName?.includes('ECG') &&
+                        component?.testResultValue === 'Abnormal'
+                      "
+                      z-table-cell
+                      class="w-[110px] break-normal align-middle">
+                      {{ component?.testResultValue }} -
+                      {{ component?.ecgAbnormalities.join(',') }}
+                    </td>
+                    <td z-table-cell class="w-[150px] break-normal align-middle">
+                      {{ component?.testResultUnit }}
+                    </td>
+                    <td z-table-cell class="max-w-[150px] break-normal align-middle">
+                      {{ component?.remarks }}
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+          <div
+            *ngIf="filteredArchivedLabResults.length > 0"
+            class="mt-4 flex flex-wrap items-center justify-between gap-4">
+            <div class="text-sm text-muted-foreground">
+              {{ current_language_set?.common?.totalCount }} :
+              {{ filteredArchivedLabResults.length }}
+            </div>
+            <z-paginator
+              [zData]="filteredArchivedLabResults"
+              [zPageSizeOptions]="[5, 10, 20]"
+              (zPagedChange)="previousLabPagedList = $event"></z-paginator>
+          </div>
+        </z-card-content>
+      </z-card>
+
+      <div class="flex flex-col gap-1">
+        <p class="text-base font-semibold text-foreground">
+          {{ current_language_set?.Reports?.radiologyreport }}
+        </p>
+        <p
+          *ngIf="archivedRadiologyResults.length > 0"
+          class="text-sm text-muted-foreground">
+          <span class="font-semibold text-foreground">
+            {{ current_language_set?.Reports?.visitcode }} :
+          </span>
+          {{ visitCode }}
+        </p>
+      </div>
+
+      <z-card>
+        <z-card-content class="p-2">
+          <div class="w-full overflow-x-auto">
+            <table z-table aria-describedby="archivedRadiologyResultTbl">
+              <thead z-table-header>
+                <tr z-table-row>
+                  <th z-table-head id="testName3">
+                    {{ current_language_set?.labTechnicianData?.testName }}
+                  </th>
+                  <th z-table-head id="report3">
+                    {{ current_language_set?.common?.report }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody z-table-body *ngIf="archivedRadiologyResults.length === 0">
+                <tr z-table-row>
+                  <td
+                    z-table-cell
+                    colspan="2"
+                    class="h-24 text-center font-semibold text-muted-foreground">
+                    {{ current_language_set?.Reports?.noradiologyreportsfound }}
+                  </td>
+                </tr>
+              </tbody>
+              <tbody z-table-body *ngIf="archivedRadiologyResults.length > 0">
+                <tr z-table-row *ngFor="let radiologyReport of archivedRadiologyResults">
+                  <td z-table-cell>{{ radiologyReport.procedureName }}</td>
+                  <td z-table-cell>
+                    <button
+                      type="button"
+                      z-button
+                      zType="ghost"
+                      zSize="icon-sm"
+                      [attr.aria-label]="current_language_set?.common?.report || 'View report'"
+                      (click)="showArchivedRadiologyTestResult(radiologyReport)">
+                      <ng-icon name="lucideFileText"></ng-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </z-card-content>
+      </z-card>
+    </div>
+  </z-tab>
+</z-tab-group>

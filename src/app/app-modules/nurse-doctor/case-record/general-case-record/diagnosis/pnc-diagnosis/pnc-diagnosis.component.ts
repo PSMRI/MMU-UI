@@ -34,6 +34,7 @@ import {
   FormArray,
   AbstractControl,
   ReactiveFormsModule,
+  FormsModule,
 } from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../../../../core/services/beneficiary-details.service';
 import { ConfirmationService } from './../../../../../core/services/confirmation.service';
@@ -41,80 +42,35 @@ import { DoctorService, MasterdataService } from '../../../../shared/services';
 import { GeneralUtils } from '../../../../shared/utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
-import {
-  MomentDateAdapter,
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-} from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgFor, NgIf } from '@angular/common';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import {
-  MatAutocompleteTrigger,
-  MatAutocomplete,
-  MatOption,
-} from '@angular/material/autocomplete';
-import { MatIcon } from '@angular/material/icon';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucidePlus, lucideX } from '@ng-icons/lucide';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardDatePickerComponent } from 'Common-UI/v2/ui/date-picker';
 import { StringValidatorDirective } from '../../../../../core/directives/stringValidator.directive';
-import {
-  MatDatepickerInput,
-  MatDatepickerToggle,
-  MatDatepicker,
-} from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-pnc-diagnosis',
   templateUrl: './pnc-diagnosis.component.html',
-  styleUrls: ['./pnc-diagnosis.component.css'],
-  providers: [
-    {
-      provide: MAT_DATE_LOCALE,
-      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
-    },
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    },
-    {
-      provide: MAT_DATE_FORMATS,
-      useValue: {
-        parse: {
-          dateInput: 'LL',
-        },
-        display: {
-          dateInput: 'DD/MM/YYYY', // Set the desired display format
-          monthYearLabel: 'MMM YYYY',
-          dateA11yLabel: 'LL',
-          monthYearA11yLabel: 'MMMM YYYY',
-        },
-      },
-    },
-  ],
+  viewProviders: [provideIcons({ lucidePlus, lucideX })],
   imports: [
     ReactiveFormsModule,
+    FormsModule,
     NgFor,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatAutocompleteTrigger,
-    MatAutocomplete,
-    MatOption,
     NgIf,
-    MatIcon,
-    MatRadioGroup,
-    MatRadioButton,
+    NgIcon,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ZardButtonComponent,
+    ZardRadioComponent,
+    ZardRadioGroupComponent,
+    ZardDatePickerComponent,
     StringValidatorDirective,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-    MatSuffix,
-    MatDatepicker,
   ],
 })
 export class PncDiagnosisComponent
@@ -166,6 +122,7 @@ export class PncDiagnosisComponent
   dob!: Date;
   today!: Date;
   minimumDeathDate!: Date;
+  dateOfDeathModel: Date | null = null;
 
   ngOnInit() {
     this.getBenificiaryDetails();
@@ -228,7 +185,13 @@ export class PncDiagnosisComponent
     if (diagnosis.dateOfDeath)
       diagnosis.dateOfDeath = new Date(diagnosis.dateOfDeath);
     this.generalDiagnosisForm.patchValue(diagnosis);
+    this.dateOfDeathModel = diagnosis.dateOfDeath || null;
     this.handleDiagnosisData(diagnosis);
+  }
+
+  onDateOfDeathChange(date: Date | null) {
+    this.dateOfDeathModel = date;
+    this.generalDiagnosisForm.patchValue({ dateOfDeath: date });
   }
 
   addProvisionalDiagnosis() {
@@ -335,6 +298,7 @@ export class PncDiagnosisComponent
       dateOfDeath: null,
       causeOfDeath: null,
     });
+    this.dateOfDeathModel = null;
   }
 
   get isMaternalDeath() {

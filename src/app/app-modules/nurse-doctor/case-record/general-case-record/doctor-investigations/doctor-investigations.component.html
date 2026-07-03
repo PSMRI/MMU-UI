@@ -1,86 +1,96 @@
-<div *ngIf="visit === 'NCD screening'">
-  <mat-label
-    class="mat-label-text"
+<div *ngIf="visit === 'NCD screening'" class="flex flex-col gap-1">
+  <span
+    z-form-message
+    zType="error"
     *ngIf="
       diabetesSelected > 0 &&
       RBSTestDoneInVitals === false &&
       !rbsSelectedInInvestigation
-    "
-    style="color: red">
-    * {{ current_language_set?.pleaseSelectRBSTest }}</mat-label
-  ><br />
-  <mat-label
-    class="mat-label-text"
-    *ngIf="VisualAcuityMandatory && !VisualAcuityTestDone"
-    style="color: red">
-    * {{ current_language_set?.pleaseSelectVisualAcuityTest }}</mat-label
-  >
+    ">
+    * {{ current_language_set?.pleaseSelectRBSTest }}
+  </span>
+  <span
+    z-form-message
+    zType="error"
+    *ngIf="VisualAcuityMandatory && !VisualAcuityTestDone">
+    * {{ current_language_set?.pleaseSelectVisualAcuityTest }}
+  </span>
 </div>
-<div *ngIf="visit === 'ANC'">
-  <mat-label
-    class="mat-label-text"
+<div *ngIf="visit === 'ANC'" class="flex flex-col gap-1">
+  <span
+    z-form-message
+    zType="error"
     *ngIf="
       (!RBSTestDoneInVitals && !rbsSelectedInInvestigation) ||
       !hemoglobbinSelected
-    "
-    style="color: red">
+    ">
     * {{ current_language_set?.pleaseSelectRBSTestAndHaemoglobinTest }}
-  </mat-label>
+  </span>
 </div>
 
-<div class="row" [formGroup]="generalDoctorInvestigationForm">
-  <div class="col-xs-12 col-sm-6">
-    <mat-form-field [style.width]="'100%'">
-      <mat-label>{{
-        current_language_set?.labTechnicianData?.testName
-      }}</mat-label>
-      <mat-select
-        class="input-full-width"
-        multiple
+<div
+  class="grid grid-cols-1 gap-4 sm:grid-cols-2"
+  [formGroup]="generalDoctorInvestigationForm">
+  <z-form-field class="w-full">
+    <label z-form-label for="labTest">{{
+      current_language_set?.labTechnicianData?.testName
+    }}</label>
+    <z-form-control>
+      <z-select
+        id="labTest"
+        class="w-full"
         name="labTest"
-        formControlName="labTest"
-        (selectionChange)="checkTestName($event)">
-        <mat-option
+        [zMultiple]="true"
+        [zPlaceholder]="current_language_set?.labTechnicianData?.testName"
+        [zValue]="selectedLabTestNames"
+        (zSelectionChange)="onLabTestChange($event)">
+        <z-select-item
           *ngFor="let nonRadiology of nonRadiologyMaster"
-          [value]="nonRadiology"
-          [disabled]="canDisable(nonRadiology)">
+          [zValue]="nonRadiology.procedureName"
+          [zDisabled]="canDisable(nonRadiology)">
           {{ nonRadiology.procedureName }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div class="col-xs-12 col-sm-6">
-    <mat-form-field [style.width]="'100%'">
-      <mat-label>{{
-        current_language_set?.labTechnicianData?.radiologyimaging
-      }}</mat-label>
-      <mat-select
-        class="input-full-width"
-        multiple
+        </z-select-item>
+      </z-select>
+    </z-form-control>
+  </z-form-field>
+
+  <z-form-field class="w-full">
+    <label z-form-label for="radiologyTest">{{
+      current_language_set?.labTechnicianData?.radiologyimaging
+    }}</label>
+    <z-form-control>
+      <z-select
+        id="radiologyTest"
+        class="w-full"
         name="radiologyTest"
-        formControlName="radiologyTest">
-        <mat-option
+        [zMultiple]="true"
+        [zPlaceholder]="current_language_set?.labTechnicianData?.radiologyimaging"
+        [zValue]="selectedRadiologyTestNames"
+        (zSelectionChange)="onRadiologyTestChange($event)">
+        <z-select-item
           *ngFor="let radiology of radiologyMaster"
-          [value]="radiology"
-          [disabled]="canDisable(radiology)">
+          [zValue]="radiology.procedureName"
+          [zDisabled]="canDisable(radiology)">
           {{ radiology.procedureName }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div class="col-xs-12 m-t-10">
-    <mat-form-field [style.width]="'100%'">
-      <mat-label>{{
-        current_language_set?.Investigationdetails?.externalinvestigations
-      }}</mat-label>
+        </z-select-item>
+      </z-select>
+    </z-form-control>
+  </z-form-field>
+
+  <z-form-field class="w-full sm:col-span-2">
+    <label z-form-label for="externalInvestigations">{{
+      current_language_set?.Investigationdetails?.externalinvestigations
+    }}</label>
+    <z-form-control>
       <textarea
-        matInput
+        z-input
+        id="externalInvestigations"
+        class="min-h-20 w-full"
         allowText="textAreaValidator"
         defaultNull
         name="externalInvestigation"
         formControlName="externalInvestigations"
-        maxlength="300">
-      </textarea>
-    </mat-form-field>
-  </div>
+        maxlength="300"></textarea>
+    </z-form-control>
+  </z-form-field>
 </div>

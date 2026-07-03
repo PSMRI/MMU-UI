@@ -1,73 +1,100 @@
-<mat-accordion [formGroup]="generalCaseRecordForm">
-  <mat-expansion-panel expanded="true">
-    <mat-expansion-panel-header>
-      <h5>
+<z-accordion
+  [formGroup]="generalCaseRecordForm"
+  zType="multiple"
+  class="flex flex-col gap-4">
+  <z-accordion-item zValue="significantFindings" class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
         {{
           current_language_set?.Significantfindingsdetails
             ?.previoussignificantfindings
         }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-previous-significiant-findings></app-previous-significiant-findings>
-  </mat-expansion-panel>
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content class="px-4">
+      <app-previous-significiant-findings></app-previous-significiant-findings>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.previousvisit?.Previousvisitdetails }}</h5>
-    </mat-expansion-panel-header>
-    <app-previous-visit-details
-      [currentVitals]="currentVitals"></app-previous-visit-details>
-  </mat-expansion-panel>
+  <z-accordion-item zValue="previousVisit" class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
+        {{ current_language_set?.previousvisit?.Previousvisitdetails }}
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content class="px-4">
+      <app-previous-visit-details
+        [currentVitals]="currentVitals"></app-previous-visit-details>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.Find?.findings }}</h5>
-    </mat-expansion-panel-header>
-    <app-findings
-      [caseRecordMode]="caseRecordMode"
-      [generalFindingsForm]="generalFindingsForm">
-    </app-findings>
-  </mat-expansion-panel>
+  <z-accordion-item zValue="findings" class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
+        {{ current_language_set?.Find?.findings }}
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content class="px-4">
+      <app-findings
+        [caseRecordMode]="caseRecordMode"
+        [generalFindingsForm]="generalFindingsForm">
+      </app-findings>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.casesheet?.diagnosis }}</h5>
-    </mat-expansion-panel-header>
-    <app-diagnosis
-      [caseRecordMode]="caseRecordMode"
-      [generalDiagnosisForm]="generalDiagnosisForm"
-      [visitCategory]="visitCategory"></app-diagnosis>
-  </mat-expansion-panel>
+  <z-accordion-item zValue="diagnosis" class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
+        {{ current_language_set?.casesheet?.diagnosis }}
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content class="px-4">
+      <app-diagnosis
+        [caseRecordMode]="caseRecordMode"
+        [generalDiagnosisForm]="generalDiagnosisForm"
+        [visitCategory]="visitCategory"></app-diagnosis>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>
+  <z-accordion-item zValue="investigations" class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
         {{
           current_language_set?.nurseData?.investigationsDetails?.investigations
         }}
-      </h5>
-    </mat-expansion-panel-header>
-    <app-doctor-investigations
-      [caseRecordMode]="caseRecordMode"
-      [visit]="visitCategory"
-      [generalDoctorInvestigationForm]="
-        generalDoctorInvestigationForm
-      "></app-doctor-investigations>
-  </mat-expansion-panel>
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content class="px-4">
+      <app-doctor-investigations
+        [caseRecordMode]="caseRecordMode"
+        [visit]="visitCategory"
+        [generalDoctorInvestigationForm]="
+          generalDoctorInvestigationForm
+        "></app-doctor-investigations>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.casesheet?.prescribe }}</h5>
-    </mat-expansion-panel-header>
-    <app-prescription
-      [caseRecordMode]="caseRecordMode"
-      [drugPrescriptionForm]="drugPrescriptionForm"></app-prescription>
-  </mat-expansion-panel>
+  <z-accordion-item zValue="prescription" class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
+        {{ current_language_set?.casesheet?.prescribe }}
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content class="px-4">
+      <app-prescription
+        [caseRecordMode]="caseRecordMode"
+        [drugPrescriptionForm]="drugPrescriptionForm"></app-prescription>
+    </z-accordion-content>
+  </z-accordion-item>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <h5>{{ current_language_set?.common?.report }}</h5>
-    </mat-expansion-panel-header>
-    <app-test-and-radiology></app-test-and-radiology>
-  </mat-expansion-panel>
-</mat-accordion>
+  <z-accordion-item zValue="report" class="rounded-lg border border-border bg-card">
+    <z-accordion-trigger class="px-4">
+      <span class="text-sm font-semibold text-foreground">
+        {{ current_language_set?.common?.report }}
+      </span>
+    </z-accordion-trigger>
+    <z-accordion-content class="px-4">
+      <app-test-and-radiology></app-test-and-radiology>
+    </z-accordion-content>
+  </z-accordion-item>
+</z-accordion>

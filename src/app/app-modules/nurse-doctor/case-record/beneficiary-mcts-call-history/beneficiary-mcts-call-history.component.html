@@ -1,67 +1,95 @@
-<div class="row title">
-  <h4>{{ current_language_set?.common?.mctcalldetails }}</h4>
-  <button class="pull-right exit" [matDialogClose]="false" mat-icon-button>
-    <mat-icon class="md-24">close</mat-icon>
-  </button>
-</div>
-<section class="row message modal_Scroll">
-  <mat-dialog-content>
-    <div *ngIf="callDetails?.length > 0" class="m-t-20">
-      <mat-form-field id="filterbox" class="pull-right">
-        <mat-label>{{ current_language_set?.common?.question }}</mat-label>
+<div class="flex flex-col">
+  <div
+    class="flex items-center justify-between gap-4 border-b border-border px-6 py-4">
+    <p class="text-lg font-semibold tracking-tight text-foreground">
+      {{ current_language_set?.common?.mctcalldetails }}
+    </p>
+    <button
+      z-button
+      zType="ghost"
+      zSize="icon"
+      type="button"
+      class="cursor-pointer text-muted-foreground"
+      [attr.aria-label]="current_language_set?.common?.close || 'Close'"
+      [matDialogClose]="false">
+      <ng-icon name="lucideX"></ng-icon>
+    </button>
+  </div>
+
+  <div class="max-h-[75vh] overflow-y-auto p-6">
+    <div *ngIf="callDetails?.length > 0" class="mb-4 flex justify-end">
+      <div class="relative flex w-full max-w-80 items-center">
+        <label class="sr-only" for="filterbox">{{
+          current_language_set?.common?.question
+        }}</label>
+        <ng-icon
+          class="pointer-events-none absolute left-2.5 text-muted-foreground"
+          name="lucideSearch"
+          size="18"></ng-icon>
         <input
+          z-input
+          id="filterbox"
+          type="search"
+          class="w-full bg-background pl-9"
           autocomplete="off"
-          matInput
-          #filterCall
-          (keyup)="filterCallHistory(filterCall.value)" />
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
+          name="filterCall"
+          [placeholder]="current_language_set?.common?.question || ''"
+          [(ngModel)]="filterTerm"
+          (ngModelChange)="filterCallHistory($event)" />
+      </div>
     </div>
 
-    <table
-      class="table table-responsive table-bordered"
-      aria-describedby="questionarie">
-      <thead>
-        <tr>
-          <th style="width: 70%" id="question">
-            {{ current_language_set?.common?.question }}
-          </th>
-          <th style="width: 30%" id="answer">
-            {{ current_language_set?.common?.answer }}
-          </th>
-        </tr>
-      </thead>
-      <tbody *ngIf="callDetails?.length === 0">
-        <tr>
-          <td colspan="2">
-            <h4 class="norecord">
-              {{ current_language_set?.common?.noCallDetailsFound }}
-            </h4>
-          </td>
-        </tr>
-      </tbody>
-      <tbody *ngIf="callDetails.length > 0"></tbody>
-      <tfoot>
-        <tr *ngIf="callDetails.length > 0">
-          <td colspan="1">
-            <div class="totalCount">
-              {{ current_language_set?.common?.totalCount }} :
-              {{ callDetails.length }}
-            </div>
-          </td>
-          <td colspan="1">
-            <pagination-controls
-              class="pull-right"
-              (pageChanged)="callDetailsPageChanged($event)"
-              *ngIf="filteredCallDetails.length"
-              [maxSize]="callDetailsRowsPerPage"
-              previousText="&lsaquo;"
-              nextText="&rsaquo;"
-              firstText="&laquo;"
-              lastText="&raquo;"></pagination-controls>
-          </td>
-        </tr>
-      </tfoot>
-    </table>
-  </mat-dialog-content>
-</section>
+    <z-card>
+      <z-card-content class="p-2">
+        <div class="w-full overflow-x-auto">
+          <table z-table aria-describedby="questionarie">
+            <thead z-table-header>
+              <tr z-table-row>
+                <th z-table-head id="question" class="w-[70%]">
+                  {{ current_language_set?.common?.question }}
+                </th>
+                <th z-table-head id="answer" class="w-[30%]">
+                  {{ current_language_set?.common?.answer }}
+                </th>
+              </tr>
+            </thead>
+            <tbody z-table-body>
+              <tr
+                z-table-row
+                *ngFor="let call of callDetailsPagedList">
+                <td z-table-cell>
+                  {{ call?.questionnaireDetail?.question }}
+                </td>
+                <td z-table-cell>
+                  {{ call?.questionnaireDetail?.answer }}
+                </td>
+              </tr>
+              <tr z-table-row *ngIf="filteredCallDetails?.length === 0">
+                <td
+                  z-table-cell
+                  colspan="2"
+                  class="h-24 text-center text-muted-foreground">
+                  {{ current_language_set?.common?.noCallDetailsFound }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div
+          *ngIf="filteredCallDetails.length > 0"
+          class="mt-4 flex flex-wrap items-center justify-between gap-4 px-2">
+          <div class="text-[0.8125rem] text-muted-foreground">
+            {{ current_language_set?.common?.totalCount }} :
+            {{ callDetails.length }}
+          </div>
+          <z-paginator
+            [zData]="filteredCallDetails"
+            [zPageSizeOptions]="[callDetailsRowsPerPage]"
+            [zShowPageSize]="false"
+            (zPagedChange)="callDetailsPagedList = $event"></z-paginator>
+        </div>
+      </z-card-content>
+    </z-card>
+  </div>
+</div>

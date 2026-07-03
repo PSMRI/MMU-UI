@@ -1,124 +1,200 @@
-<div class="m-t-10" [formGroup]="generalDiagnosisForm">
-  <div class="row">
-    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 box">
-      <mat-form-field [style.width]="'100%'">
-        <mat-label class="mat-label-text">{{
-          current_language_set?.casesheet?.ncdCondition
-        }}</mat-label>
-        <mat-select
-          class="input-full-width"
+<div class="mt-3 flex flex-col gap-4" [formGroup]="generalDiagnosisForm">
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <!-- NCD screening condition (multi-select of strings) -->
+    <z-form-field class="sm:col-span-1" *ngIf="enableNCDCondition">
+      <label z-form-label for="ncdScreeningConditionArray">{{
+        current_language_set?.casesheet?.ncdCondition
+      }}</label>
+      <z-form-control>
+        <z-select
+          id="ncdScreeningConditionArray"
+          class="w-full"
           name="ncdScreeningConditionArray"
-          *ngIf="enableNCDCondition"
-          required
-          multiple
-          (selectionChange)="changeNcdScreeningCondition($event, $event)"
-          [(ngModel)]="temp"
-          [ngModelOptions]="{ standalone: true }">
-          <mat-option
+          [zMultiple]="true"
+          [zValue]="temp"
+          [zPlaceholder]="current_language_set?.casesheet?.ncdCondition || ''"
+          (zSelectionChange)="onNcdScreeningConditionChange($event)">
+          <z-select-item
             *ngFor="let ncdCareCondition of ncdCareConditions"
-            [value]="ncdCareCondition.screeningCondition">
-            {{ ncdCareCondition.screeningCondition }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="col-xs-12" *ngIf="isNcdScreeningConditionOther">
-      <mat-form-field [style.width]="'100%'">
-        <mat-label>{{ current_language_set?.nCDConditionOther }}</mat-label>
+            [zValue]="ncdCareCondition.screeningCondition">
+            {{ ncdCareCondition.screeningCondition }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+
+    <!-- NCD condition - Other -->
+    <z-form-field class="sm:col-span-2" *ngIf="isNcdScreeningConditionOther">
+      <label z-form-label for="ncdScreeningConditionOther">{{
+        current_language_set?.nCDConditionOther
+      }}</label>
+      <z-form-control>
         <textarea
-          matInput
+          z-input
+          class="min-h-16 w-full"
           allowText="textAreaValidator"
-          matTextareaAutosize
           defaultNull
           name="ncdScreeningConditionOther"
+          id="ncdScreeningConditionOther"
           maxlength="20"
-          formControlName="ncdScreeningConditionOther">
-        </textarea>
-      </mat-form-field>
-    </div>
-    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 box">
-      <mat-form-field [style.width]="'100%'">
-        <mat-label>{{ current_language_set?.casesheet?.typeOfNcd }}</mat-label>
-        <mat-select
-          class="input-full-width"
+          formControlName="ncdScreeningConditionOther"></textarea>
+      </z-form-control>
+    </z-form-field>
+
+    <!-- Type of NCD (object-valued select) -->
+    <z-form-field class="sm:col-span-1">
+      <label z-form-label for="ncdCareType">{{
+        current_language_set?.casesheet?.typeOfNcd
+      }}</label>
+      <z-form-control>
+        <z-select
+          id="ncdCareType"
+          class="w-full"
           name="ncdCareType"
-          formControlName="ncdCareType">
-          <mat-option
+          [zValue]="
+            generalDiagnosisForm.get('ncdCareType')?.value?.ncdCareType || ''
+          "
+          [zLabel]="
+            generalDiagnosisForm.get('ncdCareType')?.value?.ncdCareType || ''
+          "
+          [zPlaceholder]="current_language_set?.casesheet?.typeOfNcd || ''"
+          (zSelectionChange)="onNcdCareTypeChange($event)">
+          <z-select-item
             *ngFor="let ncdCareType of ncdCareTypes"
-            [value]="ncdCareType">
-            {{ ncdCareType.ncdCareType }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="col-xs-12" style="display: none">
-      <mat-form-field [style.width]="'100%'">
-        <mat-label>{{
-          current_language_set?.casesheet?.ncdComplication
-        }}</mat-label>
+            [zValue]="ncdCareType.ncdCareType">
+            {{ ncdCareType.ncdCareType }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+
+    <!-- NCD complication (hidden) -->
+    <z-form-field class="hidden">
+      <label z-form-label for="ncdComplication">{{
+        current_language_set?.casesheet?.ncdComplication
+      }}</label>
+      <z-form-control>
         <textarea
-          matInput
+          z-input
+          class="min-h-16 w-full"
           allowText="textAreaValidator"
-          matTextareaAutosize
           defaultNull
           name="ncdComplication"
+          id="ncdComplication"
           maxlength="300"
-          formControlName="ncdComplication">
-        </textarea>
-      </mat-form-field>
-    </div>
+          formControlName="ncdComplication"></textarea>
+      </z-form-control>
+    </z-form-field>
   </div>
-  <div class="m-t-10">
-    <div class="row">
-      <div class="col-xs-12 col-sm-6">
-        <header class="mat-expansion-panel-header m-t-5">
-          <h4>{{ current_language_set?.casesheet?.provisionalDiag }}</h4>
-        </header>
+
+  <div class="mt-3">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div class="flex flex-col gap-3">
+        <p class="text-base font-semibold tracking-tight text-foreground">
+          {{ current_language_set?.casesheet?.provisionalDiag }}
+        </p>
+
         <ng-container formArrayName="provisionalDiagnosisList">
           <div
-            class="col-xs-12 col-sm-12 row"
+            class="flex flex-col gap-3 sm:flex-row sm:items-end"
             *ngFor="
               let diagnosis of provisionalDiagnosisControls;
               let i = index;
               let isLast = last
             ">
-            <ng-container [formGroupName]="i" class="row">
-               <div class="col-xs-12 col-sm-8 col-md-9">
-              <mat-form-field class="input-full-width" appearance="fill">
-                <mat-label>{{ current_language_set?.casesheet?.provisionalDiag }}</mat-label>
-                <input matInput type="text" autocomplete="off" name="viewProvisionalDiagnosisProvided"
-                  formControlName="viewProvisionalDiagnosisProvided" minlength="3" maxlength="100" #diagnosisInput
-                  [matAutocomplete]="autoDiagnosis" (keyup)="onDiagnosisInputKeyup(diagnosisInput.value, i)" />
-              </mat-form-field>
+            <ng-container [formGroupName]="i">
+              <!-- Provisional diagnosis: server-driven autocomplete -->
+              <z-form-field class="min-w-0 flex-1">
+                <label
+                  z-form-label
+                  for="viewProvisionalDiagnosisProvided-{{ i }}"
+                  >{{ current_language_set?.casesheet?.provisionalDiag }}</label
+                >
+                <z-form-control>
+                  <div class="relative w-full">
+                    <input
+                      z-input
+                      class="w-full"
+                      type="text"
+                      autocomplete="off"
+                      role="combobox"
+                      aria-autocomplete="list"
+                      [attr.aria-expanded]="
+                        (suggestedDiagnosisList[i]?.length ||
+                          loadingMore[i] ||
+                          noMore[i]) &&
+                        openDiagnosisIndex === i
+                          ? 'true'
+                          : 'false'
+                      "
+                      name="viewProvisionalDiagnosisProvided"
+                      id="viewProvisionalDiagnosisProvided-{{ i }}"
+                      [attr.aria-controls]="'diagnosis-listbox-' + i"
+                      [(ngModel)]="diagnosisDisplay[i]"
+                      [ngModelOptions]="{ standalone: true }"
+                      [disabled]="!!(diagnosis.get('viewProvisionalDiagnosisProvided') ?.disabled)"
+                      minlength="3"
+                      maxlength="100"
+                      #diagnosisInput
+                      (keyup)="onDiagnosisInputKeyup(diagnosisInput.value, i)"
+                      (focus)="openDiagnosisIndex = i"
+                      (blur)="onDiagnosisBlur(i)" />
 
-              <mat-autocomplete #autoDiagnosis="matAutocomplete" appAutocompleteScroller [threshold]="0.6"
-                (nearEnd)="onAutoNearEnd(i)" (panelReady)="onPanelReady(i, $event)" autoActiveFirstOption
-                [displayWith]="displayDiagnosis" (optionSelected)="onDiagnosisSelected($event.option.value, i)">
-                <mat-option *ngFor="let diag of suggestedDiagnosisList[i]" [value]="diag">
-                  {{ diag.term }}
-                </mat-option>
-                <mat-option *ngIf="loadingMore[i]" disabled>Loading…</mat-option>
-                <mat-option *ngIf="noMore[i]" disabled>End of results</mat-option>
-              </mat-autocomplete>
-               </div>
-              
-              <div class="col-xs-12 col-sm-3 col-md-3 m-t-10">
+                    <div
+                      *ngIf="
+                        openDiagnosisIndex === i &&
+                        (suggestedDiagnosisList[i]?.length ||
+                          loadingMore[i] ||
+                          noMore[i])
+                      "
+                      #diagnosisPanel
+                      role="listbox"
+                      id="diagnosis-listbox-{{ i }}"
+                      class="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md"
+                      (scroll)="onDiagnosisPanelScroll(i, diagnosisPanel)">
+                      <div
+                        *ngFor="let diag of suggestedDiagnosisList[i]"
+                        role="option"
+                        tabindex="0"
+                        [attr.aria-selected]="false"
+                        class="flex cursor-pointer items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        (mousedown)="onDiagnosisSelected(diag, i)"
+                        (keydown.enter)="onDiagnosisSelected(diag, i)">
+                        {{ diag.term }}
+                      </div>
+                      <div
+                        *ngIf="loadingMore[i]"
+                        class="px-2 py-1.5 text-sm text-muted-foreground">
+                        Loading…
+                      </div>
+                      <div
+                        *ngIf="noMore[i]"
+                        class="px-2 py-1.5 text-sm text-muted-foreground">
+                        End of results
+                      </div>
+                    </div>
+                  </div>
+                </z-form-control>
+              </z-form-field>
+
+              <!-- Add / remove diagnosis actions -->
+              <div class="flex items-center gap-2">
                 <button
-                  mat-mini-fab
+                  z-button
+                  zType="default"
+                  zSize="icon"
                   type="button"
                   *ngIf="isLast"
                   [disabled]="checkProvisionalDiagnosisValidity(diagnosis)"
-                  class="mat_blue_circle"
-                  style="margin-right: 5px"
-                  color="primary"
+                  aria-label="Add provisional diagnosis"
                   (click)="addDiagnosis()">
-                  <mat-icon>add</mat-icon>
+                  <ng-icon name="lucidePlus"></ng-icon>
                 </button>
                 <button
-                  mat-mini-fab
+                  z-button
+                  zType="destructive"
+                  zSize="icon"
                   type="button"
-                  color="warn"
-                  class="mat_warn_circle"
                   *ngIf="
                     diagnosis.get('provisionalDiagnosis')?.disabled ||
                     i !== 0 ||
@@ -128,8 +204,9 @@
                       generalDiagnosisForm.get('provisionalDiagnosisList')
                         ?.value.provisionalDiagnosis !== '')
                   "
+                  aria-label="Remove provisional diagnosis"
                   (click)="deleteDiagnosis(i, diagnosis)">
-                  <mat-icon>close</mat-icon>
+                  <ng-icon name="lucideX"></ng-icon>
                 </button>
               </div>
             </ng-container>

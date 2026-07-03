@@ -20,7 +20,7 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, DoCheck, OnInit, ViewChild } from '@angular/core';
+import { Component, DoCheck, OnInit } from '@angular/core';
 import { DoctorService } from '../../shared/services';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -28,73 +28,55 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
 import { BeneficiaryMctsCallHistoryComponent } from '../beneficiary-mcts-call-history/beneficiary-mcts-call-history.component';
-import { MatPaginator } from '@angular/material/paginator';
-import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
-  MatCell,
-  MatHeaderRowDef,
-  MatHeaderRow,
-  MatRowDef,
-  MatRow,
-} from '@angular/material/table';
 import { CaseSheetComponent } from '../../case-sheet/case-sheet.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { Router } from '@angular/router';
-import { MatTabGroup, MatTab } from '@angular/material/tabs';
 import { NgFor, NgIf, DatePipe } from '@angular/common';
-import { MatFormField, MatSuffix, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
-import { MatIcon } from '@angular/material/icon';
-import { MatTooltip } from '@angular/material/tooltip';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideSearch, lucideEye, lucidePrinter } from '@ng-icons/lucide';
+import { ZardTabGroupComponent, ZardTabComponent } from 'Common-UI/v2/ui/tabs';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardPaginatorComponent } from 'Common-UI/v2/ui/paginator';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 @Component({
   selector: 'app-beneficiary-platform-history',
   templateUrl: './beneficiary-platform-history.component.html',
-  styleUrls: ['./beneficiary-platform-history.component.css'],
+  viewProviders: [provideIcons({ lucideSearch, lucideEye, lucidePrinter })],
   imports: [
-    MatTabGroup,
     NgFor,
-    MatTab,
     NgIf,
-    MatFormField,
-    MatInput,
-    MatIcon,
-    MatSuffix,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCellDef,
-    MatHeaderCell,
-    MatCellDef,
-    MatCell,
-    MatHeaderRowDef,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
-    MatPaginator,
-    MatLabel,
-    MatTooltip,
     DatePipe,
+    NgIcon,
+    ZardTabGroupComponent,
+    ZardTabComponent,
+    ZardTableImports,
+    ZardPaginatorComponent,
+    ZardFormImports,
+    ZardInputDirective,
+    ZardButtonComponent,
+    cardImports,
+    tooltipImports,
   ],
 })
 export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
   current_language_set: any;
   filterMMU: any;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
+  dataSource: { data: any[] } = { data: [] };
+  pagedMMUHistory: any[] = [];
 
-  @ViewChild(MatPaginator) TmPaginator: MatPaginator | null = null;
-  historyOfTM = new MatTableDataSource<any>();
+  historyOfTM: { data: any[] } = { data: [] };
+  pagedTMHistory: any[] = [];
 
-  @ViewChild(MatPaginator) paginator104: MatPaginator | null = null;
-  historyOf104 = new MatTableDataSource<any>();
+  historyOf104: { data: any[] } = { data: [] };
+  paged104History: any[] = [];
 
-  @ViewChild(MatPaginator) MctsPaginator: MatPaginator | null = null;
-  historyOfMCTS = new MatTableDataSource<any>();
+  historyOfMCTS: { data: any[] } = { data: [] };
+  pagedMCTSHistory: any[] = [];
 
   displayedColumns = [
     'visitnommu',
@@ -219,7 +201,6 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
         this.serviceOnState = this.checkServiceLoader(services, 2);
         console.log('dataget', JSON.stringify(data, null, 4));
         this.dataSource.data = data.data;
-        this.dataSource.paginator = this.paginator;
         this.getEachVisitData();
       }
     });
@@ -236,7 +217,6 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
         this.doctorService.getMMUCasesheetData(reqObj).subscribe((res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
             this.dataSource.data[i]['benPreviousData'] = res.data;
-            this.dataSource.paginator = this.paginator;
             this.filteredMMUHistory = res.data;
             this.previousMMUHistoryPageChanged({
               page: this.previousMMUHistoryActivePage,
@@ -268,7 +248,6 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
         if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
           this.filteredMMUHistory.push(item);
           this.dataSource.data.push(item);
-          this.dataSource.paginator = this.paginator;
         }
       });
     }
@@ -353,7 +332,6 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
         this.serviceOnState = this.checkServiceLoader(services, 6);
         this.historyOfMCTS.data = data.data;
         this.filteredMCTSHistory = data.data;
-        this.historyOfMCTS.paginator = this.MctsPaginator;
         this.previousMCTSHistoryPageChanged({
           page: this.previousMCTSHistoryActivePage,
           itemsPerPage: this.previousMCTSHistoryRowsPerPage,
@@ -372,7 +350,6 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
         if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
           this.filteredMCTSHistory.push(item);
           this.historyOfMCTS.data.push(item);
-          this.historyOfMCTS.paginator = this.MctsPaginator;
         }
       });
     }
@@ -412,7 +389,6 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
         console.log('dataget', data);
         this.historyOf104.data = data.data;
         this.filtered104History = data.data;
-        this.historyOf104.paginator = this.paginator104;
         this.previous104HistoryPageChanged({
           page: this.previous104HistoryActivePage,
           itemsPerPage: this.previous104HistoryRowsPerPage,
@@ -431,7 +407,6 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
         if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
           this.filtered104History.push(item);
           this.historyOf104.data.push(item);
-          this.historyOf104.paginator = this.paginator104;
         }
       });
     }
@@ -499,7 +474,6 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
         console.log('dataget', JSON.stringify(data, null, 4));
         this.historyOfTM.data = data.data;
         this.filteredTMHistory = data.data;
-        this.historyOfTM.paginator = this.TmPaginator;
         this.previousTMHistoryPageChanged({
           page: this.previousTMHistoryActivePage,
           itemsPerPage: this.previousTMHistoryRowsPerPage,
@@ -518,7 +492,6 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
         if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
           this.filteredTMHistory.push(item);
           this.historyOfTM.data.push(item);
-          this.historyOfTM.paginator = this.TmPaginator;
         }
       });
     }

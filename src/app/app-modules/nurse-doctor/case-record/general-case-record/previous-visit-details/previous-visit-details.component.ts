@@ -30,11 +30,17 @@ import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-s
 import { BeneficiaryPlatformHistoryComponent } from '../../beneficiary-platform-history/beneficiary-platform-history.component';
 import { NgClass, NgIf } from '@angular/common';
 import { NgChartsModule } from 'ng2-charts';
+import { cardImports } from 'Common-UI/v2/ui/card';
 @Component({
   selector: 'app-previous-visit-details',
   templateUrl: './previous-visit-details.component.html',
-  styleUrls: ['./previous-visit-details.component.css'],
-  imports: [BeneficiaryPlatformHistoryComponent, NgClass, NgIf, NgChartsModule],
+  imports: [
+    BeneficiaryPlatformHistoryComponent,
+    NgClass,
+    NgIf,
+    NgChartsModule,
+    ...cardImports,
+  ],
 })
 export class PreviousVisitDetailsComponent implements OnInit, DoCheck {
   @Input()

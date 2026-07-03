@@ -20,7 +20,17 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  DoCheck,
+  AfterViewInit,
+  ViewChildren,
+  QueryList,
+  ElementRef,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -39,37 +49,41 @@ import {
 } from 'src/app/app-modules/nurse-doctor/shared/services';
 import { GeneralUtils } from 'src/app/app-modules/nurse-doctor/shared/utility';
 import { NgIf, NgFor } from '@angular/common';
-import { MatFormField, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  MatAutocompleteTrigger,
-  MatAutocomplete,
-  MatOption,
-} from '@angular/material/autocomplete';
-import { AutocompleteScrollerDirective } from '../../../../shared/utility/autocomplete-scroller.directive';
-import { MatIcon } from '@angular/material/icon';
+  lucideSearch,
+  lucideCheck,
+  lucidePlus,
+  lucideX,
+} from '@ng-icons/lucide';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 @Component({
   selector: 'app-ncd-screening-diagnosis',
   templateUrl: './ncd-screening-diagnosis.component.html',
-  styleUrls: ['./ncd-screening-diagnosis.component.css'],
+  viewProviders: [
+    provideIcons({ lucideSearch, lucideCheck, lucidePlus, lucideX }),
+  ],
   imports: [
     ReactiveFormsModule,
     NgIf,
     NgFor,
-    MatFormField,
-    MatLabel,
-    MatInput,
-    MatAutocompleteTrigger,
-    MatAutocomplete,
-    AutocompleteScrollerDirective,
-    MatOption,
-    MatIcon,
+    NgIcon,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ZardButtonComponent,
+    ...tooltipImports,
   ],
 })
 export class NcdScreeningDiagnosisComponent
-  implements OnInit, OnChanges, DoCheck
+  implements OnInit, OnChanges, DoCheck, AfterViewInit
 {
   utils = new GeneralUtils(this.fb, this.sessionstorage);
+
+  @ViewChildren('diagnosisInput')
+  diagnosisInputs!: QueryList<ElementRef<HTMLInputElement>>;
 
   @Input()
   generalDiagnosisForm!: FormGroup;
@@ -94,6 +108,11 @@ export class NcdScreeningDiagnosisComponent
   wantMore: boolean[] = [];
   pageByIndex: number[] = [];
   lastQueryByIndex: string[] = [];
+
+  // Inline combobox panel state (replaces the mat-autocomplete overlay).
+  openIndex: number | null = null;
+  activeIndex: number[] = [];
+  private readonly NEAR_END_THRESHOLD = 0.6; // matches AutocompleteScrollerDirective
 
   constructor(
     private fb: FormBuilder,
@@ -125,6 +144,35 @@ export class NcdScreeningDiagnosisComponent
   }
   ngDoCheck() {
     this.assignSelectedLanguage();
+    this.syncInputDisplay();
+  }
+
+  ngAfterViewInit() {
+    this.syncInputDisplay();
+    // Re-sync when rows are added/removed so text follows the FormArray.
+    this.diagnosisInputs.changes.subscribe(() => this.syncInputDisplay());
+  }
+
+  /**
+   * Reflects each row's committed diagnosis (the FormControl value) into its
+   * input's visible text — the decoupled display mat-autocomplete gave us via
+   * [displayWith]. Skips the input the user is actively typing in so it stays
+   * uncontrolled while editing, and never mutates the stored (object) value.
+   */
+  private syncInputDisplay() {
+    if (!this.diagnosisInputs) return;
+    const list = this.generalDiagnosisForm.get(
+      'provisionalDiagnosisList'
+    ) as FormArray;
+    this.diagnosisInputs.forEach((ref, i) => {
+      const el = ref.nativeElement;
+      if (document.activeElement === el) return;
+      const value = list?.at(i)?.get('viewProvisionalDiagnosisProvided')?.value;
+      const text = this.displayDiagnosis(value);
+      if (el.value !== text) {
+        el.value = text;
+      }
+    });
   }
 
   get provisionalDiagnosisControls(): AbstractControl[] {
@@ -267,6 +315,135 @@ export class NcdScreeningDiagnosisComponent
       conceptID: selected?.conceptID || null,
       term: selected?.term || null,
     });
+  }
+
+  // ---- Inline combobox panel adapters (replace mat-autocomplete overlay) ----
+
+  // True when the panel has something to show (options or a status row).
+  hasPanelContent(index: number): boolean {
+    return (
+      (this.suggestedDiagnosisList[index]?.length ?? 0) > 0 ||
+      !!this.loadingMore[index] ||
+      !!this.noMore[index]
+    );
+  }
+
+  // Highlights the same option mat-autocomplete's displayWith would show.
+  isDiagnosisSelected(diag: any, index: number): boolean {
+    const selected = this.generalDiagnosisForm.get('provisionalDiagnosisList')
+      ?.value?.[index];
+    return (
+      !!diag &&
+      !!selected &&
+      (diag.conceptID ?? null) === (selected.conceptID ?? null) &&
+      (diag.term ?? null) === (selected.term ?? null)
+    );
+  }
+
+  openPanel(index: number) {
+    this.openIndex = index;
+    this.activeIndex[index] = this.suggestedDiagnosisList[index]?.length
+      ? 0
+      : -1;
+    // Mirror the directive's panelReady bootstrap once the panel is live.
+    setTimeout(() => {
+      const panelEl = document.getElementById(`diagnosis-listbox-${index}`);
+      if (panelEl) {
+        this.onPanelReady(index, panelEl);
+      }
+    });
+  }
+
+  closePanelDeferred(index: number) {
+    // Defer so an option's mousedown selection commits before we close.
+    setTimeout(() => {
+      if (this.openIndex === index) {
+        this.openIndex = null;
+      }
+    }, 150);
+  }
+
+  onOptionMousedown(event: Event, diag: any, index: number) {
+    // mousedown (not click) so selection commits before the input's blur.
+    event.preventDefault();
+    this.onDiagnosisSelected(diag, index);
+    this.writeRowDisplay(index);
+    this.openIndex = null;
+  }
+
+  // Writes the committed term into a specific row's input, even while focused
+  // (syncInputDisplay skips the focused input to protect in-progress typing).
+  private writeRowDisplay(index: number) {
+    const ref = this.diagnosisInputs?.get(index);
+    const list = this.generalDiagnosisForm.get(
+      'provisionalDiagnosisList'
+    ) as FormArray;
+    const value = list
+      ?.at(index)
+      ?.get('viewProvisionalDiagnosisProvided')?.value;
+    if (ref) {
+      ref.nativeElement.value = this.displayDiagnosis(value);
+    }
+  }
+
+  onInputKeydown(event: KeyboardEvent, index: number) {
+    const options = this.suggestedDiagnosisList[index] ?? [];
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        if (this.openIndex !== index) {
+          this.openPanel(index);
+          return;
+        }
+        if (options.length) {
+          this.activeIndex[index] =
+            ((this.activeIndex[index] ?? -1) + 1) % options.length;
+        }
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        if (this.openIndex !== index) {
+          this.openPanel(index);
+          return;
+        }
+        if (options.length) {
+          this.activeIndex[index] =
+            ((this.activeIndex[index] ?? 0) - 1 + options.length) %
+            options.length;
+        }
+        break;
+      case 'Enter': {
+        const active = this.activeIndex[index] ?? -1;
+        if (
+          this.openIndex === index &&
+          active >= 0 &&
+          active < options.length
+        ) {
+          event.preventDefault();
+          this.onDiagnosisSelected(options[active], index);
+          this.writeRowDisplay(index);
+          this.openIndex = null;
+        }
+        break;
+      }
+      case 'Escape':
+        if (this.openIndex === index) {
+          event.preventDefault();
+          this.openIndex = null;
+        }
+        break;
+    }
+  }
+
+  // Replaces AutocompleteScrollerDirective: fire nearEnd at the threshold.
+  onPanelScroll(event: Event, index: number) {
+    const panelEl = event.target as HTMLElement;
+    if (panelEl.scrollHeight <= panelEl.clientHeight) return;
+    const ratio =
+      (panelEl.scrollTop + panelEl.clientHeight) / panelEl.scrollHeight;
+    if (ratio >= this.NEAR_END_THRESHOLD) {
+      this.onAutoNearEnd(index);
+    }
   }
 
   onPanelReady(index: number, panelEl: HTMLElement) {

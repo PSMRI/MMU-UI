@@ -24,7 +24,6 @@ import {
   Component,
   OnInit,
   Input,
-  ViewChild,
   DoCheck,
   AfterViewInit,
   OnDestroy,
@@ -36,37 +35,33 @@ import { DoctorService } from '../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { CameraService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-} from '@angular/material/expansion';
 import { BeneficiaryPlatformHistoryComponent } from '../beneficiary-platform-history/beneficiary-platform-history.component';
 import { NgClass, NgIf } from '@angular/common';
 import { NgChartsModule } from 'ng2-charts';
-import { MatFormField, MatLabel } from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
 import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideFile } from '@ng-icons/lucide';
+import { ZardAccordionImports } from 'Common-UI/v2/ui/accordion';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 @Component({
   selector: 'app-cancer-case-record',
   templateUrl: './cancer-case-record.component.html',
-  styleUrls: ['./cancer-case-record.component.css'],
+  viewProviders: [provideIcons({ lucideFile })],
   imports: [
-    MatAccordion,
     ReactiveFormsModule,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
     BeneficiaryPlatformHistoryComponent,
     NgClass,
     NgIf,
     NgChartsModule,
-    MatFormField,
-    MatInput,
     StringValidatorDirective,
-    MatLabel,
+    NgIcon,
+    ...ZardAccordionImports,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ZardButtonComponent,
   ],
 })
 export class CancerCaseRecordComponent
@@ -180,20 +175,6 @@ export class CancerCaseRecordComponent
   mammogramLink: any;
   female: any;
   current_language_set: any;
-
-  displayedColumns = [
-    'visitnommu',
-    'date',
-    'visitreasonmmu',
-    'visitcategorymmu',
-    'visitdetailsmmu',
-    'visitcodemmu',
-    'medicationmmu',
-    'previewmmu',
-    'printpreviewmmu',
-  ];
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
 
   constructor(
     private router: Router,

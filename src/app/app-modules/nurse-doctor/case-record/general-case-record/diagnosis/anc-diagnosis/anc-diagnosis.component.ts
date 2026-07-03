@@ -26,80 +26,32 @@ import { MasterdataService, DoctorService } from '../../../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
-import {
-  MomentDateAdapter,
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-} from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { NgIf, NgFor } from '@angular/common';
-import {
-  MatLabel,
-  MatFormField,
-  MatSelect,
-  MatSuffix,
-} from '@angular/material/select';
-import { MatInput } from '@angular/material/input';
 import { StringValidatorDirective } from '../../../../../core/directives/stringValidator.directive';
 import { NumberValidatorDirective } from '../../../../../core/directives/numberValidator.directive';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatRadioGroup, MatRadioButton } from '@angular/material/radio';
-import {
-  MatDatepickerInput,
-  MatDatepickerToggle,
-  MatDatepicker,
-} from '@angular/material/datepicker';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardDatePickerComponent } from 'Common-UI/v2/ui/date-picker';
 
 @Component({
   selector: 'app-anc-diagnosis',
   templateUrl: './anc-diagnosis.component.html',
-  styleUrls: ['./anc-diagnosis.component.css'],
-  providers: [
-    {
-      provide: MAT_DATE_LOCALE,
-      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
-    },
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    },
-    {
-      provide: MAT_DATE_FORMATS,
-      useValue: {
-        parse: {
-          dateInput: 'LL',
-        },
-        display: {
-          dateInput: 'DD/MM/YYYY', // Set the desired display format
-          monthYearLabel: 'MMM YYYY',
-          dateA11yLabel: 'LL',
-          monthYearA11yLabel: 'MMMM YYYY',
-        },
-      },
-    },
-  ],
   imports: [
     ReactiveFormsModule,
     NgIf,
-    MatLabel,
-    MatFormField,
-    MatInput,
+    NgFor,
     StringValidatorDirective,
     NumberValidatorDirective,
-    MatSelect,
-    NgFor,
-    MatOption,
-    MatRadioGroup,
-    MatRadioButton,
-    MatDatepickerInput,
-    MatDatepickerToggle,
-    MatSuffix,
-    MatDatepicker,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
+    ZardRadioComponent,
+    ZardRadioGroupComponent,
+    ZardDatePickerComponent,
   ],
 })
 export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
@@ -239,6 +191,31 @@ export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
     return this.generalDiagnosisForm.controls[
       'complicationOfCurrentPregnancyList'
     ].value;
+  }
+
+  // --- Zard control adapter. z-select is string-valued, but the reactive-form
+  // control keeps its original array-of-master-object value so the submission
+  // contract (complicationOfCurrentPregnancyList) is unchanged. ---
+  get selectedComplicationTypes(): string[] {
+    const val = this.complicationOfCurrentPregnancyList;
+    return Array.isArray(val)
+      ? val.map((c: any) => c?.pregComplicationType)
+      : [];
+  }
+
+  onComplicationChange(value: string | string[]): void {
+    const names = Array.isArray(value) ? value : [value];
+    const selected = (this.masterData?.pregComplicationTypes || []).filter(
+      (c: any) => names.includes(c.pregComplicationType)
+    );
+    this.generalDiagnosisForm.controls[
+      'complicationOfCurrentPregnancyList'
+    ].setValue(selected);
+    this.generalDiagnosisForm.controls[
+      'complicationOfCurrentPregnancyList'
+    ].markAsDirty();
+    this.resetOtherPregnancyComplication(selected, 0);
+    this.displayPositive(selected);
   }
 
   resetOtherPregnancyComplication(complication: any, checkNull: any) {
