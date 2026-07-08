@@ -31,7 +31,10 @@ import { WorkareaCanActivate } from './workarea/workarea-can-activate.service';
 import { HttpServiceService } from '../core/services/http-service.service';
 import { TestInVitalsService } from './shared/services/test-in-vitals.service';
 import { IdrsscoreService } from './shared/services/idrsscore.service';
-import { HttpClientModule } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -154,25 +157,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { AutocompleteScrollerDirective } from './shared/utility/autocomplete-scroller.directive';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    NurseDoctorRoutingModule,
-    CoreModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    HttpClientModule,
-    MaterialModule,
-    MatTableModule,
-    MatChipsModule,
-    MatDatepickerModule,
-    NgxPaginationModule,
-    SharedModule,
-    MatChipsModule,
-    MatToolbarModule,
-  ],
   declarations: [
     NurseWorklistComponent,
     PrintPageSelectComponent,
@@ -285,7 +269,24 @@ import { AutocompleteScrollerDirective } from './shared/utility/autocomplete-scr
     SmsNotificationComponent,
     AutocompleteScrollerDirective,
   ],
-
+  imports: [
+    CommonModule,
+    NurseDoctorRoutingModule,
+    CoreModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MaterialModule,
+    MatTableModule,
+    MatChipsModule,
+    MatDatepickerModule,
+    NgxPaginationModule,
+    SharedModule,
+    MatChipsModule,
+    MatToolbarModule,
+  ],
   providers: [
     NurseService,
     DoctorService,
@@ -295,6 +296,7 @@ import { AutocompleteScrollerDirective } from './shared/utility/autocomplete-scr
     IdrsscoreService,
     TestInVitalsService,
     LabService,
+    provideHttpClient(withInterceptorsFromDi()),
   ],
 })
 export class NurseDoctorModule {}

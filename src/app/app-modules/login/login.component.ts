@@ -47,6 +47,8 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-login-cmp',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
+
+  standalone: false,
 })
 export class LoginComponent implements OnInit, AfterViewInit {
   @ViewChild('captchaCmp') captchaCmp: CaptchaComponent | undefined;
@@ -101,6 +103,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   login() {
+    const userName = this.loginForm.controls.userName.value ?? '';
     const encryptPassword = this.encrypt(
       this.Key_IV,
       this.loginForm.controls.password.value

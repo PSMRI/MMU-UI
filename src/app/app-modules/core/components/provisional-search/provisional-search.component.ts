@@ -33,6 +33,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   selector: 'app-provisional-search',
   templateUrl: './provisional-search.component.html',
   styleUrls: ['./provisional-search.component.css'],
+
+  standalone: false,
 })
 export class ProvisionalSearchComponent implements OnInit, DoCheck {
   searchTerm: any;

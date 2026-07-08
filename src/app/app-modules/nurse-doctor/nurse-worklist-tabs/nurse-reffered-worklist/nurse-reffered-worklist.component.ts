@@ -39,6 +39,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-nurse-reffered-worklist',
   templateUrl: './nurse-reffered-worklist.component.html',
   styleUrls: ['./nurse-reffered-worklist.component.css'],
+
+  standalone: false,
 })
 export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
   currentLanguageSet: any;

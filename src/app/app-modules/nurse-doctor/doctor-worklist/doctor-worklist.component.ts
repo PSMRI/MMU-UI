@@ -44,6 +44,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-doctor-worklist',
   templateUrl: './doctor-worklist.component.html',
   styleUrls: ['./doctor-worklist.component.css'],
+
+  standalone: false,
 })
 export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
   rowsPerPage = 5;

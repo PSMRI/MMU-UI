@@ -41,6 +41,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-cancer-examination',
   templateUrl: './cancer-examination.component.html',
   styleUrls: ['./cancer-examination.component.css'],
+
+  standalone: false,
 })
 export class CancerExaminationComponent
   implements OnInit, DoCheck, OnChanges, OnDestroy

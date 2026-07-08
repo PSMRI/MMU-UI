@@ -31,6 +31,8 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-nurse-general-examination',
   templateUrl: './general-examination.component.html',
   styleUrls: ['./general-examination.component.css'],
+
+  standalone: false,
 })
 export class GeneralExaminationComponent implements OnInit, DoCheck, OnChanges {
   @Input()
