@@ -16,6 +16,16 @@
 @plugin 'tailwindcss-animate';
 @source '../Common-UI/v2/ui';
 
+/* Restore a subtle default border color. Tailwind v4 preflight leaves border-color
+   as currentColor (near-black), so bare `border` utilities (z-card, z-input,
+   tables, dividers) rendered a dark/heavy border instead of the subtle shadcn one.
+   shadcn sets this default via `* { @apply border-border }`; do the same. */
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+}
+
 @custom-variant dark (&:is(.dark *));
 
 /* Hide the browser's built-in password reveal / clear icons (Edge ::-ms-reveal,
