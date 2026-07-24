@@ -1,8 +1,6 @@
 <div class="my-5">
   <z-tab-group>
-    <z-tab
-      *ngFor="let service of serviceOnState"
-      [label]="service.serviceName">
+    <z-tab *ngFor="let service of serviceOnState" [label]="service.serviceName">
       <div class="mt-2 flex flex-col gap-5">
         <div
           class="flex h-[200px] items-center justify-center rounded-lg border border-border"
@@ -477,7 +475,9 @@
                       {{ current_language_set?.previousvisit?.age104 }}
                     </th>
                     <th z-table-head>
-                      {{ current_language_set?.previousvisit?.ChiefComplaint104 }}
+                      {{
+                        current_language_set?.previousvisit?.ChiefComplaint104
+                      }}
                     </th>
                     <th z-table-head>
                       {{
@@ -493,7 +493,8 @@
                     </th>
                     <th z-table-head>
                       {{
-                        current_language_set?.previousvisit?.recommendedaction104
+                        current_language_set?.previousvisit
+                          ?.recommendedaction104
                       }}
                     </th>
                     <th z-table-head>

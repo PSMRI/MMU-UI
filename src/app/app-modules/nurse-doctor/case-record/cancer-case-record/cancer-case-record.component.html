@@ -68,7 +68,7 @@
                         class="font-medium text-foreground"
                         [ngClass]="{
                           'text-destructive':
-                            calculateBMI() < 18.5 || calculateBMI() > 24.9
+                            calculateBMI() < 18.5 || calculateBMI() > 24.9,
                         }"
                         >{{ calculateBMI() }}</span
                       >
@@ -81,7 +81,7 @@
                       <span
                         class="font-medium text-foreground"
                         [ngClass]="{
-                          'text-destructive': +currentVitals?.hbA1C > 5.7
+                          'text-destructive': +currentVitals?.hbA1C > 5.7,
                         }"
                         >{{ currentVitals?.hbA1C }}</span
                       >
@@ -103,7 +103,8 @@
                         class="font-medium text-foreground"
                         [ngClass]="{
                           'text-destructive':
-                            currentVitals?.sPO2 < 1 || currentVitals?.sPO2 > 100
+                            currentVitals?.sPO2 < 1 ||
+                            currentVitals?.sPO2 > 100,
                         }"
                         >{{ currentVitals?.sPO2 }}</span
                       >
@@ -195,7 +196,7 @@
                         class="font-medium text-foreground"
                         [ngClass]="{
                           'text-destructive':
-                            currentVitals?.bloodGlucose_Fasting > 100
+                            currentVitals?.bloodGlucose_Fasting > 100,
                         }"
                         >{{ currentVitals?.bloodGlucose_Fasting }}</span
                       >
@@ -209,7 +210,7 @@
                         class="font-medium text-foreground"
                         [ngClass]="{
                           'text-destructive':
-                            currentVitals?.bloodGlucose_Random > 140
+                            currentVitals?.bloodGlucose_Random > 140,
                         }"
                         >{{ currentVitals?.bloodGlucose_Random }}</span
                       >
@@ -223,7 +224,7 @@
                         class="font-medium text-foreground"
                         [ngClass]="{
                           'text-destructive':
-                            currentVitals?.bloodGlucose_2HrPostPrandial > 140
+                            currentVitals?.bloodGlucose_2HrPostPrandial > 140,
                         }"
                         >{{ currentVitals?.bloodGlucose_2HrPostPrandial }}</span
                       >

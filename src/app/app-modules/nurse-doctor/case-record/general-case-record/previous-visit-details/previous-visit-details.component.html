@@ -42,7 +42,7 @@
             class="font-medium text-foreground"
             [ngClass]="{
               'text-destructive':
-                calculateBMI() < 18.5 || calculateBMI() > 24.9
+                calculateBMI() < 18.5 || calculateBMI() > 24.9,
             }"
             >{{ calculateBMI() }}</span
           >
@@ -60,7 +60,7 @@
             [ngClass]="{
               'text-destructive':
                 +currentVitals?.temperature < 96 ||
-                +currentVitals?.temperature > 100
+                +currentVitals?.temperature > 100,
             }"
             >{{ currentVitals?.temperature }}</span
           >
@@ -74,7 +74,7 @@
             [ngClass]="{
               'text-destructive':
                 +currentVitals?.pulseRate < 49 ||
-                +currentVitals?.pulseRate > 101
+                +currentVitals?.pulseRate > 101,
             }"
             >{{ currentVitals?.pulseRate }}</span
           >
@@ -88,7 +88,7 @@
             [ngClass]="{
               'text-destructive':
                 +currentVitals?.respiratoryRate < 11 ||
-                +currentVitals?.respiratoryRate > 19
+                +currentVitals?.respiratoryRate > 19,
             }"
             >{{ currentVitals?.respiratoryRate }}</span
           >
@@ -102,7 +102,7 @@
             class="font-medium text-foreground"
             [ngClass]="{
               'text-destructive':
-                currentVitals?.sPO2 < 1 || currentVitals?.sPO2 > 100
+                currentVitals?.sPO2 < 1 || currentVitals?.sPO2 > 100,
             }"
             >{{ currentVitals?.sPO2 }}</span
           >
@@ -123,7 +123,7 @@
               [ngClass]="{
                 'text-destructive':
                   +currentVitals?.systolicBP_1stReading > 80 ||
-                  +currentVitals?.systolicBP_1stReading > 100
+                  +currentVitals?.systolicBP_1stReading > 100,
               }"
               >{{ currentVitals?.systolicBP_1stReading }}</span
             >
@@ -137,7 +137,7 @@
               [ngClass]="{
                 'text-destructive':
                   +currentVitals?.diastolicBP_1stReading > 120 ||
-                  +currentVitals?.diastolicBP_1stReading > 140
+                  +currentVitals?.diastolicBP_1stReading > 140,
               }"
               >{{ currentVitals?.diastolicBP_1stReading }}</span
             >

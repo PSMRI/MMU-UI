@@ -1,6 +1,8 @@
 <z-card class="bg-muted/40" [formGroup]="referForm">
   <z-card-header>
-    <z-card-title>{{ currentLanguageSet?.Referdetails?.revisitAndRefer }}</z-card-title>
+    <z-card-title>{{
+      currentLanguageSet?.Referdetails?.revisitAndRefer
+    }}</z-card-title>
   </z-card-header>
 
   <z-card-content class="flex flex-col gap-5">
@@ -52,8 +54,9 @@
         name="referredToInstituteName"
         [zPlaceholder]="currentLanguageSet?.Referdetails?.referredtoinstitute"
         [zValue]="
-          referForm.get('referredToInstituteName')?.value?.institutionID?.toString() ||
-          ''
+          referForm
+            .get('referredToInstituteName')
+            ?.value?.institutionID?.toString() || ''
         "
         [zLabel]="
           referForm.get('referredToInstituteName')?.value?.institutionName || ''
@@ -102,7 +105,9 @@
             formControlName="referralReason"
             name="Remarks"
             maxLength="300"
-            aria-label="{{ currentLanguageSet?.Referdetails?.referralReason }}"></textarea>
+            aria-label="{{
+              currentLanguageSet?.Referdetails?.referralReason
+            }}"></textarea>
         </z-form-control>
       </z-form-field>
     </div>

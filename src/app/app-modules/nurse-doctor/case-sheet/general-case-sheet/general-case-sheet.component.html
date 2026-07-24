@@ -73,7 +73,9 @@
     [printPagePreviewSelect]="printPagePreviewSelect"
     [caseSheetData]="caseSheetData"
     [previous]="previous"></app-doctor-diagnosis-case-sheet>
-  <div class="break-after-page" *ngIf="visitCategory !== 'General OPD (QC)'"></div>
+  <div
+    class="break-after-page"
+    *ngIf="visitCategory !== 'General OPD (QC)'"></div>
   <ng-container *ngIf="printPagePreviewSelect?.caseSheetANC">
     <app-anc-case-sheet
       *ngIf="visitCategory === 'ANC'"

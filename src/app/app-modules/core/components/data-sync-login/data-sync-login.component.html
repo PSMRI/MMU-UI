@@ -2,7 +2,9 @@
   <z-card class="relative w-full max-w-md">
     <!-- Close (dialog mode only: master download / TM case-sheet authorization) -->
     <button
-      *ngIf="data?.masterDowloadFirstTime || data?.provideAuthorizationToViewTmCS"
+      *ngIf="
+        data?.masterDowloadFirstTime || data?.provideAuthorizationToViewTmCS
+      "
       z-button
       zType="ghost"
       zSize="icon"
@@ -78,10 +80,10 @@
                 (click)="togglePWD()"
                 [attr.aria-label]="
                   dynamictype === 'text'
-                    ? (current_language_set?.common?.hidePassword ||
-                      'Hide password')
-                    : (current_language_set?.common?.showPassword ||
-                      'Show password')
+                    ? current_language_set?.common?.hidePassword ||
+                      'Hide password'
+                    : current_language_set?.common?.showPassword ||
+                      'Show password'
                 "
                 [attr.aria-pressed]="dynamictype === 'text'">
                 <ng-icon

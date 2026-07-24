@@ -1,7 +1,6 @@
 <div class="bg-card text-card-foreground pb-12">
   <div class="mb-4">
-    <p
-      class="text-center text-xl font-semibold tracking-tight text-foreground">
+    <p class="text-center text-xl font-semibold tracking-tight text-foreground">
       {{ currentLanguageSet?.ExaminationData?.examination }}
     </p>
     <hr class="mt-2 border-border" />
@@ -392,8 +391,8 @@
     ">
     <p class="mb-2 text-base font-bold text-foreground">
       {{
-        currentLanguageSet?.ExaminationData?.cancerScreeningExamination
-          ?.breast?.breastExamination
+        currentLanguageSet?.ExaminationData?.cancerScreeningExamination?.breast
+          ?.breastExamination
       }}
     </p>
     <div class="overflow-x-auto">
@@ -543,7 +542,9 @@
                   ?.breast?.lumpSize
               }}:
             </th>
-            <td z-table-cell class="w-1/4">{{ breastExamination?.lumpSize }}</td>
+            <td z-table-cell class="w-1/4">
+              {{ breastExamination?.lumpSize }}
+            </td>
             <th z-table-head class="w-1/4" id="lumpTexture">
               {{
                 currentLanguageSet?.ExaminationData?.cancerScreeningExamination
@@ -971,8 +972,7 @@
 </div>
 <div class="bg-card text-card-foreground pb-12">
   <div>
-    <p
-      class="text-center text-xl font-semibold tracking-tight text-foreground">
+    <p class="text-center text-xl font-semibold tracking-tight text-foreground">
       {{ currentLanguageSet?.Referdetails?.revisitAndRefer }}
     </p>
     <hr class="mt-2 border-border" />
@@ -983,13 +983,17 @@
             <th z-table-head id="hhc">
               {{ currentLanguageSet?.Referdetails?.referredtoinstitute }}:
             </th>
-            <td z-table-cell>{{ diagnosisdetails?.referredToInstituteName }}</td>
+            <td z-table-cell>
+              {{ diagnosisdetails?.referredToInstituteName }}
+            </td>
           </tr>
           <tr z-table-row>
             <th z-table-head id="Additionalservice">
               {{ currentLanguageSet?.Referdetails?.additionalservices }}:
             </th>
-            <td z-table-cell>{{ diagnosisdetails?.refrredToAdditionalService }}</td>
+            <td z-table-cell>
+              {{ diagnosisdetails?.refrredToAdditionalService }}
+            </td>
           </tr>
           <tr z-table-row>
             <th z-table-head id="Referralreason">

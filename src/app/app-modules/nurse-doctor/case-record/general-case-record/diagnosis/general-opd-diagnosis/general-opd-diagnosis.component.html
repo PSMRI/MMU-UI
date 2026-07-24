@@ -18,9 +18,11 @@
           <ng-container [formGroupName]="i">
             <div class="min-w-0 flex-1">
               <z-form-field class="w-full">
-                <label z-form-label for="viewProvisionalDiagnosisProvided-{{ i }}">{{
-                  current_language_set?.casesheet?.provisionalDiag
-                }}</label>
+                <label
+                  z-form-label
+                  for="viewProvisionalDiagnosisProvided-{{ i }}"
+                  >{{ current_language_set?.casesheet?.provisionalDiag }}</label
+                >
                 <z-form-control>
                   <!--
                     Server-paginated typeahead built from Zard primitives (no
@@ -52,7 +54,10 @@
                       [attr.aria-controls]="'diagnosis-listbox-' + i"
                       [(ngModel)]="diagnosisDisplay[i]"
                       [ngModelOptions]="{ standalone: true }"
-                      [disabled]="!!(diagnosis.get('viewProvisionalDiagnosisProvided') ?.disabled)"
+                      [disabled]="
+                        !!diagnosis.get('viewProvisionalDiagnosisProvided')
+                          ?.disabled
+                      "
                       minlength="3"
                       maxlength="100"
                       required
@@ -128,7 +133,9 @@
                 "
                 [zTooltip]="current_language_set?.common?.delete || 'Delete'"
                 zPosition="top"
-                aria-label="{{ current_language_set?.common?.delete || 'Delete' }}"
+                aria-label="{{
+                  current_language_set?.common?.delete || 'Delete'
+                }}"
                 (click)="deleteDiagnosis(i, diagnosis)">
                 <ng-icon name="lucideX"></ng-icon>
               </button>

@@ -1,7 +1,6 @@
 <div class="bg-card text-card-foreground pb-12">
   <div class="mb-4">
-    <p
-      class="text-center text-xl font-semibold tracking-tight text-foreground">
+    <p class="text-center text-xl font-semibold tracking-tight text-foreground">
       {{ currentLanguageSet?.common?.history }}
     </p>
     <hr class="mt-2 border-border" />
@@ -16,10 +15,7 @@
       }}:
     </p>
     <div class="overflow-x-auto">
-      <table
-        z-table
-        zType="bordered"
-        aria-describedby="PastIllnessStartsTbl">
+      <table z-table zType="bordered" aria-describedby="PastIllnessStartsTbl">
         <thead z-table-header>
           <tr z-table-row>
             <th z-table-head scope="col">
@@ -306,10 +302,7 @@
       }}:
     </p>
     <div class="overflow-x-auto">
-      <table
-        z-table
-        zType="bordered"
-        aria-describedby="ComorbidconditionTbl">
+      <table z-table zType="bordered" aria-describedby="ComorbidconditionTbl">
         <thead z-table-header>
           <tr z-table-row>
             <th z-table-head scope="col">
@@ -369,10 +362,7 @@
       }}:
     </p>
     <div class="overflow-x-auto">
-      <table
-        z-table
-        zType="bordered"
-        aria-describedby="MedicationHistoryTbl">
+      <table z-table zType="bordered" aria-describedby="MedicationHistoryTbl">
         <thead z-table-header>
           <tr z-table-row>
             <th z-table-head scope="col">
@@ -525,7 +515,9 @@
                   ?.grossMotorMilestone
               }}:
             </th>
-            <td z-table-cell>{{ developmentalHistory?.grossMotorMilestone }}</td>
+            <td z-table-cell>
+              {{ developmentalHistory?.grossMotorMilestone }}
+            </td>
             <th z-table-head id="fineMotorMilestone">
               {{
                 currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
@@ -730,10 +722,7 @@
     </p>
 
     <div class="overflow-x-auto">
-      <table
-        z-table
-        zType="bordered"
-        aria-describedby="ImmunizationHistoryTbl">
+      <table z-table zType="bordered" aria-describedby="ImmunizationHistoryTbl">
         <thead z-table-header>
           <tr z-table-row>
             <th z-table-head id="age">
@@ -1313,7 +1302,9 @@
         <tbody z-table-body>
           <tr z-table-row>
             <td z-table-cell>1</td>
-            <td z-table-cell>{{ previousPhysicalList?.physicalActivityType }}</td>
+            <td z-table-cell>
+              {{ previousPhysicalList?.physicalActivityType }}
+            </td>
             <td z-table-cell>{{ previousPhysicalList?.activityType }}</td>
           </tr>
         </tbody>
@@ -1326,8 +1317,7 @@
   *ngIf="visitCategory === 'NCD care' || visitCategory === 'COVID-19 Screening'"
   class="bg-card text-card-foreground pb-12">
   <div>
-    <p
-      class="text-center text-xl font-semibold tracking-tight text-foreground">
+    <p class="text-center text-xl font-semibold tracking-tight text-foreground">
       {{ currentLanguageSet?.Referdetails?.revisitAndRefer }}
     </p>
     <hr class="mt-2 border-border" />
@@ -1367,8 +1357,7 @@
   *ngIf="visitCategory === 'NCD screening'"
   class="bg-card text-card-foreground pb-12">
   <div>
-    <p
-      class="text-center text-xl font-semibold tracking-tight text-foreground">
+    <p class="text-center text-xl font-semibold tracking-tight text-foreground">
       {{ currentLanguageSet?.Referdetails?.revisitAndRefer }}
     </p>
     <hr class="mt-2 border-border" />

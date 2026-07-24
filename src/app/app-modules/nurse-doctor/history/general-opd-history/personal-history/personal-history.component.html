@@ -208,7 +208,8 @@
             <z-form-field class="gap-1.5">
               <label z-form-label for="tobaccoUseType-{{ i }}">{{
                 currentLanguageSet?.historyData?.ancHistory
-                  ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData?.typeofTobaccoUse
+                  ?.personalHistoryANC_OPD_NCD_PNC?.tobaccoData
+                  ?.typeofTobaccoUse
               }}</label>
               <z-form-control>
                 <z-select
@@ -331,7 +332,9 @@
                 zType="destructive"
                 zSize="icon"
                 type="button"
-                *ngIf="i !== 0 || (i === 0 && (tobacco.touched || tobacco.dirty))"
+                *ngIf="
+                  i !== 0 || (i === 0 && (tobacco.touched || tobacco.dirty))
+                "
                 [attr.aria-label]="currentLanguageSet?.common?.remove"
                 (click)="removeTobacco(i, tobacco)">
                 <ng-icon name="lucideX"></ng-icon>
@@ -385,7 +388,9 @@
                   id="typeOfAlcohol-{{ i }}"
                   name="typeOfAlcohol"
                   [zValue]="getTypeOfAlcoholLabel(alcohol)"
-                  (zSelectionChange)="onTypeOfAlcoholChange($event, i, alcohol)">
+                  (zSelectionChange)="
+                    onTypeOfAlcoholChange($event, i, alcohol)
+                  ">
                   <z-select-item
                     *ngFor="let alcoholItem of alcoholSelectList[i]"
                     [zValue]="alcoholItem.habitValue">
@@ -429,7 +434,9 @@
                   formControlName="alcoholIntakeFrequency"
                   (zSelectionChange)="onChangeAlcIntakFreq(alcohol)">
                   <z-select-item
-                    *ngFor="let frequency of masterData?.frequencyOfAlcoholIntake"
+                    *ngFor="
+                      let frequency of masterData?.frequencyOfAlcoholIntake
+                    "
                     [zValue]="frequency.habitValue">
                     {{ frequency.habitValue }}
                   </z-select-item>
@@ -505,7 +512,9 @@
                 zType="destructive"
                 zSize="icon"
                 type="button"
-                *ngIf="i !== 0 || (i === 0 && (alcohol.touched || alcohol.dirty))"
+                *ngIf="
+                  i !== 0 || (i === 0 && (alcohol.touched || alcohol.dirty))
+                "
                 [attr.aria-label]="currentLanguageSet?.common?.remove"
                 (click)="removeAlcohol(i, alcohol)">
                 <ng-icon name="lucideX"></ng-icon>
@@ -677,7 +686,9 @@
                 zType="destructive"
                 zSize="icon"
                 type="button"
-                *ngIf="i !== 0 || (i === 0 && (allergy.touched || allergy.dirty))"
+                *ngIf="
+                  i !== 0 || (i === 0 && (allergy.touched || allergy.dirty))
+                "
                 [attr.aria-label]="currentLanguageSet?.common?.remove"
                 (click)="removeAllergy(i, allergy)">
                 <ng-icon name="lucideX"></ng-icon>
@@ -689,8 +700,8 @@
                 type="button"
                 *ngIf="
                   isLast &&
-                  generalPersonalHistoryForm.get('allergicList')?.value?.length <
-                    allergyMasterData.length
+                  generalPersonalHistoryForm.get('allergicList')?.value
+                    ?.length < allergyMasterData.length
                 "
                 [disabled]="checkAllergyValidity(allergy)"
                 [attr.aria-label]="currentLanguageSet?.common?.add"

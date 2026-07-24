@@ -168,7 +168,11 @@
       *ngIf="sufferedFromRTIOrSTI && sufferedFromRTIOrSTI.value">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div class="flex flex-wrap items-center gap-3">
-          <button z-button zType="outline" type="button" (click)="triggerLog($event)">
+          <button
+            z-button
+            zType="outline"
+            type="button"
+            (click)="triggerLog($event)">
             {{ currentLanguageSet?.nurseData?.visitDetailsForm?.selectFile }}
           </button>
           <input

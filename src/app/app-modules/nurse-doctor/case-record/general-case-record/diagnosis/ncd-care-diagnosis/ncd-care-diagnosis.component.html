@@ -132,7 +132,10 @@
                       [attr.aria-controls]="'diagnosis-listbox-' + i"
                       [(ngModel)]="diagnosisDisplay[i]"
                       [ngModelOptions]="{ standalone: true }"
-                      [disabled]="!!(diagnosis.get('viewProvisionalDiagnosisProvided') ?.disabled)"
+                      [disabled]="
+                        !!diagnosis.get('viewProvisionalDiagnosisProvided')
+                          ?.disabled
+                      "
                       minlength="3"
                       maxlength="100"
                       #diagnosisInput

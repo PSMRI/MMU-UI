@@ -3,11 +3,17 @@
   <!-- Step 1 — choose three security questions -->
   <z-card *ngIf="questionsection" class="w-full max-w-md">
     <z-card-header class="flex flex-col items-center gap-1.5 text-center">
-      <span class="mb-1 inline-flex size-11 items-center justify-center rounded-full bg-primary/10 text-primary">
-        <ng-icon name="lucideShieldCheck" size="24" aria-hidden="true"></ng-icon>
+      <span
+        class="mb-1 inline-flex size-11 items-center justify-center rounded-full bg-primary/10 text-primary">
+        <ng-icon
+          name="lucideShieldCheck"
+          size="24"
+          aria-hidden="true"></ng-icon>
       </span>
       <z-card-title>Account Support</z-card-title>
-      <z-card-description>Follow the steps to change or reset your password</z-card-description>
+      <z-card-description
+        >Follow the steps to change or reset your password</z-card-description
+      >
     </z-card-header>
 
     <z-card-content>
@@ -131,15 +137,25 @@
   <!-- Step 2 — set the new password -->
   <z-card *ngIf="passwordSection" class="w-full max-w-sm">
     <z-card-header class="flex flex-col items-center gap-1.5 text-center">
-      <span class="mb-1 inline-flex size-11 items-center justify-center rounded-full bg-primary/10 text-primary">
-        <ng-icon name="lucideShieldCheck" size="24" aria-hidden="true"></ng-icon>
+      <span
+        class="mb-1 inline-flex size-11 items-center justify-center rounded-full bg-primary/10 text-primary">
+        <ng-icon
+          name="lucideShieldCheck"
+          size="24"
+          aria-hidden="true"></ng-icon>
       </span>
       <z-card-title>Account Support</z-card-title>
-      <z-card-description>Choose a new password to finish resetting your account</z-card-description>
+      <z-card-description
+        >Choose a new password to finish resetting your
+        account</z-card-description
+      >
     </z-card-header>
 
     <z-card-content>
-      <form #passwordForm="ngForm" class="flex flex-col gap-6" autocomplete="off">
+      <form
+        #passwordForm="ngForm"
+        class="flex flex-col gap-6"
+        autocomplete="off">
         <z-form-field>
           <label z-form-label zRequired for="newpwd">New Password</label>
           <z-form-control>
@@ -183,7 +199,9 @@
         </z-form-field>
 
         <z-form-field>
-          <label z-form-label zRequired for="confirmpwd">Confirm Password</label>
+          <label z-form-label zRequired for="confirmpwd"
+            >Confirm Password</label
+          >
           <z-form-control>
             <div class="relative">
               <ng-icon

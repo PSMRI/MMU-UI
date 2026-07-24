@@ -1,5 +1,8 @@
 <z-tab-group>
-  <z-tab [label]="current_language_set?.Reports?.labtestreports || 'Lab Test Reports'">
+  <z-tab
+    [label]="
+      current_language_set?.Reports?.labtestreports || 'Lab Test Reports'
+    ">
     <div class="mt-5 flex flex-col gap-5">
       <div *ngIf="labResults?.length > 0" class="flex justify-end">
         <z-form-field class="w-full sm:w-1/3">
@@ -18,7 +21,9 @@
                 class="w-full bg-background pl-9"
                 autocomplete="off"
                 id="labFilter"
-                [placeholder]="current_language_set?.labTechnicianData?.testName"
+                [placeholder]="
+                  current_language_set?.labTechnicianData?.testName
+                "
                 #filterTerm
                 (keyup)="filterProcedures(filterTerm.value)" />
             </div>
@@ -59,7 +64,9 @@
                   <td z-table-cell class="max-w-[100px] align-middle">
                     {{ element?.createdDate | date: 'dd/MM/yyyy, h:mm a' }}
                   </td>
-                  <td z-table-cell class="max-w-[200px] break-normal align-middle">
+                  <td
+                    z-table-cell
+                    class="max-w-[200px] break-normal align-middle">
                     {{ element?.procedureName }}
                   </td>
                   <td z-table-cell class="w-[110px] break-normal align-top">
@@ -77,7 +84,9 @@
                       {{ component?.testResultUnit }}
                     </div>
                   </td>
-                  <td z-table-cell class="max-w-[150px] break-normal align-middle">
+                  <td
+                    z-table-cell
+                    class="max-w-[150px] break-normal align-middle">
                     <div *ngFor="let component of element.componentList">
                       {{ component?.remarks }}
                     </div>
@@ -111,7 +120,10 @@
     </div>
   </z-tab>
 
-  <z-tab [label]="current_language_set?.Reports?.radiologyreports || 'Radiology Reports'">
+  <z-tab
+    [label]="
+      current_language_set?.Reports?.radiologyreports || 'Radiology Reports'
+    ">
     <div class="mt-5">
       <z-card>
         <z-card-content class="p-2">
@@ -145,22 +157,35 @@
               </tbody>
               <tbody z-table-body *ngIf="radiologyResults?.length > 0">
                 <ng-container
-                  *ngFor="let radiologyReport of radiologyResults; let i = index">
+                  *ngFor="
+                    let radiologyReport of radiologyResults;
+                    let i = index
+                  ">
                   <tr z-table-row>
                     <td
                       z-table-cell
-                      [attr.rowspan]="radiologyReport?.componentList.length + 1">
+                      [attr.rowspan]="
+                        radiologyReport?.componentList.length + 1
+                      ">
                       {{ radiologyReport.procedureName }}
                     </td>
                   </tr>
-                  <tr z-table-row *ngFor="let test of radiologyReport?.componentList">
-                    <td z-table-cell class="w-[300px] max-w-[120px] break-normal align-middle">
+                  <tr
+                    z-table-row
+                    *ngFor="let test of radiologyReport?.componentList">
+                    <td
+                      z-table-cell
+                      class="w-[300px] max-w-[120px] break-normal align-middle">
                       {{ test?.componentName }}
                     </td>
-                    <td z-table-cell class="max-w-[150px] break-normal align-middle">
+                    <td
+                      z-table-cell
+                      class="max-w-[150px] break-normal align-middle">
                       {{ test?.remarks }}
                     </td>
-                    <td z-table-cell class="max-w-[150px] break-normal align-middle">
+                    <td
+                      z-table-cell
+                      class="max-w-[150px] break-normal align-middle">
                       <button
                         type="button"
                         z-button
@@ -182,7 +207,10 @@
     </div>
   </z-tab>
 
-  <z-tab [label]="current_language_set?.Reports?.archivedreports || 'Archived Reports'">
+  <z-tab
+    [label]="
+      current_language_set?.Reports?.archivedreports || 'Archived Reports'
+    ">
     <div class="mt-5">
       <z-card>
         <z-card-content class="p-2">
@@ -223,7 +251,9 @@
                       z-button
                       zType="ghost"
                       zSize="icon-sm"
-                      [attr.aria-label]="current_language_set?.Reports?.view || 'View'"
+                      [attr.aria-label]="
+                        current_language_set?.Reports?.view || 'View'
+                      "
                       (click)="showArchivedTestResult(archivedReport)">
                       <ng-icon name="lucideEye"></ng-icon>
                     </button>
@@ -268,7 +298,9 @@
                 class="w-full bg-background pl-9"
                 autocomplete="off"
                 id="archivedLabFilter"
-                [placeholder]="current_language_set?.labTechnicianData?.testName"
+                [placeholder]="
+                  current_language_set?.labTechnicianData?.testName
+                "
                 #filterArchivedTerm
                 (keyup)="filterArchivedProcedures(filterArchivedTerm.value)" />
             </div>
@@ -295,14 +327,18 @@
                     {{ current_language_set?.common?.result }}
                   </th>
                   <th z-table-head class="w-[10%]" id="measurementUnit1">
-                    {{ current_language_set?.labTechnicianData?.measurementUnit }}
+                    {{
+                      current_language_set?.labTechnicianData?.measurementUnit
+                    }}
                   </th>
                   <th z-table-head class="w-1/5" id="remarks1">
                     {{ current_language_set?.common?.remarks }}
                   </th>
                 </tr>
               </thead>
-              <tbody z-table-body *ngIf="filteredArchivedLabResults?.length === 0">
+              <tbody
+                z-table-body
+                *ngIf="filteredArchivedLabResults?.length === 0">
                 <tr z-table-row>
                   <td
                     z-table-cell
@@ -312,7 +348,9 @@
                   </td>
                 </tr>
               </tbody>
-              <tbody z-table-body *ngIf="filteredArchivedLabResults?.length > 0">
+              <tbody
+                z-table-body
+                *ngIf="filteredArchivedLabResults?.length > 0">
                 <ng-container
                   *ngFor="let test of previousLabPagedList; let i = index">
                   <tr z-table-row>
@@ -330,7 +368,9 @@
                     </td>
                   </tr>
                   <tr z-table-row *ngFor="let component of test?.componentList">
-                    <td z-table-cell class="w-[300px] max-w-[120px] break-normal align-middle">
+                    <td
+                      z-table-cell
+                      class="w-[300px] max-w-[120px] break-normal align-middle">
                       {{ component?.componentName }}
                     </td>
                     <td
@@ -358,10 +398,14 @@
                       {{ component?.testResultValue }} -
                       {{ component?.ecgAbnormalities.join(',') }}
                     </td>
-                    <td z-table-cell class="w-[150px] break-normal align-middle">
+                    <td
+                      z-table-cell
+                      class="w-[150px] break-normal align-middle">
                       {{ component?.testResultUnit }}
                     </td>
-                    <td z-table-cell class="max-w-[150px] break-normal align-middle">
+                    <td
+                      z-table-cell
+                      class="max-w-[150px] break-normal align-middle">
                       {{ component?.remarks }}
                     </td>
                   </tr>
@@ -423,7 +467,9 @@
                 </tr>
               </tbody>
               <tbody z-table-body *ngIf="archivedRadiologyResults.length > 0">
-                <tr z-table-row *ngFor="let radiologyReport of archivedRadiologyResults">
+                <tr
+                  z-table-row
+                  *ngFor="let radiologyReport of archivedRadiologyResults">
                   <td z-table-cell>{{ radiologyReport.procedureName }}</td>
                   <td z-table-cell>
                     <button
@@ -431,8 +477,12 @@
                       z-button
                       zType="ghost"
                       zSize="icon-sm"
-                      [attr.aria-label]="current_language_set?.common?.report || 'View report'"
-                      (click)="showArchivedRadiologyTestResult(radiologyReport)">
+                      [attr.aria-label]="
+                        current_language_set?.common?.report || 'View report'
+                      "
+                      (click)="
+                        showArchivedRadiologyTestResult(radiologyReport)
+                      ">
                       <ng-icon name="lucideFileText"></ng-icon>
                     </button>
                   </td>

@@ -6,10 +6,7 @@
       </p>
     </div>
     <div class="text-center">
-      <img
-        class="w-[90px]"
-        src="assets/images/Swasthya.png"
-        alt="Piramal" />
+      <img class="w-[90px]" src="assets/images/Swasthya.png" alt="Piramal" />
     </div>
   </div>
 
@@ -35,10 +32,7 @@
     <p class="mb-3 text-base font-semibold text-foreground">
       {{ currentLanguageSet?.casesheet?.beneficiaryDetails }}:
     </p>
-    <table
-      z-table
-      class="w-full"
-      aria-describedby="bendetails">
+    <table z-table class="w-full" aria-describedby="bendetails">
       <tbody z-table-body>
         <tr z-table-row>
           <th z-table-head id="beneficiaryID" class="w-1/4">
@@ -111,9 +105,7 @@
           }}:
         </p>
         <div class="flex flex-wrap gap-2" *ngIf="symptomFlag">
-          <z-badge
-            zType="secondary"
-            *ngFor="let symptoms of symptomsList">
+          <z-badge zType="secondary" *ngFor="let symptoms of symptomsList">
             {{ symptoms }}
           </z-badge>
         </div>
@@ -145,11 +137,7 @@
             {{ currentLanguageSet?.travel?.suspectedCOVID }}:
           </label>
           <z-form-control>
-            <input
-              z-input
-              id="suspected"
-              [value]="suspected"
-              readonly />
+            <input z-input id="suspected" [value]="suspected" readonly />
           </z-form-control>
         </z-form-field>
       </div>
@@ -158,9 +146,7 @@
         <p class="mb-2 text-sm font-semibold text-foreground">
           {{ currentLanguageSet?.travel?.recommendation }}:
         </p>
-        <div
-          class="rounded-md border border-input p-2 text-sm"
-          *ngIf="recFlag">
+        <div class="rounded-md border border-input p-2 text-sm" *ngIf="recFlag">
           <span *ngFor="let travel of temp">
             {{ travel }}
             <br />
@@ -205,7 +191,9 @@
           <td z-table-cell>{{ currentVitals && currentVitals.pulseRate }}</td>
         </tr>
         <tr z-table-row>
-          <th z-table-head id="spo2">{{ currentLanguageSet?.sPOTwoWithUnit }}:</th>
+          <th z-table-head id="spo2">
+            {{ currentLanguageSet?.sPOTwoWithUnit }}:
+          </th>
           <td z-table-cell>{{ currentVitals && currentVitals.sPO2 }}</td>
           <th z-table-head id="bpSystolic">
             {{ currentLanguageSet?.casesheet?.bpSystolic }}:
@@ -300,10 +288,7 @@
     <p class="mb-3 text-base font-semibold text-foreground">
       {{ currentLanguageSet?.covidVaccinationStatus }}:
     </p>
-    <table
-      z-table
-      class="w-full"
-      aria-describedby="CovidVaccinationDetails">
+    <table z-table class="w-full" aria-describedby="CovidVaccinationDetails">
       <tbody z-table-body>
         <tr z-table-row>
           <th z-table-head id="ageGroup" class="w-1/4">
@@ -452,7 +437,9 @@
             class="w-[10%]"
             *ngIf="visitCategory !== 'General OPD (QC)'"
             id="duration">
-            {{ currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration }}
+            {{
+              currentLanguageSet?.nurseData?.chiefComplaintsDetails?.duration
+            }}
           </th>
           <th
             z-table-head
@@ -488,9 +475,7 @@
       <tbody
         z-table-body
         *ngIf="
-          caseRecords &&
-          caseRecords.findings &&
-          caseRecords.findings.complaints
+          caseRecords && caseRecords.findings && caseRecords.findings.complaints
         ">
         <tr
           z-table-row
@@ -558,7 +543,9 @@
   <!-- Investigations -->
   <div class="mt-4">
     <p class="mb-2 text-base font-semibold text-foreground">
-      {{ currentLanguageSet?.nurseData?.investigationsDetails?.investigations }}:
+      {{
+        currentLanguageSet?.nurseData?.investigationsDetails?.investigations
+      }}:
     </p>
     <table z-table class="w-full" aria-describedby="investigations">
       <thead z-table-header>
@@ -760,10 +747,7 @@
           ** {{ currentLanguageSet?.highRiskPregnancy }} **
         </z-badge>
       </div>
-      <table
-        z-table
-        class="mt-2 w-full"
-        aria-describedby="HighRiskPregnancy">
+      <table z-table class="mt-2 w-full" aria-describedby="HighRiskPregnancy">
         <tbody z-table-body>
           <tr z-table-row>
             <th z-table-head id="gravida" class="w-1/4">
@@ -834,17 +818,20 @@
             <th z-table-head id="maternalDeath">
               {{ currentLanguageSet?.casesheet?.maternalDeath }}:
             </th>
-            <td z-table-cell *ngIf="caseRecords?.diagnosis?.isMaternalDeath === true">
+            <td
+              z-table-cell
+              *ngIf="caseRecords?.diagnosis?.isMaternalDeath === true">
               {{ 'Yes' }}
             </td>
-            <td z-table-cell *ngIf="caseRecords?.diagnosis?.isMaternalDeath === false">
+            <td
+              z-table-cell
+              *ngIf="caseRecords?.diagnosis?.isMaternalDeath === false">
               {{ 'No' }}
             </td>
             <td z-table-cell colspan="2"></td>
           </tr>
 
-          <ng-container
-            *ngTemplateOutlet="maternalDeathDetails"></ng-container>
+          <ng-container *ngTemplateOutlet="maternalDeathDetails"></ng-container>
         </tbody>
       </table>
     </div>
@@ -860,23 +847,26 @@
                 value:
                   caseRecords &&
                   caseRecords.diagnosis &&
-                  caseRecords.diagnosis.provisionalDiagnosis
+                  caseRecords.diagnosis.provisionalDiagnosis,
               }
             "></ng-container>
           <tr z-table-row>
             <th z-table-head id="matDeath">
               {{ currentLanguageSet?.casesheet?.matDeath }}:
             </th>
-            <td z-table-cell *ngIf="caseRecords?.diagnosis?.isMaternalDeath === true">
+            <td
+              z-table-cell
+              *ngIf="caseRecords?.diagnosis?.isMaternalDeath === true">
               {{ 'Yes' }}
             </td>
-            <td z-table-cell *ngIf="caseRecords?.diagnosis?.isMaternalDeath === false">
+            <td
+              z-table-cell
+              *ngIf="caseRecords?.diagnosis?.isMaternalDeath === false">
               {{ 'No' }}
             </td>
             <td z-table-cell colspan="2"></td>
           </tr>
-          <ng-container
-            *ngTemplateOutlet="maternalDeathDetails"></ng-container>
+          <ng-container *ngTemplateOutlet="maternalDeathDetails"></ng-container>
         </tbody>
       </table>
     </div>
@@ -998,7 +988,7 @@
                 value:
                   caseRecords &&
                   caseRecords.diagnosis &&
-                  caseRecords.diagnosis.diagnosisProvided
+                  caseRecords.diagnosis.diagnosisProvided,
               }
             "></ng-container>
 
@@ -1057,7 +1047,7 @@
                 value:
                   caseRecords &&
                   caseRecords.diagnosis &&
-                  caseRecords.diagnosis.diagnosisProvided
+                  caseRecords.diagnosis.diagnosisProvided,
               }
             "></ng-container>
           <tr z-table-row *ngIf="tmCaseSheet === 'true'">
@@ -1328,8 +1318,7 @@
             </th>
             <td z-table-cell>
               {{
-                mmuCaseSheetData?.referDetails?.revisitDate
-                  | date: 'dd/MM/yyyy'
+                mmuCaseSheetData?.referDetails?.revisitDate | date: 'dd/MM/yyyy'
               }}
             </td>
           </tr>

@@ -35,7 +35,7 @@
           detailRow;
           context: {
             label: current_language_set?.bendetails?.beneficiaryName,
-            value: beneficiary?.beneficiaryName
+            value: beneficiary?.beneficiaryName,
           }
         "></ng-container>
 
@@ -45,7 +45,7 @@
             detailRow;
             context: {
               label: current_language_set?.bendetails?.fatherName,
-              value: beneficiary?.fatherName
+              value: beneficiary?.fatherName,
             }
           "></ng-container>
       </ng-container>
@@ -56,7 +56,7 @@
             detailRow;
             context: {
               label: current_language_set?.bendetails?.lastName,
-              value: beneficiary?.lastName
+              value: beneficiary?.lastName,
             }
           "></ng-container>
       </ng-container>
@@ -67,7 +67,7 @@
             detailRow;
             context: {
               label: current_language_set?.bendetails?.phoneNo,
-              value: beneficiary?.preferredPhoneNum
+              value: beneficiary?.preferredPhoneNum,
             }
           "></ng-container>
       </ng-container>
@@ -88,7 +88,7 @@
           detailRow;
           context: {
             label: current_language_set?.bendetails?.beneficiaryID,
-            value: beneficiary?.beneficiaryID
+            value: beneficiary?.beneficiaryID,
           }
         "></ng-container>
 
@@ -97,7 +97,7 @@
           detailRow;
           context: {
             label: current_language_set?.bendetails?.registrationDate,
-            value: (beneficiary?.createdDate | date: 'dd/MM/yyyy, h:mm a')
+            value: (beneficiary?.createdDate | date: 'dd/MM/yyyy, h:mm a'),
           }
         "></ng-container>
 
@@ -106,7 +106,7 @@
           detailRow;
           context: {
             label: current_language_set?.bendetails?.visitDate,
-            value: (today | date: 'dd/MM/yyyy, h:mm a')
+            value: (today | date: 'dd/MM/yyyy, h:mm a'),
           }
         "></ng-container>
 

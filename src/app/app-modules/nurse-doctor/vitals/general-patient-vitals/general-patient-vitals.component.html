@@ -21,7 +21,9 @@
             <input
               z-input
               class="w-full"
-              [ngClass]="{ 'text-destructive': height_cm < 10 || height_cm > 200 }"
+              [ngClass]="{
+                'text-destructive': height_cm < 10 || height_cm > 200,
+              }"
               autocomplete="off"
               appDefaultNull
               allowText="decimal"
@@ -48,7 +50,9 @@
               <input
                 z-input
                 class="w-full pr-10"
-                [ngClass]="{ 'text-destructive': weight_Kg < 25 || weight_Kg > 150 }"
+                [ngClass]="{
+                  'text-destructive': weight_Kg < 25 || weight_Kg > 150,
+                }"
                 autocomplete="off"
                 appDefaultNull
                 (change)="checkWeight(weight_Kg)"
@@ -67,8 +71,14 @@
                 [zTooltip]="currentLanguageSet?.common?.startTest"
                 zPosition="left"
                 [attr.aria-label]="currentLanguageSet?.common?.startTest"
-                (click)="openIOTWeightModel(); trackFieldInteraction('Weight IoT Button')"
-                (keydown.enter)="openIOTWeightModel(); trackFieldInteraction('Weight IoT Button')">
+                (click)="
+                  openIOTWeightModel();
+                  trackFieldInteraction('Weight IoT Button')
+                "
+                (keydown.enter)="
+                  openIOTWeightModel();
+                  trackFieldInteraction('Weight IoT Button')
+                ">
                 <ng-icon name="lucideScale" size="18"></ng-icon>
               </button>
             </div>
@@ -222,7 +232,7 @@
                 class="w-full"
                 [ngClass]="{
                   'text-destructive':
-                    waistCircumference_cm < 50 || waistCircumference_cm > 150
+                    waistCircumference_cm < 50 || waistCircumference_cm > 150,
                 }"
                 autocomplete="off"
                 appDefaultNull
@@ -235,7 +245,9 @@
                 maxlength="6"
                 allowMax="350"
                 (focus)="trackFieldInteraction('Waist Circumference')"
-                [required]="benAge >= 30 && visitCategory === 'NCD screening'" />
+                [required]="
+                  benAge >= 30 && visitCategory === 'NCD screening'
+                " />
             </z-form-control>
           </z-form-field>
 
@@ -244,8 +256,8 @@
             class="gap-1.5"
             *ngIf="visitCategory !== 'NCD screening'">
             <label z-form-label for="hipCircumference_cm">{{
-              currentLanguageSet?.vitalsDetails?.AnthropometryDataANC_OPD_NCD_PNC
-                ?.hipCircumference
+              currentLanguageSet?.vitalsDetails
+                ?.AnthropometryDataANC_OPD_NCD_PNC?.hipCircumference
             }}</label>
             <z-form-control>
               <input
@@ -269,8 +281,8 @@
             class="gap-1.5"
             *ngIf="visitCategory !== 'NCD screening'">
             <label z-form-label for="waistHipRatio">{{
-              currentLanguageSet?.vitalsDetails?.AnthropometryDataANC_OPD_NCD_PNC
-                ?.waisttoHipRatio
+              currentLanguageSet?.vitalsDetails
+                ?.AnthropometryDataANC_OPD_NCD_PNC?.waisttoHipRatio
             }}</label>
             <z-form-control>
               <input
@@ -288,9 +300,7 @@
           </z-form-field>
 
           <!-- Waist-hip ratio marker -->
-          <div
-            class="flex items-end"
-            *ngIf="visitCategory !== 'NCD screening'">
+          <div class="flex items-end" *ngIf="visitCategory !== 'NCD screening'">
             <div
               class="flex items-center gap-1.5 text-sm text-success"
               *ngIf="
@@ -364,8 +374,8 @@
             class="gap-1.5"
             *ngIf="benAge <= 2 && visitCategory !== 'NCD screening'">
             <label z-form-label for="headCircumference_cm">{{
-              currentLanguageSet?.vitalsDetails?.AnthropometryDataANC_OPD_NCD_PNC
-                ?.headCircumference
+              currentLanguageSet?.vitalsDetails
+                ?.AnthropometryDataANC_OPD_NCD_PNC?.headCircumference
             }}</label>
             <z-form-control>
               <input
@@ -373,7 +383,7 @@
                 class="w-full"
                 [ngClass]="{
                   'text-destructive':
-                    headCircumference_cm < 25 || headCircumference_cm > 75
+                    headCircumference_cm < 25 || headCircumference_cm > 75,
                 }"
                 autocomplete="off"
                 appDefaultNull
@@ -392,8 +402,8 @@
             class="gap-1.5"
             *ngIf="benAge <= 6 && visitCategory !== 'NCD screening'">
             <label z-form-label for="midUpperArmCircumference_MUAC_cm">{{
-              currentLanguageSet?.vitalsDetails?.AnthropometryDataANC_OPD_NCD_PNC
-                ?.midUpperArmCircumference
+              currentLanguageSet?.vitalsDetails
+                ?.AnthropometryDataANC_OPD_NCD_PNC?.midUpperArmCircumference
             }}</label>
             <z-form-control>
               <input
@@ -402,7 +412,7 @@
                 [ngClass]="{
                   'text-destructive':
                     midUpperArmCircumference_MUAC_cm < 5 ||
-                    midUpperArmCircumference_MUAC_cm > 31
+                    midUpperArmCircumference_MUAC_cm > 31,
                 }"
                 autocomplete="off"
                 appDefaultNull
@@ -421,9 +431,7 @@
           </z-form-field>
 
           <!-- MUAC marker -->
-          <div
-            class="flex items-end"
-            *ngIf="visitCategory !== 'NCD screening'">
+          <div class="flex items-end" *ngIf="visitCategory !== 'NCD screening'">
             <div
               class="flex items-center gap-1.5 text-sm text-destructive"
               *ngIf="
@@ -481,7 +489,9 @@
               <input
                 z-input
                 class="w-full pr-10"
-                [ngClass]="{ 'text-destructive': temperature < 96 || temperature > 100 }"
+                [ngClass]="{
+                  'text-destructive': temperature < 96 || temperature > 100,
+                }"
                 autocomplete="off"
                 appDefaultNull
                 allowText="decimal"
@@ -499,8 +509,14 @@
                 [zTooltip]="currentLanguageSet?.common?.startTest"
                 zPosition="left"
                 [attr.aria-label]="currentLanguageSet?.common?.startTest"
-                (click)="openIOTTempModel(); trackFieldInteraction('Temperature IoT Button')"
-                (keydown.enter)="openIOTTempModel(); trackFieldInteraction('Temperature IoT Button')">
+                (click)="
+                  openIOTTempModel();
+                  trackFieldInteraction('Temperature IoT Button')
+                "
+                (keydown.enter)="
+                  openIOTTempModel();
+                  trackFieldInteraction('Temperature IoT Button')
+                ">
                 <ng-icon name="lucideThermometer" size="18"></ng-icon>
               </button>
             </div>
@@ -515,16 +531,20 @@
               visitCategory !== 'General OPD' &&
               visitCategory !== 'NCD screening'
             "
-            for="pulseRate">{{
-            currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-              ?.pulseRate
-          }}</label>
+            for="pulseRate"
+            >{{
+              currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
+                ?.pulseRate
+            }}</label
+          >
           <z-form-control>
             <div class="relative">
               <input
                 z-input
                 class="w-full pr-10"
-                [ngClass]="{ 'text-destructive': pulseRate < 49 || pulseRate > 200 }"
+                [ngClass]="{
+                  'text-destructive': pulseRate < 49 || pulseRate > 200,
+                }"
                 autocomplete="off"
                 appDefaultNull
                 allowText="number"
@@ -545,8 +565,14 @@
                 [zTooltip]="currentLanguageSet?.common?.startTest"
                 zPosition="left"
                 [attr.aria-label]="currentLanguageSet?.common?.startTest"
-                (click)="openIOTPulseRateModel(); trackFieldInteraction('Pulse Rate IoT Button')"
-                (keydown.enter)="openIOTPulseRateModel(); trackFieldInteraction('Pulse Rate IoT Button')">
+                (click)="
+                  openIOTPulseRateModel();
+                  trackFieldInteraction('Pulse Rate IoT Button')
+                "
+                (keydown.enter)="
+                  openIOTPulseRateModel();
+                  trackFieldInteraction('Pulse Rate IoT Button')
+                ">
                 <ng-icon name="lucideHeartPulse" size="18"></ng-icon>
               </button>
             </div>
@@ -596,10 +622,12 @@
                   visitCategory === 'General OPD')) ||
               benAge > 30
             "
-            for="systolicBP_1stReading">{{
-            currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-              ?.systolicBP
-          }}</label>
+            for="systolicBP_1stReading"
+            >{{
+              currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
+                ?.systolicBP
+            }}</label
+          >
           <z-form-control>
             <div class="relative">
               <input
@@ -607,7 +635,7 @@
                 class="w-full pr-10"
                 [ngClass]="{
                   'text-destructive':
-                    systolicBP_1stReading < 110 || systolicBP_1stReading > 140
+                    systolicBP_1stReading < 110 || systolicBP_1stReading > 140,
                 }"
                 autocomplete="off"
                 appDefaultNull
@@ -654,10 +682,12 @@
                   visitCategory === 'General OPD')) ||
               benAge > 30
             "
-            for="diastolicBP_1stReading">{{
-            currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
-              ?.diastolicBP
-          }}</label>
+            for="diastolicBP_1stReading"
+            >{{
+              currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
+                ?.diastolicBP
+            }}</label
+          >
           <z-form-control>
             <div class="relative">
               <input
@@ -665,7 +695,7 @@
                 class="w-full pr-10"
                 [ngClass]="{
                   'text-destructive':
-                    diastolicBP_1stReading < 60 || diastolicBP_1stReading > 90
+                    diastolicBP_1stReading < 60 || diastolicBP_1stReading > 90,
                 }"
                 autocomplete="off"
                 appDefaultNull
@@ -703,9 +733,7 @@
         </z-form-field>
 
         <!-- Respiratory rate -->
-        <z-form-field
-          class="gap-1.5"
-          *ngIf="visitCategory !== 'NCD screening'">
+        <z-form-field class="gap-1.5" *ngIf="visitCategory !== 'NCD screening'">
           <label z-form-label for="respiratoryRate">{{
             currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
               ?.respiratoryRate
@@ -715,7 +743,8 @@
               z-input
               class="w-full"
               [ngClass]="{
-                'text-destructive': respiratoryRate < 11 || respiratoryRate > 23
+                'text-destructive':
+                  respiratoryRate < 11 || respiratoryRate > 23,
               }"
               autocomplete="off"
               appDefaultNull
@@ -754,7 +783,7 @@
                   class="w-full pr-10"
                   [ngClass]="{
                     'text-destructive':
-                      bloodGlucose_Fasting < 50 || bloodGlucose_Fasting > 700
+                      bloodGlucose_Fasting < 50 || bloodGlucose_Fasting > 700,
                   }"
                   autocomplete="off"
                   appDefaultNull
@@ -863,7 +892,9 @@
               *ngIf="diabetesSelected === 1"
               class="mb-2.5"
               formControlName="rbsCheckBox"
-              (change)="onRbsCheckBox($event); trackFieldInteraction('RBS Checkbox')">
+              (change)="
+                onRbsCheckBox($event); trackFieldInteraction('RBS Checkbox')
+              ">
             </z-checkbox>
             <z-form-field class="flex-1 gap-1.5">
               <label z-form-label for="rbsTestResult">{{
@@ -875,7 +906,8 @@
                     z-input
                     class="w-full pr-10"
                     [ngClass]="{
-                      'text-destructive': rbsTestResult < 0 || rbsTestResult > 1000
+                      'text-destructive':
+                        rbsTestResult < 0 || rbsTestResult > 1000,
                     }"
                     autocomplete="off"
                     appDefaultNull
@@ -895,8 +927,12 @@
                     [zTooltip]="currentLanguageSet?.common?.startTest"
                     zPosition="left"
                     [attr.aria-label]="currentLanguageSet?.common?.startTest"
-                    (click)="openIOTRBSModel(); trackFieldInteraction('RBS IoT Button')"
-                    (keydown.enter)="openIOTRBSModel(); trackFieldInteraction('RBS IoT Button')">
+                    (click)="
+                      openIOTRBSModel(); trackFieldInteraction('RBS IoT Button')
+                    "
+                    (keydown.enter)="
+                      openIOTRBSModel(); trackFieldInteraction('RBS IoT Button')
+                    ">
                     <ng-icon name="lucideDroplet" size="18"></ng-icon>
                   </button>
                 </div>
@@ -928,10 +964,14 @@
 
       <!-- Lung Assessment (Audio recording) -->
       <div *ngIf="hideLungAssessment" class="flex flex-col gap-4">
-        <p class="text-base font-semibold text-foreground" *ngIf="!enableLungAssessment">
+        <p
+          class="text-base font-semibold text-foreground"
+          *ngIf="!enableLungAssessment">
           Lung Assessment
         </p>
-        <p class="text-base font-semibold text-foreground" *ngIf="enableLungAssessment">
+        <p
+          class="text-base font-semibold text-foreground"
+          *ngIf="enableLungAssessment">
           Lung Assessment *
         </p>
 
@@ -941,7 +981,10 @@
               z-button
               zType="default"
               *ngIf="!isRecording && !blobUrl"
-              (click)="startRecording(); trackFieldInteraction('Start Recording Button')"
+              (click)="
+                startRecording();
+                trackFieldInteraction('Start Recording Button')
+              "
               [zDisabled]="disabledLungAssesment">
               <ng-icon name="lucideMic"></ng-icon>
               Start Recording
@@ -957,7 +1000,9 @@
               z-button
               zType="destructive"
               *ngIf="isRecording && !blobUrl"
-              (click)="stopRecording(); trackFieldInteraction('Stop Recording Button')">
+              (click)="
+                stopRecording(); trackFieldInteraction('Stop Recording Button')
+              ">
               <ng-icon name="lucideSquare"></ng-icon>
               Stop Recording
             </button>
@@ -966,7 +1011,10 @@
               z-button
               zType="destructive"
               *ngIf="!isRecording && blobUrl"
-              (click)="clearRecordedData(); trackFieldInteraction('Clear Recording Button')">
+              (click)="
+                clearRecordedData();
+                trackFieldInteraction('Clear Recording Button')
+              ">
               <ng-icon name="lucideTrash2"></ng-icon>
               Clear Recording
             </button>
@@ -975,7 +1023,10 @@
               z-button
               zType="default"
               *ngIf="!isRecording && blobUrl"
-              (click)="startAssessment(); trackFieldInteraction('Start Assessment Button')">
+              (click)="
+                startAssessment();
+                trackFieldInteraction('Start Assessment Button')
+              ">
               <ng-icon name="lucideActivity"></ng-icon>
               Start Assessment
             </button>
@@ -1000,32 +1051,50 @@
               <div class="flex flex-wrap gap-4">
                 <z-checkbox
                   name="frequentCoughChecked"
-                  (change)="onCheckboxChange('frequentCough', $event); trackFieldInteraction('Frequent Cough Checkbox')">
+                  (change)="
+                    onCheckboxChange('frequentCough', $event);
+                    trackFieldInteraction('Frequent Cough Checkbox')
+                  ">
                   Frequent Cough
                 </z-checkbox>
                 <z-checkbox
                   name="sputumChecked"
-                  (change)="onCheckboxChange('sputum', $event); trackFieldInteraction('Sputum Checkbox')">
+                  (change)="
+                    onCheckboxChange('sputum', $event);
+                    trackFieldInteraction('Sputum Checkbox')
+                  ">
                   Sputum
                 </z-checkbox>
                 <z-checkbox
                   name="coughAtNightChecked"
-                  (change)="onCheckboxChange('coughAtNight', $event); trackFieldInteraction('Cough At Night Checkbox')">
+                  (change)="
+                    onCheckboxChange('coughAtNight', $event);
+                    trackFieldInteraction('Cough At Night Checkbox')
+                  ">
                   Cough At Night
                 </z-checkbox>
                 <z-checkbox
                   name="wheezingChecked"
-                  (change)="onCheckboxChange('wheezing', $event); trackFieldInteraction('Wheezing Checkbox')">
+                  (change)="
+                    onCheckboxChange('wheezing', $event);
+                    trackFieldInteraction('Wheezing Checkbox')
+                  ">
                   Wheezing
                 </z-checkbox>
                 <z-checkbox
                   name="painInChestChecked"
-                  (change)="onCheckboxChange('painInChest', $event); trackFieldInteraction('Pain In Chest Checkbox')">
+                  (change)="
+                    onCheckboxChange('painInChest', $event);
+                    trackFieldInteraction('Pain In Chest Checkbox')
+                  ">
                   Pain in Chest
                 </z-checkbox>
                 <z-checkbox
                   name="shortnessOfBreathChecked"
-                  (change)="onCheckboxChange('shortnessOfBreath', $event); trackFieldInteraction('Shortness Of Breath Checkbox')">
+                  (change)="
+                    onCheckboxChange('shortnessOfBreath', $event);
+                    trackFieldInteraction('Shortness Of Breath Checkbox')
+                  ">
                   Shortness Of Breath
                 </z-checkbox>
               </div>

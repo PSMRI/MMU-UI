@@ -81,8 +81,11 @@
               class="flex w-full cursor-pointer appearance-none items-center rounded-sm border-0 bg-transparent px-2 py-1.5 text-left text-sm outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
               (mousedown)="onMedicineSelected(item)"
               (keydown.enter)="onMedicineSelected(item)"
-              (keydown.space)="$event.preventDefault(); onMedicineSelected(item)">
-              {{ item.itemName }} {{ item.strength }}{{ item.unitOfMeasurement }}
+              (keydown.space)="
+                $event.preventDefault(); onMedicineSelected(item)
+              ">
+              {{ item.itemName }} {{ item.strength
+              }}{{ item.unitOfMeasurement }}
               {{ item.quantityInHand ? '(' + item.quantityInHand + ')' : '' }}
             </button>
           </div>

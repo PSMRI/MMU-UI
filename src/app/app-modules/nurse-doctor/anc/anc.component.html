@@ -1,6 +1,4 @@
-<z-accordion
-  [formGroup]="patientANCDataForm"
-  class="flex flex-col gap-4">
+<z-accordion [formGroup]="patientANCDataForm" class="flex flex-col gap-4">
   <z-accordion-item
     class="rounded-lg border border-border bg-card"
     zValue="ancDetails">
@@ -14,7 +12,9 @@
     <z-accordion-content>
       <div class="px-4">
         <app-nurse-anc-details
-          [patientANCDetailsForm]="patientANCDetailsForm"></app-nurse-anc-details>
+          [patientANCDetailsForm]="
+            patientANCDetailsForm
+          "></app-nurse-anc-details>
       </div>
     </z-accordion-content>
   </z-accordion-item>
@@ -25,7 +25,9 @@
     <div class="flex items-center px-4">
       <z-accordion-trigger class="flex-1 text-left">
         <span class="text-sm font-semibold text-foreground">
-          {{ current_language_set?.ancData?.obstetricDeatils?.obstetricFormula }}
+          {{
+            current_language_set?.ancData?.obstetricDeatils?.obstetricFormula
+          }}
         </span>
       </z-accordion-trigger>
     </div>

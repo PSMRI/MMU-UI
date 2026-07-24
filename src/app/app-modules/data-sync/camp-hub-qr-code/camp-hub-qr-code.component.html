@@ -62,8 +62,7 @@
         "
         >URL is required</z-form-message
       >
-      <z-form-message
-        *ngIf="urlForm.controls.campHubUrl.hasError('pattern')"
+      <z-form-message *ngIf="urlForm.controls.campHubUrl.hasError('pattern')"
         >Must start with http:// or https://</z-form-message
       >
       <p class="mb-0 mt-1 text-xs text-muted-foreground">

@@ -218,9 +218,7 @@
           id="gestation"
           class="w-full"
           [zPlaceholder]="currentLanguageSet?.pncData?.gestationalAgeofNewborn"
-          [zValue]="
-            patientPNCDataForm.get('gestationName')?.value?.name || ''
-          "
+          [zValue]="patientPNCDataForm.get('gestationName')?.value?.name || ''"
           (zSelectionChange)="onGestationChange($event)">
           <z-select-item
             *ngFor="let gestation of masterData?.gestation"
