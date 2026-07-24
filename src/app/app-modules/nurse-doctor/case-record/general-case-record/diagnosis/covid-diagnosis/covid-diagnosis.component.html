@@ -1,5 +1,7 @@
 <!-- {{ generalDiagnosisForm.value | json}} -->
-<div class="grid grid-cols-1 gap-2 sm:grid-cols-2 mt-6" [formGroup]="generalDiagnosisForm">
+<div
+  class="grid grid-cols-1 gap-2 sm:grid-cols-2 mt-6"
+  [formGroup]="generalDiagnosisForm">
   <div class="flex flex-col gap-2">
     <label
       z-form-label
@@ -19,7 +21,9 @@
           name="doctorDiagnosis"
           formControlName="doctorDiagnosis"
           [readonly]="specialist"
-          required>{{ doctorDiagnosis }} </textarea>
+          required
+          >{{ doctorDiagnosis }} </textarea
+        >
       </z-form-control>
     </z-form-field>
   </div>

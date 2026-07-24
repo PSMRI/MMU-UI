@@ -23,8 +23,12 @@
           <table z-table aria-describedby="qcChiefComplaints">
             <thead z-table-header>
               <tr z-table-row>
-                <th z-table-head>{{ currentLanguageSet?.Find?.chiefcomplaint }}</th>
-                <th z-table-head>{{ currentLanguageSet?.common?.ConceptID }}</th>
+                <th z-table-head>
+                  {{ currentLanguageSet?.Find?.chiefcomplaint }}
+                </th>
+                <th z-table-head>
+                  {{ currentLanguageSet?.common?.ConceptID }}
+                </th>
                 <th z-table-head>
                   {{
                     currentLanguageSet?.nurseData?.chiefComplaintsDetails
@@ -193,7 +197,9 @@
 
       <!-- ===================== VITALS ===================== -->
       <p class="text-base font-semibold tracking-tight text-foreground">
-        {{ currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC?.vitals }}
+        {{
+          currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC?.vitals
+        }}
       </p>
 
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -268,7 +274,7 @@
               id="temperature"
               formControlName="temperature"
               [ngClass]="{
-                'text-destructive': temperature < 96 || temperature > 100
+                'text-destructive': temperature < 96 || temperature > 100,
               }" />
           </z-form-control>
         </z-form-field>
@@ -288,7 +294,7 @@
               id="pulseRate"
               formControlName="pulseRate"
               [ngClass]="{
-                'text-destructive': pulseRate < 49 || pulseRate > 101
+                'text-destructive': pulseRate < 49 || pulseRate > 101,
               }" />
           </z-form-control>
         </z-form-field>
@@ -327,7 +333,8 @@
               id="respiratoryRate"
               formControlName="respiratoryRate"
               [ngClass]="{
-                'text-destructive': respiratoryRate < 11 || respiratoryRate > 19
+                'text-destructive':
+                  respiratoryRate < 11 || respiratoryRate > 19,
               }" />
           </z-form-control>
         </z-form-field>
@@ -349,7 +356,7 @@
               formControlName="systolicBP_1stReading"
               [ngClass]="{
                 'text-destructive':
-                  systolicBP_1stReading < 110 || systolicBP_1stReading > 140
+                  systolicBP_1stReading < 110 || systolicBP_1stReading > 140,
               }" />
           </z-form-control>
         </z-form-field>
@@ -371,7 +378,7 @@
               formControlName="diastolicBP_1stReading"
               [ngClass]="{
                 'text-destructive':
-                  diastolicBP_1stReading < 60 || diastolicBP_1stReading > 90
+                  diastolicBP_1stReading < 60 || diastolicBP_1stReading > 90,
               }" />
           </z-form-control>
         </z-form-field>
@@ -395,7 +402,7 @@
               formControlName="bloodGlucose_Fasting"
               [ngClass]="{
                 'text-destructive':
-                  bloodGlucose_Fasting < 50 || bloodGlucose_Fasting > 700
+                  bloodGlucose_Fasting < 50 || bloodGlucose_Fasting > 700,
               }" />
           </z-form-control>
         </z-form-field>
@@ -467,7 +474,7 @@
                 (blur)="checkForRange()"
                 (change)="rbsResultChange(); setRBSResultInReport()"
                 [ngClass]="{
-                  'text-destructive': rbsTestResult < 0 || rbsTestResult > 1000
+                  'text-destructive': rbsTestResult < 0 || rbsTestResult > 1000,
                 }" />
               <button
                 type="button"
@@ -538,7 +545,9 @@
 
       <!-- ===================== INVESTIGATIONS ===================== -->
       <p class="text-base font-semibold tracking-tight text-foreground">
-        {{ currentLanguageSet?.nurseData?.investigationsDetails?.investigations }}
+        {{
+          currentLanguageSet?.nurseData?.investigationsDetails?.investigations
+        }}
       </p>
 
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -649,7 +658,9 @@
                     "
                     [(ngModel)]="diagnosisDisplay[i]"
                     [ngModelOptions]="{ standalone: true }"
-                    [disabled]="!!(diagnosis.get('provisionalDiagnosis')?.disabled)"
+                    [disabled]="
+                      !!diagnosis.get('provisionalDiagnosis')?.disabled
+                    "
                     minlength="3"
                     maxlength="100"
                     required
@@ -1012,12 +1023,13 @@
       </form>
 
       <span
-        *ngIf="drugPrescriptionForm.controls['prescribedDrugs'].value.length > 0">
+        *ngIf="
+          drugPrescriptionForm.controls['prescribedDrugs'].value.length > 0
+        ">
         <hr class="border-border" />
         <div [formGroup]="drugPrescriptionForm">
           <div formArrayName="prescribedDrugs" class="flex flex-col gap-4">
-            <div
-              *ngFor="let drug of getPrescribedDrugs(); let j = index">
+            <div *ngFor="let drug of getPrescribedDrugs(); let j = index">
               <ng-container
                 [formGroupName]="j"
                 *ngIf="j >= pageLimits[0] && j < pageLimits[1]">
@@ -1028,7 +1040,8 @@
                     {{ drug.value.drugName }} {{ drug.value.drugStrength }}
                     {{ drug.value.isEDL ? '' : '- (Non-EDL) Medicine' }}
                   </legend>
-                  <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
+                  <div
+                    class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
                     <z-form-field class="min-w-0 flex-1">
                       <label z-form-label for="formName-{{ j }}">{{
                         currentLanguageSet?.Prescription?.form

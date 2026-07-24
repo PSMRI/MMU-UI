@@ -1,7 +1,6 @@
 <div class="bg-card text-card-foreground pb-12">
   <div class="mb-4">
-    <p
-      class="text-center text-xl font-semibold tracking-tight text-foreground">
+    <p class="text-center text-xl font-semibold tracking-tight text-foreground">
       {{ currentLanguageSet?.common?.history }}
     </p>
     <hr class="mt-2 border-border" />
@@ -16,10 +15,7 @@
       }}
     </p>
     <div class="overflow-x-auto">
-      <table
-        z-table
-        zType="bordered"
-        aria-describedby="familyMedicalHistory">
+      <table z-table zType="bordered" aria-describedby="familyMedicalHistory">
         <thead z-table-header>
           <tr z-table-row>
             <th z-table-head id="serialNo">
@@ -58,8 +54,12 @@
               let i = index
             ">
             <td z-table-cell>{{ i + 1 }}</td>
-            <td z-table-cell>{{ familyCancerDiseaseHistory.cancerDiseaseType }}</td>
-            <td z-table-cell>{{ familyCancerDiseaseHistory.familyMemberList }}</td>
+            <td z-table-cell>
+              {{ familyCancerDiseaseHistory.cancerDiseaseType }}
+            </td>
+            <td z-table-cell>
+              {{ familyCancerDiseaseHistory.familyMemberList }}
+            </td>
             <td z-table-cell>&nbsp;</td>
           </tr>
         </tbody>
@@ -83,8 +83,8 @@
           <tr z-table-row>
             <th z-table-head id="tobaccoUse">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.tobaccoUse
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.tobaccoUse
               }}
               :
             </th>
@@ -93,8 +93,8 @@
             </td>
             <th z-table-head id="startAge">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.startAge
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.startAge
               }}:
             </th>
             <td z-table-cell>{{ patientPersonalHistory?.startAge_year }}</td>
@@ -103,22 +103,24 @@
           <tr z-table-row>
             <th z-table-head id="stopAge">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.stopAge
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.stopAge
               }}:
             </th>
             <td z-table-cell>{{ patientPersonalHistory?.endAge_year }}</td>
             <th z-table-head id="typeofTobaccoProductsused">
               {{ currentLanguageSet?.casesheet?.typeOfTobacco }}:
             </th>
-            <td z-table-cell>{{ patientPersonalHistory?.typeOfTobaccoProduct }}</td>
+            <td z-table-cell>
+              {{ patientPersonalHistory?.typeOfTobaccoProduct }}
+            </td>
           </tr>
 
           <tr z-table-row>
             <th z-table-head id="cigarettes">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.cigarettes
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.cigarettes
               }}:
             </th>
             <td z-table-cell>{{ patientPersonalHistory?.quantityPerDay }}</td>
@@ -140,8 +142,8 @@
           <tr z-table-row>
             <th z-table-head id="exposuretoSecondHandsmoke">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.exposuretoSecondHandsmoke
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.exposuretoSecondHandsmoke
               }}:
             </th>
             <td z-table-cell>
@@ -156,17 +158,19 @@
             </td>
             <th z-table-head id="habitofBetelnutchewing">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.habitofBetelnutchewing
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.habitofBetelnutchewing
               }}:
             </th>
             <td z-table-cell>
-              <span *ngIf="patientPersonalHistory?.isBetelNutChewing === true">{{
-                currentLanguageSet?.covid?.yES
-              }}</span>
-              <span *ngIf="patientPersonalHistory?.isBetelNutChewing === false">{{
-                currentLanguageSet?.common?.no
-              }}</span>
+              <span
+                *ngIf="patientPersonalHistory?.isBetelNutChewing === true"
+                >{{ currentLanguageSet?.covid?.yES }}</span
+              >
+              <span
+                *ngIf="patientPersonalHistory?.isBetelNutChewing === false"
+                >{{ currentLanguageSet?.common?.no }}</span
+              >
             </td>
           </tr>
 
@@ -174,11 +178,13 @@
             <th z-table-head id="durationofbetelquidinmouth">
               {{ currentLanguageSet?.casesheet?.quidDuration }}:
             </th>
-            <td z-table-cell>{{ patientPersonalHistory?.durationOfBetelQuid }}</td>
+            <td z-table-cell>
+              {{ patientPersonalHistory?.durationOfBetelQuid }}
+            </td>
             <th z-table-head id="alcoholuse">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.alcoholuse
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.alcoholuse
               }}:
             </th>
             <td z-table-cell>
@@ -189,8 +195,8 @@
           <tr z-table-row>
             <th z-table-head id="alcoholconsumed">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.alcoholconsumed
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.alcoholconsumed
               }}:
             </th>
             <td z-table-cell>
@@ -203,86 +209,102 @@
             </td>
             <th z-table-head id="frequency">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.frequency
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.frequency
               }}:
             </th>
-            <td z-table-cell>{{ patientPersonalHistory?.frequencyOfAlcoholUsed }}</td>
+            <td z-table-cell>
+              {{ patientPersonalHistory?.frequencyOfAlcoholUsed }}
+            </td>
           </tr>
 
           <tr z-table-row>
             <th z-table-head id="dietType">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.dietType
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.dietType
               }}:
             </th>
             <td z-table-cell>{{ patientPersonalHistory?.dietType }}</td>
             <th z-table-head id="weeklyintakeofOutsidemeal">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.weeklyintakeofOutsidemeal
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.weeklyintakeofOutsidemeal
               }}:
             </th>
-            <td z-table-cell>{{ patientPersonalHistory?.intakeOfOutsidePreparedMeal }}</td>
+            <td z-table-cell>
+              {{ patientPersonalHistory?.intakeOfOutsidePreparedMeal }}
+            </td>
           </tr>
 
           <tr z-table-row>
             <th z-table-head id="fruitconsumption">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.fruitconsumption
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.fruitconsumption
               }}:
             </th>
-            <td z-table-cell>{{ patientPersonalHistory?.fruitConsumptionDays }}</td>
+            <td z-table-cell>
+              {{ patientPersonalHistory?.fruitConsumptionDays }}
+            </td>
             <th z-table-head id="quantityconsumed">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.quantityconsumed
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.quantityconsumed
               }}:
             </th>
-            <td z-table-cell>{{ patientPersonalHistory?.fruitQuantityPerDay }}</td>
+            <td z-table-cell>
+              {{ patientPersonalHistory?.fruitQuantityPerDay }}
+            </td>
           </tr>
 
           <tr z-table-row>
             <th z-table-head id="vegetableconsumption">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.vegetableconsumption
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.vegetableconsumption
               }}:
             </th>
-            <td z-table-cell>{{ patientPersonalHistory?.vegetableConsumptionDays }}</td>
+            <td z-table-cell>
+              {{ patientPersonalHistory?.vegetableConsumptionDays }}
+            </td>
             <th z-table-head id="quantityconsumedVeg">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.quantityconsumed
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.quantityconsumed
               }}:
             </th>
-            <td z-table-cell>{{ patientPersonalHistory?.vegetableQuantityPerDay }}</td>
+            <td z-table-cell>
+              {{ patientPersonalHistory?.vegetableQuantityPerDay }}
+            </td>
           </tr>
 
           <tr z-table-row>
             <th z-table-head id="typeofoilconsumed">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.typeofoilconsumed
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.typeofoilconsumed
               }}:
             </th>
-            <td z-table-cell>{{ patientPersonalHistory?.typeOfOilConsumedList }}</td>
+            <td z-table-cell>
+              {{ patientPersonalHistory?.typeOfOilConsumedList }}
+            </td>
             <th z-table-head id="physicalActivityType">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.physicalActivityType
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.physicalActivityType
               }}:
             </th>
-            <td z-table-cell>{{ patientPersonalHistory?.physicalActivityType }}</td>
+            <td z-table-cell>
+              {{ patientPersonalHistory?.physicalActivityType }}
+            </td>
           </tr>
 
           <tr z-table-row>
             <th z-table-head id="historyofexposuretoradiation">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.historyofexposuretoradiation
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.historyofexposuretoradiation
               }}:
             </th>
             <td z-table-cell>
@@ -297,17 +319,19 @@
             </td>
             <th z-table-head id="historyofthyroiddisorder">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
-                  ?.historyofthyroiddisorder
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.personal?.historyofthyroiddisorder
               }}:
             </th>
             <td z-table-cell>
-              <span *ngIf="patientPersonalHistory?.isThyroidDisorder === true">{{
-                currentLanguageSet?.covid?.yES
-              }}</span>
-              <span *ngIf="patientPersonalHistory?.isThyroidDisorder === false">{{
-                currentLanguageSet?.common?.no
-              }}</span>
+              <span
+                *ngIf="patientPersonalHistory?.isThyroidDisorder === true"
+                >{{ currentLanguageSet?.covid?.yES }}</span
+              >
+              <span
+                *ngIf="patientPersonalHistory?.isThyroidDisorder === false"
+                >{{ currentLanguageSet?.common?.no }}</span
+              >
             </td>
           </tr>
         </tbody>
@@ -321,9 +345,7 @@
     class="mt-4"
     *ngIf="beneficiaryDetails && beneficiaryDetails.genderName === 'Female'">
     <p class="mb-2 text-base font-bold text-foreground">
-      {{
-        currentLanguageSet?.historyData?.obstetrichistory?.obstetricshistory
-      }}
+      {{ currentLanguageSet?.historyData?.obstetrichistory?.obstetricshistory }}
     </p>
 
     <div class="overflow-x-auto">
@@ -332,39 +354,40 @@
           <tr z-table-row>
             <th z-table-head id="pregnancyStatus">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
-                  ?.pregnancyStatus
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.obstetric?.pregnancyStatus
               }}:
             </th>
             <td z-table-cell>{{ patientObstetricHistory?.pregnancyStatus }}</td>
             <th z-table-head id="urinepregnancytest">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
-                  ?.urinepregnancytest
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.obstetric?.urinepregnancytest
               }}:
             </th>
             <td z-table-cell>
               <span *ngIf="patientObstetricHistory?.isUrinePregTest === true">{{
                 currentLanguageSet?.common?.positive
               }}</span>
-              <span *ngIf="patientObstetricHistory?.isUrinePregTest === false">{{
-                currentLanguageSet?.common?.negative
-              }}</span>
+              <span
+                *ngIf="patientObstetricHistory?.isUrinePregTest === false"
+                >{{ currentLanguageSet?.common?.negative }}</span
+              >
             </td>
           </tr>
 
           <tr z-table-row>
             <th z-table-head id="nooftimespregnant">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
-                  ?.nooftimespregnant
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.obstetric?.nooftimespregnant
               }}:
             </th>
             <td z-table-cell>{{ patientObstetricHistory?.pregnant_No }}</td>
             <th z-table-head id="nooflivingchildren">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
-                  ?.nooflivingchildren
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.obstetric?.nooflivingchildren
               }}:
             </th>
             <td z-table-cell>{{ patientObstetricHistory?.noOfLivingChild }}</td>
@@ -373,8 +396,8 @@
           <tr z-table-row>
             <th z-table-head id="abortions">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
-                  ?.abortions
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.obstetric?.abortions
               }}:
             </th>
             <td z-table-cell>
@@ -387,17 +410,21 @@
             </td>
             <th z-table-head id="oralContraceptiveUsed">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
-                  ?.oralContraceptiveUsed
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.obstetric?.oralContraceptiveUsed
               }}:
             </th>
             <td z-table-cell>
               <span
-                *ngIf="patientObstetricHistory?.isOralContraceptiveUsed === true"
+                *ngIf="
+                  patientObstetricHistory?.isOralContraceptiveUsed === true
+                "
                 >{{ currentLanguageSet?.covid?.yES }}</span
               >
               <span
-                *ngIf="patientObstetricHistory?.isOralContraceptiveUsed === false"
+                *ngIf="
+                  patientObstetricHistory?.isOralContraceptiveUsed === false
+                "
                 >{{ currentLanguageSet?.common?.no }}</span
               >
             </td>
@@ -406,8 +433,8 @@
           <tr z-table-row>
             <th z-table-head id="harmonereplacementTherapy">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
-                  ?.harmonereplacementTherapy
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.obstetric?.harmonereplacementTherapy
               }}:
             </th>
             <td z-table-cell>
@@ -426,8 +453,8 @@
             </td>
             <th z-table-head id="ageatmenarche">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
-                  ?.ageatmenarche
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.obstetric?.ageatmenarche
               }}:
             </th>
             <td z-table-cell>{{ patientObstetricHistory?.menarche_Age }}</td>
@@ -436,51 +463,61 @@
           <tr z-table-row>
             <th z-table-head id="regularityofMenstrualCycle">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
-                  ?.regularityofMenstrualCycle
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.obstetric?.regularityofMenstrualCycle
               }}:
             </th>
             <td z-table-cell>
               <span
-                *ngIf="patientObstetricHistory?.isMenstrualCycleRegular === true"
+                *ngIf="
+                  patientObstetricHistory?.isMenstrualCycleRegular === true
+                "
                 >{{ currentLanguageSet?.common?.regular }}</span
               >
               <span
-                *ngIf="patientObstetricHistory?.isMenstrualCycleRegular === false"
+                *ngIf="
+                  patientObstetricHistory?.isMenstrualCycleRegular === false
+                "
                 >{{ currentLanguageSet?.common?.irregular }}</span
               >
             </td>
             <th z-table-head id="lengthofMenstrualCycle">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
-                  ?.lengthofMenstrualCycle
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.obstetric?.lengthofMenstrualCycle
               }}:
             </th>
-            <td z-table-cell>{{ patientObstetricHistory?.menstrualCycleLength }}</td>
+            <td z-table-cell>
+              {{ patientObstetricHistory?.menstrualCycleLength }}
+            </td>
           </tr>
 
           <tr z-table-row>
             <th z-table-head id="menstrualFlowduration">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
-                  ?.menstrualFlowduration
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.obstetric?.menstrualFlowduration
               }}:
             </th>
-            <td z-table-cell>{{ patientObstetricHistory?.menstrualFlowDuration }}</td>
+            <td z-table-cell>
+              {{ patientObstetricHistory?.menstrualFlowDuration }}
+            </td>
             <th z-table-head id="typeofFlow">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
-                  ?.typeofFlow
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.obstetric?.typeofFlow
               }}:
             </th>
-            <td z-table-cell>{{ patientObstetricHistory?.menstrualFlowType }}</td>
+            <td z-table-cell>
+              {{ patientObstetricHistory?.menstrualFlowType }}
+            </td>
           </tr>
 
           <tr z-table-row>
             <th z-table-head id="dysmenorrhea">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
-                  ?.dysmenorrhea
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.obstetric?.dysmenorrhea
               }}:
             </th>
             <td z-table-cell>
@@ -493,8 +530,8 @@
             </td>
             <th z-table-head id="interMenstrualBleeding">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
-                  ?.interMenstrualBleeding
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.obstetric?.interMenstrualBleeding
               }}:
             </th>
             <td z-table-cell>
@@ -516,24 +553,28 @@
           <tr z-table-row>
             <th z-table-head id="ageAtmenopause">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
-                  ?.ageAtmenopause
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.obstetric?.ageAtmenopause
               }}:
             </th>
             <td z-table-cell>{{ patientObstetricHistory?.menopauseAge }}</td>
             <th z-table-head id="postMenopausalBleeding">
               {{
-                currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
-                  ?.postMenopausalBleeding
+                currentLanguageSet?.historyData?.cancerScreeningHistory
+                  ?.obstetric?.postMenopausalBleeding
               }}:
             </th>
             <td z-table-cell>
               <span
-                *ngIf="patientObstetricHistory?.isPostMenopauseBleeding === true"
+                *ngIf="
+                  patientObstetricHistory?.isPostMenopauseBleeding === true
+                "
                 >{{ currentLanguageSet?.covid?.yES }}</span
               >
               <span
-                *ngIf="patientObstetricHistory?.isPostMenopauseBleeding === false"
+                *ngIf="
+                  patientObstetricHistory?.isPostMenopauseBleeding === false
+                "
                 >{{ currentLanguageSet?.common?.no }}</span
               >
             </td>

@@ -282,7 +282,8 @@
               type="button"
               id="removePastSurgery"
               *ngIf="
-                i !== 0 || (i === 0 && (pastSurgery.touched || pastSurgery.dirty))
+                i !== 0 ||
+                (i === 0 && (pastSurgery.touched || pastSurgery.dirty))
               "
               [attr.aria-label]="currentLanguageSet?.common?.remove"
               (click)="
@@ -301,7 +302,8 @@
               id="addPastSurgery"
               [attr.aria-label]="currentLanguageSet?.common?.add"
               (click)="
-                addPastSurgery(); trackFieldInteraction('Add Past Surgery Button')
+                addPastSurgery();
+                trackFieldInteraction('Add Past Surgery Button')
               ">
               <ng-icon name="lucidePlus"></ng-icon>
             </button>

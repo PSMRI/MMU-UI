@@ -16,9 +16,7 @@
       </z-radio-group>
     </z-form-field>
 
-    <z-form-field
-      *ngIf="toDrugs !== null && !toDrugs"
-      class="gap-1.5">
+    <z-form-field *ngIf="toDrugs !== null && !toDrugs" class="gap-1.5">
       <label z-form-label for="drugReason">
         {{ currentLanguageSet?.nurseData?.adherenceDetails?.reason }}
       </label>
@@ -53,9 +51,7 @@
       </z-radio-group>
     </z-form-field>
 
-    <z-form-field
-      *ngIf="toReferral !== null && !toReferral"
-      class="gap-1.5">
+    <z-form-field *ngIf="toReferral !== null && !toReferral" class="gap-1.5">
       <label z-form-label for="referralReason">
         {{ currentLanguageSet?.nurseData?.adherenceDetails?.reason }}
       </label>

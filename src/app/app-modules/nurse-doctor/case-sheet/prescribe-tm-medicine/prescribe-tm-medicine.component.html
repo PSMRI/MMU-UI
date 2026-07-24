@@ -63,9 +63,7 @@
             {{ currentLanguageSet?.common?.noRecordFound }}
           </td>
         </tr>
-        <tr
-          z-table-row
-          *ngFor="let drug of tmPrescribedDrugs; let i = index">
+        <tr z-table-row *ngFor="let drug of tmPrescribedDrugs; let i = index">
           <td z-table-cell>{{ i + 1 }}</td>
           <td z-table-cell>{{ drug.drugName }} {{ drug.drugStrength }}</td>
           <td z-table-cell>{{ drug.isEDL ? 'EDL' : 'Non-EDL' }}</td>
@@ -266,7 +264,7 @@
         [ngClass]="{
           'lg:col-span-2':
             !currentPrescription.formID ||
-            (currentPrescription.formID && currentPrescription.formID <= '2')
+            (currentPrescription.formID && currentPrescription.formID <= '2'),
         }">
         <label z-form-label for="route">{{
           currentLanguageSet?.Prescription?.Route

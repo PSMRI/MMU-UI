@@ -18,7 +18,9 @@
             class="w-full"
             id="referredToInstituteID"
             formControlName="referredToInstituteID"
-            [zPlaceholder]="currentLanguageSet?.Referdetails?.referredtoinstitute"
+            [zPlaceholder]="
+              currentLanguageSet?.Referdetails?.referredtoinstitute
+            "
             (zSelectionChange)="higherhealthcarecenter($event)">
             <z-select-item
               *ngFor="let center of higherHealthcareCenter"
@@ -40,7 +42,9 @@
             id="refrredToAdditionalServiceList"
             [zMultiple]="true"
             formControlName="refrredToAdditionalServiceList"
-            [zPlaceholder]="currentLanguageSet?.Referdetails?.additionalservices"
+            [zPlaceholder]="
+              currentLanguageSet?.Referdetails?.additionalservices
+            "
             (zSelectionChange)="additionalservices($event)">
             <z-select-item
               *ngFor="let service of additionalServices"

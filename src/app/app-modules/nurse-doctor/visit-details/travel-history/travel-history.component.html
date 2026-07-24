@@ -35,7 +35,10 @@
         <z-checkbox name="travelType" [zChecked]="domtravel" [disabled]="true">
           {{ currentLanguageSet?.travel?.domestic }}
         </z-checkbox>
-        <z-checkbox name="travelType" [zChecked]="intertravel" [disabled]="true">
+        <z-checkbox
+          name="travelType"
+          [zChecked]="intertravel"
+          [disabled]="true">
           {{ currentLanguageSet?.travel?.international }}
         </z-checkbox>
       </div>
@@ -62,7 +65,9 @@
                 formControlName="modeOfTravelDomestic"
                 [zPlaceholder]="currentLanguageSet?.travel?.modeofTravel || ''"
                 (zSelectionChange)="traveldomesticStatuschange($event)">
-                <z-select-item *ngFor="let type of domestictype" [zValue]="type"
+                <z-select-item
+                  *ngFor="let type of domestictype"
+                  [zValue]="type"
                   >{{ type }}</z-select-item
                 >
               </z-select>

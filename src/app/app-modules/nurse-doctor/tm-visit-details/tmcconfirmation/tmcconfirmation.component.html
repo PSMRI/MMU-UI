@@ -108,8 +108,12 @@
           <th z-table-head id="drugType">
             {{ currentLanguageSet?.casesheet?.drugType }}
           </th>
-          <th z-table-head id="form">{{ currentLanguageSet?.casesheet?.form }}</th>
-          <th z-table-head id="dose">{{ currentLanguageSet?.casesheet?.dose }}</th>
+          <th z-table-head id="form">
+            {{ currentLanguageSet?.casesheet?.form }}
+          </th>
+          <th z-table-head id="dose">
+            {{ currentLanguageSet?.casesheet?.dose }}
+          </th>
           <th z-table-head id="frequency">
             {{ currentLanguageSet?.casesheet?.freq }}
           </th>
@@ -128,9 +132,7 @@
         </tr>
       </thead>
       <tbody z-table-body>
-        <tr
-          z-table-row
-          *ngIf="prescribedDrugDataFromCaseSheet?.length === 0">
+        <tr z-table-row *ngIf="prescribedDrugDataFromCaseSheet?.length === 0">
           <td
             z-table-cell
             class="h-24 text-center text-muted-foreground"

@@ -1,6 +1,7 @@
 <div class="flex max-h-[85vh] w-[56rem] max-w-full flex-col">
   <!-- Header -->
-  <div class="flex items-center justify-between gap-4 border-b border-border px-6 py-4">
+  <div
+    class="flex items-center justify-between gap-4 border-b border-border px-6 py-4">
     <p class="m-0 text-lg font-semibold text-foreground">
       Send Prescription to Beneficiary
     </p>
@@ -31,9 +32,7 @@
           </tr>
         </thead>
         <tbody z-table-body *ngIf="data?.prescribedDrugs">
-          <tr
-            z-table-row
-            *ngFor="let p of data.prescribedDrugs; let i = index">
+          <tr z-table-row *ngFor="let p of data.prescribedDrugs; let i = index">
             <td z-table-cell>{{ p.prescribedDrugID }}</td>
             <td z-table-cell>{{ p.drugName }}</td>
             <td z-table-cell>{{ p.dosage }}</td>
@@ -53,10 +52,7 @@
 
     <!-- SMS Section -->
     <div class="flex flex-wrap items-end gap-4">
-      <z-checkbox
-        name="altNum"
-        class="pb-2.5"
-        [(ngModel)]="altNum">
+      <z-checkbox name="altNum" class="pb-2.5" [(ngModel)]="altNum">
         {{ currentLanguageSet?.alternateNumber }}
       </z-checkbox>
 

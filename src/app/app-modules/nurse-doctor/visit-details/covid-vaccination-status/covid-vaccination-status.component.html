@@ -1,6 +1,4 @@
-<div
-  class="mt-5 flex flex-col gap-6"
-  [formGroup]="covidVaccineStatusForm">
+<div class="mt-5 flex flex-col gap-6" [formGroup]="covidVaccineStatusForm">
   <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
     <z-form-field class="gap-1.5">
       <label z-form-label for="ageGroup">{{
@@ -49,9 +47,7 @@
       </z-form-control>
     </z-form-field>
 
-    <z-form-field
-      class="gap-1.5"
-      *ngIf="enableVaccinationStatusFields">
+    <z-form-field class="gap-1.5" *ngIf="enableVaccinationStatusFields">
       <label
         z-form-label
         [zRequired]="enableVaccinationStatusFields === true"
@@ -72,9 +68,7 @@
       </z-form-control>
     </z-form-field>
 
-    <z-form-field
-      class="gap-1.5"
-      *ngIf="enableVaccineTypeAndDoseTakenFlag">
+    <z-form-field class="gap-1.5" *ngIf="enableVaccineTypeAndDoseTakenFlag">
       <label
         z-form-label
         [zRequired]="enableVaccineTypeAndDoseTakenFlag === true"
@@ -101,9 +95,7 @@
       </z-form-control>
     </z-form-field>
 
-    <z-form-field
-      class="gap-1.5"
-      *ngIf="enableVaccineTypeAndDoseTakenFlag">
+    <z-form-field class="gap-1.5" *ngIf="enableVaccineTypeAndDoseTakenFlag">
       <label
         z-form-label
         [zRequired]="enableVaccineTypeAndDoseTakenFlag === true"

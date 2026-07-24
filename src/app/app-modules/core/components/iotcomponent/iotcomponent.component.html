@@ -3,7 +3,9 @@
   <div class="flex items-center justify-between gap-2">
     <p
       class="text-lg font-semibold"
-      [ngClass]="errorMsg !== undefined ? 'text-destructive' : 'text-foreground'">
+      [ngClass]="
+        errorMsg !== undefined ? 'text-destructive' : 'text-foreground'
+      ">
       {{ current_language_set?.common?.bluetoothDevice }}
     </p>
     <button
@@ -28,15 +30,17 @@
 
     <p
       class="m-0 text-center text-base"
-      [ngClass]="errorMsg !== undefined ? 'text-destructive' : 'text-foreground'"
+      [ngClass]="
+        errorMsg !== undefined ? 'text-destructive' : 'text-foreground'
+      "
       *ngIf="!msgCalibration">
-      {{
-        errorMsg === undefined ? 'Please wait. Test in Progress' : errorMsg
-      }}
+      {{ errorMsg === undefined ? 'Please wait. Test in Progress' : errorMsg }}
     </p>
     <p
       class="m-0 text-center text-base"
-      [ngClass]="errorMsg !== undefined ? 'text-destructive' : 'text-foreground'"
+      [ngClass]="
+        errorMsg !== undefined ? 'text-destructive' : 'text-foreground'
+      "
       *ngIf="msgCalibration && !stripShowMsg">
       {{
         errorMsg === undefined
@@ -46,7 +50,9 @@
     </p>
     <p
       class="m-0 text-center text-base"
-      [ngClass]="errorMsg !== undefined ? 'text-destructive' : 'text-foreground'"
+      [ngClass]="
+        errorMsg !== undefined ? 'text-destructive' : 'text-foreground'
+      "
       *ngIf="msgCalibration && stripShowMsg">
       {{
         errorMsg === undefined

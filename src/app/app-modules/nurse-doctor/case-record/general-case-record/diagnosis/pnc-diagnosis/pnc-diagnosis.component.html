@@ -17,7 +17,9 @@
             class="flex items-end gap-2"
             [formGroupName]="i">
             <z-form-field class="flex-1">
-              <label z-form-label for="viewProvisionalDiagnosisProvided-{{ i }}">
+              <label
+                z-form-label
+                for="viewProvisionalDiagnosisProvided-{{ i }}">
                 {{ current_language_set?.casesheet?.provisionalDiag }}
               </label>
               <z-form-control>
@@ -64,7 +66,8 @@
                   i !== 0 ||
                   (i === 0 &&
                     (diagnosis.touched ||
-                      diagnosis.get('viewProvisionalDiagnosisProvided')?.disabled))
+                      diagnosis.get('viewProvisionalDiagnosisProvided')
+                        ?.disabled))
                 "
                 (click)="removeProvisionalDiagnosis(i, diagnosis)">
                 <ng-icon name="lucideX"></ng-icon>
@@ -134,7 +137,9 @@
                       [attr.aria-selected]="false"
                       class="relative flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
                       (click)="onConfirmatoryDiagnosisSelected(diag, i)"
-                      (keydown.enter)="onConfirmatoryDiagnosisSelected(diag, i)">
+                      (keydown.enter)="
+                        onConfirmatoryDiagnosisSelected(diag, i)
+                      ">
                       {{ diag.term }}
                     </div>
                   </div>
@@ -155,9 +160,7 @@
                       confirmatoryDiagnosis.get('confirmatoryDiagnosis')
                         ?.disabled))
                 "
-                (click)="
-                  removeConfirmatoryDiagnosis(i, confirmatoryDiagnosis)
-                ">
+                (click)="removeConfirmatoryDiagnosis(i, confirmatoryDiagnosis)">
                 <ng-icon name="lucideX"></ng-icon>
               </button>
               <button

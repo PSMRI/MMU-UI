@@ -41,7 +41,9 @@
       autocomplete="off"
       (keyup.enter)="preventSubmitOnEnter($event)">
       <!-- Stepper indicator -->
-      <z-stepper [zActiveIndex]="currentStep" class="mb-6 w-full justify-center">
+      <z-stepper
+        [zActiveIndex]="currentStep"
+        class="mb-6 w-full justify-center">
         <z-step
           *ngIf="showVisitDetails"
           [zLabel]="currentLanguageSet?.nurseData?.visitDetails"></z-step>
@@ -121,7 +123,11 @@
           <button z-button type="button" (click)="nextStep()">
             {{ currentLanguageSet?.common?.next }}
           </button>
-          <button z-button zType="outline" type="button" (click)="previousStep()">
+          <button
+            z-button
+            zType="outline"
+            type="button"
+            (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
           <button
@@ -144,7 +150,11 @@
           <button z-button type="button" (click)="nextStep()">
             {{ currentLanguageSet?.common?.next }}
           </button>
-          <button z-button zType="outline" type="button" (click)="previousStep()">
+          <button
+            z-button
+            zType="outline"
+            type="button"
+            (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
           <button
@@ -170,14 +180,20 @@
           <button z-button type="button" (click)="nextStep()">
             {{ currentLanguageSet?.common?.next }}
           </button>
-          <button z-button zType="outline" type="button" (click)="previousStep()">
+          <button
+            z-button
+            zType="outline"
+            type="button"
+            (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
           <button
             z-button
             *ngIf="historyMode"
             type="button"
-            [disabled]="!patientMedicalForm.controls['patientHistoryForm'].dirty"
+            [disabled]="
+              !patientMedicalForm.controls['patientHistoryForm'].dirty
+            "
             (click)="updatePatientHistory()">
             {{ currentLanguageSet?.common?.update }}
           </button>
@@ -207,7 +223,11 @@
             (click)="nextStep()">
             {{ currentLanguageSet?.common?.next }}
           </button>
-          <button z-button zType="outline" type="button" (click)="previousStep()">
+          <button
+            z-button
+            zType="outline"
+            type="button"
+            (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
           <button
@@ -248,7 +268,11 @@
             (click)="nextStep()">
             {{ currentLanguageSet?.common?.next }}
           </button>
-          <button z-button zType="outline" type="button" (click)="previousStep()">
+          <button
+            z-button
+            zType="outline"
+            type="button"
+            (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
           <button
@@ -285,7 +309,11 @@
             (click)="nextStep()">
             {{ currentLanguageSet?.common?.next }}
           </button>
-          <button z-button zType="outline" type="button" (click)="previousStep()">
+          <button
+            z-button
+            zType="outline"
+            type="button"
+            (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
           <button
@@ -316,7 +344,11 @@
             (click)="nextStep()">
             {{ currentLanguageSet?.common?.next }}
           </button>
-          <button z-button zType="outline" type="button" (click)="previousStep()">
+          <button
+            z-button
+            zType="outline"
+            type="button"
+            (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
         </div>
@@ -333,7 +365,11 @@
           <button z-button type="button" (click)="nextStep()">
             {{ currentLanguageSet?.common?.next }}
           </button>
-          <button z-button zType="outline" type="button" (click)="previousStep()">
+          <button
+            z-button
+            zType="outline"
+            type="button"
+            (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
         </div>
@@ -368,7 +404,11 @@
             (click)="updateQuickConsultDiagnosisForm()">
             {{ doctorUpdateAndTCSubmit }}
           </button>
-          <button z-button zType="outline" type="button" (click)="previousStep()">
+          <button
+            z-button
+            zType="outline"
+            type="button"
+            (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
         </div>

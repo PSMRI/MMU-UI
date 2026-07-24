@@ -58,7 +58,10 @@
                     [id]="'diagnosis-listbox-' + i"
                     (scroll)="onPanelScroll($event, i)">
                     <div
-                      *ngFor="let diag of suggestedDiagnosisList[i]; let d = index"
+                      *ngFor="
+                        let diag of suggestedDiagnosisList[i];
+                        let d = index
+                      "
                       class="relative flex w-full cursor-pointer select-none items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
                       [class.bg-accent]="activeIndex[i] === d"
                       [class.text-accent-foreground]="activeIndex[i] === d"
@@ -72,7 +75,9 @@
                         class="absolute left-2 text-foreground"
                         size="16px"
                         aria-hidden="true"></ng-icon>
-                      <span class="min-w-0 flex-1 truncate">{{ diag.term }}</span>
+                      <span class="min-w-0 flex-1 truncate">{{
+                        diag.term
+                      }}</span>
                     </div>
                     <div
                       *ngIf="loadingMore[i]"
@@ -119,7 +124,9 @@
                       .provisionalDiagnosis !== '')
                 "
                 [zTooltip]="current_language_set?.common?.delete || 'Delete'"
-                [attr.aria-label]="current_language_set?.common?.delete || 'Delete'"
+                [attr.aria-label]="
+                  current_language_set?.common?.delete || 'Delete'
+                "
                 (click)="deleteDiagnosis(i, diagnosis)">
                 <ng-icon name="lucideX"></ng-icon>
               </button>

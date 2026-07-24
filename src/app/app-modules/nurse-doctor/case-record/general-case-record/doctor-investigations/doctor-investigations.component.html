@@ -64,7 +64,9 @@
         class="w-full"
         name="radiologyTest"
         [zMultiple]="true"
-        [zPlaceholder]="current_language_set?.labTechnicianData?.radiologyimaging"
+        [zPlaceholder]="
+          current_language_set?.labTechnicianData?.radiologyimaging
+        "
         [zValue]="selectedRadiologyTestNames"
         (zSelectionChange)="onRadiologyTestChange($event)">
         <z-select-item

@@ -1,4 +1,6 @@
-<div class="mt-5 flex flex-col gap-6" [formGroup]="musculoSkeletalSystemDataForm">
+<div
+  class="mt-5 flex flex-col gap-6"
+  [formGroup]="musculoSkeletalSystemDataForm">
   <!-- Joints -->
   <div class="flex flex-col gap-3">
     <p class="text-sm font-semibold text-foreground">
@@ -45,7 +47,9 @@
             currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
               ?.systemic?.musculoskeletalANC_OPD_PNC?.laterality
           "
-          (zSelectionChange)="trackFieldInteraction('Joint Laterality Selection')">
+          (zSelectionChange)="
+            trackFieldInteraction('Joint Laterality Selection')
+          ">
           <z-select-item
             *ngFor="let jointLaterality of selectJointLaterality"
             [zValue]="jointLaterality.name">
@@ -68,7 +72,9 @@
             currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
               ?.systemic?.musculoskeletalANC_OPD_PNC?.abnormality
           "
-          (zSelectionChange)="trackFieldInteraction('Joint Abnormality Selection')">
+          (zSelectionChange)="
+            trackFieldInteraction('Joint Abnormality Selection')
+          ">
           <z-select-item
             *ngFor="let jointAbnormality of selectJointAbnormality"
             [zValue]="jointAbnormality.name">
@@ -102,7 +108,9 @@
             currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
               ?.systemic?.musculoskeletalANC_OPD_PNC?.laterality
           "
-          (zSelectionChange)="trackFieldInteraction('Upper Limb Laterality Selection')">
+          (zSelectionChange)="
+            trackFieldInteraction('Upper Limb Laterality Selection')
+          ">
           <z-select-item
             *ngFor="let upperLimbsLaterality of selectUpperLimbsLaterality"
             [zValue]="upperLimbsLaterality.name">
@@ -125,7 +133,9 @@
             currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
               ?.systemic?.musculoskeletalANC_OPD_PNC?.abnormality
           "
-          (zSelectionChange)="trackFieldInteraction('Upper Limb Abnormality Selection')">
+          (zSelectionChange)="
+            trackFieldInteraction('Upper Limb Abnormality Selection')
+          ">
           <z-select-item
             *ngFor="let upperLimbsAbnormality of selectUpperLimbsAbnormality"
             [zValue]="upperLimbsAbnormality.name">
@@ -159,7 +169,9 @@
             currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
               ?.systemic?.musculoskeletalANC_OPD_PNC?.laterality
           "
-          (zSelectionChange)="trackFieldInteraction('Lower Limb Laterality Selection')">
+          (zSelectionChange)="
+            trackFieldInteraction('Lower Limb Laterality Selection')
+          ">
           <z-select-item
             *ngFor="let lowerLimbsLaterality of selectLowerLimbsLaterality"
             [zValue]="lowerLimbsLaterality.name">
@@ -182,7 +194,9 @@
             currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
               ?.systemic?.musculoskeletalANC_OPD_PNC?.abnormality
           "
-          (zSelectionChange)="trackFieldInteraction('Lower Limb Abnormality Selection')">
+          (zSelectionChange)="
+            trackFieldInteraction('Lower Limb Abnormality Selection')
+          ">
           <z-select-item
             *ngFor="let lowerLimbsAbnormality of selectLowerLimbsAbnormality"
             [zValue]="lowerLimbsAbnormality.name">

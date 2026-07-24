@@ -30,8 +30,7 @@
       type="button"
       *ngIf="!disableFileSelection"
       (click)="
-        checkForDuplicateUpload();
-        trackFieldInteraction('Upload Files Button')
+        checkForDuplicateUpload(); trackFieldInteraction('Upload Files Button')
       ">
       {{ currentLanguageSet?.nurseData?.visitDetailsForm?.uploadFiles }}
     </button>

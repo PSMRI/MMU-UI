@@ -65,7 +65,10 @@
                 class="shrink-0"
                 [zTooltip]="currentLanguageSet?.common?.startTest"
                 [attr.aria-label]="currentLanguageSet?.common?.startTest"
-                (click)="openIOTWeightModel(); trackFieldInteraction('Weight IoT Button')"
+                (click)="
+                  openIOTWeightModel();
+                  trackFieldInteraction('Weight IoT Button')
+                "
                 (keydown.enter)="openIOTWeightModel()">
                 <ng-icon name="lucideActivity"></ng-icon>
               </button>
@@ -109,8 +112,8 @@
             *ngIf="BMI !== null && BMI < 18.5">
             <ng-icon name="lucideCircle" size="14"></ng-icon>
             <span>{{
-              currentLanguageSet?.vitalsDetails?.AnthropometryDataANC_OPD_NCD_PNC
-                ?.underweight
+              currentLanguageSet?.vitalsDetails
+                ?.AnthropometryDataANC_OPD_NCD_PNC?.underweight
             }}</span>
           </div>
           <div
@@ -118,8 +121,8 @@
             *ngIf="BMI !== null && BMI >= 18.5 && BMI < 25">
             <ng-icon name="lucideCircle" size="14"></ng-icon>
             <span>{{
-              currentLanguageSet?.vitalsDetails?.AnthropometryDataANC_OPD_NCD_PNC
-                ?.normalWeight
+              currentLanguageSet?.vitalsDetails
+                ?.AnthropometryDataANC_OPD_NCD_PNC?.normalWeight
             }}</span>
           </div>
           <div
@@ -127,8 +130,8 @@
             *ngIf="BMI !== null && BMI >= 25 && BMI < 30">
             <ng-icon name="lucideCircle" size="14"></ng-icon>
             <span>{{
-              currentLanguageSet?.vitalsDetails?.AnthropometryDataANC_OPD_NCD_PNC
-                ?.overweight
+              currentLanguageSet?.vitalsDetails
+                ?.AnthropometryDataANC_OPD_NCD_PNC?.overweight
             }}</span>
           </div>
           <div
@@ -136,8 +139,8 @@
             *ngIf="BMI !== null && BMI >= 30">
             <ng-icon name="lucideCircle" size="14"></ng-icon>
             <span>{{
-              currentLanguageSet?.vitalsDetails?.AnthropometryDataANC_OPD_NCD_PNC
-                ?.obesity
+              currentLanguageSet?.vitalsDetails
+                ?.AnthropometryDataANC_OPD_NCD_PNC?.obesity
             }}</span>
           </div>
           <span
@@ -274,7 +277,10 @@
                     class="shrink-0"
                     [zTooltip]="currentLanguageSet?.common?.startTest"
                     [attr.aria-label]="currentLanguageSet?.common?.startTest"
-                    (click)="openIOTBP1Model(); trackFieldInteraction('BP 1st Reading IoT Button')"
+                    (click)="
+                      openIOTBP1Model();
+                      trackFieldInteraction('BP 1st Reading IoT Button')
+                    "
                     (keydown.enter)="openIOTBP1Model()">
                     <ng-icon name="lucideActivity"></ng-icon>
                   </button>
@@ -316,7 +322,10 @@
                     class="shrink-0"
                     [zTooltip]="currentLanguageSet?.common?.startTest"
                     [attr.aria-label]="currentLanguageSet?.common?.startTest"
-                    (click)="openIOTBP1Model(); trackFieldInteraction('BP 1st Reading IoT Button')"
+                    (click)="
+                      openIOTBP1Model();
+                      trackFieldInteraction('BP 1st Reading IoT Button')
+                    "
                     (keydown.enter)="openIOTBP1Model()">
                     <ng-icon name="lucideActivity"></ng-icon>
                   </button>
@@ -358,7 +367,9 @@
                         diastolicBP_2ndReading
                       )
                     "
-                    (focus)="trackFieldInteraction('Systolic BP 2nd Reading')" />
+                    (focus)="
+                      trackFieldInteraction('Systolic BP 2nd Reading')
+                    " />
                   <button
                     z-button
                     zType="outline"
@@ -367,7 +378,10 @@
                     class="shrink-0"
                     [zTooltip]="currentLanguageSet?.common?.startTest"
                     [attr.aria-label]="currentLanguageSet?.common?.startTest"
-                    (click)="openIOTBP2Model(); trackFieldInteraction('BP 2nd Reading IoT Button')"
+                    (click)="
+                      openIOTBP2Model();
+                      trackFieldInteraction('BP 2nd Reading IoT Button')
+                    "
                     (keydown.enter)="openIOTBP2Model()">
                     <ng-icon name="lucideActivity"></ng-icon>
                   </button>
@@ -398,7 +412,9 @@
                         diastolicBP_2ndReading
                       )
                     "
-                    (focus)="trackFieldInteraction('Diastolic BP 2nd Reading')" />
+                    (focus)="
+                      trackFieldInteraction('Diastolic BP 2nd Reading')
+                    " />
                   <button
                     z-button
                     zType="outline"
@@ -407,7 +423,10 @@
                     class="shrink-0"
                     [zTooltip]="currentLanguageSet?.common?.startTest"
                     [attr.aria-label]="currentLanguageSet?.common?.startTest"
-                    (click)="openIOTBP2Model(); trackFieldInteraction('BP 2nd Reading IoT Button')"
+                    (click)="
+                      openIOTBP2Model();
+                      trackFieldInteraction('BP 2nd Reading IoT Button')
+                    "
                     (keydown.enter)="openIOTBP2Model()">
                     <ng-icon name="lucideActivity"></ng-icon>
                   </button>
@@ -449,7 +468,9 @@
                         diastolicBP_3rdReading
                       )
                     "
-                    (focus)="trackFieldInteraction('Systolic BP 3rd Reading')" />
+                    (focus)="
+                      trackFieldInteraction('Systolic BP 3rd Reading')
+                    " />
                   <button
                     z-button
                     zType="outline"
@@ -458,7 +479,10 @@
                     class="shrink-0"
                     [zTooltip]="currentLanguageSet?.common?.startTest"
                     [attr.aria-label]="currentLanguageSet?.common?.startTest"
-                    (click)="openIOTBP3Model(); trackFieldInteraction('BP 3rd Reading IoT Button')"
+                    (click)="
+                      openIOTBP3Model();
+                      trackFieldInteraction('BP 3rd Reading IoT Button')
+                    "
                     (keydown.enter)="openIOTBP3Model()">
                     <ng-icon name="lucideActivity"></ng-icon>
                   </button>
@@ -489,7 +513,9 @@
                         diastolicBP_3rdReading
                       )
                     "
-                    (focus)="trackFieldInteraction('Diastolic BP 3rd Reading')" />
+                    (focus)="
+                      trackFieldInteraction('Diastolic BP 3rd Reading')
+                    " />
                   <button
                     z-button
                     zType="outline"
@@ -498,7 +524,10 @@
                     class="shrink-0"
                     [zTooltip]="currentLanguageSet?.common?.startTest"
                     [attr.aria-label]="currentLanguageSet?.common?.startTest"
-                    (click)="openIOTBP3Model(); trackFieldInteraction('BP 3rd Reading IoT Button')"
+                    (click)="
+                      openIOTBP3Model();
+                      trackFieldInteraction('BP 3rd Reading IoT Button')
+                    "
                     (keydown.enter)="openIOTBP3Model()">
                     <ng-icon name="lucideActivity"></ng-icon>
                   </button>
@@ -563,7 +592,10 @@
                 class="shrink-0"
                 [zTooltip]="currentLanguageSet?.common?.startTest"
                 [attr.aria-label]="currentLanguageSet?.common?.startTest"
-                (click)="openIOTHemoglobinModel(); trackFieldInteraction('Hemoglobin IoT Button')"
+                (click)="
+                  openIOTHemoglobinModel();
+                  trackFieldInteraction('Hemoglobin IoT Button')
+                "
                 (keydown.enter)="openIOTHemoglobinModel()">
                 <ng-icon name="lucideActivity"></ng-icon>
               </button>
@@ -599,7 +631,9 @@
                 class="shrink-0"
                 [zTooltip]="currentLanguageSet?.common?.startTest"
                 [attr.aria-label]="currentLanguageSet?.common?.startTest"
-                (click)="openIOTSPO2Model(); trackFieldInteraction('SPO2 IoT Button')"
+                (click)="
+                  openIOTSPO2Model(); trackFieldInteraction('SPO2 IoT Button')
+                "
                 (keydown.enter)="openIOTSPO2Model()">
                 <ng-icon name="lucideActivity"></ng-icon>
               </button>
@@ -647,7 +681,10 @@
                   class="shrink-0"
                   [zTooltip]="currentLanguageSet?.common?.startTest"
                   [attr.aria-label]="currentLanguageSet?.common?.startTest"
-                  (click)="openIOTBGFastingModel(); trackFieldInteraction('Blood Glucose Fasting IoT Button')"
+                  (click)="
+                    openIOTBGFastingModel();
+                    trackFieldInteraction('Blood Glucose Fasting IoT Button')
+                  "
                   (keydown.enter)="openIOTBGFastingModel()">
                   <ng-icon name="lucideActivity"></ng-icon>
                 </button>
@@ -685,7 +722,10 @@
                   class="shrink-0"
                   [zTooltip]="currentLanguageSet?.common?.startTest"
                   [attr.aria-label]="currentLanguageSet?.common?.startTest"
-                  (click)="openIOTBGRandomModel(); trackFieldInteraction('Blood Glucose Random IoT Button')"
+                  (click)="
+                    openIOTBGRandomModel();
+                    trackFieldInteraction('Blood Glucose Random IoT Button')
+                  "
                   (keydown.enter)="openIOTBGRandomModel()">
                   <ng-icon name="lucideActivity"></ng-icon>
                 </button>
@@ -720,7 +760,9 @@
                       bloodGlucose_2HrPostPrandial
                     )
                   "
-                  (focus)="trackFieldInteraction('Blood Glucose Post Prandial')" />
+                  (focus)="
+                    trackFieldInteraction('Blood Glucose Post Prandial')
+                  " />
                 <button
                   z-button
                   zType="outline"
@@ -729,7 +771,12 @@
                   class="shrink-0"
                   [zTooltip]="currentLanguageSet?.common?.startTest"
                   [attr.aria-label]="currentLanguageSet?.common?.startTest"
-                  (click)="openIOTBGPostPrandialModel(); trackFieldInteraction('Blood Glucose Post Prandial IoT Button')"
+                  (click)="
+                    openIOTBGPostPrandialModel();
+                    trackFieldInteraction(
+                      'Blood Glucose Post Prandial IoT Button'
+                    )
+                  "
                   (keydown.enter)="openIOTBGPostPrandialModel()">
                   <ng-icon name="lucideActivity"></ng-icon>
                 </button>
@@ -755,7 +802,7 @@
                   class="w-full"
                   [ngClass]="{
                     'text-destructive':
-                      rbsTestResult < 0 || rbsTestResult > 1000
+                      rbsTestResult < 0 || rbsTestResult > 1000,
                   }"
                   autocomplete="off"
                   appDefaultNull
@@ -775,7 +822,9 @@
                   class="shrink-0"
                   [zTooltip]="currentLanguageSet?.common?.startTest"
                   [attr.aria-label]="currentLanguageSet?.common?.startTest"
-                  (click)="openIOTRBSModel(); trackFieldInteraction('RBS IoT Button')"
+                  (click)="
+                    openIOTRBSModel(); trackFieldInteraction('RBS IoT Button')
+                  "
                   (keydown.enter)="openIOTRBSModel()">
                   <ng-icon name="lucideActivity"></ng-icon>
                 </button>

@@ -17,7 +17,9 @@
         formControlName="abdominalInspection_Normal"
         zOrientation="horizontal"
         class="gap-6">
-        <z-radio [value]="true">{{ currentLanguageSet?.common?.normal }}</z-radio>
+        <z-radio [value]="true">{{
+          currentLanguageSet?.common?.normal
+        }}</z-radio>
         <z-radio [value]="false">{{
           currentLanguageSet?.common?.abnormal
         }}</z-radio>
@@ -141,9 +143,7 @@
     /></a>
   </div>
 
-  <div
-    class="w-full"
-    *ngIf="lymphNodes_Enlarged && lymphNodes_Enlarged.value">
+  <div class="w-full" *ngIf="lymphNodes_Enlarged && lymphNodes_Enlarged.value">
     <div class="overflow-x-auto">
       <table
         class="w-full border-collapse"

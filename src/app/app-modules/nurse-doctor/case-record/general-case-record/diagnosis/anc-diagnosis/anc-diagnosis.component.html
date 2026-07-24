@@ -1,7 +1,5 @@
 <div class="mt-4 flex flex-col gap-6" [formGroup]="generalDiagnosisForm">
-  <div
-    class="text-right"
-    *ngIf="visitCategory === 'ANC'">
+  <div class="text-right" *ngIf="visitCategory === 'ANC'">
     <span
       z-form-message
       zType="error"
@@ -62,7 +60,9 @@
             id="complicationOfCurrentPregnancyList"
             name="complicationOfCurrentPregnancyList"
             [zMultiple]="true"
-            [zPlaceholder]="current_language_set?.casesheet?.complications || ''"
+            [zPlaceholder]="
+              current_language_set?.casesheet?.complications || ''
+            "
             [zValue]="selectedComplicationTypes"
             (zSelectionChange)="onComplicationChange($event)">
             <z-select-item
