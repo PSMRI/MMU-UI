@@ -1712,9 +1712,11 @@ em {
 input:-webkit-autofill,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:hover {
-  -webkit-box-shadow: 0 0 0 20px whitesmoke inset;
-  border-bottom: 2px solid #e6e6e6;
-  bottom: 1px;
+  /* Suppress the browser's yellow autofill background only. The old rule also
+     forced a gray border-bottom (Material underline leftover) which overrode
+     the shadcn focus ring on the bottom edge — removed so the focus border is
+     complete on all four sides. */
+  -webkit-box-shadow: 0 0 0 1000px var(--background) inset;
 }
 
 .height-345 {
