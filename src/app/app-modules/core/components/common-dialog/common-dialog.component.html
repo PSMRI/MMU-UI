@@ -5,22 +5,20 @@
       [name]="statusIcon(status)"
       size="20"
       [ngClass]="statusColor(status)"></ng-icon>
-    <p class="m-0 text-base font-semibold" [ngClass]="statusColor(status)">
+    <p class="m-0 text-base font-medium text-foreground">
       {{ text }}
     </p>
   </div>
 </ng-template>
 
 <!-- Confirm (confirmAlert and confirmcalibration are identical) -->
-<div
-  *ngIf="confirmAlert || confirmcalibration"
-  class="flex flex-col gap-4 p-6">
+<div *ngIf="confirmAlert || confirmcalibration" class="flex flex-col gap-3 p-4">
   <ng-container
     *ngTemplateOutlet="
       dialogHeader;
       context: {
         status: title,
-        text: (title === 'warn' ? 'warning' : title) | titlecase
+        text: (title === 'warn' ? 'warning' : title) | titlecase,
       }
     "></ng-container>
   <p class="m-0 text-sm text-muted-foreground">{{ message }}</p>
@@ -39,13 +37,13 @@
 </div>
 
 <!-- Alert / alertError (single acknowledge button) -->
-<div *ngIf="alert || alertError" class="flex flex-col gap-4 p-6">
+<div *ngIf="alert || alertError" class="flex flex-col gap-3 p-4">
   <ng-container
     *ngTemplateOutlet="
       dialogHeader;
       context: {
         status: status,
-        text: (status === 'warn' ? 'warning' : status) | titlecase
+        text: (status === 'warn' ? 'warning' : status) | titlecase,
       }
     "></ng-container>
   <p class="m-0 text-sm text-muted-foreground">{{ message }}</p>
@@ -61,7 +59,7 @@
 </div>
 
 <!-- Remarks (single-line) -->
-<div *ngIf="remarks" class="flex flex-col gap-4 p-6">
+<div *ngIf="remarks" class="flex flex-col gap-3 p-4">
   <ng-container
     *ngTemplateOutlet="
       dialogHeader;
@@ -82,14 +80,17 @@
     <button z-button zType="outline" (click)="dialogRef.close(false)">
       {{ btnCancelText }}
     </button>
-    <button z-button zType="default" (click)="dialogRef.close(remarksRef.value)">
+    <button
+      z-button
+      zType="default"
+      (click)="dialogRef.close(remarksRef.value)">
       {{ btnOkText }}
     </button>
   </div>
 </div>
 
 <!-- Edit remarks (multi-line) -->
-<div *ngIf="editRemarks" class="flex flex-col gap-4 p-6">
+<div *ngIf="editRemarks" class="flex flex-col gap-3 p-4">
   <ng-container
     *ngTemplateOutlet="
       dialogHeader;
@@ -119,7 +120,7 @@
 </div>
 
 <!-- Notify (mandatory-fields list) -->
-<div *ngIf="notify" class="flex flex-col gap-4 p-6">
+<div *ngIf="notify" class="flex flex-col gap-3 p-4">
   <ng-container
     *ngTemplateOutlet="
       dialogHeader;
@@ -166,7 +167,7 @@
 </div>
 
 <!-- Choice (radio) -->
-<div *ngIf="choice" class="flex flex-col gap-4 p-6">
+<div *ngIf="choice" class="flex flex-col gap-3 p-4">
   <ng-container
     *ngTemplateOutlet="
       dialogHeader;
@@ -195,7 +196,7 @@
 </div>
 
 <!-- Session timeout (with nested choiceSelect, preserved as in the original) -->
-<div *ngIf="sessionTimeout" class="flex flex-col gap-4 p-6">
+<div *ngIf="sessionTimeout" class="flex flex-col gap-3 p-4">
   <ng-container
     *ngTemplateOutlet="
       dialogHeader;
@@ -225,30 +226,30 @@
 </div>
 
 <!-- Choice-select (radio) — top-level mode, independent of sessionTimeout -->
-<div *ngIf="choiceSelect" class="flex flex-col gap-4 p-6">
-    <ng-container
-      *ngTemplateOutlet="
-        dialogHeader;
-        context: { status: 'info', text: 'Info' }
-      "></ng-container>
-    <div class="flex flex-col gap-2">
-      <p class="m-0 text-sm text-muted-foreground">{{ message | titlecase }}</p>
-      <z-radio-group [(ngModel)]="selectedOption" class="gap-2">
-        <z-radio *ngFor="let option of options" [value]="option.id">
-          {{ option.name }}
-        </z-radio>
-      </z-radio-group>
-    </div>
-    <div class="flex justify-end gap-2">
-      <button z-button zType="outline" (click)="dialogRef.close(false)">
-        {{ btnCancelText }}
-      </button>
-      <button
-        z-button
-        zType="default"
-        (click)="dialogRef.close(selectedOption)"
-        cdkFocusInitial>
-        {{ btnOkText }}
-      </button>
-    </div>
+<div *ngIf="choiceSelect" class="flex flex-col gap-3 p-4">
+  <ng-container
+    *ngTemplateOutlet="
+      dialogHeader;
+      context: { status: 'info', text: 'Info' }
+    "></ng-container>
+  <div class="flex flex-col gap-2">
+    <p class="m-0 text-sm text-muted-foreground">{{ message | titlecase }}</p>
+    <z-radio-group [(ngModel)]="selectedOption" class="gap-2">
+      <z-radio *ngFor="let option of options" [value]="option.id">
+        {{ option.name }}
+      </z-radio>
+    </z-radio-group>
+  </div>
+  <div class="flex justify-end gap-2">
+    <button z-button zType="outline" (click)="dialogRef.close(false)">
+      {{ btnCancelText }}
+    </button>
+    <button
+      z-button
+      zType="default"
+      (click)="dialogRef.close(selectedOption)"
+      cdkFocusInitial>
+      {{ btnOkText }}
+    </button>
+  </div>
 </div>
