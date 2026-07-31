@@ -33,20 +33,37 @@ Ensure that the following prerequisites are met before building the MMU service:
 
 * JDK 17
 * Maven 
-* Nodejs v18.10.0
+* Node.js v18.10.0 (use `nvm` to manage versions: `nvm install` picks up the version from `.nvmrc`)
 * MySQL
 
 ### Installation
 
 To install the MMU module, please follow these steps:
 
-1. Clone the repository to your local machine.
-2. Install the dependencies and build the module:
-   - Run the command `npm install`.
-   - Run the command `npm run build`.
-   - Run the command `mvn clean install`.
-   - Run the command `npm start`.
-3. Open your browser and access `http://localhost:4202/#/login` to view the login page of module.
+1. Clone the repository with submodules:
+   ```bash
+   git clone --recurse-submodules https://github.com/PSMRI/MMU-UI.git
+   cd MMU-UI
+   ```
+   If you already cloned without `--recurse-submodules`, run:
+   ```bash
+   git submodule update --init --recursive
+   ```
+
+2. Use the correct Node.js version:
+   ```bash
+   nvm install
+   nvm use
+   ```
+
+3. Install dependencies and build the module:
+   ```bash
+   npm install
+   npm run build       # or npm run build-dev for an AOT dev build
+   npm start           # serves at http://localhost:4202
+   ```
+
+4. Open your browser and access `http://localhost:4202/#/login` to view the login page of the module.
 
 ### Building from source
 
@@ -69,29 +86,19 @@ The MMU module offers comprehensive management capabilities for your application
 
 ### Initializing Submodule `Common-UI`
 
-To initialize the `Common-UI` submodule, follow these steps:
+The `Common-UI` submodule provides shared UI modules (registrar, feedback, tracking).
 
-1. Clone the `mmu-ui` project:
-   ```bash
-   git clone https://github.com/PSMRI/MMU-UI
+To initialize it:
 
-2. Navigate to the project directory and pull the latest changes from the develop branch
-   cd mmu-ui
-   git checkout develop
-   git pull origin develop
+```bash
+# From the repo root, run:
+git submodule update --init --recursive
+cd Common-UI
+git checkout develop
+git pull origin develop
+```
 
-3. Open the integrated terminal for the common-ui submodule and initialize it
-
-   cd Common-UI
-   git init
-   git remote add origin https://github.com/PSMRI/Common-UI
-   git submodule update --init --recursive
-
-4. Check the available branches and switch to the develop branch
-
-   git branch
-   git checkout develop
-   git pull origin develop
+If you cloned with `--recurse-submodules`, the submodule is already initialized.
 
 ## Filing Issues
 
