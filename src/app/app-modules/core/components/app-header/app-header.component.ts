@@ -113,7 +113,6 @@ export class AppHeaderComponent implements OnInit {
     if (this.isAuthenticated) {
       this.fetchLanguageSet();
     }
-    console.log(this.filteredNavigation, 'filter');
     this.status = this.sessionstorage.getItem('providerServiceID');
   }
 
@@ -131,7 +130,6 @@ export class AppHeaderComponent implements OnInit {
         this.getLanguage();
       }
     });
-    console.log('language array' + this.languageArray);
   }
   changeLanguage(language: any) {
     this.http_service
@@ -142,17 +140,19 @@ export class AppHeaderComponent implements OnInit {
             this.languageSuccessHandler(response, language);
           } else {
             this.confirmationService.alert(
-              this.currentLanguageSet.alerts.info.langNotDefinesd,
-              'info'
+              this.currentLanguageSet?.alerts?.info?.langNotDefinesd ??
+                'Selected language is not defined',
+              'error'
             );
           }
         },
         error => {
           this.confirmationService.alert(
-            this.currentLanguageSet.alerts.info.comingUpWithThisLang +
+            (this.currentLanguageSet?.alerts?.info?.comingUpWithThisLang ??
+              'Selected language is coming up with') +
               ' ' +
               language,
-            'info'
+            'error'
           );
         }
       );
@@ -168,8 +168,9 @@ export class AppHeaderComponent implements OnInit {
   languageSuccessHandler(response: any, language: any) {
     if (response === undefined) {
       this.confirmationService.alert(
-        this.currentLanguageSet.alerts.info.langNotDefinesd,
-        'info'
+        this.currentLanguageSet?.alerts?.info?.langNotDefinesd ??
+          'Selected language is not defined',
+        'error'
       );
       return;
     }
@@ -191,24 +192,23 @@ export class AppHeaderComponent implements OnInit {
       this.rolenavigation();
     } else {
       this.confirmationService.alert(
-        this.currentLanguageSet.alerts.info.comingUpWithThisLang +
+        (this.currentLanguageSet?.alerts?.info?.comingUpWithThisLang ??
+          'Selected language is coming up with') +
           ' ' +
           language,
-        'info'
+        'error'
       );
     }
   }
   logout() {
     this.auth.logout().subscribe(res => {
-      this.router
-        .navigate(['/feedback'], { queryParams: { sl: 'MMU' } })
-        .then(result => {
-          if (result) {
-            this.changeLanguage('English');
-            // this.sessionstorage.clear();
-            sessionStorage.clear();
-          }
-        });
+      this.router.navigate(['/login']).then(result => {
+        if (result) {
+          this.changeLanguage('English');
+          // this.sessionstorage.clear();
+          sessionStorage.clear();
+        }
+      });
     });
   }
   rolenavigation() {
@@ -281,13 +281,10 @@ export class AppHeaderComponent implements OnInit {
     const commitDetailsPath: any = 'assets/git-version.json';
     this.auth.getUIVersionAndCommitDetails(commitDetailsPath).subscribe(
       res => {
-        console.log('res', res);
         this.commitDetailsUI = res;
         this.versionUI = this.commitDetailsUI['version'];
       },
-      err => {
-        console.log('err', err);
-      }
+      err => {}
     );
   }
   showVersionAndCommitDetails() {

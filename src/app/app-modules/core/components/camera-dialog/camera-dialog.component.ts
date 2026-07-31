@@ -34,11 +34,10 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
 import { ConfirmationService } from '../../services';
 import { SetLanguageComponent } from '../set-language.component';
-import { Subject } from 'rxjs/internal/Subject';
 import { ChartData, ChartType } from 'chart.js';
 import html2canvas from 'html2canvas';
 import { WebcamImage, WebcamInitError } from 'ngx-webcam';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { saveAs } from 'file-saver';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
@@ -111,20 +110,14 @@ export class CameraDialogComponent implements OnInit, DoCheck, AfterViewInit {
     };
   }
 
-  onSuccess(stream: any) {
-    console.log('capturing video stream');
-  }
+  onSuccess(stream: any) {}
 
-  onError(err: any) {
-    console.log(err);
-  }
+  onError(err: any) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
     this.loaded = false;
     this.status = this.current_language_set.capture;
-    console.log('annoate', this.annotate);
-    console.log('availablePoints', this.availablePoints);
     if (this.availablePoints?.markers)
       this.pointsToWrite = this.availablePoints.markers;
   }
@@ -135,7 +128,6 @@ export class CameraDialogComponent implements OnInit, DoCheck, AfterViewInit {
       this.sysImage = webcamImage?.imageAsDataUrl;
       this.captured = true;
       this.status = this.current_language_set.capture;
-      console.info('got webcam image', this.sysImage);
     } else {
       this.captured = false;
       this.status = this.current_language_set.capture;
@@ -176,7 +168,6 @@ export class CameraDialogComponent implements OnInit, DoCheck, AfterViewInit {
 
   public getSnapshot(): void {
     this.trigger.next();
-    console.info('image type with base64 ', this.webcamImage);
   }
 
   public get triggerObservable(): Observable<void> {
