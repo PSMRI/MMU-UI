@@ -200,8 +200,18 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
           }
 
           this.filteredSurgeryMasterData = this.surgeryMasterData.slice();
-          this.addPastIllness();
-          this.addPastSurgery();
+          // Seed one empty row only if the array is empty. This subscription can
+          // fire more than once (and the FormArray lives in the preserved parent
+          // form across step navigation), so adding unconditionally piled up
+          // duplicate blank rows. The + button still adds rows on demand.
+          const illnessArr = this.pastHistoryForm.controls[
+            'pastIllness'
+          ] as FormArray;
+          const surgeryArr = this.pastHistoryForm.controls[
+            'pastSurgery'
+          ] as FormArray;
+          if (illnessArr.length === 0) this.addPastIllness();
+          if (surgeryArr.length === 0) this.addPastSurgery();
 
           this.changeDetectorRef.detectChanges();
 

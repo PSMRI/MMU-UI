@@ -572,35 +572,8 @@ export class WorkareaValidationService {
       }
     }
 
-    // Ensure doctor has added at least one prescription
-    if (host.attendantType === 'doctor') {
-      try {
-        const caseRecordForm = <FormGroup>(
-          medicalForm.controls['patientCaseRecordForm']
-        );
-        const drugPrescriptionForm = <FormGroup>(
-          (caseRecordForm && caseRecordForm.controls
-            ? caseRecordForm.controls['drugPrescriptionForm']
-            : null)
-        );
-        if (drugPrescriptionForm) {
-          let prescribedDrugs =
-            drugPrescriptionForm.value &&
-            drugPrescriptionForm.value.prescribedDrugs
-              ? drugPrescriptionForm.value.prescribedDrugs
-              : [];
-          prescribedDrugs = prescribedDrugs.filter((d: any) => !!d.createdBy);
-          if (!prescribedDrugs || prescribedDrugs.length === 0) {
-            required.push(
-              host.currentLanguageSet?.Prescription?.prescriptionRequired ||
-                'Please add at least one prescription'
-            );
-          }
-        }
-      } catch (err) {
-        console.warn('Error validating prescription presence', err);
-      }
-    }
+    // Note: the original app does NOT require a prescription on doctor submit,
+    // so no "at least one prescription" check is added here (kept faithful).
 
     if (required.length) {
       host.confirmationService.notify(
@@ -1095,36 +1068,8 @@ export class WorkareaValidationService {
       }
     }
 
-    // For quick consult doctor flow, ensure at least one prescription exists
-    if (host.attendantType === 'doctor') {
-      try {
-        const quickConsultCaseRecordForm = <FormGroup>(
-          host.patientMedicalForm.controls['patientCaseRecordForm']
-        );
-        const prescription =
-          quickConsultCaseRecordForm && quickConsultCaseRecordForm.controls
-            ? quickConsultCaseRecordForm.controls['drugPrescriptionForm']
-            : null;
-        if (prescription) {
-          let prescribedDrugs =
-            prescription.value && prescription.value.prescribedDrugs
-              ? prescription.value.prescribedDrugs
-              : [];
-          prescribedDrugs = prescribedDrugs.filter((d: any) => !!d.createdBy);
-          if (!prescribedDrugs || prescribedDrugs.length === 0) {
-            required.push(
-              host.currentLanguageSet?.Prescription?.prescriptionRequired ||
-                'Please add at least one prescription'
-            );
-          }
-        }
-      } catch (err) {
-        console.warn(
-          'Error validating quick consult prescription presence',
-          err
-        );
-      }
-    }
+    // Note: the original app does NOT require a prescription on submit (quick
+    // consult doctor flow included), so no such check is added here.
 
     if (required.length) {
       host.confirmationService.notify(

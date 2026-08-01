@@ -628,7 +628,15 @@ export class NurseService {
       JSON.stringify(patientChiefComplaintsForm)
     );
     for (const complaint of patientChiefComplaintsFormValue) {
-      if (complaint.chiefComplaint !== null) {
+      // The current form stores the name string in `chiefComplaint` and the id
+      // in the sibling `chiefComplaintID`; only the legacy form stored the whole
+      // option object here. Unwrap ONLY the object form — unwrapping a string
+      // would set both fields to undefined and the doctor would see no chief
+      // complaint captured.
+      if (
+        complaint.chiefComplaint &&
+        typeof complaint.chiefComplaint === 'object'
+      ) {
         complaint.chiefComplaintID = complaint.chiefComplaint.chiefComplaintID;
         complaint.chiefComplaint = complaint.chiefComplaint.chiefComplaint;
       }

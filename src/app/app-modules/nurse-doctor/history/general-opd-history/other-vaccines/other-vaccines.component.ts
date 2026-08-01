@@ -162,7 +162,12 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
           this.masterData = masterData;
           this.vaccineMasterData = masterData.vaccineMasterData;
 
-          this.addOtherVaccine();
+          // Seed one row only when empty — avoids duplicate blank rows from
+          // re-emission / step-navigation (FormArray persists in the parent).
+          const vaccinesArr = this.otherVaccinesForm.controls[
+            'otherVaccines'
+          ] as FormArray;
+          if (vaccinesArr.length === 0) this.addOtherVaccine();
 
           if (String(this.mode) === 'view') {
             const visitID = this.sessionstorage.getItem('visitID');

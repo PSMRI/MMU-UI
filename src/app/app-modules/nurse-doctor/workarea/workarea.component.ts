@@ -205,15 +205,34 @@ export class WorkareaComponent
     return this.currentStep >= this.enabledSteps.length - 1;
   }
 
+  // Keys of steps that have been shown at least once. Once a step is visited it
+  // stays rendered (just hidden while inactive) so its component — and the
+  // data/option-lists/rows it built — survives navigation, exactly like the old
+  // mat-stepper. This is what prevents duplicate FormArray rows and dead
+  // dropdowns when returning to a step.
+  private renderedSteps = new Set<string>();
+
+  isStepRendered(key: string): boolean {
+    return this.activeStepKey === key || this.renderedSteps.has(key);
+  }
+
   private goToStepIndex(target: number): void {
     const steps = this.enabledSteps;
     if (target < 0 || target >= steps.length || target === this.currentStep) {
       return;
     }
     const leaving = steps[this.currentStep];
+    if (leaving?.key) this.renderedSteps.add(leaving.key);
     this.currentStep = target;
+    if (steps[target]?.key) this.renderedSteps.add(steps[target].key);
     // Preserve the mat-stepper (selectionChange) unsaved-changes warning for the step left.
     this.updatePending({ previouslySelectedStep: { label: leaving?.label } });
+  }
+
+  /** Jump straight to a step by clicking its label in the stepper. */
+  goToStepKey(key: string): void {
+    const idx = this.enabledSteps.findIndex(step => step.key === key);
+    if (idx >= 0) this.goToStepIndex(idx);
   }
 
   nextStep(): void {

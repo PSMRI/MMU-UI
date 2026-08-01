@@ -97,18 +97,30 @@ export class CancerHistoryComponent
   ) {}
 
   ngOnInit() {
-    this.cancerPatientFamilyMedicalHistoryForm =
-      this.nurseCancerHistoryForm.get(
-        'cancerPatientFamilyMedicalHistoryForm'
-      ) as FormGroup;
-    this.cancerPatientPerosnalHistoryForm = this.nurseCancerHistoryForm.get(
-      'cancerPatientPerosnalHistoryForm'
-    ) as FormGroup;
-    this.cancerPatientObstetricHistoryForm = this.nurseCancerHistoryForm.get(
-      'cancerPatientObstetricHistoryForm'
-    ) as FormGroup;
+    this.deriveChildForms();
     this.getBenificiaryDetails();
     this.fetchLanguageResponse();
+  }
+
+  // Derive the per-section child form groups from the parent history form.
+  // Runs on every nurseCancerHistoryForm change, not just ngOnInit: switching
+  // the visit category (e.g. NCD care -> Cancer Screening) makes the parent
+  // swap in a freshly built cancer history form. Deriving only once in ngOnInit
+  // could latch onto the stale (non-cancer) form — whose get() returns null —
+  // and leave the children permanently null, crashing their templates. Only
+  // overwrite a child when its control actually exists, so a transient stale
+  // form never nulls out an already-good reference.
+  private deriveChildForms() {
+    const form = this.nurseCancerHistoryForm;
+    if (!form) return;
+    const family = form.get('cancerPatientFamilyMedicalHistoryForm');
+    const personal = form.get('cancerPatientPerosnalHistoryForm');
+    const obstetric = form.get('cancerPatientObstetricHistoryForm');
+    if (family)
+      this.cancerPatientFamilyMedicalHistoryForm = family as FormGroup;
+    if (personal) this.cancerPatientPerosnalHistoryForm = personal as FormGroup;
+    if (obstetric)
+      this.cancerPatientObstetricHistoryForm = obstetric as FormGroup;
   }
 
   ngAfterViewInit() {
@@ -120,6 +132,10 @@ export class CancerHistoryComponent
   }
 
   ngOnChanges(changes: any) {
+    if (changes['nurseCancerHistoryForm']) {
+      this.deriveChildForms();
+    }
+
     if (String(this.mode) === 'view') {
       const visitID = this.sessionstorage.getItem('visitID');
       const benRegID = this.sessionstorage.getItem('beneficiaryRegID');

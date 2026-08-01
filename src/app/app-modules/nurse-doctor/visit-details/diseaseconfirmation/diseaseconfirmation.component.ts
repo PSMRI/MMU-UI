@@ -59,7 +59,7 @@ export class DiseaseconfirmationComponent implements OnInit {
   revisit: any;
   diseaseArray: any = [];
   attendantType: any;
-  isDoctor: boolean = true;
+  isDoctor: boolean = false;
   currentLanguageSet: any;
   constructor(
     private fb: FormBuilder,
@@ -90,9 +90,12 @@ export class DiseaseconfirmationComponent implements OnInit {
     // }
     //}
     this.attendantType = this.route.snapshot.params['attendant'];
-    if (this.attendantType === 'doctor') {
-      this.isDoctor = true;
-    }
+    // Disease Confirmation is the nurse's to fill; doctors view it read-only.
+    // isDoctor defaulted to true and was only ever re-set to true, so a nurse's
+    // checkboxes stayed disabled. (Material's mat-checkbox masked this by
+    // re-enabling from the form control; z-checkbox honours [disabled] strictly.)
+    // Derive it from the role so the nurse can actually tick the boxes.
+    this.isDoctor = this.attendantType === 'doctor';
   }
 
   getDiseasesData(): any {

@@ -43,52 +43,65 @@
       <!-- Stepper indicator -->
       <z-stepper
         [zActiveIndex]="currentStep"
-        class="mb-6 w-full justify-center">
+        class="mb-6 w-full cursor-pointer justify-center">
         <z-step
           *ngIf="showVisitDetails"
+          (click)="goToStepKey('visitDetails')"
           [zLabel]="currentLanguageSet?.nurseData?.visitDetails"></z-step>
         <z-step
           *ngIf="showTMVisitDetails"
+          (click)="goToStepKey('tmVisitDetails')"
           [zLabel]="currentLanguageSet?.nurseData?.visitDetails"></z-step>
         <z-step
           *ngIf="showAnc"
+          (click)="goToStepKey('anc')"
           [zLabel]="currentLanguageSet?.ancData?.anc"></z-step>
         <z-step
           *ngIf="showPNC"
+          (click)="goToStepKey('pnc')"
           [zLabel]="currentLanguageSet?.pncData?.pnc"></z-step>
         <z-step
           *ngIf="showHistory"
+          (click)="goToStepKey('history')"
           [zLabel]="currentLanguageSet?.common?.history"></z-step>
         <z-step
           *ngIf="showVitals"
+          (click)="goToStepKey('vitals')"
           [zLabel]="
             currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC?.vitals
           "></z-step>
         <z-step
           *ngIf="showExamination"
+          (click)="goToStepKey('examination')"
           [zLabel]="currentLanguageSet?.ExaminationData?.examination"></z-step>
         <z-step
           *ngIf="showNCDScreening"
+          (click)="goToStepKey('ncdScreening')"
           [zLabel]="currentLanguageSet?.idrs?.screening"></z-step>
         <z-step
           *ngIf="showCaseRecord"
+          (click)="goToStepKey('caseRecord')"
           [zLabel]="currentLanguageSet?.common?.caseRecord"></z-step>
         <z-step
           *ngIf="showQuickConsult"
+          (click)="goToStepKey('quickConsult')"
           [zLabel]="
             currentLanguageSet?.historyData?.QuickConsultDetails?.quickconsult
           "></z-step>
         <z-step
           *ngIf="showRefer"
+          (click)="goToStepKey('refer')"
           [zLabel]="currentLanguageSet?.Referdetails?.revisitAndRefer"></z-step>
       </z-stepper>
 
       <!-- Visit Details -->
-      <div *ngIf="activeStepKey === 'visitDetails'">
+      <div
+        *ngIf="isStepRendered('visitDetails')"
+        [hidden]="activeStepKey !== 'visitDetails'">
         <app-visit-details
           [mode]="visitMode"
           [patientVisitDataForm]="patientVisitForm"></app-visit-details>
-        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+        <div class="mt-5 mb-10 flex flex-wrap justify-end gap-2">
           <button z-button type="button" (click)="nextStep(); checkMandatory()">
             {{ currentLanguageSet?.common?.next }}
           </button>
@@ -96,11 +109,13 @@
       </div>
 
       <!-- TM Visit Details -->
-      <div *ngIf="activeStepKey === 'tmVisitDetails'">
+      <div
+        *ngIf="isStepRendered('tmVisitDetails')"
+        [hidden]="activeStepKey !== 'tmVisitDetails'">
         <app-tm-visit-details
           [mode]="visitMode"
           [patientVisitForm]="patientVisitForm"></app-tm-visit-details>
-        <div class="mt-5 mb-10 flex flex-wrap items-center gap-2">
+        <div class="mt-5 mb-10 flex flex-wrap items-center justify-end gap-2">
           <button
             z-button
             type="button"
@@ -115,11 +130,13 @@
       </div>
 
       <!-- ANC -->
-      <div *ngIf="activeStepKey === 'anc'">
+      <div
+        *ngIf="isStepRendered('anc')"
+        [hidden]="activeStepKey !== 'anc'">
         <app-nurse-anc
           [mode]="ancMode"
           [patientANCDataForm]="patientANCForm"></app-nurse-anc>
-        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+        <div class="mt-5 mb-10 flex flex-wrap justify-end gap-2">
           <button z-button type="button" (click)="nextStep()">
             {{ currentLanguageSet?.common?.next }}
           </button>
@@ -127,6 +144,7 @@
             z-button
             zType="outline"
             type="button"
+            class="order-first"
             (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
@@ -142,11 +160,13 @@
       </div>
 
       <!-- PNC -->
-      <div *ngIf="activeStepKey === 'pnc'">
+      <div
+        *ngIf="isStepRendered('pnc')"
+        [hidden]="activeStepKey !== 'pnc'">
         <app-nurse-pnc
           [mode]="pncMode"
           [patientPNCDataForm]="patientPNCForm"></app-nurse-pnc>
-        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+        <div class="mt-5 mb-10 flex flex-wrap justify-end gap-2">
           <button z-button type="button" (click)="nextStep()">
             {{ currentLanguageSet?.common?.next }}
           </button>
@@ -154,6 +174,7 @@
             z-button
             zType="outline"
             type="button"
+            class="order-first"
             (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
@@ -169,14 +190,16 @@
       </div>
 
       <!-- History -->
-      <div *ngIf="activeStepKey === 'history'">
+      <div
+        *ngIf="isStepRendered('history')"
+        [hidden]="activeStepKey !== 'history'">
         <app-nurse-history
           [mode]="historyMode"
           [visitCategory]="visitCategory"
           [pregnancyStatus]="pregnancyStatus"
           [primeGravidaStatus]="primeGravidaStatus"
           [patientHistoryDataForm]="patientHistoryForm"></app-nurse-history>
-        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+        <div class="mt-5 mb-10 flex flex-wrap justify-end gap-2">
           <button z-button type="button" (click)="nextStep()">
             {{ currentLanguageSet?.common?.next }}
           </button>
@@ -184,6 +207,7 @@
             z-button
             zType="outline"
             type="button"
+            class="order-first"
             (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
@@ -201,13 +225,15 @@
       </div>
 
       <!-- Vitals -->
-      <div *ngIf="activeStepKey === 'vitals'">
+      <div
+        *ngIf="isStepRendered('vitals')"
+        [hidden]="activeStepKey !== 'vitals'">
         <app-nurse-vitals
           [vitalsMode]="vitalsMode"
           [pregnancyStatus]="pregnancyStatus"
           [visitCategory]="visitCategory"
           [patientVitalsDataForm]="patientVitalsForm"></app-nurse-vitals>
-        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+        <div class="mt-5 mb-10 flex flex-wrap justify-end gap-2">
           <button
             z-button
             type="button"
@@ -227,6 +253,7 @@
             z-button
             zType="outline"
             type="button"
+            class="order-first"
             (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
@@ -245,14 +272,16 @@
       </div>
 
       <!-- Examination -->
-      <div *ngIf="activeStepKey === 'examination'">
+      <div
+        *ngIf="isStepRendered('examination')"
+        [hidden]="activeStepKey !== 'examination'">
         <app-nurse-examination
           [examinationMode]="examinationMode"
           [visitCategory]="visitCategory"
           [patientExaminationDataForm]="
             patientExaminationForm
           "></app-nurse-examination>
-        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+        <div class="mt-5 mb-10 flex flex-wrap justify-end gap-2">
           <button
             z-button
             type="button"
@@ -272,6 +301,7 @@
             z-button
             zType="outline"
             type="button"
+            class="order-first"
             (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
@@ -287,13 +317,15 @@
       </div>
 
       <!-- NCD Screening (IDRS) -->
-      <div *ngIf="activeStepKey === 'ncdScreening'">
+      <div
+        *ngIf="isStepRendered('ncdScreening')"
+        [hidden]="activeStepKey !== 'ncdScreening'">
         <app-idrs
           [ncdScreeningMode]="ncdScreeningMode"
           [patientMedicalForm]="patientMedicalForm"
           (IDRSChanged)="idrsChange($event)"
           [idrsScreeningForm]="idrsScreeningForm"></app-idrs>
-        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+        <div class="mt-5 mb-10 flex flex-wrap justify-end gap-2">
           <button
             z-button
             *ngIf="!ncdScreeningMode"
@@ -313,6 +345,7 @@
             z-button
             zType="outline"
             type="button"
+            class="order-first"
             (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
@@ -328,7 +361,9 @@
       </div>
 
       <!-- Case Record -->
-      <div *ngIf="activeStepKey === 'caseRecord'">
+      <div
+        *ngIf="isStepRendered('caseRecord')"
+        [hidden]="activeStepKey !== 'caseRecord'">
         <app-case-record
           [caseRecordMode]="caseRecordMode"
           [visitCategory]="visitCategory"
@@ -336,7 +371,7 @@
           [findings]="findings"
           [currentVitals]="currentVitals"
           [patientCaseRecordForm]="patientCaseRecordForm"></app-case-record>
-        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+        <div class="mt-5 mb-10 flex flex-wrap justify-end gap-2">
           <button
             z-button
             *ngIf="showExamination || showHistory"
@@ -348,6 +383,7 @@
             z-button
             zType="outline"
             type="button"
+            class="order-first"
             (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
@@ -355,13 +391,15 @@
       </div>
 
       <!-- Quick Consult -->
-      <div *ngIf="activeStepKey === 'quickConsult'">
+      <div
+        *ngIf="isStepRendered('quickConsult')"
+        [hidden]="activeStepKey !== 'quickConsult'">
         <app-doctor-quick-consult
           [quickConsultMode]="quickConsultMode"
           [patientQuickConsultForm]="
             patientQuickConsultForm
           "></app-doctor-quick-consult>
-        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+        <div class="mt-5 mb-10 flex flex-wrap justify-end gap-2">
           <button z-button type="button" (click)="nextStep()">
             {{ currentLanguageSet?.common?.next }}
           </button>
@@ -369,6 +407,7 @@
             z-button
             zType="outline"
             type="button"
+            class="order-first"
             (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
@@ -376,12 +415,14 @@
       </div>
 
       <!-- Refer -->
-      <div *ngIf="activeStepKey === 'refer'">
+      <div
+        *ngIf="isStepRendered('refer')"
+        [hidden]="activeStepKey !== 'refer'">
         <app-refer
           [referMode]="referMode"
           [visitCategory]="visitCategory"
           [patientReferForm]="patientReferForm"></app-refer>
-        <div class="mt-5 mb-10 flex flex-wrap gap-2">
+        <div class="mt-5 mb-10 flex flex-wrap justify-end gap-2">
           <button
             z-button
             *ngIf="doctorFlag === 1"
@@ -408,6 +449,7 @@
             z-button
             zType="outline"
             type="button"
+            class="order-first"
             (click)="previousStep()">
             {{ currentLanguageSet?.common?.back }}
           </button>
