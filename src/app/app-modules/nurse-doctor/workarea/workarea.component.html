@@ -46,51 +46,73 @@
         class="mb-6 w-full cursor-pointer justify-center">
         <z-step
           *ngIf="showVisitDetails"
+          tabindex="0"
           (click)="goToStepKey('visitDetails')"
+          (keydown.enter)="goToStepKey('visitDetails')"
           [zLabel]="currentLanguageSet?.nurseData?.visitDetails"></z-step>
         <z-step
           *ngIf="showTMVisitDetails"
+          tabindex="0"
           (click)="goToStepKey('tmVisitDetails')"
+          (keydown.enter)="goToStepKey('tmVisitDetails')"
           [zLabel]="currentLanguageSet?.nurseData?.visitDetails"></z-step>
         <z-step
           *ngIf="showAnc"
+          tabindex="0"
           (click)="goToStepKey('anc')"
+          (keydown.enter)="goToStepKey('anc')"
           [zLabel]="currentLanguageSet?.ancData?.anc"></z-step>
         <z-step
           *ngIf="showPNC"
+          tabindex="0"
           (click)="goToStepKey('pnc')"
+          (keydown.enter)="goToStepKey('pnc')"
           [zLabel]="currentLanguageSet?.pncData?.pnc"></z-step>
         <z-step
           *ngIf="showHistory"
+          tabindex="0"
           (click)="goToStepKey('history')"
+          (keydown.enter)="goToStepKey('history')"
           [zLabel]="currentLanguageSet?.common?.history"></z-step>
         <z-step
           *ngIf="showVitals"
+          tabindex="0"
           (click)="goToStepKey('vitals')"
+          (keydown.enter)="goToStepKey('vitals')"
           [zLabel]="
             currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC?.vitals
           "></z-step>
         <z-step
           *ngIf="showExamination"
+          tabindex="0"
           (click)="goToStepKey('examination')"
+          (keydown.enter)="goToStepKey('examination')"
           [zLabel]="currentLanguageSet?.ExaminationData?.examination"></z-step>
         <z-step
           *ngIf="showNCDScreening"
+          tabindex="0"
           (click)="goToStepKey('ncdScreening')"
+          (keydown.enter)="goToStepKey('ncdScreening')"
           [zLabel]="currentLanguageSet?.idrs?.screening"></z-step>
         <z-step
           *ngIf="showCaseRecord"
+          tabindex="0"
           (click)="goToStepKey('caseRecord')"
+          (keydown.enter)="goToStepKey('caseRecord')"
           [zLabel]="currentLanguageSet?.common?.caseRecord"></z-step>
         <z-step
           *ngIf="showQuickConsult"
+          tabindex="0"
           (click)="goToStepKey('quickConsult')"
+          (keydown.enter)="goToStepKey('quickConsult')"
           [zLabel]="
             currentLanguageSet?.historyData?.QuickConsultDetails?.quickconsult
           "></z-step>
         <z-step
           *ngIf="showRefer"
+          tabindex="0"
           (click)="goToStepKey('refer')"
+          (keydown.enter)="goToStepKey('refer')"
           [zLabel]="currentLanguageSet?.Referdetails?.revisitAndRefer"></z-step>
       </z-stepper>
 
