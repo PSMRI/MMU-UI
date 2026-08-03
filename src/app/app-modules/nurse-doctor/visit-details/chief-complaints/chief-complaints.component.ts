@@ -264,6 +264,28 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
+  /**
+   * Show the full chief-complaint list when the field is focused/clicked (not
+   * just while typing). Uses the row's available list, falling back to the full
+   * master, so an empty field still opens the dropdown.
+   */
+  showChiefComplaintList(i: number) {
+    const list =
+      this.chiefComplaintTemporarayList?.[i] ?? this.chiefComplaintMaster ?? [];
+    this.suggestedChiefComplaintList[i] = [...list];
+  }
+
+  /**
+   * Hide the chief-complaint suggestion list when the input loses focus (e.g.
+   * the user clicks elsewhere). Deferred a tick so an option's (mousedown)
+   * selection — which fires before blur — completes first.
+   */
+  hideChiefComplaintList(i: number) {
+    setTimeout(() => {
+      this.suggestedChiefComplaintList[i] = [];
+    }, 200);
+  }
+
   reEnterChiefComplaint(complaintForm: AbstractControl) {
     if (complaintForm.value.chiefComplaint) {
       complaintForm.get('duration')?.enable();
@@ -502,7 +524,23 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     const complaintFormArray = <FormArray>(
       this.patientChiefComplaintsForm.controls['complaints']
     );
-    complaintFormArray.at(i).patchValue({ chiefComplaint: complaint });
+    // `complaint` is the selected option object ({ chiefComplaint, chiefComplaintID, … }).
+    // The control backs a text input, so store the name string (not the object,
+    // which renders as "[object Object]") AND its id in the sibling
+    // chiefComplaintID control — otherwise the saved visit has a name with a
+    // null id and the doctor sees "No chief complaint captured". conceptID/SCT
+    // id are patched separately.
+    const row = complaintFormArray.at(i);
+    row.patchValue({
+      chiefComplaint: complaint?.chiefComplaint ?? complaint,
+      chiefComplaintID: complaint?.chiefComplaintID ?? null,
+    });
+    // Picking a complaint must enable the dependent fields immediately. The
+    // input's (blur) enabler doesn't fire reliably when an option is chosen via
+    // mousedown, so the Duration/Description (and, once Duration is typed, Unit)
+    // stayed disabled after selecting.
+    row.get('duration')?.enable();
+    row.get('description')?.enable();
     this.suggestedChiefComplaintList[i] = [];
   }
 

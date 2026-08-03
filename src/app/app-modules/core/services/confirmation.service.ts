@@ -70,7 +70,11 @@ export class ConfirmationService {
     status = 'info',
     btnOkText = 'OK'
   ): ZardDialogRef<CommonDialogComponent> {
-    const dialogRef = this.createDialog('420px', true);
+    // Not mask-closable: alerts are commonly raised from (blur)/(change)
+    // handlers, so the same pointer interaction that opened the dialog would
+    // otherwise register as an outside-click and dismiss it within ~0.5s
+    // before the user can read it. It stays open until OK (or Escape).
+    const dialogRef = this.createDialog('420px', false);
     const instance = dialogRef.componentInstance!;
     instance.message = message;
     instance.status = status.toLowerCase();

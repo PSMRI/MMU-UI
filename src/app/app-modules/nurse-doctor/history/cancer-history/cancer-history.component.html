@@ -18,6 +18,7 @@
     <z-accordion-content>
       <div class="px-4">
         <app-nurse-cancer-family-disease-history
+          *ngIf="cancerPatientFamilyMedicalHistoryForm"
           [mode]="mode"
           [cancerPatientFamilyMedicalHistoryForm]="
             cancerPatientFamilyMedicalHistoryForm
@@ -42,6 +43,7 @@
     <z-accordion-content>
       <div class="px-4">
         <app-nurse-cancer-personal-history
+          *ngIf="cancerPatientPerosnalHistoryForm"
           [cancerPatientPerosnalHistoryForm]="
             cancerPatientPerosnalHistoryForm
           "></app-nurse-cancer-personal-history>
@@ -71,6 +73,7 @@
     <z-accordion-content>
       <div class="px-4">
         <app-nurse-cancer-obstetric-history
+          *ngIf="cancerPatientObstetricHistoryForm"
           [cancerPatientObstetricHistoryForm]="
             cancerPatientObstetricHistoryForm
           "

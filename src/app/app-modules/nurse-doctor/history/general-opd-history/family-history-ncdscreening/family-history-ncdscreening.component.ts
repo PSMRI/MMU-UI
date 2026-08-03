@@ -172,7 +172,20 @@ export class FamilyHistoryNcdscreeningComponent
           this.masterData = masterData;
           this.diseaseMasterData = masterData.DiseaseTypes;
           this.familyMemeberMasterData = masterData.familyMemberTypes;
-          this.addFamilyDisease();
+          const familyArr = this.familyHistoryForm.controls[
+            'familyDiseaseList'
+          ] as FormArray;
+          if (familyArr.length === 0) {
+            // Fresh: add one row (also builds its Disease Type option list).
+            this.addFamilyDisease();
+          } else {
+            // Revisit: the rows persist in the parent form, but the per-row
+            // dropdown option lists are component state lost on recreate —
+            // rebuild them so the Disease Type dropdowns work again.
+            this.diseaseSelectList = familyArr.controls.map(() =>
+              this.diseaseMasterData ? this.diseaseMasterData.slice() : []
+            );
+          }
 
           if (String(this.mode) === 'view') {
             const visitID = this.sessionstorage.getItem('visitID');
@@ -594,7 +607,11 @@ export class FamilyHistoryNcdscreeningComponent
 
   filterFamilyMembers(familyMembers: any, familyGroup: any) {
     this.familyMembersArray = familyMembers.value;
-    const familyDiseaseType = familyGroup.value.diseaseType.diseaseType;
+    // diseaseType may be null (member picked before a disease) or a plain value;
+    // guard so selecting a family member first doesn't throw on `.diseaseType`.
+    const familyDiseaseType =
+      familyGroup.value.diseaseType?.diseaseType ??
+      familyGroup.value.diseaseType;
     let singleParent = false;
     let bothParent = false;
     let IDRSScoreForFamilyMembes = 0;

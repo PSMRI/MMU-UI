@@ -150,7 +150,12 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
           this.masterData = masterData;
           this.diseaseMasterData = masterData.DiseaseTypes;
           this.familyMemeberMasterData = masterData.familyMemberTypes;
-          this.addFamilyDisease();
+          // Seed one row only when empty — avoids duplicate blank rows from
+          // re-emission / step-navigation (FormArray persists in the parent).
+          const familyArr = this.familyHistoryForm.controls[
+            'familyDiseaseList'
+          ] as FormArray;
+          if (familyArr.length === 0) this.addFamilyDisease();
 
           if (String(this.mode) === 'view') {
             const visitID = this.sessionstorage.getItem('visitID');

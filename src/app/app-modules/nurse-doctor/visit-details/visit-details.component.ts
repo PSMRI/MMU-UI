@@ -122,9 +122,18 @@ export class VisitDetailsComponent implements OnInit, DoCheck {
   }
 
   getVisitCategory() {
-    (<FormGroup>(
+    const categoryControl = (<FormGroup>(
       this.patientVisitDataForm.controls['patientVisitDetailsForm']
-    )).controls['visitCategory'].valueChanges.subscribe(categoryValue => {
+    )).controls['visitCategory'];
+    // Returning to this step recreates the component (each step is *ngIf-gated)
+    // while the form value is preserved. valueChanges fires only on future
+    // changes, so seed from the already-selected value to recompute which
+    // sections (Chief Complaints, etc.) are visible — otherwise they vanish.
+    if (categoryControl.value) {
+      this.visitCategory = categoryControl.value;
+      this.conditionCheck();
+    }
+    categoryControl.valueChanges.subscribe(categoryValue => {
       if (categoryValue) {
         this.visitCategory = categoryValue;
         this.conditionCheck();

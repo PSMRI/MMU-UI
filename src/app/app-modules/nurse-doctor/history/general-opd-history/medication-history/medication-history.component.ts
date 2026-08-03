@@ -111,7 +111,13 @@ export class MedicationHistoryComponent implements OnInit, OnDestroy, DoCheck {
     this.assignSelectedLanguage();
     this.getMasterData();
     this.getBeneficiaryDetails();
-    this.addMedicationHistory();
+    // Seed one row only when empty — ngOnInit runs again when the step is
+    // revisited (component recreated) but the FormArray persists in the parent
+    // form, so an unconditional add piled up duplicate blank rows.
+    const medArr = this.medicationHistoryForm.controls[
+      'medicationHistoryList'
+    ] as FormArray;
+    if (medArr.length === 0) this.addMedicationHistory();
   }
 
   ngDoCheck() {

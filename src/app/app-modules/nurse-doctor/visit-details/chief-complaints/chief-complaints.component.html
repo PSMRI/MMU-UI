@@ -27,8 +27,11 @@
                 name="chiefComplaint"
                 formControlName="chiefComplaint"
                 (keyup)="suggestChiefComplaintList(complaint, i)"
-                (blur)="reEnterChiefComplaint(complaint)"
-                (focus)="trackFieldInteraction('Chief Complaints')"
+                (blur)="reEnterChiefComplaint(complaint); hideChiefComplaintList(i)"
+                (focus)="
+                  showChiefComplaintList(i);
+                  trackFieldInteraction('Chief Complaints')
+                "
                 #complaintType />
             </z-form-control>
 

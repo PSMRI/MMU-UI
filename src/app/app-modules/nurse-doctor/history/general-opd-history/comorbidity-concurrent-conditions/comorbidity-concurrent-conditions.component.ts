@@ -167,7 +167,13 @@ export class ComorbidityConcurrentConditionsComponent
           this.comorbidityMasterData = masterData.comorbidConditions;
           this.comorbidityFilteredMasterData = masterData.comorbidConditions;
 
-          this.addComorbidityConcurrentConditions();
+          // Seed one row only when empty — this subscription can fire again and
+          // the FormArray persists in the parent form across step navigation, so
+          // an unconditional add piled up duplicate blank rows.
+          const comorbArr = this.comorbidityConcurrentConditionsForm.controls[
+            'comorbidityConcurrentConditionsList'
+          ] as FormArray;
+          if (comorbArr.length === 0) this.addComorbidityConcurrentConditions();
 
           if (String(this.mode) === 'view') {
             const visitID = this.sessionstorage.getItem('visitID');
