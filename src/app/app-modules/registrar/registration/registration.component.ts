@@ -39,8 +39,7 @@ import { RegistrationUtils } from '../shared/utility/registration-utility';
 import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard.service';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
-import { Observable } from 'rxjs/internal/Observable';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { RegistrarService } from '../shared/services/registrar.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 

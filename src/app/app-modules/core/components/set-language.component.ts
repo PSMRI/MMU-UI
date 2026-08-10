@@ -39,11 +39,9 @@ export class SetLanguageComponent {
         this.currentLanguageObject = languageResponse;
       },
       (err: any) => {
-        console.log(err);
+        console.error(err);
       },
-      () => {
-        console.log('completed');
-      }
+      () => {}
     );
     languageSubscription.unsubscribe();
   }

@@ -23,8 +23,9 @@
       "ES2022",
       "dom"
     ],
-    "noImplicitReturns": false,
-
+    "paths": {
+      "Common-UI/src/*": ["Common-UI/src/*"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

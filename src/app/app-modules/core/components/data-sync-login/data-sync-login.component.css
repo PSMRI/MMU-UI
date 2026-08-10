@@ -53,23 +53,6 @@ mat-card {
   padding: unset;
 }
 
-.prefix-icon {
-  padding-top: 16px;
-  color: gray;
-}
-
-.input-full-width {
-  width: 100%;
-}
-
-
-.m-t-20 {
-  margin-top: 20px;
-}
-
-.m-b-20 {
-  margin-bottom: 20px;
-}
 .overlay {
   height: 100%;
   width: 100%;
@@ -100,3 +83,4 @@ mat-card {
 button.submit {
   background: #0277bd;
 }
+

@@ -41,7 +41,7 @@ const defaultEnvValues = {
   COMMON_API_BASE: '',
   COMMON_API_OPEN_SYNC: '',
   IDENTITY_API_BASE: '',
-  INVENTORY_UI_BASE: '',
+  INVENTORY_UI: '',
   TM_API_BASE: '',
   MMU_API_BASE: '',
   MMU_UI_BASE: '',
