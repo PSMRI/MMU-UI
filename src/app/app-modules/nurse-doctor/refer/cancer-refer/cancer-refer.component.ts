@@ -107,7 +107,12 @@ export class CancerReferComponent implements OnInit, DoCheck, OnDestroy {
       this.masterdataService.doctorMasterData$.subscribe(masterData => {
         if (masterData) {
           this.higherHealthcareCenter = masterData.higherHealthCare;
-          this.additionalServices = masterData.additionalServices;
+          // [19] Only 104 and 1097 are offered as additional referral services.
+          this.additionalServices = (
+            masterData.additionalServices || []
+          ).filter((s: any) =>
+            ['104', '1097'].includes(String(s?.serviceName).trim())
+          );
           this.referralReason = masterData.referralReason;
           console.log(masterData.revisitDate);
           console.log('hi');
