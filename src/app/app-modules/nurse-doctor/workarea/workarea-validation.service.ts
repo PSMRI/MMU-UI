@@ -431,6 +431,36 @@ export class WorkareaValidationService {
         required.push(host.currentLanguageSet.allergyNameIsNotValid);
       }
     }
+    // [20] Require a family member whenever a real disease is chosen in Family
+    // History (mirrors the NCD-screening rule). Family history stays optional
+    // overall: an empty / None / Nil row does not raise the error.
+    const familyHistoryForm = <FormGroup>(
+      historyForm?.controls?.['familyHistory']
+    );
+    if (familyHistoryForm) {
+      const familyDiseaseList = (<FormArray>(
+        familyHistoryForm.controls['familyDiseaseList']
+      )).value;
+      let familyMember = 0;
+      let familyDiseasesLength = familyDiseaseList.length;
+      for (let i = 0; i < familyDiseaseList.length; i++) {
+        const dt = familyDiseaseList[i].diseaseType;
+        const dtName = dt && dt.diseaseType ? dt.diseaseType : dt;
+        if (dt !== null && dtName !== 'None' && dtName !== 'Nil') {
+          if (
+            familyDiseaseList[i].familyMembers &&
+            familyDiseaseList[i].familyMembers.length > 0
+          ) {
+            familyMember++;
+          }
+        } else {
+          familyDiseasesLength--;
+        }
+      }
+      if (familyMember !== familyDiseasesLength) {
+        required.push(host.currentLanguageSet.familyMemberInFamilyHistory);
+      }
+    }
     if (vitalsForm !== undefined && vitalsForm !== null) {
       if (vitalsForm.controls['systolicBP_1stReading'].errors) {
         required.push(

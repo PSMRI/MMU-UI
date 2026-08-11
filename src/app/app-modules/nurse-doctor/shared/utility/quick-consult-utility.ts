@@ -121,7 +121,7 @@ export class QuickConsultUtils {
       bloodGlucose_2hr_PP: { value: null, disabled: true },
       rbsTestResult: { value: null, disabled: false },
       rbsTestRemarks: { value: null, disabled: false },
-      clinicalObservation: [null, Validators.required],
+      clinicalObservation: null,
       provisionalDiagnosisList: this.fb.array([
         this.initProvisionalDiagnosisList(),
       ]),
