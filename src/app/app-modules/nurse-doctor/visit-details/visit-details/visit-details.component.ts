@@ -116,6 +116,42 @@ export class PatientVisitDetailsComponent
       this.beneficiaryDetailsSubscription.unsubscribe();
   }
 
+  // MMU only builds a flow (steps + forms) for these visit categories in
+  // workarea.handleVisitType(). The backend master list also returns categories
+  // that MMU has no flow for (Childhood & Adolescent, Family Planning, Neonatal,
+  // …); picking one left the user stranded on Visit Details with no Next/Submit.
+  // Restrict the dropdown to what MMU actually supports.
+  private readonly supportedVisitCategories = [
+    'General OPD (QC)',
+    'Cancer Screening',
+    'General OPD',
+    'NCD screening',
+    'PNC',
+    'ANC',
+    'NCD care',
+    'COVID-19 Screening',
+  ];
+
+  // Keep only categories MMU implements, and hide the adult NCD categories from
+  // beneficiaries under 30 (matching the age >= 30 auto-selection below) so a
+  // young beneficiary can't pick NCD screening / NCD care.
+  private filterSupportedCategories(categories: any[]): any[] {
+    const age = this.beneficiary?.ageVal;
+    return (categories || []).filter((item: any) => {
+      const name = item?.visitCategory;
+      if (!this.supportedVisitCategories.includes(name)) return false;
+      if (
+        (name === 'NCD screening' || name === 'NCD care') &&
+        age !== null &&
+        age !== undefined &&
+        age < 30
+      ) {
+        return false;
+      }
+      return true;
+    });
+  }
+
   visitCategorySubscription: any;
   getVisitReasonAndCategory() {
     this.visitCategorySubscription =
@@ -127,8 +163,9 @@ export class PatientVisitDetailsComponent
             this.templateNurseMasterData
           );
           this.templateVisitReasons = this.templateNurseMasterData.visitReasons;
-          this.templateVisitCategories =
-            this.templateNurseMasterData.visitCategories;
+          this.templateVisitCategories = this.filterSupportedCategories(
+            this.templateNurseMasterData.visitCategories
+          );
           this.templateFilterVisitCategories = this.templateVisitCategories;
 
           if (

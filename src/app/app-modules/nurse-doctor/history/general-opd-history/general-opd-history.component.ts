@@ -163,45 +163,37 @@ export class GeneralOpdHistoryComponent
   }
 
   loadFormData() {
-    this.pastHistory = this.nurseGeneralHistoryForm.get(
-      'pastHistory'
-    ) as FormGroup;
-    this.comorbidityHistory = this.nurseGeneralHistoryForm.get(
-      'comorbidityHistory'
-    ) as FormGroup;
-    this.medicationHistory = this.nurseGeneralHistoryForm.get(
-      'medicationHistory'
-    ) as FormGroup;
-    this.personalHistory = this.nurseGeneralHistoryForm.get(
-      'personalHistory'
-    ) as FormGroup;
-    this.familyHistory = this.nurseGeneralHistoryForm.get(
-      'familyHistory'
-    ) as FormGroup;
-    this.menstrualHistory = this.nurseGeneralHistoryForm.get(
-      'menstrualHistory'
-    ) as FormGroup;
-    this.perinatalHistory = this.nurseGeneralHistoryForm.get(
-      'perinatalHistory'
-    ) as FormGroup;
-    this.pastObstericHistory = this.nurseGeneralHistoryForm.get(
-      'pastObstericHistory'
-    ) as FormGroup;
-    this.immunizationHistory = this.nurseGeneralHistoryForm.get(
-      'immunizationHistory'
-    ) as FormGroup;
-    this.otherVaccines = this.nurseGeneralHistoryForm.get(
-      'otherVaccines'
-    ) as FormGroup;
-    this.feedingHistory = this.nurseGeneralHistoryForm.get(
-      'feedingHistory'
-    ) as FormGroup;
-    this.developmentHistory = this.nurseGeneralHistoryForm.get(
-      'developmentHistory'
-    ) as FormGroup;
-    this.physicalActivityHistory = this.nurseGeneralHistoryForm.get(
-      'physicalActivityHistory'
-    ) as FormGroup;
+    const form = this.nurseGeneralHistoryForm;
+    if (!form) return;
+    // Only overwrite a section form when its control actually exists on the
+    // parent. loadFormData runs on every ngOnChanges, so during a visit-category
+    // switch the parent form can momentarily be the wrong/stale group whose
+    // get() returns null; assigning that null blanked the whole History section
+    // (and could crash the child [formGroup] bindings). Keeping the previous
+    // good reference lets the correct form win once it arrives.
+    const pick = (name: string): FormGroup | undefined => {
+      const ctrl = form.get(name);
+      return ctrl ? (ctrl as FormGroup) : undefined;
+    };
+    this.pastHistory = pick('pastHistory') ?? this.pastHistory;
+    this.comorbidityHistory =
+      pick('comorbidityHistory') ?? this.comorbidityHistory;
+    this.medicationHistory =
+      pick('medicationHistory') ?? this.medicationHistory;
+    this.personalHistory = pick('personalHistory') ?? this.personalHistory;
+    this.familyHistory = pick('familyHistory') ?? this.familyHistory;
+    this.menstrualHistory = pick('menstrualHistory') ?? this.menstrualHistory;
+    this.perinatalHistory = pick('perinatalHistory') ?? this.perinatalHistory;
+    this.pastObstericHistory =
+      pick('pastObstericHistory') ?? this.pastObstericHistory;
+    this.immunizationHistory =
+      pick('immunizationHistory') ?? this.immunizationHistory;
+    this.otherVaccines = pick('otherVaccines') ?? this.otherVaccines;
+    this.feedingHistory = pick('feedingHistory') ?? this.feedingHistory;
+    this.developmentHistory =
+      pick('developmentHistory') ?? this.developmentHistory;
+    this.physicalActivityHistory =
+      pick('physicalActivityHistory') ?? this.physicalActivityHistory;
   }
 
   ngOnChanges(changes: any) {
