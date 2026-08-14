@@ -1060,10 +1060,13 @@ export class WorkareaComponent
     this.showPNC = false;
     this.showCaseRecord = false;
     this.showRefer = false;
-
-    if (this.attendantType === 'nurse') {
-      this.changeDetectorRef.detectChanges();
-    }
+    // NOTE: no forced changeDetectorRef.detectChanges() here. It was added during
+    // the migration but hideAll() runs inside the visitCategory valueChanges
+    // handler (i.e. mid change-detection). Forcing CD there while the show* flags
+    // flip true->false throws ExpressionChangedAfterItHasBeenCheckedError on a
+    // category *change*, aborting handleVisitType() before it rebuilds the steps
+    // (stepper collapses to Visit Details, Next dies — bug [31]). The normal CD
+    // pass after this handler rebuilds the stepper (Zard steps are reactive).
   }
 
   submitPatientMedicalDetailsForm(medicalForm: any) {
