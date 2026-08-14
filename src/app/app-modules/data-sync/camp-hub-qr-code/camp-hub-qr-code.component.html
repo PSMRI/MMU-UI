@@ -28,72 +28,231 @@
 </div>
 
 <mat-dialog-content class="qr-dialog-content">
-  <p class="qr-subtitle">Scan with the Stop TB Mobile app to connect over Wi-Fi.</p>
+  <mat-tab-group>
+    <mat-tab label="Pair Mobile App">
+      <div class="nikshay-tab-content">
+        <p class="qr-subtitle">Scan with the Stop TB Mobile app to connect over Wi-Fi.</p>
 
-  <!-- Auto-detection status -->
-  <div *ngIf="isDetecting" class="detect-row">
-    <mat-spinner diameter="20"></mat-spinner>
-    <span class="detect-text">Fetching Camp Hub server info&hellip;</span>
-  </div>
+        <!-- Auto-detection status -->
+        <div *ngIf="isDetecting" class="detect-row">
+          <mat-spinner diameter="20"></mat-spinner>
+          <span class="detect-text">Fetching Camp Hub server info&hellip;</span>
+        </div>
 
-  <div *ngIf="!isDetecting && detectionFailed" class="detect-row warn">
-    <span class="material-icons" style="font-size: 18px; color: #f9a825">info</span>
-    <span class="detect-text">
-      Camp Hub server unreachable &mdash; enter the server URL manually below.
-    </span>
-    <button mat-icon-button (click)="autoDetect()" matTooltip="Retry" style="margin-left: 4px">
-      <span class="material-icons" style="font-size: 18px">refresh</span>
-    </button>
-  </div>
+        <div *ngIf="!isDetecting && detectionFailed" class="detect-row warn">
+          <span class="material-icons" style="font-size: 18px; color: #f9a825">info</span>
+          <span class="detect-text">
+            Camp Hub server unreachable &mdash; enter the server URL manually below.
+          </span>
+          <button mat-icon-button (click)="autoDetect()" matTooltip="Retry" style="margin-left: 4px">
+            <span class="material-icons" style="font-size: 18px">refresh</span>
+          </button>
+        </div>
 
-  <div *ngIf="!isDetecting && !detectionFailed && urlForm.controls.campHubUrl.value" class="detect-row ok">
-    <span class="material-icons" style="font-size: 18px; color: #388e3c">check_circle</span>
-    <span class="detect-text">Server URL fetched &mdash; review below and click Generate.</span>
-  </div>
+        <div *ngIf="!isDetecting && !detectionFailed && urlForm.controls.campHubUrl.value" class="detect-row ok">
+          <span class="material-icons" style="font-size: 18px; color: #388e3c">check_circle</span>
+          <span class="detect-text">Server URL fetched &mdash; review below and click Generate.</span>
+        </div>
 
-  <!-- URL input + manual generate (shown only when auto-detect failed) -->
-  <form [formGroup]="urlForm" (ngSubmit)="generate()" style="margin-top: 16px">
-    <mat-form-field style="width: 100%">
-      <mat-label>Camp Hub Server URL</mat-label>
-      <input
-        matInput
-        formControlName="campHubUrl"
-        placeholder="http://192.168.137.1:8083/"
-        autocomplete="off" />
-      <mat-hint>Format: http://&lt;network-ip&gt;:&lt;port&gt;/</mat-hint>
-      <mat-error *ngIf="urlForm.controls.campHubUrl.hasError('required')">
-        URL is required
-      </mat-error>
-      <mat-error *ngIf="urlForm.controls.campHubUrl.hasError('pattern')">
-        Must start with http:// or https://
-      </mat-error>
-    </mat-form-field>
+        <!-- URL input + manual generate (shown only when auto-detect failed) -->
+        <form [formGroup]="urlForm" (ngSubmit)="generate()" style="margin-top: 16px">
+          <mat-form-field style="width: 100%">
+            <mat-label>Camp Hub Server URL</mat-label>
+            <input
+              matInput
+              formControlName="campHubUrl"
+              placeholder="http://192.168.137.1:8083/"
+              autocomplete="off" />
+            <mat-hint>Format: http://&lt;network-ip&gt;:&lt;port&gt;/</mat-hint>
+            <mat-error *ngIf="urlForm.controls.campHubUrl.hasError('required')">
+              URL is required
+            </mat-error>
+            <mat-error *ngIf="urlForm.controls.campHubUrl.hasError('pattern')">
+              Must start with http:// or https://
+            </mat-error>
+          </mat-form-field>
 
-    <div *ngIf="detectionFailed" style="margin-top: 20px; text-align: center">
-      <button
-        mat-raised-button
-        color="primary"
-        class="mat_blue"
-        type="submit"
-        [disabled]="urlForm.invalid || isGenerating">
-        <span class="material-icons btn-icon">qr_code</span>
-        Generate QR Code
-      </button>
-    </div>
-  </form>
+          <div *ngIf="detectionFailed" style="margin-top: 20px; text-align: center">
+            <button
+              mat-raised-button
+              color="primary"
+              class="mat_blue"
+              type="submit"
+              [disabled]="urlForm.invalid || isGenerating">
+              <span class="material-icons btn-icon">qr_code</span>
+              Generate QR Code
+            </button>
+          </div>
+        </form>
 
-  <!-- QR result -->
-  <div *ngIf="qrDataUrl" class="qr-result">
-    <div class="url-chip">
-      <span class="material-icons url-icon">wifi</span>
-      <span class="url-text">{{ generatedUrl }}</span>
-    </div>
+        <!-- QR result -->
+        <div *ngIf="qrDataUrl" class="qr-result">
+          <div class="url-chip">
+            <span class="material-icons url-icon">wifi</span>
+            <span class="url-text">{{ generatedUrl }}</span>
+          </div>
 
-    <img [src]="qrDataUrl" alt="Camp Hub QR Code" class="qr-image" />
+          <img [src]="qrDataUrl" alt="Camp Hub QR Code" class="qr-image" />
 
-    <button mat-raised-button color="primary" class="mat_blue" (click)="downloadQR()">
-      <span class="material-icons btn-icon">download</span>
-      Download
-    </button>
-  </div>
+          <button mat-raised-button color="primary" class="mat_blue" (click)="downloadQR()">
+            <span class="material-icons btn-icon">download</span>
+            Download
+          </button>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Download Beneficiaries">
+      <div class="nikshay-tab-content">
+        <p class="qr-subtitle">
+          Download this camp's beneficiaries as a CSV formatted for the Nikshay ID Generator.
+        </p>
+
+        <div *ngIf="campInfo" class="camp-info-chip">
+          <span class="material-icons url-icon">local_shipping</span>
+          <span class="url-text">{{ campInfo.vanLabel }} &middot; {{ campInfo.servicePointName }}</span>
+        </div>
+        <div *ngIf="!campInfo" class="detect-row warn">
+          <span class="material-icons" style="font-size: 18px; color: #f9a825">info</span>
+          <span class="detect-text">
+            No active camp session found &mdash; select a van and service point first.
+          </span>
+        </div>
+
+        <form [formGroup]="downloadForm" style="margin-top: 16px">
+          <mat-form-field style="width: 100%" class="mat_form_field_color">
+            <mat-label>Camp Date Range</mat-label>
+            <mat-date-range-input [rangePicker]="nikshayPicker" [max]="today">
+              <input matStartDate formControlName="fromDate" placeholder="From date" />
+              <input matEndDate formControlName="toDate" placeholder="To date" />
+            </mat-date-range-input>
+            <mat-hint>MM/DD/YYYY &ndash; MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="nikshayPicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #nikshayPicker></mat-date-range-picker>
+            <mat-error
+              *ngIf="
+                downloadForm.controls.fromDate.hasError('required') ||
+                downloadForm.controls.toDate.hasError('required')
+              ">
+              Both dates are required
+            </mat-error>
+          </mat-form-field>
+
+          <div style="margin-top: 12px; text-align: center">
+            <button
+              mat-raised-button
+              color="primary"
+              class="mat_blue"
+              type="button"
+              [disabled]="downloadForm.invalid || !campInfo || isDownloadingCsv"
+              (click)="downloadBeneficiariesCsv()">
+              <mat-spinner
+                *ngIf="isDownloadingCsv"
+                diameter="18"
+                style="display: inline-block; vertical-align: middle; margin-right: 8px">
+              </mat-spinner>
+              <span *ngIf="!isDownloadingCsv" class="material-icons btn-icon">download</span>
+              {{ isDownloadingCsv ? 'Preparing CSV…' : 'Download CSV' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Upload Nikshay Results">
+      <div class="nikshay-tab-content">
+        <p class="qr-subtitle">
+          Upload the Nikshay ID Generator app's results CSV to write the generated Nikshay IDs
+          back onto this camp's beneficiaries.
+        </p>
+
+        <div *ngIf="campInfo" class="camp-info-chip">
+          <span class="material-icons url-icon">local_shipping</span>
+          <span class="url-text">{{ campInfo.vanLabel }} &middot; {{ campInfo.servicePointName }}</span>
+        </div>
+        <div *ngIf="!campInfo" class="detect-row warn">
+          <span class="material-icons" style="font-size: 18px; color: #f9a825">info</span>
+          <span class="detect-text">
+            No active camp session found &mdash; select a van and service point first.
+          </span>
+        </div>
+
+        <form [formGroup]="uploadForm" style="margin-top: 16px">
+          <mat-form-field style="width: 100%" class="mat_form_field_color">
+            <mat-label>Visit Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="visitDatePicker"
+              [max]="today"
+              formControlName="visitDate"
+              placeholder="MM/DD/YYYY" />
+            <mat-datepicker-toggle matSuffix [for]="visitDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #visitDatePicker></mat-datepicker>
+            <mat-hint>The camp date these beneficiaries were screened on.</mat-hint>
+            <mat-error *ngIf="uploadForm.controls.visitDate.hasError('required')">
+              Visit date is required
+            </mat-error>
+          </mat-form-field>
+
+          <div style="margin-top: 8px">
+            <span class="span-style">
+              <input
+                autocomplete="off"
+                type="file"
+                accept=".csv"
+                id="nikshayResultsFile"
+                (change)="onResultsFileSelected($event)" />
+            </span>
+          </div>
+
+          <div style="margin-top: 16px; text-align: center">
+            <button
+              mat-raised-button
+              color="primary"
+              class="mat_blue"
+              type="button"
+              [disabled]="uploadForm.invalid || !campInfo || !selectedResultsFile || isUploadingCsv"
+              (click)="uploadResultsCsv()">
+              <mat-spinner
+                *ngIf="isUploadingCsv"
+                diameter="18"
+                style="display: inline-block; vertical-align: middle; margin-right: 8px">
+              </mat-spinner>
+              <span *ngIf="!isUploadingCsv" class="material-icons btn-icon">upload</span>
+              {{ isUploadingCsv ? 'Uploading…' : 'Upload Results CSV' }}
+            </button>
+          </div>
+        </form>
+
+        <div *ngIf="lastImportSummary" class="qr-result" style="width: 100%">
+          <p>
+            <strong>{{ lastImportSummary.updated }}</strong> Nikshay ID(s) updated &middot;
+            <strong>{{ lastImportSummary.needsReview }}</strong> row(s) need review &middot;
+            <strong>{{ lastImportSummary.failed }}</strong> failed
+            (of {{ lastImportSummary.csvRowCount }} row(s) in the file)
+          </p>
+
+          <div *ngIf="lastImportSummary.needsReviewRows.length" style="margin-top: 8px">
+            <strong>Needs review:</strong>
+            <ul>
+              <li *ngFor="let row of lastImportSummary.needsReviewRows">
+                {{ row.firstName }} {{ row.middleLastName }} (benRegId {{ row.benRegId }}) &mdash;
+                {{ row.note }}
+              </li>
+            </ul>
+          </div>
+
+          <div *ngIf="lastImportSummary.failedRows.length" style="margin-top: 8px">
+            <strong>Failed:</strong>
+            <ul>
+              <li *ngFor="let row of lastImportSummary.failedRows">
+                {{ row.firstName }} {{ row.middleLastName }} (benRegId {{ row.benRegId }}) &mdash;
+                {{ row.note }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
 </mat-dialog-content>
