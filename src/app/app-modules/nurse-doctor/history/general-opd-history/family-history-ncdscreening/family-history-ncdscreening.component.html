@@ -108,10 +108,14 @@
           </z-form-field>
 
           <z-form-field class="gap-1.5">
-            <label z-form-label zRequired for="familyMembers-{{ i }}">{{
-              currentLanguageSet?.historyData?.ancHistory
-                ?.familyHistoryDataANC_OPD_NCD_PNC?.familyMember
-            }}</label>
+            <label z-form-label for="familyMembers-{{ i }}"
+              >{{
+                currentLanguageSet?.historyData?.ancHistory
+                  ?.familyHistoryDataANC_OPD_NCD_PNC?.familyMember
+              }}<span class="text-destructive">{{
+                age >= 30 ? ' *' : ''
+              }}</span></label
+            >
             <z-form-control>
               <z-select
                 class="w-full bg-background"
