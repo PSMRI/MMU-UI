@@ -2,7 +2,8 @@
   <div
     class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
     <label z-form-label for="travelStatus">
-      {{ currentLanguageSet?.travel?.haveyouTravelledlast14days }} *
+      {{ currentLanguageSet?.travel?.haveyouTravelledlast14days
+      }} <span class="text-destructive">*</span>
     </label>
     <z-radio-group
       formControlName="travelStatus"
