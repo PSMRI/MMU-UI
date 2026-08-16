@@ -526,7 +526,7 @@
       </p>
 
       <z-form-field class="w-full">
-        <label z-form-label for="clinicalObservation">{{
+        <label z-form-label zRequired for="clinicalObservation">{{
           currentLanguageSet?.casesheet?.clinicalObs
         }}</label>
         <z-form-control>
@@ -538,7 +538,8 @@
             name="clinicalObservation"
             id="clinicalObservation"
             formControlName="clinicalObservation"
-            maxlength="500"></textarea>
+            maxlength="500"
+            required></textarea>
         </z-form-control>
       </z-form-field>
 
