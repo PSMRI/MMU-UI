@@ -185,6 +185,8 @@
       "bluetoothDevice": "Bluetooth Device",
       "connectBluetooth":"Connect Bluetooth",
       "proceed": "Proceed",
+      "usePhoto": "Use Photo",
+      "retake": "Retake",
       "scheduleForTM": "Schedule For TM",
       "cancel": "Cancel",
       "history": "History",

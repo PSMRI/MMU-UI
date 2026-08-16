@@ -32,15 +32,15 @@
     <button z-button zType="outline" (click)="dialogRef.close(false)">
       {{ current_language_set?.common?.cancel }}
     </button>
-    <button z-button zType="default" (click)="getSnapshot()">
-      {{ status }}
+    <button z-button zType="outline" (click)="getSnapshot()">
+      {{ captured ? (current_language_set?.common?.retake || 'Retake') : status }}
     </button>
     <button
       z-button
       zType="default"
       [disabled]="!captured"
       (click)="dialogRef.close(sysImage)">
-      {{ current_language_set?.common?.proceed }}
+      {{ current_language_set?.common?.usePhoto || 'Use Photo' }}
     </button>
   </div>
 </div>
