@@ -98,7 +98,7 @@
 
         <!-- BMI status markers (adult / no gender) -->
         <div
-          class="flex flex-col justify-center gap-1"
+          class="flex flex-col gap-1.5"
           *ngIf="
             (totalMonths !== undefined && totalMonths > 228) ||
             (totalMonths !== undefined &&
@@ -107,9 +107,15 @@
               !male &&
               !female)
           ">
-          <div
-            class="flex items-center gap-2 text-sm text-destructive"
-            *ngIf="BMI !== null && BMI < 18.5">
+          <!-- invisible label spacer: matches the sibling fields' label height so
+               the status badge lines up on the input's vertical center -->
+          <label z-form-label aria-hidden="true" class="invisible select-none"
+            >&nbsp;</label
+          >
+          <div class="flex min-h-9 flex-col justify-center gap-1">
+            <div
+              class="flex items-center gap-2 text-sm text-destructive"
+              *ngIf="BMI !== null && BMI < 18.5">
             <ng-icon name="lucideCircle" size="14"></ng-icon>
             <span>{{
               currentLanguageSet?.vitalsDetails
@@ -157,6 +163,7 @@
               >{{ currentLanguageSet?.pleaseConfirmClinically }}
             </span>
           </span>
+          </div>
         </div>
 
         <!-- BMI status markers (minor) -->

@@ -164,10 +164,16 @@
               !male &&
               !female)
           ">
-          <div class="flex flex-col justify-center gap-1 lg:pt-7">
-            <div
-              class="flex items-center gap-1.5 text-sm text-destructive"
-              *ngIf="bMI !== null && bMI < 18.5">
+          <div class="flex flex-col gap-1.5">
+            <!-- invisible label spacer: matches the sibling fields' label height so
+                 the status badge lines up on the input's vertical center -->
+            <label z-form-label aria-hidden="true" class="invisible select-none"
+              >&nbsp;</label
+            >
+            <div class="flex min-h-9 flex-col justify-center gap-1">
+              <div
+                class="flex items-center gap-1.5 text-sm text-destructive"
+                *ngIf="bMI !== null && bMI < 18.5">
               <ng-icon name="lucideCircle" size="12"></ng-icon>
               <span>{{
                 currentLanguageSet?.vitalsDetails
@@ -215,6 +221,7 @@
                 currentLanguageSet?.pleaseConfirmClinically
               }}</span>
             </span>
+            </div>
           </div>
         </ng-template>
 
