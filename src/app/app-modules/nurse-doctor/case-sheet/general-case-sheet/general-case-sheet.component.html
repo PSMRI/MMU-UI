@@ -1,4 +1,4 @@
-<div *ngIf="!hideBack" class="bg-background">
+<div *ngIf="!hideBack" class="bg-background print:hidden">
   <div class="flex flex-wrap items-center justify-between gap-2">
     <button z-button zType="default" (click)="goBack()">
       {{ currentLanguageSet?.common?.back }}

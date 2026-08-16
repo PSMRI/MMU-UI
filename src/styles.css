@@ -886,4 +886,13 @@ input.mat-input-element {
   @page {
     margin: 1.3cm;
   }
+  /* Hide the app chrome (top bar + role navigation + footer) so a printed
+     case sheet / discharge summary contains only the clinical content, not the
+     application shell. QA: "print of discharge summary is messy". */
+  app-header,
+  app-footer,
+  app-spinner,
+  .no-print {
+    display: none !important;
+  }
 }
