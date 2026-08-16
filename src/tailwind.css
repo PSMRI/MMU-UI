@@ -24,6 +24,14 @@
   * {
     border-color: var(--border);
   }
+  /* App-wide readability bump (QA: "font need to increase throughout the
+     application"). Raising the root font-size scales every rem-based Tailwind
+     size (text, spacing, radius) proportionally across the migrated screens.
+     Kept conservative (16px -> 17px) so dense data-entry forms/tables don't
+     overflow; adjust this single value to tune the scale. */
+  html {
+    font-size: 106.25%;
+  }
 }
 
 @custom-variant dark (&:is(.dark *));
