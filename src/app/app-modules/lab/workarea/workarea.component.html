@@ -1,4 +1,30 @@
 <div class="relative px-4 py-6" *ngIf="technicianForm">
+  <!-- Patient header: who the lab values are being entered for (QA) -->
+  <div
+    *ngIf="beneficiary"
+    class="mb-4 flex flex-wrap items-center gap-x-6 gap-y-1 rounded-lg border border-border bg-muted/40 px-4 py-3">
+    <div class="flex items-center gap-2">
+      <ng-icon name="lucideUserRound" class="text-primary"></ng-icon>
+      <span class="text-base font-semibold text-foreground">{{
+        beneficiary?.beneficiaryName
+      }}</span>
+    </div>
+    <span class="text-sm text-muted-foreground">
+      {{ current_language_set?.bendetails?.gender || 'Gender' }} /
+      {{ current_language_set?.bendetails?.age || 'Age' }}:
+      <span class="font-medium text-foreground"
+        >{{ beneficiary?.genderName }} / {{ beneficiary?.age }}
+        {{ beneficiary?.ageUnit }}</span
+      >
+    </span>
+    <span class="text-sm text-muted-foreground">
+      {{ current_language_set?.bendetails?.beneficiaryID || 'Beneficiary ID' }}:
+      <span class="font-medium text-foreground">{{
+        beneficiary?.beneficiaryID
+      }}</span>
+    </span>
+  </div>
+
   <form [formGroup]="technicianForm">
     <z-tab-group>
       <!-- ===================== LABORATORY INFORMATION ===================== -->

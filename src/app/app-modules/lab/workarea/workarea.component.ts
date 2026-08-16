@@ -24,6 +24,7 @@ import { DataManipulation } from './LabSubmissionDataManipulation';
 import {
   Component,
   OnInit,
+  OnDestroy,
   ViewChild,
   DoCheck,
   AfterViewChecked,
@@ -52,7 +53,7 @@ import { HttpServiceService } from '../../core/services/http-service.service';
 import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { environment } from 'src/environments/environment';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import {
   NgIf,
@@ -136,7 +137,12 @@ import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
   viewProviders: [provideIcons({ lucideSearch, lucideUserRound })],
 })
 export class WorkareaComponent
-  implements OnInit, DoCheck, AfterViewChecked, CanComponentDeactivate
+  implements
+    OnInit,
+    OnDestroy,
+    DoCheck,
+    AfterViewChecked,
+    CanComponentDeactivate
 {
   @ViewChild(ZardAccordionComponent)
   labAccordion?: ZardAccordionComponent;
@@ -147,6 +153,9 @@ export class WorkareaComponent
   beneficiaryRegID: any;
   visitID: any;
   visitCode: any;
+  // Patient header (QA: lab technician needs to see who they are entering values for)
+  beneficiary: any;
+  private beneficiarySubscription?: Subscription;
   technicianForm!: FormGroup;
   labForm!: FormArray;
   radiologyForm!: FormArray;
@@ -206,6 +215,20 @@ export class WorkareaComponent
     this.visitCode = this.sessionstorage.getItem('visitCode');
     this.beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
 
+    // Load the beneficiary so the lab screen shows whose values are being entered.
+    this.beneficiarySubscription =
+      this.beneficiaryDetailsService.beneficiaryDetails$.subscribe(
+        (data: any) => {
+          if (data) this.beneficiary = data;
+        }
+      );
+    if (this.beneficiaryRegID) {
+      this.beneficiaryDetailsService.getBeneficiaryDetails(
+        this.beneficiaryRegID,
+        this.sessionstorage.getItem('benFlowID') ?? ''
+      );
+    }
+
     this.getTestRequirements();
     this.stepExpand = 0;
     this.testName = environment.RBSTest;
@@ -213,6 +236,10 @@ export class WorkareaComponent
   }
   ngDoCheck() {
     this.assignSelectedLanguage();
+  }
+
+  ngOnDestroy() {
+    this.beneficiarySubscription?.unsubscribe();
   }
 
   ngAfterViewChecked() {
