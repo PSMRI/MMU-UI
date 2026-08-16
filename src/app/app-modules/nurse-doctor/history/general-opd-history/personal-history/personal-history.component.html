@@ -62,6 +62,85 @@
     </div>
   </div>
 
+  <!-- Inline previous tobacco / alcohol history (QA: expose the history right
+       away instead of clicking to open the dialog). Read-only; the history
+       icons above still open the full searchable dialog. -->
+  <div
+    *ngIf="previousTobaccoRows.length || previousAlcoholRows.length"
+    class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+    <div
+      *ngIf="previousTobaccoRows.length"
+      class="rounded-lg border border-border bg-muted/30 p-3">
+      <p class="mb-2 text-sm font-semibold text-foreground">
+        {{
+          currentLanguageSet?.historyData?.ancHistory
+            ?.personalHistoryANC_OPD_NCD_PNC?.previousTobaccohistory
+        }}
+      </p>
+      <div class="max-h-40 overflow-auto">
+        <table class="w-full border-collapse text-sm">
+          <thead>
+            <tr
+              class="border-b border-border text-left text-xs text-muted-foreground">
+              <th
+                class="p-1.5 font-medium"
+                *ngFor="let col of previousTobaccoColumns">
+                {{ col.columnName }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              class="border-b border-border/60"
+              *ngFor="let row of previousTobaccoRows">
+              <td
+                class="p-1.5 text-foreground"
+                *ngFor="let col of previousTobaccoColumns">
+                {{ row[col.keyName] }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div
+      *ngIf="previousAlcoholRows.length"
+      class="rounded-lg border border-border bg-muted/30 p-3">
+      <p class="mb-2 text-sm font-semibold text-foreground">
+        {{
+          currentLanguageSet?.historyData?.ancHistory
+            ?.personalHistoryANC_OPD_NCD_PNC?.previousAlcoholhistory
+        }}
+      </p>
+      <div class="max-h-40 overflow-auto">
+        <table class="w-full border-collapse text-sm">
+          <thead>
+            <tr
+              class="border-b border-border text-left text-xs text-muted-foreground">
+              <th
+                class="p-1.5 font-medium"
+                *ngFor="let col of previousAlcoholColumns">
+                {{ col.columnName }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              class="border-b border-border/60"
+              *ngFor="let row of previousAlcoholRows">
+              <td
+                class="p-1.5 text-foreground"
+                *ngFor="let col of previousAlcoholColumns">
+                {{ row[col.keyName] }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
     <div class="flex flex-col gap-1.5">
       <label z-form-label for="dietaryType">{{

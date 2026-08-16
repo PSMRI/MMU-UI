@@ -107,6 +107,13 @@ export class GeneralPersonalHistoryComponent
   @Input()
   visitCategory: any;
 
+  // Inline previous tobacco/alcohol history (QA: expose the history right away
+  // instead of requiring clicks to open the dialog).
+  previousTobaccoRows: any[] = [];
+  previousTobaccoColumns: any[] = [];
+  previousAlcoholRows: any[] = [];
+  previousAlcoholColumns: any[] = [];
+
   masterData: any;
   personalHistoryData: any;
 
@@ -162,6 +169,7 @@ export class GeneralPersonalHistoryComponent
       this.getMasterData();
     }
     this.getBeneficiaryDetails();
+    this.loadPreviousHabitsInline();
 
     this.generalHistorySubscription =
       this.doctorService.populateHistoryResponse$.subscribe(history => {
@@ -878,6 +886,39 @@ export class GeneralPersonalHistoryComponent
       otherAllergicReaction: null,
       enableOtherAllergy: false,
     });
+  }
+
+  /**
+   * Fetch the previous tobacco & alcohol history once, up-front, and expose it
+   * inline (read-only) so the nurse/doctor sees it without opening the dialog.
+   * Silent: no alerts on empty/error — the history icons still open the full
+   * dialog on demand.
+   */
+  loadPreviousHabitsInline() {
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
+    if (!benRegID) return;
+    this.nurseService
+      .getPreviousTobaccoHistory(benRegID, this.visitCategory)
+      .subscribe(
+        (res: any) => {
+          if (res?.statusCode === 200 && res?.data?.data?.length > 0) {
+            this.previousTobaccoRows = res.data.data;
+            this.previousTobaccoColumns = res.data.columns || [];
+          }
+        },
+        () => {}
+      );
+    this.nurseService
+      .getPreviousAlcoholHistory(benRegID, this.visitCategory)
+      .subscribe(
+        (res: any) => {
+          if (res?.statusCode === 200 && res?.data?.data?.length > 0) {
+            this.previousAlcoholRows = res.data.data;
+            this.previousAlcoholColumns = res.data.columns || [];
+          }
+        },
+        () => {}
+      );
   }
 
   getPreviousTobaccoHistory() {
