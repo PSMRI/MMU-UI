@@ -1021,6 +1021,21 @@ export class WorkareaComponent
             this.referMode = new String(mode);
             this.caseRecordMode = new String(mode);
           }
+        } else {
+          // Defensive: an unmapped visit category (a master-data value MMU has no
+          // flow for, or a mismatch such as a bare 'Screening' reason value reaching
+          // here as a category) would otherwise fall through silently and leave a
+          // blank page with no sections — the "Screening section is missing" symptom.
+          // Surface a clear message instead. All supported categories are handled
+          // above and never reach this branch.
+          setTimeout(() =>
+            this.confirmationService.alert(
+              this.currentLanguageSet?.alerts?.info
+                ?.visitCategoryNotSupported ||
+                'This visit category is not supported. Please re-select the visit category.',
+              'info'
+            )
+          );
         }
       } else if (this.specialistFlag === '100') {
         this.showOnlyTMReferred();
