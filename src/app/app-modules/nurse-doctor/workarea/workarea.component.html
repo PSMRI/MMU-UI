@@ -13,7 +13,7 @@
 
   <div class="px-4 pb-10 pt-3">
     <!-- Quick actions (were floating FAB buttons) -->
-    <div class="mb-4 flex items-center gap-2">
+    <div class="mb-4 flex flex-wrap items-center gap-3">
       <button
         z-button
         zType="outline"
@@ -34,6 +34,30 @@
         (click)="openBenPreviousisitDetails()">
         <ng-icon name="lucideFileText"></ng-icon>
       </button>
+
+      <!-- Persistent patient header (QA: surface Name/Age/Gender without opening
+           the slide-over) -->
+      <div
+        *ngIf="beneficiary"
+        class="flex flex-wrap items-center gap-x-5 gap-y-1 rounded-lg border border-border bg-muted/40 px-4 py-2">
+        <span class="text-base font-semibold text-foreground">{{
+          beneficiary?.beneficiaryName
+        }}</span>
+        <span class="text-sm text-muted-foreground">
+          {{ currentLanguageSet?.bendetails?.gender || 'Gender' }} /
+          {{ currentLanguageSet?.bendetails?.age || 'Age' }}:
+          <span class="font-medium text-foreground"
+            >{{ beneficiary?.genderName }} / {{ beneficiary?.age }}
+            {{ beneficiary?.ageUnit }}</span
+          >
+        </span>
+        <span class="text-sm text-muted-foreground">
+          {{ currentLanguageSet?.bendetails?.beneficiaryID || 'Beneficiary ID' }}:
+          <span class="font-medium text-foreground">{{
+            beneficiary?.beneficiaryID
+          }}</span>
+        </span>
+      </div>
     </div>
 
     <form
