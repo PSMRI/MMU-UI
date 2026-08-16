@@ -56,13 +56,45 @@ import { FeedingHistoryComponent } from './feeding-history/feeding-history.compo
 import { DevelopmentHistoryComponent } from './development-history/development-history.component';
 import { FamilyHistoryNcdscreeningComponent } from './family-history-ncdscreening/family-history-ncdscreening.component';
 import { PhysicalActivityHistoryComponent } from './physical-activity-history/physical-activity-history.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideClipboardList,
+  lucideActivity,
+  lucidePill,
+  lucideUser,
+  lucideUsers,
+  lucideCalendarDays,
+  lucideBaby,
+  lucideStethoscope,
+  lucideShieldCheck,
+  lucideSyringe,
+  lucideUtensils,
+  lucideTrendingUp,
+} from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-nurse-general-opd-history',
   templateUrl: './general-opd-history.component.html',
+  viewProviders: [
+    provideIcons({
+      lucideClipboardList,
+      lucideActivity,
+      lucidePill,
+      lucideUser,
+      lucideUsers,
+      lucideCalendarDays,
+      lucideBaby,
+      lucideStethoscope,
+      lucideShieldCheck,
+      lucideSyringe,
+      lucideUtensils,
+      lucideTrendingUp,
+    }),
+  ],
   imports: [
     ...ZardAccordionImports,
     NgIf,
+    NgIcon,
     PastHistoryComponent,
     ComorbidityConcurrentConditionsComponent,
     MedicationHistoryComponent,
