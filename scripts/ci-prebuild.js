@@ -56,6 +56,12 @@ const defaultEnvValues = {
   SITE_KEY:'',
   CAPTCHA_CHALLENGE_URL:'',
   ENABLE_CAPTCHA: false,
+  // Not related to Nikshay — pre-existing gap: environment.ci.ts.template's
+  // isMMUOfflineQRCode uses <%= QRCODE_ENABLED %> (throws if undefined) but
+  // this key was missing here, so any CI job that doesn't set it as an env
+  // var hard-fails the whole build. Defaulted off; process.env still wins if
+  // a job does set it, since it's spread after this object below.
+  QRCODE_ENABLED: false,
   SITE_ID: '3',
   TRACKER_URL: 'https://matomo.piramalswasthya.org/',
   TRACKING_PLATFORM: 'ci',
