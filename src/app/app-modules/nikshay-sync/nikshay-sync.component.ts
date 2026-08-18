@@ -150,11 +150,13 @@ export class NikshaySyncComponent implements OnInit {
       return;
     }
 
+    // vanID/servicePointID are deliberately not sent — MMU-API resolves this
+    // from the current van's own local database, not a request param. The
+    // active-camp-session check above still guards against downloading with
+    // no camp selected at all.
     const params = {
       fromDate: this.formatDate(fromDate),
       toDate: this.formatDate(toDate),
-      vanID: String(this.campInfo.vanID),
-      servicePointID: String(this.campInfo.servicePointID),
     };
 
     this.isDownloadingCsv = true;
@@ -216,9 +218,8 @@ export class NikshaySyncComponent implements OnInit {
     const formData = new FormData();
     formData.append('file', this.selectedResultsFile);
 
+    // vanID/servicePointID are deliberately not sent — see downloadBeneficiariesCsv().
     const params = {
-      vanID: String(this.campInfo.vanID),
-      servicePointID: String(this.campInfo.servicePointID),
       visitDate: this.formatDate(new Date()),
     };
 
