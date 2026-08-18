@@ -110,6 +110,14 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'nikshay-sync',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./app-modules/nikshay-sync/nikshay-sync.module').then(
+        module => module.NikshaySyncModule
+      ),
+  },
+  {
     path: 'feedback',
     loadChildren: () =>
       import('Common-UI/src/feedback/feedback.module').then(

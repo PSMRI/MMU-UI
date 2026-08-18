@@ -49,19 +49,6 @@
   padding-top: 12px;
 }
 
-.camp-info-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #e3f2fd;
-  border-radius: 20px;
-  padding: 6px 16px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #0b69b2;
-  margin-bottom: 8px;
-}
-
 .qr-subtitle {
   font-size: 13px;
   color: #555;
