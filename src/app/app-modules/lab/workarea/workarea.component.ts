@@ -153,7 +153,6 @@ export class WorkareaComponent
   beneficiaryRegID: any;
   visitID: any;
   visitCode: any;
-  // Patient header (QA: lab technician needs to see who they are entering values for)
   beneficiary: any;
   private beneficiarySubscription?: Subscription;
   technicianForm!: FormGroup;
@@ -215,7 +214,6 @@ export class WorkareaComponent
     this.visitCode = this.sessionstorage.getItem('visitCode');
     this.beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
 
-    // Load the beneficiary so the lab screen shows whose values are being entered.
     this.beneficiarySubscription =
       this.beneficiaryDetailsService.beneficiaryDetails$.subscribe(
         (data: any) => {
