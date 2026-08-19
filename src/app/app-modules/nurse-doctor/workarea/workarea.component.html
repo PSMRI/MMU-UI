@@ -37,24 +37,24 @@
 
       <div
         *ngIf="beneficiary"
-        class="flex flex-wrap items-center gap-x-5 gap-y-1 rounded-lg border border-border bg-muted/40 px-4 py-2">
-        <span class="text-base font-semibold text-foreground">{{
-          beneficiary?.beneficiaryName
-        }}</span>
-        <span class="text-sm text-muted-foreground">
-          {{ currentLanguageSet?.bendetails?.gender || 'Gender' }} /
-          {{ currentLanguageSet?.bendetails?.age || 'Age' }}:
-          <span class="font-medium text-foreground"
-            >{{ beneficiary?.genderName }} / {{ beneficiary?.age }}
-            {{ beneficiary?.ageUnit }}</span
-          >
+        class="flex min-w-0 flex-col justify-center rounded-lg border border-border bg-muted/40 px-4 py-1.5">
+        <span
+          class="truncate text-sm font-semibold leading-tight text-foreground">
+          {{ beneficiary?.beneficiaryName }}
         </span>
-        <span class="text-sm text-muted-foreground">
-          {{ currentLanguageSet?.bendetails?.beneficiaryID || 'Beneficiary ID' }}:
-          <span class="font-medium text-foreground">{{
-            beneficiary?.beneficiaryID
-          }}</span>
-        </span>
+        <div
+          class="flex flex-wrap items-center gap-x-1.5 text-xs leading-tight text-muted-foreground">
+          <span>{{ beneficiary?.genderName }}</span>
+          <span aria-hidden="true">·</span>
+          <span>{{ beneficiary?.age }} {{ beneficiary?.ageUnit }}</span>
+          <span aria-hidden="true">·</span>
+          <span>
+            {{ currentLanguageSet?.bendetails?.beneficiaryID || 'Beneficiary ID' }}:
+            <span class="font-medium text-foreground">{{
+              beneficiary?.beneficiaryID
+            }}</span>
+          </span>
+        </div>
       </div>
     </div>
 
