@@ -116,6 +116,34 @@ export class PatientVisitDetailsComponent
       this.beneficiaryDetailsSubscription.unsubscribe();
   }
 
+  private readonly supportedVisitCategories = [
+    'General OPD (QC)',
+    'Cancer Screening',
+    'General OPD',
+    'NCD screening',
+    'PNC',
+    'ANC',
+    'NCD care',
+    'COVID-19 Screening',
+  ];
+
+  private filterSupportedCategories(categories: any[]): any[] {
+    const age = this.beneficiary?.ageVal;
+    return (categories || []).filter((item: any) => {
+      const name = item?.visitCategory;
+      if (!this.supportedVisitCategories.includes(name)) return false;
+      if (
+        (name === 'NCD screening' || name === 'NCD care') &&
+        age !== null &&
+        age !== undefined &&
+        age < 30
+      ) {
+        return false;
+      }
+      return true;
+    });
+  }
+
   visitCategorySubscription: any;
   getVisitReasonAndCategory() {
     this.visitCategorySubscription =
@@ -127,8 +155,9 @@ export class PatientVisitDetailsComponent
             this.templateNurseMasterData
           );
           this.templateVisitReasons = this.templateNurseMasterData.visitReasons;
-          this.templateVisitCategories =
-            this.templateNurseMasterData.visitCategories;
+          this.templateVisitCategories = this.filterSupportedCategories(
+            this.templateNurseMasterData.visitCategories
+          );
           this.templateFilterVisitCategories = this.templateVisitCategories;
 
           if (

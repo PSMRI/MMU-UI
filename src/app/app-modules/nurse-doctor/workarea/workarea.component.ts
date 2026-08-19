@@ -1021,6 +1021,15 @@ export class WorkareaComponent
             this.referMode = new String(mode);
             this.caseRecordMode = new String(mode);
           }
+        } else {
+          setTimeout(() =>
+            this.confirmationService.alert(
+              this.currentLanguageSet?.alerts?.info
+                ?.visitCategoryNotSupported ||
+                'This visit category is not supported. Please re-select the visit category.',
+              'info'
+            )
+          );
         }
       } else if (this.specialistFlag === '100') {
         this.showOnlyTMReferred();
@@ -1060,10 +1069,6 @@ export class WorkareaComponent
     this.showPNC = false;
     this.showCaseRecord = false;
     this.showRefer = false;
-
-    if (this.attendantType === 'nurse') {
-      this.changeDetectorRef.detectChanges();
-    }
   }
 
   submitPatientMedicalDetailsForm(medicalForm: any) {
