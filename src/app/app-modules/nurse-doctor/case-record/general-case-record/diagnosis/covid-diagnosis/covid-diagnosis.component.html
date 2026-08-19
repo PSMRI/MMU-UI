@@ -7,7 +7,8 @@
       z-form-label
       for="doctorDiagnosis"
       class="rounded-md bg-muted px-3 py-2 text-sm font-semibold text-foreground">
-      {{ current_language_set?.doctorDiagnosis }}*
+      {{ current_language_set?.doctorDiagnosis
+      }}<span class="text-destructive">*</span>
     </label>
     <z-form-field class="w-full">
       <z-form-control>

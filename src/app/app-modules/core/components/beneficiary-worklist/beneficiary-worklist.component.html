@@ -57,7 +57,7 @@
                     class="border-l-[3px] font-semibold"
                     [ngClass]="
                       row.benVisitNo === 1
-                        ? 'border-l-success'
+                        ? 'border-l-primary'
                         : 'border-l-warning'
                     ">
                     {{ serial(i) }}
@@ -149,7 +149,7 @@
           *ngIf="!footerStart && visitStatus"
           class="m-0 flex list-none items-center gap-5 p-0 text-[0.8125rem] text-muted-foreground">
           <li class="inline-flex items-center gap-1.5">
-            <span class="size-3 rounded bg-success"></span>
+            <span class="size-3 rounded bg-primary"></span>
             {{ firstVisitText }}
           </li>
           <li class="inline-flex items-center gap-1.5">

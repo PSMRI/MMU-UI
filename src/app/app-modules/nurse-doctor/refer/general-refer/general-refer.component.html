@@ -46,8 +46,10 @@
     <!-- Referred to institute -->
     <div class="grid grid-cols-1 items-center gap-2 sm:grid-cols-2">
       <span class="text-sm font-medium text-foreground">
-        {{ currentLanguageSet?.Referdetails?.higherhealthcarecenter }}
-        {{ showMsg > 0 && instituteFlag === true ? '*' : '' }}
+        {{ currentLanguageSet?.Referdetails?.higherhealthcarecenter
+        }}<span class="text-destructive">{{
+          showMsg > 0 && instituteFlag === true ? ' *' : ''
+        }}</span>
       </span>
       <z-select
         class="w-full"
@@ -95,7 +97,11 @@
     <div class="grid grid-cols-1 items-start gap-2 sm:grid-cols-2">
       <span class="text-sm font-medium text-foreground">
         {{ currentLanguageSet?.Referdetails?.referralReason }}
-        <span *ngIf="referForm.get('referralReason')?.enabled">*</span>
+        <span
+          *ngIf="referForm.get('referralReason')?.enabled"
+          class="text-destructive"
+          >*</span
+        >
       </span>
       <z-form-field class="w-full">
         <z-form-control>

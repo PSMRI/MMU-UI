@@ -259,7 +259,7 @@
       "bloodGlucoseTrend": "Blood Glucose Trends",
       "resultMammogram": "Results of Mammogram",
       "otherComplication": "Other Complication of Current Pregnancy",
-      "add": "add",
+      "add": "Add",
       "remove":"remove",
       "confirmDiagnosis": "Confirmatory Diagnosis",
       "labTest": "Test Report",
@@ -525,7 +525,7 @@
           "consanguineousMarriage": "H/o Consanguineous Marriage",
           "geneticDisorders": "Genetic Disorders",
           "previousFamilyHistory": "Previous Family History",
-          "pleaseSelectDiabetesMellitusInDiseaseType": "Please select Diabetes Mellitus in disease type"
+          "pleaseSelectDiabetesMellitusInDiseaseType": "Please select any NCD for proper screening"
         },
         "menstrualHistoryANC": {
           "menstrualHistory": "Menstrual History",
@@ -1186,10 +1186,10 @@
     "Prescription": {
       "form": "Form",
       "medicine": "Medicine",
-      "dosage": "dosage",
+      "dosage": "Dosage",
       "frequency": "Frequency",
       "unit": "Unit",
-      "Route": "route",
+      "Route": "Route",
       "instructions": "Instructions",
       "quantity": "Quantity",
       "isEDL": "IsEDL"

@@ -619,7 +619,8 @@
 
       <!-- ===================== PROVISIONAL DIAGNOSIS ===================== -->
       <p class="text-base font-semibold tracking-tight text-foreground">
-        {{ currentLanguageSet?.DiagnosisDetails?.provisionaldiagnosis }} *
+        {{ currentLanguageSet?.DiagnosisDetails?.provisionaldiagnosis
+        }} <span class="text-destructive">*</span>
       </p>
 
       <ng-container formArrayName="provisionalDiagnosisList">
