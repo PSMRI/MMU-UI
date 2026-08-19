@@ -244,10 +244,7 @@
                 formControlName="waistCircumference_cm"
                 maxlength="6"
                 allowMax="350"
-                (focus)="trackFieldInteraction('Waist Circumference')"
-                [required]="
-                  benAge >= 30 && visitCategory === 'NCD screening'
-                " />
+                (focus)="trackFieldInteraction('Waist Circumference')" />
             </z-form-control>
           </z-form-field>
 
