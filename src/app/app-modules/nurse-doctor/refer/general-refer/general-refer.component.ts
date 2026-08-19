@@ -187,7 +187,11 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
             this.instituteFlag = true;
             sessionStorage.setItem('instFlag', 'true');
           }
-          this.additionalServices = masterData.additionalServices;
+          this.additionalServices = (
+            masterData.additionalServices || []
+          ).filter((s: any) =>
+            ['104', '1097'].includes(String(s?.serviceName).trim())
+          );
           console.log(masterData.revisitDate);
           console.log('hi');
           this.revisitDate = masterData.revisitDate;
