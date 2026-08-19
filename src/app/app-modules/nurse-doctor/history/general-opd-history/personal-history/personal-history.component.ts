@@ -111,6 +111,8 @@ export class GeneralPersonalHistoryComponent
   previousTobaccoColumns: any[] = [];
   previousAlcoholRows: any[] = [];
   previousAlcoholColumns: any[] = [];
+  previousAllergyRows: any[] = [];
+  previousAllergyColumns: any[] = [];
 
   masterData: any;
   personalHistoryData: any;
@@ -455,8 +457,7 @@ export class GeneralPersonalHistoryComponent
       while (formArray.length < temp.length) {
         formArray.push(this.initAlcoholList());
       }
-      // Optionally, remove extra FormGroups if any
-      while (formArray.length > temp.length) {
+      while (formArray.length > Math.max(temp.length, 1)) {
         formArray.removeAt(formArray.length - 1);
       }
 
@@ -907,6 +908,17 @@ export class GeneralPersonalHistoryComponent
           if (res?.statusCode === 200 && res?.data?.data?.length > 0) {
             this.previousAlcoholRows = res.data.data;
             this.previousAlcoholColumns = res.data.columns || [];
+          }
+        },
+        () => {}
+      );
+    this.nurseService
+      .getPreviousAllergyHistory(benRegID, this.visitCategory)
+      .subscribe(
+        (res: any) => {
+          if (res?.statusCode === 200 && res?.data?.data?.length > 0) {
+            this.previousAllergyRows = res.data.data;
+            this.previousAllergyColumns = res.data.columns || [];
           }
         },
         () => {}
