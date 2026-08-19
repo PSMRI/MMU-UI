@@ -3,7 +3,9 @@
     zValue="generalExamination"
     class="rounded-lg border border-border bg-card px-4">
     <z-accordion-trigger class="text-left">
-      <span class="text-sm font-semibold text-foreground">
+      <span
+        class="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <ng-icon name="lucideStethoscope" class="text-primary"></ng-icon>
         {{
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination
             ?.genExamination?.generalExamination
@@ -22,7 +24,9 @@
     zValue="headToToeExamination"
     class="rounded-lg border border-border bg-card px-4">
     <z-accordion-trigger class="text-left">
-      <span class="text-sm font-semibold text-foreground">
+      <span
+        class="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <ng-icon name="lucidePersonStanding" class="text-primary"></ng-icon>
         {{
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
             ?.headexamination
@@ -42,7 +46,9 @@
     zValue="systemicExamination"
     class="rounded-lg border border-border bg-card px-4">
     <z-accordion-trigger class="text-left">
-      <span class="text-sm font-semibold text-foreground">
+      <span
+        class="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <ng-icon name="lucideHeartPulse" class="text-primary"></ng-icon>
         {{
           currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
             ?.systemicExamination
