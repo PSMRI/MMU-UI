@@ -107,8 +107,6 @@ export class GeneralPersonalHistoryComponent
   @Input()
   visitCategory: any;
 
-  // Inline previous tobacco/alcohol history (QA: expose the history right away
-  // instead of requiring clicks to open the dialog).
   previousTobaccoRows: any[] = [];
   previousTobaccoColumns: any[] = [];
   previousAlcoholRows: any[] = [];
@@ -888,12 +886,6 @@ export class GeneralPersonalHistoryComponent
     });
   }
 
-  /**
-   * Fetch the previous tobacco & alcohol history once, up-front, and expose it
-   * inline (read-only) so the nurse/doctor sees it without opening the dialog.
-   * Silent: no alerts on empty/error — the history icons still open the full
-   * dialog on demand.
-   */
   loadPreviousHabitsInline() {
     const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     if (!benRegID) return;
