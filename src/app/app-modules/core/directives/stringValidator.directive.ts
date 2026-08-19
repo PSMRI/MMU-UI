@@ -147,12 +147,6 @@ export class StringValidatorDirective {
       this.validateEntry(val, lastVal, maxlength, event);
     }
 
-    // If a guard above reverted/overrode the visible value, the reactive form
-    // model was already updated with the raw (rejected) value by the value
-    // accessor on this same 'input' event — so the box looks clean but the saved
-    // FormControl keeps the rejected character. Re-emit 'input' so the corrected
-    // DOM value is written back into the model. Guarded so the re-emitted event
-    // (which is now valid and won't revert) cannot recurse.
     if (!this.syncing && event.target.value !== val) {
       this.syncing = true;
       event.target.dispatchEvent(new Event('input', { bubbles: true }));
