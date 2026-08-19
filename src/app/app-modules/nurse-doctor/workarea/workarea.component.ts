@@ -1022,12 +1022,6 @@ export class WorkareaComponent
             this.caseRecordMode = new String(mode);
           }
         } else {
-          // Defensive: an unmapped visit category (a master-data value MMU has no
-          // flow for, or a mismatch such as a bare 'Screening' reason value reaching
-          // here as a category) would otherwise fall through silently and leave a
-          // blank page with no sections — the "Screening section is missing" symptom.
-          // Surface a clear message instead. All supported categories are handled
-          // above and never reach this branch.
           setTimeout(() =>
             this.confirmationService.alert(
               this.currentLanguageSet?.alerts?.info
@@ -1075,13 +1069,6 @@ export class WorkareaComponent
     this.showPNC = false;
     this.showCaseRecord = false;
     this.showRefer = false;
-    // NOTE: no forced changeDetectorRef.detectChanges() here. It was added during
-    // the migration but hideAll() runs inside the visitCategory valueChanges
-    // handler (i.e. mid change-detection). Forcing CD there while the show* flags
-    // flip true->false throws ExpressionChangedAfterItHasBeenCheckedError on a
-    // category *change*, aborting handleVisitType() before it rebuilds the steps
-    // (stepper collapses to Visit Details, Next dies — bug [31]). The normal CD
-    // pass after this handler rebuilds the stepper (Zard steps are reactive).
   }
 
   submitPatientMedicalDetailsForm(medicalForm: any) {

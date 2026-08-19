@@ -165,12 +165,6 @@ export class GeneralOpdHistoryComponent
   loadFormData() {
     const form = this.nurseGeneralHistoryForm;
     if (!form) return;
-    // Only overwrite a section form when its control actually exists on the
-    // parent. loadFormData runs on every ngOnChanges, so during a visit-category
-    // switch the parent form can momentarily be the wrong/stale group whose
-    // get() returns null; assigning that null blanked the whole History section
-    // (and could crash the child [formGroup] bindings). Keeping the previous
-    // good reference lets the correct form win once it arrives.
     const pick = (name: string): FormGroup | undefined => {
       const ctrl = form.get(name);
       return ctrl ? (ctrl as FormGroup) : undefined;

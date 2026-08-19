@@ -116,11 +116,6 @@ export class PatientVisitDetailsComponent
       this.beneficiaryDetailsSubscription.unsubscribe();
   }
 
-  // MMU only builds a flow (steps + forms) for these visit categories in
-  // workarea.handleVisitType(). The backend master list also returns categories
-  // that MMU has no flow for (Childhood & Adolescent, Family Planning, Neonatal,
-  // …); picking one left the user stranded on Visit Details with no Next/Submit.
-  // Restrict the dropdown to what MMU actually supports.
   private readonly supportedVisitCategories = [
     'General OPD (QC)',
     'Cancer Screening',
@@ -132,9 +127,6 @@ export class PatientVisitDetailsComponent
     'COVID-19 Screening',
   ];
 
-  // Keep only categories MMU implements, and hide the adult NCD categories from
-  // beneficiaries under 30 (matching the age >= 30 auto-selection below) so a
-  // young beneficiary can't pick NCD screening / NCD care.
   private filterSupportedCategories(categories: any[]): any[] {
     const age = this.beneficiary?.ageVal;
     return (categories || []).filter((item: any) => {
