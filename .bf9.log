@@ -1,0 +1,204 @@
+- Generating browser application bundles (phase: setup)...
+    TypeScript compiler options "target" and "useDefineForClassFields" are set to "ES2022" and "false" respectively by the Angular CLI. To control ECMA version and features use the Browserslist configuration. For more information, see https://angular.dev/tools/cli/build#configuring-browser-compatibility
+    NOTE: You can set the "target" to "ES2022" in the project's tsconfig to remove this warning.
+✔ Browser application bundle generation complete.
+✔ Browser application bundle generation complete.
+- Copying assets...
+✔ Copying assets complete.
+- Generating index html...
+✔ Index html generation complete.
+
+Initial chunk files                                                                                     | Names                                        |  Raw size
+vendor.js                                                                                               | vendor                                       |   7.36 MB | 
+main.js                                                                                                 | main                                         | 813.87 kB | 
+styles.css                                                                                              | styles                                       | 176.35 kB | 
+polyfills.js                                                                                            | polyfills                                    | 116.12 kB | 
+runtime.js                                                                                              | runtime                                      |  13.34 kB | 
+
+                                                                                                        | Initial total                                |   8.48 MB
+
+Lazy chunk files                                                                                        | Names                                        |  Raw size
+src_app_app-modules_nurse-doctor_nurse-doctor_routes_ts.js                                              | app-modules-nurse-doctor-nurse-doctor-routes |   6.41 MB | 
+Common-UI_v2_registrar_registration_module_ts.js                                                        | Common-UI-v2-registrar-registration-module   | 794.78 kB | 
+default-Common-UI_v2_ui_accordion_index_ts-src_app_app-modules_core_components_beneficiary-de-64931d.js | app-modules-nurse-doctor-nurse-doctor-routes | 331.87 kB | 
+src_app_app-modules_lab_lab_routes_ts.js                                                                | app-modules-lab-lab-routes                   | 152.28 kB | 
+default-Common-UI_v2_ui_date-picker_index_ts-Common-UI_v2_ui_stepper_index_ts.js                        | Common-UI-v2-registrar-registration-module   | 129.79 kB | 
+src_app_app-modules_data-sync_dataSync_routes_ts.js                                                     | app-modules-data-sync-dataSync-routes        |  66.84 kB | 
+Common-UI_v2_feedback_feedback_module_ts.js                                                             | Common-UI-v2-feedback-feedback-module        |  53.15 kB | 
+default-src_app_app-modules_core_components_beneficiary-worklist_beneficiary-worklist_compone-8d04d2.js | app-modules-nurse-doctor-nurse-doctor-routes |  50.88 kB | 
+default-Common-UI_v2_ui_tabs_index_ts.js                                                                | app-modules-nurse-doctor-nurse-doctor-routes |  40.77 kB | 
+default-Common-UI_v2_ui_pagination_index_ts.js                                                          | Common-UI-v2-registrar-registration-module   |  35.79 kB | 
+default-Common-UI_v2_ui_checkbox_index_ts-Common-UI_v2_ui_sheet_index_ts.js                             | Common-UI-v2-registrar-registration-module   |  33.38 kB | 
+default-src_app_app-modules_core_components_data-sync-login_data-sync-login_component_ts.js             | app-modules-nurse-doctor-nurse-doctor-routes |  28.89 kB | 
+src_app_app-modules_pharmacist_pharmacist_routes_ts.js                                                  | app-modules-pharmacist-pharmacist-routes     |  23.41 kB | 
+
+Build at: 2026-08-16T16:36:29.239Z - Hash: edb8157c4315dd34 - Time: 37683ms
+
+Warning: [96mCommon-UI/v2/registrar/abha-components/generate-abha-component/generate-abha-component.component.ts[0m:[93m46[0m:[93m5[0m - [93mwarning[0m[90m NG8113: [0mNgIf is not used within the template of GenerateAbhaComponentComponent
+
+[7m46[0m     NgIf,
+[7m  [0m [93m    ~~~~[0m
+
+
+Warning: [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.html[0m:[93m57[0m:[93m20[0m - [93mwarning[0m[90m NG8116: [0mA structural directive `ngTemplateOutlet` was used in the template without a corresponding import in the component. Make sure that the directive is included in the `@Component.imports` array of this component.
+
+[7m57[0m     <ng-container *ngTemplateOutlet="avatar"></ng-container>
+[7m  [0m [93m                   ~~~~~~~~~~~~~~~~[0m
+
+  [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.ts[0m:[93m46[0m:[93m18[0m
+    [7m46[0m     templateUrl: './beneficiary-details.component.html',
+    [7m  [0m [96m                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component BeneficiaryDetailsComponent.
+
+
+Warning: [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.html[0m:[93m66[0m:[93m10[0m - [93mwarning[0m[90m NG8116: [0mA structural directive `ngTemplateOutlet` was used in the template without a corresponding import in the component. Make sure that the directive is included in the `@Component.imports` array of this component.
+
+[7m66[0m         *ngTemplateOutlet="
+[7m  [0m [93m         ~~~~~~~~~~~~~~~~[0m
+
+  [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.ts[0m:[93m46[0m:[93m18[0m
+    [7m46[0m     templateUrl: './beneficiary-details.component.html',
+    [7m  [0m [96m                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component BeneficiaryDetailsComponent.
+
+
+Warning: [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.html[0m:[93m87[0m:[93m10[0m - [93mwarning[0m[90m NG8116: [0mA structural directive `ngTemplateOutlet` was used in the template without a corresponding import in the component. Make sure that the directive is included in the `@Component.imports` array of this component.
+
+[7m87[0m         *ngTemplateOutlet="
+[7m  [0m [93m         ~~~~~~~~~~~~~~~~[0m
+
+  [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.ts[0m:[93m46[0m:[93m18[0m
+    [7m46[0m     templateUrl: './beneficiary-details.component.html',
+    [7m  [0m [96m                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component BeneficiaryDetailsComponent.
+
+
+Warning: [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.html[0m:[93m96[0m:[93m22[0m - [93mwarning[0m[90m NG8116: [0mA structural directive `ngTemplateOutlet` was used in the template without a corresponding import in the component. Make sure that the directive is included in the `@Component.imports` array of this component.
+
+[7m96[0m       <ng-container *ngTemplateOutlet="abhaRow"></ng-container>
+[7m  [0m [93m                     ~~~~~~~~~~~~~~~~[0m
+
+  [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.ts[0m:[93m46[0m:[93m18[0m
+    [7m46[0m     templateUrl: './beneficiary-details.component.html',
+    [7m  [0m [96m                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component BeneficiaryDetailsComponent.
+
+
+Warning: [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.html[0m:[93m99[0m:[93m10[0m - [93mwarning[0m[90m NG8116: [0mA structural directive `ngTemplateOutlet` was used in the template without a corresponding import in the component. Make sure that the directive is included in the `@Component.imports` array of this component.
+
+[7m99[0m         *ngTemplateOutlet="
+[7m  [0m [93m         ~~~~~~~~~~~~~~~~[0m
+
+  [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.ts[0m:[93m46[0m:[93m18[0m
+    [7m46[0m     templateUrl: './beneficiary-details.component.html',
+    [7m  [0m [96m                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component BeneficiaryDetailsComponent.
+
+
+Warning: [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.html[0m:[93m109[0m:[93m10[0m - [93mwarning[0m[90m NG8116: [0mA structural directive `ngTemplateOutlet` was used in the template without a corresponding import in the component. Make sure that the directive is included in the `@Component.imports` array of this component.
+
+[7m109[0m         *ngTemplateOutlet="
+[7m   [0m [93m         ~~~~~~~~~~~~~~~~[0m
+
+  [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.ts[0m:[93m46[0m:[93m18[0m
+    [7m46[0m     templateUrl: './beneficiary-details.component.html',
+    [7m  [0m [96m                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component BeneficiaryDetailsComponent.
+
+
+Warning: [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.html[0m:[93m135[0m:[93m20[0m - [93mwarning[0m[90m NG8116: [0mA structural directive `ngTemplateOutlet` was used in the template without a corresponding import in the component. Make sure that the directive is included in the `@Component.imports` array of this component.
+
+[7m135[0m     <ng-container *ngTemplateOutlet="avatar"></ng-container>
+[7m   [0m [93m                   ~~~~~~~~~~~~~~~~[0m
+
+  [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.ts[0m:[93m46[0m:[93m18[0m
+    [7m46[0m     templateUrl: './beneficiary-details.component.html',
+    [7m  [0m [96m                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component BeneficiaryDetailsComponent.
+
+
+Warning: [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.html[0m:[93m144[0m:[93m10[0m - [93mwarning[0m[90m NG8116: [0mA structural directive `ngTemplateOutlet` was used in the template without a corresponding import in the component. Make sure that the directive is included in the `@Component.imports` array of this component.
+
+[7m144[0m         *ngTemplateOutlet="
+[7m   [0m [93m         ~~~~~~~~~~~~~~~~[0m
+
+  [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.ts[0m:[93m46[0m:[93m18[0m
+    [7m46[0m     templateUrl: './beneficiary-details.component.html',
+    [7m  [0m [96m                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component BeneficiaryDetailsComponent.
+
+
+Warning: [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.html[0m:[93m154[0m:[93m10[0m - [93mwarning[0m[90m NG8116: [0mA structural directive `ngTemplateOutlet` was used in the template without a corresponding import in the component. Make sure that the directive is included in the `@Component.imports` array of this component.
+
+[7m154[0m         *ngTemplateOutlet="
+[7m   [0m [93m         ~~~~~~~~~~~~~~~~[0m
+
+  [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.ts[0m:[93m46[0m:[93m18[0m
+    [7m46[0m     templateUrl: './beneficiary-details.component.html',
+    [7m  [0m [96m                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component BeneficiaryDetailsComponent.
+
+
+Warning: [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.html[0m:[93m178[0m:[93m10[0m - [93mwarning[0m[90m NG8116: [0mA structural directive `ngTemplateOutlet` was used in the template without a corresponding import in the component. Make sure that the directive is included in the `@Component.imports` array of this component.
+
+[7m178[0m         *ngTemplateOutlet="
+[7m   [0m [93m         ~~~~~~~~~~~~~~~~[0m
+
+  [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.ts[0m:[93m46[0m:[93m18[0m
+    [7m46[0m     templateUrl: './beneficiary-details.component.html',
+    [7m  [0m [96m                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component BeneficiaryDetailsComponent.
+
+
+Warning: [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.html[0m:[93m187[0m:[93m22[0m - [93mwarning[0m[90m NG8116: [0mA structural directive `ngTemplateOutlet` was used in the template without a corresponding import in the component. Make sure that the directive is included in the `@Component.imports` array of this component.
+
+[7m187[0m       <ng-container *ngTemplateOutlet="abhaRow"></ng-container>
+[7m   [0m [93m                     ~~~~~~~~~~~~~~~~[0m
+
+  [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.ts[0m:[93m46[0m:[93m18[0m
+    [7m46[0m     templateUrl: './beneficiary-details.component.html',
+    [7m  [0m [96m                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component BeneficiaryDetailsComponent.
+
+
+Warning: [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.html[0m:[93m190[0m:[93m10[0m - [93mwarning[0m[90m NG8116: [0mA structural directive `ngTemplateOutlet` was used in the template without a corresponding import in the component. Make sure that the directive is included in the `@Component.imports` array of this component.
+
+[7m190[0m         *ngTemplateOutlet="
+[7m   [0m [93m         ~~~~~~~~~~~~~~~~[0m
+
+  [96mCommon-UI/v2/registrar/beneficiary-details/beneficiary-details.component.ts[0m:[93m46[0m:[93m18[0m
+    [7m46[0m     templateUrl: './beneficiary-details.component.html',
+    [7m  [0m [96m                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component BeneficiaryDetailsComponent.
+
+
+Warning: [96msrc/app/app-modules/nurse-doctor/examination/cancer-examination/gynecological-examination/gynecological-examination.component.html[0m:[93m189[0m:[93m37[0m - [93mwarning[0m[90m NG8107: [0mThe left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+[7m189[0m             [disabled]="!viewFiles?.length"
+[7m   [0m [93m                                    ~~~~~~[0m
+
+  [96msrc/app/app-modules/nurse-doctor/examination/cancer-examination/gynecological-examination/gynecological-examination.component.ts[0m:[93m61[0m:[93m16[0m
+    [7m61[0m   templateUrl: './gynecological-examination.component.html',
+    [7m  [0m [96m               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Warning occurs in the template of component GynecologicalExaminationComponent.
+
+
+Warning: /home/gk/AMRIT/MMU-UI/src/app/app-modules/core/components/camera-dialog/camera-dialog.component.ts depends on 'file-saver'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies
+
+Warning: /home/gk/AMRIT/MMU-UI/src/app/app-modules/core/components/camera-dialog/camera-dialog.component.ts depends on 'html2canvas'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies
+
+Warning: /home/gk/AMRIT/MMU-UI/src/app/app-modules/nurse-doctor/reports/reports.component.ts depends on 'exceljs'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies
+
+Warning: /home/gk/AMRIT/MMU-UI/src/app/app-modules/nurse-doctor/shared/services/audio-recording.service.ts depends on 'moment'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies
+
+Warning: /home/gk/AMRIT/MMU-UI/src/app/app-modules/nurse-doctor/shared/services/audio-recording.service.ts depends on 'recordrtc'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies
+
+Warning: /home/gk/AMRIT/MMU-UI/src/app/app-modules/set-password/set-password.component.ts depends on 'crypto-js'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.dev/tools/cli/build#configuring-commonjs-dependencies
+
+
