@@ -114,7 +114,9 @@ export class NurseService {
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
       `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.nurseWorklistTMreferred + fetchUrl);
+    return this.http.get(environment.nurseWorklistTMreferred + fetchUrl, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
   postNurseCancerVisitForm(
     medicalForm: any,
