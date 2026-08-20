@@ -418,9 +418,9 @@ export class WorkareaComponent
   }
 
   private initAutosave() {
-    this.autosaveId = `${this.attendantType || ''}:${
-      this.beneficiaryRegID || ''
-    }`;
+    this.autosaveId = `${this.sessionstorage.getItem('userID') || ''}:${
+      this.attendantType || ''
+    }:${this.beneficiaryRegID || ''}`;
     if (!this.beneficiaryRegID || !this.patientMedicalForm) return;
 
     const draft = this.formAutosave.restore(this.autosaveId);
