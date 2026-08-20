@@ -2660,13 +2660,19 @@ export class DoctorService {
   getMMUCasesheetData(caseSheetRequest: any) {
     console.log('get here in serv', caseSheetRequest);
 
-    return this.http.post(environment.getMMUCasesheetDataUrl, caseSheetRequest);
+    return this.http.post(
+      environment.getMMUCasesheetDataUrl,
+      caseSheetRequest,
+      { headers: { 'X-Skip-Loader': 'true' } }
+    );
   }
 
   getTMCasesheetData(caseSheetRequest: any) {
     console.log('get here in serv', caseSheetRequest);
 
-    return this.http.post(environment.getTMCasesheetDataUrl, caseSheetRequest);
+    return this.http.post(environment.getTMCasesheetDataUrl, caseSheetRequest, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
 
   getArchivedReports(ArchivedReports: any) {

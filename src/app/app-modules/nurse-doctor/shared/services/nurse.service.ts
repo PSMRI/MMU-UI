@@ -2127,7 +2127,9 @@ export class NurseService {
     this.ncdTemp.next(false);
   }
   getTMReferredCasesheetData(reqObj: any) {
-    return this.http.post(environment.getTMCasesheetData, reqObj);
+    return this.http.post(environment.getTMCasesheetData, reqObj, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
 
   calculateBmiStatus(obj: any) {
