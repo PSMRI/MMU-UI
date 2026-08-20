@@ -50,6 +50,7 @@ import { ZardPaginationImports } from 'Common-UI/v2/ui/pagination';
 import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 import { ZardInputDirective } from 'Common-UI/v2/ui/input';
 import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardSkeletonComponent } from 'Common-UI/v2/ui/skeleton';
 import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 /** Object keys the standard beneficiary worklist filters against. */
@@ -110,6 +111,7 @@ export const VISIT_STATUS_SEARCH_KEYS = [
     ...ZardPaginationImports,
     ...ZardSelectImports,
     ...tooltipImports,
+    ZardSkeletonComponent,
   ],
   viewProviders: [
     provideIcons({
@@ -123,6 +125,11 @@ export const VISIT_STATUS_SEARCH_KEYS = [
 export class BeneficiaryWorklistComponent implements OnChanges {
   /** Full (unfiltered) list of rows; the component filters + paginates it. */
   @Input() data: any[] = [];
+
+  /** When true, show skeleton placeholder rows instead of data / empty state. */
+  @Input() loading = false;
+
+  readonly skeletonRows = [0, 1, 2, 3, 4];
   /** Language set; drives the default headers, labels and image tooltip. */
   @Input() currentLanguageSet: any = null;
   /** Override the default standard headers. */
