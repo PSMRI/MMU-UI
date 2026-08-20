@@ -1,3 +1,21 @@
+<div class="px-4 py-6" *ngIf="!technicianForm">
+  <div
+    class="mb-4 flex flex-col gap-2 rounded-lg border border-border bg-muted/40 px-4 py-3">
+    <span z-skeleton class="h-4 w-48"></span>
+    <span z-skeleton class="h-3 w-72"></span>
+  </div>
+  <div class="flex flex-col gap-4">
+    <div
+      class="flex flex-col gap-3 rounded-lg border border-border p-4"
+      *ngFor="let s of skeletonCards">
+      <span z-skeleton class="h-5 w-40"></span>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <span z-skeleton class="h-9 w-full" *ngFor="let c of skeletonFields"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="relative px-4 py-6" *ngIf="technicianForm">
   <form [formGroup]="technicianForm">
     <z-tab-group>

@@ -75,6 +75,7 @@ import {
   ZardCardContentComponent,
   ZardCardTitleComponent,
 } from 'Common-UI/v2/ui/card';
+import { ZardSkeletonComponent } from 'Common-UI/v2/ui/skeleton';
 import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 import { ZardInputDirective } from 'Common-UI/v2/ui/input';
 import { ZardFormImports } from 'Common-UI/v2/ui/form';
@@ -114,6 +115,7 @@ import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
     ZardTabGroupComponent,
     ...ZardAccordionImports,
     ZardCardComponent,
+    ZardSkeletonComponent,
     ZardCardContentComponent,
     ZardCardTitleComponent,
     ZardButtonComponent,
@@ -148,6 +150,8 @@ export class WorkareaComponent
   visitID: any;
   visitCode: any;
   technicianForm!: FormGroup;
+  readonly skeletonCards = [0, 1, 2];
+  readonly skeletonFields = [0, 1, 2];
   labForm!: FormArray;
   radiologyForm!: FormArray;
   externalForm!: FormGroup;
