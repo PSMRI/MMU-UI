@@ -45,6 +45,7 @@ import {
 } from '../shared/services';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
+import { FormAutosaveService } from '../../core/services/form-autosave.service';
 import {
   CancerUtils,
   GeneralUtils,
@@ -54,6 +55,7 @@ import {
 } from '../shared/utility';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { Observable, Subscription, of } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { IdrsscoreService } from '../shared/services/idrsscore.service';
 import { WorkareaValidationService } from './workarea-validation.service';
@@ -309,12 +311,15 @@ export class WorkareaComponent
     private languageComponent: SetLanguageComponent,
     private readonly workareaValidation: WorkareaValidationService,
     private readonly workareaSubmission: WorkareaSubmissionService,
-    private readonly workareaLoader: WorkareaLoaderService
+    private readonly workareaLoader: WorkareaLoaderService,
+    private readonly formAutosave: FormAutosaveService
   ) {}
   isSpecialist = false;
   doctorUpdateAndTCSubmit: any;
   tmcDisable = false;
   doctorSignatureFlag = false;
+  private autosaveId = '';
+  autosaveSubscription?: Subscription;
 
   ngOnInit() {
     this.enableUpdateButtonInVitals = false;
@@ -406,6 +411,57 @@ export class WorkareaComponent
       .subscribe((res: any) => {
         if (res.statusCode === 200 && res.data !== null) {
           this.doctorSignatureFlag = res.data.signStatus;
+        }
+      });
+
+    this.initAutosave();
+  }
+
+  private initAutosave() {
+    this.autosaveId = `${this.attendantType || ''}:${
+      this.beneficiaryRegID || ''
+    }`;
+    if (!this.beneficiaryRegID || !this.patientMedicalForm) return;
+
+    const draft = this.formAutosave.restore(this.autosaveId);
+    if (draft?.data) {
+      let when = '';
+      try {
+        when = new Date(draft.savedAt).toLocaleString();
+      } catch {
+        when = '';
+      }
+      this.confirmationService
+        .confirm(
+          'info',
+          `Unsaved data${
+            when ? ' from ' + when : ''
+          } was found for this patient. Restore it?`,
+          'Restore',
+          'Discard'
+        )
+        .subscribe((restore: boolean) => {
+          if (restore) {
+            try {
+              this.patientMedicalForm.patchValue(draft.data);
+              this.patientMedicalForm.markAsDirty();
+            } catch {
+              // best-effort restore; ignore any shape mismatch
+            }
+          } else {
+            this.formAutosave.clear(this.autosaveId);
+          }
+        });
+    }
+
+    this.autosaveSubscription = this.patientMedicalForm.valueChanges
+      .pipe(debounceTime(2000))
+      .subscribe(() => {
+        if (this.patientMedicalForm?.dirty) {
+          this.formAutosave.save(
+            this.autosaveId,
+            this.patientMedicalForm.getRawValue()
+          );
         }
       });
   }
@@ -1468,6 +1524,7 @@ export class WorkareaComponent
     if (this.ncdTempSubscription) this.ncdTempSubscription.unsubscribe();
     if (this.enableVitalsButtonSubscription)
       this.enableVitalsButtonSubscription.unsubscribe();
+    if (this.autosaveSubscription) this.autosaveSubscription.unsubscribe();
 
     this.doctorService.clearCache();
     this.masterdataService.reset();

@@ -26,6 +26,7 @@ import { environment } from 'src/environments/environment';
 import packageJson from '../../../../../../package.json';
 import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { AuthService, ConfirmationService } from '../../services';
+import { FormAutosaveService } from '../../services/form-autosave.service';
 import { HttpServiceService } from '../../services/http-service.service';
 import { IotService } from '../../services/iot.service';
 import { IotBluetoothComponent } from '../iot-bluetooth/iot-bluetooth.component';
@@ -135,7 +136,8 @@ export class AppHeaderComponent implements OnInit {
     private confirmationService: ConfirmationService,
     public service: IotService,
     readonly sessionstorage: SessionStorageService,
-    private http_service: HttpServiceService
+    private http_service: HttpServiceService,
+    private readonly formAutosave: FormAutosaveService
   ) {}
 
   ngOnInit() {
@@ -239,6 +241,7 @@ export class AppHeaderComponent implements OnInit {
           this.changeLanguage('English');
           // this.sessionstorage.clear();
           sessionStorage.clear();
+          this.formAutosave.clearAll();
         }
       });
     });
