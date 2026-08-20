@@ -51,7 +51,9 @@ export class DoctorService {
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
       `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.doctorWorkList + fetchUrl);
+    return this.http.get(environment.doctorWorkList + fetchUrl, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
 
   getServiceOnState() {

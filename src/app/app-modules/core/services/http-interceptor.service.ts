@@ -61,6 +61,9 @@ export class HttpInterceptorService implements HttpInterceptor {
     const key: any = sessionStorage.getItem('key');
     const serverKey = this.sessionstorage.getItem('serverKey');
     let modifiedReq = req;
+    // Screens that render their own skeleton opt out of the global spinner
+    // overlay by sending this header (stripped before the request goes out).
+    const skipLoader = req.headers.has('X-Skip-Loader');
     const isPlatformFeedback =
       req.url && req.url.toLowerCase().includes('/platform-feedback');
 
@@ -84,9 +87,19 @@ export class HttpInterceptorService implements HttpInterceptor {
       }
     }
 
+    if (skipLoader) {
+      modifiedReq = modifiedReq.clone({
+        headers: modifiedReq.headers.delete('X-Skip-Loader'),
+      });
+    }
+
     return next.handle(modifiedReq).pipe(
       tap((event: HttpEvent<any>) => {
-        if (req.url !== undefined && !req.url.includes('cti/getAgentState')) {
+        if (
+          req.url !== undefined &&
+          !req.url.includes('cti/getAgentState') &&
+          !skipLoader
+        ) {
           this.spinnerService.setLoading(true);
         }
         if (event instanceof HttpResponse) {

@@ -91,7 +91,9 @@ export class NurseService {
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
       `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.nurseWorklist + fetchUrl);
+    return this.http.get(environment.nurseWorklist + fetchUrl, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
   getPreviousDiabetesHistory(benRegID: string, visitCategory: any) {
     return this.http.post(environment.previousDiabetesHistoryUrl, {
