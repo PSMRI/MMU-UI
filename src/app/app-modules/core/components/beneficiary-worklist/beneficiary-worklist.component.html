@@ -36,14 +36,14 @@
             </tr>
           </thead>
           <tbody z-table-body>
-            <ng-container *ngIf="loading">
+            <ng-container *ngIf="showSkeleton">
               <tr z-table-row *ngFor="let s of skeletonRows">
                 <td z-table-cell *ngFor="let h of effectiveHeaders">
                   <span z-skeleton class="h-4 w-full max-w-[140px]"></span>
                 </td>
               </tr>
             </ng-container>
-            <ng-container *ngIf="!loading">
+            <ng-container *ngIf="!showSkeleton">
               <tr
                 z-table-row
                 class="cursor-pointer transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"

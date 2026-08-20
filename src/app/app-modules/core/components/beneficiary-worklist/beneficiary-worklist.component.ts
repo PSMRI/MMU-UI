@@ -25,6 +25,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   Output,
   SimpleChanges,
   TemplateRef,
@@ -122,7 +123,7 @@ export const VISIT_STATUS_SEARCH_KEYS = [
     }),
   ],
 })
-export class BeneficiaryWorklistComponent implements OnChanges {
+export class BeneficiaryWorklistComponent implements OnChanges, OnDestroy {
   /** Full (unfiltered) list of rows; the component filters + paginates it. */
   @Input() data: any[] = [];
 
@@ -130,6 +131,11 @@ export class BeneficiaryWorklistComponent implements OnChanges {
   @Input() loading = false;
 
   readonly skeletonRows = [0, 1, 2, 3, 4];
+  /** Held a minimum time so the skeleton never just flashes on fast loads. */
+  showSkeleton = false;
+  private skeletonStartedAt = 0;
+  private skeletonTimer?: ReturnType<typeof setTimeout>;
+  private readonly minSkeletonMs = 500;
   /** Language set; drives the default headers, labels and image tooltip. */
   @Input() currentLanguageSet: any = null;
   /** Override the default standard headers. */
@@ -257,11 +263,35 @@ export class BeneficiaryWorklistComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes['loading']) {
+      this.updateSkeleton(this.loading);
+    }
     // Re-filter only when the underlying data changes, so header/template
     // input churn (re-evaluated on change detection) doesn't reset the page.
     if (changes['data']) {
       this.applyFilter(this.filterTerm);
     }
+  }
+
+  private updateSkeleton(loading: boolean) {
+    clearTimeout(this.skeletonTimer);
+    if (loading) {
+      this.showSkeleton = true;
+      this.skeletonStartedAt = Date.now();
+    } else if (this.showSkeleton) {
+      const remaining = Math.max(
+        0,
+        this.minSkeletonMs - (Date.now() - this.skeletonStartedAt)
+      );
+      this.skeletonTimer = setTimeout(
+        () => (this.showSkeleton = false),
+        remaining
+      );
+    }
+  }
+
+  ngOnDestroy() {
+    clearTimeout(this.skeletonTimer);
   }
 
   applyFilter(term: string) {
