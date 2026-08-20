@@ -24,7 +24,7 @@
     </button>
   </div>
 
-  <z-card>
+  <z-card class="shadow-lg">
     <z-card-content class="p-2">
       <div class="w-full overflow-x-auto">
         <table z-table>
@@ -39,7 +39,9 @@
             <ng-container *ngIf="showSkeleton">
               <tr z-table-row *ngFor="let s of skeletonRows">
                 <td z-table-cell *ngFor="let h of effectiveHeaders">
-                  <span z-skeleton class="h-4 w-full max-w-[140px]"></span>
+                  <span
+                    z-skeleton
+                    class="h-4 w-full max-w-[140px] bg-muted-foreground/20"></span>
                 </td>
               </tr>
             </ng-container>
