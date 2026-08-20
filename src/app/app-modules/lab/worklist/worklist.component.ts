@@ -40,6 +40,7 @@ import { BeneficiaryWorklistComponent } from '../../core/components/beneficiary-
 })
 export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
   beneficiaryList: any[] = [];
+  loading = false;
   current_language_set: any;
 
   constructor(
@@ -89,8 +90,10 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   loadWorklist() {
+    this.loading = true;
     this.labService.getLabWorklist().subscribe(
       (data: any) => {
+        this.loading = false;
         if (data && data.statusCode === 200 && data.data) {
           this.beneficiaryList = this.loadDataToBenList(data.data);
         } else {
@@ -99,6 +102,7 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
         }
       },
       err => {
+        this.loading = false;
         this.confirmationService.alert(err, 'error');
       }
     );

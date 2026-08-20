@@ -39,6 +39,8 @@ export class PharmacistService {
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
       `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.pharmacistWorklist + fetchUrl);
+    return this.http.get(environment.pharmacistWorklist + fetchUrl, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
 }

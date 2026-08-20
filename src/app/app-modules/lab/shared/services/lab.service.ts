@@ -38,7 +38,9 @@ export class LabService {
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
       `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.labWorklist + fetchUrl);
+    return this.http.get(environment.labWorklist + fetchUrl, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
 
   getEcgAbnormalities() {

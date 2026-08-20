@@ -102,7 +102,9 @@ export class DoctorService {
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
       `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.radiologistWorklist + fetchUrl);
+    return this.http.get(environment.radiologistWorklist + fetchUrl, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
 
   getOncologistWorklist() {
@@ -112,7 +114,9 @@ export class DoctorService {
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
       `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.oncologistWorklist + fetchUrl);
+    return this.http.get(environment.oncologistWorklist + fetchUrl, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
 
   confirmStatus(benVisitID: any) {
