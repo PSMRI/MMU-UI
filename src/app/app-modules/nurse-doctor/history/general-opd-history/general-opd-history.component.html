@@ -4,9 +4,11 @@
       zValue="pastHistory"
       class="rounded-lg border border-border bg-card px-4">
       <z-accordion-trigger>
-        <span class="text-sm font-semibold text-foreground">{{
-          currentLanguageSet?.historyData?.ancHistory?.pastHistory
-        }}</span>
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="lucideClipboardList" class="text-primary"></ng-icon>
+          {{ currentLanguageSet?.historyData?.ancHistory?.pastHistory }}
+        </span>
       </z-accordion-trigger>
       <z-accordion-content>
         <app-general-past-history
@@ -21,7 +23,9 @@
       zValue="comorbidityHistory"
       class="rounded-lg border border-border bg-card px-4">
       <z-accordion-trigger>
-        <span class="text-sm font-semibold text-foreground">
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="lucideActivity" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.historyData?.ancHistory
               ?.combordityANC_OPD_NCD_PNC?.comorbidityConditions
@@ -41,7 +45,9 @@
       zValue="medicationHistory"
       class="rounded-lg border border-border bg-card px-4">
       <z-accordion-trigger>
-        <span class="text-sm font-semibold text-foreground">
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="lucidePill" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.historyData?.ancHistory
               ?.medicationANC_OPD_NCD_PNC?.medicationHistory
@@ -61,7 +67,9 @@
       zValue="personalHistory"
       class="rounded-lg border border-border bg-card px-4">
       <z-accordion-trigger>
-        <span class="text-sm font-semibold text-foreground">
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="lucideUser" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.historyData?.ancHistory
               ?.personalHistoryANC_OPD_NCD_PNC?.personalHistoryData
@@ -81,7 +89,9 @@
       zValue="familyHistory"
       class="rounded-lg border border-border bg-card px-4">
       <z-accordion-trigger>
-        <span class="text-sm font-semibold text-foreground">
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="lucideUsers" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.historyData?.ancHistory
               ?.familyHistoryDataANC_OPD_NCD_PNC?.familyHistory
@@ -106,7 +116,9 @@
       zValue="menstrualHistory"
       class="rounded-lg border border-border bg-card px-4">
       <z-accordion-trigger>
-        <span class="text-sm font-semibold text-foreground">
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="lucideCalendarDays" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.historyData?.ancHistory?.menstrualHistoryANC
               ?.menstrualHistory
@@ -127,7 +139,9 @@
       zValue="perinatalHistory"
       class="rounded-lg border border-border bg-card px-4">
       <z-accordion-trigger>
-        <span class="text-sm font-semibold text-foreground">
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="lucideBaby" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
               ?.perinatalHistory
@@ -148,7 +162,9 @@
       zValue="pastObstericHistory"
       class="rounded-lg border border-border bg-card px-4">
       <z-accordion-trigger>
-        <span class="text-sm font-semibold text-foreground">
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="lucideStethoscope" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric
               ?.pastObstetricHistory
@@ -169,7 +185,9 @@
       zValue="immunizationHistory"
       class="rounded-lg border border-border bg-card px-4">
       <z-accordion-trigger>
-        <span class="text-sm font-semibold text-foreground">
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="lucideShieldCheck" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.immunization
               ?.ImmunizationHistory
@@ -190,7 +208,9 @@
       zValue="otherVaccines"
       class="rounded-lg border border-border bg-card px-4">
       <z-accordion-trigger>
-        <span class="text-sm font-semibold text-foreground">
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="lucideSyringe" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.otherVaccine
               ?.otherVaccines
@@ -211,7 +231,9 @@
       zValue="feedingHistory"
       class="rounded-lg border border-border bg-card px-4">
       <z-accordion-trigger>
-        <span class="text-sm font-semibold text-foreground">
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="lucideUtensils" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.feeding
               ?.feedingHistory
@@ -232,7 +254,9 @@
       zValue="developmentHistory"
       class="rounded-lg border border-border bg-card px-4">
       <z-accordion-trigger>
-        <span class="text-sm font-semibold text-foreground">
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="lucideTrendingUp" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.development
               ?.developmentHistory
@@ -256,7 +280,9 @@
       zValue="ncdFamilyHistory"
       class="rounded-lg border border-border bg-card px-4">
       <z-accordion-trigger>
-        <span class="text-sm font-semibold text-foreground">
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="lucideUsers" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.historyData?.ancHistory
               ?.familyHistoryDataANC_OPD_NCD_PNC?.familyHistory
@@ -276,7 +302,9 @@
       zValue="physicalActivityHistory"
       class="rounded-lg border border-border bg-card px-4">
       <z-accordion-trigger>
-        <span class="text-sm font-semibold text-foreground">
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="lucideActivity" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.historyData?.ncdPhysicalActivityHistory
               ?.physicalActivityHistory
@@ -296,7 +324,9 @@
       zValue="ncdPersonalHistory"
       class="rounded-lg border border-border bg-card px-4">
       <z-accordion-trigger>
-        <span class="text-sm font-semibold text-foreground">
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="lucideUser" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.historyData?.ancHistory
               ?.personalHistoryANC_OPD_NCD_PNC?.personalHistoryData

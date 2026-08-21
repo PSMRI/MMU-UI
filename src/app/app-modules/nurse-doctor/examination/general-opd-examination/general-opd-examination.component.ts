@@ -44,6 +44,12 @@ import { GeneralExaminationComponent } from './general-examination/general-exami
 import { HeadToToeExaminationComponent } from './head-to-toe-examination/head-to-toe-examination.component';
 import { NgIf } from '@angular/common';
 import { SystemicExaminationComponent } from './systemic-examination/systemic-examination.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideStethoscope,
+  lucidePersonStanding,
+  lucideHeartPulse,
+} from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-nurse-general-opd-examination',
@@ -54,6 +60,14 @@ import { SystemicExaminationComponent } from './systemic-examination/systemic-ex
     HeadToToeExaminationComponent,
     NgIf,
     SystemicExaminationComponent,
+    NgIcon,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideStethoscope,
+      lucidePersonStanding,
+      lucideHeartPulse,
+    }),
   ],
 })
 export class GeneralOpdExaminationComponent
