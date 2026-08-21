@@ -44,7 +44,9 @@ export class LabService {
   }
 
   getEcgAbnormalities() {
-    return this.http.get(environment.getEcgAbnormalitiesMasterUrl);
+    return this.http.get(environment.getEcgAbnormalitiesMasterUrl, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
 
   saveLabWork(techForm: any) {

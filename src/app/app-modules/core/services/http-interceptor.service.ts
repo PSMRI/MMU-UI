@@ -57,13 +57,16 @@ export class HttpInterceptorService implements HttpInterceptor {
     const isLoginRequest =
       req.url && req.url.toLowerCase().includes('user/userAuthenticate');
 
-    this.pendingRequests++;
+    // Skeleton screens opt out of the global spinner via this header, and stay
+    // out of the pending-request count so a slow fetch can't hold it open.
+    const skipLoader = req.headers.has('X-Skip-Loader');
+
+    if (!skipLoader) {
+      this.pendingRequests++;
+    }
     const key: any = sessionStorage.getItem('key');
     const serverKey = this.sessionstorage.getItem('serverKey');
     let modifiedReq = req;
-    // Screens that render their own skeleton opt out of the global spinner
-    // overlay by sending this header (stripped before the request goes out).
-    const skipLoader = req.headers.has('X-Skip-Loader');
     const isPlatformFeedback =
       req.url && req.url.toLowerCase().includes('/platform-feedback');
 
@@ -146,9 +149,11 @@ export class HttpInterceptorService implements HttpInterceptor {
       }),
 
       finalize(() => {
-        this.pendingRequests--;
-        if (this.pendingRequests === 0) {
-          this.spinnerService.setLoading(false);
+        if (!skipLoader) {
+          this.pendingRequests--;
+          if (this.pendingRequests === 0) {
+            this.spinnerService.setLoading(false);
+          }
         }
       })
     );
