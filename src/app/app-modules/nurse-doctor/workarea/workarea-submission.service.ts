@@ -52,6 +52,7 @@ export interface WorkareaSubmissionHost {
   confirmationService: ConfirmationService;
   sessionstorage: SessionStorageService;
   resetSpinnerandEnableTheSubmitButton(): any;
+  onSubmitSuccess(): any;
   checkNurseRequirements(medicalForm: any): any;
   checkCancerRequiredData(medicalForm: any): any;
   checkNCDScreeningRequiredData(medicalForm: any): any;
@@ -192,7 +193,7 @@ export class WorkareaSubmissionService {
           .subscribe(
             (res: any) => {
               if (res.statusCode === 200 && res.data !== null) {
-                host.patientMedicalForm.reset();
+                host.onSubmitSuccess();
                 host.confirmationService.alert(res.data.message, 'success');
                 // if (prescribedDrugs.length > 0) {
                 //   const prescriptionSmsObject = host.SMSObjectCreation(
@@ -232,7 +233,7 @@ export class WorkareaSubmissionService {
           .subscribe(
             (res: any) => {
               if (res.statusCode === 200 && res.data !== null) {
-                host.patientMedicalForm.reset();
+                host.onSubmitSuccess();
                 sessionStorage.removeItem('instFlag');
                 sessionStorage.removeItem('suspectFlag');
 
@@ -275,7 +276,7 @@ export class WorkareaSubmissionService {
           .subscribe(
             (res: any) => {
               if (res.statusCode === 200 && res.data !== null) {
-                host.patientMedicalForm.reset();
+                host.onSubmitSuccess();
 
                 // if (prescribedDrugs.length > 0) {
                 //   const prescriptionSmsObject = host.SMSObjectCreation(
@@ -329,7 +330,7 @@ export class WorkareaSubmissionService {
               .subscribe(
                 (res: any) => {
                   if (res.statusCode === 200 && res.data !== null) {
-                    host.patientMedicalForm.reset();
+                    host.onSubmitSuccess();
                     host.removeBeneficiaryDataForNurseVisit();
                     host.confirmationService.alert(
                       res.data.response,
@@ -337,7 +338,7 @@ export class WorkareaSubmissionService {
                     );
                     host.router.navigate(['/nurse-doctor/nurse-worklist']);
                   } else if (res.statusCode === 9999) {
-                    host.patientMedicalForm.reset();
+                    host.onSubmitSuccess();
                     host.removeBeneficiaryDataForNurseVisit();
                     host.confirmationService.alert(res.errorMessage, 'info');
                     host.router.navigate(['/nurse-doctor/nurse-worklist']);
@@ -367,7 +368,7 @@ export class WorkareaSubmissionService {
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
-              host.patientMedicalForm.reset();
+              host.onSubmitSuccess();
               host.removeBeneficiaryDataForDoctorVisit();
               host.confirmationService.alert(res.data.message, 'success');
               host.router.navigate(['/nurse-doctor/doctor-worklist']);
@@ -410,7 +411,7 @@ export class WorkareaSubmissionService {
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
-              host.patientMedicalForm.reset();
+              host.onSubmitSuccess();
               host.removeBeneficiaryDataForDoctorVisit();
               host.confirmationService.alert(res.data.response, 'success');
               host.doctorService.prescribedDrugData = null;
@@ -434,7 +435,7 @@ export class WorkareaSubmissionService {
       host.nurseService.postNurseGeneralQCVisitForm(medicalForm).subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
-            host.patientMedicalForm.reset();
+            host.onSubmitSuccess();
             host.removeBeneficiaryDataForNurseVisit();
             host.confirmationService.alert(res.data.response, 'success');
             host.router.navigate(['/nurse-doctor/nurse-worklist']);
@@ -517,7 +518,7 @@ export class WorkareaSubmissionService {
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
-              host.patientMedicalForm.reset();
+              host.onSubmitSuccess();
               host.removeBeneficiaryDataForDoctorVisit();
               // if (prescribedDrugs.length > 0) {
               //   const prescriptionSmsObject = host.SMSObjectCreation(
@@ -556,7 +557,7 @@ export class WorkareaSubmissionService {
       .subscribe(
         (res: any) => {
           if (res.statusCode === 200 && res.data !== null) {
-            host.patientMedicalForm.reset();
+            host.onSubmitSuccess();
             // if (prescribedDrugs.length > 0) {
             //   const prescriptionSmsObject = host.SMSObjectCreation(
             //     [],
@@ -665,7 +666,7 @@ export class WorkareaSubmissionService {
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
-              host.patientMedicalForm.reset();
+              host.onSubmitSuccess();
               host.removeBeneficiaryDataForNurseVisit();
               host.confirmationService.alert(res.data.response, 'success');
               host.router.navigate(['/nurse-doctor/nurse-worklist']);
@@ -702,7 +703,7 @@ export class WorkareaSubmissionService {
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
-              host.patientMedicalForm.reset();
+              host.onSubmitSuccess();
               host.removeBeneficiaryDataForDoctorVisit();
               // if (prescribedDrugs.length > 0) {
               //   const prescriptionSmsObject = host.SMSObjectCreation(
@@ -742,7 +743,7 @@ export class WorkareaSubmissionService {
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
-              host.patientMedicalForm.reset();
+              host.onSubmitSuccess();
               host.removeBeneficiaryDataForNurseVisit();
               host.confirmationService.alert(res.data.response, 'success');
               host.router.navigate(['/nurse-doctor/nurse-worklist']);
@@ -773,7 +774,7 @@ export class WorkareaSubmissionService {
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
-              host.patientMedicalForm.reset();
+              host.onSubmitSuccess();
               host.removeBeneficiaryDataForNurseVisit();
               host.confirmationService.alert(res.data.response, 'success');
               host.router.navigate(['/nurse-doctor/nurse-worklist']);
@@ -800,7 +801,7 @@ export class WorkareaSubmissionService {
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
-              host.patientMedicalForm.reset();
+              host.onSubmitSuccess();
               host.removeBeneficiaryDataForNurseVisit();
               host.confirmationService.alert(res.data.response, 'success');
               host.router.navigate(['/nurse-doctor/nurse-worklist']);
@@ -842,7 +843,7 @@ export class WorkareaSubmissionService {
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
-              host.patientMedicalForm.reset();
+              host.onSubmitSuccess();
               host.removeBeneficiaryDataForDoctorVisit();
               // if (prescribedDrugs.length > 0) {
               //   const prescriptionSmsObject = host.SMSObjectCreation(
@@ -899,7 +900,7 @@ export class WorkareaSubmissionService {
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
-              host.patientMedicalForm.reset();
+              host.onSubmitSuccess();
               host.removeBeneficiaryDataForDoctorVisit();
               host.confirmationService.alert(res.data.response, 'success');
               host.router.navigate(['/nurse-doctor/doctor-worklist']);
@@ -942,7 +943,7 @@ export class WorkareaSubmissionService {
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
-              host.patientMedicalForm.reset();
+              host.onSubmitSuccess();
               host.removeBeneficiaryDataForDoctorVisit();
               sessionStorage.removeItem('instFlag');
               sessionStorage.removeItem('suspectFlag');
@@ -992,7 +993,7 @@ export class WorkareaSubmissionService {
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
-              host.patientMedicalForm.reset();
+              host.onSubmitSuccess();
               host.removeBeneficiaryDataForNurseVisit();
               host.confirmationService.alert(res.data.response, 'success');
               host.router.navigate(['/nurse-doctor/nurse-worklist']);
@@ -1023,7 +1024,7 @@ export class WorkareaSubmissionService {
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
-              host.patientMedicalForm.reset();
+              host.onSubmitSuccess();
               host.removeBeneficiaryDataForNurseVisit();
               host.confirmationService.alert(res.data.response, 'success');
               host.router.navigate(['/nurse-doctor/nurse-worklist']);
@@ -1065,7 +1066,7 @@ export class WorkareaSubmissionService {
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
-              host.patientMedicalForm.reset();
+              host.onSubmitSuccess();
               host.removeBeneficiaryDataForDoctorVisit();
               // if (prescribedDrugs.length > 0) {
               //   const prescriptionSmsObject = host.SMSObjectCreation(
@@ -1120,7 +1121,7 @@ export class WorkareaSubmissionService {
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200 && res.data !== null) {
-              host.patientMedicalForm.reset();
+              host.onSubmitSuccess();
               host.removeBeneficiaryDataForDoctorVisit();
               // if (prescribedDrugs.length > 0) {
               //   const prescriptionSmsObject = host.SMSObjectCreation(

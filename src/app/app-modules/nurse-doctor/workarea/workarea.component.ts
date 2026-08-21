@@ -418,9 +418,10 @@ export class WorkareaComponent
   }
 
   private initAutosave() {
+    const benFlowID = this.sessionstorage.getItem('benFlowID') || '';
     this.autosaveId = `${this.sessionstorage.getItem('userID') || ''}:${
       this.attendantType || ''
-    }:${this.beneficiaryRegID || ''}`;
+    }:${this.beneficiaryRegID || ''}:${benFlowID}`;
     if (!this.beneficiaryRegID || !this.patientMedicalForm) return;
 
     const draft = this.formAutosave.restore(this.autosaveId);
@@ -464,6 +465,13 @@ export class WorkareaComponent
           );
         }
       });
+  }
+
+  // Called by the submission flows once a visit is saved: reset the form and
+  // drop its autosave draft so completed visits don't linger in localStorage.
+  onSubmitSuccess() {
+    this.patientMedicalForm.reset();
+    this.formAutosave.clear(this.autosaveId);
   }
 
   setVitalsUpdateButtonValue() {

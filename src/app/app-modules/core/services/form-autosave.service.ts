@@ -31,9 +31,9 @@ export interface AutosaveDraft {
 
 /**
  * Persists in-progress form data to localStorage (AES-encrypted with the app
- * key) so a nurse/doctor who accidentally closes the tab can recover it on
- * reopen. Drafts are keyed per beneficiary + role and are cleared on submit
- * and on logout so patient data does not linger on the device.
+ * key) so a nurse/doctor who accidentally closes the tab — or is logged out by
+ * mistake — can recover it on reopen. Drafts are keyed per user + role + visit
+ * and deliberately survive logout; callers remove them with clear()/clearAll().
  */
 @Injectable({ providedIn: 'root' })
 export class FormAutosaveService {
