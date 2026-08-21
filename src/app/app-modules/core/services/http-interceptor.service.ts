@@ -57,7 +57,20 @@ export class HttpInterceptorService implements HttpInterceptor {
     const isLoginRequest =
       req.url && req.url.toLowerCase().includes('user/userAuthenticate');
 
-    this.pendingRequests++;
+    // Background / device / polling endpoints must not drive the global spinner
+    // or its pending-request count. A stalled request to one of them (e.g. the
+    // local IoT hub that may not be running, or a CTI agent-state poll) would
+    // otherwise wedge the counter above zero and freeze the spinner forever,
+    // forcing an app restart — most visibly on an F5 inside a patient screen.
+    const url = req.url;
+    const skipSpinner =
+      !url ||
+      url.includes('cti/getAgentState') ||
+      this.donotShowSpinnerUrl.some(entry => !!entry && url.includes(entry));
+
+    if (!skipSpinner) {
+      this.pendingRequests++;
+    }
     const key: any = sessionStorage.getItem('key');
     const serverKey = this.sessionstorage.getItem('serverKey');
     let modifiedReq = req;
@@ -86,7 +99,7 @@ export class HttpInterceptorService implements HttpInterceptor {
 
     return next.handle(modifiedReq).pipe(
       tap((event: HttpEvent<any>) => {
-        if (req.url !== undefined && !req.url.includes('cti/getAgentState')) {
+        if (!skipSpinner) {
           this.spinnerService.setLoading(true);
         }
         if (event instanceof HttpResponse) {
@@ -133,9 +146,11 @@ export class HttpInterceptorService implements HttpInterceptor {
       }),
 
       finalize(() => {
-        this.pendingRequests--;
-        if (this.pendingRequests === 0) {
-          this.spinnerService.setLoading(false);
+        if (!skipSpinner) {
+          this.pendingRequests = Math.max(0, this.pendingRequests - 1);
+          if (this.pendingRequests === 0) {
+            this.spinnerService.setLoading(false);
+          }
         }
       })
     );
