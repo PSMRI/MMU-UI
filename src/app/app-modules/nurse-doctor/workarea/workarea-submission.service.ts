@@ -77,6 +77,46 @@ export interface WorkareaSubmissionHost {
  */
 @Injectable({ providedIn: 'root' })
 export class WorkareaSubmissionService {
+  // Shared success / error handling for the submit flows below. Each flow only
+  // differs in the success-message field, the worklist it returns to, and an
+  // optional cleanup step, so the response wiring lives here once instead of
+  // being copied into every subscribe.
+  private handleSubmitResponse(
+    host: WorkareaSubmissionHost,
+    res: any,
+    field: 'message' | 'response',
+    nav: 'nurse' | 'doctor' | 'specialist',
+    cleanup?: (host: WorkareaSubmissionHost) => void
+  ): void {
+    if (res.statusCode === 200 && res.data !== null) {
+      host.onSubmitSuccess();
+      if (cleanup) cleanup(host);
+      host.confirmationService.alert(res.data[field], 'success');
+      this.navigateAfterSubmit(host, nav);
+    } else {
+      host.resetSpinnerandEnableTheSubmitButton();
+      host.confirmationService.alert(res.errorMessage, 'error');
+    }
+  }
+
+  private handleSubmitError(host: WorkareaSubmissionHost, err: any): void {
+    host.resetSpinnerandEnableTheSubmitButton();
+    host.confirmationService.alert(err, 'error');
+  }
+
+  private navigateAfterSubmit(
+    host: WorkareaSubmissionHost,
+    nav: 'nurse' | 'doctor' | 'specialist'
+  ): void {
+    if (nav === 'nurse') {
+      host.router.navigate(['/nurse-doctor/nurse-worklist']);
+    } else if (nav === 'specialist' && host.isSpecialist) {
+      host.router.navigate(['/common/tcspecialist-worklist']);
+    } else {
+      host.router.navigate(['/nurse-doctor/doctor-worklist']);
+    }
+  }
+
   submitPatientMedicalDetailsForm(
     medicalForm: any,
     host: WorkareaSubmissionHost
@@ -191,33 +231,9 @@ export class WorkareaSubmissionService {
             host.doctorSignatureFlag
           )
           .subscribe(
-            (res: any) => {
-              if (res.statusCode === 200 && res.data !== null) {
-                host.onSubmitSuccess();
-                host.confirmationService.alert(res.data.message, 'success');
-                // if (prescribedDrugs.length > 0) {
-                //   const prescriptionSmsObject = host.SMSObjectCreation(
-                //     [],
-                //     prescribedDrugs,
-                //     res.data.prescribedDrugIDs
-                //   );
-                //   host.sendPrescriptionSms(prescriptionSmsObject);
-                // }
-                host.confirmationService.alert(res.data.message, 'success');
-                if (host.isSpecialist) {
-                  host.router.navigate(['/common/tcspecialist-worklist']);
-                } else {
-                  host.router.navigate(['/nurse-doctor/doctor-worklist']);
-                }
-              } else {
-                host.resetSpinnerandEnableTheSubmitButton();
-                host.confirmationService.alert(res.errorMessage, 'error');
-              }
-            },
-            err => {
-              host.resetSpinnerandEnableTheSubmitButton();
-              host.confirmationService.alert(err, 'error');
-            }
+            (res: any) =>
+              this.handleSubmitResponse(host, res, 'message', 'specialist'),
+            (err: any) => this.handleSubmitError(host, err)
           );
       }
     } else if (visitCategory === 'NCD screening') {
@@ -231,36 +247,18 @@ export class WorkareaSubmissionService {
             host.doctorSignatureFlag
           )
           .subscribe(
-            (res: any) => {
-              if (res.statusCode === 200 && res.data !== null) {
-                host.onSubmitSuccess();
-                sessionStorage.removeItem('instFlag');
-                sessionStorage.removeItem('suspectFlag');
-
-                // if (prescribedDrugs.length > 0) {
-                //   const prescriptionSmsObject = host.SMSObjectCreation(
-                //     [],
-                //     prescribedDrugs,
-                //     res.data.prescribedDrugIDs
-                //   );
-                //   host.sendPrescriptionSms(prescriptionSmsObject);
-                // } else {
-                host.confirmationService.alert(res.data.message, 'success');
-                if (host.isSpecialist) {
-                  host.router.navigate(['/common/tcspecialist-worklist']);
-                } else {
-                  host.router.navigate(['/nurse-doctor/doctor-worklist']);
+            (res: any) =>
+              this.handleSubmitResponse(
+                host,
+                res,
+                'message',
+                'specialist',
+                () => {
+                  sessionStorage.removeItem('instFlag');
+                  sessionStorage.removeItem('suspectFlag');
                 }
-                // }
-              } else {
-                host.resetSpinnerandEnableTheSubmitButton();
-                host.confirmationService.alert(res.errorMessage, 'error');
-              }
-            },
-            err => {
-              host.resetSpinnerandEnableTheSubmitButton();
-              host.confirmationService.alert(err, 'error');
-            }
+              ),
+            (err: any) => this.handleSubmitError(host, err)
           );
       }
     } else {
@@ -274,34 +272,9 @@ export class WorkareaSubmissionService {
             host.doctorSignatureFlag
           )
           .subscribe(
-            (res: any) => {
-              if (res.statusCode === 200 && res.data !== null) {
-                host.onSubmitSuccess();
-
-                // if (prescribedDrugs.length > 0) {
-                //   const prescriptionSmsObject = host.SMSObjectCreation(
-                //     [],
-                //     prescribedDrugs,
-                //     res.data.prescribedDrugIDs
-                //   );
-                //   host.sendPrescriptionSms(prescriptionSmsObject);
-                // } else {
-                host.confirmationService.alert(res.data.message, 'success');
-                if (host.isSpecialist) {
-                  host.router.navigate(['/common/tcspecialist-worklist']);
-                } else {
-                  host.router.navigate(['/nurse-doctor/doctor-worklist']);
-                }
-                // }
-              } else {
-                host.resetSpinnerandEnableTheSubmitButton();
-                host.confirmationService.alert(res.errorMessage, 'error');
-              }
-            },
-            err => {
-              host.resetSpinnerandEnableTheSubmitButton();
-              host.confirmationService.alert(err, 'error');
-            }
+            (res: any) =>
+              this.handleSubmitResponse(host, res, 'message', 'specialist'),
+            (err: any) => this.handleSubmitError(host, err)
           );
       }
     }
@@ -366,21 +339,11 @@ export class WorkareaSubmissionService {
           host.doctorSignatureFlag
         )
         .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              host.onSubmitSuccess();
-              host.removeBeneficiaryDataForDoctorVisit();
-              host.confirmationService.alert(res.data.message, 'success');
-              host.router.navigate(['/nurse-doctor/doctor-worklist']);
-            } else {
-              host.resetSpinnerandEnableTheSubmitButton();
-              host.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            host.resetSpinnerandEnableTheSubmitButton();
-            host.confirmationService.alert(err, 'error');
-          }
+          (res: any) =>
+            this.handleSubmitResponse(host, res, 'message', 'doctor', h =>
+              h.removeBeneficiaryDataForDoctorVisit()
+            ),
+          (err: any) => this.handleSubmitError(host, err)
         );
     }
   }
@@ -433,21 +396,11 @@ export class WorkareaSubmissionService {
   ) {
     if (host.checkNurseRequirements(medicalForm)) {
       host.nurseService.postNurseGeneralQCVisitForm(medicalForm).subscribe(
-        (res: any) => {
-          if (res.statusCode === 200 && res.data !== null) {
-            host.onSubmitSuccess();
-            host.removeBeneficiaryDataForNurseVisit();
-            host.confirmationService.alert(res.data.response, 'success');
-            host.router.navigate(['/nurse-doctor/nurse-worklist']);
-          } else {
-            host.resetSpinnerandEnableTheSubmitButton();
-            host.confirmationService.alert(res.errorMessage, 'error');
-          }
-        },
-        err => {
-          host.resetSpinnerandEnableTheSubmitButton();
-          host.confirmationService.alert(err, 'error');
-        }
+        (res: any) =>
+          this.handleSubmitResponse(host, res, 'response', 'nurse', h =>
+            h.removeBeneficiaryDataForNurseVisit()
+          ),
+        (err: any) => this.handleSubmitError(host, err)
       );
     }
   }
@@ -516,30 +469,11 @@ export class WorkareaSubmissionService {
           host.doctorSignatureFlag
         )
         .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              host.onSubmitSuccess();
-              host.removeBeneficiaryDataForDoctorVisit();
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = host.SMSObjectCreation(
-              //     [],
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   host.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              host.confirmationService.alert(res.data.message, 'success');
-              host.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              host.resetSpinnerandEnableTheSubmitButton();
-              host.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            host.resetSpinnerandEnableTheSubmitButton();
-            host.confirmationService.alert(err, 'error');
-          }
+          (res: any) =>
+            this.handleSubmitResponse(host, res, 'message', 'doctor', h =>
+              h.removeBeneficiaryDataForDoctorVisit()
+            ),
+          (err: any) => this.handleSubmitError(host, err)
         );
     }
   }
@@ -555,33 +489,9 @@ export class WorkareaSubmissionService {
         host.doctorSignatureFlag
       )
       .subscribe(
-        (res: any) => {
-          if (res.statusCode === 200 && res.data !== null) {
-            host.onSubmitSuccess();
-            // if (prescribedDrugs.length > 0) {
-            //   const prescriptionSmsObject = host.SMSObjectCreation(
-            //     [],
-            //     prescribedDrugs,
-            //     res.data.prescribedDrugIDs
-            //   );
-            //   host.sendPrescriptionSms(prescriptionSmsObject);
-            // } else {
-            host.confirmationService.alert(res.data.message, 'success');
-            if (host.isSpecialist) {
-              host.router.navigate(['/common/tcspecialist-worklist']);
-            } else {
-              host.router.navigate(['/nurse-doctor/doctor-worklist']);
-            }
-            // }
-          } else {
-            host.resetSpinnerandEnableTheSubmitButton();
-            host.confirmationService.alert(res.errorMessage, 'error');
-          }
-        },
-        err => {
-          host.resetSpinnerandEnableTheSubmitButton();
-          host.confirmationService.alert(err, 'error');
-        }
+        (res: any) =>
+          this.handleSubmitResponse(host, res, 'message', 'specialist'),
+        (err: any) => this.handleSubmitError(host, err)
       );
   }
 
@@ -664,21 +574,11 @@ export class WorkareaSubmissionService {
           host.beneficiary.ageVal
         )
         .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              host.onSubmitSuccess();
-              host.removeBeneficiaryDataForNurseVisit();
-              host.confirmationService.alert(res.data.response, 'success');
-              host.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              host.resetSpinnerandEnableTheSubmitButton();
-              host.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            host.resetSpinnerandEnableTheSubmitButton();
-            host.confirmationService.alert(err, 'error');
-          }
+          (res: any) =>
+            this.handleSubmitResponse(host, res, 'response', 'nurse', h =>
+              h.removeBeneficiaryDataForNurseVisit()
+            ),
+          (err: any) => this.handleSubmitError(host, err)
         );
     }
   }
@@ -701,30 +601,11 @@ export class WorkareaSubmissionService {
           host.doctorSignatureFlag
         )
         .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              host.onSubmitSuccess();
-              host.removeBeneficiaryDataForDoctorVisit();
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = host.SMSObjectCreation(
-              //     [],
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   host.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              host.confirmationService.alert(res.data.message, 'success');
-              host.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              host.resetSpinnerandEnableTheSubmitButton();
-              host.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            host.resetSpinnerandEnableTheSubmitButton();
-            host.confirmationService.alert(err, 'error');
-          }
+          (res: any) =>
+            this.handleSubmitResponse(host, res, 'message', 'doctor', h =>
+              h.removeBeneficiaryDataForDoctorVisit()
+            ),
+          (err: any) => this.handleSubmitError(host, err)
         );
     }
   }
@@ -741,21 +622,11 @@ export class WorkareaSubmissionService {
           host.beneficiary
         )
         .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              host.onSubmitSuccess();
-              host.removeBeneficiaryDataForNurseVisit();
-              host.confirmationService.alert(res.data.response, 'success');
-              host.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              host.resetSpinnerandEnableTheSubmitButton();
-              host.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            host.resetSpinnerandEnableTheSubmitButton();
-            host.confirmationService.alert(err, 'error');
-          }
+          (res: any) =>
+            this.handleSubmitResponse(host, res, 'response', 'nurse', h =>
+              h.removeBeneficiaryDataForNurseVisit()
+            ),
+          (err: any) => this.handleSubmitError(host, err)
         );
     }
   }
@@ -772,21 +643,11 @@ export class WorkareaSubmissionService {
           host.beneficiary
         )
         .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              host.onSubmitSuccess();
-              host.removeBeneficiaryDataForNurseVisit();
-              host.confirmationService.alert(res.data.response, 'success');
-              host.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              host.resetSpinnerandEnableTheSubmitButton();
-              host.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            host.resetSpinnerandEnableTheSubmitButton();
-            host.confirmationService.alert(err, 'error');
-          }
+          (res: any) =>
+            this.handleSubmitResponse(host, res, 'response', 'nurse', h =>
+              h.removeBeneficiaryDataForNurseVisit()
+            ),
+          (err: any) => this.handleSubmitError(host, err)
         );
     }
   }
@@ -799,21 +660,11 @@ export class WorkareaSubmissionService {
       host.nurseService
         .postNCDScreeningForm(medicalForm, host.visitCategory)
         .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              host.onSubmitSuccess();
-              host.removeBeneficiaryDataForNurseVisit();
-              host.confirmationService.alert(res.data.response, 'success');
-              host.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              host.resetSpinnerandEnableTheSubmitButton();
-              host.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            host.resetSpinnerandEnableTheSubmitButton();
-            host.confirmationService.alert(err, 'error');
-          }
+          (res: any) =>
+            this.handleSubmitResponse(host, res, 'response', 'nurse', h =>
+              h.removeBeneficiaryDataForNurseVisit()
+            ),
+          (err: any) => this.handleSubmitError(host, err)
         );
     }
   }
@@ -841,38 +692,11 @@ export class WorkareaSubmissionService {
           host.doctorSignatureFlag
         )
         .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              host.onSubmitSuccess();
-              host.removeBeneficiaryDataForDoctorVisit();
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = host.SMSObjectCreation(
-              //     JSON.parse(
-              //       JSON.stringify(
-              //         (
-              //           patientVisitForm.get(
-              //             'generalDiagnosisForm.provisionalDiagnosisList'
-              //           ) as FormArray
-              //         ).value
-              //       )
-              //     ),
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   host.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              host.confirmationService.alert(res.data.message, 'success');
-              host.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              host.resetSpinnerandEnableTheSubmitButton();
-              host.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            host.resetSpinnerandEnableTheSubmitButton();
-            host.confirmationService.alert(err, 'error');
-          }
+          (res: any) =>
+            this.handleSubmitResponse(host, res, 'message', 'doctor', h =>
+              h.removeBeneficiaryDataForDoctorVisit()
+            ),
+          (err: any) => this.handleSubmitError(host, err)
         );
     }
   }
@@ -898,21 +722,11 @@ export class WorkareaSubmissionService {
           host.schedulerData
         )
         .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              host.onSubmitSuccess();
-              host.removeBeneficiaryDataForDoctorVisit();
-              host.confirmationService.alert(res.data.response, 'success');
-              host.router.navigate(['/nurse-doctor/doctor-worklist']);
-            } else {
-              host.resetSpinnerandEnableTheSubmitButton();
-              host.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            host.resetSpinnerandEnableTheSubmitButton();
-            host.confirmationService.alert(err, 'error');
-          }
+          (res: any) =>
+            this.handleSubmitResponse(host, res, 'response', 'doctor', h =>
+              h.removeBeneficiaryDataForDoctorVisit()
+            ),
+          (err: any) => this.handleSubmitError(host, err)
         );
     }
   }
@@ -941,40 +755,13 @@ export class WorkareaSubmissionService {
           host.doctorSignatureFlag
         )
         .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              host.onSubmitSuccess();
-              host.removeBeneficiaryDataForDoctorVisit();
+          (res: any) =>
+            this.handleSubmitResponse(host, res, 'message', 'doctor', h => {
+              h.removeBeneficiaryDataForDoctorVisit();
               sessionStorage.removeItem('instFlag');
               sessionStorage.removeItem('suspectFlag');
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = host.SMSObjectCreation(
-              //     JSON.parse(
-              //       JSON.stringify(
-              //         (
-              //           patientVisitForm.get(
-              //             'generalDiagnosisForm.provisionalDiagnosisList'
-              //           ) as FormArray
-              //         ).value
-              //       )
-              //     ),
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   host.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              host.confirmationService.alert(res.data.message, 'success');
-              host.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              host.resetSpinnerandEnableTheSubmitButton();
-              host.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            host.resetSpinnerandEnableTheSubmitButton();
-            host.confirmationService.alert(err, 'error');
-          }
+            }),
+          (err: any) => this.handleSubmitError(host, err)
         );
     }
   }
@@ -991,21 +778,11 @@ export class WorkareaSubmissionService {
           host.beneficiary
         )
         .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              host.onSubmitSuccess();
-              host.removeBeneficiaryDataForNurseVisit();
-              host.confirmationService.alert(res.data.response, 'success');
-              host.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              host.resetSpinnerandEnableTheSubmitButton();
-              host.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            host.resetSpinnerandEnableTheSubmitButton();
-            host.confirmationService.alert(err, 'error');
-          }
+          (res: any) =>
+            this.handleSubmitResponse(host, res, 'response', 'nurse', h =>
+              h.removeBeneficiaryDataForNurseVisit()
+            ),
+          (err: any) => this.handleSubmitError(host, err)
         );
     }
   }
@@ -1022,21 +799,11 @@ export class WorkareaSubmissionService {
           host.beneficiary
         )
         .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              host.onSubmitSuccess();
-              host.removeBeneficiaryDataForNurseVisit();
-              host.confirmationService.alert(res.data.response, 'success');
-              host.router.navigate(['/nurse-doctor/nurse-worklist']);
-            } else {
-              host.resetSpinnerandEnableTheSubmitButton();
-              host.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            host.resetSpinnerandEnableTheSubmitButton();
-            host.confirmationService.alert(err, 'error');
-          }
+          (res: any) =>
+            this.handleSubmitResponse(host, res, 'response', 'nurse', h =>
+              h.removeBeneficiaryDataForNurseVisit()
+            ),
+          (err: any) => this.handleSubmitError(host, err)
         );
     }
   }
@@ -1064,38 +831,11 @@ export class WorkareaSubmissionService {
           host.doctorSignatureFlag
         )
         .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              host.onSubmitSuccess();
-              host.removeBeneficiaryDataForDoctorVisit();
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = host.SMSObjectCreation(
-              //     JSON.parse(
-              //       JSON.stringify(
-              //         (
-              //           patientVisitForm.get(
-              //             'generalDiagnosisForm.provisionalDiagnosisList'
-              //           ) as FormArray
-              //         ).value
-              //       )
-              //     ),
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   host.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              host.confirmationService.alert(res.data.message, 'success');
-              host.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              host.resetSpinnerandEnableTheSubmitButton();
-              host.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            host.resetSpinnerandEnableTheSubmitButton();
-            host.confirmationService.alert(err, 'error');
-          }
+          (res: any) =>
+            this.handleSubmitResponse(host, res, 'message', 'doctor', h =>
+              h.removeBeneficiaryDataForDoctorVisit()
+            ),
+          (err: any) => this.handleSubmitError(host, err)
         );
     }
   }
@@ -1119,38 +859,11 @@ export class WorkareaSubmissionService {
           host.doctorSignatureFlag
         )
         .subscribe(
-          (res: any) => {
-            if (res.statusCode === 200 && res.data !== null) {
-              host.onSubmitSuccess();
-              host.removeBeneficiaryDataForDoctorVisit();
-              // if (prescribedDrugs.length > 0) {
-              //   const prescriptionSmsObject = host.SMSObjectCreation(
-              //     JSON.parse(
-              //       JSON.stringify(
-              //         (
-              //           host.patientVisitForm.get(
-              //             'generalDiagnosisForm.provisionalDiagnosisList'
-              //           ) as FormArray
-              //         ).value
-              //       )
-              //     ),
-              //     prescribedDrugs,
-              //     res.data.prescribedDrugIDs
-              //   );
-              //   host.sendPrescriptionSms(prescriptionSmsObject);
-              // } else {
-              host.confirmationService.alert(res.data.message, 'success');
-              host.router.navigate(['/nurse-doctor/doctor-worklist']);
-              // }
-            } else {
-              host.resetSpinnerandEnableTheSubmitButton();
-              host.confirmationService.alert(res.errorMessage, 'error');
-            }
-          },
-          err => {
-            host.resetSpinnerandEnableTheSubmitButton();
-            host.confirmationService.alert(err, 'error');
-          }
+          (res: any) =>
+            this.handleSubmitResponse(host, res, 'message', 'doctor', h =>
+              h.removeBeneficiaryDataForDoctorVisit()
+            ),
+          (err: any) => this.handleSubmitError(host, err)
         );
     }
   }
