@@ -1,111 +1,73 @@
-<div *ngIf="!hideBack" class="bg-background">
-  <div class="flex flex-wrap items-center justify-between gap-2">
-    <button z-button zType="default" (click)="goBack()">
-      {{ currentLanguageSet?.common?.back }}
+<div
+  *ngIf="!hideBack"
+  class="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-2 border-b border-border bg-background/95 py-3 backdrop-blur print:hidden">
+  <button z-button zType="ghost" (click)="goBack()">
+    <ng-icon name="lucideChevronLeft"></ng-icon>
+    {{ currentLanguageSet?.common?.back }}
+  </button>
+  <div class="flex flex-wrap items-center gap-2">
+    <button
+      *ngIf="enablePrescriptionButton === true"
+      z-button
+      zType="outline"
+      (click)="prescribeTMMedicine()">
+      {{ currentLanguageSet?.casesheet?.PrescribeTmMedicine }}
     </button>
-    <div class="flex flex-wrap items-center gap-2">
-      <button
-        *ngIf="enablePrescriptionButton === true"
-        z-button
-        zType="default"
-        (click)="prescribeTMMedicine()">
-        {{ currentLanguageSet?.casesheet?.PrescribeTmMedicine }}
-      </button>
-      <button z-button zType="default" (click)="downloadCasesheet()">
-        {{ currentLanguageSet?.casesheet?.print }}
-      </button>
-    </div>
+    <button
+      *ngIf="!hideSelectQC"
+      z-button
+      zType="outline"
+      (click)="selectPrintPage()">
+      <ng-icon name="lucideLayoutGrid"></ng-icon>
+      {{ currentLanguageSet?.casesheet?.caseComponent }}
+    </button>
+    <button z-button zType="default" (click)="downloadCasesheet()">
+      <ng-icon name="lucidePrinter"></ng-icon>
+      {{ currentLanguageSet?.casesheet?.print }}
+    </button>
   </div>
 </div>
-<div
-  class="fixed right-5 bottom-8 z-30 flex flex-col-reverse items-end gap-2 print:hidden">
-  <button
-    *ngIf="!hideSelectQC"
-    z-button
-    zType="default"
-    zShape="circle"
-    zSize="icon"
-    [zTooltip]="currentLanguageSet?.casesheet?.caseComponent"
-    zPosition="left"
-    aria-label="{{ currentLanguageSet?.casesheet?.caseComponent }}"
-    (click)="selectPrintPage()">
-    <ng-icon name="lucideLayoutGrid"></ng-icon>
-  </button>
-  <button
-    *ngIf="!previous"
-    z-button
-    zType="default"
-    zShape="circle"
-    zSize="icon"
-    [zTooltip]="currentLanguageSet?.casesheet?.goTop"
-    zPosition="left"
-    aria-label="{{ currentLanguageSet?.casesheet?.goTop }}"
-    (click)="goToTop()">
-    <ng-icon name="lucideArrowUp"></ng-icon>
-  </button>
-  <button
-    *ngIf="!previous"
-    z-button
-    zType="default"
-    zShape="circle"
-    zSize="icon"
-    [zTooltip]="currentLanguageSet?.casesheet?.printCaseheet"
-    zPosition="left"
-    aria-label="{{ currentLanguageSet?.casesheet?.printCaseheet }}"
-    (click)="downloadCasesheet()">
-    <ng-icon name="lucidePrinter"></ng-icon>
-  </button>
-  <button
-    *ngIf="!hideBack"
-    z-button
-    zType="default"
-    zShape="circle"
-    zSize="icon"
-    [zTooltip]="currentLanguageSet?.casesheet?.workList"
-    zPosition="left"
-    aria-label="{{ currentLanguageSet?.casesheet?.workList }}"
-    (click)="goBack()">
-    <ng-icon name="lucideChevronLeft"></ng-icon>
-  </button>
-</div>
-<div class="mt-5">
+<button
+  *ngIf="!previous"
+  z-button
+  zType="default"
+  zShape="circle"
+  zSize="icon"
+  class="fixed bottom-8 right-5 z-30 shadow-lg print:hidden"
+  [zTooltip]="currentLanguageSet?.casesheet?.goTop"
+  zPosition="left"
+  aria-label="{{ currentLanguageSet?.casesheet?.goTop }}"
+  (click)="goToTop()">
+  <ng-icon name="lucideArrowUp"></ng-icon>
+</button>
+<div class="mt-5 flex flex-col gap-8">
   <app-doctor-diagnosis-case-sheet
     [printPagePreviewSelect]="printPagePreviewSelect"
     [caseSheetData]="caseSheetData"
     [previous]="previous"></app-doctor-diagnosis-case-sheet>
-  <div
-    class="break-after-page"
-    *ngIf="visitCategory !== 'General OPD (QC)'"></div>
-  <ng-container *ngIf="printPagePreviewSelect?.caseSheetANC">
-    <app-anc-case-sheet
-      *ngIf="visitCategory === 'ANC'"
-      [caseSheetData]="caseSheetData"
-      [previous]="previous"></app-anc-case-sheet>
-    <div class="break-after-page"></div>
-  </ng-container>
-  <ng-container *ngIf="printPagePreviewSelect?.caseSheetPNC">
-    <app-pnc-case-sheet
-      *ngIf="visitCategory === 'PNC'"
-      [caseSheetData]="caseSheetData"
-      [previous]="previous"></app-pnc-case-sheet>
-    <div class="break-after-page"></div>
-  </ng-container>
-  <ng-container *ngIf="printPagePreviewSelect?.caseSheetHistory">
-    <app-history-case-sheet
-      *ngIf="visitCategory !== 'General OPD (QC)'"
-      [caseSheetData]="caseSheetData"
-      [previous]="previous"></app-history-case-sheet>
-    <div class="break-after-page"></div>
-  </ng-container>
-  <ng-container *ngIf="printPagePreviewSelect?.caseSheetExamination">
-    <app-examination-case-sheet
-      *ngIf="
-        visitCategory !== 'NCD care' &&
-        visitCategory !== 'General OPD (QC)' &&
-        visitCategory !== 'NCD screening' &&
-        visitCategory !== 'COVID-19 Screening'
-      "
-      [caseSheetData]="caseSheetData"
-      [previous]="previous"></app-examination-case-sheet>
-  </ng-container>
+  <app-anc-case-sheet
+    *ngIf="printPagePreviewSelect?.caseSheetANC && visitCategory === 'ANC'"
+    [caseSheetData]="caseSheetData"
+    [previous]="previous"></app-anc-case-sheet>
+  <app-pnc-case-sheet
+    *ngIf="printPagePreviewSelect?.caseSheetPNC && visitCategory === 'PNC'"
+    [caseSheetData]="caseSheetData"
+    [previous]="previous"></app-pnc-case-sheet>
+  <app-history-case-sheet
+    *ngIf="
+      printPagePreviewSelect?.caseSheetHistory &&
+      visitCategory !== 'General OPD (QC)'
+    "
+    [caseSheetData]="caseSheetData"
+    [previous]="previous"></app-history-case-sheet>
+  <app-examination-case-sheet
+    *ngIf="
+      printPagePreviewSelect?.caseSheetExamination &&
+      visitCategory !== 'NCD care' &&
+      visitCategory !== 'General OPD (QC)' &&
+      visitCategory !== 'NCD screening' &&
+      visitCategory !== 'COVID-19 Screening'
+    "
+    [caseSheetData]="caseSheetData"
+    [previous]="previous"></app-examination-case-sheet>
 </div>
