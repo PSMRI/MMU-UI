@@ -42,6 +42,7 @@ import { normalizeStandardWorklistRows } from '../../core/components/beneficiary
 })
 export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
   beneficiaryList: any[] = [];
+  loading = false;
   languageComponent!: SetLanguageComponent;
   currentLanguageSet: any;
 
@@ -83,8 +84,10 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   loadPharmaWorklist() {
+    this.loading = true;
     this.pharmacistService.getPharmacistWorklist().subscribe(
       (data: any) => {
+        this.loading = false;
         if (data && data.statusCode === 200 && data.data) {
           this.beneficiaryList = this.loadDataToBenList(data.data);
         } else {
@@ -93,6 +96,7 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
         }
       },
       err => {
+        this.loading = false;
         this.confirmationService.alert(err, 'error');
       }
     );

@@ -29,7 +29,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { DoctorService } from '../../shared/services/doctor.service';
-import { Location, NgIf } from '@angular/common';
+import { Location, NgIf, NgFor } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { PrescribeTmMedicineComponent } from '../prescribe-tm-medicine/prescribe-tm-medicine.component';
 import { NurseService } from '../../shared/services';
@@ -40,6 +40,7 @@ import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { PrintPageSelectComponent } from '../../print-page-select/print-page-select.component';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardSkeletonComponent } from 'Common-UI/v2/ui/skeleton';
 import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -67,7 +68,9 @@ import { ExaminationCaseSheetComponent } from './examination-case-sheet/examinat
   ],
   imports: [
     NgIf,
+    NgFor,
     ZardButtonComponent,
+    ZardSkeletonComponent,
     NgIcon,
     ...tooltipImports,
     DoctorDiagnosisCaseSheetComponent,
@@ -85,6 +88,7 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
   serviceType: any;
 
   caseSheetData: any;
+  readonly caseSheetSkeletonRows = [0, 1, 2, 3, 4, 5, 6, 7];
   visitCategory: any;
   hideBack: boolean = false;
 

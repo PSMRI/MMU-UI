@@ -24,7 +24,7 @@
     </button>
   </div>
 
-  <z-card>
+  <z-card class="shadow-lg">
     <z-card-content class="p-2">
       <div class="w-full overflow-x-auto">
         <table z-table>
@@ -36,9 +36,19 @@
             </tr>
           </thead>
           <tbody z-table-body>
-            <tr
-              z-table-row
-              class="cursor-pointer transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+            <ng-container *ngIf="showSkeleton">
+              <tr z-table-row *ngFor="let s of skeletonRows">
+                <td z-table-cell *ngFor="let h of effectiveHeaders">
+                  <span
+                    z-skeleton
+                    class="h-4 w-full max-w-[140px] bg-muted-foreground/20"></span>
+                </td>
+              </tr>
+            </ng-container>
+            <ng-container *ngIf="!showSkeleton">
+              <tr
+                z-table-row
+                class="cursor-pointer transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
               tabindex="0"
               *ngFor="let row of pagedList; let i = index"
               (click)="rowClick.emit(row)"
@@ -107,14 +117,15 @@
                   "></ng-container>
               </ng-template>
             </tr>
-            <tr z-table-row *ngIf="filteredData.length === 0">
-              <td
-                z-table-cell
-                [attr.colspan]="effectiveHeaders.length"
-                class="h-24 text-center text-muted-foreground">
-                {{ emptyText }}
-              </td>
-            </tr>
+              <tr z-table-row *ngIf="filteredData.length === 0">
+                <td
+                  z-table-cell
+                  [attr.colspan]="effectiveHeaders.length"
+                  class="h-24 text-center text-muted-foreground">
+                  {{ emptyText }}
+                </td>
+              </tr>
+            </ng-container>
           </tbody>
         </table>
       </div>

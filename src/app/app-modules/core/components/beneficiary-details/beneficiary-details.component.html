@@ -20,7 +20,22 @@
   </div>
 </ng-template>
 
-<z-card class="w-full">
+<z-card class="w-full" *ngIf="!beneficiary">
+  <z-card-header class="flex flex-col items-center gap-3 text-center">
+    <span z-skeleton class="size-24 rounded-full"></span>
+    <span z-skeleton class="h-5 w-40"></span>
+  </z-card-header>
+  <z-card-content>
+    <dl class="grid grid-cols-1 gap-x-6 gap-y-4">
+      <div class="flex flex-col gap-1" *ngFor="let s of skeletonRows">
+        <span z-skeleton class="h-3 w-24"></span>
+        <span z-skeleton class="h-4 w-40"></span>
+      </div>
+    </dl>
+  </z-card-content>
+</z-card>
+
+<z-card class="w-full" *ngIf="beneficiary">
   <z-card-header class="flex flex-col items-center gap-3 text-center">
     <ng-container *ngTemplateOutlet="avatar"></ng-container>
     <z-card-title class="text-base">

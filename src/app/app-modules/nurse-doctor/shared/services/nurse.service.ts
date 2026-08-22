@@ -91,7 +91,9 @@ export class NurseService {
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
       `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.nurseWorklist + fetchUrl);
+    return this.http.get(environment.nurseWorklist + fetchUrl, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
   getPreviousDiabetesHistory(benRegID: string, visitCategory: any) {
     return this.http.post(environment.previousDiabetesHistoryUrl, {
@@ -112,7 +114,9 @@ export class NurseService {
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
       `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.nurseWorklistTMreferred + fetchUrl);
+    return this.http.get(environment.nurseWorklistTMreferred + fetchUrl, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
   postNurseCancerVisitForm(
     medicalForm: any,
@@ -2123,7 +2127,9 @@ export class NurseService {
     this.ncdTemp.next(false);
   }
   getTMReferredCasesheetData(reqObj: any) {
-    return this.http.post(environment.getTMCasesheetData, reqObj);
+    return this.http.post(environment.getTMCasesheetData, reqObj, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
 
   calculateBmiStatus(obj: any) {

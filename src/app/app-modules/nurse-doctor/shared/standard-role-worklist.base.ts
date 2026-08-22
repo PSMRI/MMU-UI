@@ -37,6 +37,7 @@ export abstract class StandardRoleWorklistBase
   implements OnInit, OnDestroy, DoCheck
 {
   beneficiaryList: any[] = [];
+  loading = false;
   currentLanguageSet: any;
 
   /** Role stored as `currentRole` (e.g. 'Oncologist', 'Radiologist'). */
@@ -69,10 +70,11 @@ export abstract class StandardRoleWorklistBase
   }
 
   loadWorklist() {
-    this.roleWorklist.loadStandardWorklist(
-      this.fetchWorklist(),
-      rows => (this.beneficiaryList = rows)
-    );
+    this.loading = true;
+    this.roleWorklist.loadStandardWorklist(this.fetchWorklist(), rows => {
+      this.loading = false;
+      this.beneficiaryList = rows;
+    });
   }
 
   loadDoctorExaminationPage(beneficiary: any) {

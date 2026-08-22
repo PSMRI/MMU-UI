@@ -37,6 +37,7 @@ import { BeneficiaryWorklistComponent } from 'src/app/app-modules/core/component
 export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
   currentLanguageSet: any;
   beneficiaryList: any[] = [];
+  loading = false;
 
   visitCategory: any;
   casesheetSubs: any;
@@ -68,14 +69,21 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
 
   loadWorklist() {
     sessionStorage.removeItem('disableNoOnSuccessOfYes');
-    this.nurseService.getNurseWorklistTMreferred().subscribe((res: any) => {
-      if (res.statusCode === 200 && res.data !== null) {
-        this.beneficiaryList = this.loadDataToBenList(res.data);
-      } else {
-        this.confirmationService.alert(res.errorMessage, 'error');
-        this.beneficiaryList = [];
+    this.loading = true;
+    this.nurseService.getNurseWorklistTMreferred().subscribe(
+      (res: any) => {
+        this.loading = false;
+        if (res.statusCode === 200 && res.data !== null) {
+          this.beneficiaryList = this.loadDataToBenList(res.data);
+        } else {
+          this.confirmationService.alert(res.errorMessage, 'error');
+          this.beneficiaryList = [];
+        }
+      },
+      () => {
+        this.loading = false;
       }
-    });
+    );
   }
 
   loadDataToBenList(data: any) {

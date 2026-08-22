@@ -40,10 +40,14 @@ export class BeneficiaryDetailsService {
 
   getBeneficiaryDetails(beneficiaryRegID: string, benFlowID: string) {
     this.http
-      .post(environment.getBeneficiaryDetail, {
-        beneficiaryRegID: beneficiaryRegID,
-        benFlowID: benFlowID,
-      })
+      .post(
+        environment.getBeneficiaryDetail,
+        {
+          beneficiaryRegID: beneficiaryRegID,
+          benFlowID: benFlowID,
+        },
+        { headers: { 'X-Skip-Loader': 'true' } }
+      )
       .subscribe(
         (res: any) => {
           if (res.data) {

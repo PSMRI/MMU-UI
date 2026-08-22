@@ -57,7 +57,13 @@ export class HttpInterceptorService implements HttpInterceptor {
     const isLoginRequest =
       req.url && req.url.toLowerCase().includes('user/userAuthenticate');
 
-    this.pendingRequests++;
+    // Skeleton screens opt out of the global spinner via this header, and stay
+    // out of the pending-request count so a slow fetch can't hold it open.
+    const skipLoader = req.headers.has('X-Skip-Loader');
+
+    if (!skipLoader) {
+      this.pendingRequests++;
+    }
     const key: any = sessionStorage.getItem('key');
     const serverKey = this.sessionstorage.getItem('serverKey');
     let modifiedReq = req;
@@ -84,9 +90,19 @@ export class HttpInterceptorService implements HttpInterceptor {
       }
     }
 
+    if (skipLoader) {
+      modifiedReq = modifiedReq.clone({
+        headers: modifiedReq.headers.delete('X-Skip-Loader'),
+      });
+    }
+
     return next.handle(modifiedReq).pipe(
       tap((event: HttpEvent<any>) => {
-        if (req.url !== undefined && !req.url.includes('cti/getAgentState')) {
+        if (
+          req.url !== undefined &&
+          !req.url.includes('cti/getAgentState') &&
+          !skipLoader
+        ) {
           this.spinnerService.setLoading(true);
         }
         if (event instanceof HttpResponse) {
@@ -133,9 +149,11 @@ export class HttpInterceptorService implements HttpInterceptor {
       }),
 
       finalize(() => {
-        this.pendingRequests--;
-        if (this.pendingRequests === 0) {
-          this.spinnerService.setLoading(false);
+        if (!skipLoader) {
+          this.pendingRequests--;
+          if (this.pendingRequests === 0) {
+            this.spinnerService.setLoading(false);
+          }
         }
       })
     );
