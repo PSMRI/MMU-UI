@@ -6,7 +6,9 @@
     zValue="significantFindings"
     class="rounded-lg border border-border bg-card">
     <z-accordion-trigger class="px-4">
-      <span class="text-sm font-semibold text-foreground">
+      <span
+        class="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <ng-icon name="healthNotes" class="text-primary"></ng-icon>
         {{
           current_language_set?.Significantfindingsdetails
             ?.previoussignificantfindings
@@ -22,7 +24,9 @@
     zValue="previousVisit"
     class="rounded-lg border border-border bg-card">
     <z-accordion-trigger class="px-4">
-      <span class="text-sm font-semibold text-foreground">
+      <span
+        class="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <ng-icon name="healthCalendar" class="text-primary"></ng-icon>
         {{ current_language_set?.previousvisit?.Previousvisitdetails }}
       </span>
     </z-accordion-trigger>
@@ -36,7 +40,9 @@
     zValue="findings"
     class="rounded-lg border border-border bg-card">
     <z-accordion-trigger class="px-4">
-      <span class="text-sm font-semibold text-foreground">
+      <span
+        class="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <ng-icon name="healthStethoscope" class="text-primary"></ng-icon>
         {{ current_language_set?.Find?.findings }}
       </span>
     </z-accordion-trigger>
@@ -52,7 +58,9 @@
     zValue="diagnosis"
     class="rounded-lg border border-border bg-card">
     <z-accordion-trigger class="px-4">
-      <span class="text-sm font-semibold text-foreground">
+      <span
+        class="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <ng-icon name="healthClinical" class="text-primary"></ng-icon>
         {{ current_language_set?.casesheet?.diagnosis }}
       </span>
     </z-accordion-trigger>
@@ -68,7 +76,9 @@
     zValue="investigations"
     class="rounded-lg border border-border bg-card">
     <z-accordion-trigger class="px-4">
-      <span class="text-sm font-semibold text-foreground">
+      <span
+        class="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <ng-icon name="healthMicroscope" class="text-primary"></ng-icon>
         {{
           current_language_set?.nurseData?.investigationsDetails?.investigations
         }}
@@ -88,7 +98,9 @@
     zValue="prescription"
     class="rounded-lg border border-border bg-card">
     <z-accordion-trigger class="px-4">
-      <span class="text-sm font-semibold text-foreground">
+      <span
+        class="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <ng-icon name="healthMedicines" class="text-primary"></ng-icon>
         {{ current_language_set?.casesheet?.prescribe }}
       </span>
     </z-accordion-trigger>
@@ -103,7 +115,9 @@
     zValue="report"
     class="rounded-lg border border-border bg-card">
     <z-accordion-trigger class="px-4">
-      <span class="text-sm font-semibold text-foreground">
+      <span
+        class="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <ng-icon name="healthChart" class="text-primary"></ng-icon>
         {{ current_language_set?.common?.report }}
       </span>
     </z-accordion-trigger>

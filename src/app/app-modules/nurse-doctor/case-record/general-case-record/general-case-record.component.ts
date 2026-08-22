@@ -32,9 +32,12 @@ import { DiagnosisComponent } from './diagnosis/diagnosis.component';
 import { DoctorInvestigationsComponent } from './doctor-investigations/doctor-investigations.component';
 import { PrescriptionComponent } from './prescription/prescription.component';
 import { TestAndRadiologyComponent } from './test-and-radiology/test-and-radiology.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { healthicons } from '../../../core/icons/healthicons';
 @Component({
   selector: 'app-general-case-record',
   templateUrl: './general-case-record.component.html',
+  viewProviders: [provideIcons(healthicons)],
   imports: [
     ...ZardAccordionImports,
     ReactiveFormsModule,
@@ -45,6 +48,7 @@ import { TestAndRadiologyComponent } from './test-and-radiology/test-and-radiolo
     DoctorInvestigationsComponent,
     PrescriptionComponent,
     TestAndRadiologyComponent,
+    NgIcon,
   ],
 })
 export class GeneralCaseRecordComponent implements DoCheck {
