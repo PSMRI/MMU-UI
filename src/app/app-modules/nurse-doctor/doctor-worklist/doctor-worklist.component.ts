@@ -114,12 +114,15 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
       (data: any) => {
         if (data && data.statusCode === 200 && data.data) {
           this.beneficiaryMetaData = data.data;
+          // Populate the rows first: on a hard refresh the language JSON may
+          // still be loading, so decorate statuses only after — ngDoCheck
+          // re-runs getVisitStatus once currentLanguageSet is ready.
+          this.beneficiaryList = this.loadDataToBenList(data.data);
           data.data.forEach((item: any) => {
             const temp = this.getVisitStatus(item);
             item.statusMessage = temp.statusMessage;
             item.statusCode = temp.statusCode;
           });
-          this.beneficiaryList = this.loadDataToBenList(data.data);
         } else {
           this.confirmationService.alert(data.errorMessage, 'error');
           this.beneficiaryList = [];
@@ -229,16 +232,19 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
       beneficiaryVisitDetials.nurseFlag === 2
     ) {
       status.statusCode = 2;
-      status.statusMessage = this.currentLanguageSet.alerts.info.pending;
+      status.statusMessage =
+        this.currentLanguageSet?.alerts?.info?.pending ?? '';
     } else if (beneficiaryVisitDetials.doctorFlag === 1) {
       status.statusCode = 1;
-      status.statusMessage = this.currentLanguageSet.alerts.info.pendingConsult;
+      status.statusMessage =
+        this.currentLanguageSet?.alerts?.info?.pendingConsult ?? '';
     } else if (beneficiaryVisitDetials.doctorFlag === 3) {
       status.statusCode = 3;
-      status.statusMessage = this.currentLanguageSet.alerts.info.labtestDone;
+      status.statusMessage =
+        this.currentLanguageSet?.alerts?.info?.labtestDone ?? '';
     } else if (beneficiaryVisitDetials.specialist_flag === 100) {
       status.statusCode = 10;
-      status.statusMessage = this.currentLanguageSet.common.tmReferred;
+      status.statusMessage = this.currentLanguageSet?.common?.tmReferred ?? '';
     } else if (beneficiaryVisitDetials.doctorFlag === 9) {
       status.statusCode = 9;
       status.statusMessage = 'Consultation Done';
