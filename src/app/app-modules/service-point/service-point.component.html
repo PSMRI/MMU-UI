@@ -172,7 +172,7 @@
           <button
             z-button
             type="button"
-            [disabled]="!servicePointForm.valid"
+            [zDisabled]="!servicePointForm.valid"
             (click)="
               saveLocationDataToStorage();
               trackFieldInteraction('Continue Button')
