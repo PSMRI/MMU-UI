@@ -45,11 +45,7 @@ import { HeadToToeExaminationComponent } from './head-to-toe-examination/head-to
 import { NgIf } from '@angular/common';
 import { SystemicExaminationComponent } from './systemic-examination/systemic-examination.component';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import {
-  lucideStethoscope,
-  lucidePersonStanding,
-  lucideHeartPulse,
-} from '@ng-icons/lucide';
+import { healthicons } from '../../../core/icons/healthicons';
 
 @Component({
   selector: 'app-nurse-general-opd-examination',
@@ -62,13 +58,7 @@ import {
     SystemicExaminationComponent,
     NgIcon,
   ],
-  viewProviders: [
-    provideIcons({
-      lucideStethoscope,
-      lucidePersonStanding,
-      lucideHeartPulse,
-    }),
-  ],
+  viewProviders: [provideIcons(healthicons)],
 })
 export class GeneralOpdExaminationComponent
   implements OnInit, AfterViewInit, DoCheck, OnDestroy, OnChanges
