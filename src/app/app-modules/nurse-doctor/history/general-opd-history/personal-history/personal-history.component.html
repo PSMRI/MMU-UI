@@ -1,64 +1,113 @@
 <div [formGroup]="generalPersonalHistoryForm" class="flex flex-col gap-6">
-  <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+  <div
+    *ngIf="previousTobaccoRows.length || previousAlcoholRows.length"
+    class="flex flex-col gap-4">
     <div
-      class="flex items-center justify-center gap-2"
-      *ngIf="beneficiary?.ageVal >= 13">
-      <span class="text-sm font-medium text-foreground">{{
-        currentLanguageSet?.historyData?.ancHistory
-          ?.personalHistoryANC_OPD_NCD_PNC?.previousTobaccohistory
-      }}</span>
-      <button
-        z-button
-        zType="ghost"
-        zSize="icon-sm"
-        type="button"
-        id="previousTobaccoHistory"
-        class="text-primary"
-        [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
-        [attr.aria-label]="currentLanguageSet?.DurationData?.previousDetails"
-        (click)="getPreviousTobaccoHistory()">
-        <ng-icon name="lucideHistory"></ng-icon>
-      </button>
+      *ngIf="previousTobaccoRows.length"
+      class="rounded-lg border border-border bg-muted/30 p-3">
+      <p class="mb-2 text-sm font-semibold text-foreground">
+        {{
+          currentLanguageSet?.historyData?.ancHistory
+            ?.personalHistoryANC_OPD_NCD_PNC?.previousTobaccohistory
+        }}
+      </p>
+      <div class="max-h-40 overflow-auto">
+        <table class="w-full border-collapse text-sm">
+          <thead>
+            <tr
+              class="border-b border-border text-left text-xs text-muted-foreground">
+              <th
+                class="p-1.5 font-medium"
+                *ngFor="let col of previousTobaccoColumns">
+                {{ col.columnName }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              class="border-b border-border/60"
+              *ngFor="let row of previousTobaccoRows">
+              <td
+                class="whitespace-nowrap p-1.5 text-foreground"
+                *ngFor="let col of previousTobaccoColumns">
+                {{ row[col.keyName] }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <div
-      class="flex items-center justify-center gap-2"
-      *ngIf="beneficiary?.ageVal >= 13">
-      <span class="text-sm font-medium text-foreground">{{
-        currentLanguageSet?.historyData?.ancHistory
-          ?.personalHistoryANC_OPD_NCD_PNC?.previousAlcoholhistory
-      }}</span>
-      <button
-        z-button
-        zType="ghost"
-        zSize="icon-sm"
-        type="button"
-        id="previousAlcoholHistory"
-        class="text-primary"
-        [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
-        [attr.aria-label]="currentLanguageSet?.DurationData?.previousDetails"
-        (click)="getPreviousAlcoholHistory()">
-        <ng-icon name="lucideHistory"></ng-icon>
-      </button>
+      *ngIf="previousAlcoholRows.length"
+      class="rounded-lg border border-border bg-muted/30 p-3">
+      <p class="mb-2 text-sm font-semibold text-foreground">
+        {{
+          currentLanguageSet?.historyData?.ancHistory
+            ?.personalHistoryANC_OPD_NCD_PNC?.previousAlcoholhistory
+        }}
+      </p>
+      <div class="max-h-40 overflow-auto">
+        <table class="w-full border-collapse text-sm">
+          <thead>
+            <tr
+              class="border-b border-border text-left text-xs text-muted-foreground">
+              <th
+                class="p-1.5 font-medium"
+                *ngFor="let col of previousAlcoholColumns">
+                {{ col.columnName }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              class="border-b border-border/60"
+              *ngFor="let row of previousAlcoholRows">
+              <td
+                class="whitespace-nowrap p-1.5 text-foreground"
+                *ngFor="let col of previousAlcoholColumns">
+                {{ row[col.keyName] }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 
-    <div class="flex items-center justify-center gap-2">
-      <span class="text-sm font-medium text-foreground">{{
+  <div
+    *ngIf="previousAllergyRows.length"
+    class="rounded-lg border border-border bg-muted/30 p-3">
+    <p class="mb-2 text-sm font-semibold text-foreground">
+      {{
         currentLanguageSet?.historyData?.ancHistory
           ?.personalHistoryANC_OPD_NCD_PNC?.previousAllergyhistory
-      }}</span>
-      <button
-        z-button
-        zType="ghost"
-        zSize="icon-sm"
-        type="button"
-        id="previousAllergyHistory"
-        class="text-primary"
-        [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
-        [attr.aria-label]="currentLanguageSet?.DurationData?.previousDetails"
-        (click)="getPreviousAllergyHistory()">
-        <ng-icon name="lucideHistory"></ng-icon>
-      </button>
+      }}
+    </p>
+    <div class="max-h-40 overflow-auto">
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr
+            class="border-b border-border text-left text-xs text-muted-foreground">
+            <th
+              class="p-1.5 font-medium"
+              *ngFor="let col of previousAllergyColumns">
+              {{ col.columnName }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            class="border-b border-border/60"
+            *ngFor="let row of previousAllergyRows">
+            <td
+              class="p-1.5 text-foreground"
+              *ngFor="let col of previousAllergyColumns">
+              {{ row[col.keyName] }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -326,12 +375,13 @@
               </z-form-control>
             </z-form-field>
 
-            <div class="flex items-end justify-end gap-2 lg:col-span-4">
+            <div class="flex items-center justify-end gap-2 lg:col-span-4">
               <button
                 z-button
-                zType="destructive"
-                zSize="icon"
+                zType="ghost"
+                zSize="icon-sm"
                 type="button"
+                class="text-muted-foreground hover:text-destructive"
                 *ngIf="
                   i !== 0 || (i === 0 && (tobacco.touched || tobacco.dirty))
                 "
@@ -341,14 +391,14 @@
               </button>
               <button
                 z-button
-                zType="default"
-                zSize="icon"
+                zType="outline"
+                zSize="sm"
                 type="button"
                 *ngIf="isLast"
-                [disabled]="checkTobaccoValidity(tobacco)"
-                [attr.aria-label]="currentLanguageSet?.common?.add"
+                [zDisabled]="checkTobaccoValidity(tobacco)"
                 (click)="addTobacco()">
                 <ng-icon name="lucidePlus"></ng-icon>
+                {{ currentLanguageSet?.common?.add || 'Add' }}
               </button>
             </div>
           </div>
@@ -506,12 +556,13 @@
               </z-form-control>
             </z-form-field>
 
-            <div class="flex items-end justify-end gap-2 lg:col-span-3">
+            <div class="flex items-center justify-end gap-2 lg:col-span-3">
               <button
                 z-button
-                zType="destructive"
-                zSize="icon"
+                zType="ghost"
+                zSize="icon-sm"
                 type="button"
+                class="text-muted-foreground hover:text-destructive"
                 *ngIf="
                   i !== 0 || (i === 0 && (alcohol.touched || alcohol.dirty))
                 "
@@ -521,14 +572,14 @@
               </button>
               <button
                 z-button
-                zType="default"
-                zSize="icon"
+                zType="outline"
+                zSize="sm"
                 type="button"
                 *ngIf="isLast"
-                [disabled]="checkAlcoholValidity(alcohol)"
-                [attr.aria-label]="currentLanguageSet?.common?.add"
+                [zDisabled]="checkAlcoholValidity(alcohol)"
                 (click)="addAlcohol()">
                 <ng-icon name="lucidePlus"></ng-icon>
+                {{ currentLanguageSet?.common?.add || 'Add' }}
               </button>
             </div>
           </div>
@@ -680,12 +731,13 @@
               </z-form-control>
             </z-form-field>
 
-            <div class="flex items-end justify-end gap-2 lg:col-span-3">
+            <div class="flex items-center justify-end gap-2 lg:col-span-3">
               <button
                 z-button
-                zType="destructive"
-                zSize="icon"
+                zType="ghost"
+                zSize="icon-sm"
                 type="button"
+                class="text-muted-foreground hover:text-destructive"
                 *ngIf="
                   i !== 0 || (i === 0 && (allergy.touched || allergy.dirty))
                 "
@@ -695,18 +747,18 @@
               </button>
               <button
                 z-button
-                zType="default"
-                zSize="icon"
+                zType="outline"
+                zSize="sm"
                 type="button"
                 *ngIf="
                   isLast &&
                   generalPersonalHistoryForm.get('allergicList')?.value
                     ?.length < allergyMasterData.length
                 "
-                [disabled]="checkAllergyValidity(allergy)"
-                [attr.aria-label]="currentLanguageSet?.common?.add"
+                [zDisabled]="checkAllergyValidity(allergy)"
                 (click)="addAllergy()">
                 <ng-icon name="lucidePlus"></ng-icon>
+                {{ currentLanguageSet?.common?.add || 'Add' }}
               </button>
             </div>
           </div>

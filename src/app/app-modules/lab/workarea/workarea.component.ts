@@ -24,6 +24,7 @@ import { DataManipulation } from './LabSubmissionDataManipulation';
 import {
   Component,
   OnInit,
+  OnDestroy,
   ViewChild,
   DoCheck,
   AfterViewChecked,
@@ -52,7 +53,7 @@ import { HttpServiceService } from '../../core/services/http-service.service';
 import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { environment } from 'src/environments/environment';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import {
   NgIf,
@@ -138,7 +139,12 @@ import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
   viewProviders: [provideIcons({ lucideSearch, lucideUserRound })],
 })
 export class WorkareaComponent
-  implements OnInit, DoCheck, AfterViewChecked, CanComponentDeactivate
+  implements
+    OnInit,
+    OnDestroy,
+    DoCheck,
+    AfterViewChecked,
+    CanComponentDeactivate
 {
   @ViewChild(ZardAccordionComponent)
   labAccordion?: ZardAccordionComponent;
@@ -149,6 +155,8 @@ export class WorkareaComponent
   beneficiaryRegID: any;
   visitID: any;
   visitCode: any;
+  beneficiary: any;
+  private beneficiarySubscription?: Subscription;
   technicianForm!: FormGroup;
   readonly skeletonCards = [0, 1, 2];
   readonly skeletonFields = [0, 1, 2];
@@ -210,6 +218,19 @@ export class WorkareaComponent
     this.visitCode = this.sessionstorage.getItem('visitCode');
     this.beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
 
+    this.beneficiarySubscription =
+      this.beneficiaryDetailsService.beneficiaryDetails$.subscribe(
+        (data: any) => {
+          if (data) this.beneficiary = data;
+        }
+      );
+    if (this.beneficiaryRegID) {
+      this.beneficiaryDetailsService.getBeneficiaryDetails(
+        this.beneficiaryRegID,
+        this.sessionstorage.getItem('benFlowID') ?? ''
+      );
+    }
+
     this.getTestRequirements();
     this.stepExpand = 0;
     this.testName = environment.RBSTest;
@@ -217,6 +238,10 @@ export class WorkareaComponent
   }
   ngDoCheck() {
     this.assignSelectedLanguage();
+  }
+
+  ngOnDestroy() {
+    this.beneficiarySubscription?.unsubscribe();
   }
 
   ngAfterViewChecked() {

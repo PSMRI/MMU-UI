@@ -7,7 +7,7 @@
       zSize="icon"
       class="p-0"
       aria-label="Close"
-      (click)="dialogRef.close(false)">
+      (click)="closeDialog(false)">
       <ng-icon name="lucideX"></ng-icon>
     </button>
   </div>
@@ -19,6 +19,7 @@
       [height]="options.height"
       #workarea
       [trigger]="triggerObservable"
+      [videoOptions]="videoOptions"
       (imageCapture)="captureImg($event)"></webcam>
 
     <img
@@ -29,18 +30,18 @@
   </div>
 
   <div class="flex justify-end gap-2">
-    <button z-button zType="outline" (click)="dialogRef.close(false)">
+    <button z-button zType="outline" (click)="closeDialog(false)">
       {{ current_language_set?.common?.cancel }}
     </button>
-    <button z-button zType="default" (click)="getSnapshot()">
-      {{ status }}
+    <button z-button zType="outline" (click)="onCaptureOrRetake()">
+      {{ captured ? (current_language_set?.common?.retake || 'Retake') : status }}
     </button>
     <button
       z-button
       zType="default"
-      [disabled]="!captured"
-      (click)="dialogRef.close(sysImage)">
-      {{ current_language_set?.common?.proceed }}
+      [zDisabled]="!captured"
+      (click)="usePhoto()">
+      {{ current_language_set?.common?.usePhoto || 'Use Photo' }}
     </button>
   </div>
 </div>
@@ -117,14 +118,14 @@
     <button
       z-button
       zType="outline"
-      [disabled]="!markers.length"
+      [zDisabled]="!markers.length"
       (click)="clearPointers()">
       {{ current_language_set?.coreComponents?.reset }}
     </button>
     <button
       z-button
       zType="default"
-      [disabled]="!markers.length"
+      [zDisabled]="!markers.length"
       (click)="dialogRef.close(getMarkers())">
       {{ current_language_set?.coreComponents?.save }}
     </button>

@@ -1,12 +1,29 @@
-<div
-  class="flex min-h-svh w-full flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
-  <z-card class="w-full max-w-sm">
-    <z-card-header class="flex flex-col items-center gap-1.5 text-center">
+<div class="grid min-h-svh w-full lg:grid-cols-2">
+  <div
+    class="relative hidden flex-col items-center justify-center gap-6 bg-primary p-10 text-primary-foreground lg:flex">
+    <div class="rounded-2xl bg-white p-5 shadow-lg">
       <img
-        class="mb-2 h-12 w-auto"
+        class="h-16 w-auto"
         src="assets/images/Swasthya.png"
         alt="Piramal Swasthya" />
-      <z-card-title>AMRIT MMU</z-card-title>
+    </div>
+    <div class="text-center">
+      <p class="text-3xl font-semibold tracking-tight">AMRIT MMU</p>
+      <p class="mt-2 max-w-xs text-sm text-primary-foreground/80">
+        Mobile Medical Unit — integrated healthcare for every visit.
+      </p>
+    </div>
+  </div>
+
+  <div
+    class="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+    <z-card class="w-full max-w-sm">
+    <z-card-header class="flex flex-col items-center gap-1.5 text-center">
+      <img
+        class="mb-2 h-12 w-auto lg:hidden"
+        src="assets/images/Swasthya.png"
+        alt="Piramal Swasthya" />
+      <z-card-title class="lg:hidden">AMRIT MMU</z-card-title>
       <z-card-description
         >Sign in to your account to continue</z-card-description
       >
@@ -133,5 +150,6 @@
     </z-card-content>
   </z-card>
 
-  <p class="text-center text-xs text-muted-foreground">© 2026 PSMRI · AMRIT</p>
+    <p class="text-center text-xs text-muted-foreground">© 2026 PSMRI · AMRIT</p>
+  </div>
 </div>

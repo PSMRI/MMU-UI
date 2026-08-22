@@ -107,6 +107,13 @@ export class GeneralPersonalHistoryComponent
   @Input()
   visitCategory: any;
 
+  previousTobaccoRows: any[] = [];
+  previousTobaccoColumns: any[] = [];
+  previousAlcoholRows: any[] = [];
+  previousAlcoholColumns: any[] = [];
+  previousAllergyRows: any[] = [];
+  previousAllergyColumns: any[] = [];
+
   masterData: any;
   personalHistoryData: any;
 
@@ -162,6 +169,7 @@ export class GeneralPersonalHistoryComponent
       this.getMasterData();
     }
     this.getBeneficiaryDetails();
+    this.loadPreviousHabitsInline();
 
     this.generalHistorySubscription =
       this.doctorService.populateHistoryResponse$.subscribe(history => {
@@ -449,8 +457,7 @@ export class GeneralPersonalHistoryComponent
       while (formArray.length < temp.length) {
         formArray.push(this.initAlcoholList());
       }
-      // Optionally, remove extra FormGroups if any
-      while (formArray.length > temp.length) {
+      while (formArray.length > Math.max(temp.length, 1)) {
         formArray.removeAt(formArray.length - 1);
       }
 
@@ -878,6 +885,44 @@ export class GeneralPersonalHistoryComponent
       otherAllergicReaction: null,
       enableOtherAllergy: false,
     });
+  }
+
+  loadPreviousHabitsInline() {
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
+    if (!benRegID) return;
+    this.nurseService
+      .getPreviousTobaccoHistory(benRegID, this.visitCategory)
+      .subscribe(
+        (res: any) => {
+          if (res?.statusCode === 200 && res?.data?.data?.length > 0) {
+            this.previousTobaccoRows = res.data.data;
+            this.previousTobaccoColumns = res.data.columns || [];
+          }
+        },
+        () => {}
+      );
+    this.nurseService
+      .getPreviousAlcoholHistory(benRegID, this.visitCategory)
+      .subscribe(
+        (res: any) => {
+          if (res?.statusCode === 200 && res?.data?.data?.length > 0) {
+            this.previousAlcoholRows = res.data.data;
+            this.previousAlcoholColumns = res.data.columns || [];
+          }
+        },
+        () => {}
+      );
+    this.nurseService
+      .getPreviousAllergyHistory(benRegID, this.visitCategory)
+      .subscribe(
+        (res: any) => {
+          if (res?.statusCode === 200 && res?.data?.data?.length > 0) {
+            this.previousAllergyRows = res.data.data;
+            this.previousAllergyColumns = res.data.columns || [];
+          }
+        },
+        () => {}
+      );
   }
 
   getPreviousTobaccoHistory() {

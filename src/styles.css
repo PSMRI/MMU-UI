@@ -886,4 +886,13 @@ input.mat-input-element {
   @page {
     margin: 1.3cm;
   }
+  table {
+    break-inside: auto;
+  }
+  tr {
+    break-inside: avoid;
+  }
+  thead {
+    display: table-header-group;
+  }
 }
