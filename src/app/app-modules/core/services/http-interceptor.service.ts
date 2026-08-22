@@ -57,14 +57,16 @@ export class HttpInterceptorService implements HttpInterceptor {
     const isLoginRequest =
       req.url && req.url.toLowerCase().includes('user/userAuthenticate');
 
-    // Background / device / polling endpoints must not drive the global spinner
-    // or its pending-request count. A stalled request to one of them (e.g. the
-    // local IoT hub that may not be running, or a CTI agent-state poll) would
-    // otherwise wedge the counter above zero and freeze the spinner forever,
-    // forcing an app restart — most visibly on an F5 inside a patient screen.
+    // A request stays out of the global spinner AND its pending-request count when:
+    //  - a skeleton screen opts out via the X-Skip-Loader header, or
+    //  - it targets a background / device / polling endpoint (IoT hub, CTI
+    //    agent-state, sync-download) — a stalled one there would otherwise wedge
+    //    the counter above zero and freeze the spinner (seen on a hard F5).
     const url = req.url;
+    const hasSkipLoaderHeader = req.headers.has('X-Skip-Loader');
     const skipSpinner =
       !url ||
+      hasSkipLoaderHeader ||
       url.includes('cti/getAgentState') ||
       this.donotShowSpinnerUrl.some(entry => !!entry && url.includes(entry));
 
@@ -95,6 +97,12 @@ export class HttpInterceptorService implements HttpInterceptor {
             .set('ServerAuthorization', serverKey || ''),
         });
       }
+    }
+
+    if (hasSkipLoaderHeader) {
+      modifiedReq = modifiedReq.clone({
+        headers: modifiedReq.headers.delete('X-Skip-Loader'),
+      });
     }
 
     return next.handle(modifiedReq).pipe(

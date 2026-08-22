@@ -50,6 +50,7 @@ import {
 })
 export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
   beneficiaryList: any[] = [];
+  loading = false;
   beneficiaryMetaData: any;
   currentLanguageSet: any;
 
@@ -110,8 +111,10 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
 
   loadWorklist() {
     this.beneficiaryMetaData = [];
+    this.loading = true;
     this.doctorService.getDoctorWorklist().subscribe(
       (data: any) => {
+        this.loading = false;
         if (data && data.statusCode === 200 && data.data) {
           this.beneficiaryMetaData = data.data;
           // Populate the rows first: on a hard refresh the language JSON may
@@ -129,6 +132,7 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
         }
       },
       err => {
+        this.loading = false;
         if (err?.handled) return;
         this.confirmationService.alert(err, 'error');
         this.beneficiaryList = [];

@@ -51,7 +51,9 @@ export class DoctorService {
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
       `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.doctorWorkList + fetchUrl);
+    return this.http.get(environment.doctorWorkList + fetchUrl, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
 
   getServiceOnState() {
@@ -100,7 +102,9 @@ export class DoctorService {
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
       `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.radiologistWorklist + fetchUrl);
+    return this.http.get(environment.radiologistWorklist + fetchUrl, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
 
   getOncologistWorklist() {
@@ -110,7 +114,9 @@ export class DoctorService {
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
       `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.oncologistWorklist + fetchUrl);
+    return this.http.get(environment.oncologistWorklist + fetchUrl, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
 
   confirmStatus(benVisitID: any) {
@@ -2654,13 +2660,19 @@ export class DoctorService {
   getMMUCasesheetData(caseSheetRequest: any) {
     console.log('get here in serv', caseSheetRequest);
 
-    return this.http.post(environment.getMMUCasesheetDataUrl, caseSheetRequest);
+    return this.http.post(
+      environment.getMMUCasesheetDataUrl,
+      caseSheetRequest,
+      { headers: { 'X-Skip-Loader': 'true' } }
+    );
   }
 
   getTMCasesheetData(caseSheetRequest: any) {
     console.log('get here in serv', caseSheetRequest);
 
-    return this.http.post(environment.getTMCasesheetDataUrl, caseSheetRequest);
+    return this.http.post(environment.getTMCasesheetDataUrl, caseSheetRequest, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
 
   getArchivedReports(ArchivedReports: any) {

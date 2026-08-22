@@ -25,6 +25,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   Output,
   SimpleChanges,
   TemplateRef,
@@ -50,6 +51,7 @@ import { ZardPaginationImports } from 'Common-UI/v2/ui/pagination';
 import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 import { ZardInputDirective } from 'Common-UI/v2/ui/input';
 import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardSkeletonComponent } from 'Common-UI/v2/ui/skeleton';
 import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 /** Object keys the standard beneficiary worklist filters against. */
@@ -110,6 +112,7 @@ export const VISIT_STATUS_SEARCH_KEYS = [
     ...ZardPaginationImports,
     ...ZardSelectImports,
     ...tooltipImports,
+    ZardSkeletonComponent,
   ],
   viewProviders: [
     provideIcons({
@@ -120,9 +123,19 @@ export const VISIT_STATUS_SEARCH_KEYS = [
     }),
   ],
 })
-export class BeneficiaryWorklistComponent implements OnChanges {
+export class BeneficiaryWorklistComponent implements OnChanges, OnDestroy {
   /** Full (unfiltered) list of rows; the component filters + paginates it. */
   @Input() data: any[] = [];
+
+  /** When true, show skeleton placeholder rows instead of data / empty state. */
+  @Input() loading = false;
+
+  readonly skeletonRows = [0, 1, 2, 3, 4];
+  /** Held a minimum time so the skeleton never just flashes on fast loads. */
+  showSkeleton = false;
+  private skeletonStartedAt = 0;
+  private skeletonTimer?: ReturnType<typeof setTimeout>;
+  private readonly minSkeletonMs = 500;
   /** Language set; drives the default headers, labels and image tooltip. */
   @Input() currentLanguageSet: any = null;
   /** Override the default standard headers. */
@@ -250,11 +263,35 @@ export class BeneficiaryWorklistComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (changes['loading']) {
+      this.updateSkeleton(this.loading);
+    }
     // Re-filter only when the underlying data changes, so header/template
     // input churn (re-evaluated on change detection) doesn't reset the page.
     if (changes['data']) {
       this.applyFilter(this.filterTerm);
     }
+  }
+
+  private updateSkeleton(loading: boolean) {
+    clearTimeout(this.skeletonTimer);
+    if (loading) {
+      this.showSkeleton = true;
+      this.skeletonStartedAt = Date.now();
+    } else if (this.showSkeleton) {
+      const remaining = Math.max(
+        0,
+        this.minSkeletonMs - (Date.now() - this.skeletonStartedAt)
+      );
+      this.skeletonTimer = setTimeout(
+        () => (this.showSkeleton = false),
+        remaining
+      );
+    }
+  }
+
+  ngOnDestroy() {
+    clearTimeout(this.skeletonTimer);
   }
 
   applyFilter(term: string) {

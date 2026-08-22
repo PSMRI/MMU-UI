@@ -1,5 +1,6 @@
 <app-beneficiary-worklist
   [data]="beneficiaryList"
+  [loading]="loading"
   [currentLanguageSet]="current_language_set"
   (rowClick)="loadLabExaminationPage($event)"
   (refresh)="loadWorklist()"

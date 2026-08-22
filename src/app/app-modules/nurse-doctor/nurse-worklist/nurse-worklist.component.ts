@@ -36,6 +36,7 @@ import { BeneficiaryWorklistComponent } from '../../core/components/beneficiary-
 })
 export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
   beneficiaryList: any[] = [];
+  loading = false;
   currentLanguageSet: any;
 
   constructor(
@@ -72,8 +73,10 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   getNurseWorklist() {
+    this.loading = true;
     this.nurseService.getNurseWorklist().subscribe(
       (res: any) => {
+        this.loading = false;
         if (res.statusCode === 200 && res.data !== null) {
           this.beneficiaryList = this.loadDataToBenList(res.data);
         } else {
@@ -82,6 +85,7 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
         }
       },
       err => {
+        this.loading = false;
         if (err?.handled) {
           return;
         }
