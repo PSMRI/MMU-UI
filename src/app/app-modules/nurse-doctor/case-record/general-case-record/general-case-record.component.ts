@@ -21,7 +21,7 @@
  */
 
 import { Component, Input, DoCheck } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ZardAccordionImports } from 'Common-UI/v2/ui/accordion';
