@@ -117,9 +117,7 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
         this.loading = false;
         if (data && data.statusCode === 200 && data.data) {
           this.beneficiaryMetaData = data.data;
-          // Populate the rows first: on a hard refresh the language JSON may
-          // still be loading, so decorate statuses only after — ngDoCheck
-          // re-runs getVisitStatus once currentLanguageSet is ready.
+          // Populate rows first; statuses decorate once the language set is ready.
           this.beneficiaryList = this.loadDataToBenList(data.data);
           data.data.forEach((item: any) => {
             const temp = this.getVisitStatus(item);

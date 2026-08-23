@@ -57,11 +57,7 @@ export class HttpInterceptorService implements HttpInterceptor {
     const isLoginRequest =
       req.url && req.url.toLowerCase().includes('user/userAuthenticate');
 
-    // A request stays out of the global spinner AND its pending-request count when:
-    //  - a skeleton screen opts out via the X-Skip-Loader header, or
-    //  - it targets a background / device / polling endpoint (IoT hub, CTI
-    //    agent-state, sync-download) — a stalled one there would otherwise wedge
-    //    the counter above zero and freeze the spinner (seen on a hard F5).
+    // Skip the spinner for skeleton opt-outs and background/device/polling requests.
     const url = req.url;
     const hasSkipLoaderHeader = req.headers.has('X-Skip-Loader');
     const skipSpinner =

@@ -25,11 +25,7 @@ export class HttpServiceService {
   ) {
     const storedLang = localStorage.getItem('appLanguage');
     this.language = storedLang ? JSON.parse(storedLang) : null;
-    // Seed the subject from the persisted language. The field initializer above
-    // ran before this, so the BehaviorSubject started as undefined; without this
-    // a fresh instance (e.g. the nurse-doctor-scoped one created on a hard F5)
-    // would expose no language until getCurrentLanguage() runs, leaving worklist
-    // headers / labels blank on reload.
+    // Seed from the persisted language so a fresh (F5) instance has it immediately.
     if (this.language) {
       this.appCurrentLanguge.next(this.language);
     }
