@@ -356,10 +356,10 @@ export class WorkareaComponent
       ); // if rbs test value > 200
     let disableFlag = this.visitCategory ? true : false;
     if (attendant === 'tcspecialist') {
-      this.doctorUpdateAndTCSubmit = this.currentLanguageSet.common.submit;
+      this.doctorUpdateAndTCSubmit = this.currentLanguageSet?.common?.submit;
       this.isSpecialist = true;
     } else {
-      this.doctorUpdateAndTCSubmit = this.currentLanguageSet.common.update;
+      this.doctorUpdateAndTCSubmit = this.currentLanguageSet?.common?.update;
       this.isSpecialist = false;
     }
     if (this.specialistFlag === '100') disableFlag = true;
@@ -1763,10 +1763,10 @@ export class WorkareaComponent
   setValues() {
     const attendant = this.route.snapshot.params['attendant'];
     if (attendant === 'tcspecialist') {
-      this.doctorUpdateAndTCSubmit = this.currentLanguageSet.common.submit;
+      this.doctorUpdateAndTCSubmit = this.currentLanguageSet?.common?.submit;
       this.isSpecialist = true;
     } else {
-      this.doctorUpdateAndTCSubmit = this.currentLanguageSet.common.update;
+      this.doctorUpdateAndTCSubmit = this.currentLanguageSet?.common?.update;
       this.isSpecialist = false;
     }
   }
