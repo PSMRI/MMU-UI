@@ -2,7 +2,8 @@
   <!-- Anthropometry -->
   <z-card class="w-full">
     <z-card-header>
-      <z-card-title>
+      <z-card-title class="flex items-center gap-2">
+        <ng-icon name="healthWeight" class="text-primary"></ng-icon>
         {{
           currentLanguageSet?.vitalsDetails?.AnthropometryDataANC_OPD_NCD_PNC
             ?.anthropometry
@@ -474,7 +475,8 @@
   <!-- Vitals -->
   <z-card class="w-full">
     <z-card-header>
-      <z-card-title>
+      <z-card-title class="flex items-center gap-2">
+        <ng-icon name="healthCardiogram" class="text-primary"></ng-icon>
         {{
           currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC?.vitals
         }}
@@ -767,7 +769,8 @@
       <div
         *ngIf="showGlucoseQC && visitCategory !== 'NCD screening'"
         class="flex flex-col gap-4">
-        <p class="text-sm font-semibold text-foreground">
+        <p class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="healthBlood" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
               ?.bloodGlucose
@@ -888,7 +891,10 @@
 
       <!-- Random Glucose Test -->
       <div class="flex flex-col gap-4">
-        <p class="text-sm font-semibold text-foreground">Random Glucose Test</p>
+        <p class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="healthBlood" class="text-primary"></ng-icon>
+          Random Glucose Test
+        </p>
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <!-- RBS result (+ optional checkbox) -->
           <div class="flex items-end gap-3">
