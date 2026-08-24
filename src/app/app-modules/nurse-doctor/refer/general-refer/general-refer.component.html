@@ -43,95 +43,98 @@
       </button>
     </div>
 
-    <!-- Referred to institute -->
-    <div class="grid grid-cols-1 items-center gap-2 sm:grid-cols-2">
-      <span class="text-sm font-medium text-foreground">
-        {{ currentLanguageSet?.Referdetails?.higherhealthcarecenter
-        }}<span class="text-destructive">{{
-          showMsg > 0 && instituteFlag === true ? ' *' : ''
-        }}</span>
-      </span>
-      <z-select
-        class="w-full"
-        name="referredToInstituteName"
-        [zPlaceholder]="currentLanguageSet?.Referdetails?.referredtoinstitute"
-        [zValue]="
-          referForm
-            .get('referredToInstituteName')
-            ?.value?.institutionID?.toString() || ''
-        "
-        [zLabel]="
-          referForm.get('referredToInstituteName')?.value?.institutionName || ''
-        "
-        (zSelectionChange)="onInstituteChange($event)">
-        <z-select-item
-          *ngFor="let center of higherHealthcareCenter"
-          [zValue]="center.institutionID.toString()">
-          {{ center.institutionName }}
-        </z-select-item>
-      </z-select>
-    </div>
+    <div class="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
+      <!-- Referred to institute -->
+      <div class="flex flex-col gap-1.5">
+        <span class="text-sm font-medium text-foreground">
+          {{ currentLanguageSet?.Referdetails?.higherhealthcarecenter
+          }}<span class="text-destructive">{{
+            showMsg > 0 && instituteFlag === true ? ' *' : ''
+          }}</span>
+        </span>
+        <z-select
+          class="w-full"
+          name="referredToInstituteName"
+          [zPlaceholder]="currentLanguageSet?.Referdetails?.referredtoinstitute"
+          [zValue]="
+            referForm
+              .get('referredToInstituteName')
+              ?.value?.institutionID?.toString() || ''
+          "
+          [zLabel]="
+            referForm.get('referredToInstituteName')?.value?.institutionName ||
+            ''
+          "
+          (zSelectionChange)="onInstituteChange($event)">
+          <z-select-item
+            *ngFor="let center of higherHealthcareCenter"
+            [zValue]="center.institutionID.toString()">
+            {{ center.institutionName }}
+          </z-select-item>
+        </z-select>
+      </div>
 
-    <!-- Additional services -->
-    <div class="grid grid-cols-1 items-center gap-2 sm:grid-cols-2">
-      <span class="text-sm font-medium text-foreground">
-        {{ currentLanguageSet?.Referdetails?.additionalservices }}
-      </span>
-      <z-select
-        class="w-full"
-        name="refrredToAdditionalServiceList"
-        [zMultiple]="true"
-        [zPlaceholder]="currentLanguageSet?.Referdetails?.additionalservices"
-        [zValue]="selectedServiceNames"
-        (zSelectionChange)="onAdditionalServicesChange($event)">
-        <z-select-item
-          *ngFor="let service of additionalServices"
-          [zValue]="service.serviceName"
-          [zDisabled]="canDisable(service)">
-          {{ service.serviceName }}
-        </z-select-item>
-      </z-select>
-    </div>
+      <!-- Additional services -->
+      <div class="flex flex-col gap-1.5">
+        <span class="text-sm font-medium text-foreground">
+          {{ currentLanguageSet?.Referdetails?.additionalservices }}
+        </span>
+        <z-select
+          class="w-full"
+          name="refrredToAdditionalServiceList"
+          [zMultiple]="true"
+          [zPlaceholder]="currentLanguageSet?.Referdetails?.additionalservices"
+          [zValue]="selectedServiceNames"
+          (zSelectionChange)="onAdditionalServicesChange($event)">
+          <z-select-item
+            *ngFor="let service of additionalServices"
+            [zValue]="service.serviceName"
+            [zDisabled]="canDisable(service)">
+            {{ service.serviceName }}
+          </z-select-item>
+        </z-select>
+      </div>
 
-    <!-- Referral reason -->
-    <div class="grid grid-cols-1 items-start gap-2 sm:grid-cols-2">
-      <span class="text-sm font-medium text-foreground">
-        {{ currentLanguageSet?.Referdetails?.referralReason }}
-        <span
-          *ngIf="referForm.get('referralReason')?.enabled"
-          class="text-destructive"
-          >*</span
-        >
-      </span>
-      <z-form-field class="w-full">
-        <z-form-control>
-          <textarea
-            z-input
-            class="min-h-20 w-full"
-            formControlName="referralReason"
-            name="Remarks"
-            maxLength="300"
-            aria-label="{{
-              currentLanguageSet?.Referdetails?.referralReason
-            }}"></textarea>
-        </z-form-control>
-      </z-form-field>
-    </div>
+      <!-- Referral reason -->
+      <div class="flex flex-col gap-1.5 sm:col-span-2">
+        <span class="text-sm font-medium text-foreground">
+          {{ currentLanguageSet?.Referdetails?.referralReason }}
+          <span
+            *ngIf="referForm.get('referralReason')?.enabled"
+            class="text-destructive"
+            >*</span
+          >
+        </span>
+        <z-form-field class="w-full">
+          <z-form-control>
+            <textarea
+              z-input
+              class="min-h-20 w-full"
+              formControlName="referralReason"
+              name="Remarks"
+              maxLength="300"
+              aria-label="{{
+                currentLanguageSet?.Referdetails?.referralReason
+              }}"></textarea>
+          </z-form-control>
+        </z-form-field>
+      </div>
 
-    <!-- Revisit date -->
-    <div class="grid grid-cols-1 items-center gap-2 sm:grid-cols-2">
-      <span class="text-sm font-medium text-foreground">
-        {{ currentLanguageSet?.Referdetails?.revisitDate }}
-      </span>
-      <z-date-picker
-        class="w-full"
-        [(ngModel)]="revisitDateModel"
-        [ngModelOptions]="{ standalone: true }"
-        zFormat="dd/MM/yyyy"
-        [minDate]="tomorrow"
-        [maxDate]="maxSchedulerDate"
-        [placeholder]="currentLanguageSet?.Referdetails?.revisitDate"
-        (dateChange)="onRevisitDateChange($event)"></z-date-picker>
+      <!-- Revisit date -->
+      <div class="flex flex-col gap-1.5">
+        <span class="text-sm font-medium text-foreground">
+          {{ currentLanguageSet?.Referdetails?.revisitDate }}
+        </span>
+        <z-date-picker
+          class="w-full"
+          [(ngModel)]="revisitDateModel"
+          [ngModelOptions]="{ standalone: true }"
+          zFormat="dd/MM/yyyy"
+          [minDate]="tomorrow"
+          [maxDate]="maxSchedulerDate"
+          [placeholder]="currentLanguageSet?.Referdetails?.revisitDate"
+          (dateChange)="onRevisitDateChange($event)"></z-date-picker>
+      </div>
     </div>
   </z-card-content>
 </z-card>

@@ -1,7 +1,8 @@
 <div class="mt-2.5" [formGroup]="patientVitalsForm">
   <z-card class="block">
     <z-card-header>
-      <z-card-title>
+      <z-card-title class="flex items-center gap-2">
+        <ng-icon name="healthCardiogram" class="text-primary"></ng-icon>
         {{
           currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC?.vitals
         }}
@@ -70,7 +71,7 @@
                   trackFieldInteraction('Weight IoT Button')
                 "
                 (keydown.enter)="openIOTWeightModel()">
-                <ng-icon name="lucideActivity"></ng-icon>
+                <ng-icon name="healthCardiogram"></ng-icon>
               </button>
             </div>
           </z-form-control>
@@ -243,7 +244,9 @@
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <!-- BP 1st reading -->
         <div class="flex flex-col gap-2">
-          <p class="text-sm font-semibold text-foreground">
+          <p
+            class="flex items-center gap-2 text-sm font-semibold text-foreground">
+            <ng-icon name="healthCardiogram" class="text-primary"></ng-icon>
             {{
               currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
                 ?.bloodPressure1
@@ -288,7 +291,7 @@
                       trackFieldInteraction('BP 1st Reading IoT Button')
                     "
                     (keydown.enter)="openIOTBP1Model()">
-                    <ng-icon name="lucideActivity"></ng-icon>
+                    <ng-icon name="healthCardiogram"></ng-icon>
                   </button>
                 </div>
               </z-form-control>
@@ -332,7 +335,7 @@
                       trackFieldInteraction('BP 1st Reading IoT Button')
                     "
                     (keydown.enter)="openIOTBP1Model()">
-                    <ng-icon name="lucideActivity"></ng-icon>
+                    <ng-icon name="healthCardiogram"></ng-icon>
                   </button>
                 </div>
               </z-form-control>
@@ -342,7 +345,9 @@
 
         <!-- BP 2nd reading -->
         <div class="flex flex-col gap-2">
-          <p class="text-sm font-semibold text-foreground">
+          <p
+            class="flex items-center gap-2 text-sm font-semibold text-foreground">
+            <ng-icon name="healthCardiogram" class="text-primary"></ng-icon>
             {{
               currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
                 ?.bloodPressure2
@@ -388,7 +393,7 @@
                       trackFieldInteraction('BP 2nd Reading IoT Button')
                     "
                     (keydown.enter)="openIOTBP2Model()">
-                    <ng-icon name="lucideActivity"></ng-icon>
+                    <ng-icon name="healthCardiogram"></ng-icon>
                   </button>
                 </div>
               </z-form-control>
@@ -433,7 +438,7 @@
                       trackFieldInteraction('BP 2nd Reading IoT Button')
                     "
                     (keydown.enter)="openIOTBP2Model()">
-                    <ng-icon name="lucideActivity"></ng-icon>
+                    <ng-icon name="healthCardiogram"></ng-icon>
                   </button>
                 </div>
               </z-form-control>
@@ -443,7 +448,9 @@
 
         <!-- BP 3rd reading -->
         <div class="flex flex-col gap-2" *ngIf="showBP3">
-          <p class="text-sm font-semibold text-foreground">
+          <p
+            class="flex items-center gap-2 text-sm font-semibold text-foreground">
+            <ng-icon name="healthCardiogram" class="text-primary"></ng-icon>
             {{
               currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
                 ?.bloodPressure3
@@ -489,7 +496,7 @@
                       trackFieldInteraction('BP 3rd Reading IoT Button')
                     "
                     (keydown.enter)="openIOTBP3Model()">
-                    <ng-icon name="lucideActivity"></ng-icon>
+                    <ng-icon name="healthCardiogram"></ng-icon>
                   </button>
                 </div>
               </z-form-control>
@@ -534,7 +541,7 @@
                       trackFieldInteraction('BP 3rd Reading IoT Button')
                     "
                     (keydown.enter)="openIOTBP3Model()">
-                    <ng-icon name="lucideActivity"></ng-icon>
+                    <ng-icon name="healthCardiogram"></ng-icon>
                   </button>
                 </div>
               </z-form-control>
@@ -602,7 +609,7 @@
                   trackFieldInteraction('Hemoglobin IoT Button')
                 "
                 (keydown.enter)="openIOTHemoglobinModel()">
-                <ng-icon name="lucideActivity"></ng-icon>
+                <ng-icon name="healthCardiogram"></ng-icon>
               </button>
             </div>
           </z-form-control>
@@ -640,7 +647,7 @@
                   openIOTSPO2Model(); trackFieldInteraction('SPO2 IoT Button')
                 "
                 (keydown.enter)="openIOTSPO2Model()">
-                <ng-icon name="lucideActivity"></ng-icon>
+                <ng-icon name="healthCardiogram"></ng-icon>
               </button>
             </div>
           </z-form-control>
@@ -649,7 +656,8 @@
 
       <!-- Blood glucose -->
       <div class="flex flex-col gap-2">
-        <p class="text-sm font-semibold text-foreground">
+        <p class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="healthBlood" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
               ?.bloodGlucose
@@ -691,7 +699,7 @@
                     trackFieldInteraction('Blood Glucose Fasting IoT Button')
                   "
                   (keydown.enter)="openIOTBGFastingModel()">
-                  <ng-icon name="lucideActivity"></ng-icon>
+                  <ng-icon name="healthCardiogram"></ng-icon>
                 </button>
               </div>
             </z-form-control>
@@ -732,7 +740,7 @@
                     trackFieldInteraction('Blood Glucose Random IoT Button')
                   "
                   (keydown.enter)="openIOTBGRandomModel()">
-                  <ng-icon name="lucideActivity"></ng-icon>
+                  <ng-icon name="healthCardiogram"></ng-icon>
                 </button>
               </div>
             </z-form-control>
@@ -783,7 +791,7 @@
                     )
                   "
                   (keydown.enter)="openIOTBGPostPrandialModel()">
-                  <ng-icon name="lucideActivity"></ng-icon>
+                  <ng-icon name="healthCardiogram"></ng-icon>
                 </button>
               </div>
             </z-form-control>
@@ -831,7 +839,7 @@
                     openIOTRBSModel(); trackFieldInteraction('RBS IoT Button')
                   "
                   (keydown.enter)="openIOTRBSModel()">
-                  <ng-icon name="lucideActivity"></ng-icon>
+                  <ng-icon name="healthCardiogram"></ng-icon>
                 </button>
               </div>
             </z-form-control>

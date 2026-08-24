@@ -49,9 +49,12 @@ import { NgIf } from '@angular/common';
 import { BreastExaminationComponent } from './breast-examination/breast-examination.component';
 import { AbdominalExaminationComponent } from './abdominal-examination/abdominal-examination.component';
 import { GynecologicalExaminationComponent } from './gynecological-examination/gynecological-examination.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { healthicons } from '../../../core/icons/healthicons';
 @Component({
   selector: 'app-cancer-examination',
   templateUrl: './cancer-examination.component.html',
+  viewProviders: [provideIcons(healthicons)],
   imports: [
     ReactiveFormsModule,
     ...ZardAccordionImports,
@@ -61,6 +64,7 @@ import { GynecologicalExaminationComponent } from './gynecological-examination/g
     BreastExaminationComponent,
     AbdominalExaminationComponent,
     GynecologicalExaminationComponent,
+    NgIcon,
   ],
 })
 export class CancerExaminationComponent
