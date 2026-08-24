@@ -6,7 +6,9 @@
     zValue="symptoms"
     class="rounded-lg border border-border bg-card px-4">
     <z-accordion-trigger>
-      <span class="text-sm font-semibold text-foreground">
+      <span
+        class="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <ng-icon name="healthSymptom" class="text-primary"></ng-icon>
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.symptoms?.symptoms
@@ -23,9 +25,11 @@
     zValue="oral"
     class="rounded-lg border border-border bg-card px-4">
     <z-accordion-trigger>
-      <span class="text-sm font-semibold text-foreground">{{
-        currentLanguageSet?.casesheet?.oralExamination
-      }}</span>
+      <span
+        class="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <ng-icon name="healthOral" class="text-primary"></ng-icon>
+        {{ currentLanguageSet?.casesheet?.oralExamination }}
+      </span>
     </z-accordion-trigger>
     <z-accordion-content>
       <app-cancer-oral-examination
@@ -40,7 +44,9 @@
     zValue="breast"
     class="rounded-lg border border-border bg-card px-4">
     <z-accordion-trigger>
-      <span class="text-sm font-semibold text-foreground">
+      <span
+        class="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <ng-icon name="healthBreast" class="text-primary"></ng-icon>
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.breast?.breastExamination
@@ -58,7 +64,9 @@
     zValue="abdominal"
     class="rounded-lg border border-border bg-card px-4">
     <z-accordion-trigger>
-      <span class="text-sm font-semibold text-foreground">
+      <span
+        class="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <ng-icon name="healthStomach" class="text-primary"></ng-icon>
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.abdominal?.abdominalExamination
@@ -78,7 +86,9 @@
     zValue="gynecological"
     class="rounded-lg border border-border bg-card px-4">
     <z-accordion-trigger>
-      <span class="text-sm font-semibold text-foreground">
+      <span
+        class="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <ng-icon name="healthGynecology" class="text-primary"></ng-icon>
         {{
           currentLanguageSet?.ExaminationData?.cancerScreeningExamination
             ?.gynecological?.gynecologicalExamination

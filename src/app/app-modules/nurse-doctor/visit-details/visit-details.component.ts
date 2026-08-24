@@ -40,15 +40,22 @@ import { ContactHistoryComponent } from './contact-history/contact-history.compo
 import { TravelHistoryComponent } from './travel-history/travel-history.component';
 import { UploadFilesComponent } from './upload-files/upload-files.component';
 import { DiseaseconfirmationComponent } from './diseaseconfirmation/diseaseconfirmation.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideMapPin, lucidePaperclip } from '@ng-icons/lucide';
+import { healthicons } from '../../core/icons/healthicons';
 
 @Component({
   selector: 'app-visit-details',
   templateUrl: './visit-details.component.html',
+  viewProviders: [
+    provideIcons({ ...healthicons, lucideMapPin, lucidePaperclip }),
+  ],
   imports: [
     ZardAccordionImports,
     ReactiveFormsModule,
     PatientVisitDetailsComponent,
     NgIf,
+    NgIcon,
     CovidVaccinationStatusComponent,
     ChiefComplaintsComponent,
     AdherenceComponent,

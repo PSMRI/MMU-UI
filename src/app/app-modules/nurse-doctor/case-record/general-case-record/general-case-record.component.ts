@@ -21,7 +21,7 @@
  */
 
 import { Component, Input, DoCheck } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ZardAccordionImports } from 'Common-UI/v2/ui/accordion';
@@ -32,12 +32,14 @@ import { DiagnosisComponent } from './diagnosis/diagnosis.component';
 import { DoctorInvestigationsComponent } from './doctor-investigations/doctor-investigations.component';
 import { PrescriptionComponent } from './prescription/prescription.component';
 import { TestAndRadiologyComponent } from './test-and-radiology/test-and-radiology.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { healthicons } from '../../../core/icons/healthicons';
 @Component({
   selector: 'app-general-case-record',
   templateUrl: './general-case-record.component.html',
+  viewProviders: [provideIcons(healthicons)],
   imports: [
     ...ZardAccordionImports,
-    ReactiveFormsModule,
     PreviousSignificiantFindingsComponent,
     PreviousVisitDetailsComponent,
     FindingsComponent,
@@ -45,6 +47,7 @@ import { TestAndRadiologyComponent } from './test-and-radiology/test-and-radiolo
     DoctorInvestigationsComponent,
     PrescriptionComponent,
     TestAndRadiologyComponent,
+    NgIcon,
   ],
 })
 export class GeneralCaseRecordComponent implements DoCheck {

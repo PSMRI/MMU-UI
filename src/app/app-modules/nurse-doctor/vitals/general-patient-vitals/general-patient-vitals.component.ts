@@ -51,16 +51,12 @@ import { NumberValidatorDirective } from '../../../core/directives/numberValidat
 import { NgClass, NgIf } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
-  lucideScale,
-  lucideThermometer,
-  lucideHeartPulse,
-  lucideActivity,
-  lucideDroplet,
   lucideCircle,
   lucideMic,
   lucideSquare,
   lucideTrash2,
 } from '@ng-icons/lucide';
+import { healthicons } from '../../../core/icons/healthicons';
 import { cardImports } from 'Common-UI/v2/ui/card';
 import { ZardFormImports } from 'Common-UI/v2/ui/form';
 import { ZardInputDirective } from 'Common-UI/v2/ui/input';
@@ -88,11 +84,7 @@ import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
   ],
   viewProviders: [
     provideIcons({
-      lucideScale,
-      lucideThermometer,
-      lucideHeartPulse,
-      lucideActivity,
-      lucideDroplet,
+      ...healthicons,
       lucideCircle,
       lucideMic,
       lucideSquare,

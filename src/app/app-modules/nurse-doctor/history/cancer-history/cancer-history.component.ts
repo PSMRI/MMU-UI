@@ -51,10 +51,13 @@ import { FamilyDiseaseHistoryComponent } from './family-disease-history/family-d
 import { PersonalHistoryComponent } from './personal-history/personal-history.component';
 import { NgIf } from '@angular/common';
 import { ObstetricHistoryComponent } from './obstetric-history/obstetric-history.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { healthicons } from '../../../core/icons/healthicons';
 
 @Component({
   selector: 'app-nurse-cancer-history',
   templateUrl: './cancer-history.component.html',
+  viewProviders: [provideIcons(healthicons)],
   imports: [
     ...ZardAccordionImports,
     ReactiveFormsModule,
@@ -62,6 +65,7 @@ import { ObstetricHistoryComponent } from './obstetric-history/obstetric-history
     PersonalHistoryComponent,
     NgIf,
     ObstetricHistoryComponent,
+    NgIcon,
   ],
 })
 export class CancerHistoryComponent
