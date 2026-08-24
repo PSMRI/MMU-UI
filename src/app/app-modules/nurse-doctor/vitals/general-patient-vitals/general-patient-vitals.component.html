@@ -2,7 +2,8 @@
   <!-- Anthropometry -->
   <z-card class="w-full">
     <z-card-header>
-      <z-card-title>
+      <z-card-title class="flex items-center gap-2">
+        <ng-icon name="healthWeight" class="text-primary"></ng-icon>
         {{
           currentLanguageSet?.vitalsDetails?.AnthropometryDataANC_OPD_NCD_PNC
             ?.anthropometry
@@ -79,7 +80,7 @@
                   openIOTWeightModel();
                   trackFieldInteraction('Weight IoT Button')
                 ">
-                <ng-icon name="lucideScale" size="18"></ng-icon>
+                <ng-icon name="healthWeight" size="18"></ng-icon>
               </button>
             </div>
           </z-form-control>
@@ -474,7 +475,8 @@
   <!-- Vitals -->
   <z-card class="w-full">
     <z-card-header>
-      <z-card-title>
+      <z-card-title class="flex items-center gap-2">
+        <ng-icon name="healthCardiogram" class="text-primary"></ng-icon>
         {{
           currentLanguageSet?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC?.vitals
         }}
@@ -521,7 +523,7 @@
                   openIOTTempModel();
                   trackFieldInteraction('Temperature IoT Button')
                 ">
-                <ng-icon name="lucideThermometer" size="18"></ng-icon>
+                <ng-icon name="healthThermometer" size="18"></ng-icon>
               </button>
             </div>
           </z-form-control>
@@ -577,7 +579,7 @@
                   openIOTPulseRateModel();
                   trackFieldInteraction('Pulse Rate IoT Button')
                 ">
-                <ng-icon name="lucideHeartPulse" size="18"></ng-icon>
+                <ng-icon name="healthCardiogram" size="18"></ng-icon>
               </button>
             </div>
           </z-form-control>
@@ -610,7 +612,7 @@
                 [attr.aria-label]="currentLanguageSet?.common?.startTest"
                 (click)="openIOTSPO2Model()"
                 (keydown.enter)="openIOTSPO2Model()">
-                <ng-icon name="lucideActivity" size="18"></ng-icon>
+                <ng-icon name="healthCardiogram" size="18"></ng-icon>
               </button>
             </div>
           </z-form-control>
@@ -670,7 +672,7 @@
                 [attr.aria-label]="currentLanguageSet?.common?.startTest"
                 (click)="openIOTBPModel()"
                 (keydown.enter)="openIOTBPModel()">
-                <ng-icon name="lucideActivity" size="18"></ng-icon>
+                <ng-icon name="healthCardiogram" size="18"></ng-icon>
               </button>
             </div>
           </z-form-control>
@@ -730,7 +732,7 @@
                 [attr.aria-label]="currentLanguageSet?.common?.startTest"
                 (click)="openIOTBPModel()"
                 (keydown.enter)="openIOTBPModel()">
-                <ng-icon name="lucideActivity" size="18"></ng-icon>
+                <ng-icon name="healthCardiogram" size="18"></ng-icon>
               </button>
             </div>
           </z-form-control>
@@ -767,7 +769,8 @@
       <div
         *ngIf="showGlucoseQC && visitCategory !== 'NCD screening'"
         class="flex flex-col gap-4">
-        <p class="text-sm font-semibold text-foreground">
+        <p class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="healthBlood" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.vitalsDetails?.vitalsCancerscreening_QC
               ?.bloodGlucose
@@ -806,7 +809,7 @@
                   [attr.aria-label]="currentLanguageSet?.common?.startTest"
                   (click)="openIOTBGFastingModel()"
                   (keydown.enter)="openIOTBGFastingModel()">
-                  <ng-icon name="lucideDroplet" size="18"></ng-icon>
+                  <ng-icon name="healthBlood" size="18"></ng-icon>
                 </button>
               </div>
             </z-form-control>
@@ -841,7 +844,7 @@
                   [attr.aria-label]="currentLanguageSet?.common?.startTest"
                   (click)="openIOTBGRandomModel()"
                   (keydown.enter)="openIOTBGRandomModel()">
-                  <ng-icon name="lucideDroplet" size="18"></ng-icon>
+                  <ng-icon name="healthBlood" size="18"></ng-icon>
                 </button>
               </div>
             </z-form-control>
@@ -878,7 +881,7 @@
                   [attr.aria-label]="currentLanguageSet?.common?.startTest"
                   (click)="openIOTBGPostPrandialModel()"
                   (keydown.enter)="openIOTBGPostPrandialModel()">
-                  <ng-icon name="lucideDroplet" size="18"></ng-icon>
+                  <ng-icon name="healthBlood" size="18"></ng-icon>
                 </button>
               </div>
             </z-form-control>
@@ -888,7 +891,10 @@
 
       <!-- Random Glucose Test -->
       <div class="flex flex-col gap-4">
-        <p class="text-sm font-semibold text-foreground">Random Glucose Test</p>
+        <p class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="healthBlood" class="text-primary"></ng-icon>
+          Random Glucose Test
+        </p>
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <!-- RBS result (+ optional checkbox) -->
           <div class="flex items-end gap-3">
@@ -937,7 +943,7 @@
                     (keydown.enter)="
                       openIOTRBSModel(); trackFieldInteraction('RBS IoT Button')
                     ">
-                    <ng-icon name="lucideDroplet" size="18"></ng-icon>
+                    <ng-icon name="healthBlood" size="18"></ng-icon>
                   </button>
                 </div>
               </z-form-control>
@@ -1031,7 +1037,7 @@
                 startAssessment();
                 trackFieldInteraction('Start Assessment Button')
               ">
-              <ng-icon name="lucideActivity"></ng-icon>
+              <ng-icon name="healthCardiogram"></ng-icon>
               Start Assessment
             </button>
           </div>

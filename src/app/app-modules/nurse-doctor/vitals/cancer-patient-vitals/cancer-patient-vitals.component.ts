@@ -47,7 +47,8 @@ import { StringValidatorDirective } from '../../../core/directives/stringValidat
 import { NumberValidatorDirective } from '../../../core/directives/numberValidator.directive';
 import { NgIf, NgClass } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideActivity, lucideCircle } from '@ng-icons/lucide';
+import { lucideCircle } from '@ng-icons/lucide';
+import { healthicons } from '../../../core/icons/healthicons';
 import { cardImports } from 'Common-UI/v2/ui/card';
 import { ZardFormImports } from 'Common-UI/v2/ui/form';
 import { ZardInputDirective } from 'Common-UI/v2/ui/input';
@@ -58,7 +59,7 @@ import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
   selector: 'app-nurse-cancer-patient-vitals',
   templateUrl: './cancer-patient-vitals.component.html',
   standalone: true,
-  viewProviders: [provideIcons({ lucideActivity, lucideCircle })],
+  viewProviders: [provideIcons({ ...healthicons, lucideCircle })],
   imports: [
     ReactiveFormsModule,
     NullDefaultValueDirective,

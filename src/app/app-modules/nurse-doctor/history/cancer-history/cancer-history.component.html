@@ -7,7 +7,9 @@
     class="rounded-lg border border-border bg-card">
     <div class="px-4">
       <z-accordion-trigger class="flex-1 text-left">
-        <span class="text-sm font-semibold text-foreground">
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="healthGroup" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.historyData?.cancerScreeningHistory
               ?.familyMedical?.familyMedicalHistory
@@ -32,7 +34,9 @@
     class="rounded-lg border border-border bg-card">
     <div class="px-4">
       <z-accordion-trigger class="flex-1 text-left">
-        <span class="text-sm font-semibold text-foreground">
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="healthPerson" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.historyData?.cancerScreeningHistory?.personal
               ?.personalHistory
@@ -62,7 +66,9 @@
     class="rounded-lg border border-border bg-card">
     <div class="px-4">
       <z-accordion-trigger class="flex-1 text-left">
-        <span class="text-sm font-semibold text-foreground">
+        <span
+          class="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <ng-icon name="healthPregnant" class="text-primary"></ng-icon>
           {{
             currentLanguageSet?.historyData?.cancerScreeningHistory?.obstetric
               ?.obstetricHistory
