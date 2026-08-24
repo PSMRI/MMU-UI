@@ -85,6 +85,7 @@ export class WorkareaComponent
   }
   ngOnDestroy() {
     sessionStorage.removeItem('serverKey');
+    this.stopDownSyncPolling();
   }
 
   getDataSYNCGroup() {
@@ -287,7 +288,148 @@ export class WorkareaComponent
     });
   }
 
+  /* ------------------------------------------------------------------
+   * Down-sync : central -> local
+   *
+   * Its own progress state, deliberately not shared with showProgressBar /
+   * progressValue - those belong to the up-sync and the master download, and a
+   * shared flag would let one sync's progress bar be cleared by the other.
+   * ------------------------------------------------------------------ */
+  downSyncInProgress = false;
+  downSyncProgressValue = 0;
+  downSyncStatus: any = null;
+  downSyncFailedTables: string[] = [];
+  downSyncFinished = false;
+  downSyncIntervalRef: any;
+
+  startDownSync() {
+    const serviceLineDetails =
+      this.sessionstorage.getItem('serviceLineDetails');
+    const vanID = serviceLineDetails
+      ? JSON.parse(serviceLineDetails).vanID
+      : undefined;
+
+    if (!vanID) {
+      this.confirmationService.alert(
+        'Van details are not available, cannot start the down-sync',
+        'error'
+      );
+      return;
+    }
+
+    this.confirmationService
+      .confirm('info', 'Confirm to download data from central')
+      .subscribe(result => {
+        if (!result) return;
+
+        this.downSyncProgressValue = 0;
+        this.downSyncStatus = null;
+        this.downSyncFailedTables = [];
+        this.downSyncFinished = false;
+
+        const reqObj = {
+          vanID: vanID,
+          providerServiceMapID: this.sessionstorage.getItem(
+            'dataSyncProviderServiceMapID'
+          ),
+        };
+
+        this.dataSyncService.startDownSync(reqObj).subscribe(
+          (res: any) => {
+            if (res && res.statusCode === 200) {
+              this.downSyncInProgress = true;
+              this.downSyncIntervalRef = setInterval(() => {
+                this.getDownSyncProgress();
+              }, 2000);
+            } else {
+              this.confirmationService.alert(
+                res && res.errorMessage
+                  ? res.errorMessage
+                  : 'Could not start the down-sync',
+                'error'
+              );
+            }
+          },
+          () => {
+            this.confirmationService.alert(
+              'Could not reach the server to start the down-sync',
+              'error'
+            );
+          }
+        );
+      });
+  }
+
+  getDownSyncProgress() {
+    this.dataSyncService.downSyncProgress().subscribe(
+      (res: any) => {
+        if (res && res.statusCode === 200 && res.data) {
+          // the API returns the status map as a JSON string
+          const status =
+            typeof res.data === 'string' ? JSON.parse(res.data) : res.data;
+
+          this.downSyncStatus = status;
+          this.downSyncProgressValue = status.percentage || 0;
+          this.downSyncFailedTables = this.parseFailedTables(
+            status.failedTables
+          );
+
+          // inProgress is the authoritative end signal: a run that fails part way
+          // stops without ever reaching 100%.
+          if (status.inProgress === false) {
+            this.stopDownSyncPolling();
+            this.downSyncFinished = true;
+            this.confirmationService.alert(
+              this.downSyncFailedTables.length > 0
+                ? 'Down-sync finished with ' +
+                    this.downSyncFailedTables.length +
+                    ' failed table(s)'
+                : 'Down-sync finished successfully'
+            );
+          }
+        } else {
+          this.stopDownSyncPolling();
+          this.confirmationService.alert(
+            res && res.errorMessage
+              ? res.errorMessage
+              : 'Could not read the down-sync progress',
+            'error'
+          );
+        }
+      },
+      () => {
+        this.stopDownSyncPolling();
+        this.confirmationService.alert(
+          'Lost contact with the server while the down-sync was running',
+          'error'
+        );
+      }
+    );
+  }
+
+  /** the API sends the failed tables as the toString() of a list, e.g. "[a, b]" */
+  private parseFailedTables(failedTables: any): string[] {
+    if (!failedTables) return [];
+    return String(failedTables)
+      .replace(/^\[|\]$/g, '')
+      .split(',')
+      .map((t: string) => t.trim())
+      .filter((t: string) => t.length > 0);
+  }
+
+  private stopDownSyncPolling() {
+    this.downSyncInProgress = false;
+    if (this.downSyncIntervalRef) {
+      clearInterval(this.downSyncIntervalRef);
+      this.downSyncIntervalRef = undefined;
+    }
+  }
+
   canDeactivate() {
+    if (this.downSyncInProgress) {
+      this.confirmationService.alert('Down-sync in progress');
+      return false;
+    }
     if (this.showProgressBar) {
       this.confirmationService.alert('Download in progress');
       return false;

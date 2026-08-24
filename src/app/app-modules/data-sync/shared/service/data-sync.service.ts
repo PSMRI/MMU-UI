@@ -96,4 +96,17 @@ export class DataSyncService {
   inventorySyncDownloadData(vanID: any) {
     return this.http.post(environment.getInventorySyncData, vanID);
   }
+
+  /**
+   * Down-sync : pulls the masters and this van's transactional records from
+   * central. Returns immediately - the sync itself runs in the background on the
+   * API, and its progress is read from checkDownSyncProgress.
+   */
+  startDownSync(reqObj: any) {
+    return this.http.post(environment.startDownSyncUrl, reqObj);
+  }
+
+  downSyncProgress() {
+    return this.http.get(environment.checkDownSyncProgressUrl);
+  }
 }

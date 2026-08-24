@@ -273,6 +273,120 @@
             </section>
           </div>
         </mat-tab>
+        <mat-tab label="Down Sync (Central to Local)">
+          <mat-drawer-container class="example-container m-t-10" autosize>
+            <div class="example-sidenav-content">
+              <button
+                type="button"
+                mat-raised-button
+                color="primary"
+                class="btn-green mat_blue"
+                (click)="startDownSync()"
+                [disabled]="downSyncInProgress || showProgressBar">
+                Start Down Sync
+              </button>
+            </div>
+
+            <div class="example-sidenav-content">
+              <div *ngIf="downSyncInProgress" class="progress">
+                <div
+                  class="progress-bar progress-bar-striped active"
+                  role="progressbar"
+                  [attr.aria-valuenow]="downSyncProgressValue"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  [ngStyle]="{ width: downSyncProgressValue + '%' }">
+                  {{ downSyncProgressValue + '%' }}
+                </div>
+              </div>
+
+              <section
+                *ngIf="downSyncStatus"
+                class="table-responsive"
+                style="padding-bottom: 20px !important; border: unset">
+                <table
+                  aria-describedby="downsyncprogress"
+                  class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th id="downSyncMetric">Progress</th>
+                      <th id="downSyncValue">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Current table</td>
+                      <td>{{ downSyncStatus.currentTable || '-' }}</td>
+                    </tr>
+                    <tr>
+                      <td>Tables completed</td>
+                      <td>
+                        {{ downSyncStatus.completedTables }} /
+                        {{ downSyncStatus.totalTables }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Records inserted</td>
+                      <td>{{ downSyncStatus.recordsInserted }}</td>
+                    </tr>
+                    <tr>
+                      <td>Records updated</td>
+                      <td>{{ downSyncStatus.recordsUpdated }}</td>
+                    </tr>
+                    <tr>
+                      <td>Records skipped</td>
+                      <td>{{ downSyncStatus.recordsSkipped }}</td>
+                    </tr>
+                    <tr>
+                      <td>Conflicts</td>
+                      <td>{{ downSyncStatus.conflicts }}</td>
+                    </tr>
+                    <tr>
+                      <td>Failed tables</td>
+                      <td>{{ downSyncStatus.failedTableCount }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+
+              <section
+                *ngIf="downSyncFailedTables && downSyncFailedTables.length > 0"
+                class="failedMaster">
+                <h4>Failed Tables :</h4>
+                <ul class="list-group">
+                  <li
+                    class="list-group-item"
+                    *ngFor="let item of downSyncFailedTables">
+                    {{ item }}
+                  </li>
+                </ul>
+              </section>
+
+              <section
+                *ngIf="
+                  downSyncFinished &&
+                  downSyncFailedTables &&
+                  downSyncFailedTables.length === 0
+                "
+                class="download-success">
+                <h4>
+                  Down sync completed successfully
+                  <span class="material-icons">done</span>
+                </h4>
+              </section>
+
+              <section
+                *ngIf="downSyncFinished && downSyncStatus?.conflicts > 0"
+                class="failedMaster">
+                <h4>
+                  {{ downSyncStatus.conflicts }} record(s) could not be applied
+                  because they were changed both here and at central. They are
+                  marked for review and the local copy has been left untouched.
+                </h4>
+              </section>
+            </div>
+          </mat-drawer-container>
+        </mat-tab>
         <mat-tab label="Inventory Data Download">
           <mat-drawer-container class="example-container m-t-10" autosize>
             <div class="example-sidenav-content">
