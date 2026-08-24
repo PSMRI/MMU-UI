@@ -45,6 +45,7 @@ import {
 } from '../shared/services';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
+import { FormAutosaveService } from '../../core/services/form-autosave.service';
 import {
   CancerUtils,
   GeneralUtils,
@@ -54,6 +55,7 @@ import {
 } from '../shared/utility';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { Observable, Subscription, of } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { IdrsscoreService } from '../shared/services/idrsscore.service';
 import { WorkareaValidationService } from './workarea-validation.service';
@@ -309,12 +311,15 @@ export class WorkareaComponent
     private languageComponent: SetLanguageComponent,
     private readonly workareaValidation: WorkareaValidationService,
     private readonly workareaSubmission: WorkareaSubmissionService,
-    private readonly workareaLoader: WorkareaLoaderService
+    private readonly workareaLoader: WorkareaLoaderService,
+    private readonly formAutosave: FormAutosaveService
   ) {}
   isSpecialist = false;
   doctorUpdateAndTCSubmit: any;
   tmcDisable = false;
   doctorSignatureFlag = false;
+  private autosaveId = '';
+  autosaveSubscription?: Subscription;
 
   ngOnInit() {
     this.enableUpdateButtonInVitals = false;
@@ -351,10 +356,10 @@ export class WorkareaComponent
       ); // if rbs test value > 200
     let disableFlag = this.visitCategory ? true : false;
     if (attendant === 'tcspecialist') {
-      this.doctorUpdateAndTCSubmit = this.currentLanguageSet.common.submit;
+      this.doctorUpdateAndTCSubmit = this.currentLanguageSet?.common?.submit;
       this.isSpecialist = true;
     } else {
-      this.doctorUpdateAndTCSubmit = this.currentLanguageSet.common.update;
+      this.doctorUpdateAndTCSubmit = this.currentLanguageSet?.common?.update;
       this.isSpecialist = false;
     }
     if (this.specialistFlag === '100') disableFlag = true;
@@ -408,6 +413,65 @@ export class WorkareaComponent
           this.doctorSignatureFlag = res.data.signStatus;
         }
       });
+
+    this.initAutosave();
+  }
+
+  private initAutosave() {
+    const benFlowID = this.sessionstorage.getItem('benFlowID') || '';
+    this.autosaveId = `${this.sessionstorage.getItem('userID') || ''}:${
+      this.attendantType || ''
+    }:${this.beneficiaryRegID || ''}:${benFlowID}`;
+    if (!this.beneficiaryRegID || !this.patientMedicalForm) return;
+
+    const draft = this.formAutosave.restore(this.autosaveId);
+    if (draft?.data) {
+      let when = '';
+      try {
+        when = new Date(draft.savedAt).toLocaleString();
+      } catch {
+        when = '';
+      }
+      this.confirmationService
+        .confirm(
+          'info',
+          `Unsaved data${
+            when ? ' from ' + when : ''
+          } was found for this patient. Restore it?`,
+          'Restore',
+          'Discard'
+        )
+        .subscribe((restore: boolean) => {
+          if (restore) {
+            try {
+              this.patientMedicalForm.patchValue(draft.data);
+              this.patientMedicalForm.markAsDirty();
+            } catch {
+              // best-effort restore; ignore any shape mismatch
+            }
+          } else {
+            this.formAutosave.clear(this.autosaveId);
+          }
+        });
+    }
+
+    this.autosaveSubscription = this.patientMedicalForm.valueChanges
+      .pipe(debounceTime(2000))
+      .subscribe(() => {
+        if (this.patientMedicalForm?.dirty) {
+          this.formAutosave.save(
+            this.autosaveId,
+            this.patientMedicalForm.getRawValue()
+          );
+        }
+      });
+  }
+
+  // Called by the submission flows once a visit is saved: reset the form and
+  // drop its autosave draft so completed visits don't linger in localStorage.
+  onSubmitSuccess() {
+    this.patientMedicalForm.reset();
+    this.formAutosave.clear(this.autosaveId);
   }
 
   setVitalsUpdateButtonValue() {
@@ -1468,6 +1532,7 @@ export class WorkareaComponent
     if (this.ncdTempSubscription) this.ncdTempSubscription.unsubscribe();
     if (this.enableVitalsButtonSubscription)
       this.enableVitalsButtonSubscription.unsubscribe();
+    if (this.autosaveSubscription) this.autosaveSubscription.unsubscribe();
 
     this.doctorService.clearCache();
     this.masterdataService.reset();
@@ -1698,10 +1763,10 @@ export class WorkareaComponent
   setValues() {
     const attendant = this.route.snapshot.params['attendant'];
     if (attendant === 'tcspecialist') {
-      this.doctorUpdateAndTCSubmit = this.currentLanguageSet.common.submit;
+      this.doctorUpdateAndTCSubmit = this.currentLanguageSet?.common?.submit;
       this.isSpecialist = true;
     } else {
-      this.doctorUpdateAndTCSubmit = this.currentLanguageSet.common.update;
+      this.doctorUpdateAndTCSubmit = this.currentLanguageSet?.common?.update;
       this.isSpecialist = false;
     }
   }
