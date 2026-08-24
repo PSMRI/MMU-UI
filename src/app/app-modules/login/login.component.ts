@@ -38,7 +38,6 @@ import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-s
 import { environment } from 'src/environments/environment';
 import { CaptchaComponent } from '../captcha/captcha.component';
 import { AmritTrackingService } from 'Common-UI/v2/tracking';
-import { StringValidatorDirective } from '../core/directives/stringValidator.directive';
 import { NgIf } from '@angular/common';
 import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 import { ZardInputDirective } from 'Common-UI/v2/ui/input';
@@ -61,7 +60,6 @@ import {
   host: { class: 'block min-h-screen' },
   imports: [
     ReactiveFormsModule,
-    StringValidatorDirective,
     NgIf,
     CaptchaComponent,
     RouterLink,
