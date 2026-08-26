@@ -38,18 +38,15 @@ export class ServicePointResolve implements Resolve<any> {
   resolve(route: ActivatedRouteSnapshot) {
     const serviceProviderId: any =
       this.sessionstorage.getItem('providerServiceID');
-    const userId: any = this.sessionstorage.getItem('userID');
-    return this.servicePointService
-      .getServicePoints(userId, serviceProviderId)
-      .pipe(
-        map((res: any) => {
-          if (res) {
-            return res;
-          } else {
-            this.router.navigate(['/service']);
-            return null;
-          }
-        })
-      );
+    return this.servicePointService.getServicePoints(serviceProviderId).pipe(
+      map((res: any) => {
+        if (res) {
+          return res;
+        } else {
+          this.router.navigate(['/service']);
+          return null;
+        }
+      })
+    );
   }
 }

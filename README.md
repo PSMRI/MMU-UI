@@ -1,6 +1,7 @@
 # AMRIT - Mobile Medical Unit (MMU) Service
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) ![branch parameter](https://github.com/PSMRI/MMU-UI/actions/workflows/sast.yml/badge.svg)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![DeepWiki](https://img.shields.io/badge/DeepWiki-PSMRI%2FMMU--UI-blue)](https://deepwiki.com/PSMRI/MMU-UI)
+
 
 The AMRIT Mobile Medical Unit (MMU) service provides essential medical assistance to individuals without requiring them to be admitted to a hospital. This service operates through a mobile unit equipped with a laboratory for conducting medical tests and the capability to dispense medicines. The MMU employs an internet-connected device to collect and transmit medical data to the AMRIT application. It supports various medical standards and incorporates a feature that allows data capture and synchronization even when an internet connection is unavailable.
 
@@ -32,20 +33,37 @@ Ensure that the following prerequisites are met before building the MMU service:
 
 * JDK 17
 * Maven 
-* Nodejs v18.10.0
+* Node.js v18.10.0 (use `nvm` to manage versions: `nvm install` picks up the version from `.nvmrc`)
 * MySQL
 
 ### Installation
 
 To install the MMU module, please follow these steps:
 
-1. Clone the repository to your local machine.
-2. Install the dependencies and build the module:
-   - Run the command `npm install`.
-   - Run the command `npm run build`.
-   - Run the command `mvn clean install`.
-   - Run the command `npm start`.
-3. Open your browser and access `http://localhost:4200/#/login` to view the login page of module.
+1. Clone the repository with submodules:
+   ```bash
+   git clone --recurse-submodules https://github.com/PSMRI/MMU-UI.git
+   cd MMU-UI
+   ```
+   If you already cloned without `--recurse-submodules`, run:
+   ```bash
+   git submodule update --init --recursive
+   ```
+
+2. Use the correct Node.js version:
+   ```bash
+   nvm install
+   nvm use
+   ```
+
+3. Install dependencies and build the module:
+   ```bash
+   npm install
+   npm run build       # or npm run build-dev for an AOT dev build
+   npm start           # serves at http://localhost:4202
+   ```
+
+4. Open your browser and access `http://localhost:4202/#/login` to view the login page of the module.
 
 ### Building from source
 
@@ -55,7 +73,7 @@ mvn -B package --file pom.xml -P <profile_name>
 ```
 
 The available profiles include dev, local, test, and ci.
-Refer to `src/environments/environment.ci.template` file and ensure that the right environment variables are set for the build.
+Refer to `src/environments/environment.ci.ts.template` file and ensure that the right environment variables are set for the build.
 
 Packing with `ci` profile calls `build-ci` script in `package.json`.
 It creates a `environment.ci.ts` file with all environment variables used in the generated build.
@@ -68,29 +86,19 @@ The MMU module offers comprehensive management capabilities for your application
 
 ### Initializing Submodule `Common-UI`
 
-To initialize the `Common-UI` submodule, follow these steps:
+The `Common-UI` submodule provides shared UI modules (registrar, feedback, tracking).
 
-1. Clone the `mmu-ui` project:
-   ```bash
-   git clone https://github.com/PSMRI/MMU-UI
+To initialize it:
 
-2. Navigate to the project directory and pull the latest changes from the develop branch
-   cd mmu-ui
-   git checkout develop
-   git pull origin develop
+```bash
+# From the repo root, run:
+git submodule update --init --recursive
+cd Common-UI
+git checkout develop
+git pull origin develop
+```
 
-3. Open the integrated terminal for the common-ui submodule and initialize it
-
-   cd Common-UI
-   git init
-   git remote add origin https://github.com/PSMRI/Common-UI
-   git submodule update --init --recursive
-
-4. Check the available branches and switch to the develop branch
-
-   git branch
-   git checkout develop
-   git pull origin develop
+If you cloned with `--recurse-submodules`, the submodule is already initialized.
 
 ## Filing Issues
 
@@ -100,4 +108,3 @@ If you encounter any issues, bugs, or have feature requests, please file them in
 
 We’d love to have you join our community discussions and get real-time support!  
 Join our [Discord server](https://discord.gg/FVQWsf5ENS) to connect with contributors, ask questions, and stay updated.  
-

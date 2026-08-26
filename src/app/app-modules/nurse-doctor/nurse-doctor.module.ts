@@ -51,7 +51,6 @@ import { SymptomsComponent } from './visit-details/symptoms/symptoms.component';
 import { ContactHistoryComponent } from './visit-details/contact-history/contact-history.component';
 import { TravelHistoryComponent } from './visit-details/travel-history/travel-history.component';
 import { UploadFilesComponent } from './visit-details/upload-files/upload-files.component';
-import { MatChipsModule } from '@angular/material/chips';
 import { DiseaseconfirmationComponent } from './visit-details/diseaseconfirmation/diseaseconfirmation.component';
 import { AncDetailsComponent } from './anc/anc-details/anc-details.component';
 import { AncComponent } from './anc/anc.component';
@@ -149,6 +148,9 @@ import { ReportsComponent } from './reports/reports.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { DoctorInvestigationsComponent } from './case-record/general-case-record/doctor-investigations/doctor-investigations.component';
 import { SharedModule } from '../core/components/shared/shared.module';
+import { SmsNotificationComponent } from './sms-notification/sms-notification.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { AutocompleteScrollerDirective } from './shared/utility/autocomplete-scroller.directive';
 
 @NgModule({
@@ -168,6 +170,8 @@ import { AutocompleteScrollerDirective } from './shared/utility/autocomplete-scr
     MatDatepickerModule,
     NgxPaginationModule,
     SharedModule,
+    MatChipsModule,
+    MatToolbarModule,
   ],
   declarations: [
     NurseWorklistComponent,
@@ -278,6 +282,7 @@ import { AutocompleteScrollerDirective } from './shared/utility/autocomplete-scr
     TmVisitDetailsComponent,
     PrescribeTmMedicineComponent,
     CovidVaccinationStatusComponent,
+    SmsNotificationComponent,
     AutocompleteScrollerDirective,
   ],
 

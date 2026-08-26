@@ -30,7 +30,8 @@ import { environment } from 'src/environments/environment';
 @Injectable()
 export class DoctorService {
   fileIDs: any; // To store fileIDs
-  enableCovidVaccinationButton: boolean = false;
+  gynecologicalFiles: any; // To store gynecological examination files
+  enableCovidVaccinationButton = false;
   prescribedDrugData: any;
   covidVaccineAgeGroup: any;
 
@@ -72,9 +73,7 @@ export class DoctorService {
     return this.http.get(
       environment.specialistWorkListURL +
         this.sessionstorage.getItem('providerServiceID') +
-        `/${this.sessionstorage.getItem(
-          'serviceID'
-        )}/${this.sessionstorage.getItem('userID')}`
+        `/${this.sessionstorage.getItem('serviceID')}`
     );
   }
 
@@ -90,9 +89,7 @@ export class DoctorService {
     return this.http.get(
       environment.specialistFutureWorkListURL +
         this.sessionstorage.getItem('providerServiceID') +
-        `/${this.sessionstorage.getItem(
-          'serviceID'
-        )}/${this.sessionstorage.getItem('userID')}`
+        `/${this.sessionstorage.getItem('serviceID')}`
     );
   }
 
@@ -154,7 +151,11 @@ export class DoctorService {
    ****************************CANCER SCREENING***********************************
    */
 
-  postDoctorCancerVisitDetails(cancerForm: any, tcRequest: any) {
+  postDoctorCancerVisitDetails(
+    cancerForm: any,
+    tcRequest: any,
+    doctorSignatureFlag: any
+  ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
@@ -188,6 +189,7 @@ export class DoctorService {
     const cancerRequest = Object.assign({
       tcRequest: tcRequest,
       diagnosis: diagnosis,
+      doctorSignatureFlag: doctorSignatureFlag,
     });
     console.log(
       'Doctor Cancer visit Details',
@@ -483,7 +485,11 @@ export class DoctorService {
    **************************GENERAL OPD QUICK CONSULT**************************
    */
 
-  postQuickConsultDetails(consultationData: any, tcRequest: any) {
+  postQuickConsultDetails(
+    consultationData: any,
+    tcRequest: any,
+    doctorSignatureFlag: any
+  ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
@@ -508,7 +514,8 @@ export class DoctorService {
     const quickConsultation = Object.assign(
       {},
       consultationData.quickConsultation,
-      temp
+      temp,
+      { doctorSignatureFlag: doctorSignatureFlag }
     );
 
     console.log('qc', JSON.stringify(quickConsultation, null, 4));
@@ -521,7 +528,8 @@ export class DoctorService {
   updateQuickConsultDetails(
     consultationData: any,
     tcRequest: any,
-    isSpecialist: any
+    isSpecialist: any,
+    doctorSignatureFlag: any
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -544,6 +552,7 @@ export class DoctorService {
       vanID: vanID,
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
     const quickConsultation = Object.assign(
       {},
@@ -659,7 +668,8 @@ export class DoctorService {
   postDoctorANCDetails(
     patientMedicalForm: any,
     otherDetails: any,
-    tcRequest: any
+    tcRequest: any,
+    doctorSignatureFlag: any
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -707,6 +717,7 @@ export class DoctorService {
       serviceID: this.sessionstorage.getItem('serviceID'),
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -793,7 +804,8 @@ export class DoctorService {
   postDoctorGeneralOPDDetails(
     patientMedicalForm: any,
     otherDetails: any,
-    tcRequest: any
+    tcRequest: any,
+    doctorSignatureFlag: any
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -843,6 +855,7 @@ export class DoctorService {
       serviceID: this.sessionstorage.getItem('serviceID'),
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -867,7 +880,8 @@ export class DoctorService {
   postDoctorNCDCareDetails(
     patientMedicalForm: any,
     otherDetails: any,
-    tcRequest: any
+    tcRequest: any,
+    doctorSignatureFlag: any
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -917,6 +931,7 @@ export class DoctorService {
       serviceID: this.sessionstorage.getItem('serviceID'),
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -1002,8 +1017,10 @@ export class DoctorService {
   postDoctorNCDScreeningDetails(
     patientMedicalForm: any,
     otherDetails: any,
-    tcRequest: any
+    tcRequest: any,
+    doctorSignatureFlag: any
   ) {
+    const visitCategory = this.sessionstorage.getItem('visitCategory');
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
@@ -1023,6 +1040,11 @@ export class DoctorService {
     const referForm = patientMedicalForm.controls['patientReferForm'];
 
     const NCDScreeningDetails = {
+      visitDetails: this.postGenericVisitDetailForm(
+        patientMedicalForm.controls.patientVisitForm,
+        null,
+        visitCategory
+      ),
       findings: this.postGeneralCaseRecordFindings(findingForm, otherDetails),
       diagnosis: this.postNCDscreeningCaseRecordDiagnosis(
         diagnosisForm,
@@ -1052,6 +1074,7 @@ export class DoctorService {
       serviceID: this.sessionstorage.getItem('serviceID'),
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -2280,7 +2303,8 @@ export class DoctorService {
   postDoctorPNCDetails(
     patientMedicalForm: any,
     otherDetails: any,
-    tcRequest: any
+    tcRequest: any,
+    doctorSignatureFlag: any
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -2327,6 +2351,7 @@ export class DoctorService {
       serviceID: this.sessionstorage.getItem('serviceID'),
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -2475,7 +2500,8 @@ export class DoctorService {
     patientMedicalForm: any,
     visitCategory: any,
     otherDetails: any,
-    tcRequest: any
+    tcRequest: any,
+    doctorSignatureFlag: any
   ): Observable<object> {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -2527,6 +2553,7 @@ export class DoctorService {
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: otherDetails.isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -2680,7 +2707,8 @@ export class DoctorService {
   // }
   saveSpecialistCancerObservation(
     specialistDiagonosis: any,
-    otherDetails: any
+    otherDetails: any,
+    doctorSignatureFlag: any
   ) {
     const diagnosisDetails =
       specialistDiagonosis.controls.patientCaseRecordForm.value;
@@ -2692,7 +2720,8 @@ export class DoctorService {
       {},
       referDetails,
       diagnosisDetails,
-      otherDetails
+      otherDetails,
+      { doctorSignatureFlag: doctorSignatureFlag }
     );
     console.log(
       'saveSpecialistCancerObservation',
@@ -2875,10 +2904,16 @@ export class DoctorService {
   }
 
   /* Doctor Signature download */
+
   downloadSign(userID: any) {
-    return this.http
-      .get(environment.downloadSignUrl + userID, { responseType: 'blob' })
-      .pipe(map((res: any) => <Blob>res.blob()));
+    return this.http.get(environment.downloadSignUrl + userID, {
+      responseType: 'blob' as 'json',
+    });
+  }
+
+  /* Get UserID using UserName */
+  getUserId(userName: any) {
+    return this.http.get(environment.getUserId + userName);
   }
 
   enableButton: any = false;
@@ -2902,5 +2937,37 @@ export class DoctorService {
 
   setCapturedHistoryByNurse(historyResponse: any) {
     this.populateHistoryResponse.next(historyResponse);
+  }
+
+  postGenericVisitDetailForm(
+    patientVisitForm: any,
+    benVisitID: any,
+    visitCategory: any
+  ): Observable<any> {
+    if (visitCategory === 'NCD screening') {
+      const visitDeatilsData: any = {
+        visitDetails: this.postPatientVisitDetails(
+          patientVisitForm.controls.patientVisitDetailsForm.value,
+          patientVisitForm.controls.patientFileUploadDetailsForm.value
+        ),
+      };
+      return visitDeatilsData;
+    }
+    return new Observable(observer => {
+      observer.complete();
+    });
+  }
+
+  postPatientVisitDetails(visitForm: any, files: any) {
+    const patientVisitDetails = Object.assign({}, visitForm, files, {
+      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+      createdBy: this.sessionstorage.getItem('userName'),
+    });
+    return patientVisitDetails;
+  }
+
+  checkUsersignatureExist(userID: any) {
+    return this.http.get(environment.checkUsersignExistUrl + userID);
   }
 }

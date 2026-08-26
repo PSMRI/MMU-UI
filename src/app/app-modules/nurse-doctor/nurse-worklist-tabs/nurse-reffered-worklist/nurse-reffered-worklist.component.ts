@@ -42,7 +42,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
 })
 export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
   currentLanguageSet: any;
-  currentPage: number = 0;
+  currentPage = 0;
   displayedColumns: any = [
     'sno',
     'beneficiaryID',
@@ -190,10 +190,10 @@ export class NurseRefferedWorklistComponent implements OnInit, DoCheck {
         } else {
           this.confirmationService.alert(res.errorMessage, 'error');
         }
-      },
-      err => {
-        this.confirmationService.alert(err, 'error');
       }
+      // err => {
+      //   this.confirmationService.alert(err, 'error');
+      // }
     );
     console.log(
       'filtered Beneficiary List',

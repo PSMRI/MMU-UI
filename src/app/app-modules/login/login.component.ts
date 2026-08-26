@@ -20,7 +20,13 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
@@ -31,6 +37,7 @@ import {
 import { FormBuilder, Validators } from '@angular/forms';
 import { DataSyncLoginComponent } from '../core/components/data-sync-login/data-sync-login.component';
 import { MasterDownloadComponent } from '../data-sync/master-download/master-download.component';
+import { CampHubQrCodeComponent } from '../data-sync/camp-hub-qr-code/camp-hub-qr-code.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { environment } from 'src/environments/environment';
 import { CaptchaComponent } from '../captcha/captcha.component';
@@ -41,7 +48,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit {
   @ViewChild('captchaCmp') captchaCmp: CaptchaComponent | undefined;
   dynamictype = 'password';
   encryptedVar: any;
@@ -58,6 +65,7 @@ export class LoginComponent implements OnInit {
 
   captchaToken!: string;
   enableCaptcha = environment.enableCaptcha;
+  isMMUOfflineQRCode = environment.isMMUOfflineQRCode;
 
   constructor(
     private router: Router,
@@ -88,7 +96,7 @@ export class LoginComponent implements OnInit {
       sessionStorage.clear();
     }
   }
-  public AfterViewInit(): void {
+  ngAfterViewInit(): void {
     this.elementRef.nativeElement.focus();
   }
 
@@ -98,13 +106,10 @@ export class LoginComponent implements OnInit {
       this.loginForm.controls.password.value
     );
 
-    if (
-      this.loginForm.controls.userName.value &&
-      this.loginForm.controls.password.value
-    ) {
+    if (this.loginForm.valid) {
       this.authService
         .login(
-          this.loginForm.controls.userName.value.trim(),
+          (this.loginForm.controls.userName.value ?? '').trim(),
           encryptPassword,
           false,
           this.enableCaptcha ? this.captchaToken : undefined
@@ -259,12 +264,21 @@ export class LoginComponent implements OnInit {
     this.sessionstorage.setItem('userName', loginDataResponse.userName);
     this.sessionstorage.setItem('username', userName);
     this.sessionstorage.setItem('fullName', loginDataResponse.fullName);
+    this.sessionstorage.setItem(
+      'providerServiceMapID',
+      loginDataResponse.previlegeObj[0].providerServiceMapID
+    );
     const services: any = [];
     loginDataResponse.previlegeObj.map((item: any) => {
       if (
         item.roles[0].serviceRoleScreenMappings[0].providerServiceMapping
           .serviceID === 2
       ) {
+        this.sessionstorage.setItem(
+          'currentServiceID',
+          item.roles[0].serviceRoleScreenMappings[0].providerServiceMapping
+            .serviceID
+        );
         const service = {
           providerServiceID: item.serviceID,
           serviceName: item.serviceName,
@@ -299,6 +313,13 @@ export class LoginComponent implements OnInit {
 
   hidePWD() {
     this.dynamictype = 'password';
+  }
+
+  openQrDialog(): void {
+    this.dialog.open(CampHubQrCodeComponent, {
+      width: '500px',
+      disableClose: false,
+    });
   }
 
   loginDialogRef!: MatDialogRef<DataSyncLoginComponent>;

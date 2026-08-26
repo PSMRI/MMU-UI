@@ -92,15 +92,21 @@ export class PncDiagnosisComponent
   caseRecordMode!: string;
   current_language_set: any;
 
-  getProvisionalDiagnosisList(): AbstractControl[] | null {
-    const provisionalDiagnosisListControl = this.generalDiagnosisForm.get(
-      'provisionalDiagnosisList'
+  suggestedDiagnosisList: any = [];
+  suggestedConfirmatoryDiagnosisList: any = [];
+  get provisionalDiagnosisControls(): AbstractControl[] {
+    return (
+      (this.generalDiagnosisForm.get('provisionalDiagnosisList') as FormArray)
+        ?.controls || []
     );
-    return provisionalDiagnosisListControl instanceof FormArray
-      ? provisionalDiagnosisListControl.controls
-      : null;
   }
 
+  get confirmatoryDiagnosisControls(): AbstractControl[] {
+    return (
+      (this.generalDiagnosisForm.get('confirmatoryDiagnosisList') as FormArray)
+        ?.controls || []
+    );
+  }
   getConfirmatoryDiagnosisList(): AbstractControl[] | null {
     const confirmatoryDiagnosisListControl = this.generalDiagnosisForm.get(
       'confirmatoryDiagnosisList'
@@ -251,14 +257,16 @@ export class PncDiagnosisComponent
     const provisionalDiagnosisList = this.generalDiagnosisForm.controls[
       'provisionalDiagnosisList'
     ] as FormArray;
+
     for (let i = 0; i < provisionalDiagnosisDataList.length; i++) {
       provisionalDiagnosisList.at(i).patchValue({
         provisionalDiagnosis: provisionalDiagnosisDataList[i].term,
         term: provisionalDiagnosisDataList[i].term,
         conceptID: provisionalDiagnosisDataList[i].conceptID,
+        viewProvisionalDiagnosisProvided: provisionalDiagnosisDataList[i].term,
       });
       (<FormGroup>provisionalDiagnosisList.at(i)).controls[
-        'provisionalDiagnosis'
+        'viewProvisionalDiagnosisProvided'
       ].disable();
       if (provisionalDiagnosisList.length < provisionalDiagnosisDataList.length)
         this.addProvisionalDiagnosis();
@@ -296,6 +304,7 @@ export class PncDiagnosisComponent
   get isMaternalDeath() {
     return this.generalDiagnosisForm.controls['isMaternalDeath'].value;
   }
+
   addConfirmatoryDiagnosis() {
     const confirmatoryDiagnosisArrayList = this.generalDiagnosisForm.controls[
       'confirmatoryDiagnosisList'
@@ -353,6 +362,30 @@ export class PncDiagnosisComponent
       return true;
     }
   }
+  onDiagnosisInputKeyup(value: string, index: number) {
+    if (value.length >= 3) {
+      this.masterdataService
+        .searchDiagnosisBasedOnPageNo(value, index)
+        .subscribe((results: any) => {
+          this.suggestedDiagnosisList[index] = results?.data?.sctMaster;
+        });
+    } else {
+      this.suggestedDiagnosisList[index] = [];
+    }
+  }
+
+  onConfirmatoryDiagnosisInputKeyup(value: string, index: number) {
+    if (value.length >= 3) {
+      this.masterdataService
+        .searchDiagnosisBasedOnPageNo(value, index)
+        .subscribe((results: any) => {
+          this.suggestedConfirmatoryDiagnosisList[index] =
+            results?.data?.sctMaster;
+        });
+    } else {
+      this.suggestedConfirmatoryDiagnosisList[index] = [];
+    }
+  }
 
   displayDiagnosis(diagnosis: any): string {
     return typeof diagnosis === 'string' ? diagnosis : diagnosis?.term || '';
@@ -362,171 +395,32 @@ export class PncDiagnosisComponent
     return typeof diagnosis === 'string' ? diagnosis : diagnosis?.term || '';
   }
 
-  // --- Shared scroll state for both provisional + confirmatory ---
-  private readonly PAGE_BASE = 0;
-  private readonly BOOTSTRAP_MAX_PAGES = 3;
+  onDiagnosisSelected(selected: any, index: number) {
+    const diagnosisFormArray = this.generalDiagnosisForm.get(
+      'provisionalDiagnosisList'
+    ) as FormArray;
+    const diagnosisFormGroup = diagnosisFormArray.at(index) as FormGroup;
 
-  state: any = {
-    provisional: {
-      suggested: [] as any[][],
-      lastQueryByIndex: [] as string[],
-      pageByIndex: [] as number[],
-      loadingMore: [] as boolean[],
-      noMore: [] as boolean[],
-      wantMore: [] as boolean[],
-    },
-    confirmatory: {
-      suggested: [] as any[][],
-      lastQueryByIndex: [] as string[],
-      pageByIndex: [] as number[],
-      loadingMore: [] as boolean[],
-      noMore: [] as boolean[],
-      wantMore: [] as boolean[],
-    },
-  };
-
-  // --- Keyup handler (shared) ---
-  onDiagnosisInputKeyup(
-    type: 'provisional' | 'confirmatory',
-    value: string,
-    index: number
-  ) {
-    const term = (value || '').trim();
-    const s = this.state[type];
-
-    if (term.length >= 3) {
-      if (s.lastQueryByIndex[index] !== term) {
-        s.lastQueryByIndex[index] = term;
-        s.pageByIndex[index] = 0;
-        s.noMore[index] = false;
-        s.wantMore[index] = false;
-        s.suggested[index] = [];
-      }
-      this.fetchPage(type, index, false);
-    } else {
-      s.lastQueryByIndex[index] = '';
-      s.pageByIndex[index] = 0;
-      s.noMore[index] = false;
-      s.wantMore[index] = false;
-      s.suggested[index] = [];
-    }
-  }
-
-  // --- When user picks an option ---
-  onDiagnosisSelected(
-    type: 'provisional' | 'confirmatory',
-    selected: any,
-    index: number
-  ) {
-    const controlName =
-      type === 'provisional'
-        ? 'provisionalDiagnosisList'
-        : 'confirmatoryDiagnosisList';
-    const formArray = this.generalDiagnosisForm.get(controlName) as FormArray;
-    const fg = formArray.at(index) as FormGroup;
-
-    fg.patchValue({
-      [type === 'provisional'
-        ? 'viewProvisionalDiagnosisProvided'
-        : 'confirmatoryDiagnosis']: selected,
-      conceptID: selected?.conceptID ?? null,
-      term: selected?.term ?? null,
+    // Set the nested and top-level fields
+    diagnosisFormGroup.patchValue({
+      provisionalDiagnosis: selected?.term || null,
+      viewProvisionalDiagnosisProvided: selected,
+      conceptID: selected?.conceptID || null,
+      term: selected?.term || null,
     });
   }
 
-  // --- Autocomplete scroll hooks ---
-  onPanelReady(
-    type: 'provisional' | 'confirmatory',
-    index: number,
-    panelEl: HTMLElement
-  ) {
-    const s = this.state[type];
-    if (panelEl.scrollHeight <= panelEl.clientHeight && !s.noMore[index]) {
-      this.bootstrapUntilScrollable(type, index, panelEl);
-    }
-  }
+  onConfirmatoryDiagnosisSelected(selected: any, index: number) {
+    const diagnosisFormArray = this.generalDiagnosisForm.get(
+      'confirmatoryDiagnosisList'
+    ) as FormArray;
+    const diagnosisFormGroup = diagnosisFormArray.at(index) as FormGroup;
 
-  onAutoNearEnd(type: 'provisional' | 'confirmatory', index: number) {
-    const s = this.state[type];
-    if (!s.loadingMore[index] && !s.noMore[index]) {
-      this.fetchPage(type, index, true);
-    } else if (s.loadingMore[index]) {
-      s.wantMore[index] = true;
-    }
-  }
-
-  private bootstrapUntilScrollable(
-    type: 'provisional' | 'confirmatory',
-    rowIndex: number,
-    panelEl: HTMLElement
-  ) {
-    const s = this.state[type];
-    let fetched = 0;
-    const tryFill = () => {
-      const scrollable = panelEl.scrollHeight > panelEl.clientHeight;
-      if (
-        scrollable ||
-        s.noMore[rowIndex] ||
-        fetched >= this.BOOTSTRAP_MAX_PAGES
-      )
-        return;
-      if (s.loadingMore[rowIndex]) {
-        requestAnimationFrame(tryFill);
-        return;
-      }
-      fetched++;
-      this.fetchPage(type, rowIndex, true);
-      requestAnimationFrame(tryFill);
-    };
-    if (s.lastQueryByIndex[rowIndex]?.length >= 3) tryFill();
-  }
-
-  private fetchPage(
-    type: 'provisional' | 'confirmatory',
-    index: number,
-    append = false
-  ) {
-    const s = this.state[type];
-    const term = s.lastQueryByIndex[index];
-    if (!term) return;
-
-    const nextLogical = (s.pageByIndex[index] ?? 0) + (append ? 1 : 0);
-    const pageAtReq = nextLogical + this.PAGE_BASE;
-    if (s.loadingMore[index]) return;
-    s.loadingMore[index] = true;
-
-    this.masterdataService
-      .searchDiagnosisBasedOnPageNo(term, pageAtReq)
-      .subscribe({
-        next: (results: any) => {
-          if (s.lastQueryByIndex[index] !== term) return;
-          const list = results?.data?.sctMaster ?? [];
-
-          if (append) {
-            const existing = new Set(
-              (s.suggested[index] ?? []).map(
-                (d: any) => d.id ?? d.code ?? d.term
-              )
-            );
-            s.suggested[index] = [
-              ...(s.suggested[index] ?? []),
-              ...list.filter(
-                (d: any) => !existing.has(d.id ?? d.code ?? d.term)
-              ),
-            ];
-          } else {
-            s.suggested[index] = list;
-          }
-
-          s.pageByIndex[index] = nextLogical;
-          if (!list.length) s.noMore[index] = true;
-        },
-        complete: () => {
-          const wantChain = s.wantMore[index] && !s.noMore[index];
-          s.loadingMore[index] = false;
-          s.wantMore[index] = false;
-          if (wantChain) this.fetchPage(type, index, true);
-        },
-      });
+    // Set the nested and top-level fields
+    diagnosisFormGroup.patchValue({
+      ConfirmatoryDiagnosisProvided: selected,
+      conceptID: selected?.conceptID || null,
+      term: selected?.term || null,
+    });
   }
 }

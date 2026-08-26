@@ -209,7 +209,9 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
             })[0];
         }
 
-        tempPNCData.dDate = new Date(tempPNCData.dateOfDelivery);
+        tempPNCData.dDate = this.normalizeToUTCMidnight(
+          new Date(tempPNCData.dateOfDelivery)
+        );
 
         const patchPNCdata = Object.assign({}, tempPNCData);
         this.patientPNCDataForm.patchValue(tempPNCData);
@@ -224,6 +226,14 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
       modifiedBy: this.sessionstorage.getItem('userName'),
       visitCode: this.sessionstorage.getItem('visitCode'),
     };
+
+    const dDate = patientPNCDataForm.get('dDate')?.value;
+    if (dDate) {
+      patientPNCDataForm.patchValue({
+        dateOfDelivery: this.normalizeToUTCMidnight(new Date(dDate)),
+        dDate: this.normalizeToUTCMidnight(new Date(dDate)),
+      });
+    }
 
     this.doctorService.updatePNCDetails(patientPNCDataForm, temp).subscribe(
       (res: any) => {
@@ -357,5 +367,15 @@ export class PncComponent implements OnInit, DoCheck, OnChanges, OnDestroy {
 
   get otherPostNatalComplication() {
     return this.patientPNCDataForm.controls['otherPostNatalComplication'].value;
+  }
+
+  private normalizeToUTCMidnight(date: Date | null | undefined): string | null {
+    if (!date) return null;
+
+    const d = new Date(date);
+    const utcDate = new Date(
+      Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0)
+    );
+    return utcDate.toISOString();
   }
 }

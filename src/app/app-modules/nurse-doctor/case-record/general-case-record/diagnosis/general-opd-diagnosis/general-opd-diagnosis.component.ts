@@ -95,38 +95,35 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
       });
   }
 
-  getProvisionalDiagnosisList(): AbstractControl[] | null {
-    const provisionalDiagnosisListControl = this.generalDiagnosisForm.get(
-      'provisionalDiagnosisList'
+  get provisionalDiagnosisControls(): AbstractControl[] {
+    return (
+      (this.generalDiagnosisForm.get('provisionalDiagnosisList') as FormArray)
+        ?.controls || []
     );
-    return provisionalDiagnosisListControl instanceof FormArray
-      ? provisionalDiagnosisListControl.controls
-      : null;
   }
 
   patchDiagnosisDetails(diagnosis: any) {
     this.generalDiagnosisForm.patchValue(diagnosis);
-    const generalArray = this.generalDiagnosisForm.controls[
+    const diagnosisArrayList = this.generalDiagnosisForm.controls[
       'provisionalDiagnosisList'
     ] as FormArray;
 
     const previousArray = diagnosis.provisionalDiagnosisList;
-    let j = 0;
-    if (previousArray !== undefined && previousArray.length > 0) {
-      previousArray.forEach((i: any) => {
-        generalArray.at(j).patchValue({
-          conceptID: i.conceptID,
-          term: i.term,
-          provisionalDiagnosis: i.term,
-        });
-        (<FormGroup>generalArray.at(j)).controls[
-          'provisionalDiagnosis'
-        ].disable();
-        if (generalArray.length < previousArray.length) {
-          this.addDiagnosis();
-        }
-        j++;
+
+    while (diagnosisArrayList.length < previousArray.length) {
+      diagnosisArrayList.push(this.utils.initProvisionalDiagnosisList());
+    }
+    for (let i = 0; i < previousArray.length; i++) {
+      diagnosisArrayList.at(i).patchValue({
+        viewProvisionalDiagnosisProvided: previousArray[i].term,
+        term: previousArray[i].term,
+        conceptID: previousArray[i].conceptID,
+        provisionalDiagnosis: previousArray[i].term, // <-- Add this line
       });
+      diagnosisArrayList
+        .at(i)
+        .get('viewProvisionalDiagnosisProvided')
+        ?.disable();
     }
   }
 
@@ -202,7 +199,7 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
   }
 
   displayDiagnosis(diagnosis: any): string {
-    return diagnosis?.term || '';
+    return typeof diagnosis === 'string' ? diagnosis : diagnosis?.Term || '';
   }
 
   onDiagnosisSelected(selected: any, index: number) {
@@ -214,7 +211,8 @@ export class GeneralOpdDiagnosisComponent implements OnChanges, DoCheck {
 
     // Set the nested and top-level fields
     diagnosisFormGroup.patchValue({
-      viewProvisionalDiagnosisProvided: selected,
+      provisionalDiagnosis: selected?.term || null,
+      viewProvisionalDiagnosisProvided: selected?.term || null,
       conceptID: selected?.conceptID || null,
       term: selected?.term || null,
     });

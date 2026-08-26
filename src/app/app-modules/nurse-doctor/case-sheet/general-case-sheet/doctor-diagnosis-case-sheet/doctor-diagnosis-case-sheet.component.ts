@@ -30,6 +30,8 @@ import {
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import * as moment from 'moment';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { get } from 'jquery';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-doctor-diagnosis-case-sheet',
@@ -55,20 +57,20 @@ export class DoctorDiagnosisCaseSheetComponent
   caseRecords: any;
   ancDetails: any;
   symptomsList: any = [];
-  symptomFlag: boolean = false;
+  symptomFlag = false;
   contactList: any = [];
-  contactFlag: boolean = false;
+  contactFlag = false;
   travelStatus: any;
-  travelFlag: boolean = false;
-  suspectedFlag: boolean = false;
+  travelFlag = false;
+  suspectedFlag = false;
   suspected: any;
-  recFlag: boolean = false;
+  recFlag = false;
   recommendation: any = [];
   temp: any = [];
   recommendationText!: string;
   tempComp!: string;
   indexComplication!: number;
-  tempComplication: boolean = false;
+  tempComplication = false;
   newComp!: string;
   idrsDetailsHistory: any = [];
   suspect: any = [];
@@ -77,14 +79,14 @@ export class DoctorDiagnosisCaseSheetComponent
 
   severityValue: any;
   cough_pattern_Value: any;
-  enableResult: boolean = false;
+  enableResult = false;
   severity: any;
   cough_pattern: any;
   cough_severity_score: any;
   record_duration: any;
 
   idrsScore: any;
-  enableTCReferredMMUData: boolean = false;
+  enableTCReferredMMUData = false;
   showHRP!: string;
   tmCaseSheet: any;
   imgUrl!: string | ArrayBuffer;
@@ -99,8 +101,9 @@ export class DoctorDiagnosisCaseSheetComponent
   serviceList = '';
   referralReasonList = '';
   MMUReferDetails: any;
-  mmuServiceList: string = '';
+  mmuServiceList = '';
   isCovidVaccinationStatusVisible = false;
+  userName: any;
 
   constructor(
     private doctorService: DoctorService,
@@ -178,6 +181,7 @@ export class DoctorDiagnosisCaseSheetComponent
                   .filter((name: any) => name !== null && name !== '')
                   .join(',');
             }
+            this.userName = this.MMUcaseRecords?.diagnosis?.createdBy;
           }
 
           if (this.mmuCaseSheetData?.doctorData) {
@@ -201,6 +205,8 @@ export class DoctorDiagnosisCaseSheetComponent
   ngOnChanges() {
     this.ncdScreeningCondition = null;
     if (this.caseSheetData) {
+      this.userName = this.caseSheetData?.doctorData?.diagnosis?.createdBy;
+
       const temp2 = this.caseSheetData.nurseData.covidDetails;
       const t = new Date();
       this.date =
@@ -423,26 +429,26 @@ export class DoctorDiagnosisCaseSheetComponent
         ].join('/');
       }
 
-      this.downloadSign();
+      if (this.caseSheetData?.BeneficiaryData?.doctorSignatureFlag) {
+        this.downloadSign();
+      }
       this.getVaccinationTypeAndDoseMaster();
     }
   }
 
   downloadSign() {
-    if (this.beneficiaryDetails?.tCSpecialistUserID) {
-      const tCSpecialistUserID = this.beneficiaryDetails.tCSpecialistUserID;
-      this.doctorService.downloadSign(tCSpecialistUserID).subscribe(
+    this.getUserId().subscribe(userId => {
+      const userIdToUse = this.beneficiaryDetails?.tCSpecialistUserID ?? userId;
+      this.doctorService.downloadSign(userIdToUse).subscribe(
         (response: any) => {
           const blob = new Blob([response], { type: response.type });
           this.showSign(blob);
         },
         (err: any) => {
-          console.log('error');
+          console.error('Error downloading signature:', err);
         }
       );
-    } else {
-      console.log('No tCSpecialistUserID found');
-    }
+    });
   }
   showSign(blob: any) {
     const reader = new FileReader();
@@ -570,5 +576,11 @@ export class DoctorDiagnosisCaseSheetComponent
         this.enableResult = true;
       }
     });
+  }
+
+  getUserId(): Observable<any> {
+    return this.doctorService
+      .getUserId(this.userName)
+      .pipe(map((res: any) => res?.userId || null));
   }
 }

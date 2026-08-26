@@ -108,7 +108,7 @@
       "district": "District / Village",
       "registrationDate": "Registration Date",
       "image": "Image",
-      "advanceSearch": "Advance Search",
+      "advanceSearch": "Advanced Search",
       "status": "Status",
       "visitCategory": "Visit Category / Visit No",
       "tcDate": "TC Date",
@@ -310,7 +310,7 @@
       "toTime": "To Time",
       "kindlyuploadthefiles": "Kindly upload the files",
       "clearslots": "Clear Slot",
-      "advanceBeneficiarySearch": "Advance Beneficiary Search",
+      "advanceBeneficiarySearch": "Advanced Beneficiary Search",
       "firstNameisrequired": "First Name is required",
       "pleaseprovideatleast2character": "Please provide atleast 2 character",
       "pleaseprovideatleastthreecharacter": "Please provide atleast 3 character",
@@ -1503,6 +1503,8 @@
       "close": "Close"
     },
     "coreComponents": {
+      "errorForDataSync": "Error for Data Sync",
+      "partialDataSync":"Partially Successful",
       "poweredByWipro": "Powered by: WIPRO",
       "selectCallibrationStrip": "Select Callibration Strip",
       "inTableSearchStripCode": "In-Table Search (Strip Code)",
@@ -1733,7 +1735,26 @@
     "abhaDetails":"ABHA Details",
     "abhaAddress":"ABHA Address",
     "abhaMode":"ABHA Mode",
-    "abhaDetailsNotAvailable":"ABHA details not available"
+    "abhaDetailsNotAvailable":"ABHA details not available",
+    "enterMobileNumberToBeLinkedWithAbha": "Enter Phone number to be linked with ABHA",
+    "doYouWantToVerifyMobileOtpForAbha": "Your provided mobile number is not linked with Aadhaar, Do you want to verify it?",
+    "abhaCardAlreadyExists": "ABHA already exists for the Aadhaar Number",
+    "enterABHANumber": "Please Enter ABHA Number",
+    "enterABHAAddress": "Please Enter ABHA Address",
+    "enterAadhaarNumber": "Please Enter Aadhaar Number",
+    "enterMobileNumber": "Please Enter Mobile Number",
+    "enterCorrectAuthIdForAuthMode": "Please Enter correct Authentication ID for choosen AuthMode",
+    "abhaAddressFound" : "ABHA Address Found:",
+    "searchAndDownloadAbha": "Search and Download ABHA",
+    "abhaSearchMode": "ABHA Search Mode*",
+    "verifyAbha": "Verify ABHA",
+    "issueInAbhaCard": "Issue in printing ABHA Card",
+    "fileUploadedSuccessfully": "File Uploaded successfully",
+    "verifyMobileOtp": "Verify Mobile OTP",
+    "enterMobileOtp": "Enter Mobile OTP",
+    "verify": "Verify",
+    "abhaNumberAlreadyWith": "The Abha number is already linked with beneficiary ID - ",
+    "enterTenDigitMobileNumber": "Enter mobile number"
   }
   
 }

@@ -703,6 +703,7 @@ export class QuickConsultComponent
           prescriptionID: diagnosis.prescriptionID,
         });
       }
+
       if (diagnosis && diagnosis.provisionalDiagnosisList) {
         const generalArray = this.patientQuickConsultForm.controls[
           'provisionalDiagnosisList'
@@ -712,6 +713,7 @@ export class QuickConsultComponent
         if (previousArray.length > 0) {
           previousArray.forEach((i: any) => {
             generalArray.at(j).patchValue({
+              provisionalDiagnosis: i.term, // Add this line to show the value in input
               conceptID: i.conceptID,
               term: i.term,
               viewProvisionalDiagnosisProvided: i.term,
@@ -719,6 +721,7 @@ export class QuickConsultComponent
             (<FormGroup>generalArray.at(j)).controls[
               'provisionalDiagnosis'
             ].disable();
+            // Instead of disabling provisionalDiagnosis, keep it enabled but read-only via the view
             if (generalArray.length < previousArray.length) {
               this.addDiagnosis();
             }
@@ -726,6 +729,7 @@ export class QuickConsultComponent
           });
         }
       }
+
       this.patchPrescriptionDetails(response.prescription);
     }
   }

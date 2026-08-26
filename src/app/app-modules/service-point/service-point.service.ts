@@ -34,14 +34,13 @@ export class ServicePointService {
     readonly sessionstorage: SessionStorageService
   ) {}
 
-  getServicePoints(userId: string, serviceProviderId: string) {
+  getServicePoints(serviceProviderId: string) {
     return this.http.post(environment.servicePointUrl, {
-      userID: userId,
       providerServiceMapID: serviceProviderId,
     });
   }
 
-  getMMUDemographics(spID: any, spPSMID: any, userId: any) {
+  getMMUDemographics(spID: any, spPSMID: any) {
     // const spID = this.sessionstorage.getItem('servicePointID');
     // const spPSMID = this.sessionstorage.getItem('providerServiceID');
     // const userId = this.sessionstorage.getItem('userID');
@@ -49,7 +48,6 @@ export class ServicePointService {
     return this.http.post(environment.demographicsCurrentMasterUrl, {
       spID: spID,
       spPSMID: spPSMID,
-      userId: userId,
     });
   }
   // getMMUDemographics() {

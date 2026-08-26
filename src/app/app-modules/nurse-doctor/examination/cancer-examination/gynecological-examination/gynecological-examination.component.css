@@ -28,5 +28,18 @@ img {
     height: 60px;
 }
 .cell_postion{
-    padding-top: 8px !important;
+    padding-top: 10px !important;
+}
+.chipEdit{
+    background-color: #99cc00;
+}
+.span-style {
+    visibility: hidden;
+    position: absolute; 
+    overflow: hidden; 
+    width: 0px; 
+    height:0px;
+    border:none;
+    margin:0; 
+    padding:0;
 }

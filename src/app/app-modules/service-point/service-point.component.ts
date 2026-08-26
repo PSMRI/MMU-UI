@@ -191,7 +191,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
       JSON.stringify(serviceLineDetails)
     );
     if (serviceLineDetails.facilityID) {
-      sessionStorage.setItem('facilityID', serviceLineDetails.facilityID);
+      this.sessionstorage.setItem('facilityID', serviceLineDetails.facilityID);
     }
     this.servicePointForm.controls.servicePointID.reset();
     this.servicePointForm.controls.servicePointName.reset();
@@ -301,9 +301,8 @@ export class ServicePointComponent implements OnInit, DoCheck {
         );
         const spID = spIDs;
         const spPSMID = this.sessionstorage.getItem('providerServiceID');
-        const userId = this.sessionstorage.getItem('userID');
         this.servicePointService
-          .getMMUDemographics(spID, spPSMID, userId)
+          .getMMUDemographics(spID, spPSMID)
           .subscribe((res: any) => {
             if (res && res.statusCode === 200) {
               this.saveDemographicsToStorage(res.data);

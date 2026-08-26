@@ -78,8 +78,8 @@ export class GeneralPersonalHistoryComponent
   alcoholMasterData: any;
   previousSelectedAlcoholList: any = [];
   alcoholSelectList: any = [];
-  componentFlag: boolean = false;
-  enableAlert: boolean = true;
+  componentFlag = false;
+  enableAlert = true;
 
   allergyMasterData = [
     {
@@ -100,7 +100,7 @@ export class GeneralPersonalHistoryComponent
   snomedTerm: any;
   snomedCode: any;
   selectedSnomedTerm: any;
-  countForSearch: number = -1;
+  countForSearch = -1;
   currentLanguageSet: any;
 
   constructor(
@@ -200,6 +200,15 @@ export class GeneralPersonalHistoryComponent
           history.data.PersonalHistory
         ) {
           this.personalHistoryData = history.data.PersonalHistory;
+          if (
+            this.personalHistoryData &&
+            this.personalHistoryData.riskySexualPracticesStatus !== null
+          ) {
+            this.personalHistoryData.riskySexualPracticesStatus =
+              this.personalHistoryData.riskySexualPracticesStatus == '1'
+                ? true
+                : false;
+          }
           this.generalPersonalHistoryForm.patchValue(this.personalHistoryData);
           this.handlePersonalTobaccoHistoryData();
           this.handlePersonalAlcoholHistoryData();
@@ -252,9 +261,7 @@ export class GeneralPersonalHistoryComponent
 
         this.allerySelectList.push(resultAllergy.slice());
       }
-
       allergicList.push(this.initAllergyList());
-
       if (
         this.personalHistoryData !== null &&
         this.personalHistoryData !== undefined
@@ -311,6 +318,7 @@ export class GeneralPersonalHistoryComponent
       );
       this.alcoholSelectList.push(resultAlcohol.slice());
     }
+
     alcoholList.push(this.initAlcoholList());
 
     if (
@@ -325,12 +333,23 @@ export class GeneralPersonalHistoryComponent
     const formArray = this.generalPersonalHistoryForm.controls[
       'tobaccoList'
     ] as FormArray;
+
     if (this.personalHistoryData && this.personalHistoryData.tobaccoList) {
       const temp = this.personalHistoryData.tobaccoList.slice();
+      // Ensure form array length matches data
+      while (formArray.length < temp.length) {
+        formArray.push(this.initTobaccoList());
+      }
+      while (formArray.length > temp.length) {
+        formArray.removeAt(formArray.length - 1);
+      }
 
       for (let i = 0; i < temp.length; i++) {
         const tobaccoType = this.tobaccoMasterData.filter((item: any) => {
-          return item.habitValue === temp[i].tobaccoUseType;
+          return typeof temp[i].tobaccoUseType === 'string'
+            ? item.habitValue === temp[i].tobaccoUseType
+            : item.personalHabitTypeID ===
+                temp[i].tobaccoUseType.personalHabitTypeID;
         });
 
         if (tobaccoType.length > 0) {
@@ -350,26 +369,32 @@ export class GeneralPersonalHistoryComponent
           }
         }
 
-        if (temp[i].tobaccoUseType) {
-          const k: any = formArray.get('' + i);
+        const k: any = formArray.get('' + i);
+        k.reset();
+        k?.get('number')?.disable();
+        k?.get('perDay')?.disable();
+        k?.get('duration')?.disable();
+        k?.get('durationUnit')?.disable();
+        k?.markAsUntouched();
+        if (k) {
           k.patchValue(temp[i]);
           k.markAsDirty();
           k.markAsTouched();
           this.filterTobaccoList(temp[i].tobaccoUseType, i);
+
           if (
             k?.get('number')?.value !== null &&
             k?.get('perDay')?.value !== null &&
             k?.get('duration')?.value !== null &&
             k?.get('durationUnit')?.value !== null
           ) {
-            k?.get('number')?.enable();
-            k?.get('perDay')?.enable();
-            k?.get('duration')?.enable();
-            k?.get('durationUnit')?.enable();
+            k.get('number')?.enable();
+            k.get('perDay')?.enable();
+            k.get('duration')?.enable();
+            k.get('durationUnit')?.enable();
           }
         }
-
-        if (i + 1 < temp.length) this.addTobacco();
+        if (i + 1 < temp.length) this.addTobacco(true);
       }
     }
   }
@@ -380,6 +405,14 @@ export class GeneralPersonalHistoryComponent
     ] as FormArray;
     if (this.personalHistoryData && this.personalHistoryData.alcoholList) {
       const temp = this.personalHistoryData.alcoholList.slice();
+
+      while (formArray.length < temp.length) {
+        formArray.push(this.initAlcoholList());
+      }
+      // Optionally, remove extra FormGroups if any
+      while (formArray.length > temp.length) {
+        formArray.removeAt(formArray.length - 1);
+      }
 
       for (let i = 0; i < temp.length; i++) {
         const alcoholType = this.alcoholMasterData.filter((item: any) => {
@@ -414,7 +447,7 @@ export class GeneralPersonalHistoryComponent
           }
         }
 
-        if (i + 1 < temp.length) this.addAlcohol();
+        if (i + 1 < temp.length) this.addAlcohol(true);
       }
     }
   }
@@ -423,8 +456,20 @@ export class GeneralPersonalHistoryComponent
     const formArray = this.generalPersonalHistoryForm.controls[
       'allergicList'
     ] as FormArray;
+
     if (this.personalHistoryData && this.personalHistoryData.allergicList) {
       const temp = this.personalHistoryData.allergicList.slice();
+
+      while (formArray.length > 0) {
+        formArray.removeAt(0);
+      }
+
+      for (let i = 0; i < temp.length; i++) {
+        formArray.push(this.initAllergyList());
+      }
+
+      this.allerySelectList = [];
+      this.previousSelectedAlleryList = [];
 
       for (let i = 0; i < temp.length; i++) {
         const allergyType = this.allergyMasterData.filter(item => {
@@ -444,19 +489,35 @@ export class GeneralPersonalHistoryComponent
 
         if (temp[i].otherAllergicReaction) temp[i].enableOtherAllergy = true;
 
+        const selectedAllergies = temp
+          .filter((t: any, idx: any) => idx !== i && t.allergyType)
+          .map((t: any) => t.allergyType.allergyType);
+
+        const availableAllergies = this.allergyMasterData.filter(
+          item => !selectedAllergies.includes(item.allergyType)
+        );
+
+        this.allerySelectList.push(availableAllergies.slice());
+
         if (temp[i].allergyType) {
-          const k: any = formArray.get('' + i);
-          k.patchValue(temp[i]);
-          k.markAsTouched();
-          this.filterAlleryList(temp[i].allergyType, i);
+          this.previousSelectedAlleryList[i] = temp[i].allergyType;
         }
 
-        if (i + 1 < temp.length) this.addAllergy();
+        const k: any = formArray.get('' + i);
+        if (k) {
+          k.patchValue(temp[i]);
+          k.markAsTouched();
+
+          if (temp[i].allergyType) {
+            k.get('snomedTerm')?.enable();
+            k.get('typeOfAllergicReactions')?.enable();
+          }
+        }
       }
     }
   }
 
-  addTobacco() {
+  addTobacco(avoidNullValue?: boolean) {
     const tobaccoList = <FormArray>(
       this.generalPersonalHistoryForm.controls['tobaccoList']
     );
@@ -474,7 +535,9 @@ export class GeneralPersonalHistoryComponent
       });
       this.tobaccoSelectList.push(result.slice());
     }
-    tobaccoList.push(this.initTobaccoList());
+    if (!avoidNullValue) {
+      tobaccoList.push(this.initTobaccoList());
+    }
   }
 
   filterTobaccoList(
@@ -496,13 +559,12 @@ export class GeneralPersonalHistoryComponent
         }
       });
     }
-
     this.tobaccoSelectList.map((item: any, t: any) => {
       const index = item.indexOf(tobacco);
-      if (index !== -1 && t !== i && tobacco.tobaccoUseType !== 'Other')
+      if (index !== -1 && t !== i && tobacco.tobaccoUseType !== 'Other') {
         item = item.splice(index, 1);
+      }
     });
-
     this.previousSelectedTobaccoList[i] = tobacco;
     //To disable the fields
     if (tobaccoForm?.value?.tobaccoUseType) {
@@ -555,7 +617,7 @@ export class GeneralPersonalHistoryComponent
     this.generalPersonalHistoryForm.markAsDirty();
   }
 
-  addAlcohol() {
+  addAlcohol(avoidNullValue?: boolean) {
     const alcoholList = <FormArray>(
       this.generalPersonalHistoryForm.controls['alcoholList']
     );
@@ -572,7 +634,9 @@ export class GeneralPersonalHistoryComponent
       });
       this.alcoholSelectList.push(result.slice());
     }
-    alcoholList.push(this.initAlcoholList());
+    if (!avoidNullValue) {
+      alcoholList.push(this.initAlcoholList());
+    }
   }
 
   filterAlcoholList(
@@ -651,7 +715,7 @@ export class GeneralPersonalHistoryComponent
       });
   }
 
-  addAllergy() {
+  addAllergy(avoidNullValue?: boolean) {
     this.selectedSnomedTerm = null;
     const allergicList = <FormArray>(
       this.generalPersonalHistoryForm.controls['allergicList']
@@ -670,7 +734,9 @@ export class GeneralPersonalHistoryComponent
         });
         this.allerySelectList.push(result.slice());
       }
-      allergicList.push(this.initAllergyList());
+      if (!avoidNullValue) {
+        allergicList.push(this.initAllergyList());
+      }
     }
   }
 
