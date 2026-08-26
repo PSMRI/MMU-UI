@@ -529,4 +529,6 @@ export const environment = {
   advanceElasticSearchUrl: `${MMU_API}registrar/advancedSearchES`,
   isSMSFeatureEnabled: false,
   campHubConnectInfoAPI: `${COMMON_API}public/connect/info`,
+  nikshayBeneficiaryCsvUrl: `${MMU_API}stopTb/nikshay/exportBeneficiariesCsv`,
+  nikshayImportResultsCsvUrl: `${MMU_API}stopTb/nikshay/importResultsCsv`,
 };
