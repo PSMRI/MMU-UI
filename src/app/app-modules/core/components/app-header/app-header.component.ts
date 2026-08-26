@@ -80,6 +80,7 @@ export class AppHeaderComponent implements OnInit {
   isAuthenticated!: boolean;
   roles: any;
   helpURL: string = environment.licenseURL;
+  isMMUOfflineQRCode = environment.isMMUOfflineQRCode;
   filteredNavigation: any;
   isConnected = true;
   status!: any;

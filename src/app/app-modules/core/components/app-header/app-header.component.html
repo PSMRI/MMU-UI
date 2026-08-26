@@ -159,7 +159,7 @@
             {{ currentLanguageSet?.common?.report }}
           </button>
         </li>
-        <li class="nav-item" *ngIf="isLast">
+        <li class="nav-item" *ngIf="isLast && isMMUOfflineQRCode">
           <button class="nav-btn" mat-button routerLink="/nikshay-sync" routerLinkActive="active">
             Nikshay Sync
           </button>
