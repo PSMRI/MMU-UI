@@ -22,7 +22,8 @@
 
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
+import { of } from 'rxjs';
 import { AuthService } from './auth.service';
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -37,7 +38,8 @@ export class AuthGuard implements CanActivate {
         res && res.statusCode === 200 && res.data
           ? true
           : this.router.createUrlTree(['/login'])
-      )
+      ),
+      catchError(() => of(this.router.createUrlTree(['/login'])))
     );
   }
 }
