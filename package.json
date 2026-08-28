@@ -37,7 +37,7 @@
     "@angular/material": "^16.2.12",
     "@angular/material-moment-adapter": "^16.2.14",
     "@angular/platform-browser": "^16.2.0",
-    "@angular/platform-browser-dynamic": "^16.2.0",
+    "@angular/platform-browser-dynamic": "^22.0.4",
     "@angular/router": "^16.2.0",
     "@types/file-saver": "^2.0.7",
     "@types/jquery": "^3.5.30",
