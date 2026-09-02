@@ -50,7 +50,7 @@ const COMMON_API_OPEN = `${commonIP}:8083/`;
 const COMMON_API = `${commonIP}:8083/`;
 const MMU_API = `${mmuIP}:8087/`;
 const TM_API = `${tmIP}:8089/`;
-const COMMON_API_OPEN_SYNC = `${SERVER_IP}:8083/`;
+const COMMON_API_OPEN_SYNC = `https://amritdemo.piramalswasthya.org/common-api/`;
 const SCHEDULER_API = `${schedulerIP}:8088/`;
 const FHIR_API = `${FHIRIP}:8093/`;
 const IDENTITY_API = `${identityIP}:8094/`;
@@ -376,6 +376,9 @@ export const environment = {
   syncDataUploadUrl: `${MMU_API}dataSyncActivity/van-to-server`,
   syncDataDownloadUrl: `${MMU_API}dataSyncActivity/startMasterDownload`,
   syncDownloadProgressUrl: `${MMU_API}dataSyncActivity/checkMastersDownloadProgress`,
+  // down-sync : central -> local
+  startDownSyncUrl: `${MMU_API}dataSyncActivity/startDownSync`,
+  checkDownSyncProgressUrl: `${MMU_API}dataSyncActivity/checkDownSyncProgress`,
   getNcdScreeningVisitCountUrl: `${MMU_API}NCD/getNcdScreeningVisitCount/`,
   getVanDetailsForMasterDownloadUrl: `${MMU_API}dataSyncActivity/getVanDetailsForMasterDownload`,
 
