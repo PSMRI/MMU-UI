@@ -296,11 +296,10 @@ export class WorkareaComponent
    * shared flag would let one sync's progress bar be cleared by the other.
    * ------------------------------------------------------------------ */
   downSyncInProgress = false;
-  downSyncProgressValue = 0;
   downSyncStatus: any = null;
   downSyncFailedTables: string[] = [];
+  downSyncGroups: any[] = [];
   downSyncFinished = false;
-  downSyncIntervalRef: any;
 
   startDownSync() {
     const serviceLineDetails =
@@ -322,9 +321,9 @@ export class WorkareaComponent
       .subscribe(result => {
         if (!result) return;
 
-        this.downSyncProgressValue = 0;
         this.downSyncStatus = null;
         this.downSyncFailedTables = [];
+        this.downSyncGroups = [];
         this.downSyncFinished = false;
 
         const reqObj = {
@@ -334,25 +333,64 @@ export class WorkareaComponent
           ),
         };
 
+        this.downSyncInProgress = true;
+
         this.dataSyncService.startDownSync(reqObj).subscribe(
           (res: any) => {
-            if (res && res.statusCode === 200) {
-              this.downSyncInProgress = true;
-              this.downSyncIntervalRef = setInterval(() => {
-                this.getDownSyncProgress();
-              }, 2000);
+            this.downSyncInProgress = false;
+
+            if (res && res.statusCode === 200 && res.data) {
+              const status =
+                typeof res.data === 'string' ? JSON.parse(res.data) : res.data;
+
+              this.downSyncStatus = status;
+              this.downSyncFailedTables = this.parseFailedTables(
+                status.failedTables
+              );
+              this.downSyncGroups = this.buildGroups(status.tableResults);
+              this.downSyncFinished = true;
+
+              const failedTables = this.downSyncFailedTables.length;
+              const failedRecords = status.failedRecordCount || 0;
+              const conflicts = status.conflicts || 0;
+              const outstanding = status.outstandingConflicts || 0;
+
+              if (failedTables > 0 || failedRecords > 0) {
+                const parts = [];
+                if (failedTables > 0) parts.push(failedTables + ' table(s)');
+                if (failedRecords > 0) parts.push(failedRecords + ' record(s)');
+                this.confirmationService.alert(
+                  'Down-sync finished, but ' + parts.join(' and ') + ' failed',
+                  'error'
+                );
+              } else if (conflicts > 0 || outstanding > 0) {
+                const pending = outstanding || conflicts;
+                this.confirmationService.alert(
+                  'Down-sync finished. ' +
+                    pending +
+                    (pending === 1
+                      ? ' record was changed here and at central, so it was left as it is and needs review.'
+                      : ' records were changed here and at central, so they were left as they are and need review.'),
+                  'warn'
+                );
+              } else {
+                this.confirmationService.alert(
+                  'Down-sync finished successfully'
+                );
+              }
             } else {
               this.confirmationService.alert(
                 res && res.errorMessage
                   ? res.errorMessage
-                  : 'Could not start the down-sync',
+                  : 'Could not run the down-sync',
                 'error'
               );
             }
           },
           () => {
+            this.downSyncInProgress = false;
             this.confirmationService.alert(
-              'Could not reach the server to start the down-sync',
+              'Could not reach the server to run the down-sync',
               'error'
             );
           }
@@ -360,69 +398,64 @@ export class WorkareaComponent
       });
   }
 
-  getDownSyncProgress() {
-    this.dataSyncService.downSyncProgress().subscribe(
-      (res: any) => {
-        if (res && res.statusCode === 200 && res.data) {
-          // the API returns the status map as a JSON string
-          const status =
-            typeof res.data === 'string' ? JSON.parse(res.data) : res.data;
+  private buildGroups(tableResults: any[]): any[] {
+    if (!tableResults || tableResults.length === 0) return [];
 
-          this.downSyncStatus = status;
-          this.downSyncProgressValue = status.percentage || 0;
-          this.downSyncFailedTables = this.parseFailedTables(
-            status.failedTables
-          );
-
-          // inProgress is the authoritative end signal: a run that fails part way
-          // stops without ever reaching 100%.
-          if (status.inProgress === false) {
-            this.stopDownSyncPolling();
-            this.downSyncFinished = true;
-            this.confirmationService.alert(
-              this.downSyncFailedTables.length > 0
-                ? 'Down-sync finished with ' +
-                    this.downSyncFailedTables.length +
-                    ' failed table(s)'
-                : 'Down-sync finished successfully'
-            );
-          }
-        } else {
-          this.stopDownSyncPolling();
-          this.confirmationService.alert(
-            res && res.errorMessage
-              ? res.errorMessage
-              : 'Could not read the down-sync progress',
-            'error'
-          );
-        }
-      },
-      () => {
-        this.stopDownSyncPolling();
-        this.confirmationService.alert(
-          'Lost contact with the server while the down-sync was running',
-          'error'
-        );
+    const byGroup = new Map<string, any>();
+    for (const t of tableResults) {
+      const name = t.groupName || 'Other';
+      if (!byGroup.has(name)) {
+        byGroup.set(name, {
+          groupName: name,
+          total: 0,
+          succeeded: 0,
+          failedTables: 0,
+          failedRecords: 0,
+          conflicts: 0,
+        });
       }
-    );
+      const g = byGroup.get(name);
+      g.total++;
+      if (t.status === 'FAILED') g.failedTables++;
+      // PARTIAL means the table was delivered but some of its records were not,
+      // so it must not be counted as a clean success
+      if (t.status === 'SUCCESS') g.succeeded++;
+      // CONFLICT means delivered, so the table still counts towards the tally
+      if (t.status === 'CONFLICT') g.succeeded++;
+      g.failedRecords += t.failedRecords || 0;
+      g.conflicts += t.conflicts || 0;
+    }
+
+    const groups: any[] = [];
+    byGroup.forEach((g: any) => {
+      let status = 'success';
+      if (g.failedTables === g.total) {
+        status = 'failed';
+      } else if (g.failedTables > 0 || g.failedRecords > 0) {
+        status = 'partial';
+      } else if (g.conflicts > 0) {
+        status = 'conflict';
+      }
+      groups.push({ ...g, status });
+    });
+    return groups;
   }
 
   /** the API sends the failed tables as the toString() of a list, e.g. "[a, b]" */
   private parseFailedTables(failedTables: any): string[] {
     if (!failedTables) return [];
-    return String(failedTables)
-      .replace(/^\[|\]$/g, '')
-      .split(',')
-      .map((t: string) => t.trim())
-      .filter((t: string) => t.length > 0);
+    return (
+      String(failedTables)
+        .replace(/^\[|\]$/g, '')
+        // the API joins the names with ' | ' (see DownSyncDataFromServerImpl)
+        .split(/\s*[|,]\s*/)
+        .map((t: string) => t.trim())
+        .filter((t: string) => t.length > 0)
+    );
   }
 
   private stopDownSyncPolling() {
     this.downSyncInProgress = false;
-    if (this.downSyncIntervalRef) {
-      clearInterval(this.downSyncIntervalRef);
-      this.downSyncIntervalRef = undefined;
-    }
   }
 
   canDeactivate() {
