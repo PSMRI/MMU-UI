@@ -73,11 +73,6 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
     password: ['', Validators.required],
   });
 
-  /**
-   * Services whose users are allowed to run the data sync.  Central models the
-   * StopTB deployment under its own service, so matching 'MMU' alone locks
-   * those users out of the Data Sync screen.
-   */
   private readonly dataSyncServices = ['MMU', 'Stop TB', 'StopTB'];
 
   private isDataSyncService(serviceName: any): boolean {
@@ -88,7 +83,6 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
     );
   }
 
-  /** Privilege entries of previlegeObj that permit the data sync. */
   private getDataSyncPrivileges(previlegeObj: any): any[] {
     if (!Array.isArray(previlegeObj)) return [];
     return previlegeObj.filter((item: any) =>
