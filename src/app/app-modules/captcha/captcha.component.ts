@@ -44,6 +44,7 @@ export class CaptchaComponent implements AfterViewInit, OnDestroy {
         });
       }
     } catch (error) {
+
     }
   }
 
