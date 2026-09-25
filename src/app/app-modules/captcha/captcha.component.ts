@@ -44,7 +44,7 @@ export class CaptchaComponent implements AfterViewInit, OnDestroy {
         });
       }
     } catch (error) {
-      console.error('Error loading Turnstile script:', error);
+
     }
   }
 

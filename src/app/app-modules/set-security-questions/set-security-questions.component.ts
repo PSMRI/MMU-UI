@@ -77,7 +77,9 @@ export class SetSecurityQuestionsComponent implements OnInit {
     this.Q_array_two = response.data;
   }
 
-  handleError(response: any) {}
+
+  handleError(response: any) {
+  }
 
   switch() {
     this.passwordSection = true;
@@ -110,6 +112,7 @@ export class SetSecurityQuestionsComponent implements OnInit {
   selectedQuestions: any = [];
 
   updateQuestions(selectedques: any, position: any) {
+
     if (this.selectedQuestions.indexOf(selectedques) === -1) {
       this.selectedQuestions[position] = selectedques;
       if (position === 0) {
