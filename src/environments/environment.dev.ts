@@ -68,6 +68,7 @@ const enableCaptcha = false;
 export const environment = {
   production: true,
   isMMUOfflineSync: false,
+  isMMUOfflineQRCode: false,
   encKey: sessionStorageEncKey,
   tracking: {
     platform: 'matomo',
@@ -527,4 +528,5 @@ export const environment = {
   elasticSearchUrl: `${MMU_API}registrar/quickSearchES`,
   advanceElasticSearchUrl: `${MMU_API}registrar/advancedSearchES`,
   isSMSFeatureEnabled: false,
+  campHubConnectInfoAPI: `${COMMON_API}public/connect/info`,
 };

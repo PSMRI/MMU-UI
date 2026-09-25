@@ -57,7 +57,6 @@ export class OpenPreviousVisitDetailsComponent implements OnInit {
   loadPreviousVisitDetails() {
     this.doctorService.getMMUHistory().subscribe(
       (data: any) => {
-        console.log('data', data);
         if (data.statusCode === 200) {
           this.previousVisitData = data.data;
           this.getEachVisitData();
@@ -98,16 +97,13 @@ export class OpenPreviousVisitDetailsComponent implements OnInit {
       page: this.previousHistoryActivePage,
       itemsPerPage: this.previousHistoryRowsPerPage,
     });
-    console.log('previous data', this.previousVisitData);
   }
 
   previousHistoryPagedList: any = [];
   previousHistoryPageChanged(event: any): void {
-    console.log('called', event);
     for (let i = 0; i < 5 && i < this.previousVisitData.length; i++) {
       this.previousHistoryPagedList.push(this.previousVisitData[i]);
     }
-    console.log('list', this.previousHistoryPagedList);
   }
 
   filterHistory(searchTerm?: string) {

@@ -33,7 +33,6 @@ export class CaptchaComponent implements AfterViewInit, OnDestroy {
 
       const captchaElement = this.captchaRef?.nativeElement;
       if (!captchaElement) {
-        console.error('CAPTCHA container element not found');
         return;
       }
 
@@ -45,7 +44,6 @@ export class CaptchaComponent implements AfterViewInit, OnDestroy {
         });
       }
     } catch (error) {
-      console.error('Failed to initialize CAPTCHA:', error);
     }
   }
 

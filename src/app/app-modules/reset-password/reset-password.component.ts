@@ -69,7 +69,6 @@ export class ResetPasswordComponent {
   }
 
   handleSuccess(data: any) {
-    console.log(data);
     if (
       data !== undefined &&
       data !== null &&
@@ -99,13 +98,10 @@ export class ResetPasswordComponent {
   }
 
   splitQuestionAndQuestionID() {
-    console.log('Q n A', this.securityQuestions);
     for (let i = 0; i < this.securityQuestions.length; i++) {
       this.questions.push(this.securityQuestions[i].question);
       this.questionId.push(this.securityQuestions[i].questionId);
     }
-    console.log('questions', this.questions);
-    console.log('questionID', this.questionId);
     this.showMyQuestion();
   }
 
@@ -114,7 +110,6 @@ export class ResetPasswordComponent {
   counter = 0;
 
   showMyQuestion() {
-    console.log('this is question' + (this.counter + 1));
     this.bufferQuestion = this.questions[this.counter];
     this.bufferQuestionId = this.questionId[this.counter];
   }
@@ -135,7 +130,6 @@ export class ResetPasswordComponent {
         this.checking();
       }
     }
-    console.log('user Final Answers are:', this.userFinalAnswers);
   }
 
   checking() {

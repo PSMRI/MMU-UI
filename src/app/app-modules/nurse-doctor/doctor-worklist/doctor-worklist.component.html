@@ -10,7 +10,7 @@
           name="filterTerm"
           [(ngModel)]="filterTerm"
           (keyup)="filterBeneficiaryList(filterTerm)" />
-        <button class="go" (click)="filterBeneficiaryList(filterTerm)">
+        <button type="button" class="go" (click)="filterBeneficiaryList(filterTerm)">
           <span class="material-icons">search</span>
         </button>
       </div>

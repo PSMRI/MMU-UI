@@ -47,11 +47,11 @@ export class IotcomponentComponent implements OnInit, DoCheck {
   current_language_set: any;
   procedure: any;
   stripCode: any;
-  msgCalibration: boolean = false;
-  startedCalibration: boolean = false;
-  stoppedCalibration: boolean = false;
-  statusCalibration: boolean = false;
-  stripShowMsg: boolean = false;
+  msgCalibration = false;
+  startedCalibration = false;
+  stoppedCalibration = false;
+  statusCalibration = false;
+  stripShowMsg = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public input: any,
@@ -71,7 +71,6 @@ export class IotcomponentComponent implements OnInit, DoCheck {
     this.statusCalibration = false;
     this.stoppedCalibration = false;
     this.errorMsg = undefined;
-    console.log('input', this.input);
     this.startAPI = this.input['startAPI'];
     this.output = this.input['output'];
     this.procedure = this.input['procedure'];
@@ -91,7 +90,6 @@ export class IotcomponentComponent implements OnInit, DoCheck {
       });
 
       dialogRef.afterClosed().subscribe(result => {
-        console.log('calibration', result);
         if (result !== null) {
           this.stripCode = result;
           this.msgCalibration = true;
@@ -115,7 +113,6 @@ export class IotcomponentComponent implements OnInit, DoCheck {
     try {
       this.service.startAPI(this.procedure.value.calibrationStartAPI).subscribe(
         (res: any) => {
-          console.log('dfasdas', res);
           if (res.status === 202) {
             this.progressMsg = res['_body']['message'];
             this.startedCalibration = true;
@@ -144,7 +141,6 @@ export class IotcomponentComponent implements OnInit, DoCheck {
     );
     this.service.statusAPI(statusAPI).subscribe(
       (res: any) => {
-        console.log('dfasdas', res);
         if (res.status === 202 || res.status === 200) {
           this.stripShowMsg = false;
           this.statusCalibration = true;
@@ -195,7 +191,6 @@ export class IotcomponentComponent implements OnInit, DoCheck {
     try {
       this.service.startAPI(this.startAPI).subscribe(
         (res: any) => {
-          console.log('dfasdas', res);
           if (res.status === 202) {
             this.progressMsg = res['_body']['message'];
             this.getstatus();
@@ -222,7 +217,6 @@ export class IotcomponentComponent implements OnInit, DoCheck {
   getstatus() {
     this.service.statusAPI(this.startAPI + '/status').subscribe(
       (res: any) => {
-        console.log('dfasdas', res);
         if (res.status === 200) {
           clearTimeout(this.statuscall);
 
@@ -257,7 +251,6 @@ export class IotcomponentComponent implements OnInit, DoCheck {
       if (this.statuscall !== undefined) {
         clearTimeout(this.statuscall);
         this.service.endAPI(this.startAPI).subscribe((res: any) => {
-          console.log('dfasdas', res);
           if (res.status === 202) {
             //do something
           } else {
@@ -276,7 +269,6 @@ export class IotcomponentComponent implements OnInit, DoCheck {
         .endCalibrationAPI(this.procedure.value.calibrationEndAPI)
         .subscribe(
           (res: any) => {
-            console.log('dfasdas', res);
             if (res.status === 202 || res.status === 200) {
               //do something
               this.stoppedCalibration = true;
@@ -299,7 +291,6 @@ export class IotcomponentComponent implements OnInit, DoCheck {
         .endCalibrationAPI(this.procedure.value.calibrationEndAPI)
         .subscribe(
           (res: any) => {
-            console.log('dfasdas', res);
             if (res.status === 202 || res.status === 200) {
               //do something
               this.stoppedCalibration = true;
