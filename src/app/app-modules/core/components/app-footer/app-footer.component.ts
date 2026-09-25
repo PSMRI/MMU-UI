@@ -40,7 +40,6 @@ export class AppFooterComponent implements OnInit, DoCheck {
     this.assignSelectedLanguage();
     this.today = new Date();
     this.year = this.today.getFullYear();
-    console.log('inside footer', this.year);
     setInterval(() => {
       this.status = navigator.onLine;
     }, 1000);

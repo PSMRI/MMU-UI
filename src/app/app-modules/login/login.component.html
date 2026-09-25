@@ -27,6 +27,7 @@
                 <input
                   matInput
                   allowText="usernameValidator"
+                  autocomplete="username"
                   id="userID"
                   formControlName="userName"
                   name="userName"
@@ -50,7 +51,7 @@
               <mat-form-field class="full-width text-input-fullwidth">
                 <mat-label class="mat-label-text">Enter Password</mat-label>
                 <input
-                  autocomplete="off"
+                  autocomplete="current-password"
                   matInput
                   [type]="dynamictype"
                   id="password"
@@ -114,6 +115,18 @@
               routerLink="/reset-password"
               >Forgot Password?</a
             >
+          </div>
+        </div>
+        <div class="row m-t-10" *ngIf="isMMUOfflineQRCode">
+          <div class="col-xs-12 col-sm-12">
+            <button
+              mat-raised-button
+              type="button"
+              class="qr-btn"
+              (click)="openQrDialog()">
+              <mat-icon class="qr-btn-icon">qr_code_2</mat-icon>
+              Generate QR Code
+            </button>
           </div>
         </div>
       </form>

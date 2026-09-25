@@ -1,0 +1,125 @@
+.qr-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 10px 12px 24px;
+  background: linear-gradient(135deg, #0277bd, #01579b);
+  color: white;
+  border-radius: 4px 4px 0 0;
+}
+
+.qr-dialog-title {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.qr-close-btn {
+  background: rgba(0, 0, 0, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.qr-close-btn .material-icons {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.qr-close-btn:hover {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.qr-dialog-content {
+  padding: 16px 24px 8px !important;
+  min-width: 420px;
+}
+
+.qr-subtitle {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+/* ── Detection status row ── */
+
+.detect-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.detect-row.warn {
+  background: #fff8e1;
+  color: #6d4c00;
+}
+
+.detect-row.ok {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
+.detect-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* ── QR result ── */
+
+.qr-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 0 8px;
+  gap: 16px;
+}
+
+.url-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #e3f2fd;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0b69b2;
+  word-break: break-all;
+}
+
+.url-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.url-text {
+  font-family: monospace;
+}
+
+.qr-image {
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  padding: 8px;
+  background: #fff;
+}
+
+.btn-icon {
+  vertical-align: middle;
+  font-size: 18px;
+  margin-right: 4px;
+}

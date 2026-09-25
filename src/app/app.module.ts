@@ -32,8 +32,8 @@ import { AudioRecordingService } from './app-modules/nurse-doctor/shared/service
 import { NgxPaginationModule } from 'ngx-pagination';
 // import { SharedModule } from './app-modules/core/shared/shared/shared.module';
 import { RegistrarService } from './app-modules/registrar/shared/services/registrar.service';
-import { DataSYNCModule } from './app-modules/data-sync/dataSync.module';
 import { SharedModule } from './app-modules/core/components/shared/shared.module';
+import { CampHubQrCodeComponent } from './app-modules/data-sync/camp-hub-qr-code/camp-hub-qr-code.component';
 import { CommonModule } from '@angular/common';
 import { CaptchaComponent } from './app-modules/captcha/captcha.component';
 import { MatChipsModule } from '@angular/material/chips';
@@ -50,6 +50,7 @@ import { TrackingModule } from 'Common-UI/src/tracking';
     ResetPasswordComponent,
     TmLogoutComponent,
     CaptchaComponent,
+    CampHubQrCodeComponent,
   ],
   imports: [
     CommonModule,

@@ -50,6 +50,7 @@ const enableCaptcha = <%= ENABLE_CAPTCHA %>;
 export const environment = {
   production: true,
   isMMUOfflineSync: true,
+  isMMUOfflineQRCode: '<%= QRCODE_ENABLED %>',
   encKey: sessionStorageEncKey,
 
   tracking: {
@@ -505,6 +506,11 @@ export const environment = {
   getSMStypes_url:`${COMMON_API}sms/getSMSTypes`,
   sendSMS_url:`${COMMON_API}sms/sendSMS`,
 
-  getUserId: `${COMMON_API}user/userName/`,
+  getUserId: `${COMMON_API}user/checkUserName/`,
   checkUsersignExistUrl: `${ADMIN_API}signature1/signexist/`,
+  isEnableES: false,
+  campHubConnectInfoAPI: `${COMMON_API}public/connect/info`,
+  elasticSearchUrl: `${MMU_API}registrar/quickSearchES`,
+  advanceElasticSearchUrl: `${MMU_API}registrar/advancedSearchES`,
+
 };
