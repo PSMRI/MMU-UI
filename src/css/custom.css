@@ -3,6 +3,24 @@
   src: url(../fonts/SF-UI-Display/SF-UI-Display-Regular.otf);
 }
 
+/* Digit-only override (QA #6 "one digit looks bigger than another").
+   SF-UI-Display draws its round digits (0 3 6 8 9) noticeably taller than the
+   flat ones (1 4 7) — ~3.4% height spread that reads as uneven numbers in dates
+   and IDs. tabular-nums fixes their width, not this height. Roboto's digits are
+   far more uniform (~2.7% spread) and its cap height matches SF closely, so the
+   numbers blend in. This face reuses the body family name but with
+   `unicode-range` limited to 0-9, and is declared AFTER the base face so the
+   browser uses Roboto for digits only and SF-UI-Display for everything else.
+   Only the Regular weight is provided (like the SF face above): the family has a
+   single outline, so bold/medium text is synthesised by the browser — routing
+   digits through Roboto-Regular too keeps them in step with the letters. */
+@font-face {
+  font-family: SF-UI-Display-Regular;
+  src: url(../fonts/Roboto/Roboto-Regular.ttf);
+  font-weight: 400;
+  unicode-range: U+0030-0039;
+}
+
 @font-face {
   font-family: SF-UI-Display-Medium;
   src: url(../fonts/SF-UI-Display/SF-UI-Display-Medium.otf);
