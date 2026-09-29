@@ -240,6 +240,18 @@ export class WorkareaComponent
   }
 
   nextStep(): void {
+    // Visit Details: block advancing (and surface the inline error) when the
+    // mandatory "Reason for Visit" is empty.
+    if (this.activeStepKey === 'visitDetails') {
+      const visitDetailsForm = this.patientVisitForm?.get(
+        'patientVisitDetailsForm'
+      ) as FormGroup;
+      const reason = visitDetailsForm?.get('visitReason');
+      if (reason && reason.enabled && reason.invalid) {
+        reason.markAsTouched();
+        return;
+      }
+    }
     this.goToStepIndex(this.currentStep + 1);
   }
 

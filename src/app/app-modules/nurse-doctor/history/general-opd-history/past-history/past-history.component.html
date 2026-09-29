@@ -117,6 +117,7 @@
                 id="illnessTimePeriodUnit-{{ i }}"
                 name="timePeriodUnit"
                 formControlName="timePeriodUnit"
+                [zDisabled]="pastIllness.get('timePeriodUnit')?.disabled"
                 (zSelectionChange)="
                   validateDuration(pastIllness);
                   trackFieldInteraction('Time Period Unit')
@@ -262,6 +263,7 @@
                 id="surgeryTimePeriodUnit-{{ i }}"
                 name="timePeriodUnit"
                 formControlName="timePeriodUnit"
+                [zDisabled]="pastSurgery.get('timePeriodUnit')?.disabled"
                 (zSelectionChange)="
                   validateDuration(pastSurgery);
                   trackFieldInteraction('Time Period Unit')

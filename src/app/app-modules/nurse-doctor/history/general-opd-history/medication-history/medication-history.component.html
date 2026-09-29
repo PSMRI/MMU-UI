@@ -80,6 +80,7 @@
                 id="timePeriodUnit-{{ i }}"
                 formControlName="timePeriodUnit"
                 name="timePeriodAgoUnit"
+                [zDisabled]="medicationHistory.get('timePeriodUnit')?.disabled"
                 (zSelectionChange)="validateDuration(medicationHistory)">
                 <z-select-item [zValue]="'Days'">Day(s)</z-select-item>
                 <z-select-item [zValue]="'Weeks'">Week(s)</z-select-item>

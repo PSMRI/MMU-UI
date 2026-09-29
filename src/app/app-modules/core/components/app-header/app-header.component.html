@@ -141,7 +141,11 @@
     *ngFor="let item of filteredNavigation"
     class="inline-flex items-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground no-underline transition-colors hover:text-foreground"
     [routerLink]="[item.link]"
-    routerLinkActive="bg-background! text-foreground! shadow-sm!">
+    [ngClass]="{
+      'bg-background!': isNavItemActive(item),
+      'text-foreground!': isNavItemActive(item),
+      'shadow-sm!': isNavItemActive(item)
+    }">
     {{ item.label }}
   </a>
   <a

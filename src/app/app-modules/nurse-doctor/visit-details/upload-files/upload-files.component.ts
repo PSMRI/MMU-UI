@@ -124,28 +124,26 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
       const fileNameExtension = this.file.name.split('.');
       const fileName = fileNameExtension[0];
       if (fileName !== undefined && fileName !== null && fileName !== '') {
-        const validFormat = this.checkExtension(this.file);
-        if (!validFormat) {
+        if (this.fileList[0].size / 1000 / 1000 > this.maxFileSize) {
+          // Check size first, so an oversized file always shows the size message
+          // regardless of its name or extension.
+          this.confirmationService.alert(
+            this.currentLanguageSet.fileSizeShouldNotExceed +
+              ' ' +
+              this.maxFileSize +
+              ' ' +
+              this.currentLanguageSet.mb,
+            'error'
+          );
+        } else if (!this.checkExtension(this.file)) {
           this.confirmationService.alert(
             this.currentLanguageSet.invalidFileExtensionSupportedFileFormats,
             'error'
           );
-        } else {
-          if (this.fileList[0].size / 1000 / 1000 > this.maxFileSize) {
-            console.log('File Size' + this.fileList[0].size / 1000 / 1000);
-            this.confirmationService.alert(
-              this.currentLanguageSet.fileSizeShouldNotExceed +
-                ' ' +
-                this.maxFileSize +
-                ' ' +
-                this.currentLanguageSet.mb,
-              'error'
-            );
-          } else if (this.file) {
-            const myReader: FileReader = new FileReader();
-            myReader.onloadend = this.onLoadFileCallback.bind(this);
-            myReader.readAsDataURL(this.file);
-          }
+        } else if (this.file) {
+          const myReader: FileReader = new FileReader();
+          myReader.onloadend = this.onLoadFileCallback.bind(this);
+          myReader.readAsDataURL(this.file);
         }
       } else
         this.confirmationService.alert(
@@ -164,32 +162,19 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
    *  check for valid file extensions
    */
   checkExtension(file: any) {
-    let count = 0;
-    console.log('FILE DETAILS', file);
-    if (file) {
-      const array_after_split = file.name.split('.');
-      if (array_after_split.length === 2) {
-        const file_extension = array_after_split[array_after_split.length - 1];
-        for (let i = 0; i < this.valid_file_extensions.length; i++) {
-          if (
-            file_extension.toUpperCase() ===
-            this.valid_file_extensions[i].toUpperCase()
-          ) {
-            count = count + 1;
-          }
-        }
-
-        if (count > 0) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
-    } else {
+    if (!file) {
       return true;
     }
+    const array_after_split = file.name.split('.');
+    // A valid file must have an extension; use the LAST segment so names with
+    // more than one dot (e.g. "report.final.pdf") are handled correctly.
+    if (array_after_split.length < 2) {
+      return false;
+    }
+    const file_extension = array_after_split[array_after_split.length - 1];
+    return this.valid_file_extensions.some(
+      ext => ext.toUpperCase() === file_extension.toUpperCase()
+    );
   }
   fileObj: any = [];
   assignFileObject(fileContent: any) {
@@ -198,7 +183,7 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
     const kmFileManager = {
       fileName: this.file !== undefined ? this.file.name : '',
       fileExtension:
-        this.file !== undefined ? '.' + this.file.name.split('.')[1] : '',
+        this.file !== undefined ? '.' + this.file.name.split('.').pop() : '',
       userID: this.sessionstorage.getItem('userID'),
       fileContent: fileContent !== undefined ? fileContent.split(',')[1] : '',
       vanID: JSON.parse(serviceLineDetails).vanID,
