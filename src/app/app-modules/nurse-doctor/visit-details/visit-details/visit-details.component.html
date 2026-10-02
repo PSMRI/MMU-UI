@@ -40,6 +40,14 @@
         </z-select-item>
       </z-select>
     </z-form-control>
+    <z-form-message
+      zType="error"
+      *ngIf="
+        patientVisitDetailsForm.controls['visitReason'].touched &&
+        patientVisitDetailsForm.controls['visitReason'].invalid
+      ">
+      {{ currentLanguageSet?.nurseData?.visitDetailsForm?.reasonForVisit }}
+    </z-form-message>
   </z-form-field>
 
   <z-form-field

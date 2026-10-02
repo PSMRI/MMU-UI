@@ -243,6 +243,19 @@ export class AppHeaderComponent implements OnInit {
       });
     });
   }
+  // Highlights the correct nav tab for the current screen. routerLinkActive alone
+  // fails inside the patient workarea, because that route
+  // (/nurse-doctor/attendant/<nurse|doctor>/patient/:id) is a sibling of the
+  // worklist route, not a prefix of it, so no tab matched.
+  isNavItemActive(item: any): boolean {
+    const url = (this.router.url || '').split('?')[0];
+    if (item?.link && url.startsWith(item.link)) return true;
+    const attendant = url.match(/\/attendant\/([^/]+)\//)?.[1];
+    if (attendant === 'nurse' && item?.role === 'Nurse') return true;
+    if (attendant === 'doctor' && item?.role === 'Doctor') return true;
+    return false;
+  }
+
   rolenavigation() {
     this.navigation = [
       {

@@ -186,7 +186,9 @@ export class WorkareaComponent
   stripSelected: boolean = true;
   testName!: string;
   current_language_set: any;
-  maxFileSize = 5;
+  // Backend (nginx) 413s request bodies over 1 MiB; files are base64-encoded
+  // (~4/3 larger) in JSON, so 0.75 MB keeps the body under the limit.
+  maxFileSize = 0.75;
   ecgAbnormalities: any;
   enableEcgAbnormal: boolean = false;
   sidenavOpen = false;
@@ -929,7 +931,13 @@ export class WorkareaComponent
         }
       },
       err => {
-        this.confirmationService.alert(err.errorMessage, 'err');
+        this.confirmationService.alert(
+          err?.error?.errorMessage ||
+            err?.errorMessage ||
+            err?.message ||
+            'File upload failed',
+          'error'
+        );
       }
     );
   }

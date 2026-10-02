@@ -119,6 +119,9 @@
                 id="comorbidTimePeriodUnit-{{ i }}"
                 name="timePeriodUnit"
                 formControlName="timePeriodUnit"
+                [zDisabled]="
+                  comorbidityConcurrentConditions.get('timePeriodUnit')?.disabled
+                "
                 (zSelectionChange)="
                   validateDuration(comorbidityConcurrentConditions)
                 ">

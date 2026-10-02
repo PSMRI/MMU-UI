@@ -113,7 +113,10 @@ export class VisitDetailUtils {
       providerServiceMapID: null,
       visitNo: null,
       visitCode: { value: null, disabled: true },
-      visitReason: { value: null, disabled: disableFlag },
+      visitReason: [
+        { value: null, disabled: disableFlag },
+        Validators.required,
+      ],
       visitCategory: { value: null, disabled: disableFlag },
       pregnancyStatus: { value: null, disabled: disableFlag },
       rCHID: { value: null, disabled: disableFlag },

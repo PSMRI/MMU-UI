@@ -115,7 +115,7 @@ export class AllergenSearchComponent implements OnInit, DoCheck {
     if (term.length > 2) {
       this.showProgressBar = true;
       this.masterdataService
-        .searchDiagnosisBasedOnPageNo1(term, pageNo)
+        .searchDiagnosisBasedOnPageNo(term, pageNo)
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200) {
