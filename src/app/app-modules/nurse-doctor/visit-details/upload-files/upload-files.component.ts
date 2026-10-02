@@ -124,20 +124,22 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
       const fileNameExtension = this.file.name.split('.');
       const fileName = fileNameExtension[0];
       if (fileName !== undefined && fileName !== null && fileName !== '') {
-        if (this.fileList[0].size / 1000 / 1000 > this.maxFileSize) {
-          // Check size first, so an oversized file always shows the size message
-          // regardless of its name or extension.
+        if (!this.checkExtension(this.file)) {
+          // Check the extension first: an unsupported type (e.g. .mp4) should
+          // always report "invalid file extension", even when it is also
+          // oversized. checkExtension handles valid multi-dot names, so a
+          // supported-but-oversized file still falls through to the size check.
+          this.confirmationService.alert(
+            this.currentLanguageSet.invalidFileExtensionSupportedFileFormats,
+            'error'
+          );
+        } else if (this.fileList[0].size / 1000 / 1000 > this.maxFileSize) {
           this.confirmationService.alert(
             this.currentLanguageSet.fileSizeShouldNotExceed +
               ' ' +
               this.maxFileSize +
               ' ' +
               this.currentLanguageSet.mb,
-            'error'
-          );
-        } else if (!this.checkExtension(this.file)) {
-          this.confirmationService.alert(
-            this.currentLanguageSet.invalidFileExtensionSupportedFileFormats,
             'error'
           );
         } else if (this.file) {
@@ -218,7 +220,13 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
         }
       },
       err => {
-        this.confirmationService.alert(err.errorMessage, 'err');
+        this.confirmationService.alert(
+          err?.error?.errorMessage ||
+            err?.errorMessage ||
+            err?.message ||
+            'File upload failed',
+          'error'
+        );
       }
     );
     console.log('fileIDs', this.fileIDs);

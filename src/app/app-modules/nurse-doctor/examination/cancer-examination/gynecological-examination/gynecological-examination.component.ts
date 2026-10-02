@@ -251,7 +251,13 @@ export class GynecologicalExaminationComponent implements OnInit, DoCheck {
         }
       },
       err => {
-        this.confirmationService.alert(err.errorMessage, 'err');
+        this.confirmationService.alert(
+          err?.error?.errorMessage ||
+            err?.errorMessage ||
+            err?.message ||
+            'File upload failed',
+          'error'
+        );
       }
     );
     if (this.viewFiles && this.viewFiles.length > 0) {
