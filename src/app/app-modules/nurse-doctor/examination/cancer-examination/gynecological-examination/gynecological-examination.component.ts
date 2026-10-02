@@ -302,7 +302,9 @@ export class GynecologicalExaminationComponent implements OnInit, DoCheck {
       });
   }
 
-  maxFileSize = 5; // MB
+  // Backend (nginx) 413s request bodies over 1 MiB; files are base64-encoded
+  // (~4/3 larger) in JSON, so 0.75 MB keeps the body under the limit.
+  maxFileSize = 0.75; // MB
   file: File | undefined;
 
   removeFile(index: number): void {

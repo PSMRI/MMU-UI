@@ -74,7 +74,10 @@ export class UploadFilesComponent implements OnInit, DoCheck, OnChanges {
   // invalid_file_extensions_flag: boolean = false;
   disableFileSelection = false;
   enableForNCDScreening = false;
-  maxFileSize = 5;
+  // Backend (nginx) rejects request bodies over 1 MiB with HTTP 413. Files are
+  // sent base64-encoded (~4/3 larger) inside JSON, so the real file-size ceiling
+  // is ~786 KB; 0.75 MB keeps the encoded body safely under the 1 MiB limit.
+  maxFileSize = 0.75;
 
   @Input()
   patientFileUploadDetailsForm!: FormGroup;
