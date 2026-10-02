@@ -243,7 +243,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
     if (this.vanServicepointDetails)
       this.servicePointsList = this.vanServicepointDetails.filter(
         (item: any) => {
-          if (item.vanSession === '3') {
+          if (item.vanSession === 3) {
             return item.vanID === this.servicePointForm.controls.vanID.value;
           } else {
             return (
