@@ -186,9 +186,7 @@ export class WorkareaComponent
   stripSelected: boolean = true;
   testName!: string;
   current_language_set: any;
-  // Backend (nginx) 413s request bodies over 1 MiB; files are base64-encoded
-  // (~4/3 larger) in JSON, so 0.75 MB keeps the body under the limit.
-  maxFileSize = 0.75;
+  maxFileSize = 5;
   ecgAbnormalities: any;
   enableEcgAbnormal: boolean = false;
   sidenavOpen = false;
