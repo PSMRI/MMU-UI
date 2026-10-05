@@ -20,27 +20,96 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 import { CancerExaminationCaseSheetComponent } from './cancer-examination-case-sheet.component';
 
 describe('CancerExaminationCaseSheetComponent', () => {
   let component: CancerExaminationCaseSheetComponent;
   let fixture: ComponentFixture<CancerExaminationCaseSheetComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [CancerExaminationCaseSheetComponent],
+      providers: [...commonTestProviders()],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(CancerExaminationCaseSheetComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('language helpers set current language', () => {
+    component.ngOnInit();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    component.currentLanguageSet = null;
+    component.assignSelectedLanguage();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    component.currentLanguageSet = null;
+    component.ngDoCheck();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+  });
+
+  it('maps nurse examination data, image annotations and formats revisit date', () => {
+    component.caseSheetData = {
+      BeneficiaryData: { name: 'b' },
+      nurseData: {
+        signsAndSymptoms: 's',
+        BenCancerLymphNodeDetails: 'l',
+        oralExamination: 'o',
+        breastExamination: 'br',
+        abdominalExamination: 'a',
+        gynecologicalExamination: 'g',
+      },
+      ImageAnnotatedData: [{ imageID: 1 }, { imageID: 2, markers: [] }],
+      doctorData: { diagnosis: { revisitDate: '2024-07-08T00:00:00' } },
+    };
+    component.ngOnChanges();
+    const t = new Date();
+    expect(component.date).toBe(
+      t.getDate() + '/' + (t.getMonth() + 1) + '/' + t.getFullYear()
+    );
+    expect(component.beneficiaryDetails).toEqual({ name: 'b' });
+    expect(component.signsAndSymptoms).toBe('s');
+    expect(component.BenCancerLymphNodeDetails).toBe('l');
+    expect(component.oralExamination).toBe('o');
+    expect(component.breastExamination).toBe('br');
+    expect(component.abdominalExamination).toBe('a');
+    expect(component.gynecologicalExamination).toBe('g');
+    expect(component.diagnosisdetails.revisitDate).toBe('08/07/2024');
+    expect(component.getImageAnnotation(2)).toEqual({
+      imageID: 2,
+      markers: [],
+    });
+    expect(component.getImageAnnotation(9)).toBeNull();
+  });
+
+  it('keeps valid or missing revisit dates; no data sets only date', () => {
+    component.caseSheetData = {
+      nurseData: {},
+      doctorData: { diagnosis: { revisitDate: '01/02/2024' } },
+    };
+    component.ngOnChanges();
+    expect(component.beneficiaryDetails).toBeUndefined();
+    expect(component.diagnosisdetails.revisitDate).toBe('01/02/2024');
+
+    component.caseSheetData = { nurseData: {}, doctorData: { diagnosis: {} } };
+    component.ngOnChanges();
+    expect(component.diagnosisdetails).toEqual({});
+
+    component.caseSheetData = null;
+    component.diagnosisdetails = 'prev';
+    component.ngOnChanges();
+    expect(component.diagnosisdetails).toBe('prev');
+    expect(component.date).toBeDefined();
+  });
+
+  it('padLeft pads single digits', () => {
+    expect(String(component.padLeft.apply(4 as any))).toBe('04');
   });
 });

@@ -20,27 +20,56 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpServiceService } from '../../services/http-service.service';
+import {
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 import { ShowCommitAndVersionDetailsComponent } from './show-commit-and-version-details.component';
 
 describe('ShowCommitAndVersionDetailsComponent', () => {
-  let component: ShowCommitAndVersionDetailsComponent;
   let fixture: ComponentFixture<ShowCommitAndVersionDetailsComponent>;
+  let component: ShowCommitAndVersionDetailsComponent;
+  const input = {
+    commitDetailsAPI: { version: '3.1.0', commit: 'abc123' },
+    commitDetailsUI: { version: '3.2.0', commit: 'def456' },
+  };
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [ShowCommitAndVersionDetailsComponent],
+      providers: [...commonTestProviders({ dialogData: input })],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(ShowCommitAndVersionDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  afterEach(() => fixture.destroy());
+
+  it('assigns the language set on init', () => {
+    expect(component.current_language_set).toBe(LANGUAGE_EN);
+    expect(component.input).toBe(input);
+  });
+
+  it('renders API and UI version and commit details', () => {
+    const cells = Array.from(
+      fixture.nativeElement.querySelectorAll('td') as NodeListOf<HTMLElement>
+    ).map(td => td.textContent?.trim());
+    expect(cells).toEqual(['3.1.0', '3.2.0', 'abc123', 'def456']);
+  });
+
+  it('ngDoCheck re-reads the current language', () => {
+    const http: any = TestBed.inject(HttpServiceService);
+    const lang = { common: { versionDetails: 'VD' } };
+    http.appCurrentLanguge.next(lang);
+    fixture.detectChanges();
+    expect(component.current_language_set).toBe(lang);
+    expect(fixture.nativeElement.querySelector('h4').textContent).toContain(
+      'VD'
+    );
   });
 });

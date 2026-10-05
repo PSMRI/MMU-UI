@@ -19,169 +19,452 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
 import {
-  async,
-  inject,
   ComponentFixture,
   TestBed,
+  fakeAsync,
+  tick,
 } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MaterialModule } from '../../../core/material.module';
-
-import { CancerUtils } from '../../shared/utility';
-
-import { ConfirmationService } from '../../../core/services/confirmation.service';
-import { DoctorService } from '../../shared/services';
-import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
-
-import { DoctorServiceStub } from '../../shared/mocks/doctor-service-stub';
-import { BeneficiaryDetailsServiceStub } from '../../../core/mocks/beneficiary-details-service-stub';
-import { ConfirmationServiceStub } from '../../../core/mocks/confirmation-service-stub';
-
-import * as data from '../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Rx';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { BehaviorSubject, of } from 'rxjs';
 
 import { CancerExaminationComponent } from './cancer-examination.component';
+import { DoctorService } from '../../shared/services/doctor.service';
+import {
+  BeneficiaryDetailsService,
+  ConfirmationService,
+} from '../../../core/services';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  autoSpy,
+  commonTestProviders,
+  throwingObs,
+} from 'src/testing/test-utils';
 
 describe('CancerExaminationComponent', () => {
   let component: CancerExaminationComponent;
   let fixture: ComponentFixture<CancerExaminationComponent>;
-  let debugElement: any;
-  let fb: any;
+  let doctor: any;
+  let confirm: any;
+  let benDetails$: BehaviorSubject<any>;
+  let form: FormGroup;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
+  const session = {
+    visitID: 'V1',
+    beneficiaryRegID: 'B1',
+    providerServiceID: 'P1',
+    userName: 'doc',
+    beneficiaryID: 'BEN',
+    sessionID: 'S1',
+    benFlowID: 'F1',
+    visitCode: 'VC1',
+    serviceLineDetails: JSON.stringify({ vanID: 7, parkingPlaceID: 9 }),
+  };
+
+  function lymph(name: string) {
+    return new FormGroup({
+      lymphNodeName: new FormControl(name),
+      size_Left: new FormControl(null),
+      mobility_Left: new FormControl(null),
+      size_Right: new FormControl(null),
+      mobility_Right: new FormControl(null),
+      vanID: new FormControl(null),
+      parkingPlaceID: new FormControl(null),
+    });
+  }
+
+  function buildForm() {
+    return new FormGroup({
+      signsForm: new FormGroup({
+        breastEnlargement: new FormControl(null),
+        shortnessOfBreath: new FormControl(null),
+        lymphNodes: new FormArray([lymph('Cervical'), lymph('Axillary')]),
+      }),
+      oralExaminationForm: new FormGroup({
+        image: new FormControl(null),
+        preMalignantLesionTypeList: new FormControl(null),
+        otherLesionType: new FormControl(null),
+        limitedMouthOpening: new FormControl(null),
+      }),
+      breastExaminationForm: new FormGroup({
+        image: new FormControl(null),
+        everBreastFed: new FormControl(null),
+      }),
+      abdominalExaminationForm: new FormGroup({
+        image: new FormControl(null),
+        liver: new FormControl(null),
+      }),
+      gynecologicalExaminationForm: new FormGroup({
+        image: new FormControl(null),
+        typeOfLesionList: new FormControl(null),
+        uterus_Normal: new FormControl(null),
+      }),
+    });
+  }
+
+  beforeEach(async () => {
+    benDetails$ = new BehaviorSubject<any>(null);
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [CancerExaminationComponent],
-      schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        { provide: DoctorService, useClass: DoctorServiceStub },
-        { provide: ConfirmationService, useClass: ConfirmationServiceStub },
+        ...commonTestProviders({ session }),
+        { provide: DoctorService, useValue: autoSpy(DoctorService) },
         {
           provide: BeneficiaryDetailsService,
-          useClass: BeneficiaryDetailsServiceStub,
+          useValue: { beneficiaryDetails$: benDetails$ },
         },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(CancerExaminationComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
+    doctor = TestBed.inject(DoctorService) as any;
+    confirm = TestBed.inject(ConfirmationService) as any;
+    form = buildForm();
+    component.cancerForm = form;
+    spyOn(console, 'log');
+  });
 
-    fb = debugElement.injector.get(FormBuilder);
-    component.cancerForm = new CancerUtils(fb).createCancerExaminationForm();
+  it('creates, sets language and extracts sub forms', () => {
     fixture.detectChanges();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    expect(component.signsForm).toBe(form.get('signsForm') as FormGroup);
+    expect(component.oralExaminationForm).toBe(
+      form.get('oralExaminationForm') as FormGroup
+    );
+    expect(component.breastExaminationForm).toBe(
+      form.get('breastExaminationForm') as FormGroup
+    );
+    expect(component.abdominalExaminationForm).toBe(
+      form.get('abdominalExaminationForm') as FormGroup
+    );
+    expect(component.gynecologicalExaminationForm).toBe(
+      form.get('gynecologicalExaminationForm') as FormGroup
+    );
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('toggles breast examination with breastEnlargement', () => {
+    fixture.detectChanges();
+    const el: HTMLElement = fixture.nativeElement;
+    expect(el.querySelector('app-doctor-breast-examination')).toBeNull();
+    form.get('signsForm.breastEnlargement')!.setValue(true);
+    fixture.detectChanges();
+    expect(component.showBreastExamination).toBeTrue();
+    expect(el.querySelector('app-doctor-breast-examination')).not.toBeNull();
+    form.get('signsForm.breastEnlargement')!.setValue(false);
+    expect(component.showBreastExamination).toBeFalse();
   });
 
-  it('should call getBenificiaryDetails on Initialisation', () => {
-    spyOn(component, 'getBeneficiaryDetails');
-    component.ngOnInit();
-    expect(component.getBeneficiaryDetails).toHaveBeenCalled();
+  it('works when the form has no signsForm', () => {
+    component.cancerForm = new FormGroup({});
+    fixture.detectChanges();
+    expect(component.signsForm).toBeNull();
   });
 
-  it('should show breast examination tab for female beneficiary', async(
-    inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
-      beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
+  ['Female', 'Transgender'].forEach(g => {
+    it(`marks ${g} beneficiaries as female and shows gynec panel`, () => {
+      benDetails$.next({ genderName: g });
       fixture.detectChanges();
-      debugElement = fixture.debugElement.query(By.css('#breastExamination'));
-      expect(component.female).toBe(true);
-      expect(debugElement).toBeTruthy();
-    })
-  ));
-
-  it('should not show breast examination tab for male beneficiary by deafult', async(
-    inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
-      beneficiaryDetailsService.beneficiaryDetails.next(data.maleBeneficiary);
-      fixture.detectChanges();
-      debugElement = fixture.debugElement.query(By.css('#breastExamination'));
-      expect(component.female).toBe(false);
-      expect(debugElement).not.toBeTruthy();
-    })
-  ));
-
-  it('should show breast examination tab for male beneficiary if selected breast enlargement', async(
-    inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
-      beneficiaryDetailsService.beneficiaryDetails.next(data.maleBeneficiary);
-      component.cancerForm.controls['signsForm'].patchValue({
-        breastEnlargement: true,
-      });
-      fixture.detectChanges();
-      debugElement = fixture.debugElement.query(By.css('#breastExamination'));
-      expect(component.female).toBe(false);
-      expect(debugElement).toBeTruthy();
-    })
-  ));
-
-  it('should get Cancer Examination Details when mode is view', () => {
-    spyOn(component, 'fetchCancerExaminationDetails');
-    component.mode = String('view');
-    component.ngOnChanges();
-    expect(component.fetchCancerExaminationDetails).toHaveBeenCalled();
-  });
-
-  it('should get Cancer Examination Details when mode is view', async(
-    inject([DoctorService], doctorService => {
-      spyOn(component, 'fetchCancerExaminationDetails').and.callThrough();
-      spyOn(doctorService, 'getCancerExaminationDetails').and.returnValue(
-        Observable.of(data.cancerExaminationDetails)
-      );
-
-      component.mode = String('view');
-      component.ngOnChanges();
-
-      expect(component.fetchCancerExaminationDetails).toHaveBeenCalled();
-      expect(doctorService.getCancerExaminationDetails).toHaveBeenCalled();
-    })
-  ));
-
-  it('should patch examionationDetails to form when mode is view', async(
-    inject([DoctorService], doctorService => {
-      spyOn(component, 'fetchCancerExaminationDetails').and.callThrough();
-      spyOn(doctorService, 'getCancerExaminationDetails').and.returnValue(
-        Observable.of(data.cancerExaminationDetails)
-      );
-
-      component.mode = String('view');
-      component.ngOnChanges();
-
-      expect(component.fetchCancerExaminationDetails).toHaveBeenCalled();
-      expect(doctorService.getCancerExaminationDetails).toHaveBeenCalled();
+      expect(component.female).toBeTrue();
       expect(
-        (<FormGroup>component.cancerForm.controls.breastExaminationForm)
-          .controls['everBreastFed'].value
-      ).toEqual(
-        data.cancerExaminationDetails.data.breastExamination.everBreastFed
-      );
-    })
-  ));
-
-  it('should upadte Cancer Examination Details when mode is update', () => {
-    spyOn(component, 'upadteCancerExaminationDetails');
-    component.mode = String('update');
-    component.ngOnChanges();
-    expect(component.upadteCancerExaminationDetails).toHaveBeenCalled();
+        fixture.nativeElement.querySelector(
+          'app-doctor-gynecological-examination'
+        )
+      ).not.toBeNull();
+    });
   });
 
-  it('should get upadte Cancer Examination Details when mode is update', async(
-    inject([DoctorService], doctorService => {
-      spyOn(component, 'upadteCancerExaminationDetails').and.callThrough();
-      spyOn(doctorService, 'updateCancerExaminationDetails').and.returnValue(
-        Observable.of(data.updateCancerExaminationSuccessResponse)
-      );
+  it('does not mark male beneficiaries as female', () => {
+    benDetails$.next({ genderName: 'Male' });
+    fixture.detectChanges();
+    expect(component.female).toBeFalse();
+  });
 
-      component.mode = String('update');
+  describe('getImageCoordinates', () => {
+    it('returns only images from dirty forms', () => {
+      ['oral', 'abdominal', 'gynecological', 'breast'].forEach(k =>
+        form.get(`${k}ExaminationForm.image`)!.setValue({ id: k })
+      );
+      expect(component.getImageCoordinates(form)).toEqual([]);
+      ['oral', 'abdominal', 'gynecological', 'breast'].forEach(k =>
+        form.get(`${k}ExaminationForm`)!.markAsDirty()
+      );
+      expect(component.getImageCoordinates(form)).toEqual([
+        { id: 'oral' },
+        { id: 'abdominal' },
+        { id: 'gynecological' },
+        { id: 'breast' },
+      ]);
+    });
+  });
+
+  describe('update mode', () => {
+    beforeEach(() => {
+      fixture.detectChanges();
+      component.mode = 'update';
+    });
+
+    it('updates and alerts success', fakeAsync(() => {
+      form.markAsDirty();
+      doctor.updateCancerExaminationDetails.and.returnValue(
+        of({ statusCode: 200, data: { response: 'Saved' } })
+      );
       component.ngOnChanges();
-      expect(component.upadteCancerExaminationDetails).toHaveBeenCalled();
-    })
-  ));
+      expect(doctor.updateCancerExaminationDetails).toHaveBeenCalledWith(
+        form,
+        {
+          beneficiaryRegID: 'B1',
+          benVisitID: 'V1',
+          providerServiceMapID: 'P1',
+          modifiedBy: 'doc',
+          beneficiaryID: 'BEN',
+          sessionID: 'S1',
+          parkingPlaceID: 9,
+          vanID: 7,
+          benFlowID: 'F1',
+          visitCode: 'VC1',
+        },
+        []
+      );
+      expect(form.pristine).toBeTrue();
+      tick();
+      expect(confirm.alert).toHaveBeenCalledWith('Saved', 'success');
+    }));
+
+    it('alerts errorMessage on non-200', fakeAsync(() => {
+      doctor.updateCancerExaminationDetails.and.returnValue(
+        of({ statusCode: 500, errorMessage: 'bad' })
+      );
+      component.ngOnChanges();
+      tick();
+      expect(confirm.alert).toHaveBeenCalledWith('bad', 'error');
+    }));
+
+    it('alerts error on failure', fakeAsync(() => {
+      doctor.updateCancerExaminationDetails.and.returnValue(
+        throwingObs('down')
+      );
+      component.ngOnChanges();
+      tick();
+      expect(confirm.alert).toHaveBeenCalledWith('down', 'error');
+    }));
+  });
+
+  describe('view mode', () => {
+    beforeEach(() => {
+      fixture.detectChanges();
+      component.mode = 'view';
+    });
+
+    it('fetches details and patches the form', () => {
+      doctor.getCancerExaminationDetails.and.returnValue(
+        of({
+          statusCode: 200,
+          data: {
+            breastExamination: { everBreastFed: true },
+            imageCoordinates: [],
+          },
+        })
+      );
+      component.ngOnChanges();
+      expect(doctor.getCancerExaminationDetails).toHaveBeenCalledWith(
+        'B1',
+        'V1'
+      );
+      expect(form.value.breastExaminationForm.everBreastFed).toBeTrue();
+    });
+
+    it('alerts errorMessage when data is null', fakeAsync(() => {
+      doctor.getCancerExaminationDetails.and.returnValue(
+        of({ statusCode: 200, data: null, errorMessage: 'none' })
+      );
+      component.ngOnChanges();
+      tick();
+      expect(confirm.alert).toHaveBeenCalledWith('none', 'error');
+    }));
+
+    it('alerts error on failure', fakeAsync(() => {
+      doctor.getCancerExaminationDetails.and.returnValue(throwingObs('x'));
+      component.ngOnChanges();
+      tick();
+      expect(confirm.alert).toHaveBeenCalledWith('x', 'error');
+    }));
+  });
+
+  it('ngOnChanges does nothing for other modes', () => {
+    component.mode = 'add';
+    component.ngOnChanges();
+    expect(doctor.getCancerExaminationDetails).not.toHaveBeenCalled();
+    expect(doctor.updateCancerExaminationDetails).not.toHaveBeenCalled();
+  });
+
+  describe('filterAnnotatedImageList', () => {
+    it('returns the single matching image', () => {
+      const list = [{ imageID: 1 }, { imageID: 2 }];
+      expect(component.filterAnnotatedImageList(list, 2)).toEqual({
+        imageID: 2,
+      });
+    });
+    it('returns undefined when none or many match', () => {
+      expect(component.filterAnnotatedImageList([], 1)).toBeUndefined();
+      expect(
+        component.filterAnnotatedImageList([{ imageID: 1 }, { imageID: 1 }], 1)
+      ).toBeUndefined();
+    });
+  });
+
+  describe('getMergedLymphNodeValues', () => {
+    it('merges api values and falls back to service line ids', () => {
+      const merged = component.getMergedLymphNodeValues([
+        {
+          lymphNodeName: ' cervical ',
+          size_Left: null,
+          size_Right: null,
+          mobility_Left: null,
+          mobility_Right: null,
+        },
+        {
+          lymphNodeName: 'Cervical',
+          size_Left: '2cm',
+          size_Right: null,
+          mobility_Left: 'Fixed',
+          mobility_Right: null,
+          vanID: 1,
+          parkingPlaceID: 2,
+        },
+      ]);
+      expect(merged).toEqual([
+        {
+          lymphNodeName: 'Cervical',
+          size_Left: '2cm',
+          mobility_Left: 'Fixed',
+          size_Right: null,
+          mobility_Right: null,
+          vanID: 1,
+          parkingPlaceID: 2,
+        },
+        {
+          lymphNodeName: 'Axillary',
+          size_Left: null,
+          mobility_Left: null,
+          size_Right: null,
+          mobility_Right: null,
+          vanID: 7,
+          parkingPlaceID: 9,
+        },
+      ]);
+    });
+  });
+
+  describe('patchExaminationDetails', () => {
+    beforeEach(() => fixture.detectChanges());
+
+    it('patches every section', () => {
+      component.patchExaminationDetails({
+        signsAndSymptoms: { shortnessOfBreath: true },
+        BenCancerLymphNodeDetails: [
+          {
+            lymphNodeName: 'Axillary',
+            size_Left: '1cm',
+            size_Right: '2cm',
+            mobility_Left: null,
+            mobility_Right: null,
+          },
+        ],
+        oralExamination: {
+          preMalignantLesionType: 'Leukoplakia,Weird lesion,',
+          limitedMouthOpening: 'Yes',
+        },
+        breastExamination: { everBreastFed: false },
+        abdominalExamination: { liver: 'Normal' },
+        gynecologicalExamination: {
+          files: [{ fileName: 'a.png' }],
+          typeOfLesion: 'Ulcer,Growth,',
+          uterus_Normal: true,
+        },
+        imageCoordinates: [
+          { imageID: 1, a: 1 },
+          { imageID: 2, b: 2 },
+          { imageID: 3, c: 3 },
+          { imageID: 4, d: 4 },
+        ],
+      });
+      const v = form.value;
+      expect(v.signsForm.shortnessOfBreath).toBeTrue();
+      expect(v.signsForm.lymphNodes[1].size_Left).toBe('1cm');
+      expect(v.signsForm.lymphNodes[1].size_Right).toBe('2cm');
+      expect(v.signsForm.lymphNodes[0].vanID).toBe(7);
+      expect(v.oralExaminationForm.preMalignantLesionTypeList).toEqual([
+        'Leukoplakia',
+        'Weird lesion',
+        'Any other lesion',
+      ]);
+      expect(v.oralExaminationForm.otherLesionType).toBe('Weird lesion');
+      expect(v.oralExaminationForm.image).toEqual({ imageID: 3, c: 3 });
+      expect(v.breastExaminationForm.everBreastFed).toBeFalse();
+      expect(v.breastExaminationForm.image).toEqual({ imageID: 2, b: 2 });
+      expect(v.abdominalExaminationForm.liver).toBe('Normal');
+      expect(v.abdominalExaminationForm.image).toEqual({ imageID: 1, a: 1 });
+      expect(v.gynecologicalExaminationForm.typeOfLesionList).toEqual([
+        'Ulcer',
+        'Growth',
+      ]);
+      expect(v.gynecologicalExaminationForm.image).toEqual({
+        imageID: 4,
+        d: 4,
+      });
+      expect(doctor.gynecologicalFiles).toEqual([{ fileName: 'a.png' }]);
+    });
+
+    it('does not add other lesion when all oral lesions are known', () => {
+      component.patchExaminationDetails({
+        oralExamination: { preMalignantLesionType: 'Melanoplakia,' },
+        imageCoordinates: [],
+      });
+      expect(form.value.oralExaminationForm.preMalignantLesionTypeList).toEqual(
+        ['Melanoplakia']
+      );
+      expect(form.value.oralExaminationForm.otherLesionType).toBeNull();
+    });
+
+    it('ignores lymph nodes that are not in the form', () => {
+      spyOn(component, 'getMergedLymphNodeValues').and.returnValue([
+        { lymphNodeName: 'Unknown', size_Left: 'x' },
+      ]);
+      component.patchExaminationDetails({
+        signsAndSymptoms: {},
+        BenCancerLymphNodeDetails: [],
+      });
+      expect(
+        form.value.signsForm.lymphNodes.every((n: any) => n.size_Left === null)
+      ).toBeTrue();
+    });
+  });
+
+  it('unsubscribes all subscriptions on destroy', () => {
+    fixture.detectChanges();
+    component.mode = 'update';
+    component.ngOnChanges();
+    component.mode = 'view';
+    doctor.getCancerExaminationDetails.and.returnValue(
+      of({ statusCode: 200, data: {} })
+    );
+    component.ngOnChanges();
+    const subs = [
+      component.beneficiaryDetailsSubscription,
+      component.fetchExaminationDetailsSubs,
+      component.updateExaminationSubs,
+    ];
+    subs.forEach(s => spyOn(s, 'unsubscribe').and.callThrough());
+    component.ngOnDestroy();
+    subs.forEach(s => expect(s.unsubscribe).toHaveBeenCalled());
+  });
+
+  it('ngOnDestroy is safe with no subscriptions', () => {
+    expect(() => component.ngOnDestroy()).not.toThrow();
+  });
 });

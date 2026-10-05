@@ -20,27 +20,52 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogRef } from '@angular/material/dialog';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 import { ViewTestReportComponent } from './view-test-report.component';
 
 describe('ViewTestReportComponent', () => {
   let component: ViewTestReportComponent;
   let fixture: ComponentFixture<ViewTestReportComponent>;
+  const report = [
+    { procedureName: 'CBC', componentName: 'Hb', testResultValue: '12' },
+    { procedureName: 'RBS', componentName: 'Glucose', testResultValue: '90' },
+  ];
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [ViewTestReportComponent],
+      providers: [...commonTestProviders({ dialogData: report })],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(ViewTestReportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  afterEach(() => fixture.destroy());
+
+  it('loads dialog data into the table and sets language', () => {
+    expect(component.data).toBe(report);
+    expect(component.dataSource.data).toEqual(report);
+    expect(component.displayedColumns).toEqual([
+      'procedureName',
+      'componentName',
+      'testresult',
+      'unit',
+    ]);
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
+  });
+
+  it('exposes the dialog ref for closing', () => {
+    component.matDialogRef.close();
+    expect(TestBed.inject(MatDialogRef).close).toHaveBeenCalled();
   });
 });

@@ -20,21 +20,78 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { TestBed, inject } from '@angular/core/testing';
-
+import { TestBed } from '@angular/core/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { PharmacistService } from './pharmacist.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { environment } from 'src/environments/environment';
 
 describe('PharmacistService', () => {
+  let service: PharmacistService;
+  let httpMock: HttpTestingController;
+  let mockSessionStorage: jasmine.SpyObj<SessionStorageService>;
+
   beforeEach(() => {
+    mockSessionStorage = jasmine.createSpyObj('SessionStorageService', [
+      'getItem',
+      'setItem',
+    ]);
+
     TestBed.configureTestingModule({
-      providers: [PharmacistService],
+      imports: [HttpClientTestingModule],
+      providers: [
+        PharmacistService,
+        { provide: SessionStorageService, useValue: mockSessionStorage },
+      ],
     });
+
+    service = TestBed.inject(PharmacistService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
-  it('should be created', inject(
-    [PharmacistService],
-    (service: PharmacistService) => {
-      expect(service).toBeTruthy();
-    }
-  ));
+  afterEach(() => {
+    httpMock.verify();
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+
+  describe('getPharmacistWorklist', () => {
+    it('should make GET request with correctly built URL', () => {
+      mockSessionStorage.getItem.and.callFake((key: string) => {
+        if (key === 'serviceLineDetails') return JSON.stringify({ vanID: 10 });
+        if (key === 'providerServiceID') return '100';
+        if (key === 'serviceID') return '2';
+        return null;
+      });
+
+      service.getPharmacistWorklist().subscribe(res => {
+        expect(res).toBeTruthy();
+      });
+
+      const expectedUrl = environment.pharmacistWorklist + '100/2/10';
+      const req = httpMock.expectOne(expectedUrl);
+      expect(req.request.method).toBe('GET');
+      req.flush({ statusCode: 200, data: [] });
+    });
+
+    it('should construct URL with different van IDs', () => {
+      mockSessionStorage.getItem.and.callFake((key: string) => {
+        if (key === 'serviceLineDetails') return JSON.stringify({ vanID: 25 });
+        if (key === 'providerServiceID') return '200';
+        if (key === 'serviceID') return '3';
+        return null;
+      });
+
+      service.getPharmacistWorklist().subscribe();
+      const expectedUrl = environment.pharmacistWorklist + '200/3/25';
+      const req = httpMock.expectOne(expectedUrl);
+      expect(req.request.method).toBe('GET');
+      req.flush({ statusCode: 200 });
+    });
+  });
 });

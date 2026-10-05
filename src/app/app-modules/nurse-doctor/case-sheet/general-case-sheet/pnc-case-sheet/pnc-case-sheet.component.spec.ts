@@ -20,27 +20,49 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 import { PncCaseSheetComponent } from './pnc-case-sheet.component';
 
 describe('PncCaseSheetComponent', () => {
   let component: PncCaseSheetComponent;
   let fixture: ComponentFixture<PncCaseSheetComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [PncCaseSheetComponent],
+      providers: [...commonTestProviders()],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(PncCaseSheetComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('ngOnInit and ngDoCheck set language', () => {
+    component.ngOnInit();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    component.currentLanguageSet = null;
+    component.ngDoCheck();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+  });
+
+  it('maps PNC care details', () => {
+    component.caseSheetData = {
+      nurseData: { pnc: { PNCCareDetail: { d: 1 } } },
+    };
+    component.ngOnChanges();
+    expect(component.pNCCaseSheetData).toEqual({ d: 1 });
+  });
+
+  it('ignores data without PNC', () => {
+    component.caseSheetData = {};
+    component.ngOnChanges();
+    expect(component.pNCCaseSheetData).toBeUndefined();
   });
 });

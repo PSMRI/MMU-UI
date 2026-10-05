@@ -19,72 +19,79 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import {
-  async,
-  ComponentFixture,
-  tick,
-  inject,
-  fakeAsync,
-  TestBed,
-} from '@angular/core/testing';
-import {
-  FormsModule,
-  FormGroup,
-  ReactiveFormsModule,
-  FormBuilder,
-} from '@angular/forms';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../../../../core/material.module';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { GeneralUtils } from '../../../../shared/utility';
-
-import * as data from '../../../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Observable';
-
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { RespiratorySystemComponent } from './respiratory-system.component';
+import { MaterialModule } from '../../../../../core/material.module';
+import { GeneralUtils } from '../../../../shared/utility/general-utility';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 
 describe('RespiratorySystemComponent', () => {
   let component: RespiratorySystemComponent;
   let fixture: ComponentFixture<RespiratorySystemComponent>;
-  let fb;
-  let debugElement: DebugElement;
-  let el: HTMLElement;
-  let spy: any;
+  let tracking: any;
+  let form: FormGroup;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS, MaterialModule],
       declarations: [RespiratorySystemComponent],
+      providers: [...commonTestProviders()],
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MaterialModule,
-        NoopAnimationsModule,
-      ],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(RespiratorySystemComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-    fb = debugElement.injector.get(FormBuilder);
-    component.respiratorySystemForm = new GeneralUtils(
-      fb
-    ).createRespiratorySystemForm();
+    tracking = TestBed.inject(AmritTrackingService) as any;
+    form = new GeneralUtils(new FormBuilder(), {
+      getItem: () => JSON.stringify({ vanID: 1, parkingPlaceID: 2 }),
+    } as any).createRespiratorySystemForm();
+    component.respiratorySystemDataForm = form;
     fixture.detectChanges();
   });
 
-  it('should create RespiratorySystemComponent', () => {
+  it('creates and loads the language set', () => {
     expect(component).toBeTruthy();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
   });
 
-  it('Should initialize the component', () => {
-    component.ngOnInit();
-    expect(component).toBeTruthy();
+  it('refreshes the language set on ngDoCheck', () => {
+    component.currentLanguageSet = null;
+    component.ngDoCheck();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+  });
+
+  it('binds the palpation input to the form', () => {
+    const input = fixture.nativeElement.querySelector(
+      '[formControlName="palpation"]'
+    ) as HTMLInputElement;
+    expect(input).not.toBeNull();
+    input.value = 'observed';
+    input.dispatchEvent(new Event('input'));
+    expect(form.value.palpation).toBe('observed');
+  });
+
+  it('exposes the selectPercussion options', () => {
+    expect(component.selectPercussion.map(o => o.name)).toEqual([
+      'Dull',
+      'Stony Dull',
+      'Resonant',
+      'Hyper Resonant',
+    ]);
+  });
+
+  it('trackFieldInteraction reports to the tracking service', () => {
+    component.trackFieldInteraction('Field');
+    expect(tracking.trackFieldInteraction).toHaveBeenCalledWith(
+      'Field',
+      'Respiratory System Examination'
+    );
   });
 });

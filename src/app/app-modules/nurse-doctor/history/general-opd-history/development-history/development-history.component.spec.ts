@@ -20,76 +20,194 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { BehaviorSubject, of } from 'rxjs';
 import {
-  async,
-  inject,
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  FormArray,
-} from '@angular/forms';
-import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
-import { MaterialModule } from '../../../../core/material.module';
-
-import { GeneralUtils } from '../../../shared/utility';
-
-import { ConfirmationService } from '../../../../core/services/confirmation.service';
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  autoSpy,
+  commonTestProviders,
+  throwingObs,
+} from 'src/testing/test-utils';
+import { ConfirmationService } from 'src/app/app-modules/core/services/confirmation.service';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import {
   DoctorService,
-  NurseService,
   MasterdataService,
+  NurseService,
 } from '../../../shared/services';
-
-import { MasterdataServiceStub } from '../../../shared/mocks/masterdata-service-stub';
-import { DoctorServiceStub } from '../../../shared/mocks/doctor-service-stub';
-import { NurseServiceStub } from '../../../shared/mocks/nurse-service-stub';
-
-import * as data from '../../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Rx';
-
 import { DevelopmentHistoryComponent } from './development-history.component';
 
 describe('DevelopmentHistoryComponent', () => {
   let component: DevelopmentHistoryComponent;
   let fixture: ComponentFixture<DevelopmentHistoryComponent>;
-  let debugElement: DebugElement;
-  let fb: FormBuilder;
+  let nurse: any;
+  let doctor: any;
+  let confirm: any;
+  let dialog: any;
+  let master$: BehaviorSubject<any>;
+  let form: FormGroup;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
-      schemas: [NO_ERRORS_SCHEMA],
+  async function setup(mode = 'new') {
+    nurse = autoSpy(NurseService);
+    doctor = autoSpy(DoctorService);
+    master$ = new BehaviorSubject<any>(null);
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [DevelopmentHistoryComponent],
       providers: [
-        ConfirmationService,
-        { provide: MasterdataService, useClass: MasterdataServiceStub },
-        { provide: DoctorService, useClass: DoctorServiceStub },
-        { provide: NurseService, useClass: NurseServiceStub },
+        ...commonTestProviders({
+          session: { beneficiaryRegID: '11', visitID: '22' },
+        }),
+        { provide: NurseService, useValue: nurse },
+        { provide: DoctorService, useValue: doctor },
+        {
+          provide: MasterdataService,
+          useValue: { nurseMasterData$: master$.asObservable() },
+        },
       ],
-    }).compileComponents();
-  }));
-
-  beforeEach(() => {
+      schemas: [NO_ERRORS_SCHEMA],
+    })
+      .overrideTemplate(DevelopmentHistoryComponent, '')
+      .compileComponents();
+    confirm = TestBed.inject(ConfirmationService) as any;
+    dialog = TestBed.inject(MatDialog) as any;
+    spyOn(console, 'log');
     fixture = TestBed.createComponent(DevelopmentHistoryComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-
-    fb = debugElement.injector.get(FormBuilder);
-    component.developmentHistoryForm = new GeneralUtils(
-      fb
-    ).createDevelopmentHistoryForm();
-    window.console.log = () => {};
-
+    form = new FormGroup({
+      grossMotorMilestones: new FormControl(null),
+      isGrossMotorMilestones: new FormControl(null),
+    });
+    component.developmentHistoryForm = form;
+    component.mode = mode;
+    component.visitCategory = 'General OPD';
     fixture.detectChanges();
+  }
+
+  describe('new mode', () => {
+    beforeEach(async () => setup('new'));
+
+    it('sets language and stores master data without loading history', () => {
+      expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+      expect(component.masterData).toBeUndefined();
+      const m = { a: 1 };
+      master$.next(m);
+      expect(component.masterData).toBe(m);
+      expect(doctor.getGeneralHistoryDetails).not.toHaveBeenCalled();
+      component.currentLanguageSet = null;
+      component.ngDoCheck();
+      expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    });
+
+    it('ngOnDestroy unsubscribes when present and tolerates nulls', () => {
+      doctor.getGeneralHistoryDetails.and.returnValue(of(null));
+      component.getGeneralHistory('1', '2');
+      const a = spyOn(component.nurseMasterDataSubscription, 'unsubscribe');
+      const b = spyOn(component.generalHistorySubscription, 'unsubscribe');
+      component.ngOnDestroy();
+      expect(a).toHaveBeenCalled();
+      expect(b).toHaveBeenCalled();
+      component.nurseMasterDataSubscription = null;
+      component.generalHistorySubscription = null;
+      expect(() => component.ngOnDestroy()).not.toThrow();
+    });
+
+    describe('getGeneralHistory', () => {
+      it('patches form with DevelopmentHistory', () => {
+        const dh = { grossMotorMilestones: 'x', isGrossMotorMilestones: true };
+        doctor.getGeneralHistoryDetails.and.returnValue(
+          of({ statusCode: 200, data: { DevelopmentHistory: dh } })
+        );
+        component.getGeneralHistory('1', '2');
+        expect(doctor.getGeneralHistoryDetails).toHaveBeenCalledWith('1', '2');
+        expect(component.developmentHistoryData).toBe(dh);
+        expect(form.value).toEqual(dh);
+      });
+
+      [
+        null,
+        { statusCode: 500, data: { DevelopmentHistory: {} } },
+        { statusCode: 200, data: null },
+        { statusCode: 200, data: {} },
+      ].forEach((resp, i) => {
+        it(`ignores unusable response #${i}`, () => {
+          doctor.getGeneralHistoryDetails.and.returnValue(of(resp));
+          component.getGeneralHistory('1', '2');
+          expect(component.developmentHistoryData).toBeUndefined();
+          expect(form.value.grossMotorMilestones).toBeNull();
+        });
+      });
+    });
+
+    describe('getPreviousDevelopmentalHistory', () => {
+      const err = () => LANGUAGE_EN.alerts.info.errorFetchingHistory;
+      it('opens dialog with data', () => {
+        const payload = { data: [1] };
+        nurse.getPreviousDevelopmentalHistory.and.returnValue(
+          of({ data: payload })
+        );
+        component.getPreviousDevelopmentalHistory();
+        expect(nurse.getPreviousDevelopmentalHistory).toHaveBeenCalledWith(
+          '11',
+          'General OPD'
+        );
+        expect(dialog.open).toHaveBeenCalledWith(PreviousDetailsComponent, {
+          data: {
+            dataList: payload,
+            title:
+              LANGUAGE_EN.historyData.Perinatalhistorydetails
+                .developmentalhistorydetails,
+          },
+        });
+      });
+      it('alerts when empty', () => {
+        nurse.getPreviousDevelopmentalHistory.and.returnValue(
+          of({ data: { data: [] } })
+        );
+        component.getPreviousDevelopmentalHistory();
+        expect(confirm.alert).toHaveBeenCalledWith(
+          LANGUAGE_EN.historyData.ancHistory.previousHistoryDetails
+            .pastHistoryalert
+        );
+        expect(dialog.open).not.toHaveBeenCalled();
+      });
+      it('alerts when data null', () => {
+        nurse.getPreviousDevelopmentalHistory.and.returnValue(
+          of({ data: null })
+        );
+        component.getPreviousDevelopmentalHistory();
+        expect(confirm.alert).toHaveBeenCalledWith(err(), 'error');
+      });
+      it('alerts when response null', () => {
+        nurse.getPreviousDevelopmentalHistory.and.returnValue(of(null));
+        component.getPreviousDevelopmentalHistory();
+        expect(confirm.alert).toHaveBeenCalledWith(err(), 'error');
+      });
+      it('alerts on failure', () => {
+        nurse.getPreviousDevelopmentalHistory.and.returnValue(throwingObs());
+        component.getPreviousDevelopmentalHistory();
+        expect(confirm.alert).toHaveBeenCalledWith(err(), 'error');
+      });
+    });
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  describe('view mode', () => {
+    beforeEach(async () => setup('view'));
+
+    it('loads history with session IDs when master data arrives', () => {
+      doctor.getGeneralHistoryDetails.and.returnValue(
+        of({
+          statusCode: 200,
+          data: { DevelopmentHistory: { grossMotorMilestones: 'g' } },
+        })
+      );
+      master$.next({ a: 1 });
+      expect(doctor.getGeneralHistoryDetails).toHaveBeenCalledWith('11', '22');
+      expect(form.value.grossMotorMilestones).toBe('g');
+    });
   });
 });

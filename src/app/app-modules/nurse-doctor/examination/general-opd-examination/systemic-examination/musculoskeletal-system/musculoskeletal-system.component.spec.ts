@@ -19,104 +19,99 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 
-import {
-  async,
-  ComponentFixture,
-  tick,
-  inject,
-  fakeAsync,
-  TestBed,
-} from '@angular/core/testing';
-import {
-  FormsModule,
-  FormGroup,
-  ReactiveFormsModule,
-  FormBuilder,
-} from '@angular/forms';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../../../../core/material.module';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { GeneralUtils } from '../../../../shared/utility';
-
-import * as data from '../../../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Observable';
-
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-
-import { MasterdataService } from '../../../../shared/services';
-
-import { MasterdataServiceStub } from '../../../../shared/mocks/masterdata-service-stub';
 import { MusculoskeletalSystemComponent } from './musculoskeletal-system.component';
+import { MaterialModule } from '../../../../../core/material.module';
+import { MasterdataService } from '../../../../shared/services';
+import { GeneralUtils } from '../../../../shared/utility/general-utility';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 
 describe('MusculoskeletalSystemComponent', () => {
   let component: MusculoskeletalSystemComponent;
   let fixture: ComponentFixture<MusculoskeletalSystemComponent>;
-  let fb;
-  let debugElement: DebugElement;
-  let el: HTMLElement;
-  let spy: any;
+  let tracking: any;
+  let masterData$: BehaviorSubject<any>;
+  let form: FormGroup;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    masterData$ = new BehaviorSubject<any>(null);
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS, MaterialModule],
       declarations: [MusculoskeletalSystemComponent],
-      schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MaterialModule,
-        NoopAnimationsModule,
-      ],
       providers: [
-        { provide: MasterdataService, useClass: MasterdataServiceStub },
+        ...commonTestProviders(),
+        {
+          provide: MasterdataService,
+          useValue: { nurseMasterData$: masterData$ },
+        },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(MusculoskeletalSystemComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-    fb = debugElement.injector.get(FormBuilder);
-    component.musculoSkeletalSystemForm = new GeneralUtils(
-      fb
-    ).createMusculoSkeletalSystemForm();
+    tracking = TestBed.inject(AmritTrackingService) as any;
+    form = new GeneralUtils(new FormBuilder(), {
+      getItem: () => JSON.stringify({ vanID: 1, parkingPlaceID: 2 }),
+    } as any).createMusculoSkeletalSystemForm();
+    component.musculoSkeletalSystemDataForm = form;
     fixture.detectChanges();
   });
 
-  it('should create MusculoskeletalSystemComponent', () => {
-    expect(component).toBeTruthy();
+  it('creates, loads language and keeps empty joint types without master data', () => {
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    expect(component.selectTypeOfJoint).toEqual([]);
   });
 
-  it('Should initialize the component', () => {
-    component.ngOnInit();
-    expect(component).toBeTruthy();
+  it('loads joint types from nurse master data', () => {
+    const jointTypes = [{ name: 'Knee', id: 1 }];
+    masterData$.next({ jointTypes });
+    expect(component.selectTypeOfJoint).toEqual(jointTypes);
   });
 
-  it('Should call getMasterData ', async () => {
-    spyOn(component, 'getMasterData');
-    component.ngOnInit();
-    fixture.detectChanges();
-    expect(component.getMasterData).toHaveBeenCalled();
+  it('exposes laterality and abnormality options', () => {
+    expect(component.selectJointLaterality.length).toBe(3);
+    expect(component.selectUpperLimbsAbnormality.map(o => o.name)).toContain(
+      'Deformity'
+    );
+    expect(component.selectLowerLimbsLaterality[2].name).toBe('Bilateral');
   });
 
-  it('Should call getMasterData and get master Data ', async(
-    inject([MasterdataService], masterdataService => {
-      spyOn(component, 'getMasterData').and.callThrough();
-      spyOn(masterdataService, 'getNurseMasterData')
-        .and.returnValue(Observable.of(data.generalOPDNurseMasterdata.data))
-        .and.callThrough();
-      masterdataService.nurseMasterDataSource.next(
-        data.generalOPDNurseMasterdata.data
-      );
-      component.ngOnInit();
-      fixture.detectChanges();
-      expect(component.getMasterData).toHaveBeenCalled();
-      fixture.detectChanges();
-      expect(component.selectTypeOfJoint).toEqual(
-        data.generalOPDNurseMasterdata.data.jointTypes
-      );
-    })
-  ));
+  it('binds the spine input to the form', () => {
+    const input = fixture.nativeElement.querySelector(
+      '[formControlName="spine"]'
+    ) as HTMLInputElement;
+    input.value = 'Kyphosis';
+    input.dispatchEvent(new Event('input'));
+    expect(form.value.spine).toBe('Kyphosis');
+  });
+
+  it('unsubscribes master data on destroy', () => {
+    const sub = component.nurseMasterDataSubscription;
+    spyOn(sub, 'unsubscribe').and.callThrough();
+    component.ngOnDestroy();
+    expect(sub.unsubscribe).toHaveBeenCalled();
+  });
+
+  it('ngOnDestroy is safe without a subscription', () => {
+    component.nurseMasterDataSubscription = undefined;
+    expect(() => component.ngOnDestroy()).not.toThrow();
+  });
+
+  it('trackFieldInteraction reports to the tracking service', () => {
+    component.trackFieldInteraction('Spine');
+    expect(tracking.trackFieldInteraction).toHaveBeenCalledWith(
+      'Spine',
+      'Musculoskeletal System Examination'
+    );
+  });
 });

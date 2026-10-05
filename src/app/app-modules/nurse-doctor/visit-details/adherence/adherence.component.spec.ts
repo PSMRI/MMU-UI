@@ -20,61 +20,110 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, FormGroup } from '@angular/forms';
+import { of } from 'rxjs';
 import {
-  async,
-  inject,
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  FormArray,
-} from '@angular/forms';
-import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
-import { MaterialModule } from '../../../core/material.module';
-
-import { VisitDetailUtils } from '../../shared/utility';
-
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  autoSpy,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 import { DoctorService } from '../../shared/services';
-import { DoctorServiceStub } from '../../shared/mocks/doctor-service-stub';
-
-import * as data from '../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Rx';
-
 import { AdherenceComponent } from './adherence.component';
 
 describe('AdherenceComponent', () => {
   let component: AdherenceComponent;
   let fixture: ComponentFixture<AdherenceComponent>;
-  let debugElement: DebugElement;
-  let fb: FormBuilder;
+  let doctor: any;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
+  beforeEach(async () => {
+    doctor = autoSpy(DoctorService);
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [AdherenceComponent],
+      providers: [
+        ...commonTestProviders({
+          session: { visitID: 'v1', beneficiaryRegID: 'b1' },
+        }),
+        { provide: DoctorService, useValue: doctor },
+      ],
       schemas: [NO_ERRORS_SCHEMA],
-      providers: [{ provide: DoctorService, useClass: DoctorServiceStub }],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
+    TestBed.overrideTemplate(AdherenceComponent, '');
     fixture = TestBed.createComponent(AdherenceComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-
-    fb = debugElement.injector.get(FormBuilder);
-    component.patientAdherenceForm = new VisitDetailUtils(
-      fb
-    ).createPatientAdherenceForm();
-    fixture.detectChanges();
+    component.patientAdherenceForm = new FormGroup({
+      toDrugs: new FormControl(null),
+      drugReason: new FormControl('old drug'),
+      toReferral: new FormControl(null),
+      referralReason: new FormControl('old ref'),
+      progress: new FormControl(null),
+    });
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('ngOnInit and ngDoCheck set the language', () => {
+    component.ngOnInit();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    component.currentLanguageSet = null;
+    component.ngDoCheck();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    expect(component.adherenceProgressData).toEqual([
+      'Improved',
+      'Unchanged',
+      'Worsened',
+    ]);
+  });
+
+  it('ngOnChanges in view mode patches adherence details', () => {
+    doctor.getVisitComplaintDetails.and.returnValue(
+      of({
+        statusCode: 200,
+        data: { BenAdherence: { toDrugs: true, drugReason: 'none' } },
+      })
+    );
+    component.mode = 'view';
+    component.ngOnChanges();
+    expect(doctor.getVisitComplaintDetails).toHaveBeenCalledWith('b1', 'v1');
+    expect(component.toDrugs).toBeTrue();
+    expect(component.drugReason).toBe('none');
+  });
+
+  it('does not patch on non-200 response', () => {
+    doctor.getVisitComplaintDetails.and.returnValue(
+      of({ statusCode: 5000, data: { BenAdherence: { toDrugs: true } } })
+    );
+    component.getAdherenceDetails('b1', 'v1');
+    expect(component.toDrugs).toBeNull();
+  });
+
+  it('does not patch when BenAdherence is null', () => {
+    doctor.getVisitComplaintDetails.and.returnValue(
+      of({ statusCode: 200, data: { BenAdherence: null } })
+    );
+    component.getAdherenceDetails('b1', 'v1');
+    expect(component.toDrugs).toBeNull();
+  });
+
+  it('ngOnChanges outside view mode does nothing', () => {
+    component.mode = 'add';
+    component.ngOnChanges();
+    expect(doctor.getVisitComplaintDetails).not.toHaveBeenCalled();
+  });
+
+  it('checkReferralDescription clears reason only when truthy', () => {
+    component.checkReferralDescription(false);
+    expect(component.referralReason).toBe('old ref');
+    component.checkReferralDescription(true);
+    expect(component.referralReason).toBeNull();
+    expect(component.toReferral).toBeNull();
+  });
+
+  it('checkDrugsDescription clears reason only when truthy', () => {
+    component.checkDrugsDescription(false);
+    expect(component.drugReason).toBe('old drug');
+    component.checkDrugsDescription(true);
+    expect(component.drugReason).toBeNull();
   });
 });

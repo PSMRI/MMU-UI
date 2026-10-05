@@ -20,17 +20,18 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { DashboardComponent } from './dashboard.component';
 
-describe('DashboardComponent', () => {
+describe('DashboardComponent (Registrar)', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [DashboardComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
   }));
 
@@ -40,7 +41,11 @@ describe('DashboardComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should be created', () => {
+  it('should create the component', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should be an instance of DashboardComponent', () => {
+    expect(component instanceof DashboardComponent).toBe(true);
   });
 });

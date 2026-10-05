@@ -19,191 +19,139 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import {
-  async,
-  inject,
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MaterialModule } from '../../../../core/material.module';
-
-import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
-import { BeneficiaryDetailsServiceStub } from '../../../../core/mocks/beneficiary-details-service-stub';
-
-import { CancerUtils } from '../../../shared/utility';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 
 import { SignsAndSymptomsComponent } from './signs-and-symptoms.component';
+import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
+import { MaterialModule } from '../../../../core/material.module';
+import { CancerUtils } from '../../../shared/utility/cancer-utility';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 
 describe('SignsAndSymptomsComponent', () => {
   let component: SignsAndSymptomsComponent;
   let fixture: ComponentFixture<SignsAndSymptomsComponent>;
-  let debugElement: any;
-  let fb: any;
+  let benDetails$: BehaviorSubject<any>;
+  let form: FormGroup;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
+  beforeEach(async () => {
+    benDetails$ = new BehaviorSubject<any>(null);
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS, MaterialModule],
       declarations: [SignsAndSymptomsComponent],
-      schemas: [NO_ERRORS_SCHEMA],
       providers: [
+        ...commonTestProviders(),
         {
           provide: BeneficiaryDetailsService,
-          useClass: BeneficiaryDetailsServiceStub,
+          useValue: { beneficiaryDetails$: benDetails$ },
         },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(SignsAndSymptomsComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
+    form = new CancerUtils(new FormBuilder(), {
+      getItem: () => JSON.stringify({ vanID: 1, parkingPlaceID: 2 }),
+    } as any).createSignsForm();
+    component.signsForm = form;
+  });
 
-    fb = debugElement.injector.get(FormBuilder);
-    component.signsForm = new CancerUtils(fb).createSignsForm();
+  it('creates, loads language and fills the lymph node table source', () => {
     fixture.detectChanges();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    expect(component.dataSource.data.length).toBe(9);
+    expect(component.female).toBeFalse();
+    expect(component.female18).toBeFalse();
+    expect(component.female30).toBeFalse();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('sets female flags for a 35 year old female', () => {
+    benDetails$.next({ genderName: 'Female', ageVal: 35 });
+    fixture.detectChanges();
+    expect(component.female).toBeTrue();
+    expect(component.female18).toBeTrue();
+    expect(component.female30).toBeTrue();
+    expect(
+      fixture.nativeElement.querySelectorAll('mat-radio-group').length
+    ).toBeGreaterThan(5);
   });
 
-  it('should call getBenificiaryDetails on Initialisation', () => {
-    spyOn(component, 'getBeneficiaryDetails');
-    component.ngOnInit();
-    expect(component.getBeneficiaryDetails).toHaveBeenCalled();
+  it('sets only female/female18 for a 20 year old female', () => {
+    benDetails$.next({ genderName: 'female', ageVal: 20 });
+    fixture.detectChanges();
+    expect(component.female).toBeTrue();
+    expect(component.female18).toBeTrue();
+    expect(component.female30).toBeFalse();
   });
 
-  it('should hide lumpInTheBreast symptom for male beneficiary', async(
-    inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
-      beneficiaryDetailsService.beneficiaryDetails.next(data.maleBeneficiary);
-      fixture.detectChanges();
-      debugElement = fixture.debugElement.query(By.css('#lumpInTheBreast'));
-      expect(debugElement).toBeFalsy();
-    })
-  ));
+  it('treats transgender as female without age flags', () => {
+    benDetails$.next({ genderName: 'Transgender', ageVal: 40 });
+    fixture.detectChanges();
+    expect(component.female).toBeTrue();
+    expect(component.female18).toBeFalse();
+    expect(component.female30).toBeFalse();
+  });
 
-  it('should hide bloodStainedDischargeFromNipple symptom for male beneficiary', async(
-    inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
-      beneficiaryDetailsService.beneficiaryDetails.next(data.maleBeneficiary);
-      fixture.detectChanges();
-      debugElement = fixture.debugElement.query(
-        By.css('#bloodStainedDischargeFromNipple')
-      );
-      expect(debugElement).toBeFalsy();
-    })
-  ));
+  it('resets female flags when gender changes to male', () => {
+    benDetails$.next({ genderName: 'Female', ageVal: 40 });
+    fixture.detectChanges();
+    benDetails$.next({ genderName: 'Male', ageVal: 40 });
+    expect(component.female).toBeFalse();
+    expect(component.female30).toBeFalse();
+  });
 
-  it('should hide changeInShapeAndSizeOfBreasts symptom for male beneficiary', async(
-    inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
-      beneficiaryDetailsService.beneficiaryDetails.next(data.maleBeneficiary);
-      fixture.detectChanges();
-      debugElement = fixture.debugElement.query(
-        By.css('#changeInShapeAndSizeOfBreasts')
-      );
-      expect(debugElement).toBeFalsy();
-    })
-  ));
+  it('exposes getters', () => {
+    expect(component.observation).toBe(form.get('observation'));
+    form.patchValue({ lymphNode_Enlarged: true });
+    expect(component.lymphNode_Enlarged).toBeTrue();
+    expect(component.lymphNodes.length).toBe(9);
+  });
 
-  it('should hide vaginalBleedingBetweenPeriods symptom for male beneficiary', async(
-    inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
-      beneficiaryDetailsService.beneficiaryDetails.next(data.maleBeneficiary);
-      fixture.detectChanges();
-      debugElement = fixture.debugElement.query(
-        By.css('#vaginalBleedingBetweenPeriods')
-      );
-      expect(debugElement).toBeFalsy();
-    })
-  ));
+  it('getLymphNodes returns controls or null', () => {
+    expect(component.getLymphNodes()!.length).toBe(9);
+    component.signsForm = new FormGroup({});
+    expect(component.getLymphNodes()).toBeNull();
+  });
 
-  it('should hide vaginalBleedingAfterMenopause symptom for male beneficiary', async(
-    inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
-      beneficiaryDetailsService.beneficiaryDetails.next(data.maleBeneficiary);
-      fixture.detectChanges();
-      debugElement = fixture.debugElement.query(
-        By.css('#vaginalBleedingAfterMenopause')
-      );
-      expect(debugElement).toBeFalsy();
-    })
-  ));
+  it('checkLymph resets lymph node values when not enlarged', () => {
+    const nodes = form.get('lymphNodes')!;
+    nodes.patchValue([{ size_Left: '<3 cm' }]);
+    component.checkLymph(false);
+    expect(nodes.value[0].size_Left).toBeNull();
+    expect(component.dataSource.data.length).toBe(9);
+  });
 
-  it('should hide foulSmellingVaginalDischarge symptom for male beneficiary', async(
-    inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
-      beneficiaryDetailsService.beneficiaryDetails.next(data.maleBeneficiary);
-      fixture.detectChanges();
-      debugElement = fixture.debugElement.query(
-        By.css('#foulSmellingVaginalDischarge')
-      );
-      expect(debugElement).toBeFalsy();
-    })
-  ));
+  it('checkLymph keeps values when enlarged', () => {
+    const nodes = form.get('lymphNodes')!;
+    nodes.patchValue([{ size_Left: '<3 cm' }]);
+    component.checkLymph(true);
+    expect(nodes.value[0].size_Left).toBe('<3 cm');
+  });
 
-  it('should show lumpInTheBreast symptom for female beneficiary', async(
-    inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
-      beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
-      fixture.detectChanges();
-      debugElement = fixture.debugElement.query(By.css('#lumpInTheBreast'));
-      expect(debugElement).toBeTruthy();
-    })
-  ));
+  it('checkLymph sets empty data source without lymphNodes array', () => {
+    component.dataSource.data = [1];
+    component.signsForm = new FormGroup({});
+    component.checkLymph(true);
+    // MatTableDataSource normalises the null it is given to []
+    expect(component.dataSource.data).toEqual([]);
+  });
 
-  it('should show bloodStainedDischargeFromNipple symptom for female beneficiary', async(
-    inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
-      beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
-      fixture.detectChanges();
-      debugElement = fixture.debugElement.query(
-        By.css('#bloodStainedDischargeFromNipple')
-      );
-      expect(debugElement).toBeTruthy();
-    })
-  ));
+  it('unsubscribes on destroy', () => {
+    fixture.detectChanges();
+    const sub = component.beneficiaryDetailsSubs;
+    spyOn(sub, 'unsubscribe').and.callThrough();
+    component.ngOnDestroy();
+    expect(sub.unsubscribe).toHaveBeenCalled();
+  });
 
-  it('should show changeInShapeAndSizeOfBreasts symptom for female beneficiary', async(
-    inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
-      beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
-      fixture.detectChanges();
-      debugElement = fixture.debugElement.query(
-        By.css('#changeInShapeAndSizeOfBreasts')
-      );
-      expect(debugElement).toBeTruthy();
-    })
-  ));
-
-  it('should show vaginalBleedingBetweenPeriods symptom for female beneficiary', async(
-    inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
-      beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
-      fixture.detectChanges();
-      debugElement = fixture.debugElement.query(
-        By.css('#vaginalBleedingBetweenPeriods')
-      );
-      expect(debugElement).toBeTruthy();
-    })
-  ));
-
-  it('should not show vaginalBleedingAfterMenopause symptom for female beneficiary less than 30 years', async(
-    inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
-      beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
-      fixture.detectChanges();
-      debugElement = fixture.debugElement.query(
-        By.css('#vaginalBleedingAfterMenopause')
-      );
-      expect(debugElement).toBeFalsy();
-    })
-  ));
-
-  it('should show foulSmellingVaginalDischarge symptom for female beneficiary', async(
-    inject([BeneficiaryDetailsService], beneficiaryDetailsService => {
-      beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
-      fixture.detectChanges();
-      debugElement = fixture.debugElement.query(
-        By.css('#foulSmellingVaginalDischarge')
-      );
-      expect(debugElement).toBeTruthy();
-    })
-  ));
+  it('ngOnDestroy is safe before init', () => {
+    expect(() => component.ngOnDestroy()).not.toThrow();
+  });
 });

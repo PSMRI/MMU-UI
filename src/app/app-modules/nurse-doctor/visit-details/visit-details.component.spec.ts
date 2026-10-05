@@ -1,53 +1,48 @@
-/*
- * AMRIT – Accessible Medical Records via Integrated Technology
- * Integrated EHR (Electronic Health Records) Solution
- *
- * Copyright (C) "Piramal Swasthya Management and Research Institute"
- *
- * This file is part of AMRIT.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see https://www.gnu.org/licenses/.
- */
-
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MaterialModule } from '../../core/material.module';
-
-import { VisitDetailUtils } from '../shared/utility';
-
-import { ConfirmationService } from '../../core/services/confirmation.service';
-import { DoctorService } from '../shared/services';
-import { DoctorServiceStub } from '../shared/mocks/doctor-service-stub';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 
 import { VisitDetailsComponent } from './visit-details.component';
+import { HttpServiceService } from '../../core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 describe('VisitDetailsComponent', () => {
   let component: VisitDetailsComponent;
   let fixture: ComponentFixture<VisitDetailsComponent>;
-  let debugElement;
-  let fb;
+  let mockHttpService: jasmine.SpyObj<HttpServiceService>;
+  let mockSessionStorage: jasmine.SpyObj<SessionStorageService>;
 
-  beforeEach(async(() => {
+  function buildParentForm(): FormGroup {
+    return new FormGroup({
+      patientVisitDetailsForm: new FormGroup({
+        visitCategory: new FormControl(''),
+      }),
+      covidVaccineStatusForm: new FormGroup({}),
+      patientChiefComplaintsForm: new FormGroup({}),
+      patientAdherenceForm: new FormGroup({}),
+      patientInvestigationsForm: new FormGroup({}),
+      patientCovidForm: new FormGroup({}),
+      patientFileUploadDetailsForm: new FormGroup({}),
+      patientDiseaseForm: new FormGroup({}),
+    });
+  }
+
+  beforeEach(waitForAsync(() => {
+    mockHttpService = jasmine.createSpyObj('HttpServiceService', [], {
+      currentLangugae$: new BehaviorSubject<any>({ test: 'language' }),
+    });
+    mockSessionStorage = jasmine.createSpyObj('SessionStorageService', [
+      'getItem',
+      'setItem',
+    ]);
+
     TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, ReactiveFormsModule, MaterialModule],
+      imports: [ReactiveFormsModule],
       declarations: [VisitDetailsComponent],
       providers: [
-        ConfirmationService,
-        { provide: DoctorService, useClass: DoctorServiceStub },
+        { provide: HttpServiceService, useValue: mockHttpService },
+        { provide: SessionStorageService, useValue: mockSessionStorage },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
@@ -56,13 +51,7 @@ describe('VisitDetailsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(VisitDetailsComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-
-    fb = debugElement.injector.get(FormBuilder);
-    component.patientVisitForm = new VisitDetailUtils(
-      fb
-    ).createPatientVisitForm();
-
+    component.patientVisitDataForm = buildParentForm();
     fixture.detectChanges();
   });
 
@@ -70,38 +59,184 @@ describe('VisitDetailsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show Visit Details', () => {
-    fixture.detectChanges();
-    const de = fixture.debugElement.query(By.css('patient-visit-details'));
-    expect(de.nativeElement).toBeTruthy();
-  });
-
-  it('should not show Chief Complaints', () => {
-    fixture.detectChanges();
-    const de = fixture.debugElement.query(By.css('patient-chief-complaints'));
-    expect(de).not.toBeTruthy();
-  });
-
-  it('should show Chief Complaints after selected visit category is General OPD', () => {
-    component.patientVisitForm.controls['patientVisitDetailsForm'].patchValue({
-      visitCategory: 'General OPD',
+  describe('ngOnInit', () => {
+    it('should extract all sub-forms from the parent form', () => {
+      expect(component.patientVisitDetailsForm).toBeTruthy();
+      expect(component.covidVaccineStatusForm).toBeTruthy();
+      expect(component.patientChiefComplaintsForm).toBeTruthy();
+      expect(component.patientAdherenceForm).toBeTruthy();
+      expect(component.patientInvestigationsForm).toBeTruthy();
+      expect(component.patientCovidForm).toBeTruthy();
+      expect(component.patientFileUploadDetailsForm).toBeTruthy();
+      expect(component.patientDiseaseForm).toBeTruthy();
     });
-    fixture.detectChanges();
-    const de = fixture.debugElement.query(By.css('patient-chief-complaints'));
-    expect(de.nativeElement).toBeTruthy();
-  });
 
-  it('should call conditionCheck when  visit category is selected', () => {
-    spyOn(component, 'conditionCheck');
-    component.patientVisitForm.controls['patientVisitDetailsForm'].patchValue({
-      visitCategory: 'General OPD',
+    it('should call assignSelectedLanguage', () => {
+      spyOn(component, 'assignSelectedLanguage');
+      component.ngOnInit();
+      expect(component.assignSelectedLanguage).toHaveBeenCalled();
     });
-    expect(component.conditionCheck).toHaveBeenCalled();
+
+    it('should call getVisitCategory', () => {
+      spyOn(component, 'getVisitCategory');
+      component.ngOnInit();
+      expect(component.getVisitCategory).toHaveBeenCalled();
+    });
   });
 
-  it('should call getVisitCategory On Initialisation', () => {
-    spyOn(component, 'getVisitCategory');
-    component.ngOnInit();
-    expect(component.getVisitCategory).toHaveBeenCalled();
+  describe('getVisitCategory', () => {
+    it('should subscribe to visitCategory valueChanges and call conditionCheck on value change', () => {
+      spyOn(component, 'conditionCheck');
+      const visitCategoryControl = (
+        component.patientVisitDataForm.get(
+          'patientVisitDetailsForm'
+        ) as FormGroup
+      ).controls['visitCategory'];
+
+      visitCategoryControl.setValue('ANC');
+
+      expect(component.visitCategory).toBe('ANC');
+      expect(component.conditionCheck).toHaveBeenCalled();
+    });
+
+    it('should not call conditionCheck when visitCategory is empty/null', () => {
+      spyOn(component, 'conditionCheck');
+      const visitCategoryControl = (
+        component.patientVisitDataForm.get(
+          'patientVisitDetailsForm'
+        ) as FormGroup
+      ).controls['visitCategory'];
+
+      visitCategoryControl.setValue('');
+
+      expect(component.conditionCheck).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('conditionCheck', () => {
+    it('should call hideAllTab when mode is falsy', () => {
+      component.mode = '';
+      spyOn(component, 'hideAllTab');
+      component.visitCategory = 'ANC';
+      component.conditionCheck();
+      expect(component.hideAllTab).toHaveBeenCalled();
+    });
+
+    it('should not call hideAllTab when mode is set', () => {
+      component.mode = 'view';
+      spyOn(component, 'hideAllTab');
+      component.visitCategory = 'ANC';
+      component.conditionCheck();
+      expect(component.hideAllTab).not.toHaveBeenCalled();
+    });
+
+    it('should set sessionStorage with visitCategory', () => {
+      component.visitCategory = 'ANC';
+      component.conditionCheck();
+      expect(mockSessionStorage.setItem).toHaveBeenCalledWith(
+        'visiCategoryANC',
+        'ANC'
+      );
+    });
+
+    it('should set flags for NCD screening', () => {
+      component.visitCategory = 'NCD screening';
+      component.mode = 'view';
+      component.conditionCheck();
+      expect(component.enableFileSelection).toBeTrue();
+      expect(component.showNcdScreeningVisit).toBeTrue();
+      expect(component.hideAll).toBeFalse();
+    });
+
+    it('should set hideAll false for Cancer Screening', () => {
+      component.visitCategory = 'Cancer Screening';
+      component.mode = 'view';
+      component.conditionCheck();
+      expect(component.hideAll).toBeFalse();
+    });
+
+    it('should set hideAll false for General OPD (QC)', () => {
+      component.visitCategory = 'General OPD (QC)';
+      component.mode = 'view';
+      component.conditionCheck();
+      expect(component.hideAll).toBeFalse();
+    });
+
+    it('should show ANC visit when visitCategory is ANC', () => {
+      component.visitCategory = 'ANC';
+      component.mode = 'view';
+      component.conditionCheck();
+      expect(component.showANCVisit).toBeTrue();
+    });
+
+    it('should show NCD care when visitCategory is NCD care', () => {
+      component.visitCategory = 'NCD care';
+      component.mode = 'view';
+      component.conditionCheck();
+      expect(component.showNCDCare).toBeTrue();
+    });
+
+    it('should show PNC when visitCategory is PNC', () => {
+      component.visitCategory = 'PNC';
+      component.mode = 'view';
+      component.conditionCheck();
+      expect(component.showPNC).toBeTrue();
+    });
+
+    it('should show PNC when visitCategory is General OPD', () => {
+      component.visitCategory = 'General OPD';
+      component.mode = 'view';
+      component.conditionCheck();
+      expect(component.showPNC).toBeTrue();
+    });
+
+    it('should show COVID when visitCategory is COVID-19 Screening', () => {
+      component.visitCategory = 'COVID-19 Screening';
+      component.mode = 'view';
+      component.conditionCheck();
+      expect(component.showCOVID).toBeTrue();
+    });
+
+    it('should set hideAll false for unknown category', () => {
+      component.visitCategory = 'Unknown Category';
+      component.mode = 'view';
+      component.conditionCheck();
+      expect(component.hideAll).toBeFalse();
+    });
+  });
+
+  describe('hideAllTab', () => {
+    it('should reset all visibility flags', () => {
+      component.hideAll = true;
+      component.showANCVisit = true;
+      component.showNCDCare = true;
+      component.showPNC = true;
+      component.showCOVID = true;
+      component.showNcdScreeningVisit = true;
+
+      component.hideAllTab();
+
+      expect(component.hideAll).toBeFalse();
+      expect(component.showANCVisit).toBeFalse();
+      expect(component.showNCDCare).toBeFalse();
+      expect(component.showPNC).toBeFalse();
+      expect(component.showCOVID).toBeFalse();
+      expect(component.showNcdScreeningVisit).toBeFalse();
+    });
+  });
+
+  describe('ngDoCheck', () => {
+    it('should call assignSelectedLanguage', () => {
+      spyOn(component, 'assignSelectedLanguage');
+      component.ngDoCheck();
+      expect(component.assignSelectedLanguage).toHaveBeenCalled();
+    });
+  });
+
+  describe('assignSelectedLanguage', () => {
+    it('should set current_language_set from the language service', () => {
+      component.assignSelectedLanguage();
+      expect(component.current_language_set).toEqual({ test: 'language' });
+    });
   });
 });

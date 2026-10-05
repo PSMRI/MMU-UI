@@ -19,71 +19,86 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import {
-  async,
-  ComponentFixture,
-  tick,
-  inject,
-  fakeAsync,
-  TestBed,
-} from '@angular/core/testing';
-import {
-  FormsModule,
-  FormGroup,
-  ReactiveFormsModule,
-  FormBuilder,
-} from '@angular/forms';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../../../../core/material.module';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { GeneralUtils } from '../../../../shared/utility';
-
-import * as data from '../../../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Observable';
-
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { ObstetricExaminationComponent } from './obstetric-examination.component';
+import { MaterialModule } from '../../../../../core/material.module';
+import { GeneralUtils } from '../../../../shared/utility/general-utility';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 
 describe('ObstetricExaminationComponent', () => {
   let component: ObstetricExaminationComponent;
   let fixture: ComponentFixture<ObstetricExaminationComponent>;
-  let fb;
-  let debugElement: DebugElement;
-  let el: HTMLElement;
-  let spy: any;
+  let form: FormGroup;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS, MaterialModule],
       declarations: [ObstetricExaminationComponent],
+      providers: [...commonTestProviders()],
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MaterialModule,
-        NoopAnimationsModule,
-      ],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ObstetricExaminationComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-    fb = debugElement.injector.get(FormBuilder);
-    component.obstetricExaminationForANCForm = new GeneralUtils(
-      fb
-    ).createObstetricExaminationForANCForm();
+    form = new GeneralUtils(new FormBuilder(), {
+      getItem: () => JSON.stringify({ vanID: 1, parkingPlaceID: 2 }),
+    } as any).createObstetricExaminationForANCForm();
+    component.obstetricExaminationForANCDataForm = form;
+    spyOn(console, 'log');
     fixture.detectChanges();
   });
-  it('should create ObstetricExaminationComponent', () => {
-    expect(component).toBeTruthy();
+
+  it('creates and loads language', () => {
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    expect(component.selectFundalHeight.length).toBe(9);
+    expect(component.selectFetalHeartRate.map(o => o.name)).toEqual([
+      '<120',
+      '120-160',
+      '>160',
+    ]);
   });
 
-  it('Should initialize the component', () => {
-    component.ngOnInit();
-    expect(component).toBeTruthy();
+  it('shows fetal heart rate only when heart sounds are Audible', () => {
+    const el: HTMLElement = fixture.nativeElement;
+    const sel = '[formControlName="fetalHeartRate_BeatsPerMinute"]';
+    expect(el.querySelector(sel)).toBeNull();
+    form.patchValue({ fetalHeartSounds: 'Audible' });
+    fixture.detectChanges();
+    expect(el.querySelector(sel)).not.toBeNull();
+  });
+
+  it('resetFetalHeartRate clears the rate when Not Audible', () => {
+    form.patchValue({ fetalHeartRate_BeatsPerMinute: '>160' });
+    component.resetFetalHeartRate({ value: 'Not Audible' });
+    expect(form.value.fetalHeartRate_BeatsPerMinute).toBeNull();
+  });
+
+  it('resetFetalHeartRate keeps the rate when Audible', () => {
+    form.patchValue({ fetalHeartRate_BeatsPerMinute: '>160' });
+    component.resetFetalHeartRate({ value: 'Audible' });
+    expect(form.value.fetalHeartRate_BeatsPerMinute).toBe('>160');
+  });
+
+  it('getters return control values', () => {
+    form.patchValue({ fetalHeartSounds: 'Audible', sfh: 24 });
+    expect(component.fetalHeartSounds).toBe('Audible');
+    expect(component.SFH).toBe(24);
+    expect(console.log).toHaveBeenCalledWith('sfh');
+  });
+
+  it('binds the sfh input to the form', () => {
+    const input = fixture.nativeElement.querySelector(
+      '[formControlName="sfh"]'
+    ) as HTMLInputElement;
+    input.value = '30';
+    input.dispatchEvent(new Event('input'));
+    expect(String(form.value.sfh)).toBe('30');
   });
 });

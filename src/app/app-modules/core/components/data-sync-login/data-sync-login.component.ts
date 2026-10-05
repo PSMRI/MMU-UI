@@ -151,11 +151,7 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
         this.loginForm.controls['password'].value
       );
       this.dataSyncService
-        .dataSyncLogin(
-          this.loginForm.controls['userName'].value,
-          encriptPassword,
-          false
-        )
+        .dataSyncLogin(userName, encriptPassword, false)
         .subscribe(
           (res: any) => {
             if (res.statusCode === 200) {

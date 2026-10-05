@@ -20,82 +20,239 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { BehaviorSubject, of } from 'rxjs';
 import {
-  async,
-  inject,
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  FormArray,
-} from '@angular/forms';
-import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
-import { MaterialModule } from '../../../../core/material.module';
-
-import { GeneralUtils } from '../../../shared/utility';
-
-import { ConfirmationService } from '../../../../core/services/confirmation.service';
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  autoSpy,
+  commonTestProviders,
+  throwingObs,
+} from 'src/testing/test-utils';
+import { ConfirmationService } from 'src/app/app-modules/core/services/confirmation.service';
+import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services/beneficiary-details.service';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import {
   DoctorService,
-  NurseService,
   MasterdataService,
+  NurseService,
 } from '../../../shared/services';
-import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
-
-import { BeneficiaryDetailsServiceStub } from '../../../../core/mocks/beneficiary-details-service-stub';
-import { MasterdataServiceStub } from '../../../shared/mocks/masterdata-service-stub';
-import { DoctorServiceStub } from '../../../shared/mocks/doctor-service-stub';
-import { NurseServiceStub } from '../../../shared/mocks/nurse-service-stub';
-
-import * as data from '../../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Rx';
-
 import { FeedingHistoryComponent } from './feeding-history.component';
+
+const CONTROLS = [
+  'typeOfFeed',
+  'compFeedStartAge',
+  'noOfCompFeedPerDay',
+  'foodIntoleranceStatus',
+  'typeofFoodIntolerance',
+];
 
 describe('FeedingHistoryComponent', () => {
   let component: FeedingHistoryComponent;
   let fixture: ComponentFixture<FeedingHistoryComponent>;
-  let debugElement: DebugElement;
-  let fb: FormBuilder;
+  let nurse: any;
+  let doctor: any;
+  let confirm: any;
+  let dialog: any;
+  let master$: BehaviorSubject<any>;
+  let ben$: BehaviorSubject<any>;
+  let form: FormGroup;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
-      schemas: [NO_ERRORS_SCHEMA],
+  async function setup(mode = 'new', ben: any = null) {
+    nurse = autoSpy(NurseService);
+    doctor = autoSpy(DoctorService);
+    master$ = new BehaviorSubject<any>(null);
+    ben$ = new BehaviorSubject<any>(ben);
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [FeedingHistoryComponent],
       providers: [
-        ConfirmationService,
-        { provide: MasterdataService, useClass: MasterdataServiceStub },
-        { provide: DoctorService, useClass: DoctorServiceStub },
-        { provide: NurseService, useClass: NurseServiceStub },
+        ...commonTestProviders({
+          session: { beneficiaryRegID: '11', visitID: '22' },
+        }),
+        { provide: NurseService, useValue: nurse },
+        { provide: DoctorService, useValue: doctor },
+        {
+          provide: MasterdataService,
+          useValue: { nurseMasterData$: master$.asObservable() },
+        },
         {
           provide: BeneficiaryDetailsService,
-          useClass: BeneficiaryDetailsServiceStub,
+          useValue: { beneficiaryDetails$: ben$.asObservable() },
         },
       ],
-    }).compileComponents();
-  }));
-
-  beforeEach(() => {
+      schemas: [NO_ERRORS_SCHEMA],
+    })
+      .overrideTemplate(FeedingHistoryComponent, '')
+      .compileComponents();
+    confirm = TestBed.inject(ConfirmationService) as any;
+    dialog = TestBed.inject(MatDialog) as any;
     fixture = TestBed.createComponent(FeedingHistoryComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-
-    fb = debugElement.injector.get(FormBuilder);
-    component.feedingHistoryForm = new GeneralUtils(
-      fb
-    ).createFeedingHistoryForm();
-    window.console.log = () => {};
-
+    const g: any = {};
+    CONTROLS.forEach(c => (g[c] = new FormControl(null)));
+    form = new FormGroup(g);
+    component.feedingHistoryForm = form;
+    component.mode = mode;
+    component.visitCategory = 'General OPD';
     fixture.detectChanges();
+  }
+
+  describe('new mode', () => {
+    beforeEach(async () => setup('new'));
+
+    it('sets language, age stays 0 without beneficiary, master data stored', () => {
+      expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+      expect(component.age).toBe(0);
+      const m = { a: 1 };
+      master$.next(m);
+      expect(component.masterData).toBe(m);
+      expect(doctor.getGeneralHistoryDetails).not.toHaveBeenCalled();
+      component.currentLanguageSet = null;
+      component.ngDoCheck();
+      expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    });
+
+    it('computes age in months from "years - months" string', () => {
+      ben$.next({ age: '2 years - 3 months' });
+      expect(component.age).toBe(27);
+    });
+
+    it('computes age in months from "months" string', () => {
+      ben$.next({ age: '7 months - 4 days' });
+      expect(component.age).toBe(7);
+    });
+
+    it('leaves age unchanged when neither years nor months', () => {
+      ben$.next({ age: '10 days' });
+      expect(component.age).toBe(0);
+    });
+
+    it('ngOnDestroy unsubscribes when present and tolerates nulls', () => {
+      doctor.getGeneralHistoryDetails.and.returnValue(of(null));
+      component.getGeneralHistory('1', '2');
+      const a = spyOn(component.nurseMasterDataSubscription, 'unsubscribe');
+      const b = spyOn(component.beneficiaryDetailSubscription, 'unsubscribe');
+      const c = spyOn(component.generalHistorySubscription, 'unsubscribe');
+      component.ngOnDestroy();
+      expect(a).toHaveBeenCalled();
+      expect(b).toHaveBeenCalled();
+      expect(c).toHaveBeenCalled();
+      component.nurseMasterDataSubscription = null;
+      component.beneficiaryDetailSubscription = null;
+      component.generalHistorySubscription = null;
+      expect(() => component.ngOnDestroy()).not.toThrow();
+    });
+
+    describe('getGeneralHistory', () => {
+      it('patches form with FeedingHistory', () => {
+        const fh = { typeOfFeed: 'Breast', compFeedStartAge: 6 };
+        doctor.getGeneralHistoryDetails.and.returnValue(
+          of({ statusCode: 200, data: { FeedingHistory: fh } })
+        );
+        component.getGeneralHistory('1', '2');
+        expect(doctor.getGeneralHistoryDetails).toHaveBeenCalledWith('1', '2');
+        expect(component.feedingHistoryData).toBe(fh);
+        expect(form.value.typeOfFeed).toBe('Breast');
+        expect(component.compFeedStartAge).toBe(6);
+      });
+
+      [
+        null,
+        { statusCode: 500, data: { FeedingHistory: {} } },
+        { statusCode: 200, data: null },
+        { statusCode: 200, data: {} },
+      ].forEach((resp, i) => {
+        it(`ignores unusable response #${i}`, () => {
+          doctor.getGeneralHistoryDetails.and.returnValue(of(resp));
+          component.getGeneralHistory('1', '2');
+          expect(component.feedingHistoryData).toBeUndefined();
+          expect(form.value.typeOfFeed).toBeNull();
+        });
+      });
+    });
+
+    it('getters and reset helpers', () => {
+      form.patchValue({
+        foodIntoleranceStatus: 'Yes',
+        noOfCompFeedPerDay: 3,
+        typeofFoodIntolerance: 'Milk',
+      });
+      expect(component.foodIntoleranceStatus).toBe('Yes');
+      component.resetNoOfCompFeedPerDay();
+      expect(form.value.noOfCompFeedPerDay).toBeNull();
+      component.resetTypeofFoodIntolerance();
+      expect(form.value.typeofFoodIntolerance).toBeNull();
+    });
+
+    describe('getPreviousFeedingHistory', () => {
+      const err = () => LANGUAGE_EN.alerts.info.errorFetchingHistory;
+      it('opens dialog with data', () => {
+        const payload = { data: [1] };
+        nurse.getPreviousFeedingHistory.and.returnValue(of({ data: payload }));
+        component.getPreviousFeedingHistory();
+        expect(nurse.getPreviousFeedingHistory).toHaveBeenCalledWith(
+          '11',
+          'General OPD'
+        );
+        expect(dialog.open).toHaveBeenCalledWith(PreviousDetailsComponent, {
+          data: {
+            dataList: payload,
+            title:
+              LANGUAGE_EN.historyData.Perinatalhistorydetails
+                .developmentalhistorydetails,
+          },
+        });
+      });
+      it('alerts when empty', () => {
+        nurse.getPreviousFeedingHistory.and.returnValue(
+          of({ data: { data: [] } })
+        );
+        component.getPreviousFeedingHistory();
+        expect(confirm.alert).toHaveBeenCalledWith(
+          LANGUAGE_EN.historyData.ancHistory.previousHistoryDetails
+            .pastHistoryalert
+        );
+        expect(dialog.open).not.toHaveBeenCalled();
+      });
+      it('alerts when data null', () => {
+        nurse.getPreviousFeedingHistory.and.returnValue(of({ data: null }));
+        component.getPreviousFeedingHistory();
+        expect(confirm.alert).toHaveBeenCalledWith(err(), 'error');
+      });
+      it('alerts when response null', () => {
+        nurse.getPreviousFeedingHistory.and.returnValue(of(null));
+        component.getPreviousFeedingHistory();
+        expect(confirm.alert).toHaveBeenCalledWith(err(), 'error');
+      });
+      it('alerts on failure', () => {
+        nurse.getPreviousFeedingHistory.and.returnValue(throwingObs());
+        component.getPreviousFeedingHistory();
+        expect(confirm.alert).toHaveBeenCalledWith(err(), 'error');
+      });
+    });
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  describe('initial beneficiary', () => {
+    beforeEach(async () => setup('new', { age: '1 years - 1 months' }));
+    it('computes age on init', () => {
+      expect(component.age).toBe(13);
+    });
+  });
+
+  describe('view mode', () => {
+    beforeEach(async () => setup('view'));
+
+    it('loads history with session IDs when master data arrives', () => {
+      doctor.getGeneralHistoryDetails.and.returnValue(
+        of({ statusCode: 200, data: { FeedingHistory: { typeOfFeed: 'F' } } })
+      );
+      master$.next({ a: 1 });
+      expect(doctor.getGeneralHistoryDetails).toHaveBeenCalledWith('11', '22');
+      expect(form.value.typeOfFeed).toBe('F');
+    });
   });
 });
