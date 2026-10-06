@@ -53,6 +53,13 @@ export class WorkareaComponent
   displaySyncBool = true;
   isMMUOfflineQRCode = environment.isMMUOfflineQRCode;
   documentSyncInProgress = false;
+  documentSyncResult: {
+    status: string;
+    totalRecords: number;
+    successfulRecords: number;
+    failedRecords: number;
+    failureReasons: string[];
+  } | null = null;
 
   constructor(
     private router: Router,
@@ -248,23 +255,21 @@ export class WorkareaComponent
   }
   startDocumentSync() {
     this.documentSyncInProgress = true;
+    this.documentSyncResult = null;
     this.dataSyncService.syncDiagnosticDocuments().subscribe(
       (res: any) => {
         this.documentSyncInProgress = false;
-        if (res?.statusCode === 200) {
-          // "Data successfully synced" is a success; any other data.response
-          // (nothing pending, decrypt failures, all rejected) is informational.
-          const message = res.data?.response || 'Document sync completed';
+        if (res?.statusCode !== 200) {
+          // whole call failed, e.g. van database down (statusCode 5000)
           this.confirmationService.alert(
-            message,
-            message === 'Data successfully synced' ? 'success' : 'info'
-          );
-        } else {
-          this.confirmationService.alert(
-            res?.errorMessage || 'Document sync failed. Please try again.',
+            res?.errorMessage ||
+              res?.status ||
+              'Document sync failed. Please try again.',
             'error'
           );
+          return;
         }
+        this.handleDocumentSyncResult(res.data);
       },
       (err: any) => {
         this.documentSyncInProgress = false;
@@ -274,6 +279,40 @@ export class WorkareaComponent
         );
       }
     );
+  }
+
+  /** data.status: success | partial | failed; absent when nothing was pending */
+  private handleDocumentSyncResult(data: any) {
+    const response = data?.response || 'Document sync completed';
+    if (!data?.status) {
+      this.confirmationService.alert(response, 'info');
+      return;
+    }
+    this.documentSyncResult = {
+      status: data.status,
+      totalRecords: data.totalRecords ?? 0,
+      successfulRecords: data.successfulRecords ?? 0,
+      failedRecords: data.failedRecords ?? 0,
+      failureReasons: data.failureReasons ?? [],
+    };
+    const { totalRecords, successfulRecords, failedRecords } =
+      this.documentSyncResult;
+    if (data.status === 'success') {
+      this.confirmationService.alert(
+        `${response}. ${successfulRecords} of ${totalRecords} documents synced.`,
+        'success'
+      );
+    } else if (data.status === 'partial') {
+      this.confirmationService.alert(
+        `${response}. ${successfulRecords} of ${totalRecords} documents synced, ${failedRecords} failed. See failure details below.`,
+        'warn'
+      );
+    } else {
+      this.confirmationService.alert(
+        `${response}. All ${failedRecords} documents failed. See failure details below.`,
+        'error'
+      );
+    }
   }
 
   updateGroupStatus(groupsProgress: any[]) {

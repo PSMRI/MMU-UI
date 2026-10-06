@@ -45,6 +45,28 @@
                     (click)="startDocumentSync()">
                     {{ current_language_set?.startDocumentSync }}
                   </button>
+                  <div
+                    *ngIf="documentSyncResult"
+                    style="margin-top: 16px; width: 100%; text-align: left">
+                    <p>
+                      Synced {{ documentSyncResult.successfulRecords }} of
+                      {{ documentSyncResult.totalRecords }} documents<span
+                        *ngIf="documentSyncResult.failedRecords > 0"
+                        >, {{ documentSyncResult.failedRecords }} failed</span
+                      >
+                    </p>
+                    <ul
+                      *ngIf="documentSyncResult.failureReasons.length > 0"
+                      class="text-danger"
+                      style="padding-left: 20px; margin-bottom: 0">
+                      <li
+                        *ngFor="
+                          let reason of documentSyncResult.failureReasons
+                        ">
+                        {{ reason }}
+                      </li>
+                    </ul>
+                  </div>
                 </mat-card>
               </div>
             </div>
