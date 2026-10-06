@@ -1720,6 +1720,7 @@
     "covidVaccinationDetailsSaved":"Covid vaccination details saved successfully",
     "benPreviousVisitDetails": "Beneficiary previous visit details",
     "startDataSync": "Start Data Sync",
+    "startDocumentSync": "Start Document Sync",
     "abha":"ABHA",
     "abhaNumber":"ABHA Number",
     "abhaDetails":"ABHA Details",

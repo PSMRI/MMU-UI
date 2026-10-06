@@ -3,10 +3,19 @@
     <!-- Tab 1 — Data Upload -->
     <z-tab label="Data Upload">
       <div class="space-y-6 pt-6">
-        <div *ngIf="displaySyncBool" class="flex justify-center">
+        <div *ngIf="displaySyncBool" class="flex flex-col items-center gap-3">
           <button z-button type="button" (click)="syncGroups()">
             <ng-icon name="lucideRefreshCw"></ng-icon>
             {{ current_language_set?.startDataSync }}
+          </button>
+          <button
+            *ngIf="isMMUOfflineQRCode"
+            z-button
+            type="button"
+            (click)="startDocumentSync()"
+            [disabled]="documentSyncInProgress">
+            <ng-icon name="lucideUpload"></ng-icon>
+            {{ current_language_set?.startDocumentSync }}
           </button>
         </div>
 
