@@ -48,24 +48,33 @@
                   <div
                     *ngIf="documentSyncResult"
                     style="margin-top: 16px; width: 100%; text-align: left">
-                    <p>
-                      Synced {{ documentSyncResult.successfulRecords }} of
-                      {{ documentSyncResult.totalRecords }} documents<span
-                        *ngIf="documentSyncResult.failedRecords > 0"
-                        >, {{ documentSyncResult.failedRecords }} failed</span
-                      >
-                    </p>
                     <ul
-                      *ngIf="documentSyncResult.failureReasons.length > 0"
-                      class="text-danger"
-                      style="padding-left: 20px; margin-bottom: 0">
-                      <li
-                        *ngFor="
-                          let reason of documentSyncResult.failureReasons
-                        ">
-                        {{ reason }}
+                      *ngIf="documentSyncResult.documents.length > 0"
+                      class="document-sync-list">
+                      <li *ngFor="let doc of documentSyncResult.documents">
+                        <span class="document-sync-name">{{ doc.name }}</span>
+                        <span
+                          class="document-sync-status"
+                          [class.uploaded]="doc.uploaded"
+                          [class.not-uploaded]="!doc.uploaded"
+                          >{{ doc.uploaded ? 'Uploaded' : 'Not uploaded' }}</span
+                        >
+                        <div *ngIf="doc.reason" class="document-sync-reason">
+                          {{ doc.reason }}
+                        </div>
                       </li>
                     </ul>
+                    <p
+                      *ngIf="documentSyncResult.unlistedUploaded > 0"
+                      class="document-sync-more">
+                      {{ documentSyncResult.unlistedUploaded }}
+                      {{
+                        documentSyncResult.documents.length > 0
+                          ? 'other documents'
+                          : 'documents'
+                      }}
+                      uploaded
+                    </p>
                   </div>
                 </mat-card>
               </div>

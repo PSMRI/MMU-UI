@@ -38,6 +38,13 @@ import { SetLanguageComponent } from '../../core/components/set-language.compone
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { environment } from 'src/environments/environment';
 
+interface DocumentSyncItem {
+  documentId: string | number | null;
+  name: string;
+  uploaded: boolean;
+  reason: string | null;
+}
+
 @Component({
   selector: 'app-workarea',
   templateUrl: './workarea.component.html',
@@ -58,7 +65,9 @@ export class WorkareaComponent
     totalRecords: number;
     successfulRecords: number;
     failedRecords: number;
-    failureReasons: string[];
+    documents: DocumentSyncItem[];
+    // uploaded documents the server did not list individually
+    unlistedUploaded: number;
   } | null = null;
 
   constructor(
@@ -288,31 +297,82 @@ export class WorkareaComponent
       this.confirmationService.alert(response, 'info');
       return;
     }
+    const totalRecords = data.totalRecords ?? 0;
+    const successfulRecords = data.successfulRecords ?? 0;
+    const failedRecords = data.failedRecords ?? 0;
+    const documents = this.toDocumentSyncItems(data);
+    const listedUploaded = documents.filter(doc => doc.uploaded).length;
     this.documentSyncResult = {
       status: data.status,
-      totalRecords: data.totalRecords ?? 0,
-      successfulRecords: data.successfulRecords ?? 0,
-      failedRecords: data.failedRecords ?? 0,
-      failureReasons: data.failureReasons ?? [],
+      totalRecords,
+      successfulRecords,
+      failedRecords,
+      documents,
+      unlistedUploaded: Math.max(successfulRecords - listedUploaded, 0),
     };
-    const { totalRecords, successfulRecords, failedRecords } =
-      this.documentSyncResult;
+    // one popup per sync call; per-document detail is shown in the card
     if (data.status === 'success') {
       this.confirmationService.alert(
-        `${response}. ${successfulRecords} of ${totalRecords} documents synced.`,
+        `${response}. ${successfulRecords} of ${totalRecords} documents uploaded.`,
         'success'
       );
     } else if (data.status === 'partial') {
       this.confirmationService.alert(
-        `${response}. ${successfulRecords} of ${totalRecords} documents synced, ${failedRecords} failed. See failure details below.`,
+        `${response}. ${successfulRecords} of ${totalRecords} documents uploaded, ${failedRecords} not uploaded.`,
         'warn'
       );
     } else {
       this.confirmationService.alert(
-        `${response}. All ${failedRecords} documents failed. See failure details below.`,
+        `${response}. ${failedRecords} of ${totalRecords} documents not uploaded.`,
         'error'
       );
     }
+  }
+
+  /**
+   * Prefers data.documents ([{ documentId, status, reason }]).
+   * Documents are labelled by documentId for now (file names to follow).
+   * Falls back to failureReasons ("documentId 28: sha256 mismatch on receipt"),
+   * which only lists the failed documents.
+   */
+  private toDocumentSyncItems(data: any): DocumentSyncItem[] {
+    if (Array.isArray(data.documents) && data.documents.length > 0) {
+      return data.documents.map((doc: any) => {
+        const status = String(doc?.status ?? '').toLowerCase();
+        const uploaded = ['uploaded', 'success', 'synced'].includes(status);
+        return {
+          documentId: doc?.documentId ?? null,
+          name: this.documentLabel(doc?.documentId),
+          uploaded,
+          reason: uploaded ? null : doc?.reason || doc?.failureReason || null,
+        };
+      });
+    }
+    const reasons: string[] = Array.isArray(data.failureReasons)
+      ? data.failureReasons
+      : [];
+    return reasons.map(reason => {
+      const match = /^\s*documentId\s+(\S+?)\s*:\s*(.*)$/i.exec(String(reason));
+      return match
+        ? {
+            documentId: match[1],
+            name: this.documentLabel(match[1]),
+            uploaded: false,
+            reason: match[2] || null,
+          }
+        : {
+            documentId: null,
+            name: this.documentLabel(null),
+            uploaded: false,
+            reason: String(reason),
+          };
+    });
+  }
+
+  private documentLabel(documentId: any): string {
+    return documentId != null && documentId !== ''
+      ? `Document ID: ${documentId}`
+      : 'Document ID: -';
   }
 
   updateGroupStatus(groupsProgress: any[]) {
