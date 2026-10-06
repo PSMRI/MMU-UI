@@ -36,6 +36,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-workarea',
@@ -50,6 +51,8 @@ export class WorkareaComponent
   blankTable: any[] = [];
   showTable = false;
   displaySyncBool = true;
+  isMMUOfflineQRCode = environment.isMMUOfflineQRCode;
+  documentSyncInProgress = false;
 
   constructor(
     private router: Router,
@@ -243,6 +246,36 @@ export class WorkareaComponent
       }
     );
   }
+  startDocumentSync() {
+    this.documentSyncInProgress = true;
+    this.dataSyncService.syncDiagnosticDocuments().subscribe(
+      (res: any) => {
+        this.documentSyncInProgress = false;
+        if (res?.statusCode === 200) {
+          // "Data successfully synced" is a success; any other data.response
+          // (nothing pending, decrypt failures, all rejected) is informational.
+          const message = res.data?.response || 'Document sync completed';
+          this.confirmationService.alert(
+            message,
+            message === 'Data successfully synced' ? 'success' : 'info'
+          );
+        } else {
+          this.confirmationService.alert(
+            res?.errorMessage || 'Document sync failed. Please try again.',
+            'error'
+          );
+        }
+      },
+      (err: any) => {
+        this.documentSyncInProgress = false;
+        this.confirmationService.alert(
+          err?.errorMessage || err?.message || 'Document sync failed',
+          'error'
+        );
+      }
+    );
+  }
+
   updateGroupStatus(groupsProgress: any[]) {
     this.syncTableGroupList.forEach((group: any) => {
       const progress = groupsProgress.find(

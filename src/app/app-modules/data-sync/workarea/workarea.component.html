@@ -16,6 +16,16 @@
                 color="primary">
                 {{ current_language_set?.startDataSync }}
               </button>
+              <div *ngIf="displaySyncBool && isMMUOfflineQRCode" class="m-t-10">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  class="mat_blue"
+                  [disabled]="documentSyncInProgress"
+                  (click)="startDocumentSync()">
+                  {{ current_language_set?.startDocumentSync }}
+                </button>
+              </div>
             </div>
             <section
               class="table-responsive"
