@@ -5,26 +5,47 @@
         <mat-tab label="Data Upload" [disabled]="showProgressBar">
           <mat-drawer-container class="example-container m-t-10">
             <div
-              class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
-              style="text-align: center; padding: 20px">
-              <button
-                *ngIf="displaySyncBool"
-                mat-raised-button
-                color="primary"
-                class="mat_blue"
-                (click)="syncGroups()"
-                color="primary">
-                {{ current_language_set?.startDataSync }}
-              </button>
-              <div *ngIf="displaySyncBool && isMMUOfflineQRCode" class="m-t-10">
-                <button
-                  mat-raised-button
-                  color="primary"
-                  class="mat_blue"
-                  [disabled]="documentSyncInProgress"
-                  (click)="startDocumentSync()">
-                  {{ current_language_set?.startDocumentSync }}
-                </button>
+              *ngIf="displaySyncBool"
+              class="row justify-content-center align-items-center"
+              style="padding: 20px; min-height: 60vh">
+              <div class="col-12 col-md-6 m-b-10">
+                <mat-card
+                  style="
+                    min-height: 170px;
+                    text-align: center;
+                    align-items: center;
+                  ">
+                  <h4>{{ current_language_set?.dataSyncCardTitle }}</h4>
+                  <p>{{ current_language_set?.dataSyncCardDescription }}</p>
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    class="mat_blue"
+                    style="width: 220px"
+                    (click)="syncGroups()">
+                    {{ current_language_set?.startDataSync }}
+                  </button>
+                </mat-card>
+              </div>
+              <div class="col-12 col-md-6 m-b-10" *ngIf="isMMUOfflineQRCode">
+                <mat-card
+                  style="
+                    min-height: 170px;
+                    text-align: center;
+                    align-items: center;
+                  ">
+                  <h4>{{ current_language_set?.documentSyncCardTitle }}</h4>
+                  <p>{{ current_language_set?.documentSyncCardDescription }}</p>
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    class="mat_blue"
+                    style="width: 220px"
+                    [disabled]="documentSyncInProgress"
+                    (click)="startDocumentSync()">
+                    {{ current_language_set?.startDocumentSync }}
+                  </button>
+                </mat-card>
               </div>
             </div>
             <section
