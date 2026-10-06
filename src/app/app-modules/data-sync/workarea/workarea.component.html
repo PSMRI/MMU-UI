@@ -3,20 +3,71 @@
     <!-- Tab 1 — Data Upload -->
     <z-tab label="Data Upload">
       <div class="space-y-6 pt-6">
-        <div *ngIf="displaySyncBool" class="flex flex-col items-center gap-3">
-          <button z-button type="button" (click)="syncGroups()">
-            <ng-icon name="lucideRefreshCw"></ng-icon>
-            {{ current_language_set?.startDataSync }}
-          </button>
-          <button
+        <div
+          *ngIf="displaySyncBool"
+          class="flex min-h-[60vh] flex-col items-center justify-center gap-6 md:flex-row">
+          <z-card class="w-full md:w-[calc(50%-0.75rem)]">
+            <z-card-header
+              class="flex flex-col items-center gap-1.5 text-center">
+              <z-card-title>{{
+                current_language_set?.dataSyncCardTitle
+              }}</z-card-title>
+              <z-card-description>{{
+                current_language_set?.dataSyncCardDescription
+              }}</z-card-description>
+            </z-card-header>
+            <z-card-content class="flex justify-center">
+              <button
+                z-button
+                type="button"
+                class="w-56"
+                (click)="syncGroups()">
+                <ng-icon name="lucideRefreshCw"></ng-icon>
+                {{ current_language_set?.startDataSync }}
+              </button>
+            </z-card-content>
+          </z-card>
+
+          <z-card
             *ngIf="isMMUOfflineQRCode"
-            z-button
-            type="button"
-            (click)="startDocumentSync()"
-            [disabled]="documentSyncInProgress">
-            <ng-icon name="lucideUpload"></ng-icon>
-            {{ current_language_set?.startDocumentSync }}
-          </button>
+            class="w-full md:w-[calc(50%-0.75rem)]">
+            <z-card-header
+              class="flex flex-col items-center gap-1.5 text-center">
+              <z-card-title>{{
+                current_language_set?.documentSyncCardTitle
+              }}</z-card-title>
+              <z-card-description>{{
+                current_language_set?.documentSyncCardDescription
+              }}</z-card-description>
+            </z-card-header>
+            <z-card-content class="flex flex-col items-center gap-4">
+              <button
+                z-button
+                type="button"
+                class="w-56"
+                (click)="startDocumentSync()"
+                [disabled]="documentSyncInProgress">
+                <ng-icon name="lucideUpload"></ng-icon>
+                {{ current_language_set?.startDocumentSync }}
+              </button>
+              <div *ngIf="documentSyncResult" class="w-full space-y-2 text-sm">
+                <p class="text-muted-foreground">
+                  Synced {{ documentSyncResult.successfulRecords }} of
+                  {{ documentSyncResult.totalRecords }} documents<span
+                    *ngIf="documentSyncResult.failedRecords > 0"
+                    >, {{ documentSyncResult.failedRecords }} failed</span
+                  >
+                </p>
+                <ul
+                  *ngIf="documentSyncResult.failureReasons.length > 0"
+                  class="list-disc space-y-1 pl-5 text-destructive">
+                  <li *ngFor="let reason of documentSyncResult.failureReasons">
+                    {{ reason }}
+                  </li>
+                </ul>
+              </div>
+            </z-card-content>
+          </z-card>
         </div>
 
         <z-card *ngIf="showTable">
