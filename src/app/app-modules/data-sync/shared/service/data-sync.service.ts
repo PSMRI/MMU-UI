@@ -76,6 +76,13 @@ export class DataSyncService {
 
     return this.http.post(environment.syncDataUploadUrl, req);
   }
+  /**
+   * Pushes pending diagnostic documents from the van to the central server.
+   * No request body; auth and JSON content-type headers come from the interceptor.
+   */
+  syncDiagnosticDocuments() {
+    return this.http.post(environment.syncDiagnosticDocumentsUrl, null);
+  }
   syncDownloadData(reqObj: any) {
     return this.http.post(environment.syncDataDownloadUrl, reqObj);
   }
