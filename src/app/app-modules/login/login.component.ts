@@ -203,7 +203,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
           },
           err => {
             this.resetCaptcha();
-            this.confirmationService.alert(err, 'error');
+            const message = [err?.error?.errorMessage, err?.message].find(
+              msg => !!msg
+            );
+            this.confirmationService.alert(
+              message || 'Login request failed. Please try again.',
+              'error'
+            );
           }
         );
     }
