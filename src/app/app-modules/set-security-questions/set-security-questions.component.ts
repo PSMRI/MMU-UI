@@ -77,6 +77,7 @@ export class SetSecurityQuestionsComponent implements OnInit {
     this.Q_array_two = response.data;
   }
 
+
   handleError(response: any) {
   }
 
