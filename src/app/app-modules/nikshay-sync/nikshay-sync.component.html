@@ -1,0 +1,168 @@
+<!--
+  AMRIT – Accessible Medical Records via Integrated Technology
+  Integrated EHR (Electronic Health Records) Solution
+
+  Copyright (C) "Piramal Swasthya Management and Research Institute"
+
+  This file is part of AMRIT.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see https://www.gnu.org/licenses/.
+-->
+
+<app-header [showRoles]="true"></app-header>
+
+<div class="nikshay-sync-page">
+  <h2 class="page-title">Nikshay Sync</h2>
+
+  <mat-tab-group>
+    <mat-tab label="Download Beneficiaries">
+      <div class="nikshay-tab-content">
+        <p class="qr-subtitle">
+          Download this camp's beneficiaries as a CSV formatted for the Nikshay ID Generator.
+        </p>
+
+        <div *ngIf="campInfo" class="camp-info-chip">
+          <span class="material-icons url-icon">local_shipping</span>
+          <span class="url-text">{{ campInfo.vanLabel }} &middot; {{ campInfo.servicePointName }}</span>
+        </div>
+        <div *ngIf="!campInfo" class="detect-row warn">
+          <span class="material-icons" style="font-size: 18px; color: #f9a825">info</span>
+          <span class="detect-text">
+            No active camp session found &mdash; select a van and service point first.
+          </span>
+        </div>
+
+        <form [formGroup]="downloadForm" style="margin-top: 16px">
+          <mat-form-field style="width: 100%" class="mat_form_field_color">
+            <mat-label>Camp Date Range</mat-label>
+            <mat-date-range-input [rangePicker]="nikshayPicker" [max]="today">
+              <input matStartDate formControlName="fromDate" placeholder="From date" />
+              <input matEndDate formControlName="toDate" placeholder="To date" />
+            </mat-date-range-input>
+            <mat-hint>MM/DD/YYYY &ndash; MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="nikshayPicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #nikshayPicker></mat-date-range-picker>
+            <mat-error
+              *ngIf="
+                downloadForm.controls.fromDate.hasError('required') ||
+                downloadForm.controls.toDate.hasError('required')
+              ">
+              Both dates are required
+            </mat-error>
+          </mat-form-field>
+
+          <div style="margin-top: 12px; text-align: center">
+            <button
+              mat-raised-button
+              color="primary"
+              class="mat_blue"
+              type="button"
+              [disabled]="downloadForm.invalid || !campInfo || isDownloadingCsv"
+              (click)="downloadBeneficiariesCsv()">
+              <mat-spinner
+                *ngIf="isDownloadingCsv"
+                diameter="18"
+                style="display: inline-block; vertical-align: middle; margin-right: 8px">
+              </mat-spinner>
+              <span *ngIf="!isDownloadingCsv" class="material-icons btn-icon">download</span>
+              {{ isDownloadingCsv ? 'Preparing CSV…' : 'Download CSV' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Upload Nikshay Results">
+      <div class="nikshay-tab-content">
+        <p class="qr-subtitle">
+          Upload the Nikshay ID Generator app's results CSV to write the generated Nikshay IDs
+          back onto this camp's beneficiaries.
+        </p>
+
+        <div *ngIf="campInfo" class="camp-info-chip">
+          <span class="material-icons url-icon">local_shipping</span>
+          <span class="url-text">{{ campInfo.vanLabel }} &middot; {{ campInfo.servicePointName }}</span>
+        </div>
+        <div *ngIf="!campInfo" class="detect-row warn">
+          <span class="material-icons" style="font-size: 18px; color: #f9a825">info</span>
+          <span class="detect-text">
+            No active camp session found &mdash; select a van and service point first.
+          </span>
+        </div>
+
+        <div style="margin-top: 16px">
+          <div>
+            <span class="span-style">
+              <input
+                autocomplete="off"
+                type="file"
+                accept=".csv"
+                id="nikshayResultsFile"
+                (change)="onResultsFileSelected($event)" />
+            </span>
+          </div>
+
+          <div style="margin-top: 16px; text-align: center">
+            <button
+              mat-raised-button
+              color="primary"
+              class="mat_blue"
+              type="button"
+              [disabled]="!campInfo || !selectedResultsFile || isUploadingCsv"
+              (click)="uploadResultsCsv()">
+              <mat-spinner
+                *ngIf="isUploadingCsv"
+                diameter="18"
+                style="display: inline-block; vertical-align: middle; margin-right: 8px">
+              </mat-spinner>
+              <span *ngIf="!isUploadingCsv" class="material-icons btn-icon">upload</span>
+              {{ isUploadingCsv ? 'Uploading…' : 'Upload Results CSV' }}
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="lastImportSummary" class="qr-result" style="width: 100%">
+          <p>
+            <strong>{{ lastImportSummary.updated }}</strong> Nikshay ID(s) updated &middot;
+            <strong>{{ lastImportSummary.needsReview }}</strong> row(s) need review &middot;
+            <strong>{{ lastImportSummary.failed }}</strong> failed
+            (of {{ lastImportSummary.csvRowCount }} row(s) in the file)
+          </p>
+
+          <div *ngIf="lastImportSummary.needsReviewRows.length" style="margin-top: 8px">
+            <strong>Needs review:</strong>
+            <ul>
+              <li *ngFor="let row of lastImportSummary.needsReviewRows">
+                {{ row.firstName }} {{ row.middleLastName }} (benRegId {{ row.benRegId }}) &mdash;
+                {{ row.note }}
+              </li>
+            </ul>
+          </div>
+
+          <div *ngIf="lastImportSummary.failedRows.length" style="margin-top: 8px">
+            <strong>Failed:</strong>
+            <ul>
+              <li *ngFor="let row of lastImportSummary.failedRows">
+                {{ row.firstName }} {{ row.middleLastName }} (benRegId {{ row.benRegId }}) &mdash;
+                {{ row.note }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<app-footer></app-footer>

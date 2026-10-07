@@ -373,6 +373,9 @@ export const environment = {
   syncDataUploadUrl: `${MMU_API}dataSyncActivity/van-to-server`,
   syncDataDownloadUrl: `${MMU_API}dataSyncActivity/startMasterDownload`,
   syncDownloadProgressUrl: `${MMU_API}dataSyncActivity/checkMastersDownloadProgress`,
+  // down-sync : central -> local
+  startDownSyncUrl: `${MMU_API}dataSyncActivity/startDownSync`,
+  checkDownSyncProgressUrl: `${MMU_API}dataSyncActivity/checkDownSyncProgress`,
   getNcdScreeningVisitCountUrl: `${MMU_API}NCD/getNcdScreeningVisitCount/`,
   getVanDetailsForMasterDownloadUrl: `${MMU_API}dataSyncActivity/getVanDetailsForMasterDownload`,
 
@@ -524,4 +527,6 @@ export const environment = {
   advanceElasticSearchUrl: `${MMU_API}registrar/advancedSearchES`,
   isSMSFeatureEnabled: false,
   campHubConnectInfoAPI: `${COMMON_API}public/connect/info`,
+  nikshayBeneficiaryCsvUrl: `${MMU_API}stopTb/nikshay/exportBeneficiariesCsv`,
+  nikshayImportResultsCsvUrl: `${MMU_API}stopTb/nikshay/importResultsCsv`,
 };

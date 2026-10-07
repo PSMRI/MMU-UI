@@ -45,6 +45,10 @@
   min-width: 420px;
 }
 
+.nikshay-tab-content {
+  padding-top: 12px;
+}
+
 .qr-subtitle {
   font-size: 13px;
   color: #555;
