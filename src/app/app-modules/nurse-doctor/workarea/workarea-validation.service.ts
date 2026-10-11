@@ -589,7 +589,17 @@ export class WorkareaValidationService {
             drugPrescriptionForm.value.prescribedDrugs
               ? drugPrescriptionForm.value.prescribedDrugs
               : [];
-          prescribedDrugs = prescribedDrugs.filter((d: any) => !!d.createdBy);
+          // Count a drug as a real prescription if it was added in this session
+          // (createdBy) OR was loaded from an already-saved prescription (it has a
+          // drug identity but no createdBy). Previously only createdBy rows counted,
+          // so a prescription reloaded after the lab step falsely failed this gate
+          // even though it is shown to the user.
+          prescribedDrugs = prescribedDrugs.filter(
+            (d: any) =>
+              !!d.createdBy ||
+              !!d.drugID ||
+              !!(d.drugName && String(d.drugName).trim())
+          );
           if (!prescribedDrugs || prescribedDrugs.length === 0) {
             required.push(
               host.currentLanguageSet?.Prescription?.prescriptionRequired ||
@@ -1110,7 +1120,17 @@ export class WorkareaValidationService {
             prescription.value && prescription.value.prescribedDrugs
               ? prescription.value.prescribedDrugs
               : [];
-          prescribedDrugs = prescribedDrugs.filter((d: any) => !!d.createdBy);
+          // Count a drug as a real prescription if it was added in this session
+          // (createdBy) OR was loaded from an already-saved prescription (it has a
+          // drug identity but no createdBy). Previously only createdBy rows counted,
+          // so a prescription reloaded after the lab step falsely failed this gate
+          // even though it is shown to the user.
+          prescribedDrugs = prescribedDrugs.filter(
+            (d: any) =>
+              !!d.createdBy ||
+              !!d.drugID ||
+              !!(d.drugName && String(d.drugName).trim())
+          );
           if (!prescribedDrugs || prescribedDrugs.length === 0) {
             required.push(
               host.currentLanguageSet?.Prescription?.prescriptionRequired ||
