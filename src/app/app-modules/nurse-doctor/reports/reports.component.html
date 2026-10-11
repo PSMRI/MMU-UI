@@ -96,7 +96,7 @@
           <button
             z-button
             type="button"
-            [disabled]="!reportForm.valid"
+            [zDisabled]="!reportForm.valid"
             (click)="getReportData()">
             <ng-icon name="lucideDownload"></ng-icon>
             {{ currentLanguageSet?.downloadReport }}

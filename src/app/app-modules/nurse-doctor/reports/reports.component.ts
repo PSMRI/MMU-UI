@@ -23,7 +23,12 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
 import { MasterdataService } from '../shared/services';
 import { ConfirmationService } from '../../core/services/confirmation.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import * as ExcelJS from 'exceljs';
@@ -96,10 +101,10 @@ export class ReportsComponent implements OnInit, DoCheck {
   // Ends
   createReportForm() {
     return this.formBuilder.group({
-      report: null,
-      fromDate: null,
-      toDate: null,
-      van: null,
+      report: [null, Validators.required],
+      fromDate: [null, Validators.required],
+      toDate: [null, Validators.required],
+      van: [null, Validators.required],
     });
   }
 
