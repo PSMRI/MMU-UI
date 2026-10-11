@@ -91,7 +91,7 @@ export class PreviousDetailsComponent implements OnInit, DoCheck {
       this.input.dataList.columns instanceof Array
     )
       this.columnList = this.input.dataList.columns;
-    this.input.dataList.columns.filter((item: any) => {
+    (this.input.dataList.columns || []).filter((item: any) => {
       if (item.keyName) {
         this.displayedColumns.push(item.keyName);
       }
