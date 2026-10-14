@@ -57,7 +57,9 @@
                           class="document-sync-status"
                           [class.uploaded]="doc.uploaded"
                           [class.not-uploaded]="!doc.uploaded"
-                          >{{ doc.uploaded ? 'Uploaded' : 'Not uploaded' }}</span
+                          >{{
+                            doc.uploaded ? 'Uploaded' : 'Not uploaded'
+                          }}</span
                         >
                         <div *ngIf="doc.reason" class="document-sync-reason">
                           {{ doc.reason }}
@@ -279,6 +281,64 @@
         </mat-tab>
         <mat-tab label="Generate BeneficiaryID">
           <div class="col-12" style="width: 99%; padding-left: 12px">
+            <!-- automatic BenID download (StopTB laptops only; hidden when the feature is off) -->
+            <mat-card
+              *ngIf="autoTopUp?.enabled"
+              id="autoBenIdStatus"
+              style="margin-top: 10px"
+              [style.border-left]="
+                '6px solid ' +
+                (autoTopUpState === 'OK'
+                  ? '#2e7d32'
+                  : autoTopUpState === 'WAITING'
+                    ? '#ef6c00'
+                    : '#c62828')
+              ">
+              <h4>Automatic BenID download</h4>
+              <div *ngIf="autoTopUpState === 'OK'">
+                Active. {{ autoTopUp.poolCount }} BeneficiaryIDs available on
+                this laptop<span *ngIf="autoTopUp.lastTopUpAt"
+                  >, last download
+                  {{ autoTopUp.lastTopUpAt | date: 'dd-MM-yyyy HH:mm' }} (+{{
+                    autoTopUp.lastTopUpCount
+                  }})</span
+                >.
+              </div>
+              <div *ngIf="autoTopUpState === 'WAITING'">
+                Waiting for internet. {{ autoTopUp.poolCount }} BeneficiaryIDs
+                available; more are downloaded automatically once the central
+                server is reachable.
+              </div>
+              <div *ngIf="autoTopUpState === 'ACTION'">
+                {{
+                  autoTopUp.centralConnection === 'PASSWORD_MISMATCH'
+                    ? 'This laptop could not connect to the central server: the password does not match the central password.'
+                    : 'This laptop is not connected to the central server yet.'
+                }}
+                Log in to Data Sync with your central password to reconnect.
+                <div style="margin-top: 8px">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    type="button"
+                    id="reconnectCentral"
+                    (click)="reconnectToCentral()">
+                    Reconnect to central
+                  </button>
+                </div>
+              </div>
+              <div
+                *ngIf="
+                  autoTopUp.poolCount >= 0 &&
+                  autoTopUp.poolCount < autoTopUp.lowerLimit
+                "
+                id="lowBenIdWarning"
+                style="margin-top: 8px; color: #c62828">
+                BeneficiaryIDs are running low ({{ autoTopUp.poolCount }} left).
+                Keep this laptop connected to the internet so it can download
+                more.
+              </div>
+            </mat-card>
             <section
               [formGroup]="generateBenIDForm"
               style="margin-top: 10px"

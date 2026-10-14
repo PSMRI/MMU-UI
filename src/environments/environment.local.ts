@@ -422,6 +422,8 @@ export const environment = {
 
   // Check availability of benIDs
   getBenIDs: `${IDENTITY_API}id/checkAvailablBenIDLocalServer`,
+  centralAuthStatusUrl: `${MMU_API}centralAuth/status`,
+  centralAuthCaptureUrl: `${MMU_API}centralAuth/capture`,
   generateBenID: `${MMU_API}dataSyncActivity/callCentralAPIToGenerateBenIDAndimportToLocal`,
 
   // Inventory Data Sync Download

@@ -42,6 +42,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
 import { environment } from 'src/environments/environment';
 import { CaptchaComponent } from '../captcha/captcha.component';
 import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { CentralAuthService } from '../core/services/central-auth.service';
 
 @Component({
   selector: 'app-login-cmp',
@@ -74,7 +75,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
     readonly sessionstorage: SessionStorageService,
-    private trackingService: AmritTrackingService
+    private trackingService: AmritTrackingService,
+    private centralAuthService: CentralAuthService
   ) {
     this._keySize = 256;
     this._ivSize = 128;
@@ -100,11 +102,15 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.elementRef.nativeElement.focus();
   }
 
+  private pendingCentralPassword: string | null = null;
+
   login() {
     const encryptPassword = this.encrypt(
       this.Key_IV,
       this.loginForm.controls.password.value
     );
+    // kept only until the login completes, for the one-time central connection
+    this.pendingCentralPassword = encryptPassword;
 
     if (this.loginForm.valid) {
       this.authService
@@ -261,6 +267,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
   getServicesAuthdetails(loginDataResponse: any) {
     const userName: any = this.loginForm.controls.userName.value;
     sessionStorage.setItem('key', loginDataResponse.key);
+    if (this.pendingCentralPassword) {
+      this.centralAuthService.captureIfEnabled(
+        userName,
+        this.pendingCentralPassword
+      );
+      this.pendingCentralPassword = null;
+    }
     sessionStorage.setItem(
       'isAuthenticated',
       loginDataResponse.isAuthenticated
