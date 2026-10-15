@@ -60,6 +60,10 @@ export const environment = {
     trackingPlatform: '<%= TRACKING_PLATFORM %>',
     enabled: '<%= TRACKING_ENABLED %>' === 'true'
   },
+  consentManagement: {
+    enabled: '<%= CONSENT_ENABLED %>' === 'true',
+    apiBase: '<%= CONSENT_API_BASE %>',
+  },
 
   app: `MMU`,
   RBSTest: `RBS Test`,
