@@ -61,6 +61,8 @@ const defaultEnvValues = {
   TRACKING_PLATFORM: 'ci',
   TRACKING_ENABLED: 'true',
 
+  CONSENT_ENABLED: 'false',
+  CONSENT_API_BASE: '',
 };
 
 // Generate output data
