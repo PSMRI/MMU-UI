@@ -9,9 +9,8 @@
   },
   "include": [
     "src/**/*.spec.ts",
-    "Common-UI/src/consent/core/**/*.spec.ts",
-    "Common-UI/v2/consent/**/*.spec.ts",
-    "Common-UI/v2/registrar/**/*.consent-hook.spec.ts",
+    "Common-UI/src/consent/**/*.spec.ts",
+    "Common-UI/src/registrar/**/*.consent-hook.spec.ts",
     "src/**/*.d.ts"
   ]
 }
