@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row m-t-10 m-b-30">
     <div class="col-xs-12">
-      <mat-tab-group class="tabs_css">
+      <mat-tab-group class="tabs_css" (selectedTabChange)="onTabChange($event)">
         <mat-tab label="Data Upload" [disabled]="showProgressBar">
           <mat-drawer-container class="example-container m-t-10">
             <div

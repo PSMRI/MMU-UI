@@ -626,6 +626,13 @@ export class WorkareaComponent
     });
   }
 
+  onTabChange(event: any) {
+    // the panel is loaded once on open; refresh it each time its tab is shown
+    if (this.autoTopUp && event?.tab?.textLabel === 'Generate BeneficiaryID') {
+      this.loadAutoTopUpStatus();
+    }
+  }
+
   reconnectToCentral() {
     // the Data Sync login reconnects the automatic BenID download
     sessionStorage.removeItem('serverKey');
@@ -638,6 +645,10 @@ export class WorkareaComponent
       .subscribe((benIDResponse: any) => {
         if (benIDResponse) {
           this.benID_Count = benIDResponse.data.response;
+          // keep the automatic download panel on the same count
+          if (this.autoTopUp) {
+            this.loadAutoTopUpStatus();
+          }
         } else {
           this.confirmationService.alert('No benID available. Generate benIDs');
         }
