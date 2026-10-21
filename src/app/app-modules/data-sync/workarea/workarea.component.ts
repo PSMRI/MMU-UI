@@ -91,6 +91,7 @@ export class WorkareaComponent
     if (serverKey) {
       this.getDataSYNCGroup();
       this.loadAutoTopUpStatus();
+      this.loadAutoSyncStatus();
     } else {
       this.router.navigate(['datasync/sync-login']);
     }
@@ -623,6 +624,19 @@ export class WorkareaComponent
       next: (res: any) =>
         (this.autoTopUp = this.centralAuthService.parseStatus(res)),
       error: () => (this.autoTopUp = null),
+    });
+  }
+
+  // automatic Data Sync status (null when the feature is off or MMU-API does not support it)
+  autoSync: any = null;
+
+  loadAutoSyncStatus() {
+    this.centralAuthService.getAutoSyncStatus().subscribe({
+      next: (res: any) => {
+        const status = this.centralAuthService.parseStatus(res);
+        this.autoSync = status?.enabled ? status : null;
+      },
+      error: () => (this.autoSync = null),
     });
   }
 

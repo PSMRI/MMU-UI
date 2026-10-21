@@ -44,6 +44,11 @@ export class CentralAuthService {
     return this.http.get(environment.centralAuthStatusUrl);
   }
 
+  // automatic Data Sync (upload / master download) and rows central rejected
+  getAutoSyncStatus() {
+    return this.http.get(environment.autoSyncStatusUrl);
+  }
+
   parseStatus(res: any) {
     if (res?.statusCode !== 200 || !res?.data) {
       return null;

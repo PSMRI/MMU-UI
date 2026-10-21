@@ -408,6 +408,73 @@
             </section>
           </div>
         </mat-tab>
+        <!-- automatic Data Sync (StopTB laptops only; hidden when the feature is off) -->
+        <mat-tab label="Automatic Sync" *ngIf="autoSync">
+          <div class="m-t-20" style="padding: 0 20px" id="autoSyncStatus">
+            <div style="text-align: end">
+              <button
+                mat-raised-button
+                color="primary"
+                class="mat_blue"
+                id="refreshAutoSync"
+                (click)="loadAutoSyncStatus()">
+                Refresh
+              </button>
+            </div>
+            <h4>Automatic upload and master download</h4>
+            <p>
+              Last upload:
+              <b>{{
+                autoSync.lastUploadAt
+                  ? (autoSync.lastUploadAt | date: 'dd-MM-yyyy HH:mm')
+                  : 'not yet'
+              }}</b>
+              <span *ngIf="autoSync.lastUploadResult">
+                ({{ autoSync.lastUploadResult }})</span
+              >
+            </p>
+            <p>
+              Last master download:
+              <b>{{
+                autoSync.lastMasterDownloadAt
+                  ? (autoSync.lastMasterDownloadAt | date: 'dd-MM-yyyy HH:mm')
+                  : 'not yet'
+              }}</b>
+            </p>
+            <p *ngIf="autoSync.lastError" style="color: #c62828">
+              {{ autoSync.lastError }}
+            </p>
+
+            <h4 class="m-t-20">Records central did not accept</h4>
+            <p *ngIf="!autoSync.failedRows">
+              None. All uploaded records were accepted by central.
+            </p>
+            <div *ngIf="autoSync.failedRows">
+              <p>
+                {{ autoSync.failedRows }} record(s) are sent again on every upload
+                until central accepts them. Share this list with the administrator.
+              </p>
+              <table class="table table-bordered" id="syncFailures">
+                <thead>
+                  <tr>
+                    <th>Table</th>
+                    <th>Reason</th>
+                    <th>Records</th>
+                    <th>Last tried</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let f of autoSync.failures">
+                    <td>{{ f.tableName }}</td>
+                    <td>{{ f.reason }}</td>
+                    <td>{{ f.failedRows }}</td>
+                    <td>{{ f.lastTried }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </mat-tab>
         <mat-tab label="Down Sync (Central to Local)">
           <div class="col-12 down-sync-tab">
             <section class="row down-sync-actions">
