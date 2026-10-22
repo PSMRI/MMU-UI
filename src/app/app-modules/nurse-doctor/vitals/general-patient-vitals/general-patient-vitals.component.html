@@ -922,7 +922,6 @@
                     autocomplete="off"
                     appDefaultNull
                     allowText="number"
-                    [disabled]="rbsResultChange()"
                     name="rbsTestResult"
                     id="rbsTestResult"
                     [required]="diabetesSelected === 1 ? rbsCheckBox : false"
@@ -965,8 +964,7 @@
                 name="rbsTestRemarks"
                 id="rbsTestRemarks"
                 formControlName="rbsTestRemarks"
-                maxlength="300"
-                [disabled]="rbsResultChange()" />
+                maxlength="300" />
             </z-form-control>
           </z-form-field>
         </div>

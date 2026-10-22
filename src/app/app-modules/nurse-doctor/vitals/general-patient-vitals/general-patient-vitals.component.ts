@@ -225,11 +225,17 @@ export class GeneralPatientVitalsComponent
     }
     this.idrsscore.clearMessage();
     this.rbsSelectedInInvestigationSubscription =
-      this.nurseService.rbsSelectedInInvestigation$.subscribe(response =>
-        response === undefined
-          ? (this.rbsSelectedInInvestigation = false)
-          : (this.rbsSelectedInInvestigation = response)
-      );
+      this.nurseService.rbsSelectedInInvestigation$.subscribe(response => {
+        this.rbsSelectedInInvestigation =
+          response === undefined ? false : response;
+        // Apply the RBS enable/disable here (outside template render). This used
+        // to be driven by a [disabled]="rbsResultChange()" binding, but that
+        // method toggles form-control disabled state (a signal write), so running
+        // it during render threw NG0600 on every change-detection cycle.
+        if (this.patientVitalsForm?.controls) {
+          this.rbsResultChange();
+        }
+      });
     this.idrsscore.diabetesSelectedFlag$.subscribe(
       response => (this.diabetesSelected = response)
     );
