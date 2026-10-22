@@ -124,6 +124,7 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   chronicDisabled: boolean = false;
   chronicData: any;
   revisit: boolean = false;
+  previousDiabetesHistoryLoading = false;
   nurse!: string;
   rev: any = [];
   confirmed: any = [];
@@ -1420,11 +1421,18 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
         .subscribe((res: any) => {});
   }
   getPreviousDiabetesHistory() {
+    // Guard against rapid repeat clicks: each call opens a dialog/alert, so
+    // multiple clicks before the request resolves stacked several modal
+    // backdrops ("screen goes dark / popup disappears"). Ignore clicks while a
+    // request is already in flight; the button is also disabled meanwhile.
+    if (this.previousDiabetesHistoryLoading) return;
+    this.previousDiabetesHistoryLoading = true;
     const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousDiabetesHistory(benRegID, this.visitCategory)
       .subscribe(
         (res: any) => {
+          this.previousDiabetesHistoryLoading = false;
           if (res.statusCode === 200 && res.data !== null) {
             if (res.data.data.length > 0) {
               this.viewPreviousData(res.data);
@@ -1441,6 +1449,7 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
           }
         },
         err => {
+          this.previousDiabetesHistoryLoading = false;
           this.confirmationService.alert(
             this.currentLanguageSet.alerts.info.errorFetchingHistory,
             'error'

@@ -49,6 +49,7 @@
           [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
           zPosition="bottom"
           [attr.aria-label]="currentLanguageSet?.DurationData?.previousDetails"
+          [zDisabled]="previousDiabetesHistoryLoading"
           (click)="getPreviousDiabetesHistory()">
           <ng-icon name="lucideHistory"></ng-icon>
         </button>
