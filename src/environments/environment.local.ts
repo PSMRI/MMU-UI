@@ -457,6 +457,7 @@ export const environment = {
 
   /* Customization APIs*/
   getAllRegistrationData: `${COMMON_API}customization/fetchAllData`,
+  getConsentConfigUrl: `${COMMON_API}customization/consent/fetchConsentConfig`,
 
   /** Previous Anthropometry  Urls */
   getPreviousAnthropometryUrl: `${MMU_API}anthropometryVitals/getBenHeightDetailsFrmNurse`,
