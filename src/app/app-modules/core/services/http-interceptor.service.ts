@@ -72,6 +72,7 @@ export class HttpInterceptorService implements HttpInterceptor {
       if (req.body instanceof FormData) {
         modifiedReq = req.clone({
           headers: req.headers.set('Authorization', key || ''),
+          withCredentials: true,
         });
       } else {
         modifiedReq = req.clone({
@@ -79,6 +80,7 @@ export class HttpInterceptorService implements HttpInterceptor {
             .set('Authorization', key || '')
             .set('Content-Type', 'application/json')
             .set('ServerAuthorization', serverKey || ''),
+          withCredentials: true,
         });
       }
     }

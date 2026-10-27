@@ -1,0 +1,82 @@
+.nikshay-sync-page {
+  max-width: 640px;
+  margin: 32px auto;
+  padding: 24px 32px 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: #01579b;
+  margin-bottom: 16px;
+}
+
+.nikshay-tab-content {
+  padding-top: 12px;
+}
+
+.camp-info-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #e3f2fd;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #0b69b2;
+  margin-bottom: 8px;
+}
+
+.qr-subtitle {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.detect-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.detect-row.warn {
+  background: #fff8e1;
+  color: #6d4c00;
+}
+
+.detect-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.qr-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 0 8px;
+  gap: 16px;
+}
+
+.url-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.url-text {
+  font-family: monospace;
+}
+
+.btn-icon {
+  vertical-align: middle;
+  font-size: 18px;
+  margin-right: 4px;
+}

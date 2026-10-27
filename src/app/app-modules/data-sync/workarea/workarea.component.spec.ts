@@ -31,7 +31,6 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
 import { of } from 'rxjs';
-
 import { WorkareaComponent } from './workarea.component';
 import { DataSyncService } from '../shared/service/data-sync.service';
 import { DataSyncUtils } from '../shared/utility/data-sync-utility';
@@ -379,5 +378,206 @@ describe('DataSync WorkareaComponent', () => {
   it('DataSyncUtils builds the wrapper form', () => {
     const form = new DataSyncUtils(new FormBuilder()).GenerateBenIDsForm();
     expect(form.get('generateBenIDForm.benID_Range')).toBeTruthy();
+  });
+
+  describe('startDocumentSync', () => {
+    it('shows one popup without "see details below" when every document fails', () => {
+      dataSyncService.syncDiagnosticDocuments.and.returnValue(
+        of(
+          syncResponse({
+            response: 'Data sync completed with failures',
+            status: 'failed',
+            totalRecords: 3,
+            successfulRecords: 0,
+            failedRecords: 3,
+            failureReasons: [
+              'documentId 28: sha256 mismatch on receipt',
+              'documentId 29: sha256 mismatch on receipt',
+              'documentId 30: sha256 mismatch on receipt',
+            ],
+          })
+        ) as any
+      );
+
+      component.startDocumentSync();
+
+      expect(confirmationService.alert).toHaveBeenCalledTimes(1);
+      const [message, type] = confirmationService.alert.calls.mostRecent().args;
+      expect(type).toBe('error');
+      expect(message).toBe(
+        'Data sync completed with failures. 3 of 3 documents not uploaded.'
+      );
+      expect(message).not.toMatch(/below/i);
+      expect(component.documentSyncInProgress).toBeFalse();
+      expect(component.documentSyncResult?.documents).toEqual([
+        {
+          documentId: '28',
+          name: 'Document ID: 28',
+          uploaded: false,
+          reason: 'sha256 mismatch on receipt',
+        },
+        {
+          documentId: '29',
+          name: 'Document ID: 29',
+          uploaded: false,
+          reason: 'sha256 mismatch on receipt',
+        },
+        {
+          documentId: '30',
+          name: 'Document ID: 30',
+          uploaded: false,
+          reason: 'sha256 mismatch on receipt',
+        },
+      ]);
+      expect(component.documentSyncResult?.unlistedUploaded).toBe(0);
+    });
+
+    it('labels server-listed documents by documentId, ignoring file names for now', () => {
+      dataSyncService.syncDiagnosticDocuments.and.returnValue(
+        of(
+          syncResponse({
+            response: 'Data sync completed with failures',
+            status: 'partial',
+            totalRecords: 2,
+            successfulRecords: 1,
+            failedRecords: 1,
+            documents: [
+              { documentId: 28, documentName: 'xray.pdf', status: 'uploaded' },
+              {
+                documentId: 29,
+                fileName: 'cbc.jpg',
+                status: 'FAILED',
+                reason: 'sha256 mismatch on receipt',
+              },
+            ],
+          })
+        ) as any
+      );
+
+      component.startDocumentSync();
+
+      expect(confirmationService.alert).toHaveBeenCalledOnceWith(
+        'Data sync completed with failures. 1 of 2 documents uploaded, 1 not uploaded.',
+        'warn'
+      );
+      expect(component.documentSyncResult?.documents).toEqual([
+        {
+          documentId: 28,
+          name: 'Document ID: 28',
+          uploaded: true,
+          reason: null,
+        },
+        {
+          documentId: 29,
+          name: 'Document ID: 29',
+          uploaded: false,
+          reason: 'sha256 mismatch on receipt',
+        },
+      ]);
+      expect(component.documentSyncResult?.unlistedUploaded).toBe(0);
+    });
+
+    it('counts uploaded documents the server did not list individually', () => {
+      dataSyncService.syncDiagnosticDocuments.and.returnValue(
+        of(
+          syncResponse({
+            response: 'Data sync completed with failures',
+            status: 'partial',
+            totalRecords: 3,
+            successfulRecords: 2,
+            failedRecords: 1,
+            failureReasons: ['documentId 30: sha256 mismatch on receipt'],
+          })
+        ) as any
+      );
+
+      component.startDocumentSync();
+
+      expect(component.documentSyncResult?.documents.length).toBe(1);
+      expect(component.documentSyncResult?.unlistedUploaded).toBe(2);
+    });
+
+    it('keeps a failure reason that has no documentId', () => {
+      dataSyncService.syncDiagnosticDocuments.and.returnValue(
+        of(
+          syncResponse({
+            status: 'failed',
+            totalRecords: 1,
+            successfulRecords: 0,
+            failedRecords: 1,
+            failureReasons: ['Connection failed: timeout'],
+          })
+        ) as any
+      );
+
+      component.startDocumentSync();
+
+      expect(component.documentSyncResult?.documents).toEqual([
+        {
+          documentId: null,
+          name: 'Document ID: -',
+          uploaded: false,
+          reason: 'Connection failed: timeout',
+        },
+      ]);
+    });
+
+    it('shows a single success popup when all documents upload', () => {
+      dataSyncService.syncDiagnosticDocuments.and.returnValue(
+        of(
+          syncResponse({
+            response: 'Data successfully synced',
+            status: 'success',
+            totalRecords: 2,
+            successfulRecords: 2,
+            failedRecords: 0,
+          })
+        ) as any
+      );
+
+      component.startDocumentSync();
+
+      expect(confirmationService.alert).toHaveBeenCalledOnceWith(
+        'Data successfully synced. 2 of 2 documents uploaded.',
+        'success'
+      );
+      expect(component.documentSyncResult?.unlistedUploaded).toBe(2);
+    });
+
+    it('shows an info popup when nothing was pending', () => {
+      dataSyncService.syncDiagnosticDocuments.and.returnValue(
+        of(syncResponse({ response: 'No documents to sync' })) as any
+      );
+
+      component.startDocumentSync();
+
+      expect(confirmationService.alert).toHaveBeenCalledOnceWith(
+        'No documents to sync',
+        'info'
+      );
+      expect(component.documentSyncResult).toBeNull();
+    });
+
+    it('shows the error message when the call itself fails', () => {
+      dataSyncService.syncDiagnosticDocuments.and.returnValue(
+        of({ statusCode: 5000, errorMessage: 'Van database down' }) as any
+      );
+      component.startDocumentSync();
+      expect(confirmationService.alert).toHaveBeenCalledOnceWith(
+        'Van database down',
+        'error'
+      );
+
+      confirmationService.alert.calls.reset();
+      dataSyncService.syncDiagnosticDocuments.and.returnValue(
+        throwError(() => ({ message: 'Network error' }))
+      );
+      component.startDocumentSync();
+      expect(confirmationService.alert).toHaveBeenCalledOnceWith(
+        'Network error',
+        'error'
+      );
+      expect(component.documentSyncInProgress).toBeFalse();
+    });
   });
 });

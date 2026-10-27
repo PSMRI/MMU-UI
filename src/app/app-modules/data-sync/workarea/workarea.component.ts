@@ -36,6 +36,14 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { environment } from 'src/environments/environment';
+
+interface DocumentSyncItem {
+  documentId: string | number | null;
+  name: string;
+  uploaded: boolean;
+  reason: string | null;
+}
 
 @Component({
   selector: 'app-workarea',
@@ -50,6 +58,17 @@ export class WorkareaComponent
   blankTable: any[] = [];
   showTable = false;
   displaySyncBool = true;
+  isMMUOfflineQRCode = environment.isMMUOfflineQRCode;
+  documentSyncInProgress = false;
+  documentSyncResult: {
+    status: string;
+    totalRecords: number;
+    successfulRecords: number;
+    failedRecords: number;
+    documents: DocumentSyncItem[];
+    // uploaded documents the server did not list individually
+    unlistedUploaded: number;
+  } | null = null;
 
   constructor(
     private router: Router,
@@ -85,6 +104,7 @@ export class WorkareaComponent
   }
   ngOnDestroy() {
     sessionStorage.removeItem('serverKey');
+    this.stopDownSyncPolling();
   }
 
   getDataSYNCGroup() {
@@ -242,6 +262,119 @@ export class WorkareaComponent
       }
     );
   }
+  startDocumentSync() {
+    this.documentSyncInProgress = true;
+    this.documentSyncResult = null;
+    this.dataSyncService.syncDiagnosticDocuments().subscribe(
+      (res: any) => {
+        this.documentSyncInProgress = false;
+        if (res?.statusCode !== 200) {
+          // whole call failed, e.g. van database down (statusCode 5000)
+          this.confirmationService.alert(
+            res?.errorMessage ||
+              res?.status ||
+              'Document sync failed. Please try again.',
+            'error'
+          );
+          return;
+        }
+        this.handleDocumentSyncResult(res.data);
+      },
+      (err: any) => {
+        this.documentSyncInProgress = false;
+        this.confirmationService.alert(
+          err?.errorMessage || err?.message || 'Document sync failed',
+          'error'
+        );
+      }
+    );
+  }
+
+  /** data.status: success | partial | failed; absent when nothing was pending */
+  private handleDocumentSyncResult(data: any) {
+    const response = data?.response || 'Document sync completed';
+    if (!data?.status) {
+      this.confirmationService.alert(response, 'info');
+      return;
+    }
+    const totalRecords = data.totalRecords ?? 0;
+    const successfulRecords = data.successfulRecords ?? 0;
+    const failedRecords = data.failedRecords ?? 0;
+    const documents = this.toDocumentSyncItems(data);
+    const listedUploaded = documents.filter(doc => doc.uploaded).length;
+    this.documentSyncResult = {
+      status: data.status,
+      totalRecords,
+      successfulRecords,
+      failedRecords,
+      documents,
+      unlistedUploaded: Math.max(successfulRecords - listedUploaded, 0),
+    };
+    // one popup per sync call; per-document detail is shown in the card
+    if (data.status === 'success') {
+      this.confirmationService.alert(
+        `${response}. ${successfulRecords} of ${totalRecords} documents uploaded.`,
+        'success'
+      );
+    } else if (data.status === 'partial') {
+      this.confirmationService.alert(
+        `${response}. ${successfulRecords} of ${totalRecords} documents uploaded, ${failedRecords} not uploaded.`,
+        'warn'
+      );
+    } else {
+      this.confirmationService.alert(
+        `${response}. ${failedRecords} of ${totalRecords} documents not uploaded.`,
+        'error'
+      );
+    }
+  }
+
+  /**
+   * Prefers data.documents ([{ documentId, status, reason }]).
+   * Documents are labelled by documentId for now (file names to follow).
+   * Falls back to failureReasons ("documentId 28: sha256 mismatch on receipt"),
+   * which only lists the failed documents.
+   */
+  private toDocumentSyncItems(data: any): DocumentSyncItem[] {
+    if (Array.isArray(data.documents) && data.documents.length > 0) {
+      return data.documents.map((doc: any) => {
+        const status = String(doc?.status ?? '').toLowerCase();
+        const uploaded = ['uploaded', 'success', 'synced'].includes(status);
+        return {
+          documentId: doc?.documentId ?? null,
+          name: this.documentLabel(doc?.documentId),
+          uploaded,
+          reason: uploaded ? null : doc?.reason || doc?.failureReason || null,
+        };
+      });
+    }
+    const reasons: string[] = Array.isArray(data.failureReasons)
+      ? data.failureReasons
+      : [];
+    return reasons.map(reason => {
+      const match = /^\s*documentId\s+(\S+?)\s*:\s*(.*)$/i.exec(String(reason));
+      return match
+        ? {
+            documentId: match[1],
+            name: this.documentLabel(match[1]),
+            uploaded: false,
+            reason: match[2] || null,
+          }
+        : {
+            documentId: null,
+            name: this.documentLabel(null),
+            uploaded: false,
+            reason: String(reason),
+          };
+    });
+  }
+
+  private documentLabel(documentId: any): string {
+    return documentId != null && documentId !== ''
+      ? `Document ID: ${documentId}`
+      : 'Document ID: -';
+  }
+
   updateGroupStatus(groupsProgress: any[]) {
     this.syncTableGroupList.forEach((group: any) => {
       const progress = groupsProgress.find(
@@ -287,7 +420,181 @@ export class WorkareaComponent
     });
   }
 
+  /* ------------------------------------------------------------------
+   * Down-sync : central -> local
+   *
+   * Its own progress state, deliberately not shared with showProgressBar /
+   * progressValue - those belong to the up-sync and the master download, and a
+   * shared flag would let one sync's progress bar be cleared by the other.
+   * ------------------------------------------------------------------ */
+  downSyncInProgress = false;
+  downSyncStatus: any = null;
+  downSyncFailedTables: string[] = [];
+  downSyncGroups: any[] = [];
+  downSyncFinished = false;
+
+  startDownSync() {
+    const serviceLineDetails =
+      this.sessionstorage.getItem('serviceLineDetails');
+    const vanID = serviceLineDetails
+      ? JSON.parse(serviceLineDetails).vanID
+      : undefined;
+
+    if (!vanID) {
+      this.confirmationService.alert(
+        'Van details are not available, cannot start the down-sync',
+        'error'
+      );
+      return;
+    }
+
+    this.confirmationService
+      .confirm('info', 'Confirm to download data from central')
+      .subscribe(result => {
+        if (!result) return;
+
+        this.downSyncStatus = null;
+        this.downSyncFailedTables = [];
+        this.downSyncGroups = [];
+        this.downSyncFinished = false;
+
+        const reqObj = {
+          vanID: vanID,
+          providerServiceMapID: this.sessionstorage.getItem(
+            'dataSyncProviderServiceMapID'
+          ),
+        };
+
+        this.downSyncInProgress = true;
+
+        this.dataSyncService.startDownSync(reqObj).subscribe(
+          (res: any) => {
+            this.downSyncInProgress = false;
+
+            if (res && res.statusCode === 200 && res.data) {
+              const status =
+                typeof res.data === 'string' ? JSON.parse(res.data) : res.data;
+
+              this.downSyncStatus = status;
+              this.downSyncFailedTables = this.parseFailedTables(
+                status.failedTables
+              );
+              this.downSyncGroups = this.buildGroups(status.tableResults);
+              this.downSyncFinished = true;
+
+              const failedTables = this.downSyncFailedTables.length;
+              const failedRecords = status.failedRecordCount || 0;
+              const conflicts = status.conflicts || 0;
+              const outstanding = status.outstandingConflicts || 0;
+
+              if (failedTables > 0 || failedRecords > 0) {
+                const parts = [];
+                if (failedTables > 0) parts.push(failedTables + ' table(s)');
+                if (failedRecords > 0) parts.push(failedRecords + ' record(s)');
+                this.confirmationService.alert(
+                  'Down-sync finished, but ' + parts.join(' and ') + ' failed',
+                  'error'
+                );
+              } else if (conflicts > 0 || outstanding > 0) {
+                const pending = outstanding || conflicts;
+                this.confirmationService.alert(
+                  'Down-sync finished. ' +
+                    pending +
+                    (pending === 1
+                      ? ' record was changed here and at central, so it was left as it is and needs review.'
+                      : ' records were changed here and at central, so they were left as they are and need review.'),
+                  'warn'
+                );
+              } else {
+                this.confirmationService.alert(
+                  'Down-sync finished successfully'
+                );
+              }
+            } else {
+              this.confirmationService.alert(
+                res && res.errorMessage
+                  ? res.errorMessage
+                  : 'Could not run the down-sync',
+                'error'
+              );
+            }
+          },
+          () => {
+            this.downSyncInProgress = false;
+            this.confirmationService.alert(
+              'Could not reach the server to run the down-sync',
+              'error'
+            );
+          }
+        );
+      });
+  }
+
+  private buildGroups(tableResults: any[]): any[] {
+    if (!tableResults || tableResults.length === 0) return [];
+
+    const byGroup = new Map<string, any>();
+    for (const t of tableResults) {
+      const name = t.groupName || 'Other';
+      if (!byGroup.has(name)) {
+        byGroup.set(name, {
+          groupName: name,
+          total: 0,
+          succeeded: 0,
+          failedTables: 0,
+          failedRecords: 0,
+          conflicts: 0,
+        });
+      }
+      const g = byGroup.get(name);
+      g.total++;
+      if (t.status === 'FAILED') g.failedTables++;
+      // PARTIAL means the table was delivered but some of its records were not,
+      // so it must not be counted as a clean success
+      if (t.status === 'SUCCESS') g.succeeded++;
+      // CONFLICT means delivered, so the table still counts towards the tally
+      if (t.status === 'CONFLICT') g.succeeded++;
+      g.failedRecords += t.failedRecords || 0;
+      g.conflicts += t.conflicts || 0;
+    }
+
+    const groups: any[] = [];
+    byGroup.forEach((g: any) => {
+      let status = 'success';
+      if (g.failedTables === g.total) {
+        status = 'failed';
+      } else if (g.failedTables > 0 || g.failedRecords > 0) {
+        status = 'partial';
+      } else if (g.conflicts > 0) {
+        status = 'conflict';
+      }
+      groups.push({ ...g, status });
+    });
+    return groups;
+  }
+
+  /** the API sends the failed tables as the toString() of a list, e.g. "[a, b]" */
+  private parseFailedTables(failedTables: any): string[] {
+    if (!failedTables) return [];
+    return (
+      String(failedTables)
+        .replace(/^\[|\]$/g, '')
+        // the API joins the names with ' | ' (see DownSyncDataFromServerImpl)
+        .split(/\s*[|,]\s*/)
+        .map((t: string) => t.trim())
+        .filter((t: string) => t.length > 0)
+    );
+  }
+
+  private stopDownSyncPolling() {
+    this.downSyncInProgress = false;
+  }
+
   canDeactivate() {
+    if (this.downSyncInProgress) {
+      this.confirmationService.alert('Down-sync in progress');
+      return false;
+    }
     if (this.showProgressBar) {
       this.confirmationService.alert('Download in progress');
       return false;

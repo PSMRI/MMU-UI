@@ -5,17 +5,79 @@
         <mat-tab label="Data Upload" [disabled]="showProgressBar">
           <mat-drawer-container class="example-container m-t-10">
             <div
-              class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
-              style="text-align: center; padding: 20px">
-              <button
-                *ngIf="displaySyncBool"
-                mat-raised-button
-                color="primary"
-                class="mat_blue"
-                (click)="syncGroups()"
-                color="primary">
-                {{ current_language_set?.startDataSync }}
-              </button>
+              *ngIf="displaySyncBool"
+              class="row justify-content-center align-items-center"
+              style="padding: 20px; min-height: 60vh">
+              <div class="col-12 col-md-6 m-b-10">
+                <mat-card
+                  style="
+                    min-height: 170px;
+                    text-align: center;
+                    align-items: center;
+                  ">
+                  <h4>{{ current_language_set?.dataSyncCardTitle }}</h4>
+                  <p>{{ current_language_set?.dataSyncCardDescription }}</p>
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    class="mat_blue"
+                    style="width: 220px"
+                    (click)="syncGroups()">
+                    {{ current_language_set?.startDataSync }}
+                  </button>
+                </mat-card>
+              </div>
+              <div class="col-12 col-md-6 m-b-10" *ngIf="isMMUOfflineQRCode">
+                <mat-card
+                  style="
+                    min-height: 170px;
+                    text-align: center;
+                    align-items: center;
+                  ">
+                  <h4>{{ current_language_set?.documentSyncCardTitle }}</h4>
+                  <p>{{ current_language_set?.documentSyncCardDescription }}</p>
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    class="mat_blue"
+                    style="width: 220px"
+                    [disabled]="documentSyncInProgress"
+                    (click)="startDocumentSync()">
+                    {{ current_language_set?.startDocumentSync }}
+                  </button>
+                  <div
+                    *ngIf="documentSyncResult"
+                    style="margin-top: 16px; width: 100%; text-align: left">
+                    <ul
+                      *ngIf="documentSyncResult.documents.length > 0"
+                      class="document-sync-list">
+                      <li *ngFor="let doc of documentSyncResult.documents">
+                        <span class="document-sync-name">{{ doc.name }}</span>
+                        <span
+                          class="document-sync-status"
+                          [class.uploaded]="doc.uploaded"
+                          [class.not-uploaded]="!doc.uploaded"
+                          >{{ doc.uploaded ? 'Uploaded' : 'Not uploaded' }}</span
+                        >
+                        <div *ngIf="doc.reason" class="document-sync-reason">
+                          {{ doc.reason }}
+                        </div>
+                      </li>
+                    </ul>
+                    <p
+                      *ngIf="documentSyncResult.unlistedUploaded > 0"
+                      class="document-sync-more">
+                      {{ documentSyncResult.unlistedUploaded }}
+                      {{
+                        documentSyncResult.documents.length > 0
+                          ? 'other documents'
+                          : 'documents'
+                      }}
+                      uploaded
+                    </p>
+                  </div>
+                </mat-card>
+              </div>
             </div>
             <section
               class="table-responsive"
@@ -57,11 +119,13 @@
                         <div
                           [ngClass]="{
                             visitStatus: true,
-                            'p-f-c': syncTableGroup.status === 'partial' ||
+                            'p-f-c':
+                              syncTableGroup.status === 'partial' ||
                               syncTableGroup.status === 'pending',
-                            'c-d': syncTableGroup.status === 'completed' ||
+                            'c-d':
+                              syncTableGroup.status === 'completed' ||
                               syncTableGroup.status === 'success',
-                            't-d': syncTableGroup.status === 'failed'
+                            't-d': syncTableGroup.status === 'failed',
                           }"></div>
                       </td>
                       <td>
@@ -70,25 +134,28 @@
                       <td>
                         <span
                           class="material-icons"
-                          style="color: #0b69b2;"
+                          style="color: #0b69b2"
                           *ngIf="syncTableGroup.status === 'pending'"
                           >hourglass_empty</span
                         >
                         <span
                           class="material-icons"
-                          style="color: #eaaa26;"
+                          style="color: #eaaa26"
                           *ngIf="syncTableGroup.status === 'partial'"
                           >indeterminate_check_box</span
                         >
                         <span
                           class="material-icons"
-                          style="color: #43760f;"
-                          *ngIf="syncTableGroup.status === 'success' || syncTableGroup.status === 'completed'"
+                          style="color: #43760f"
+                          *ngIf="
+                            syncTableGroup.status === 'success' ||
+                            syncTableGroup.status === 'completed'
+                          "
                           >check_circle</span
                         >
                         <span
                           class="material-icons"
-                          style="color: #e44e4f;"
+                          style="color: #e44e4f"
                           *ngIf="syncTableGroup.status === 'failed'"
                           >error</span
                         >
@@ -101,10 +168,12 @@
                     <td colspan="3">
                       <ul
                         class="description"
-                        style="display: flex;justify-content: center;"
+                        style="display: flex; justify-content: center"
                         *ngIf="syncTableGroupList.length > 0">
                         <li>
-                          <div class="marker-p-f-c" style="margin-right: 4px; margin-top: 4px;"></div>
+                          <div
+                            class="marker-p-f-c"
+                            style="margin-right: 4px; margin-top: 4px"></div>
                           <p>
                             {{
                               current_language_set?.coreComponents
@@ -113,7 +182,9 @@
                           </p>
                         </li>
                         <li>
-                          <div class="marker-t-d" style="margin-right: 4px; margin-top: 4px;"></div>
+                          <div
+                            class="marker-t-d"
+                            style="margin-right: 4px; margin-top: 4px"></div>
                           <p>
                             {{
                               current_language_set?.coreComponents
@@ -122,7 +193,9 @@
                           </p>
                         </li>
                         <li>
-                          <div class="marker-p-f-t" style="margin-right: 4px; margin-top: 4px;"></div>
+                          <div
+                            class="marker-p-f-t"
+                            style="margin-right: 4px; margin-top: 4px"></div>
                           <p>
                             {{
                               current_language_set?.coreComponents
@@ -131,7 +204,9 @@
                           </p>
                         </li>
                         <li>
-                          <div class="marker-c-d" style="margin-right: 4px; margin-top: 4px;"></div>
+                          <div
+                            class="marker-c-d"
+                            style="margin-right: 4px; margin-top: 4px"></div>
                           <p>
                             {{
                               current_language_set?.coreComponents?.dataSynced
@@ -269,6 +344,118 @@
                     </div>
                   </div>
                 </mat-card>
+              </div>
+            </section>
+          </div>
+        </mat-tab>
+        <mat-tab label="Down Sync (Central to Local)">
+          <div class="col-12 down-sync-tab">
+            <section class="row down-sync-actions">
+              <div class="col-12 div-align">
+                <button
+                  type="button"
+                  mat-raised-button
+                  color="primary"
+                  class="btn-green mat_blue"
+                  (click)="startDownSync()"
+                  [disabled]="downSyncInProgress || showProgressBar">
+                  Start Down Sync
+                </button>
+              </div>
+            </section>
+
+            <section
+              class="row"
+              *ngIf="downSyncGroups && downSyncGroups.length > 0">
+              <div class="col-12">
+                <div
+                  class="ds-conflict-note"
+                  *ngIf="downSyncStatus && downSyncStatus.conflictsPending">
+                  <span class="material-icons">compare_arrows</span>
+                  <span>
+                    <strong>{{ downSyncStatus.conflicts }}</strong>
+                    {{
+                      downSyncStatus.conflicts === 1
+                        ? 'record was'
+                        : 'records were'
+                    }}
+                    changed both here and at central. Nothing on this device was
+                    overwritten - review each one and save the version you want
+                    to keep.
+                  </span>
+                </div>
+                <section
+                  class="table-responsive"
+                  style="padding-bottom: 20px !important; border: unset">
+                  <table
+                    aria-describedby="downsyncresults"
+                    class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th id="dsEmpty">&nbsp;</th>
+                        <th id="dsGroupName">Group</th>
+                        <th id="dsGroupTables">Tables</th>
+                        <th id="dsGroupRecords">Failed records</th>
+                        <th id="dsGroupConflicts">Conflicts</th>
+                        <th id="dsGroupStatus">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let g of downSyncGroups" class="table-hover">
+                        <td>
+                          <div
+                            [ngClass]="{
+                              visitStatus: true,
+                              'p-f-c': g.status === 'partial',
+                              'cf-d': g.status === 'conflict',
+                              'c-d': g.status === 'success',
+                              't-d': g.status === 'failed',
+                            }"></div>
+                        </td>
+                        <td>{{ g.groupName }}</td>
+                        <td>{{ g.succeeded }} / {{ g.total }}</td>
+                        <td>
+                          {{ g.failedRecords > 0 ? g.failedRecords : '-' }}
+                        </td>
+                        <td>
+                          <span
+                            class="ds-conflict-count"
+                            *ngIf="g.conflicts > 0"
+                            >{{ g.conflicts }}</span
+                          >
+                          <span *ngIf="!g.conflicts">-</span>
+                        </td>
+                        <td>
+                          <span
+                            class="material-icons"
+                            style="color: #eaaa26"
+                            *ngIf="g.status === 'partial'"
+                            >indeterminate_check_box</span
+                          >
+                          <span
+                            class="material-icons"
+                            style="color: #e07b00"
+                            *ngIf="g.status === 'conflict'"
+                            title="Delivered, but a record needs review"
+                            >compare_arrows</span
+                          >
+                          <span
+                            class="material-icons"
+                            style="color: #43760f"
+                            *ngIf="g.status === 'success'"
+                            >check_box</span
+                          >
+                          <span
+                            class="material-icons"
+                            style="color: #b22222"
+                            *ngIf="g.status === 'failed'"
+                            >indeterminate_check_box</span
+                          >
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
               </div>
             </section>
           </div>
