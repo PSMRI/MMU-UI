@@ -20,21 +20,57 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { TestBed, inject } from '@angular/core/testing';
-
+import { TestBed } from '@angular/core/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { MasterDataService } from './master-data.service';
+import { environment } from 'src/environments/environment';
 
 describe('MasterDataService', () => {
+  let service: MasterDataService;
+  let httpMock: HttpTestingController;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       providers: [MasterDataService],
     });
+
+    service = TestBed.inject(MasterDataService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
-  it('should be created', inject(
-    [MasterDataService],
-    (service: MasterDataService) => {
-      expect(service).toBeTruthy();
-    }
-  ));
+  afterEach(() => {
+    httpMock.verify();
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+
+  describe('getLabRequirements', () => {
+    it('should POST beneficiary details to get prescribed test data', () => {
+      service.getLabRequirements('12345', '100', 'VC001').subscribe(res => {
+        expect(res).toBeTruthy();
+      });
+
+      const req = httpMock.expectOne(environment.getprescribedTestDataUrl);
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual({
+        beneficiaryRegID: '12345',
+        benVisitID: '100',
+        visitCode: 'VC001',
+      });
+      req.flush({ statusCode: 200, data: [] });
+    });
+
+    it('should handle null parameters', () => {
+      service.getLabRequirements(null, null, null).subscribe();
+      const req = httpMock.expectOne(environment.getprescribedTestDataUrl);
+      expect(req.request.body.beneficiaryRegID).toBeNull();
+      req.flush({ statusCode: 200 });
+    });
+  });
 });

@@ -20,27 +20,84 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+  createHttpServiceMock,
+} from 'src/testing/test-utils';
 import { PrintPageSelectComponent } from './print-page-select.component';
 
 describe('PrintPageSelectComponent', () => {
   let component: PrintPageSelectComponent;
   let fixture: ComponentFixture<PrintPageSelectComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [PrintPageSelectComponent],
-    }).compileComponents();
-  }));
+  const dialogData = {
+    visitCategory: 'ANC',
+    printPagePreviewSelect: {
+      caseSheetANC: false,
+      caseSheetPNC: true,
+      caseSheetHistory: false,
+      caseSheetExamination: true,
+      caseSheetCovidVaccinationDetails: false,
+    },
+  };
 
-  beforeEach(() => {
+  const setup = async (data: any) => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS, MatCheckboxModule],
+      declarations: [PrintPageSelectComponent],
+      providers: [
+        ...commonTestProviders(),
+        { provide: MAT_DIALOG_DATA, useValue: data },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
     fixture = TestBed.createComponent(PrintPageSelectComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+  };
+
+  it('defaults every page to selected before init', () => {
+    const c = new PrintPageSelectComponent(
+      {} as MatDialogRef<PrintPageSelectComponent>,
+      null,
+      createHttpServiceMock() as any
+    );
+    expect(Object.values(c.printPagePreviewSelect).every(v => v)).toBeTrue();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('copies visit category and page selection from dialog data and renders', async () => {
+    await setup(dialogData);
+    fixture.detectChanges();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    expect(component.visitCategory).toBe('ANC');
+    expect(component.printPagePreviewSelect).toEqual(
+      dialogData.printPagePreviewSelect
+    );
+    expect(component.printPagePreviewSelect).not.toBe(
+      dialogData.printPagePreviewSelect
+    );
+    expect(
+      fixture.nativeElement.querySelectorAll('mat-checkbox').length
+    ).toBeGreaterThan(0);
+  });
+
+  it('keeps defaults when no dialog data is provided', async () => {
+    await setup(null);
+    component.ngOnInit();
+    expect(component.visitCategory).toBeUndefined();
+    expect(component.printPagePreviewSelect.caseSheetANC).toBeTrue();
+    expect(component.printPagePreviewSelect.caseSheetHistory).toBeTrue();
+  });
+
+  it('ngDoCheck refreshes the language set', async () => {
+    await setup(dialogData);
+    component.currentLanguageSet = null;
+    component.ngDoCheck();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
   });
 });

@@ -19,144 +19,87 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MaterialModule } from '../../core/material.module';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormGroup } from '@angular/forms';
 
 import { ExaminationComponent } from './examination.component';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 
 describe('ExaminationComponent', () => {
   let component: ExaminationComponent;
   let fixture: ComponentFixture<ExaminationComponent>;
-  let debugElement;
-  let fb;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, ReactiveFormsModule, MaterialModule],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [ExaminationComponent],
+      providers: [...commonTestProviders()],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ExaminationComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
+    component.patientExaminationDataForm = new FormGroup({});
+    component.examinationMode = 'add';
+  });
+
+  it('creates and loads the language set on init', () => {
     fixture.detectChanges();
-  });
-
-  it('should create ExaminationComponent', () => {
     expect(component).toBeTruthy();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    expect(component.languageComponent).toBeDefined();
   });
 
-  it('should initialize ExaminationComponent', () => {
-    component.ngOnInit();
-    expect(component).toBeTruthy();
+  it('refreshes the language set on ngDoCheck', () => {
+    component.currentLanguageSet = null;
+    component.ngDoCheck();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
   });
 
-  it('should excute on changes', () => {
-    component.ngOnChanges();
-    expect(component).toBeTruthy();
+  ['General OPD', 'ANC', 'PNC'].forEach(cat => {
+    it(`shows the general OPD examination for ${cat}`, () => {
+      component.visitCategory = cat;
+      component.ngOnChanges();
+      fixture.detectChanges();
+      expect(component.showGeneralOPD).toBeTrue();
+      expect(component.showCancer).toBeFalse();
+      const el: HTMLElement = fixture.nativeElement;
+      expect(
+        el.querySelector('app-nurse-general-opd-examination')
+      ).not.toBeNull();
+      expect(el.querySelector('app-cancer-examination')).toBeNull();
+    });
   });
 
-  it('Should show general examination while selecting visitCategory ANC', () => {
-    component.ngOnInit();
-    component.visitCategory = 'ANC';
-    component.ngOnChanges();
-    expect(component.showCancer).toEqual(false);
-    expect(component.showGeneralOPD).toEqual(true);
-  });
-
-  it('Should show general examination while selecting visitCategory ANC', () => {
-    component.ngOnInit();
-    component.visitCategory = 'General OPD';
-    component.ngOnChanges();
-    expect(component.showCancer).toEqual(false);
-    expect(component.showGeneralOPD).toEqual(true);
-  });
-
-  it('Should show cancer examination', () => {
-    component.ngOnInit();
+  it('shows the cancer examination for Cancer Screening', () => {
     component.visitCategory = 'Cancer Screening';
     component.ngOnChanges();
-    expect(component.showCancer).toEqual(true);
-    expect(component.showGeneralOPD).toEqual(false);
+    fixture.detectChanges();
+    expect(component.showGeneralOPD).toBeFalse();
+    expect(component.showCancer).toBeTrue();
+    const el: HTMLElement = fixture.nativeElement;
+    expect(el.querySelector('app-cancer-examination')).not.toBeNull();
+    expect(el.querySelector('app-nurse-general-opd-examination')).toBeNull();
   });
 
-  it('Should show cancer examination', () => {
-    component.ngOnInit();
-    component.visitCategory = 'Cancer Screening';
+  it('hides both examinations for other categories', () => {
+    component.visitCategory = 'NCD Screening';
     component.ngOnChanges();
-    expect(component.showCancer).toEqual(true);
-    expect(component.showGeneralOPD).toEqual(false);
-    fixture.detectChanges();
-    const de = fixture.debugElement.query(By.css('cancer-examination'));
-    expect(de.nativeElement).toBeTruthy();
+    expect(component.showGeneralOPD).toBeFalse();
+    expect(component.showCancer).toBeFalse();
   });
 
-  it('Should show General examination', () => {
-    component.ngOnInit();
-    component.visitCategory = 'General OPD';
+  it('leaves flags untouched when no visit category is set', () => {
+    component.showGeneralOPD = true;
+    component.showCancer = true;
+    component.visitCategory = '';
     component.ngOnChanges();
-    expect(component.showCancer).toEqual(false);
-    expect(component.showGeneralOPD).toEqual(true);
-    fixture.detectChanges();
-    const de = fixture.debugElement.query(
-      By.css('nurse-general-opd-examination')
-    );
-    expect(de.nativeElement).toBeTruthy();
-  });
-
-  it('Should show General examination', () => {
-    component.ngOnInit();
-    component.visitCategory = 'ANC';
-    component.ngOnChanges();
-    expect(component.showCancer).toEqual(false);
-    expect(component.showGeneralOPD).toEqual(true);
-    fixture.detectChanges();
-    const de = fixture.debugElement.query(
-      By.css('nurse-general-opd-examination')
-    );
-    expect(de.nativeElement).toBeTruthy();
-  });
-
-  it('Should not show general examination', () => {
-    component.ngOnInit();
-    component.visitCategory = 'Cancer Screening';
-    component.ngOnChanges();
-    expect(component.showCancer).toEqual(true);
-    expect(component.showGeneralOPD).toEqual(false);
-    fixture.detectChanges();
-    const de = fixture.debugElement.query(
-      By.css('nurse-general-opd-examination')
-    );
-    expect(de).not.toBeTruthy();
-  });
-
-  it('Should not show cancer examination', () => {
-    component.ngOnInit();
-    component.visitCategory = 'General OPD';
-    component.ngOnChanges();
-    expect(component.showCancer).toEqual(false);
-    expect(component.showGeneralOPD).toEqual(true);
-    fixture.detectChanges();
-    const de = fixture.debugElement.query(By.css('cancer-examination'));
-    expect(de).not.toBeTruthy();
-  });
-
-  it('Should not show cancer examination', () => {
-    component.ngOnInit();
-    component.visitCategory = 'ANC';
-    component.ngOnChanges();
-    expect(component.showCancer).toEqual(false);
-    expect(component.showGeneralOPD).toEqual(true);
-    fixture.detectChanges();
-    const de = fixture.debugElement.query(By.css('cancer-examination'));
-    expect(de).not.toBeTruthy();
+    expect(component.showGeneralOPD).toBeTrue();
+    expect(component.showCancer).toBeTrue();
   });
 });

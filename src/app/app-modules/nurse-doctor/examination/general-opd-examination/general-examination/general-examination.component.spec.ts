@@ -19,220 +19,132 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import {
-  async,
-  ComponentFixture,
-  tick,
-  inject,
-  fakeAsync,
-  TestBed,
-} from '@angular/core/testing';
-import {
-  FormsModule,
-  FormGroup,
-  ReactiveFormsModule,
-  FormBuilder,
-} from '@angular/forms';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../../../core/material.module';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { GeneralExaminationComponent } from './general-examination.component';
-
-import { GeneralUtils } from '../../../shared/utility';
-
-import { ConfirmationService } from '../../../../core/services/confirmation.service';
-import { DoctorService } from '../../../shared/services';
-
-import { DoctorServiceStub } from '../../../shared/mocks/doctor-service-stub';
-
-import * as data from '../../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Observable';
-
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { MaterialModule } from '../../../../core/material.module';
+import { GeneralUtils } from '../../../shared/utility/general-utility';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 
 describe('GeneralExaminationComponent', () => {
   let component: GeneralExaminationComponent;
   let fixture: ComponentFixture<GeneralExaminationComponent>;
-  let doctorService: DoctorService;
-  let confirmationService: ConfirmationService;
-  let fb;
-  let debugElement: DebugElement;
-  let el: HTMLElement;
-  let spy: any;
+  let session: any;
+  let tracking: any;
+  let form: FormGroup;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS, MaterialModule],
       declarations: [GeneralExaminationComponent],
+      providers: [...commonTestProviders()],
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MaterialModule,
-        NoopAnimationsModule,
-      ],
-      providers: [
-        ConfirmationService,
-        { provide: DoctorService, useClass: DoctorServiceStub },
-      ],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(GeneralExaminationComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-    fb = debugElement.injector.get(FormBuilder);
-    component.generalExaminationForm = new GeneralUtils(
-      fb
-    ).createGeneralExaminationForm();
-    window.console.log = () => {};
+    session = TestBed.inject(SessionStorageService) as any;
+    tracking = TestBed.inject(AmritTrackingService) as any;
+    form = new GeneralUtils(new FormBuilder(), {
+      getItem: () => JSON.stringify({ vanID: 1, parkingPlaceID: 2 }),
+    } as any).createGeneralExaminationForm();
+    component.generalExaminationDataForm = form;
+  });
+
+  it('creates and loads language', () => {
     fixture.detectChanges();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    expect(component.selectDangerSigns.length).toBe(13);
   });
 
-  it('should create GeneralExaminationComponent', () => {
-    expect(component).toBeTruthy();
+  it('shows ANC-only fields when visiCategoryANC is ANC', () => {
+    session.setItem('visiCategoryANC', 'ANC');
+    component.ngOnChanges();
+    fixture.detectChanges();
+    expect(component.visitCategory).toBe('ANC');
+    expect(component.hideForANCAndQC).toBeTrue();
+    expect(
+      fixture.nativeElement.querySelector('[formControlName="quickening"]')
+    ).not.toBeNull();
   });
 
-  it('should initialize GeneralExaminationComponent', () => {
-    component.ngOnInit();
-    expect(component).toBeTruthy();
+  it('shows ANC-only fields when visitCategory is ANC', () => {
+    session.setItem('visitCategory', 'ANC');
+    component.ngOnChanges();
+    expect(component.hideForANCAndQC).toBeTrue();
   });
 
-  it('should check value of danger sign and make null to dependent fields', async(() => {
-    spyOn(component, 'checkWithDangerSign').and.callThrough();
-    component.generalExaminationForm.patchValue({ dangerSigns: 'Yes' });
-    component.generalExaminationForm.patchValue({
-      typeOfDangerSigns: ['1', '2'],
+  it('hides ANC-only fields for other visits', () => {
+    session.setItem('visitCategory', 'General OPD');
+    component.ngOnChanges();
+    fixture.detectChanges();
+    expect(component.hideForANCAndQC).toBeFalse();
+    expect(
+      fixture.nativeElement.querySelector('[formControlName="quickening"]')
+    ).toBeNull();
+  });
+
+  it('checkWithDangerSign clears danger sign types', () => {
+    form.patchValue({ typeOfDangerSigns: ['Stridor'] });
+    component.checkWithDangerSign();
+    expect(form.value.typeOfDangerSigns).toBeNull();
+  });
+
+  it('checkWithLymphadenopathy clears lymph node fields', () => {
+    form.patchValue({
+      lymphnodesInvolved: ['a'],
+      typeOfLymphadenopathy: ['b'],
     });
-    debugElement = fixture.debugElement.query(By.css('#dangerSigns'));
-    debugElement.nativeElement.value = 'Yes';
-    const el = debugElement.nativeElement as HTMLElement;
-    el.dispatchEvent(new Event('input'));
-    el.dispatchEvent(new Event('change'));
-    fixture.detectChanges();
-    expect(component.dangerSigns).toEqual(debugElement.nativeElement.value);
-    fixture.detectChanges();
-    expect(component.checkWithDangerSign).toHaveBeenCalled();
-    expect(component.typeOfDangerSigns).toEqual(null);
-  }));
+    component.checkWithLymphadenopathy();
+    expect(form.value.lymphnodesInvolved).toBeNull();
+    expect(form.value.typeOfLymphadenopathy).toBeNull();
+  });
 
-  it('should check value of lymphadenopathy and make null to dependent fields', async(() => {
-    spyOn(component, 'checkWithLymphadenopathy').and.callThrough();
-    component.generalExaminationForm.patchValue({ lymphadenopathy: 'Present' });
-    component.generalExaminationForm.patchValue({
-      lymphnodesInvolved: 'Cervical LN',
+  it('checkWithEdema clears edema fields', () => {
+    form.patchValue({ extentOfEdema: ['Foot'], edemaType: 'Pitting' });
+    component.checkWithEdema();
+    expect(form.value.extentOfEdema).toBeNull();
+    expect(form.value.edemaType).toBeNull();
+  });
+
+  it('getters return control values', () => {
+    form.patchValue({
+      dangerSigns: 'Yes',
+      edema: 'Yes',
+      lymphadenopathy: 'No',
+      typeOfDangerSigns: ['Grunt'],
+      extentOfEdema: ['Leg'],
+      lymphnodesInvolved: ['Axillary LN'],
+      typeOfLymphadenopathy: ['Soft'],
+      edemaType: 'Non Pitting',
+      quickening: 'Yes',
+      foetalMovements: 'Normal',
     });
-    component.generalExaminationForm.patchValue({
-      typeOfLymphadenopathy: 'Soft',
-    });
-    debugElement = fixture.debugElement.query(By.css('#lymphadenopathy'));
-    debugElement.nativeElement.value = 'Present';
-    const el = debugElement.nativeElement as HTMLElement;
-    el.dispatchEvent(new Event('input'));
-    el.dispatchEvent(new Event('change'));
-    fixture.detectChanges();
-    expect(component.lymphadenopathy).toEqual(debugElement.nativeElement.value);
-    fixture.detectChanges();
-    expect(component.checkWithLymphadenopathy).toHaveBeenCalled();
-    expect(component.lymphnodesInvolved).toEqual(null);
-    expect(component.typeOfLymphadenopathy).toEqual(null);
-  }));
-
-  it('should check value of edema and make null to dependent fields', async(() => {
-    spyOn(component, 'checkWithEdema').and.callThrough();
-    component.generalExaminationForm.patchValue({ edema: 'Present' });
-    component.generalExaminationForm.patchValue({ extentOfEdema: 'Foot' });
-    component.generalExaminationForm.patchValue({ edemaType: 'Pitting' });
-    debugElement = fixture.debugElement.query(By.css('#edema'));
-    debugElement.nativeElement.value = 'Present';
-    const el = debugElement.nativeElement as HTMLElement;
-    el.dispatchEvent(new Event('input'));
-    el.dispatchEvent(new Event('change'));
-    fixture.detectChanges();
-    expect(component.edema).toEqual(debugElement.nativeElement.value);
-    fixture.detectChanges();
-    expect(component.checkWithEdema).toHaveBeenCalled();
-    expect(component.extentOfEdema).toEqual(null);
-    expect(component.edemaType).toEqual(null);
-  }));
-
-  it('should disable type of danger sign when dangerSigns is No', () => {
-    component.generalExaminationForm.patchValue({ dangerSigns: 'No' });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(By.css('#typeOfDangerSigns'));
-    expect(debugElement).not.toBeTruthy();
+    expect(component.dangerSigns).toBe('Yes');
+    expect(component.edema).toBe('Yes');
+    expect(component.lymphadenopathy).toBe('No');
+    expect(component.typeOfDangerSigns).toEqual(['Grunt']);
+    expect(component.extentOfEdema).toEqual(['Leg']);
+    expect(component.lymphnodesInvolved).toEqual(['Axillary LN']);
+    expect(component.typeOfLymphadenopathy).toEqual(['Soft']);
+    expect(component.edemaType).toBe('Non Pitting');
+    expect(component.quickening).toBe('Yes');
+    expect(component.foetalmovements).toBe('Normal');
   });
 
-  it('should able type of danger sign when dangerSigns is Yes', () => {
-    component.generalExaminationForm.patchValue({ dangerSigns: 'Yes' });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(By.css('#typeOfDangerSigns'));
-    expect(debugElement).toBeTruthy();
-  });
-
-  it('should disable type of danger sign when dangerSigns is No', () => {
-    component.generalExaminationForm.patchValue({ dangerSigns: 'No' });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(By.css('#typeOfDangerSigns'));
-    expect(debugElement).not.toBeTruthy();
-  });
-
-  it('should able lymphnodesInvolved  when lymphadenopathy is Present ', () => {
-    component.generalExaminationForm.patchValue({ lymphadenopathy: 'Present' });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(By.css('#lymphnodesInvolved'));
-    expect(debugElement).toBeTruthy();
-  });
-
-  it('should disable type of danger sign when dangerSigns is Absent', () => {
-    component.generalExaminationForm.patchValue({ lymphadenopathy: 'Absent' });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(By.css('#lymphnodesInvolved'));
-    expect(debugElement).not.toBeTruthy();
-  });
-
-  it('should able typeOfLymphadenopathy  when lymphadenopathy is Present ', () => {
-    component.generalExaminationForm.patchValue({ lymphadenopathy: 'Present' });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(By.css('#typeOfLymphadenopathy'));
-    expect(debugElement).toBeTruthy();
-  });
-
-  it('should disable typeOfLymphadenopathy  when lymphadenopathy is is Absent', () => {
-    component.generalExaminationForm.patchValue({ lymphadenopathy: 'Absent' });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(By.css('#typeOfLymphadenopathy'));
-    expect(debugElement).not.toBeTruthy();
-  });
-
-  it('should able edemaType  when edema is Present ', () => {
-    component.generalExaminationForm.patchValue({ edema: 'Present' });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(By.css('#edemaType'));
-    expect(debugElement).toBeTruthy();
-  });
-
-  it('should able extentOfEdema  when edema is Present ', () => {
-    component.generalExaminationForm.patchValue({ edema: 'Present' });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(By.css('#extentOfEdema'));
-    expect(debugElement).toBeTruthy();
-  });
-
-  it('should able edemaType  when edema is Absent ', () => {
-    component.generalExaminationForm.patchValue({ edema: 'Absent' });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(By.css('#edemaType'));
-    expect(debugElement).not.toBeTruthy();
-  });
-
-  it('should able extentOfEdema  when edema is Absent ', () => {
-    component.generalExaminationForm.patchValue({ edema: 'Absent' });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(By.css('#extentOfEdema'));
-    expect(debugElement).not.toBeTruthy();
+  it('trackFieldInteraction reports to the tracking service', () => {
+    component.trackFieldInteraction('Pallor');
+    expect(tracking.trackFieldInteraction).toHaveBeenCalledWith(
+      'Pallor',
+      'General Examination'
+    );
   });
 });

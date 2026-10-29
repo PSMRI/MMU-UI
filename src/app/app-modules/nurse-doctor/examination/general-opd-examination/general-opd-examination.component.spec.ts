@@ -19,128 +19,292 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import {
-  async,
-  ComponentFixture,
-  tick,
-  inject,
-  fakeAsync,
-  TestBed,
-} from '@angular/core/testing';
-import {
-  FormsModule,
-  FormGroup,
-  ReactiveFormsModule,
-  FormBuilder,
-} from '@angular/forms';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../../core/material.module';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { of } from 'rxjs';
 
 import { GeneralOpdExaminationComponent } from './general-opd-examination.component';
-import { GeneralUtils } from '../../shared/utility';
-
-import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { DoctorService } from '../../shared/services';
-
-import { DoctorServiceStub } from '../../shared/mocks/doctor-service-stub';
-
-import * as data from '../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Observable';
-
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { ConfirmationService } from '../../../core/services/confirmation.service';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  autoSpy,
+  commonTestProviders,
+  throwingObs,
+} from 'src/testing/test-utils';
 
 describe('GeneralOpdExaminationComponent', () => {
   let component: GeneralOpdExaminationComponent;
   let fixture: ComponentFixture<GeneralOpdExaminationComponent>;
-  let doctorService: DoctorService;
-  let confirmationService: ConfirmationService;
-  let fb;
-  let debugElement: DebugElement;
-  let el: HTMLElement;
-  let spy: any;
+  let doctor: any;
+  let confirm: any;
+  let form: FormGroup;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  const session = {
+    visitID: 'V1',
+    beneficiaryRegID: 'B1',
+    providerServiceID: 'P1',
+    userName: 'nurse',
+    beneficiaryID: 'BEN',
+    sessionID: 'S1',
+    benFlowID: 'F1',
+    visitCode: 'VC1',
+    serviceLineDetails: JSON.stringify({ vanID: 7, parkingPlaceID: 9 }),
+  };
+
+  const genControls = [
+    'typeOfDangerSigns',
+    'lymphnodesInvolved',
+    'typeOfLymphadenopathy',
+    'extentOfEdema',
+    'edemaType',
+  ];
+
+  function buildForm(required = false) {
+    const gen: any = {};
+    genControls.forEach(
+      c => (gen[c] = new FormControl(null, required ? Validators.required : []))
+    );
+    gen.pallor = new FormControl(null);
+    return new FormGroup({
+      generalExaminationForm: new FormGroup(gen),
+      headToToeExaminationForm: new FormGroup({ head: new FormControl() }),
+      systemicExaminationForm: new FormGroup({
+        cardioVascularSystemForm: new FormGroup({ x: new FormControl() }),
+        gastroIntestinalSystemForm: new FormGroup({ g: new FormControl() }),
+        obstetricExaminationForANCForm: new FormGroup({
+          o: new FormControl(),
+        }),
+      }),
+    });
+  }
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [GeneralOpdExaminationComponent],
-      schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MaterialModule,
-        NoopAnimationsModule,
-      ],
       providers: [
-        ConfirmationService,
-        { provide: DoctorService, useClass: DoctorServiceStub },
+        ...commonTestProviders({ session }),
+        { provide: DoctorService, useValue: autoSpy(DoctorService) },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(GeneralOpdExaminationComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
+    doctor = TestBed.inject(DoctorService) as any;
+    confirm = TestBed.inject(ConfirmationService) as any;
+    form = buildForm();
+    component.patientExaminationForm = form;
+    component.visitCategory = 'General OPD';
+  });
 
-    fb = debugElement.injector.get(FormBuilder);
-    component.patientExaminationForm = new GeneralUtils(
-      fb
-    ).createPatientExaminationForm();
+  it('creates, loads language and extracts sub forms on init', () => {
     fixture.detectChanges();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    expect(component.generalExaminationForm).toBe(
+      form.get('generalExaminationForm') as FormGroup
+    );
+    expect(component.headToToeExaminationForm).toBe(
+      form.get('headToToeExaminationForm') as FormGroup
+    );
+    expect(component.systemicExaminationForm).toBe(
+      form.get('systemicExaminationForm') as FormGroup
+    );
   });
 
-  it('should create GeneralOpdExaminationComponent', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should initialize GeneralOpdExaminationComponent', () => {
-    component.ngOnInit();
-    expect(component).toBeTruthy();
-  });
-
-  it('should execute on changes of GeneralOpdExaminationComponent', () => {
-    component.ngOnChanges();
-    expect(component).toBeTruthy();
-  });
-
-  it('should execute on changes and check for mode', () => {
-    component.mode = new String('view');
-    localStorage.setItem('visitID', '45');
-    localStorage.setItem('beneficiaryRegID', '5476');
-    spyOn(component, 'getAncExaminationData');
-    component.ngOnChanges();
+  it('renders the systemic panel except for NCD Care', () => {
     fixture.detectChanges();
-    const visitID = localStorage.getItem('visitID');
-    const benRegID = localStorage.getItem('beneficiaryRegID');
-    expect(component.getAncExaminationData).toHaveBeenCalled();
-  });
-
-  it('should get GeneralExaminationData when mode is view and patch data to fields', async(
-    inject([DoctorService], doctorService => {
-      localStorage.setItem('visitID', '932');
-      localStorage.setItem('beneficiaryRegID', '7397');
-      localStorage.setItem('visitCategory', 'General OPD');
-      component.visitCategory = 'General OPD';
-      spyOn(doctorService, 'getGeneralExamintionData').and.returnValue(
-        Observable.of(data.examinationGOPData.data)
-      );
-      spyOn(component, 'getAncExaminationData').and.callThrough();
-      component.mode = new String('view');
-      component.ngOnChanges();
-      expect(component.getAncExaminationData).toHaveBeenCalled();
-      expect(doctorService.getGeneralExamintionData).toHaveBeenCalled();
-      fixture.detectChanges();
-      // expect(component.patientExaminationForm.value.generalExaminationForm).toEqual(data.examinationData.data.generalExamination)
-    })
-  ));
-
-  it('should hide systemic examination for visitCategory category NCD Care', () => {
+    const el: HTMLElement = fixture.nativeElement;
+    expect(el.querySelector('app-nurse-general-examination')).not.toBeNull();
+    expect(
+      el.querySelector('app-nurse-head-to-toe-examination')
+    ).not.toBeNull();
+    expect(el.querySelector('app-nurse-systemic-examination')).not.toBeNull();
     component.visitCategory = 'NCD Care';
-    component.ngOnInit();
     fixture.detectChanges();
-    const de = fixture.debugElement.query(By.css('nurse-systemic-examination'));
-    expect(de).not.toBeTruthy();
+    expect(el.querySelector('app-nurse-systemic-examination')).toBeNull();
+  });
+
+  it('ngOnChanges in add mode only reloads sub forms', () => {
+    component.mode = 'add';
+    component.ngOnChanges();
+    expect(component.generalExaminationForm).toBeTruthy();
+    expect(doctor.getGeneralExamintionData).not.toHaveBeenCalled();
+    expect(doctor.updatePatientExamination).not.toHaveBeenCalled();
+  });
+
+  describe('view mode', () => {
+    const data = {
+      generalExamination: { pallor: 'Yes' },
+      headToToeExamination: { head: 'Normal' },
+      cardiovascularExamination: { x: 'cv' },
+      gastrointestinalExamination: { g: 'gi' },
+      obstetricExamination: { o: 'ob' },
+    };
+
+    beforeEach(() => {
+      component.mode = 'view';
+      spyOn(console, 'log');
+    });
+
+    it('fetches data using session IDs and patches General OPD form', () => {
+      doctor.getGeneralExamintionData.and.returnValue(
+        of({ statusCode: 200, data })
+      );
+      component.ngOnChanges();
+      expect(doctor.getGeneralExamintionData).toHaveBeenCalledWith('B1', 'V1');
+      expect(form.value.generalExaminationForm.pallor).toBe('Yes');
+      expect(form.value.headToToeExaminationForm.head).toBe('Normal');
+      expect(
+        form.value.systemicExaminationForm.gastroIntestinalSystemForm.g
+      ).toBe('gi');
+      expect(
+        form.value.systemicExaminationForm.obstetricExaminationForANCForm.o
+      ).toBe('ob');
+    });
+
+    it('patches ANC data without gastro-intestinal section', () => {
+      component.visitCategory = 'ANC';
+      doctor.getGeneralExamintionData.and.returnValue(
+        of({ statusCode: 200, data })
+      );
+      component.ngOnChanges();
+      expect(
+        form.value.systemicExaminationForm.cardioVascularSystemForm.x
+      ).toBe('cv');
+      expect(
+        form.value.systemicExaminationForm.obstetricExaminationForANCForm.o
+      ).toBe('ob');
+      expect(
+        form.value.systemicExaminationForm.gastroIntestinalSystemForm.g
+      ).toBeNull();
+    });
+
+    it('patches PNC data without obstetric section', () => {
+      component.visitCategory = 'PNC';
+      doctor.getGeneralExamintionData.and.returnValue(
+        of({ statusCode: 200, data })
+      );
+      component.ngOnChanges();
+      expect(
+        form.value.systemicExaminationForm.gastroIntestinalSystemForm.g
+      ).toBe('gi');
+      expect(
+        form.value.systemicExaminationForm.obstetricExaminationForANCForm.o
+      ).toBeNull();
+    });
+
+    it('does not patch for other categories', () => {
+      component.visitCategory = 'Cancer Screening';
+      doctor.getGeneralExamintionData.and.returnValue(
+        of({ statusCode: 200, data })
+      );
+      component.ngOnChanges();
+      expect(form.value.generalExaminationForm.pallor).toBeNull();
+    });
+
+    it('ignores non-200 responses', () => {
+      doctor.getGeneralExamintionData.and.returnValue(
+        of({ statusCode: 500, data })
+      );
+      component.ngOnChanges();
+      expect(form.value.generalExaminationForm.pallor).toBeNull();
+      expect(console.log).not.toHaveBeenCalled();
+    });
+
+    it('unsubscribes on destroy', () => {
+      component.ngOnChanges();
+      const sub = component.ancExaminationDataSubscription;
+      spyOn(sub, 'unsubscribe');
+      component.ngOnDestroy();
+      expect(sub.unsubscribe).toHaveBeenCalled();
+    });
+  });
+
+  it('ngOnDestroy is safe without a subscription', () => {
+    expect(() => component.ngOnDestroy()).not.toThrow();
+  });
+
+  describe('update mode', () => {
+    beforeEach(() => {
+      fixture.detectChanges();
+      component.mode = 'update';
+    });
+
+    it('updates the examination and marks the form pristine on success', () => {
+      form.markAsDirty();
+      doctor.updatePatientExamination.and.returnValue(
+        of({ statusCode: 200, data: {} })
+      );
+      component.ngOnChanges();
+      expect(doctor.updatePatientExamination).toHaveBeenCalledWith(
+        form.value,
+        'General OPD',
+        {
+          beneficiaryRegID: 'B1',
+          benVisitID: 'V1',
+          providerServiceMapID: 'P1',
+          modifiedBy: 'nurse',
+          beneficiaryID: 'BEN',
+          sessionID: 'S1',
+          parkingPlaceID: 9,
+          vanID: 7,
+          benFlowID: 'F1',
+          visitCode: 'VC1',
+        }
+      );
+      expect(confirm.alert).toHaveBeenCalledWith(
+        'Examination updated successfully',
+        'success'
+      );
+      expect(form.pristine).toBeTrue();
+    });
+
+    it('alerts error when response has null data', () => {
+      doctor.updatePatientExamination.and.returnValue(
+        of({ statusCode: 200, data: null })
+      );
+      component.ngOnChanges();
+      expect(confirm.alert).toHaveBeenCalledWith(
+        'Error in Examination update',
+        'error'
+      );
+    });
+
+    it('alerts error when the call fails', () => {
+      doctor.updatePatientExamination.and.returnValue(throwingObs());
+      component.ngOnChanges();
+      expect(confirm.alert).toHaveBeenCalledWith(
+        'Error in Examination update',
+        'error'
+      );
+    });
+
+    it('notifies mandatory fields and skips update when invalid', () => {
+      form = buildForm(true);
+      component.patientExaminationForm = form;
+      component.ngOnChanges();
+      const g =
+        LANGUAGE_EN.ExaminationData.ANC_OPD_PNCExamination.genExamination;
+      expect(confirm.notify).toHaveBeenCalledWith(
+        LANGUAGE_EN.alerts.info.mandatoryFields,
+        [
+          g.dangersigns,
+          g.lymph,
+          g.typeofLymphadenopathy,
+          g.extentofEdema,
+          g.typeofEdema,
+        ]
+      );
+      expect(doctor.updatePatientExamination).not.toHaveBeenCalled();
+    });
+  });
+
+  it('checkRequired returns true when there are no errors', () => {
+    fixture.detectChanges();
+    expect(component.checkRequired(form)).toBeTrue();
   });
 });

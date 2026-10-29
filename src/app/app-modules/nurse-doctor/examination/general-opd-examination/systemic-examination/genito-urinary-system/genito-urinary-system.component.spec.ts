@@ -19,72 +19,70 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import {
-  async,
-  ComponentFixture,
-  tick,
-  inject,
-  fakeAsync,
-  TestBed,
-} from '@angular/core/testing';
-import {
-  FormsModule,
-  FormGroup,
-  ReactiveFormsModule,
-  FormBuilder,
-} from '@angular/forms';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../../../../core/material.module';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { GeneralUtils } from '../../../../shared/utility';
-
-import * as data from '../../../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Observable';
-
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { GenitoUrinarySystemComponent } from './genito-urinary-system.component';
+import { MaterialModule } from '../../../../../core/material.module';
+import { GeneralUtils } from '../../../../shared/utility/general-utility';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 
 describe('GenitoUrinarySystemComponent', () => {
   let component: GenitoUrinarySystemComponent;
   let fixture: ComponentFixture<GenitoUrinarySystemComponent>;
-  let fb;
-  let debugElement: DebugElement;
-  let el: HTMLElement;
-  let spy: any;
+  let tracking: any;
+  let form: FormGroup;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS, MaterialModule],
       declarations: [GenitoUrinarySystemComponent],
+      providers: [...commonTestProviders()],
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MaterialModule,
-        NoopAnimationsModule,
-      ],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(GenitoUrinarySystemComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-    fb = debugElement.injector.get(FormBuilder);
-    component.genitoUrinarySystemForm = new GeneralUtils(
-      fb
-    ).createGenitoUrinarySystemForm();
+    tracking = TestBed.inject(AmritTrackingService) as any;
+    form = new GeneralUtils(new FormBuilder(), {
+      getItem: () => JSON.stringify({ vanID: 1, parkingPlaceID: 2 }),
+    } as any).createGenitoUrinarySystemForm();
+    component.genitoUrinarySystemDataForm = form;
     fixture.detectChanges();
   });
 
-  it('should create GenitoUrinarySystemComponent', () => {
+  it('creates and loads the language set', () => {
     expect(component).toBeTruthy();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
   });
 
-  it('Should initialize the component', () => {
-    component.ngOnInit();
-    expect(component).toBeTruthy();
+  it('refreshes the language set on ngDoCheck', () => {
+    component.currentLanguageSet = null;
+    component.ngDoCheck();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+  });
+
+  it('binds the renalAngle input to the form', () => {
+    const input = fixture.nativeElement.querySelector(
+      '[formControlName="renalAngle"]'
+    ) as HTMLInputElement;
+    expect(input).not.toBeNull();
+    input.value = 'observed';
+    input.dispatchEvent(new Event('input'));
+    expect(form.value.renalAngle).toBe('observed');
+  });
+
+  it('trackFieldInteraction reports to the tracking service', () => {
+    component.trackFieldInteraction('Field');
+    expect(tracking.trackFieldInteraction).toHaveBeenCalledWith(
+      'Field',
+      'Genito-Urinary System Examination'
+    );
   });
 });

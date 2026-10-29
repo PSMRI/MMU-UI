@@ -20,27 +20,52 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 import { AncCaseSheetComponent } from './anc-case-sheet.component';
 
 describe('AncCaseSheetComponent', () => {
   let component: AncCaseSheetComponent;
   let fixture: ComponentFixture<AncCaseSheetComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [AncCaseSheetComponent],
+      providers: [...commonTestProviders()],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(AncCaseSheetComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('ngOnInit and ngDoCheck set language', () => {
+    component.ngOnInit();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    component.currentLanguageSet = null;
+    component.ngDoCheck();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+  });
+
+  it('maps ANC care details and immunization', () => {
+    component.caseSheetData = {
+      nurseData: {
+        anc: { ANCCareDetail: { lmp: 1 }, ANCWomenVaccineDetails: [{ v: 1 }] },
+      },
+    };
+    component.ngOnChanges();
+    expect(component.aNCDetailsAndFormula).toEqual({ lmp: 1 });
+    expect(component.aNCImmunization).toEqual([{ v: 1 }]);
+  });
+
+  it('ignores data without ANC', () => {
+    component.caseSheetData = { nurseData: {} };
+    component.ngOnChanges();
+    expect(component.aNCDetailsAndFormula).toBeUndefined();
   });
 });

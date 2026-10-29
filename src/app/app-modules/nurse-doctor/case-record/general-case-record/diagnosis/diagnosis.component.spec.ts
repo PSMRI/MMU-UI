@@ -20,27 +20,57 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormGroup } from '@angular/forms';
+import { NO_ERRORS_SCHEMA } from 'src/testing/test-utils';
 import { DiagnosisComponent } from './diagnosis.component';
 
 describe('DiagnosisComponent', () => {
   let component: DiagnosisComponent;
   let fixture: ComponentFixture<DiagnosisComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [DiagnosisComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(DiagnosisComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    component.generalDiagnosisForm = new FormGroup({});
+    component.caseRecordMode = 'new';
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  afterEach(() => fixture.destroy());
+
+  const selectors = [
+    'app-general-opd-diagnosis',
+    'app-anc-diagnosis',
+    'app-pnc-diagnosis',
+    'app-ncd-care-diagnosis',
+    'app-covid-diagnosis',
+    'app-ncd-screening-diagnosis',
+  ];
+  const rendered = () =>
+    selectors.filter(s => fixture.nativeElement.querySelector(s));
+
+  [
+    ['General OPD', 'app-general-opd-diagnosis'],
+    ['ANC', 'app-anc-diagnosis'],
+    ['PNC', 'app-pnc-diagnosis'],
+    ['NCD care', 'app-ncd-care-diagnosis'],
+    ['COVID-19 Screening', 'app-covid-diagnosis'],
+    ['NCD screening', 'app-ncd-screening-diagnosis'],
+  ].forEach(([cat, sel]) => {
+    it(`renders only ${sel} for ${cat}`, () => {
+      component.visitCategory = cat;
+      fixture.detectChanges();
+      expect(rendered()).toEqual([sel]);
+    });
+  });
+
+  it('renders no diagnosis for unknown category', () => {
+    component.visitCategory = 'Cancer Screening';
+    fixture.detectChanges();
+    expect(rendered()).toEqual([]);
   });
 });

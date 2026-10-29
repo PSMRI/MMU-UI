@@ -20,198 +20,411 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { BehaviorSubject, of } from 'rxjs';
 import {
-  async,
-  inject,
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  FormArray,
-} from '@angular/forms';
-import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
-import { MaterialModule } from '../../../core/material.module';
-
-import { VisitDetailUtils } from '../../shared/utility';
-
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  autoSpy,
+  commonTestProviders,
+} from 'src/testing/test-utils';
+import { environment } from 'src/environments/environment';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
-import { DoctorService, MasterdataService } from '../../shared/services';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
-
-import { MasterdataServiceStub } from '../../shared/mocks/masterdata-service-stub';
-import { DoctorServiceStub } from '../../shared/mocks/doctor-service-stub';
-import { BeneficiaryDetailsServiceStub } from '../../../core/mocks/beneficiary-details-service-stub';
-
-import * as data from '../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Rx';
-
+import {
+  DoctorService,
+  MasterdataService,
+  NurseService,
+} from '../../shared/services';
+import { VisitDetailUtils } from '../../shared/utility/visit-detail-utility';
 import { ChiefComplaintsComponent } from './chief-complaints.component';
 
 describe('ChiefComplaintsComponent', () => {
   let component: ChiefComplaintsComponent;
   let fixture: ComponentFixture<ChiefComplaintsComponent>;
-  let debugElement: DebugElement;
-  let fb: FormBuilder;
+  let master: any;
+  let doctor: any;
+  let nurse: any;
+  let confirm: any;
+  let tracking: any;
+  let nurseMasterData$: BehaviorSubject<any>;
+  let beneficiary$: BehaviorSubject<any>;
+  let utils: VisitDetailUtils;
+  const originalOffline = environment.isMMUOfflineSync;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
+  const fever = { chiefComplaint: 'Fever', chiefComplaintID: 1 };
+  const cough = { chiefComplaint: 'Cough', chiefComplaintID: 2 };
+  const headache = { chiefComplaint: 'Headache', chiefComplaintID: 3 };
+  const masterList = () => [cough, fever, headache];
+
+  beforeEach(async () => {
+    nurseMasterData$ = new BehaviorSubject<any>(null);
+    beneficiary$ = new BehaviorSubject<any>({ age: '2 years' });
+    master = autoSpy(MasterdataService, { nurseMasterData$ });
+    doctor = autoSpy(DoctorService);
+    nurse = autoSpy(NurseService);
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [ChiefComplaintsComponent],
-      schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        ConfirmationService,
-        { provide: MasterdataService, useClass: MasterdataServiceStub },
-        { provide: DoctorService, useClass: DoctorServiceStub },
+        ...commonTestProviders({
+          session: {
+            visitID: 'v1',
+            beneficiaryRegID: 'b1',
+            serviceLineDetails: JSON.stringify({ vanID: 1, parkingPlaceID: 2 }),
+          },
+        }),
+        { provide: MasterdataService, useValue: master },
+        { provide: DoctorService, useValue: doctor },
+        { provide: NurseService, useValue: nurse },
         {
           provide: BeneficiaryDetailsService,
-          useClass: BeneficiaryDetailsServiceStub,
+          useValue: { beneficiaryDetails$: beneficiary$ },
         },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(ChiefComplaintsComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-
-    fb = debugElement.injector.get(FormBuilder);
-    component.patientChiefComplaintsForm = new VisitDetailUtils(
-      fb
-    ).createANCPatientChiefComplaintArrayForm();
-    window.console.log = () => {};
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should call getBeneficiaryDetails on Initialisation', inject(
-    [BeneficiaryDetailsService],
-    beneficiaryDetailsService => {
-      beneficiaryDetailsService.beneficiaryDetails.next(data.femaleBeneficiary);
-      spyOn(component, 'getBeneficiaryDetails');
-      component.ngOnInit();
-      expect(component.getBeneficiaryDetails).toHaveBeenCalled();
-      expect(component.beneficiary).toEqual(data.femaleBeneficiary);
-    }
-  ));
-
-  it('should clear ChiefComplaintsForm when total complaints is one and remove button is clicked', () => {
-    const complaint = component.patientChiefComplaintsForm.controls[
-      'complaints'
-    ] as FormArray;
-    complaint.controls[0].patchValue({
-      chiefComplaint: {
-        chiefComplaintID: 1,
-        chiefComplaint: 'Abdominal Bloating',
-      },
-      beneficiaryRegID: 7416,
-      benVisitID: 863,
-      providerServiceMapID: 1320,
-      duration: 12,
-      unitOfDuration: 'Hours',
-      description: 'hghgjhgjh',
-      createdBy: null,
+    confirm = TestBed.inject(ConfirmationService);
+    tracking = TestBed.inject(AmritTrackingService);
+    utils = new VisitDetailUtils(
+      TestBed.inject(FormBuilder),
+      TestBed.inject(SessionStorageService)
+    );
+    component.patientChiefComplaintsForm = new FormGroup({
+      complaints: new FormArray([utils.createPatientChiefComplaintsForm()]),
     });
-    fixture.detectChanges();
-    component.removeCheifComplaint(0, complaint.controls[0] as FormGroup);
-    expect(complaint.value.length).toBe(1);
+    spyOn(console, 'log');
+    component.ngOnInit();
+    nurseMasterData$.next({ chiefComplaintMaster: masterList() });
+  });
+
+  afterEach(() => {
+    environment.isMMUOfflineSync = originalOffline;
+    component.ngOnDestroy();
+  });
+
+  const complaints = () =>
+    component.patientChiefComplaintsForm.controls['complaints'] as FormArray;
+  const addRowAfter = (first: any) => {
+    complaints().at(0).patchValue({ chiefComplaint: first });
+    component.addCheifComplaint();
+  };
+
+  it('ngOnInit sets language, masters, beneficiary and clears provision', () => {
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    expect(component.chiefComplaintMaster).toEqual(masterList());
+    expect(component.chiefComplaintTemporarayList[0]).toEqual(masterList());
+    expect(component.beneficiary).toEqual({ age: '2 years' });
+    expect(nurse.clearNCDScreeningProvision).toHaveBeenCalled();
+    expect(doctor.getVisitComplaintDetails).not.toHaveBeenCalled();
+    expect(component.getCheifComplaints()?.length).toBe(1);
+  });
+
+  it('getCheifComplaints returns null without complaints array', () => {
+    component.patientChiefComplaintsForm = new FormGroup({});
+    expect(component.getCheifComplaints()).toBeNull();
+  });
+
+  describe('view mode', () => {
+    const load = (list: any[]) => {
+      doctor.getVisitComplaintDetails.and.returnValue(
+        of({ statusCode: 200, data: { BenChiefComplaints: list } })
+      );
+      component.mode = 'view';
+      nurseMasterData$.next({ chiefComplaintMaster: masterList() });
+    };
+
+    it('loads complaints; fever sets NCD temp and provisional diagnosis', () => {
+      load([{ chiefComplaint: 'Fever' }]);
+      expect(doctor.getVisitComplaintDetails).toHaveBeenCalledWith('b1', 'v1');
+      expect(component.benChiefComplaints).toEqual([
+        { chiefComplaint: 'Fever' },
+      ]);
+      expect(component.dataSource.data.length).toBe(1);
+      expect(nurse.setNCDTemp).toHaveBeenCalledWith(true);
+      expect(nurse.setEnableLAssessment).toHaveBeenCalledWith(false);
+      expect(nurse.setNCDScreeningProvision).toHaveBeenCalledWith(true);
+    });
+
+    it('offline sync: respiratory complaint enables lung assessment', () => {
+      environment.isMMUOfflineSync = true;
+      load([{ chiefComplaint: 'Dry cough' }]);
+      expect(nurse.setNCDTemp).toHaveBeenCalledWith(false);
+      expect(nurse.setEnableLAssessment).toHaveBeenCalledWith(true);
+    });
+
+    it('offline sync: non-respiratory complaint keeps lung assessment off', () => {
+      environment.isMMUOfflineSync = true;
+      load([{ chiefComplaint: 'Headache' }]);
+      expect(nurse.setEnableLAssessment).toHaveBeenCalledWith(false);
+      expect(nurse.setNCDScreeningProvision).toHaveBeenCalledWith(true);
+    });
+
+    it('empty complaints disable provision', () => {
+      load([]);
+      expect(nurse.setNCDScreeningProvision).toHaveBeenCalledWith(false);
+    });
+
+    it('ignores non-200 or null responses', () => {
+      doctor.getVisitComplaintDetails.and.returnValue(of(null));
+      component.getChiefComplaints('b', 'v');
+      doctor.getVisitComplaintDetails.and.returnValue(of({ statusCode: 500 }));
+      component.getChiefComplaints('b', 'v');
+      expect(nurse.setNCDTemp).not.toHaveBeenCalled();
+    });
+  });
+
+  it('getSCTid patches concept id on success only', () => {
+    master.getSnomedCTRecord.and.returnValue(
+      of({ statusCode: 200, data: { conceptID: 'C1' } })
+    );
+    component.getSCTid({ chiefComplaint: 'Fever' }, 0);
+    expect(master.getSnomedCTRecord).toHaveBeenCalledWith('Fever');
+    expect(complaints().at(0).value.conceptID).toBe('C1');
+    master.getSnomedCTRecord.and.returnValue(of({ statusCode: 500 }));
+    component.getSCTid({ chiefComplaint: 'Fever' }, 0);
+    expect(complaints().at(0).value.conceptID).toBe('C1');
+  });
+
+  it('onInputDuration toggles unit field', () => {
+    const f = complaints().at(0);
+    f.get('duration')?.enable();
+    f.patchValue({ duration: 2 });
+    component.onInputDuration(f);
+    expect(f.get('unitOfDuration')?.enabled).toBeTrue();
+    f.patchValue({ duration: null, unitOfDuration: 'Days' });
+    component.onInputDuration(f);
+    expect(f.get('unitOfDuration')?.disabled).toBeTrue();
+    expect(f.get('unitOfDuration')?.value).toBeNull();
+  });
+
+  it('reEnterChiefComplaint enables or resets dependent fields', () => {
+    const f = complaints().at(0);
+    f.patchValue({ chiefComplaint: fever });
+    component.reEnterChiefComplaint(f);
+    expect(f.get('duration')?.enabled).toBeTrue();
+    expect(f.get('description')?.enabled).toBeTrue();
+    f.patchValue({ chiefComplaint: null, duration: 3, description: 'x' });
+    component.reEnterChiefComplaint(f);
+    expect(f.get('duration')?.disabled).toBeTrue();
+    expect(f.get('description')?.disabled).toBeTrue();
+    expect(f.get('duration')?.value).toBeNull();
+  });
+
+  describe('filterComplaints', () => {
+    it('selects complaint, removes it from other lists and sets fever flags', () => {
+      addRowAfter(cough);
+      component.filterComplaints(fever, 0);
+      expect(component.selectedChiefComplaintList[0]).toBe(fever);
+      expect(component.chiefComplaintTemporarayList[1]).not.toContain(fever);
+      expect(component.chiefComplaintTemporarayList[0]).toContain(fever);
+      expect(nurse.setNCDTemp).toHaveBeenCalledWith(true);
+      expect(nurse.setNCDScreeningProvision).toHaveBeenCalledWith(true);
+      expect(nurse.setEnableLAssessment).toHaveBeenCalledWith(false);
+    });
+
+    it('re-adds the previous selection to other lists when changed', () => {
+      addRowAfter(cough);
+      component.filterComplaints(fever, 0);
+      component.filterComplaints(headache, 0);
+      expect(component.chiefComplaintTemporarayList[1]).toContain(fever);
+      expect(component.chiefComplaintTemporarayList[1]).not.toContain(headache);
+      expect(component.selectedChiefComplaintList[0]).toBe(headache);
+      expect(nurse.setNCDTemp).toHaveBeenCalledWith(false);
+    });
+
+    it('offline sync flags lung assessment for cough', () => {
+      environment.isMMUOfflineSync = true;
+      component.filterComplaints(cough, 0);
+      expect(nurse.setEnableLAssessment).toHaveBeenCalledWith(true);
+    });
+
+    it('unknown complaint with no selection disables provision', () => {
+      component.filterComplaints({ chiefComplaint: 'Fe' }, 0);
+      expect(component.selectedChiefComplaintList.length).toBe(0);
+      expect(nurse.setNCDScreeningProvision).toHaveBeenCalledWith(false);
+    });
+  });
+
+  it('addCheifComplaint adds a row with a list excluding chosen complaints', () => {
+    complaints().at(0).patchValue({ chiefComplaint: fever });
+    component.addCheifComplaint();
+    expect(complaints().length).toBe(2);
+    expect(component.chiefComplaintTemporarayList[1]).toEqual([
+      cough,
+      headache,
+    ]);
+  });
+
+  describe('removeCheifComplaint', () => {
+    it('removes a row, restores complaint to other lists and resets flags', () => {
+      addRowAfter(fever);
+      component.filterComplaints(fever, 0);
+      component.removeCheifComplaint(0, complaints().at(0));
+      expect(confirm.confirm).toHaveBeenCalledWith(
+        'warn',
+        LANGUAGE_EN.alerts.info.warn
+      );
+      expect(complaints().length).toBe(1);
+      expect(component.patientChiefComplaintsForm.dirty).toBeTrue();
+      expect(component.selectedChiefComplaintList[0]).toBeNull();
+      expect(component.chiefComplaintTemporarayList[1]).toContain(fever);
+      expect(nurse.setNCDTemp).toHaveBeenCalledWith(false);
+      expect(nurse.setNCDScreeningProvision).toHaveBeenCalledWith(true);
+    });
+
+    it('resets the last remaining row instead of removing it', () => {
+      const f = complaints().at(0);
+      f.patchValue({ createdBy: 'x' });
+      component.removeCheifComplaint(0, f);
+      expect(complaints().length).toBe(1);
+      expect(f.value.createdBy).toBeNull();
+    });
+
+    it('offline sync keeps lung assessment when a respiratory complaint remains', () => {
+      environment.isMMUOfflineSync = true;
+      addRowAfter(fever);
+      complaints().at(0).patchValue({ chiefComplaint: null });
+      component.filterComplaints(cough, 1);
+      component.selectedChiefComplaintList[0] = fever;
+      component.removeCheifComplaint(0, complaints().at(0));
+      expect(nurse.setNCDTemp).toHaveBeenCalledWith(false);
+      expect(nurse.setEnableLAssessment).toHaveBeenCalledWith(true);
+    });
+
+    it('when not confirmed only re-publishes flags', () => {
+      confirm.confirm.and.returnValue(of(false));
+      component.removeCheifComplaint(0, complaints().at(0));
+      expect(complaints().length).toBe(1);
+      expect(nurse.setNCDTemp).not.toHaveBeenCalled();
+      expect(nurse.setEnableLAssessment).toHaveBeenCalledWith(false);
+      expect(nurse.setNCDScreeningProvision).toHaveBeenCalledWith(false);
+    });
+  });
+
+  describe('validateDuration', () => {
+    it('alerts and clears when duration exceeds age', () => {
+      const f = complaints().at(0);
+      f.get('duration')?.enable();
+      f.get('unitOfDuration')?.enable();
+      f.patchValue({ duration: 5, unitOfDuration: 'Years' });
+      component.validateDuration(f);
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.alerts.info.durationGreaterThanAge
+      );
+      expect(f.value.duration).toBeNull();
+      expect(f.value.unitOfDuration).toBeNull();
+    });
+
+    it('accepts duration within age or incomplete input', () => {
+      const f = complaints().at(0);
+      f.get('duration')?.enable();
+      f.get('unitOfDuration')?.enable();
+      f.patchValue({ duration: 3, unitOfDuration: 'Days' });
+      component.validateDuration(f);
+      f.patchValue({ duration: 3, unitOfDuration: null });
+      component.validateDuration(f);
+      expect(confirm.alert).not.toHaveBeenCalled();
+      expect(f.value.duration).toBe(3);
+    });
+  });
+
+  it('displayChiefComplaint returns name or undefined', () => {
+    expect(component.displayChiefComplaint(fever)).toBe('Fever');
+    expect(component.displayChiefComplaint(null)).toBeUndefined();
+  });
+
+  describe('suggestChiefComplaintList', () => {
+    it('string input filters suggestions and enables fields', () => {
+      const f = complaints().at(0);
+      f.patchValue({ chiefComplaint: 'he' });
+      component.suggestChiefComplaintList(f, 0);
+      expect(component.suggestedChiefComplaintList[0]).toEqual([headache]);
+      expect(f.get('duration')?.enabled).toBeTrue();
+    });
+
+    it('object input filters by its name', () => {
+      const f = complaints().at(0);
+      f.patchValue({ chiefComplaint: cough });
+      component.suggestChiefComplaintList(f, 0);
+      expect(component.suggestedChiefComplaintList[0]).toEqual([cough]);
+      expect(f.get('description')?.enabled).toBeTrue();
+    });
+
+    it('no-match string resets the form', () => {
+      const f = complaints().at(0);
+      f.patchValue({ chiefComplaint: 'zzz' });
+      component.suggestChiefComplaintList(f, 0);
+      expect(component.suggestedChiefComplaintList[0]).toEqual([]);
+      expect(f.value.chiefComplaint).toBeNull();
+    });
+
+    it('empty input disables and resets dependent fields', () => {
+      const f = complaints().at(0);
+      f.get('duration')?.enable();
+      component.suggestedChiefComplaintList[0] = [fever];
+      component.suggestChiefComplaintList(f, 0);
+      expect(f.get('duration')?.disabled).toBeTrue();
+      expect(f.get('unitOfDuration')?.disabled).toBeTrue();
+      expect(f.get('description')?.disabled).toBeTrue();
+    });
+  });
+
+  it('sortChiefComplaintList sorts by name', () => {
+    const list = [headache, fever, cough, { ...fever }];
+    component.sortChiefComplaintList(list);
+    expect(list.map(x => x.chiefComplaint)).toEqual([
+      'Cough',
+      'Fever',
+      'Fever',
+      'Headache',
+    ]);
+  });
+
+  it('checkComplaintFormValidity is false only when all fields filled', () => {
     expect(
-      component.patientChiefComplaintsForm.value.complaints[0]
-    ).not.toEqual({
-      chiefComplaint: {
-        chiefComplaintID: 1,
-        chiefComplaint: 'Abdominal Bloating',
-      },
-      chiefComplaintID: null,
-      beneficiaryRegID: 7416,
-      benVisitID: 863,
-      providerServiceMapID: 1320,
-      duration: 12,
-      unitOfDuration: 'Hours',
-      description: 'hghgjhgjh',
-      createdBy: null,
-    });
+      component.checkComplaintFormValidity({
+        value: { chiefComplaint: fever, duration: 2, unitOfDuration: 'Days' },
+      })
+    ).toBeFalse();
+    expect(
+      component.checkComplaintFormValidity({
+        value: { chiefComplaint: fever, duration: 2 },
+      })
+    ).toBeTrue();
   });
 
-  it('should remove ChiefComplaintsForm when total complaints is more than one and remove button is clicked', inject(
-    [MasterdataService],
-    masterdataService => {
-      masterdataService.nurseMasterDataSource.next(
-        data.generalOPDNurseMasterdata.data
-      );
-      const complaint = component.patientChiefComplaintsForm.controls[
-        'complaints'
-      ] as FormArray;
-      component.addCheifComplaint();
-      component.addCheifComplaint();
-      complaint.controls[0].markAsDirty();
-      complaint.controls[1].markAsDirty();
-      fixture.detectChanges();
-      const de = fixture.debugElement.query(By.css('#removeBtn0'));
-      de.triggerEventHandler('click', null);
-      // component.removeCheifComplaint(1, complaint.controls[1] as FormGroup);
-      expect(complaint.value.length).toBe(1);
-    }
-  ));
+  it('trackFieldInteraction forwards to tracking service', () => {
+    component.trackFieldInteraction('duration');
+    expect(tracking.trackFieldInteraction).toHaveBeenCalledWith(
+      'duration',
+      'Chief Complaints'
+    );
+  });
 
-  it('should add ChiefComplaintsForm when add button is clicked', inject(
-    [MasterdataService],
-    masterdataService => {
-      masterdataService.nurseMasterDataSource.next(
-        data.generalOPDNurseMasterdata.data
-      );
-      const complaint = component.patientChiefComplaintsForm.controls[
-        'complaints'
-      ] as FormArray;
-      const de = fixture.debugElement.query(By.css('#addBtn0'));
-      de.triggerEventHandler('click', null);
-      fixture.detectChanges();
-      expect(complaint.value.length).toBe(2);
-    }
-  ));
+  it('ngOnDestroy unsubscribes all subscriptions', () => {
+    const subs = ['a', 'b', 'c'].map(n => ({
+      unsubscribe: jasmine.createSpy(n),
+    }));
+    component.nurseMasterDataSubscription = subs[0];
+    component.getChiefComplaintDetails = subs[1];
+    component.beneficiaryDetailSubscription = subs[2];
+    component.ngOnDestroy();
+    subs.forEach(s => expect(s.unsubscribe).toHaveBeenCalled());
+    component.nurseMasterDataSubscription = null;
+    component.getChiefComplaintDetails = null;
+    component.beneficiaryDetailSubscription = null;
+  });
 
-  it('should get ChiefComplaintsDetails when mode is view', async(
-    inject(
-      [DoctorService, MasterdataService],
-      (doctorService, masterdataService) => {
-        component.mode = String('view');
-        spyOn(component, 'getChiefComplaints').and.callThrough();
-        spyOn(doctorService, 'getVisitComplaintDetails').and.returnValue(
-          Observable.of(data.generalOPDVisitDetails)
-        );
-        masterdataService.nurseMasterDataSource.next(
-          data.generalOPDNurseMasterdata.data
-        );
-        expect(component.getChiefComplaints).toHaveBeenCalled();
-        expect(doctorService.getVisitComplaintDetails).toHaveBeenCalled();
-      }
-    )
-  ));
-
-  it('should patch ChiefComplaintsDetails to form when mode is view', async(
-    inject(
-      [DoctorService, MasterdataService],
-      (doctorService, masterdataService) => {
-        spyOn(doctorService, 'getVisitComplaintDetails').and.returnValue(
-          Observable.of(data.generalOPDVisitDetails)
-        );
-        component.mode = String('view');
-        masterdataService.nurseMasterDataSource.next(
-          data.generalOPDNurseMasterdata.data
-        );
-        fixture.detectChanges();
-        expect(
-          component.patientChiefComplaintsForm.value.complaints.length
-        ).toBe(2);
-      }
-    )
-  ));
+  it('ngDoCheck refreshes language', () => {
+    component.currentLanguageSet = null;
+    component.ngDoCheck();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+  });
 });

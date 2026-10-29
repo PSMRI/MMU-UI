@@ -19,115 +19,138 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { BehaviorSubject, of } from 'rxjs';
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MaterialModule } from '../../../../core/material.module';
-
+import { BreastExaminationComponent } from './breast-examination.component';
 import { CameraService } from '../../../../core/services/camera.service';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
-
-import { CameraServiceStub } from '../../../../core/mocks/camera-service-stub';
-import { BeneficiaryDetailsServiceStub } from '../../../../core/mocks/beneficiary-details-service-stub';
-import { CancerUtils } from '../../../shared/utility';
-import { BreastExaminationComponent } from './breast-examination.component';
+import { MaterialModule } from '../../../../core/material.module';
+import { CancerUtils } from '../../../shared/utility/cancer-utility';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  autoSpy,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 
 describe('BreastExaminationComponent', () => {
   let component: BreastExaminationComponent;
   let fixture: ComponentFixture<BreastExaminationComponent>;
-  let debugElement: any;
-  let fb: any;
+  let camera: any;
+  let benDetails$: BehaviorSubject<any>;
+  let form: FormGroup;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
+  beforeEach(async () => {
+    benDetails$ = new BehaviorSubject<any>(null);
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS, MaterialModule],
       declarations: [BreastExaminationComponent],
-      schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        { provide: CameraService, useClass: CameraServiceStub },
+        ...commonTestProviders(),
+        { provide: CameraService, useValue: autoSpy(CameraService) },
         {
           provide: BeneficiaryDetailsService,
-          useClass: BeneficiaryDetailsServiceStub,
+          useValue: { beneficiaryDetails$: benDetails$ },
         },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(BreastExaminationComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
+    camera = TestBed.inject(CameraService) as any;
+    form = new CancerUtils(new FormBuilder(), {
+      getItem: () => JSON.stringify({ vanID: 1, parkingPlaceID: 2 }),
+    } as any).createBreastExaminationForm();
+    component.breastExaminationForm = form;
+  });
 
-    fb = debugElement.injector.get(FormBuilder);
-    component.breastExaminationForm = new CancerUtils(
-      fb
-    ).createBreastExaminationForm();
+  it('creates with language and treats unknown gender as not female', () => {
     fixture.detectChanges();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    expect(component.female).toBeFalse();
+    expect(
+      fixture.nativeElement.querySelector('[formControlName="everBreastFed"]')
+    ).toBeNull();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  ['FEMALE', 'transgender'].forEach(g => {
+    it(`shows breast-feeding questions for ${g}`, () => {
+      benDetails$.next({ genderName: g });
+      fixture.detectChanges();
+      expect(component.female).toBeTrue();
+      expect(
+        fixture.nativeElement.querySelector('[formControlName="everBreastFed"]')
+      ).not.toBeNull();
+    });
   });
 
-  it('should not show duration of breast feeding symptom', () => {
-    debugElement = fixture.debugElement.query(
-      By.css('#breastFeedingDurationGTE6months')
+  it('keeps female false for male beneficiaries', () => {
+    benDetails$.next({ genderName: 'Male' });
+    fixture.detectChanges();
+    expect(component.female).toBeFalse();
+  });
+
+  it('exposes getters', () => {
+    expect(component.everBreastFed).toBe(form.get('everBreastFed'));
+    expect(component.lumpInBreast).toBe(form.get('lumpInBreast'));
+  });
+
+  it('checkBreastFeed resets the duration', () => {
+    form.patchValue({ breastFeedingDurationGTE6months: true });
+    component.checkBreastFeed();
+    expect(form.value.breastFeedingDurationGTE6months).toBeNull();
+  });
+
+  it('checkLump resets lump size, shape and texture', () => {
+    form.patchValue({ lumpSize: 'a', lumpShape: 'b', lumpTexture: 'c' });
+    component.checkLump();
+    expect(form.value.lumpSize).toBeNull();
+    expect(form.value.lumpShape).toBeNull();
+    expect(form.value.lumpTexture).toBeNull();
+  });
+
+  it('renders lump details when a lump is present', () => {
+    fixture.detectChanges();
+    form.patchValue({ lumpInBreast: true });
+    fixture.detectChanges();
+    expect(
+      fixture.nativeElement.querySelector('[formControlName="lumpSize"]')
+    ).not.toBeNull();
+  });
+
+  it('annotateImage stores points with imageID 2', () => {
+    fixture.detectChanges();
+    camera.annotate.and.returnValue(of({ markers: [5] }));
+    (
+      fixture.nativeElement.querySelector('#annotateBreastImg') as HTMLElement
+    ).click();
+    expect(camera.annotate).toHaveBeenCalledWith(
+      'assets/images/breastExamination.png',
+      null,
+      LANGUAGE_EN
     );
-    expect(debugElement).toBeFalsy();
+    expect(form.value.image).toEqual({ markers: [5], imageID: 2 });
+    expect(form.dirty).toBeTrue();
   });
 
-  it('should not show duration of breast feeding symptom when ever breast fed a child is true', () => {
-    component.everBreastFed.patchValue({ everBreastFed: true });
+  it('annotateImage ignores an empty result', () => {
     fixture.detectChanges();
-    debugElement = fixture.debugElement.query(
-      By.css('#breastFeedingDurationGTE6months')
-    );
-    expect(debugElement).toBeTruthy();
+    camera.annotate.and.returnValue(of(false));
+    component.annotateImage();
+    expect(form.value.image).toBeNull();
   });
 
-  it('should not show lump size symptom', () => {
-    debugElement = fixture.debugElement.query(By.css('#lumpSize'));
-    expect(debugElement).toBeFalsy();
-  });
-
-  it('should not show lump shape symptom', () => {
-    debugElement = fixture.debugElement.query(By.css('#lumpShape'));
-    expect(debugElement).toBeFalsy();
-  });
-
-  it('should not show lump texture symptom', () => {
-    debugElement = fixture.debugElement.query(By.css('#lumpTexture'));
-    expect(debugElement).toBeFalsy();
-  });
-
-  it('should show lump size symptom when any lump in breast is true', () => {
-    component.breastExaminationForm.patchValue({ lumpInBreast: true });
+  it('ngOnDestroy unsubscribes a stored subscription', () => {
     fixture.detectChanges();
-    debugElement = fixture.debugElement.query(By.css('#lumpSize'));
-    expect(debugElement).toBeTruthy();
-  });
-
-  it('should show lump shape symptom when any lump in breast is true', () => {
-    component.breastExaminationForm.patchValue({ lumpInBreast: true });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(By.css('#lumpShape'));
-    expect(debugElement).toBeTruthy();
-  });
-
-  it('should show lump texture symptom when any lump in breast is true', () => {
-    component.breastExaminationForm.patchValue({ lumpInBreast: true });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(By.css('#lumpTexture'));
-    expect(debugElement).toBeTruthy();
-  });
-
-  it('should call annotateImage when image is clicked', () => {
-    spyOn(component, 'annotateImage');
-    debugElement = fixture.debugElement.query(By.css('#annotateBreastImg'));
-    debugElement.triggerEventHandler('click', null);
-    expect(component.annotateImage).toHaveBeenCalled();
+    // getBeneficiaryDetails never assigns beneficiarySubs (current behaviour)
+    expect(component.beneficiarySubs).toBeUndefined();
+    const sub = { unsubscribe: jasmine.createSpy('unsubscribe') };
+    component.beneficiarySubs = sub;
+    component.ngOnDestroy();
+    expect(sub.unsubscribe).toHaveBeenCalled();
   });
 });

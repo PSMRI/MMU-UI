@@ -20,27 +20,93 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import {
+  ComponentFixture,
+  TestBed,
+  discardPeriodicTasks,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpServiceService } from '../../services/http-service.service';
+import {
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  createHttpServiceMock,
+} from 'src/testing/test-utils';
 import { AppFooterComponent } from './app-footer.component';
 
 describe('AppFooterComponent', () => {
-  let component: AppFooterComponent;
   let fixture: ComponentFixture<AppFooterComponent>;
+  let component: AppFooterComponent;
+  let http: any;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    http = createHttpServiceMock(LANGUAGE_EN);
+    await TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
       declarations: [AppFooterComponent],
+      providers: [{ provide: HttpServiceService, useValue: http }],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(AppFooterComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  afterEach(() => fixture?.destroy());
+
+  it('sets language, year and polls online status every second', fakeAsync(() => {
+    const onLine = spyOnProperty(navigator, 'onLine').and.returnValue(true);
+    fixture.detectChanges();
+    expect(component.currentLanguageSet).toBe(LANGUAGE_EN);
+    expect(component.year).toBe(new Date().getFullYear());
+    expect(component.status).toBeFalse();
+    tick(1000);
+    expect(component.status).toBeTrue();
+    onLine.and.returnValue(false);
+    tick(1000);
+    expect(component.status).toBeFalse();
+    discardPeriodicTasks();
+  }));
+
+  it('renders localized text when language is available', fakeAsync(() => {
+    spyOnProperty(navigator, 'onLine').and.returnValue(true);
+    fixture.detectChanges();
+    tick(1000);
+    fixture.detectChanges();
+    const text = fixture.nativeElement.textContent;
+    expect(text).toContain(`${component.year} ©`);
+    expect(text).toContain(LANGUAGE_EN.online);
+    const dot = fixture.nativeElement.querySelector(
+      'span[style*="border-radius"]'
+    ) as HTMLElement;
+    expect(dot).not.toBeNull();
+    expect(dot.style.background).toContain('green');
+    discardPeriodicTasks();
+  }));
+
+  it('renders fallback text when no language is available', fakeAsync(() => {
+    http.appCurrentLanguge.next(undefined);
+    spyOnProperty(navigator, 'onLine').and.returnValue(false);
+    fixture.detectChanges();
+    expect(component.currentLanguageSet).toBeUndefined();
+    const text = fixture.nativeElement.textContent;
+    expect(text).toContain('Powered by: WIPRO');
+    expect(text).toContain('PSMRI');
+    expect(text).toContain('Offline');
+    expect(
+      fixture.nativeElement.querySelector('span[style*="border-radius"]')
+    ).toBeNull();
+    expect(text).toContain('Feedback');
+    discardPeriodicTasks();
+  }));
+
+  it('ngDoCheck picks up a changed language', fakeAsync(() => {
+    fixture.detectChanges();
+    const other = { online: 'On', offline: 'Off' };
+    http.appCurrentLanguge.next(other);
+    component.ngDoCheck();
+    expect(component.currentLanguageSet).toBe(other);
+    discardPeriodicTasks();
+  }));
 });

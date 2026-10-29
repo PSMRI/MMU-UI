@@ -19,87 +19,105 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MaterialModule } from '../../../../core/material.module';
-
-import { CameraService } from '../../../../core/services/camera.service';
-import { CameraServiceStub } from '../../../../core/mocks/camera-service-stub';
-
-import { CancerUtils } from '../../../shared/utility';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { of } from 'rxjs';
 
 import { OralExaminationComponent } from './oral-examination.component';
+import { CameraService } from '../../../../core/services/camera.service';
+import { MaterialModule } from '../../../../core/material.module';
+import { CancerUtils } from '../../../shared/utility/cancer-utility';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  autoSpy,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 
 describe('OralExaminationComponent', () => {
   let component: OralExaminationComponent;
   let fixture: ComponentFixture<OralExaminationComponent>;
-  let debugElement: any;
-  let fb: any;
+  let camera: any;
+  let form: FormGroup;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS, MaterialModule],
       declarations: [OralExaminationComponent],
+      providers: [
+        ...commonTestProviders(),
+        { provide: CameraService, useValue: autoSpy(CameraService) },
+      ],
       schemas: [NO_ERRORS_SCHEMA],
-      providers: [{ provide: CameraService, useClass: CameraServiceStub }],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(OralExaminationComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-
-    fb = debugElement.injector.get(FormBuilder);
-    component.oralExaminationForm = new CancerUtils(
-      fb
-    ).createOralExaminationForm();
+    camera = TestBed.inject(CameraService) as any;
+    form = new CancerUtils(new FormBuilder(), {
+      getItem: () => JSON.stringify({ vanID: 1, parkingPlaceID: 2 }),
+    } as any).createOralExaminationForm();
+    component.oralExaminationForm = form;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('creates and loads language on ngDoCheck', () => {
     expect(component).toBeTruthy();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
   });
 
-  it('should not show type of premalignant lesion', () => {
-    debugElement = fixture.debugElement.query(
-      By.css('#preMalignantLesionTypeList')
+  it('exposes form control getters', () => {
+    expect(component.premalignantLesions).toBe(form.get('premalignantLesions'));
+    expect(component.preMalignantLesionType).toBe(
+      form.get('preMalignantLesionType')
     );
-    expect(debugElement).toBeFalsy();
+    expect(component.observation).toBe(form.get('observation'));
   });
 
-  it('should not show other lesion', () => {
-    debugElement = fixture.debugElement.query(By.css('#otherLesionType'));
-    expect(debugElement).toBeFalsy();
-  });
-
-  it('should show other lesion when preMalignantLesionTypeList contians Any other lesion', () => {
-    component.oralExaminationForm.patchValue({ premalignantLesions: true });
-    component.oralExaminationForm.patchValue({
-      preMalignantLesionTypeList: ['Any other lesion'],
-    });
+  it('shows the other lesion input when "Any other lesion" is selected', () => {
+    form.patchValue({ premalignantLesions: true });
+    form.patchValue({ preMalignantLesionTypeList: ['Any other lesion'] });
     fixture.detectChanges();
-    debugElement = fixture.debugElement.query(By.css('#otherLesionType'));
-    expect(debugElement).toBeTruthy();
+    expect(component.showOther).toBeTrue();
+    expect(
+      fixture.nativeElement.querySelector('[formControlName="otherLesionType"]')
+    ).not.toBeNull();
   });
 
-  it('should show type of premalignant lesion when premalignant lesions is true', () => {
-    component.oralExaminationForm.patchValue({ premalignantLesions: true });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(
-      By.css('#preMalignantLesionTypeList')
+  it('hides and clears the other lesion when it is deselected', () => {
+    form.patchValue({ preMalignantLesionTypeList: ['Any other lesion'] });
+    form.patchValue({ otherLesionType: 'Custom' });
+    form.patchValue({ preMalignantLesionTypeList: ['Leukoplakia'] });
+    expect(component.showOther).toBeFalse();
+    expect(form.value.otherLesionType).toBeNull();
+  });
+
+  it('clears the other lesion when list becomes null', () => {
+    form.patchValue({ otherLesionType: 'Custom' });
+    component.checkWithPremalignantLesion();
+    expect(form.value.preMalignantLesionTypeList).toBeNull();
+    expect(form.value.otherLesionType).toBeNull();
+  });
+
+  it('annotateImage stores points with imageID 3', () => {
+    camera.annotate.and.returnValue(of({ markers: [] }));
+    (
+      fixture.nativeElement.querySelector('#annotateOralImg') as HTMLElement
+    ).click();
+    expect(camera.annotate).toHaveBeenCalledWith(
+      'assets/images/oralExamination.png',
+      null,
+      LANGUAGE_EN
     );
-    expect(debugElement).toBeTruthy();
+    expect(form.value.image).toEqual({ markers: [], imageID: 3 });
+    expect(form.dirty).toBeTrue();
   });
 
-  it('should call annotateImage when image is clicked', () => {
-    spyOn(component, 'annotateImage');
-    debugElement = fixture.debugElement.query(By.css('#annotateOralImg'));
-    debugElement.triggerEventHandler('click', null);
-    expect(component.annotateImage).toHaveBeenCalled();
+  it('annotateImage ignores an empty result', () => {
+    camera.annotate.and.returnValue(of(null));
+    component.annotateImage();
+    expect(form.value.image).toBeNull();
+    expect(form.dirty).toBeFalse();
   });
 });

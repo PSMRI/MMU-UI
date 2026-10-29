@@ -20,27 +20,38 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 
 import { TmLogoutComponent } from './tm-logout.component';
+import {
+  commonTestProviders,
+  COMMON_TEST_IMPORTS,
+  NO_ERRORS_SCHEMA,
+} from 'src/testing/test-utils';
 
 describe('TmLogoutComponent', () => {
-  let component: TmLogoutComponent;
   let fixture: ComponentFixture<TmLogoutComponent>;
+  let router: Router;
+  let clearSpy: jasmine.Spy;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [TmLogoutComponent],
+      providers: [...commonTestProviders()],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
+    router = TestBed.inject(Router);
+    spyOn(router, 'navigate').and.returnValue(Promise.resolve(true));
+    clearSpy = spyOn(Storage.prototype, 'clear');
     fixture = TestBed.createComponent(TmLogoutComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('clears session storage and navigates to login on init', () => {
+    expect(fixture.componentInstance).toBeTruthy();
+    expect(clearSpy).toHaveBeenCalledTimes(1);
+    expect(router.navigate).toHaveBeenCalledWith(['/login']);
   });
 });
