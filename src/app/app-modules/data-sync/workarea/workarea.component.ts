@@ -37,6 +37,7 @@ import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { environment } from 'src/environments/environment';
+import { CentralAuthService } from '../../core/services/central-auth.service';
 
 interface DocumentSyncItem {
   documentId: string | number | null;
@@ -77,7 +78,8 @@ export class WorkareaComponent
     private dataSyncService: DataSyncService,
     private fb: FormBuilder,
     private httpServiceService: HttpServiceService,
-    readonly sessionstorage: SessionStorageService
+    readonly sessionstorage: SessionStorageService,
+    private centralAuthService: CentralAuthService
   ) {}
 
   syncTableGroupList: any = [];
@@ -88,6 +90,8 @@ export class WorkareaComponent
     const serverKey = this.sessionstorage.getItem('serverKey');
     if (serverKey) {
       this.getDataSYNCGroup();
+      this.loadAutoTopUpStatus();
+      this.loadAutoSyncStatus();
     } else {
       this.router.navigate(['datasync/sync-login']);
     }
@@ -602,12 +606,63 @@ export class WorkareaComponent
       return true;
     }
   }
+  // status of the automatic BenID download (null when MMU-API does not support it)
+  autoTopUp: any = null;
+
+  get autoTopUpState(): 'OK' | 'WAITING' | 'ACTION' | null {
+    if (!this.autoTopUp?.enabled) {
+      return null;
+    }
+    if (this.autoTopUp.centralConnection !== 'CONNECTED') {
+      return 'ACTION';
+    }
+    return this.autoTopUp.lastError ? 'WAITING' : 'OK';
+  }
+
+  loadAutoTopUpStatus() {
+    this.centralAuthService.getStatus().subscribe({
+      next: (res: any) =>
+        (this.autoTopUp = this.centralAuthService.parseStatus(res)),
+      error: () => (this.autoTopUp = null),
+    });
+  }
+
+  // automatic Data Sync status (null when the feature is off or MMU-API does not support it)
+  autoSync: any = null;
+
+  loadAutoSyncStatus() {
+    this.centralAuthService.getAutoSyncStatus().subscribe({
+      next: (res: any) => {
+        const status = this.centralAuthService.parseStatus(res);
+        this.autoSync = status?.enabled ? status : null;
+      },
+      error: () => (this.autoSync = null),
+    });
+  }
+
+  onTabChange(event: any) {
+    // the panel is loaded once on open; refresh it each time its tab is shown
+    if (this.autoTopUp && event?.tab?.textLabel === 'Generate BeneficiaryID') {
+      this.loadAutoTopUpStatus();
+    }
+  }
+
+  reconnectToCentral() {
+    // the Data Sync login reconnects the automatic BenID download
+    sessionStorage.removeItem('serverKey');
+    this.router.navigate(['datasync/sync-login']);
+  }
+
   checkBenIDAvailability() {
     this.dataSyncService
       .checkBenIDAvailability()
       .subscribe((benIDResponse: any) => {
         if (benIDResponse) {
           this.benID_Count = benIDResponse.data.response;
+          // keep the automatic download panel on the same count
+          if (this.autoTopUp) {
+            this.loadAutoTopUpStatus();
+          }
         } else {
           this.confirmationService.alert('No benID available. Generate benIDs');
         }

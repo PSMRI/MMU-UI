@@ -31,6 +31,7 @@ import { ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
 import { DataSyncService } from '../../../data-sync/shared/service/data-sync.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { CentralAuthService } from '../../services/central-auth.service';
 
 @Component({
   selector: 'app-data-sync-login',
@@ -61,7 +62,8 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
     public httpServiceService: HttpServiceService,
     private confirmationService: ConfirmationService,
     readonly sessionstorage: SessionStorageService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private centralAuthService: CentralAuthService
   ) {
     this._keySize = 256;
     this._ivSize = 128;
@@ -183,6 +185,12 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
                 ) {
                   this.showProgressBar = false;
                   this.sessionstorage.setItem('serverKey', res.data.key);
+                  // central password just worked: (re)connect the automatic BenID top-up
+                  this.centralAuthService.captureIfEnabled(
+                    userName,
+                    encriptPassword,
+                    true
+                  );
                   this.getDataSyncMMU(res);
                 } else {
                   this.showProgressBar = false;
@@ -229,6 +237,11 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
                                       this.sessionstorage.setItem(
                                         'serverKey',
                                         userLoggedIn.data.key
+                                      );
+                                      this.centralAuthService.captureIfEnabled(
+                                        userName,
+                                        encriptPassword,
+                                        true
                                       );
                                       this.getDataSyncMMU(userLoggedIn);
                                     } else {
