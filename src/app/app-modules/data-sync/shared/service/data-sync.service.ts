@@ -103,4 +103,12 @@ export class DataSyncService {
   inventorySyncDownloadData(vanID: any) {
     return this.http.post(environment.getInventorySyncData, vanID);
   }
+
+  startDownSync(reqObj: any) {
+    return this.http.post(environment.startDownSyncUrl, reqObj);
+  }
+
+  downSyncProgress() {
+    return this.http.get(environment.checkDownSyncProgressUrl);
+  }
 }
