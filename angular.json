@@ -36,7 +36,10 @@
               "src/styles.css",
               "node_modules/font-awesome/css/font-awesome.min.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "qrcode"
+            ]
           },
           "configurations": {
             "production": {
@@ -120,7 +123,8 @@
           },
           "defaultConfiguration": "development",
           "options": {
-            "port": 4202
+            "port": 4202,
+            "host": "0.0.0.0"
           }
         },
         "extract-i18n": {
@@ -147,7 +151,17 @@
               "src/css/layout.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "karmaConfig": "karma.conf.js",
+            "codeCoverageExclude": [
+              "Common-UI/**",
+              "src/testing/**",
+              "src/environments/**",
+              "src/test.ts",
+              "src/polyfills.ts",
+              "src/main.ts",
+              "**/mocks/**"
+            ]
           }
         },
         "lint": {

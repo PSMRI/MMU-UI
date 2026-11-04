@@ -1,13 +1,102 @@
 <div class="mx-auto w-full max-w-5xl px-4 py-6">
-  <z-tab-group>
+  <z-tab-group (zTabChange)="onTabChange($event)">
     <!-- Tab 1 — Data Upload -->
     <z-tab label="Data Upload">
       <div class="space-y-6 pt-6">
-        <div *ngIf="displaySyncBool" class="flex justify-center">
-          <button z-button type="button" (click)="syncGroups()">
-            <ng-icon name="lucideRefreshCw"></ng-icon>
-            {{ current_language_set?.startDataSync }}
-          </button>
+        <div
+          *ngIf="displaySyncBool"
+          class="flex min-h-[60vh] flex-col items-center justify-center gap-6 md:flex-row">
+          <z-card class="w-full md:w-[calc(50%-0.75rem)]">
+            <z-card-header
+              class="flex flex-col items-center gap-1.5 text-center">
+              <z-card-title>{{
+                current_language_set?.dataSyncCardTitle
+              }}</z-card-title>
+              <z-card-description>{{
+                current_language_set?.dataSyncCardDescription
+              }}</z-card-description>
+            </z-card-header>
+            <z-card-content class="flex justify-center">
+              <button
+                z-button
+                type="button"
+                class="w-56"
+                [disabled]="showProgressBar"
+                (click)="syncGroups()">
+                <ng-icon name="lucideRefreshCw"></ng-icon>
+                {{ current_language_set?.startDataSync }}
+              </button>
+            </z-card-content>
+          </z-card>
+
+          <z-card
+            *ngIf="isMMUOfflineQRCode"
+            class="w-full md:w-[calc(50%-0.75rem)]">
+            <z-card-header
+              class="flex flex-col items-center gap-1.5 text-center">
+              <z-card-title>{{
+                current_language_set?.documentSyncCardTitle
+              }}</z-card-title>
+              <z-card-description>{{
+                current_language_set?.documentSyncCardDescription
+              }}</z-card-description>
+            </z-card-header>
+            <z-card-content class="flex flex-col items-center gap-4">
+              <button
+                z-button
+                type="button"
+                class="w-56"
+                (click)="startDocumentSync()"
+                [disabled]="documentSyncInProgress">
+                <ng-icon name="lucideUpload"></ng-icon>
+                {{ current_language_set?.startDocumentSync }}
+              </button>
+              <div *ngIf="documentSyncResult" class="w-full space-y-2 text-sm">
+                <ul
+                  *ngIf="documentSyncResult.documents.length > 0"
+                  class="m-0 list-none space-y-2 p-0">
+                  <li
+                    *ngFor="let doc of documentSyncResult.documents"
+                    class="rounded-md border border-border px-3 py-2">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="font-medium text-foreground">{{
+                        doc.name
+                      }}</span>
+                      <span
+                        class="inline-flex items-center gap-1 text-xs font-medium"
+                        [class.text-success]="doc.uploaded"
+                        [class.text-destructive]="!doc.uploaded">
+                        <ng-icon
+                          [name]="
+                            doc.uploaded
+                              ? 'lucideCircleCheckBig'
+                              : 'lucideCircleAlert'
+                          "
+                          size="14"></ng-icon>
+                        {{ doc.uploaded ? 'Uploaded' : 'Not uploaded' }}
+                      </span>
+                    </div>
+                    <p
+                      *ngIf="doc.reason"
+                      class="mb-0 mt-1 text-xs text-muted-foreground">
+                      {{ doc.reason }}
+                    </p>
+                  </li>
+                </ul>
+                <p
+                  *ngIf="documentSyncResult.unlistedUploaded > 0"
+                  class="m-0 text-muted-foreground">
+                  {{ documentSyncResult.unlistedUploaded }}
+                  {{
+                    documentSyncResult.documents.length > 0
+                      ? 'other documents'
+                      : 'documents'
+                  }}
+                  uploaded
+                </p>
+              </div>
+            </z-card-content>
+          </z-card>
         </div>
 
         <z-card *ngIf="showTable">
@@ -179,73 +268,333 @@
 
     <!-- Tab 3 — Generate BeneficiaryID -->
     <z-tab label="Generate BeneficiaryID">
-      <form
-        [formGroup]="generateBenIDForm"
-        class="grid grid-cols-1 gap-6 pt-6 md:grid-cols-2">
-        <z-card>
+      <div class="space-y-6 pt-6">
+        <!-- automatic BenID download (StopTB laptops only; hidden when the feature is off) -->
+        <z-card
+          *ngIf="autoTopUp?.enabled"
+          id="autoBenIdStatus"
+          class="border-l-[6px]"
+          [class.border-l-success]="autoTopUpState === 'OK'"
+          [class.border-l-warning]="autoTopUpState === 'WAITING'"
+          [class.border-l-destructive]="autoTopUpState === 'ACTION'">
           <z-card-header>
-            <z-card-title>Check BenID Availability</z-card-title>
-            <z-card-description>
-              Check how many Beneficiary IDs are available on this van.
-            </z-card-description>
+            <z-card-title>Automatic BenID download</z-card-title>
           </z-card-header>
-          <z-card-content class="flex flex-col items-center gap-4">
-            <button z-button type="button" (click)="checkBenIDAvailability()">
-              Check BenID
+          <z-card-content class="space-y-2 text-sm">
+            <p *ngIf="autoTopUpState === 'OK'" class="m-0">
+              Active. {{ autoTopUp.poolCount }} BeneficiaryIDs available on this
+              laptop<span *ngIf="autoTopUp.lastTopUpAt"
+                >, last download
+                {{ autoTopUp.lastTopUpAt | date: 'dd-MM-yyyy HH:mm' }} (+{{
+                  autoTopUp.lastTopUpCount
+                }})</span
+              >.
+            </p>
+            <p *ngIf="autoTopUpState === 'WAITING'" class="m-0">
+              Waiting for internet. {{ autoTopUp.poolCount }} BeneficiaryIDs
+              available; more are downloaded automatically once the central
+              server is reachable.
+            </p>
+            <div *ngIf="autoTopUpState === 'ACTION'" class="space-y-3">
+              <p class="m-0">
+                {{
+                  autoTopUp.centralConnection === 'PASSWORD_MISMATCH'
+                    ? 'This laptop could not connect to the central server: the password does not match the central password.'
+                    : 'This laptop is not connected to the central server yet.'
+                }}
+                Log in to Data Sync with your central password to reconnect.
+              </p>
+              <button
+                z-button
+                type="button"
+                id="reconnectCentral"
+                (click)="reconnectToCentral()">
+                Reconnect to central
+              </button>
+            </div>
+            <p
+              *ngIf="
+                autoTopUp.poolCount >= 0 &&
+                autoTopUp.poolCount < autoTopUp.lowerLimit
+              "
+              id="lowBenIdWarning"
+              class="m-0 text-destructive">
+              BeneficiaryIDs are running low ({{ autoTopUp.poolCount }} left).
+              Keep this laptop connected to the internet so it can download
+              more.
+            </p>
+          </z-card-content>
+        </z-card>
+
+        <form
+          [formGroup]="generateBenIDForm"
+          class="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <z-card>
+            <z-card-header>
+              <z-card-title>Check BenID Availability</z-card-title>
+              <z-card-description>
+                Check how many Beneficiary IDs are available on this van.
+              </z-card-description>
+            </z-card-header>
+            <z-card-content class="flex flex-col items-center gap-4">
+              <button z-button type="button" (click)="checkBenIDAvailability()">
+                Check BenID
+              </button>
+              <p *ngIf="benID_Count" class="text-sm text-muted-foreground">
+                Available BeneficiaryID Count:
+                <span class="font-semibold text-foreground">{{
+                  benID_Count
+                }}</span>
+              </p>
+            </z-card-content>
+          </z-card>
+
+          <z-card>
+            <z-card-header>
+              <z-card-title>Generate BenID</z-card-title>
+              <z-card-description>
+                Select a range and generate new Beneficiary IDs.
+              </z-card-description>
+            </z-card-header>
+            <z-card-content class="flex flex-col gap-4">
+              <div class="flex flex-col gap-2">
+                <label
+                  class="text-sm font-medium text-foreground"
+                  for="benID_Range">
+                  BenID Range
+                </label>
+                <z-select
+                  id="benID_Range"
+                  class="w-full"
+                  formControlName="benID_Range"
+                  [zDisabled]="!benID_Count"
+                  zPlaceholder="Select range">
+                  <z-select-item [zValue]="'1000'">1000</z-select-item>
+                  <z-select-item [zValue]="'2000'">2000</z-select-item>
+                  <z-select-item [zValue]="'3000'">3000</z-select-item>
+                  <z-select-item [zValue]="'4000'">4000</z-select-item>
+                  <z-select-item [zValue]="'5000'">5000</z-select-item>
+                </z-select>
+              </div>
+              <div>
+                <button
+                  z-button
+                  type="button"
+                  [disabled]="!generateBenIDForm.valid"
+                  (click)="
+                    generateBenID(
+                      generateBenIDForm.controls['benID_Range'].value
+                    )
+                  ">
+                  Generate BenID
+                </button>
+              </div>
+            </z-card-content>
+          </z-card>
+        </form>
+      </div>
+    </z-tab>
+
+    <!-- Tab 4 — Automatic Sync (StopTB laptops only; hidden when the feature is off) -->
+    <z-tab *ngIf="autoSync" label="Automatic Sync">
+      <div class="space-y-6 pt-6" id="autoSyncStatus">
+        <z-card>
+          <z-card-header class="flex flex-row items-start justify-between">
+            <div class="flex flex-col gap-1.5">
+              <z-card-title>Automatic upload and master download</z-card-title>
+            </div>
+            <button
+              z-button
+              zType="outline"
+              type="button"
+              id="refreshAutoSync"
+              (click)="loadAutoSyncStatus()">
+              <ng-icon name="lucideRefreshCw"></ng-icon>
+              Refresh
             </button>
-            <p *ngIf="benID_Count" class="text-sm text-muted-foreground">
-              Available BeneficiaryID Count:
+          </z-card-header>
+          <z-card-content class="space-y-2 text-sm">
+            <p class="m-0">
+              Last upload:
               <span class="font-semibold text-foreground">{{
-                benID_Count
+                autoSync.lastUploadAt
+                  ? (autoSync.lastUploadAt | date: 'dd-MM-yyyy HH:mm')
+                  : 'not yet'
               }}</span>
+              <span
+                *ngIf="autoSync.lastUploadResult"
+                class="text-muted-foreground">
+                ({{ autoSync.lastUploadResult }})</span
+              >
+            </p>
+            <p class="m-0">
+              Last master download:
+              <span class="font-semibold text-foreground">{{
+                autoSync.lastMasterDownloadAt
+                  ? (autoSync.lastMasterDownloadAt | date: 'dd-MM-yyyy HH:mm')
+                  : 'not yet'
+              }}</span>
+            </p>
+            <p *ngIf="autoSync.lastError" class="m-0 text-destructive">
+              {{ autoSync.lastError }}
             </p>
           </z-card-content>
         </z-card>
 
         <z-card>
           <z-card-header>
-            <z-card-title>Generate BenID</z-card-title>
-            <z-card-description>
-              Select a range and generate new Beneficiary IDs.
+            <z-card-title>Records central did not accept</z-card-title>
+            <z-card-description *ngIf="!autoSync.failedRows">
+              None. All uploaded records were accepted by central.
+            </z-card-description>
+            <z-card-description *ngIf="autoSync.failedRows">
+              {{ autoSync.failedRows }} record(s) are sent again on every upload
+              until central accepts them. Share this list with the
+              administrator.
             </z-card-description>
           </z-card-header>
-          <z-card-content class="flex flex-col gap-4">
-            <div class="flex flex-col gap-2">
-              <label
-                class="text-sm font-medium text-foreground"
-                for="benID_Range">
-                BenID Range
-              </label>
-              <z-select
-                id="benID_Range"
-                class="w-full"
-                formControlName="benID_Range"
-                [zDisabled]="!benID_Count"
-                zPlaceholder="Select range">
-                <z-select-item [zValue]="'1000'">1000</z-select-item>
-                <z-select-item [zValue]="'2000'">2000</z-select-item>
-                <z-select-item [zValue]="'3000'">3000</z-select-item>
-                <z-select-item [zValue]="'4000'">4000</z-select-item>
-                <z-select-item [zValue]="'5000'">5000</z-select-item>
-              </z-select>
-            </div>
-            <div>
-              <button
-                z-button
-                type="button"
-                [disabled]="!generateBenIDForm.valid"
-                (click)="
-                  generateBenID(generateBenIDForm.controls['benID_Range'].value)
-                ">
-                Generate BenID
-              </button>
+          <z-card-content *ngIf="autoSync.failedRows" class="p-2">
+            <div class="w-full overflow-x-auto">
+              <table
+                z-table
+                id="syncFailures"
+                aria-label="Records central did not accept">
+                <thead z-table-header>
+                  <tr z-table-row>
+                    <th z-table-head>Table</th>
+                    <th z-table-head>Reason</th>
+                    <th z-table-head>Records</th>
+                    <th z-table-head>Last tried</th>
+                  </tr>
+                </thead>
+                <tbody z-table-body>
+                  <tr z-table-row *ngFor="let f of autoSync.failures">
+                    <td z-table-cell>{{ f.tableName }}</td>
+                    <td z-table-cell>{{ f.reason }}</td>
+                    <td z-table-cell>{{ f.failedRows }}</td>
+                    <td z-table-cell>{{ f.lastTried }}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </z-card-content>
         </z-card>
-      </form>
+      </div>
     </z-tab>
 
-    <!-- Tab 4 — Inventory Data Download -->
+    <!-- Tab 5 — Down Sync (Central to Local) -->
+    <z-tab label="Down Sync (Central to Local)">
+      <div class="space-y-6 pt-6">
+        <div class="flex justify-center">
+          <button
+            z-button
+            type="button"
+            (click)="startDownSync()"
+            [disabled]="downSyncInProgress || showProgressBar">
+            <ng-icon name="lucideDownload"></ng-icon>
+            Start Down Sync
+          </button>
+        </div>
+
+        <ng-container *ngIf="downSyncGroups && downSyncGroups.length > 0">
+          <div
+            *ngIf="downSyncStatus && downSyncStatus.conflictsPending"
+            class="flex items-start gap-2 rounded-lg border border-warning bg-warning/10 px-4 py-3 text-sm text-foreground">
+            <ng-icon
+              name="lucideArrowLeftRight"
+              size="18"
+              class="mt-0.5 flex-none text-warning"></ng-icon>
+            <span>
+              <strong>{{ downSyncStatus.conflicts }}</strong>
+              {{
+                downSyncStatus.conflicts === 1 ? 'record was' : 'records were'
+              }}
+              changed both here and at central. Nothing on this device was
+              overwritten - review each one and save the version you want to
+              keep.
+            </span>
+          </div>
+
+          <z-card>
+            <z-card-content class="p-2">
+              <div class="w-full overflow-x-auto">
+                <table z-table aria-label="Down sync results">
+                  <thead z-table-header>
+                    <tr z-table-row>
+                      <th z-table-head class="w-1" id="dsEmpty">
+                        <span class="sr-only">Status</span>
+                      </th>
+                      <th z-table-head id="dsGroupName">Group</th>
+                      <th z-table-head id="dsGroupTables">Tables</th>
+                      <th z-table-head id="dsGroupRecords">Failed records</th>
+                      <th z-table-head id="dsGroupConflicts">Conflicts</th>
+                      <th z-table-head id="dsGroupStatus">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody z-table-body>
+                    <tr z-table-row *ngFor="let g of downSyncGroups">
+                      <td
+                        z-table-cell
+                        class="border-l-[3px]"
+                        [class.border-l-warning]="
+                          g.status === 'partial' || g.status === 'conflict'
+                        "
+                        [class.border-l-success]="g.status === 'success'"
+                        [class.border-l-destructive]="g.status === 'failed'"
+                        [class.border-l-transparent]="!g.status">
+                        &nbsp;
+                      </td>
+                      <td z-table-cell>{{ g.groupName }}</td>
+                      <td z-table-cell>{{ g.succeeded }} / {{ g.total }}</td>
+                      <td z-table-cell>
+                        {{ g.failedRecords > 0 ? g.failedRecords : '-' }}
+                      </td>
+                      <td z-table-cell>
+                        <span
+                          *ngIf="g.conflicts > 0"
+                          class="font-semibold text-warning"
+                          >{{ g.conflicts }}</span
+                        >
+                        <span *ngIf="!g.conflicts">-</span>
+                      </td>
+                      <td z-table-cell>
+                        <ng-icon
+                          *ngIf="g.status === 'partial'"
+                          class="text-warning"
+                          name="lucideSquareMinus"
+                          size="20"
+                          aria-label="Partially synced"></ng-icon>
+                        <ng-icon
+                          *ngIf="g.status === 'conflict'"
+                          class="text-warning"
+                          name="lucideArrowLeftRight"
+                          size="20"
+                          title="Delivered, but a record needs review"
+                          aria-label="Delivered, but a record needs review"></ng-icon>
+                        <ng-icon
+                          *ngIf="g.status === 'success'"
+                          class="text-success"
+                          name="lucideCircleCheckBig"
+                          size="20"
+                          aria-label="Synced"></ng-icon>
+                        <ng-icon
+                          *ngIf="g.status === 'failed'"
+                          class="text-destructive"
+                          name="lucideCircleAlert"
+                          size="20"
+                          aria-label="Failed"></ng-icon>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </z-card-content>
+          </z-card>
+        </ng-container>
+      </div>
+    </z-tab>
+
+    <!-- Tab 6 — Inventory Data Download -->
     <z-tab label="Inventory Data Download">
       <div class="flex justify-center pt-6">
         <button

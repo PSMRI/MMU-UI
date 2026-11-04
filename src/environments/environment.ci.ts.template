@@ -50,8 +50,7 @@ const enableCaptcha = <%= ENABLE_CAPTCHA %>;
 export const environment = {
   production: true,
   isMMUOfflineSync: true,
-  isMMUOfflineQRCode: false,
-  campHubConnectInfoAPI: `${COMMON_API}public/connect/info`,
+  isMMUOfflineQRCode: '<%= QRCODE_ENABLED %>',
   encKey: sessionStorageEncKey,
 
   tracking: {
@@ -368,8 +367,12 @@ export const environment = {
   getMMUCasesheetDataUrl: `${MMU_API}common/get/Case-sheet/printData`,
   getDataSYNCGroupUrl: `${MMU_API}dataSyncActivity/getSyncGroupDetails`,
   syncDataUploadUrl: `${MMU_API}dataSyncActivity/van-to-server`,
+  syncDiagnosticDocumentsUrl: `${MMU_API}dataSyncActivity/diagnostic-documents-to-server`,
   syncDataDownloadUrl: `${MMU_API}dataSyncActivity/startMasterDownload`,
   syncDownloadProgressUrl: `${MMU_API}dataSyncActivity/checkMastersDownloadProgress`,
+  // down-sync : central -> local
+  startDownSyncUrl: `${MMU_API}dataSyncActivity/startDownSync`,
+  checkDownSyncProgressUrl: `${MMU_API}dataSyncActivity/checkDownSyncProgress`,
   getNcdScreeningVisitCountUrl: `${MMU_API}NCD/getNcdScreeningVisitCount/`,
   getVanDetailsForMasterDownloadUrl: `${MMU_API}dataSyncActivity/getVanDetailsForMasterDownload`,
 
@@ -413,6 +416,9 @@ export const environment = {
   startRBSurl: '/api/v1/wbpoct_tests/blood_glucose',
   // Check availability of benIDs
   getBenIDs: `${IDENTITY_API}id/checkAvailablBenIDLocalServer`,
+  centralAuthStatusUrl: `${MMU_API}centralAuth/status`,
+  autoSyncStatusUrl: `${MMU_API}dataSyncActivity/autoSyncStatus`,
+  centralAuthCaptureUrl: `${MMU_API}centralAuth/capture`,
   generateBenID: `${MMU_API}dataSyncActivity/callCentralAPIToGenerateBenIDAndimportToLocal`,
 
   // Inventory Data Sync Download
@@ -515,6 +521,9 @@ export const environment = {
   getUserId: `${COMMON_API}user/checkUserName/`,
   checkUsersignExistUrl: `${ADMIN_API}signature1/signexist/`,
   isEnableES: false,
+  campHubConnectInfoAPI: `${COMMON_API}public/connect/info`,
+  nikshayBeneficiaryCsvUrl: `${MMU_API}stopTb/nikshay/exportBeneficiariesCsv`,
+  nikshayImportResultsCsvUrl: `${MMU_API}stopTb/nikshay/importResultsCsv`,
   elasticSearchUrl: `${MMU_API}registrar/quickSearchES`,
   advanceElasticSearchUrl: `${MMU_API}registrar/advancedSearchES`,
 

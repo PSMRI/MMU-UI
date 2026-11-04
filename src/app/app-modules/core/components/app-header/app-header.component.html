@@ -154,4 +154,11 @@
     routerLinkActive="bg-background! text-foreground! shadow-sm!">
     {{ currentLanguageSet?.common?.report }}
   </a>
+  <a
+    *ngIf="isMMUOfflineQRCode"
+    class="inline-flex items-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground no-underline transition-colors hover:text-foreground"
+    routerLink="/nikshay-sync"
+    routerLinkActive="bg-background! text-foreground! shadow-sm!">
+    Nikshay Sync
+  </a>
 </nav>

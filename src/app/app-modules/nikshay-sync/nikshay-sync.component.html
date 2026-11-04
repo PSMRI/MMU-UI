@@ -1,0 +1,214 @@
+<!--
+  AMRIT – Accessible Medical Records via Integrated Technology
+  Integrated EHR (Electronic Health Records) Solution
+
+  Copyright (C) "Piramal Swasthya Management and Research Institute"
+
+  This file is part of AMRIT.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see https://www.gnu.org/licenses/.
+-->
+
+<app-header [showRoles]="true"></app-header>
+
+<div class="mx-auto w-full max-w-3xl px-4 py-6">
+  <z-card>
+    <z-card-header>
+      <z-card-title>Nikshay Sync</z-card-title>
+      <z-card-description>
+        Exchange this camp's beneficiaries with the Nikshay ID Generator.
+      </z-card-description>
+    </z-card-header>
+
+    <z-card-content>
+      <ng-template #campInfoBlock>
+        <div
+          *ngIf="campInfo"
+          class="inline-flex max-w-full items-center gap-1.5 rounded-lg bg-muted px-3 py-1.5 text-sm text-foreground">
+          <ng-icon name="lucideTruck" size="16" class="flex-none"></ng-icon>
+          <span class="min-w-0 [overflow-wrap:anywhere]"
+            >{{ campInfo.vanLabel }} &middot;
+            {{ campInfo.servicePointName }}</span
+          >
+        </div>
+        <div
+          *ngIf="!campInfo"
+          class="flex items-center gap-2 text-sm text-warning">
+          <ng-icon name="lucideInfo" size="18"></ng-icon>
+          <span
+            >No active camp session found &mdash; select a van and service point
+            first.</span
+          >
+        </div>
+      </ng-template>
+
+      <z-tab-group>
+        <!-- Download Beneficiaries (Nikshay CSV) -->
+        <z-tab label="Download Beneficiaries">
+          <div class="flex flex-col gap-4 pt-6">
+            <p class="m-0 text-sm text-muted-foreground">
+              Download this camp's beneficiaries as a CSV formatted for the
+              Nikshay ID Generator.
+            </p>
+
+            <ng-container *ngTemplateOutlet="campInfoBlock"></ng-container>
+
+            <form [formGroup]="downloadForm" class="flex flex-col gap-4">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <z-form-field>
+                  <label z-form-label zRequired for="nikshayFromDate"
+                    >From date</label
+                  >
+                  <z-form-control>
+                    <z-date-picker
+                      class="w-full"
+                      id="nikshayFromDate"
+                      formControlName="fromDate"
+                      zFormat="dd/MM/yyyy"
+                      placeholder="From date"
+                      [maxDate]="today"></z-date-picker>
+                  </z-form-control>
+                </z-form-field>
+
+                <z-form-field>
+                  <label z-form-label zRequired for="nikshayToDate"
+                    >To date</label
+                  >
+                  <z-form-control>
+                    <z-date-picker
+                      class="w-full"
+                      id="nikshayToDate"
+                      formControlName="toDate"
+                      zFormat="dd/MM/yyyy"
+                      placeholder="To date"
+                      [minDate]="downloadForm.controls.fromDate.value"
+                      [maxDate]="today"></z-date-picker>
+                  </z-form-control>
+                </z-form-field>
+              </div>
+
+              <z-form-message
+                *ngIf="
+                  (downloadForm.controls.fromDate.touched ||
+                    downloadForm.controls.toDate.touched) &&
+                  (downloadForm.controls.fromDate.hasError('required') ||
+                    downloadForm.controls.toDate.hasError('required'))
+                "
+                >Both dates are required</z-form-message
+              >
+
+              <div class="flex justify-center">
+                <button
+                  z-button
+                  type="button"
+                  [zLoading]="isDownloadingCsv"
+                  [disabled]="
+                    downloadForm.invalid || !campInfo || isDownloadingCsv
+                  "
+                  (click)="downloadBeneficiariesCsv()">
+                  <ng-icon
+                    *ngIf="!isDownloadingCsv"
+                    name="lucideDownload"></ng-icon>
+                  {{ isDownloadingCsv ? 'Preparing CSV…' : 'Download CSV' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </z-tab>
+
+        <!-- Upload Nikshay Results -->
+        <z-tab label="Upload Nikshay Results">
+          <div class="flex flex-col gap-4 pt-6">
+            <p class="m-0 text-sm text-muted-foreground">
+              Upload the Nikshay ID Generator app's results CSV to write the
+              generated Nikshay IDs back onto this camp's beneficiaries.
+            </p>
+
+            <ng-container *ngTemplateOutlet="campInfoBlock"></ng-container>
+
+            <z-form-field>
+              <label z-form-label for="nikshayResultsFile"
+                >Nikshay results CSV</label
+              >
+              <z-form-control>
+                <input
+                  z-input
+                  class="w-full"
+                  autocomplete="off"
+                  type="file"
+                  accept=".csv"
+                  id="nikshayResultsFile"
+                  (change)="onResultsFileSelected($event)" />
+              </z-form-control>
+            </z-form-field>
+
+            <div class="flex justify-center">
+              <button
+                z-button
+                type="button"
+                [zLoading]="isUploadingCsv"
+                [disabled]="!campInfo || !selectedResultsFile || isUploadingCsv"
+                (click)="uploadResultsCsv()">
+                <ng-icon *ngIf="!isUploadingCsv" name="lucideUpload"></ng-icon>
+                {{ isUploadingCsv ? 'Uploading…' : 'Upload Results CSV' }}
+              </button>
+            </div>
+
+            <div
+              *ngIf="lastImportSummary"
+              class="space-y-3 rounded-lg border border-border p-4 text-sm">
+              <p class="m-0">
+                <span class="font-semibold">{{
+                  lastImportSummary.updated
+                }}</span>
+                Nikshay ID(s) updated &middot;
+                <span class="font-semibold">{{
+                  lastImportSummary.needsReview
+                }}</span>
+                row(s) need review &middot;
+                <span class="font-semibold">{{
+                  lastImportSummary.failed
+                }}</span>
+                failed (of {{ lastImportSummary.csvRowCount }} row(s) in the
+                file)
+              </p>
+
+              <div *ngIf="lastImportSummary.needsReviewRows.length">
+                <p class="mb-1 font-semibold text-warning">Needs review:</p>
+                <ul class="m-0 list-disc space-y-1 pl-5">
+                  <li *ngFor="let row of lastImportSummary.needsReviewRows">
+                    {{ row.firstName }} {{ row.middleLastName }} (benRegId
+                    {{ row.benRegId }}) &mdash; {{ row.note }}
+                  </li>
+                </ul>
+              </div>
+
+              <div *ngIf="lastImportSummary.failedRows.length">
+                <p class="mb-1 font-semibold text-destructive">Failed:</p>
+                <ul class="m-0 list-disc space-y-1 pl-5">
+                  <li *ngFor="let row of lastImportSummary.failedRows">
+                    {{ row.firstName }} {{ row.middleLastName }} (benRegId
+                    {{ row.benRegId }}) &mdash; {{ row.note }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </z-tab>
+      </z-tab-group>
+    </z-card-content>
+  </z-card>
+</div>
+
+<app-footer></app-footer>

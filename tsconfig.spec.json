@@ -3,6 +3,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "types": [
       "jasmine"
     ]
@@ -12,6 +14,7 @@
     "Common-UI/src/consent/core/**/*.spec.ts",
     "Common-UI/v2/consent/**/*.spec.ts",
     "Common-UI/v2/registrar/**/*.consent-hook.spec.ts",
+    "src/testing/**/*.ts",
     "src/**/*.d.ts"
   ]
 }

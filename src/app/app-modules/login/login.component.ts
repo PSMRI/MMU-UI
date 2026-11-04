@@ -45,6 +45,7 @@ import { ZardFormImports } from 'Common-UI/v2/ui/form';
 import { cardImports } from 'Common-UI/v2/ui/card';
 import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { CampHubQrCodeComponent } from '../data-sync/camp-hub-qr-code/camp-hub-qr-code.component';
+import { CentralAuthService } from '../core/services/central-auth.service';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideUser,
@@ -105,7 +106,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private readonly fb: FormBuilder,
     readonly sessionstorage: SessionStorageService,
     private readonly trackingService: AmritTrackingService,
-    private readonly dialogService: ZardDialogService
+    private readonly dialogService: ZardDialogService,
+    private readonly centralAuthService: CentralAuthService
   ) {
     this._keySize = 256;
     this._ivSize = 128;
@@ -131,16 +133,20 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.elementRef.nativeElement.focus();
   }
 
+  private pendingCentralPassword: string | null = null;
+
   login() {
     const encryptPassword = this.encrypt(
       this.Key_IV,
       this.loginForm.controls.password.value
     );
+    // kept only until the login completes, for the one-time central connection
+    this.pendingCentralPassword = encryptPassword;
 
     if (this.loginForm.valid) {
       this.authService
         .login(
-          this.loginForm.controls.userName.value?.trim() ?? '',
+          (this.loginForm.controls.userName.value ?? '').trim(),
           encryptPassword,
           false,
           this.enableCaptcha ? this.captchaToken : undefined
@@ -234,7 +240,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
           },
           err => {
             this.resetCaptcha();
-            this.confirmationService.alert(err, 'error');
+            const message = [err?.error?.errorMessage, err?.message].find(
+              msg => !!msg
+            );
+            this.confirmationService.alert(
+              message || 'Login request failed. Please try again.',
+              'error'
+            );
           }
         );
     }
@@ -286,6 +298,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
   getServicesAuthdetails(loginDataResponse: any) {
     const userName: any = this.loginForm.controls.userName.value;
     sessionStorage.setItem('key', loginDataResponse.key);
+    if (this.pendingCentralPassword) {
+      this.centralAuthService.captureIfEnabled(
+        userName,
+        this.pendingCentralPassword
+      );
+      this.pendingCentralPassword = null;
+    }
     sessionStorage.setItem(
       'isAuthenticated',
       loginDataResponse.isAuthenticated

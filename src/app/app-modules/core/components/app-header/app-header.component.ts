@@ -124,6 +124,7 @@ export class AppHeaderComponent implements OnInit {
   isAuthenticated!: boolean;
   roles: any;
   helpURL: string = environment.licenseURL;
+  isMMUOfflineQRCode = environment.isMMUOfflineQRCode;
   filteredNavigation: any;
   isConnected = true;
   status!: any;
@@ -184,14 +185,20 @@ export class AppHeaderComponent implements OnInit {
           if (response !== undefined && response !== null) {
             this.languageSuccessHandler(response, language);
           } else {
-            alert(this.currentLanguageSet.alerts.info.langNotDefinesd);
+            this.confirmationService.alert(
+              this.currentLanguageSet?.alerts?.info?.langNotDefinesd ??
+                'Selected language is not defined',
+              'error'
+            );
           }
         },
         error => {
-          alert(
-            this.currentLanguageSet.alerts.info.comingUpWithThisLang +
+          this.confirmationService.alert(
+            (this.currentLanguageSet?.alerts?.info?.comingUpWithThisLang ??
+              'Selected language is coming up with') +
               ' ' +
-              language
+              language,
+            'error'
           );
         }
       );
@@ -206,7 +213,12 @@ export class AppHeaderComponent implements OnInit {
 
   languageSuccessHandler(response: any, language: any) {
     if (response === undefined) {
-      alert(this.currentLanguageSet.alerts.info.langNotDefinesd);
+      this.confirmationService.alert(
+        this.currentLanguageSet?.alerts?.info?.langNotDefinesd ??
+          'Selected language is not defined',
+        'error'
+      );
+      return;
     }
 
     if (response[language] !== undefined) {
@@ -225,10 +237,12 @@ export class AppHeaderComponent implements OnInit {
       this.http_service.getCurrentLanguage(response[language]);
       this.rolenavigation();
     } else {
-      alert(
-        this.currentLanguageSet.alerts.info.comingUpWithThisLang +
+      this.confirmationService.alert(
+        (this.currentLanguageSet?.alerts?.info?.comingUpWithThisLang ??
+          'Selected language is coming up with') +
           ' ' +
-          language
+          language,
+        'error'
       );
     }
   }

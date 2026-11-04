@@ -10,9 +10,8 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { catchError, tap, finalize } from 'rxjs/operators';
-import { Observable, of, Subject, EMPTY } from 'rxjs';
+import { Observable, of, Subject, EMPTY, throwError } from 'rxjs';
 import { Router } from '@angular/router';
-import { throwError } from 'rxjs/internal/observable/throwError';
 import { SpinnerService } from './spinner.service';
 import { ConfirmationService } from './confirmation.service';
 import { environment } from 'src/environments/environment';
@@ -84,6 +83,7 @@ export class HttpInterceptorService implements HttpInterceptor {
       if (req.body instanceof FormData) {
         modifiedReq = req.clone({
           headers: req.headers.set('Authorization', key || ''),
+          withCredentials: true,
         });
       } else {
         modifiedReq = req.clone({
@@ -91,6 +91,7 @@ export class HttpInterceptorService implements HttpInterceptor {
             .set('Authorization', key || '')
             .set('Content-Type', 'application/json')
             .set('ServerAuthorization', serverKey || ''),
+          withCredentials: true,
         });
       }
     }
