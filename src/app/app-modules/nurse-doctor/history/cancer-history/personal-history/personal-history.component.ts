@@ -27,22 +27,55 @@ import {
   OnChanges,
   OnDestroy,
   DoCheck,
+  ViewContainerRef,
 } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import { MasterdataService, NurseService } from '../../../shared/services';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MatDialog } from '@angular/material/dialog';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgFor, NgIf } from '@angular/common';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory } from '@ng-icons/lucide';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
 
 @Component({
   selector: 'app-nurse-cancer-personal-history',
   templateUrl: './personal-history.component.html',
-  styleUrls: ['./personal-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    NgIf,
+    NgIcon,
+    ...tooltipImports,
+    ZardButtonComponent,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+  ],
+  viewProviders: [provideIcons({ lucideHistory })],
 })
 export class PersonalHistoryComponent implements OnInit, OnDestroy, DoCheck {
   @Input()
@@ -52,7 +85,8 @@ export class PersonalHistoryComponent implements OnInit, OnDestroy, DoCheck {
   constructor(
     private fb: FormBuilder,
     private confirmationService: ConfirmationService,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private nurseService: NurseService,
     private httpServiceService: HttpServiceService,
     private masterdataService: MasterdataService,
@@ -391,13 +425,11 @@ export class PersonalHistoryComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   viewPreviousData(data: any) {
-    this.dialog.open(PreviousDetailsComponent, {
-      data: {
-        dataList: data,
-        title:
-          this.currentLanguageSet.historyData.personalhistory
-            .previouspersonalhistory,
-      },
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title:
+        this.currentLanguageSet.historyData.personalhistory
+          .previouspersonalhistory,
     });
   }
 

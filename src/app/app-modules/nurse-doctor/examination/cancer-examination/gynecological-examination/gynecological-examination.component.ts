@@ -28,22 +28,51 @@ import {
   ElementRef,
   DoCheck,
   EventEmitter,
+  ViewContainerRef,
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CameraService } from '../../../../core/services/camera.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { DoctorService, NurseService } from '../../../shared/services';
 import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
-import { MatDialog } from '@angular/material/dialog';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
+import { openViewRadiologyDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
+import { NgIf, NgFor } from '@angular/common';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
 
 @Component({
   selector: 'app-doctor-gynecological-examination',
   templateUrl: './gynecological-examination.component.html',
-  styleUrls: ['./gynecological-examination.component.css'],
+  viewProviders: [provideIcons({ lucideX })],
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    NgFor,
+    NgIcon,
+    StringValidatorDirective,
+    ...ZardSelectImports,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+  ],
 })
 export class GynecologicalExaminationComponent implements OnInit, DoCheck {
   @Input()
@@ -76,7 +105,8 @@ export class GynecologicalExaminationComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     readonly sessionstorage: SessionStorageService,
     private doctorService: DoctorService,
-    private dialog: MatDialog
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef
   ) {}
 
   ngOnInit() {
@@ -221,7 +251,13 @@ export class GynecologicalExaminationComponent implements OnInit, DoCheck {
         }
       },
       err => {
-        this.confirmationService.alert(err.errorMessage, 'err');
+        this.confirmationService.alert(
+          err?.error?.errorMessage ||
+            err?.errorMessage ||
+            err?.message ||
+            'File upload failed',
+          'error'
+        );
       }
     );
     if (this.viewFiles && this.viewFiles.length > 0) {
@@ -297,16 +333,14 @@ export class GynecologicalExaminationComponent implements OnInit, DoCheck {
   }
 
   viewNurseSelectedFiles() {
-    const ViewTestReport = this.dialog.open(
-      ViewRadiologyUploadedFilesComponent,
+    const ViewTestReport = openViewRadiologyDialog(
+      this.dialog,
+      this.viewContainerRef,
       {
-        width: '40%',
-        data: {
-          filesDetails: this.viewFiles,
-          // width: 0.8 * window.innerWidth + "px",
-          panelClass: 'dialog-width',
-          disableClose: false,
-        },
+        filesDetails: this.viewFiles,
+        // width: 0.8 * window.innerWidth + "px",
+        panelClass: 'dialog-width',
+        disableClose: false,
       }
     );
     ViewTestReport.afterClosed().subscribe(result => {

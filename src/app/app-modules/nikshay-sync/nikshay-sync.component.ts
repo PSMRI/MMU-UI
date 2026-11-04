@@ -21,12 +21,28 @@
  */
 
 import { Component, OnInit } from '@angular/core';
+import { NgIf, NgFor, NgTemplateOutlet } from '@angular/common';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { saveAs } from 'file-saver';
 import { environment } from 'src/environments/environment';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideDownload,
+  lucideUpload,
+  lucideTruck,
+  lucideInfo,
+} from '@ng-icons/lucide';
+import { ZardTabComponent, ZardTabGroupComponent } from 'Common-UI/v2/ui/tabs';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardDatePickerComponent } from 'Common-UI/v2/ui/date-picker';
 import { ConfirmationService } from '../core/services/confirmation.service';
+import { AppHeaderComponent } from '../core/components/app-header/app-header.component';
+import { AppFooterComponent } from '../core/components/app-footer/app-footer.component';
 
 interface CampInfo {
   vanID: string;
@@ -61,8 +77,27 @@ const MAX_RANGE_DAYS = 90;
 
 @Component({
   selector: 'app-nikshay-sync',
+  standalone: true,
   templateUrl: './nikshay-sync.component.html',
-  styleUrls: ['./nikshay-sync.component.css'],
+  imports: [
+    NgIf,
+    NgFor,
+    NgTemplateOutlet,
+    ReactiveFormsModule,
+    NgIcon,
+    AppHeaderComponent,
+    AppFooterComponent,
+    ZardTabGroupComponent,
+    ZardTabComponent,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ZardDatePickerComponent,
+    ...ZardFormImports,
+    ...cardImports,
+  ],
+  viewProviders: [
+    provideIcons({ lucideDownload, lucideUpload, lucideTruck, lucideInfo }),
+  ],
 })
 export class NikshaySyncComponent implements OnInit {
   // ── Download Beneficiaries (Nikshay CSV) tab ──

@@ -20,12 +20,27 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Optional } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { timeout } from 'rxjs';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideWifi,
+  lucideDownload,
+  lucideRefreshCw,
+  lucideQrCode,
+  lucideCircleCheck,
+  lucideInfo,
+  lucideLoaderCircle,
+} from '@ng-icons/lucide';
 import * as QRCode from 'qrcode';
 import { environment } from 'src/environments/environment';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardDialogRef } from 'Common-UI/v2/ui/dialog';
 
 interface ConnectInfo {
   ip: string;
@@ -34,8 +49,28 @@ interface ConnectInfo {
 
 @Component({
   selector: 'app-camp-hub-qr-code',
+  standalone: true,
   templateUrl: './camp-hub-qr-code.component.html',
-  styleUrls: ['./camp-hub-qr-code.component.css'],
+  host: { class: 'block min-w-0' },
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    NgIcon,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideWifi,
+      lucideDownload,
+      lucideRefreshCw,
+      lucideQrCode,
+      lucideCircleCheck,
+      lucideInfo,
+      lucideLoaderCircle,
+    }),
+  ],
 })
 export class CampHubQrCodeComponent implements OnInit {
   isDetecting = false;
@@ -51,15 +86,12 @@ export class CampHubQrCodeComponent implements OnInit {
     ],
   });
 
-  private dialogRef: MatDialogRef<CampHubQrCodeComponent> | null = null;
-
   constructor(
-    private fb: FormBuilder,
-    private http: HttpClient,
-    private injector: Injector
-  ) {
-    this.dialogRef = this.injector.get(MatDialogRef, null);
-  }
+    private readonly fb: FormBuilder,
+    private readonly http: HttpClient,
+    @Optional()
+    private readonly dialogRef: ZardDialogRef<CampHubQrCodeComponent>
+  ) {}
 
   close(): void {
     this.dialogRef?.close();
@@ -74,17 +106,22 @@ export class CampHubQrCodeComponent implements OnInit {
     this.detectionFailed = false;
     this.qrDataUrl = null;
 
-    this.http.get<ConnectInfo>(environment.campHubConnectInfoAPI).subscribe({
-      next: res => {
-        this.urlForm.controls.campHubUrl.setValue(`http://${res.ip}:8080/`);
-        this.isDetecting = false;
-        this.generate();
-      },
-      error: () => {
-        this.detectionFailed = true;
-        this.isDetecting = false;
-      },
-    });
+    // Short timeout so a slow/unreachable endpoint falls back to manual entry
+    // quickly (the original had no timeout — it relied on a fast network error).
+    this.http
+      .get<ConnectInfo>(environment.campHubConnectInfoAPI)
+      .pipe(timeout(2500))
+      .subscribe({
+        next: res => {
+          this.urlForm.controls.campHubUrl.setValue(`http://${res.ip}:8080/`);
+          this.isDetecting = false;
+          this.generate();
+        },
+        error: () => {
+          this.detectionFailed = true;
+          this.isDetecting = false;
+        },
+      });
   }
 
   generate(): void {

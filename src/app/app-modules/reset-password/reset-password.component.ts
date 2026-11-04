@@ -21,15 +21,36 @@
  */
 
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ConfirmationService } from '../core/services/confirmation.service';
 import { AuthService } from '../core/services';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideUser, lucideEye, lucideEyeOff } from '@ng-icons/lucide';
+import { StringValidatorDirective } from '../core/directives/stringValidator.directive';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { cardImports } from 'Common-UI/v2/ui/card';
 
 @Component({
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
-  styleUrls: ['./reset-password.component.css'],
+  host: { class: 'block' },
+  imports: [
+    NgIf,
+    FormsModule,
+    RouterLink,
+    NgIcon,
+    StringValidatorDirective,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ...cardImports,
+  ],
+  viewProviders: [provideIcons({ lucideUser, lucideEye, lucideEyeOff })],
 })
 export class ResetPasswordComponent {
   constructor(
@@ -95,6 +116,10 @@ export class ResetPasswordComponent {
 
   hidePWD() {
     this.dynamictype = 'password';
+  }
+
+  togglePWD() {
+    this.dynamictype = this.dynamictype === 'text' ? 'password' : 'text';
   }
 
   splitQuestionAndQuestionID() {

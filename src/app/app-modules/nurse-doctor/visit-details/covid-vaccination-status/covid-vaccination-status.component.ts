@@ -21,7 +21,7 @@
  */
 
 import { Component, DoCheck, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import {
   BeneficiaryDetailsService,
@@ -33,11 +33,22 @@ import {
   MasterdataService,
   DoctorService,
 } from '../../shared/services';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgFor, NgIf } from '@angular/common';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 @Component({
   selector: 'app-covid-vaccination-status',
   templateUrl: './covid-vaccination-status.component.html',
-  styleUrls: ['./covid-vaccination-status.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    NgIf,
+    ...ZardFormImports,
+    ...ZardSelectImports,
+    ZardButtonComponent,
+  ],
 })
 export class CovidVaccinationStatusComponent implements OnInit, DoCheck {
   currentLanguageSet: any;

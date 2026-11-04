@@ -28,19 +28,40 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  FormArray,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 import { MasterdataService, DoctorService } from '../../shared/services';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/v2/tracking';
+import { NgIf, NgFor } from '@angular/common';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { NullDefaultValueDirective } from '../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-patient-visit-details',
   templateUrl: './visit-details.component.html',
-  styleUrls: ['./visit-details.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    NgFor,
+    ZardInputDirective,
+    ...ZardSelectImports,
+    ...ZardFormImports,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+  ],
 })
 export class PatientVisitDetailsComponent
   implements OnInit, DoCheck, OnChanges, OnDestroy
@@ -95,6 +116,34 @@ export class PatientVisitDetailsComponent
       this.beneficiaryDetailsSubscription.unsubscribe();
   }
 
+  private readonly supportedVisitCategories = [
+    'General OPD (QC)',
+    'Cancer Screening',
+    'General OPD',
+    'NCD screening',
+    'PNC',
+    'ANC',
+    'NCD care',
+    'COVID-19 Screening',
+  ];
+
+  private filterSupportedCategories(categories: any[]): any[] {
+    const age = this.beneficiary?.ageVal;
+    return (categories || []).filter((item: any) => {
+      const name = item?.visitCategory;
+      if (!this.supportedVisitCategories.includes(name)) return false;
+      if (
+        (name === 'NCD screening' || name === 'NCD care') &&
+        age !== null &&
+        age !== undefined &&
+        age < 30
+      ) {
+        return false;
+      }
+      return true;
+    });
+  }
+
   visitCategorySubscription: any;
   getVisitReasonAndCategory() {
     this.visitCategorySubscription =
@@ -106,8 +155,9 @@ export class PatientVisitDetailsComponent
             this.templateNurseMasterData
           );
           this.templateVisitReasons = this.templateNurseMasterData.visitReasons;
-          this.templateVisitCategories =
-            this.templateNurseMasterData.visitCategories;
+          this.templateVisitCategories = this.filterSupportedCategories(
+            this.templateNurseMasterData.visitCategories
+          );
           this.templateFilterVisitCategories = this.templateVisitCategories;
 
           if (

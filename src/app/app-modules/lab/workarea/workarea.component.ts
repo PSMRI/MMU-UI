@@ -21,36 +21,133 @@
  */
 
 import { DataManipulation } from './LabSubmissionDataManipulation';
-import { Component, OnInit, ViewChild, DoCheck } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  DoCheck,
+  AfterViewChecked,
+  ViewContainerRef,
+} from '@angular/core';
 import { Router } from '@angular/router';
-import { FormArray, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormGroup,
+  FormBuilder,
+  Validators,
+  ReactiveFormsModule,
+  FormsModule,
+} from '@angular/forms';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { LabService, MasterDataService } from '../shared/services';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
 import { LabUtils } from './../shared/utility/lab-utility';
 import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard.service';
 import { ViewFileComponent } from './../view-file/view-file.component';
-import { ViewRadiologyUploadedFilesComponent } from '../../core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
+import {
+  openViewRadiologyDialog,
+  openIotDialog,
+} from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { environment } from 'src/environments/environment';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
-import { Observable, of } from 'rxjs';
-import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { Observable, of, Subscription } from 'rxjs';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import {
+  NgIf,
+  NgFor,
+  JsonPipe,
+  TitleCasePipe,
+  DatePipe,
+} from '@angular/common';
+import { BeneficiaryDetailsComponent } from '../../core/components/beneficiary-details/beneficiary-details.component';
+import { StringValidatorDirective } from '../../core/directives/stringValidator.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideSearch, lucideUserRound } from '@ng-icons/lucide';
+import { ZardTabComponent, ZardTabGroupComponent } from 'Common-UI/v2/ui/tabs';
+import {
+  ZardAccordionImports,
+  ZardAccordionComponent,
+} from 'Common-UI/v2/ui/accordion';
+import {
+  ZardCardComponent,
+  ZardCardContentComponent,
+  ZardCardTitleComponent,
+} from 'Common-UI/v2/ui/card';
+import { ZardSkeletonComponent } from 'Common-UI/v2/ui/skeleton';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardCheckboxComponent } from 'Common-UI/v2/ui/checkbox';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import {
+  ZardSelectComponent,
+  ZardSelectItemComponent,
+} from 'Common-UI/v2/ui/select';
+import {
+  ZardTableComponent,
+  ZardTableHeaderComponent,
+  ZardTableBodyComponent,
+  ZardTableRowComponent,
+  ZardTableHeadComponent,
+  ZardTableCellComponent,
+} from 'Common-UI/v2/ui/table';
+import { ZardSheetComponent } from 'Common-UI/v2/ui/sheet';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-workarea',
   templateUrl: './workarea.component.html',
-  styleUrls: ['./workarea.component.css'],
+  imports: [
+    NgIf,
+    NgFor,
+    JsonPipe,
+    TitleCasePipe,
+    DatePipe,
+    FormsModule,
+    ReactiveFormsModule,
+    StringValidatorDirective,
+    NgIcon,
+    BeneficiaryDetailsComponent,
+    ZardTabComponent,
+    ZardTabGroupComponent,
+    ...ZardAccordionImports,
+    ZardCardComponent,
+    ZardSkeletonComponent,
+    ZardCardContentComponent,
+    ZardCardTitleComponent,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ZardCheckboxComponent,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
+    ZardSelectComponent,
+    ZardSelectItemComponent,
+    ZardTableComponent,
+    ZardTableHeaderComponent,
+    ZardTableBodyComponent,
+    ZardTableRowComponent,
+    ZardTableHeadComponent,
+    ZardTableCellComponent,
+    ZardSheetComponent,
+    ...tooltipImports,
+  ],
+  viewProviders: [provideIcons({ lucideSearch, lucideUserRound })],
 })
 export class WorkareaComponent
-  implements OnInit, DoCheck, CanComponentDeactivate
+  implements
+    OnInit,
+    OnDestroy,
+    DoCheck,
+    AfterViewChecked,
+    CanComponentDeactivate
 {
-  @ViewChild('sidenav')
-  sidenav: any;
+  @ViewChild(ZardAccordionComponent)
+  labAccordion?: ZardAccordionComponent;
 
   utils = new LabUtils(this.fb);
   dataLoad = new DataManipulation();
@@ -58,7 +155,11 @@ export class WorkareaComponent
   beneficiaryRegID: any;
   visitID: any;
   visitCode: any;
+  beneficiary: any;
+  private beneficiarySubscription?: Subscription;
   technicianForm!: FormGroup;
+  readonly skeletonCards = [0, 1, 2];
+  readonly skeletonFields = [0, 1, 2];
   labForm!: FormArray;
   radiologyForm!: FormArray;
   externalForm!: FormGroup;
@@ -88,11 +189,22 @@ export class WorkareaComponent
   maxFileSize = 5;
   ecgAbnormalities: any;
   enableEcgAbnormal: boolean = false;
+  sidenavOpen = false;
+
+  // Tracks which accordion index has been programmatically opened so the
+  // initial / IOT-driven expansion is applied exactly once per request.
+  private accordionExpandRequest: number | null = null;
+  private accordionExpandApplied: number | null = null;
+
+  // Search terms for the lab/radiology result tables (filter on ngModelChange).
+  laboratoryFilterTerm = '';
+  radiologyFilterTerm = '';
 
   constructor(
     private fb: FormBuilder,
     private confirmationService: ConfirmationService,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private router: Router,
     private masterdataService: MasterDataService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
@@ -106,6 +218,19 @@ export class WorkareaComponent
     this.visitCode = this.sessionstorage.getItem('visitCode');
     this.beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
 
+    this.beneficiarySubscription =
+      this.beneficiaryDetailsService.beneficiaryDetails$.subscribe(
+        (data: any) => {
+          if (data) this.beneficiary = data;
+        }
+      );
+    if (this.beneficiaryRegID) {
+      this.beneficiaryDetailsService.getBeneficiaryDetails(
+        this.beneficiaryRegID,
+        this.sessionstorage.getItem('benFlowID') ?? ''
+      );
+    }
+
     this.getTestRequirements();
     this.stepExpand = 0;
     this.testName = environment.RBSTest;
@@ -114,6 +239,33 @@ export class WorkareaComponent
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
+
+  ngOnDestroy() {
+    this.beneficiarySubscription?.unsubscribe();
+  }
+
+  ngAfterViewChecked() {
+    // The Zard accordion has no controlled-open input, so initial and
+    // IOT-driven expansion is applied imperatively once the panels exist.
+    if (
+      this.accordionExpandRequest !== null &&
+      this.accordionExpandRequest !== this.accordionExpandApplied &&
+      this.labAccordion
+    ) {
+      const value = this.accordionExpandRequest.toString();
+      if (!this.labAccordion.isOpen(value)) {
+        this.labAccordion.toggle(value);
+      }
+      this.accordionExpandApplied = this.accordionExpandRequest;
+    }
+  }
+
+  private requestAccordionExpand(index: number) {
+    this.stepExpand = index;
+    this.accordionExpandRequest = index;
+    this.accordionExpandApplied = null;
+  }
+
   assignSelectedLanguage() {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
@@ -134,6 +286,8 @@ export class WorkareaComponent
       'valuessss',
       JSON.stringify(this.technicianForm.value, null, 4)
     );
+    // Expand the first lab procedure panel by default.
+    this.requestAccordionExpand(0);
   }
 
   /////////////////////////////// CALLING AND LOADING ALL TESTS CODE BELOW/////////////////////////////
@@ -447,9 +601,8 @@ export class WorkareaComponent
     this.router.navigate(['/lab/worklist']);
   }
 
-  laboratoryData = new MatTableDataSource<any>();
-  radiologyFile = new MatTableDataSource<any>();
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+  laboratoryData: any[] = [];
+  radiologyFile: any[] = [];
   filteredRadiologyData: any = [];
   filteredLaboratoryData: any = [];
 
@@ -460,16 +613,11 @@ export class WorkareaComponent
       this.filteredArchiveList = this.archiveList;
       this.archiveList.forEach((fileSplit: any) => {
         if (fileSplit.procedureType === 'Radiology') {
-          this.radiologyFile.data.push(fileSplit);
-          this.radiologyFile.paginator = this.paginator;
-          this.filteredRadiologyData = this.radiologyFile.data;
-          this.radiologyFile.paginator = this.paginator;
+          this.radiologyFile.push(fileSplit);
+          this.filteredRadiologyData = this.radiologyFile;
         } else {
-          this.laboratoryData.data.push(fileSplit);
-          this.laboratoryData.paginator = this.paginator;
-          const temLaboratoryData: any = [];
-          this.filteredLaboratoryData = this.laboratoryData.data;
-          this.laboratoryData.paginator = this.paginator;
+          this.laboratoryData.push(fileSplit);
+          this.filteredLaboratoryData = this.laboratoryData;
         }
       });
     }
@@ -477,18 +625,15 @@ export class WorkareaComponent
 
   filterProceduresLab(searchTerm?: string) {
     if (!searchTerm) {
-      this.laboratoryData.data = this.filteredLaboratoryData;
-      this.laboratoryData.paginator = this.paginator;
+      this.laboratoryData = this.filteredLaboratoryData;
     } else {
-      this.laboratoryData.data = [];
-      this.laboratoryData.paginator = this.paginator;
+      this.laboratoryData = [];
       this.filteredLaboratoryData.forEach((item: any) => {
         for (const key in item) {
           if (key === 'procedureName') {
             const value: string = '' + item[key];
             if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-              this.laboratoryData.data.push(item);
-              this.laboratoryData.paginator = this.paginator;
+              this.laboratoryData.push(item);
               break;
             }
           }
@@ -499,18 +644,15 @@ export class WorkareaComponent
 
   filterProceduresRadiology(searchTerm?: string) {
     if (!searchTerm) {
-      this.radiologyFile.data = this.filteredRadiologyData;
-      this.radiologyFile.paginator = this.paginator;
+      this.radiologyFile = this.filteredRadiologyData;
     } else {
-      this.radiologyFile.data = [];
-      this.radiologyFile.paginator = this.paginator;
+      this.radiologyFile = [];
       this.filteredRadiologyData.forEach((item: any) => {
         for (const key in item) {
           if (key === 'procedureName') {
             const value: string = '' + item[key];
             if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-              this.radiologyFile.data.push(item);
-              this.radiologyFile.paginator = this.paginator;
+              this.radiologyFile.push(item);
 
               break;
             }
@@ -665,12 +807,16 @@ export class WorkareaComponent
     return kmFileManager;
   }
   openToViewFile(procedureID: any) {
-    const dialogRef = this.dialog.open(ViewFileComponent, {
-      width: '50%',
-      data: {
+    const dialogRef = this.dialog.create<ViewFileComponent, unknown>({
+      zContent: ViewFileComponent,
+      zWidth: '50%',
+      zData: {
         viewFileObj: this.fileObj,
         procedureID: procedureID,
       },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     dialogRef.afterClosed().subscribe(result => {
       this.fileObj = result;
@@ -783,7 +929,13 @@ export class WorkareaComponent
         }
       },
       err => {
-        this.confirmationService.alert(err.errorMessage, 'err');
+        this.confirmationService.alert(
+          err?.error?.errorMessage ||
+            err?.errorMessage ||
+            err?.message ||
+            'File upload failed',
+          'error'
+        );
       }
     );
   }
@@ -952,13 +1104,8 @@ export class WorkareaComponent
    * submitDetails for Submit // SUBMIT BUTTON ACTION CODE
    */
 
-  sideNavModeChange(sidenav: any) {
-    const deviceWidth = window.screen.width;
-
-    if (deviceWidth < 700) sidenav.mode = 'over';
-    else sidenav.mode = 'side';
-
-    sidenav.toggle();
+  toggleSidenav() {
+    this.sidenavOpen = !this.sidenavOpen;
   }
   canDeactivate(): Observable<boolean> {
     console.log('deactivate called');
@@ -974,12 +1121,13 @@ export class WorkareaComponent
 
   viewFileContent(fileIDs: any) {
     console.log(fileIDs);
-    const dialogRef = this.dialog.open(ViewRadiologyUploadedFilesComponent, {
-      width: '40%',
-      data: {
+    const dialogRef = openViewRadiologyDialog(
+      this.dialog,
+      this.viewContainerRef,
+      {
         filesDetails: fileIDs,
-      },
-    });
+      }
+    );
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
         this.labService.viewFileContent(result).subscribe((res: any) => {
@@ -998,7 +1146,7 @@ export class WorkareaComponent
   }
 
   openIOTModal(api: FormGroup, i: number) {
-    this.stepExpand = i;
+    this.requestAccordionExpand(i);
     console.log(this.stepExpand);
     console.log(api, 'sfasdfasfgasdfasfa');
     const output: any = [];
@@ -1006,15 +1154,10 @@ export class WorkareaComponent
       output.push(element.componentCode);
     });
     console.log('calibration', api);
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '200px',
-      disableClose: true,
-      data: {
-        startAPI: api.value.procedureStartAPI,
-        output: output,
-        procedure: api,
-      },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: api.value.procedureStartAPI,
+      output: output,
+      procedure: api,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('he;;p', result, result['result']);
@@ -1041,12 +1184,12 @@ export class WorkareaComponent
     });
   }
 
-  onStripsCheckBox(event: any, procedureIndex: any, componentIndex: any) {
+  onStripsCheckBox(checked: boolean, procedureIndex: any, componentIndex: any) {
     const procedure = <FormGroup>this.labForm.at(procedureIndex);
     const component = (<FormArray>procedure.controls['compListDetails']).at(
       componentIndex
     );
-    if (event.checked) {
+    if (checked) {
       procedure.controls['compListDetails'].setValidators([
         Validators.required,
       ]);

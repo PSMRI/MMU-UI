@@ -21,14 +21,28 @@
  */
 
 import { Component, OnInit, Inject, DoCheck } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
+import { NgIf } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideInfo } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardCheckboxComponent } from 'Common-UI/v2/ui/checkbox';
 
 @Component({
   selector: 'app-case-sheet-print-page-select',
   templateUrl: './print-page-select.component.html',
-  styleUrls: ['./print-page-select.component.css'],
+  imports: [
+    NgIf,
+    ReactiveFormsModule,
+    FormsModule,
+    NgIcon,
+    ZardButtonComponent,
+    ZardCheckboxComponent,
+  ],
+  viewProviders: [provideIcons({ lucideInfo })],
 })
 export class PrintPageSelectComponent implements OnInit, DoCheck {
   printPagePreviewSelect = {
@@ -44,8 +58,8 @@ export class PrintPageSelectComponent implements OnInit, DoCheck {
   isCovidVaccinationStatusVisible = false;
 
   constructor(
-    public dialogRef: MatDialogRef<PrintPageSelectComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: ZardDialogRef<PrintPageSelectComponent>,
+    @Inject(Z_MODAL_DATA) public data: any,
     private httpServices: HttpServiceService
   ) {}
 

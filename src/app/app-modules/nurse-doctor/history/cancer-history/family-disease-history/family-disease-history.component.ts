@@ -27,6 +27,7 @@ import {
   OnChanges,
   OnDestroy,
   DoCheck,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -34,6 +35,7 @@ import {
   FormControl,
   FormArray,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import {
   MasterdataService,
@@ -46,14 +48,38 @@ import { ConfirmationService } from '../../../../core/services/confirmation.serv
 import { CancerUtils } from '../../../shared/utility/cancer-utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MatDialog } from '@angular/material/dialog';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgFor, NgClass, NgIf } from '@angular/common';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory, lucidePlus, lucideX } from '@ng-icons/lucide';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 
 @Component({
   selector: 'app-nurse-cancer-family-disease-history',
   templateUrl: './family-disease-history.component.html',
-  styleUrls: ['./family-disease-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    NgClass,
+    NgIf,
+    NgIcon,
+    ...tooltipImports,
+    ZardButtonComponent,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+  ],
+  viewProviders: [provideIcons({ lucideHistory, lucidePlus, lucideX })],
 })
 export class FamilyDiseaseHistoryComponent
   implements OnInit, OnDestroy, DoCheck
@@ -84,7 +110,8 @@ export class FamilyDiseaseHistoryComponent
     private masterdataService: MasterdataService,
     private doctorService: DoctorService,
     private httpServiceService: HttpServiceService,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private nurseService: NurseService,
     private confirmationService: ConfirmationService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
@@ -204,6 +231,24 @@ export class FamilyDiseaseHistoryComponent
             console.log('beneficiary', beneficiaryDetails);
         }
       );
+  }
+
+  onCancerDiseaseTypeChange(
+    selectedType: string | string[],
+    i: any,
+    familyDiseaseForm: AbstractControl<any, any>
+  ) {
+    const matchedDisease = (this.temp[i]?.diseaseType || []).find(
+      (item: any) => item.cancerDiseaseType === selectedType
+    );
+    familyDiseaseForm
+      .get('cancerDiseaseType')
+      ?.setValue(matchedDisease ?? null);
+    this.filterFamilyMember(
+      familyDiseaseForm.value?.cancerDiseaseType,
+      i,
+      familyDiseaseForm
+    );
   }
 
   filterFamilyMember(
@@ -393,11 +438,9 @@ export class FamilyDiseaseHistoryComponent
   }
 
   viewPreviousData(data: any) {
-    this.dialog.open(PreviousDetailsComponent, {
-      data: {
-        dataList: data,
-        title: this.currentLanguageSet.common.prevFamilyHistory,
-      },
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title: this.currentLanguageSet.common.prevFamilyHistory,
     });
   }
 

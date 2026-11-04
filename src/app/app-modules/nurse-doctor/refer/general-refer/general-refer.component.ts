@@ -20,63 +20,67 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnDestroy,
+  ViewContainerRef,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  FormsModule,
+} from '@angular/forms';
 
 import {
   MasterdataService,
   DoctorService,
   NurseService,
 } from '../../shared/services';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgIf, NgFor } from '@angular/common';
 import { IdrsscoreService } from '../../shared/services/idrsscore.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { MatDialog } from '@angular/material/dialog';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
-import {
-  MomentDateAdapter,
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-} from '@angular/material-moment-adapter';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardDatePickerComponent } from 'Common-UI/v2/ui/date-picker';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory } from '@ng-icons/lucide';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-general-refer',
   templateUrl: './general-refer.component.html',
-  styleUrls: ['./general-refer.component.css'],
+  viewProviders: [provideIcons({ lucideHistory })],
   providers: [
     {
       provide: DatePipe,
     },
-    {
-      provide: MAT_DATE_LOCALE,
-      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
-    },
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    },
-    {
-      provide: MAT_DATE_FORMATS,
-      useValue: {
-        parse: {
-          dateInput: 'LL',
-        },
-        display: {
-          dateInput: 'DD/MM/YYYY', // Set the desired display format
-          monthYearLabel: 'MMM YYYY',
-          dateA11yLabel: 'LL',
-          monthYearA11yLabel: 'MMMM YYYY',
-        },
-      },
-    },
+  ],
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    NgIf,
+    NgFor,
+    NgIcon,
+    ...cardImports,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ...tooltipImports,
+    ...ZardSelectImports,
+    ZardDatePickerComponent,
   ],
 })
 export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
@@ -114,7 +118,8 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
     private masterdataService: MasterdataService,
     private idrsScoreService: IdrsscoreService,
     private nurseService: NurseService,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private confirmationService: ConfirmationService,
     readonly sessionstorage: SessionStorageService,
     private httpServices: HttpServiceService
@@ -182,7 +187,11 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
             this.instituteFlag = true;
             sessionStorage.setItem('instFlag', 'true');
           }
-          this.additionalServices = masterData.additionalServices;
+          this.additionalServices = (
+            masterData.additionalServices || []
+          ).filter((s: any) =>
+            ['104', '1097'].includes(String(s?.serviceName).trim())
+          );
           console.log(masterData.revisitDate);
           console.log('hi');
           this.revisitDate = masterData.revisitDate;
@@ -243,6 +252,9 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
     referDetails.referralReason = this.referralReason;
     this.referForm.patchValue({ referralReason: referDetails.referralReason });
     this.referForm.patchValue(referDetails);
+    this.revisitDateModel = referDetails.revisitDate
+      ? new Date(referDetails.revisitDate)
+      : null;
     if (referDetails.referredToInstituteName !== null) {
       this.healthCareReferred = true;
     }
@@ -307,6 +319,46 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
     console.log(this.selectValue);
   }
 
+  // --- Zard control adapters. z-select is string-valued and z-date-picker is
+  // Date-valued, but the reactive-form controls keep their original object /
+  // object-array / ISO-string values so the submission contract is unchanged. ---
+  revisitDateModel: Date | null = null;
+
+  get selectedServiceNames(): string[] {
+    const val = this.referForm.get('refrredToAdditionalServiceList')?.value;
+    return Array.isArray(val) ? val.map((s: any) => s?.serviceName) : [];
+  }
+
+  onInstituteChange(value: string | string[]): void {
+    const id = Array.isArray(value) ? value[0] : value;
+    const center = (this.higherHealthcareCenter || []).find(
+      (c: any) => String(c.institutionID) === id
+    );
+    this.referForm.controls['referredToInstituteName'].setValue(center ?? null);
+    this.referForm.controls['referredToInstituteName'].markAsDirty();
+    this.higherhealthcarecenter(center ?? null);
+  }
+
+  onAdditionalServicesChange(value: string | string[]): void {
+    const names = Array.isArray(value) ? value : [value];
+    const selected = (this.additionalServices || []).filter((s: any) =>
+      names.includes(s.serviceName)
+    );
+    this.referForm.controls['refrredToAdditionalServiceList'].setValue(
+      selected
+    );
+    this.referForm.controls['refrredToAdditionalServiceList'].markAsDirty();
+    this.additionalservices(selected);
+  }
+
+  onRevisitDateChange(date: Date | null): void {
+    if (date) {
+      this.checkdate(date);
+    } else {
+      this.referForm.patchValue({ revisitDate: null });
+    }
+  }
+
   private toggleReferralReasonValidator(): void {
     const control = this.referForm.get('referralReason');
 
@@ -353,11 +405,9 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   viewPreviousData(data: any) {
-    this.dialog.open(PreviousDetailsComponent, {
-      data: {
-        dataList: data,
-        title: this.currentLanguageSet.previousReferralHistoryDetails,
-      },
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title: this.currentLanguageSet.previousReferralHistoryDetails,
     });
   }
 }

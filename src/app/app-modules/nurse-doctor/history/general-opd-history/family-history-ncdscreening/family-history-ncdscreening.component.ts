@@ -20,15 +20,23 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnDestroy,
+  ViewContainerRef,
+} from '@angular/core';
 import {
   FormBuilder,
   FormArray,
   FormGroup,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
-import { MatDialog } from '@angular/material/dialog';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import {
   ConfirmationService,
@@ -41,12 +49,40 @@ import {
   MasterdataService,
 } from '../../../shared/services';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory, lucidePlus, lucideX } from '@ng-icons/lucide';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
 
 @Component({
   selector: 'app-family-history-ncdscreening',
   templateUrl: './family-history-ncdscreening.component.html',
-  styleUrls: ['./family-history-ncdscreening.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    NgFor,
+    NgClass,
+    NgIcon,
+    ...tooltipImports,
+    ZardButtonComponent,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+  ],
+  viewProviders: [provideIcons({ lucideHistory, lucidePlus, lucideX })],
 })
 export class FamilyHistoryNcdscreeningComponent
   implements OnInit, DoCheck, OnDestroy
@@ -79,7 +115,8 @@ export class FamilyHistoryNcdscreeningComponent
 
   constructor(
     private fb: FormBuilder,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private nurseService: NurseService,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
@@ -135,7 +172,20 @@ export class FamilyHistoryNcdscreeningComponent
           this.masterData = masterData;
           this.diseaseMasterData = masterData.DiseaseTypes;
           this.familyMemeberMasterData = masterData.familyMemberTypes;
-          this.addFamilyDisease();
+          const familyArr = this.familyHistoryForm.controls[
+            'familyDiseaseList'
+          ] as FormArray;
+          if (familyArr.length === 0) {
+            // Fresh: add one row (also builds its Disease Type option list).
+            this.addFamilyDisease();
+          } else {
+            // Revisit: the rows persist in the parent form, but the per-row
+            // dropdown option lists are component state lost on recreate —
+            // rebuild them so the Disease Type dropdowns work again.
+            this.diseaseSelectList = familyArr.controls.map(() =>
+              this.diseaseMasterData ? this.diseaseMasterData.slice() : []
+            );
+          }
 
           if (String(this.mode) === 'view') {
             const visitID = this.sessionstorage.getItem('visitID');
@@ -293,6 +343,18 @@ export class FamilyHistoryNcdscreeningComponent
       this.sortDiseaseList(this.diseaseSelectList[index + 1]);
     }
     familyDiseaseList.push(this.initFamilyDiseaseList());
+  }
+
+  onDiseaseTypeChange(
+    selectedType: string | string[],
+    i: any,
+    familyDiseaseForm: AbstractControl<any, any>
+  ) {
+    const matchedDisease = (this.diseaseSelectList[i] || []).find(
+      (item: any) => item.diseaseType === selectedType
+    );
+    familyDiseaseForm.get('diseaseType')?.setValue(matchedDisease ?? null);
+    this.filterFamilyDiseaseList(matchedDisease, i, familyDiseaseForm);
   }
 
   filterFamilyDiseaseList(
@@ -498,13 +560,10 @@ export class FamilyHistoryNcdscreeningComponent
   }
 
   viewPreviousData(data: any) {
-    this.dialog.open(PreviousDetailsComponent, {
-      data: {
-        dataList: data,
-        title:
-          this.currentLanguageSet.historyData.familyhistory
-            .previousfamilyhistory,
-      },
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title:
+        this.currentLanguageSet.historyData.familyhistory.previousfamilyhistory,
     });
   }
 
@@ -548,7 +607,11 @@ export class FamilyHistoryNcdscreeningComponent
 
   filterFamilyMembers(familyMembers: any, familyGroup: any) {
     this.familyMembersArray = familyMembers.value;
-    const familyDiseaseType = familyGroup.value.diseaseType.diseaseType;
+    // diseaseType may be null (member picked before a disease) or a plain value;
+    // guard so selecting a family member first doesn't throw on `.diseaseType`.
+    const familyDiseaseType =
+      familyGroup.value.diseaseType?.diseaseType ??
+      familyGroup.value.diseaseType;
     let singleParent = false;
     let bothParent = false;
     let IDRSScoreForFamilyMembes = 0;

@@ -185,6 +185,8 @@
       "bluetoothDevice": "Bluetooth Device",
       "connectBluetooth":"Connect Bluetooth",
       "proceed": "Proceed",
+      "usePhoto": "Use Photo",
+      "retake": "Retake",
       "scheduleForTM": "Schedule For TM",
       "cancel": "Cancel",
       "history": "History",
@@ -259,7 +261,7 @@
       "bloodGlucoseTrend": "Blood Glucose Trends",
       "resultMammogram": "Results of Mammogram",
       "otherComplication": "Other Complication of Current Pregnancy",
-      "add": "add",
+      "add": "Add",
       "remove":"remove",
       "confirmDiagnosis": "Confirmatory Diagnosis",
       "labTest": "Test Report",
@@ -525,7 +527,7 @@
           "consanguineousMarriage": "H/o Consanguineous Marriage",
           "geneticDisorders": "Genetic Disorders",
           "previousFamilyHistory": "Previous Family History",
-          "pleaseSelectDiabetesMellitusInDiseaseType": "Please select Diabetes Mellitus in disease type"
+          "pleaseSelectDiabetesMellitusInDiseaseType": "Please select any NCD for proper screening"
         },
         "menstrualHistoryANC": {
           "menstrualHistory": "Menstrual History",
@@ -1186,10 +1188,10 @@
     "Prescription": {
       "form": "Form",
       "medicine": "Medicine",
-      "dosage": "dosage",
+      "dosage": "Dosage",
       "frequency": "Frequency",
       "unit": "Unit",
-      "Route": "route",
+      "Route": "Route",
       "instructions": "Instructions",
       "quantity": "Quantity",
       "isEDL": "IsEDL"
@@ -1733,7 +1735,7 @@
     "dataSyncCardDescription": "Upload pending van records to the central server",
     "documentSyncCardTitle": "Document Sync",
     "documentSyncCardDescription": "Upload pending diagnostic documents to the central server",
-    "consentFormText": "To provide you with better service, we would,request your personal information. The information that you will providewill be kept confidential and will only be used for research and analysis.",
+    "consentFormText": "To provide you with better service, we would request your personal information. The information that you will provide will be kept confidential and will only be used for research and analysis.",
     "beneficaryConsent":"Beneficiary Consent",
     "abha":"ABHA",
     "abhaNumber":"ABHA Number",

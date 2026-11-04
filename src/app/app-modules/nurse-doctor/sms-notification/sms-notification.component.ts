@@ -1,25 +1,45 @@
-import { Component, Inject, ViewChild } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-  MatDialog,
-} from '@angular/material/dialog';
+import { Component, Inject, OnInit, DoCheck } from '@angular/core';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { SmsTemplateService } from '../smsTemplate/sms-template.service';
 import { ConfirmationService } from '../../core/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { map, switchMap } from 'rxjs';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf, NgFor } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX, lucideSend } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardCheckboxComponent } from 'Common-UI/v2/ui/checkbox';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
 
 @Component({
   selector: 'app-sms-notification',
+  standalone: true,
   templateUrl: './sms-notification.component.html',
-  styleUrls: ['./sms-notification.component.css'],
+  imports: [
+    NgIf,
+    NgFor,
+    ReactiveFormsModule,
+    FormsModule,
+    NgIcon,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ZardCheckboxComponent,
+    ...ZardTableImports,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideX,
+      lucideSend,
+    }),
+  ],
 })
-export class SmsNotificationComponent {
+export class SmsNotificationComponent implements OnInit, DoCheck {
   altNum = false;
   mobileNumber: any;
   smsFlag = false;
@@ -29,29 +49,18 @@ export class SmsNotificationComponent {
   currentLanguageSet: any;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialog: MatDialog,
-    private snackBar: MatSnackBar,
+    @Inject(Z_MODAL_DATA) public data: any,
     private _smsService: SmsTemplateService,
     private alertMessage: ConfirmationService,
-    public dialogRef: MatDialogRef<SmsNotificationComponent>,
+    public dialogRef: ZardDialogRef<SmsNotificationComponent>,
     public httpServices: HttpServiceService,
     readonly sessionstorage: SessionStorageService
-  ) {}
+  ) {
+    // Preserve the original MatDialog disableClose:true behaviour.
+    this.dialogRef.disableClose = true;
+  }
 
-  displayedColumns: string[] = [
-    'prescriptionID',
-    'diagnosisProvided',
-    'drug',
-    'strength',
-    'frequency',
-    'noOfDays',
-    'remarks',
-  ];
-
-  dataSource!: MatTableDataSource<any>;
   ngOnInit() {
-    this.dataSource = new MatTableDataSource(this.data.prescribedDrugs);
     this.assignSelectedLanguage();
   }
 
@@ -129,20 +138,11 @@ export class SmsNotificationComponent {
         )
         .subscribe({
           next: () => {
-            this.snackBar.open('SMS sent successfully', 'Close', {
-              duration: 3000,
-              verticalPosition: 'top',
-              panelClass: ['snackbar-success'],
-            });
             this.alertMessage.alert('Data saved successfully', 'success');
           },
           error: err => {
             console.error('Error sending SMS:', err);
-            this.snackBar.open('SMS not sent', 'Close', {
-              duration: 3000,
-              verticalPosition: 'top',
-              panelClass: ['snackbar-error'],
-            });
+            this.alertMessage.alert('SMS not sent', 'error');
           },
         });
 

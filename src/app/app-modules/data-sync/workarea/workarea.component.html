@@ -1,608 +1,611 @@
-<div class="container-fluid">
-  <div class="row m-t-10 m-b-30">
-    <div class="col-xs-12">
-      <mat-tab-group class="tabs_css" (selectedTabChange)="onTabChange($event)">
-        <mat-tab label="Data Upload" [disabled]="showProgressBar">
-          <mat-drawer-container class="example-container m-t-10">
-            <div
-              *ngIf="displaySyncBool"
-              class="row justify-content-center align-items-center"
-              style="padding: 20px; min-height: 60vh">
-              <div class="col-12 col-md-6 m-b-10">
-                <mat-card
-                  style="
-                    min-height: 170px;
-                    text-align: center;
-                    align-items: center;
-                  ">
-                  <h4>{{ current_language_set?.dataSyncCardTitle }}</h4>
-                  <p>{{ current_language_set?.dataSyncCardDescription }}</p>
-                  <button
-                    mat-raised-button
-                    color="primary"
-                    class="mat_blue"
-                    style="width: 220px"
-                    (click)="syncGroups()">
-                    {{ current_language_set?.startDataSync }}
-                  </button>
-                </mat-card>
-              </div>
-              <div class="col-12 col-md-6 m-b-10" *ngIf="isMMUOfflineQRCode">
-                <mat-card
-                  style="
-                    min-height: 170px;
-                    text-align: center;
-                    align-items: center;
-                  ">
-                  <h4>{{ current_language_set?.documentSyncCardTitle }}</h4>
-                  <p>{{ current_language_set?.documentSyncCardDescription }}</p>
-                  <button
-                    mat-raised-button
-                    color="primary"
-                    class="mat_blue"
-                    style="width: 220px"
-                    [disabled]="documentSyncInProgress"
-                    (click)="startDocumentSync()">
-                    {{ current_language_set?.startDocumentSync }}
-                  </button>
-                  <div
-                    *ngIf="documentSyncResult"
-                    style="margin-top: 16px; width: 100%; text-align: left">
-                    <ul
-                      *ngIf="documentSyncResult.documents.length > 0"
-                      class="document-sync-list">
-                      <li *ngFor="let doc of documentSyncResult.documents">
-                        <span class="document-sync-name">{{ doc.name }}</span>
-                        <span
-                          class="document-sync-status"
-                          [class.uploaded]="doc.uploaded"
-                          [class.not-uploaded]="!doc.uploaded"
-                          >{{
-                            doc.uploaded ? 'Uploaded' : 'Not uploaded'
-                          }}</span
-                        >
-                        <div *ngIf="doc.reason" class="document-sync-reason">
-                          {{ doc.reason }}
-                        </div>
-                      </li>
-                    </ul>
+<div class="mx-auto w-full max-w-5xl px-4 py-6">
+  <z-tab-group (zTabChange)="onTabChange($event)">
+    <!-- Tab 1 — Data Upload -->
+    <z-tab label="Data Upload">
+      <div class="space-y-6 pt-6">
+        <div
+          *ngIf="displaySyncBool"
+          class="flex min-h-[60vh] flex-col items-center justify-center gap-6 md:flex-row">
+          <z-card class="w-full md:w-[calc(50%-0.75rem)]">
+            <z-card-header
+              class="flex flex-col items-center gap-1.5 text-center">
+              <z-card-title>{{
+                current_language_set?.dataSyncCardTitle
+              }}</z-card-title>
+              <z-card-description>{{
+                current_language_set?.dataSyncCardDescription
+              }}</z-card-description>
+            </z-card-header>
+            <z-card-content class="flex justify-center">
+              <button
+                z-button
+                type="button"
+                class="w-56"
+                [disabled]="showProgressBar"
+                (click)="syncGroups()">
+                <ng-icon name="lucideRefreshCw"></ng-icon>
+                {{ current_language_set?.startDataSync }}
+              </button>
+            </z-card-content>
+          </z-card>
+
+          <z-card
+            *ngIf="isMMUOfflineQRCode"
+            class="w-full md:w-[calc(50%-0.75rem)]">
+            <z-card-header
+              class="flex flex-col items-center gap-1.5 text-center">
+              <z-card-title>{{
+                current_language_set?.documentSyncCardTitle
+              }}</z-card-title>
+              <z-card-description>{{
+                current_language_set?.documentSyncCardDescription
+              }}</z-card-description>
+            </z-card-header>
+            <z-card-content class="flex flex-col items-center gap-4">
+              <button
+                z-button
+                type="button"
+                class="w-56"
+                (click)="startDocumentSync()"
+                [disabled]="documentSyncInProgress">
+                <ng-icon name="lucideUpload"></ng-icon>
+                {{ current_language_set?.startDocumentSync }}
+              </button>
+              <div *ngIf="documentSyncResult" class="w-full space-y-2 text-sm">
+                <ul
+                  *ngIf="documentSyncResult.documents.length > 0"
+                  class="m-0 list-none space-y-2 p-0">
+                  <li
+                    *ngFor="let doc of documentSyncResult.documents"
+                    class="rounded-md border border-border px-3 py-2">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="font-medium text-foreground">{{
+                        doc.name
+                      }}</span>
+                      <span
+                        class="inline-flex items-center gap-1 text-xs font-medium"
+                        [class.text-success]="doc.uploaded"
+                        [class.text-destructive]="!doc.uploaded">
+                        <ng-icon
+                          [name]="
+                            doc.uploaded
+                              ? 'lucideCircleCheckBig'
+                              : 'lucideCircleAlert'
+                          "
+                          size="14"></ng-icon>
+                        {{ doc.uploaded ? 'Uploaded' : 'Not uploaded' }}
+                      </span>
+                    </div>
                     <p
-                      *ngIf="documentSyncResult.unlistedUploaded > 0"
-                      class="document-sync-more">
-                      {{ documentSyncResult.unlistedUploaded }}
-                      {{
-                        documentSyncResult.documents.length > 0
-                          ? 'other documents'
-                          : 'documents'
-                      }}
-                      uploaded
+                      *ngIf="doc.reason"
+                      class="mb-0 mt-1 text-xs text-muted-foreground">
+                      {{ doc.reason }}
                     </p>
-                  </div>
-                </mat-card>
+                  </li>
+                </ul>
+                <p
+                  *ngIf="documentSyncResult.unlistedUploaded > 0"
+                  class="m-0 text-muted-foreground">
+                  {{ documentSyncResult.unlistedUploaded }}
+                  {{
+                    documentSyncResult.documents.length > 0
+                      ? 'other documents'
+                      : 'documents'
+                  }}
+                  uploaded
+                </p>
               </div>
-            </div>
-            <section
-              class="table-responsive"
-              style="padding-bottom: 20px !important; border: unset">
-              <table
-                aria-describedby="synctable"
-                class="table table-striped"
-                *ngIf="showTable">
-                <thead>
-                  <tr>
-                    <th id="empty">&nbsp;</th>
-                    <th id="SYNCTableGroupName">
+            </z-card-content>
+          </z-card>
+        </div>
+
+        <z-card *ngIf="showTable">
+          <z-card-content class="p-2">
+            <div class="w-full overflow-x-auto">
+              <table z-table aria-label="Data synchronization records">
+                <thead z-table-header>
+                  <tr z-table-row>
+                    <th z-table-head class="w-1" id="empty">
+                      <span class="sr-only">Status</span>
+                    </th>
+                    <th z-table-head id="SYNCTableGroupName">
                       {{
                         current_language_set?.coreComponents?.sYNCTableGroupName
                       }}
                     </th>
-                    <th id="sync">
+                    <th z-table-head id="sync">
                       {{ current_language_set?.coreComponents?.sYNC }}
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody z-table-body>
                   <ng-container
                     *ngIf="
                       syncTableGroupList && syncTableGroupList.length === 0;
                       else groupList
                     ">
-                    <tr *ngFor="let row of blankTable">
-                      <td>&nbsp;</td>
-                      <td>&nbsp;</td>
-                      <td>&nbsp;</td>
+                    <tr z-table-row *ngFor="let row of blankTable">
+                      <td z-table-cell>&nbsp;</td>
+                      <td z-table-cell>&nbsp;</td>
+                      <td z-table-cell>&nbsp;</td>
                     </tr>
                   </ng-container>
                   <ng-template #groupList>
                     <tr
-                      *ngFor="let syncTableGroup of syncTableGroupList"
-                      class="table-hover">
-                      <td>
-                        <div
-                          [ngClass]="{
-                            visitStatus: true,
-                            'p-f-c':
-                              syncTableGroup.status === 'partial' ||
-                              syncTableGroup.status === 'pending',
-                            'c-d':
-                              syncTableGroup.status === 'completed' ||
-                              syncTableGroup.status === 'success',
-                            't-d': syncTableGroup.status === 'failed',
-                          }"></div>
+                      z-table-row
+                      *ngFor="let syncTableGroup of syncTableGroupList">
+                      <td
+                        z-table-cell
+                        class="border-l-[3px]"
+                        [class.border-l-info]="
+                          syncTableGroup.status === 'pending'
+                        "
+                        [class.border-l-warning]="
+                          syncTableGroup.status === 'partial'
+                        "
+                        [class.border-l-success]="
+                          syncTableGroup.status === 'completed' ||
+                          syncTableGroup.status === 'success'
+                        "
+                        [class.border-l-destructive]="
+                          syncTableGroup.status === 'failed'
+                        "
+                        [class.border-l-transparent]="!syncTableGroup.status">
+                        &nbsp;
                       </td>
-                      <td>
+                      <td z-table-cell>
                         {{ syncTableGroup?.syncTableGroupName }}
                       </td>
-                      <td>
-                        <span
-                          class="material-icons"
-                          style="color: #0b69b2"
+                      <td z-table-cell>
+                        <ng-icon
                           *ngIf="syncTableGroup.status === 'pending'"
-                          >hourglass_empty</span
-                        >
-                        <span
-                          class="material-icons"
-                          style="color: #eaaa26"
+                          class="text-info"
+                          name="lucideHourglass"
+                          size="20"
+                          aria-label="Pending for data sync"></ng-icon>
+                        <ng-icon
                           *ngIf="syncTableGroup.status === 'partial'"
-                          >indeterminate_check_box</span
-                        >
-                        <span
-                          class="material-icons"
-                          style="color: #43760f"
+                          class="text-warning"
+                          name="lucideSquareMinus"
+                          size="20"
+                          aria-label="Partial data sync"></ng-icon>
+                        <ng-icon
                           *ngIf="
                             syncTableGroup.status === 'success' ||
                             syncTableGroup.status === 'completed'
                           "
-                          >check_circle</span
-                        >
-                        <span
-                          class="material-icons"
-                          style="color: #e44e4f"
+                          class="text-success"
+                          name="lucideCircleCheckBig"
+                          size="20"
+                          aria-label="Data synced"></ng-icon>
+                        <ng-icon
                           *ngIf="syncTableGroup.status === 'failed'"
-                          >error</span
-                        >
+                          class="text-destructive"
+                          name="lucideCircleAlert"
+                          size="20"
+                          aria-label="Error for data sync"></ng-icon>
                       </td>
                     </tr>
                   </ng-template>
                 </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="3">
-                      <ul
-                        class="description"
-                        style="display: flex; justify-content: center"
-                        *ngIf="syncTableGroupList.length > 0">
-                        <li>
-                          <div
-                            class="marker-p-f-c"
-                            style="margin-right: 4px; margin-top: 4px"></div>
-                          <p>
-                            {{
-                              current_language_set?.coreComponents
-                                ?.pendingForDataSYNC
-                            }}
-                          </p>
-                        </li>
-                        <li>
-                          <div
-                            class="marker-t-d"
-                            style="margin-right: 4px; margin-top: 4px"></div>
-                          <p>
-                            {{
-                              current_language_set?.coreComponents
-                                ?.partialDataSync
-                            }}
-                          </p>
-                        </li>
-                        <li>
-                          <div
-                            class="marker-p-f-t"
-                            style="margin-right: 4px; margin-top: 4px"></div>
-                          <p>
-                            {{
-                              current_language_set?.coreComponents
-                                ?.errorForDataSync
-                            }}
-                          </p>
-                        </li>
-                        <li>
-                          <div
-                            class="marker-c-d"
-                            style="margin-right: 4px; margin-top: 4px"></div>
-                          <p>
-                            {{
-                              current_language_set?.coreComponents?.dataSynced
-                            }}
-                          </p>
-                        </li>
-                      </ul>
-                    </td>
-                  </tr>
-                </tfoot>
               </table>
-            </section>
-          </mat-drawer-container>
-        </mat-tab>
-        <mat-tab label="Data Download">
-          <mat-drawer-container class="example-container m-t-10" autosize>
-            <div class="example-sidenav-content">
-              <button
-                type="button"
-                mat-raised-button
-                color="primary"
-                class="btn-green mat_blue"
-                (click)="syncDownloadData()"
-                [disabled]="showProgressBar">
-                {{ current_language_set?.coreComponents?.download }}
-              </button>
             </div>
 
-            <div class="example-sidenav-content">
-              <div *ngIf="showProgressBar" class="progress">
-                <div
-                  class="progress-bar progress-bar-striped active"
-                  role="progressbar"
-                  [attr.aria-valuenow]="progressValue"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                  [ngStyle]="{ width: progressValue + '%' }">
-                  {{ progressValue + '%' }}
-                </div>
-              </div>
-
-              <section
-                *ngIf="failedMasterList && failedMasterList.length > 0"
-                class="failedMaster">
-                <h4>
-                  {{ current_language_set?.coreComponents?.failedMasters }} :
-                </h4>
-                <ul class="list-group">
-                  <li
-                    class="list-group-item"
-                    *ngFor="let item of failedMasterList">
-                    {{ item }}
-                  </li>
-                </ul>
-              </section>
-
-              <section
-                *ngIf="failedMasterList && failedMasterList.length === 0"
-                class="download-success">
-                <h4>
-                  {{
-                    current_language_set?.coreComponents
-                      ?.dataDownloadedSuccessfully
-                  }}
-                  <span class="material-icons">done</span>
-                </h4>
-              </section>
+            <div
+              *ngIf="syncTableGroupList.length > 0"
+              class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-border px-2 pt-4 text-sm text-muted-foreground">
+              <span class="inline-flex items-center gap-1.5">
+                <span class="size-3 rounded-sm bg-info"></span>
+                {{ current_language_set?.coreComponents?.pendingForDataSYNC }}
+              </span>
+              <span class="inline-flex items-center gap-1.5">
+                <span class="size-3 rounded-sm bg-warning"></span>
+                {{ current_language_set?.coreComponents?.partialDataSync }}
+              </span>
+              <span class="inline-flex items-center gap-1.5">
+                <span class="size-3 rounded-sm bg-destructive"></span>
+                {{ current_language_set?.coreComponents?.errorForDataSync }}
+              </span>
+              <span class="inline-flex items-center gap-1.5">
+                <span class="size-3 rounded-sm bg-success"></span>
+                {{ current_language_set?.coreComponents?.dataSynced }}
+              </span>
             </div>
-          </mat-drawer-container>
-        </mat-tab>
-        <mat-tab label="Generate BeneficiaryID">
-          <div class="col-12" style="width: 99%; padding-left: 12px">
-            <!-- automatic BenID download (StopTB laptops only; hidden when the feature is off) -->
-            <mat-card
-              *ngIf="autoTopUp?.enabled"
-              id="autoBenIdStatus"
-              style="margin-top: 10px"
-              [style.border-left]="
-                '6px solid ' +
-                (autoTopUpState === 'OK'
-                  ? '#2e7d32'
-                  : autoTopUpState === 'WAITING'
-                    ? '#ef6c00'
-                    : '#c62828')
-              ">
-              <h4>Automatic BenID download</h4>
-              <div *ngIf="autoTopUpState === 'OK'">
-                Active. {{ autoTopUp.poolCount }} BeneficiaryIDs available on
-                this laptop<span *ngIf="autoTopUp.lastTopUpAt"
-                  >, last download
-                  {{ autoTopUp.lastTopUpAt | date: 'dd-MM-yyyy HH:mm' }} (+{{
-                    autoTopUp.lastTopUpCount
-                  }})</span
-                >.
-              </div>
-              <div *ngIf="autoTopUpState === 'WAITING'">
-                Waiting for internet. {{ autoTopUp.poolCount }} BeneficiaryIDs
-                available; more are downloaded automatically once the central
-                server is reachable.
-              </div>
-              <div *ngIf="autoTopUpState === 'ACTION'">
+          </z-card-content>
+        </z-card>
+      </div>
+    </z-tab>
+
+    <!-- Tab 2 — Data Download -->
+    <z-tab label="Data Download">
+      <div class="flex flex-col items-center gap-6 pt-6">
+        <button
+          z-button
+          type="button"
+          (click)="syncDownloadData()"
+          [disabled]="showProgressBar">
+          <ng-icon name="lucideDownload"></ng-icon>
+          {{ current_language_set?.coreComponents?.download }}
+        </button>
+
+        <div
+          *ngIf="showProgressBar"
+          class="h-4 w-full max-w-md overflow-hidden rounded-full bg-muted">
+          <div
+            class="flex h-full items-center justify-center bg-primary text-[0.625rem] font-medium text-primary-foreground transition-all"
+            role="progressbar"
+            [style.width.%]="progressValue"
+            [attr.aria-valuenow]="progressValue"
+            aria-valuemin="0"
+            aria-valuemax="100">
+            {{ progressValue }}%
+          </div>
+        </div>
+
+        <section
+          *ngIf="failedMasterList && failedMasterList.length > 0"
+          class="w-full max-w-md">
+          <p class="mb-1 text-sm font-semibold text-destructive">
+            {{ current_language_set?.coreComponents?.failedMasters }} :
+          </p>
+          <ul class="m-0 list-none space-y-1 p-0 text-sm">
+            <li
+              *ngFor="let item of failedMasterList"
+              class="rounded-md border border-border px-2 py-1">
+              {{ item }}
+            </li>
+          </ul>
+        </section>
+
+        <div
+          *ngIf="failedMasterList && failedMasterList.length === 0"
+          class="inline-flex items-center gap-1.5 text-sm font-medium text-success">
+          <ng-icon name="lucideCheck" size="18"></ng-icon>
+          {{ current_language_set?.coreComponents?.dataDownloadedSuccessfully }}
+        </div>
+      </div>
+    </z-tab>
+
+    <!-- Tab 3 — Generate BeneficiaryID -->
+    <z-tab label="Generate BeneficiaryID">
+      <div class="space-y-6 pt-6">
+        <!-- automatic BenID download (StopTB laptops only; hidden when the feature is off) -->
+        <z-card
+          *ngIf="autoTopUp?.enabled"
+          id="autoBenIdStatus"
+          class="border-l-[6px]"
+          [class.border-l-success]="autoTopUpState === 'OK'"
+          [class.border-l-warning]="autoTopUpState === 'WAITING'"
+          [class.border-l-destructive]="autoTopUpState === 'ACTION'">
+          <z-card-header>
+            <z-card-title>Automatic BenID download</z-card-title>
+          </z-card-header>
+          <z-card-content class="space-y-2 text-sm">
+            <p *ngIf="autoTopUpState === 'OK'" class="m-0">
+              Active. {{ autoTopUp.poolCount }} BeneficiaryIDs available on this
+              laptop<span *ngIf="autoTopUp.lastTopUpAt"
+                >, last download
+                {{ autoTopUp.lastTopUpAt | date: 'dd-MM-yyyy HH:mm' }} (+{{
+                  autoTopUp.lastTopUpCount
+                }})</span
+              >.
+            </p>
+            <p *ngIf="autoTopUpState === 'WAITING'" class="m-0">
+              Waiting for internet. {{ autoTopUp.poolCount }} BeneficiaryIDs
+              available; more are downloaded automatically once the central
+              server is reachable.
+            </p>
+            <div *ngIf="autoTopUpState === 'ACTION'" class="space-y-3">
+              <p class="m-0">
                 {{
                   autoTopUp.centralConnection === 'PASSWORD_MISMATCH'
                     ? 'This laptop could not connect to the central server: the password does not match the central password.'
                     : 'This laptop is not connected to the central server yet.'
                 }}
                 Log in to Data Sync with your central password to reconnect.
-                <div style="margin-top: 8px">
-                  <button
-                    mat-raised-button
-                    color="primary"
-                    type="button"
-                    id="reconnectCentral"
-                    (click)="reconnectToCentral()">
-                    Reconnect to central
-                  </button>
-                </div>
-              </div>
-              <div
-                *ngIf="
-                  autoTopUp.poolCount >= 0 &&
-                  autoTopUp.poolCount < autoTopUp.lowerLimit
-                "
-                id="lowBenIdWarning"
-                style="margin-top: 8px; color: #c62828">
-                BeneficiaryIDs are running low ({{ autoTopUp.poolCount }} left).
-                Keep this laptop connected to the internet so it can download
-                more.
-              </div>
-            </mat-card>
-            <section
-              [formGroup]="generateBenIDForm"
-              style="margin-top: 10px"
-              class="row">
-              <div class="col-6">
-                <mat-card style="min-height: 240px">
-                  <h4 style="text-align: center">Check BenID Availability</h4>
-                  <div class="col-md-12 div-align">
-                    <button
-                      mat-raised-button
-                      color="primary"
-                      class="mat_blue"
-                      (click)="checkBenIDAvailability()">
-                      Check BenID
-                    </button>
-                  </div>
-                  <div class="col-md-12 div-align" *ngIf="benID_Count">
-                    <span
-                      >Available BeneficiaryID Count: {{ benID_Count }}</span
-                    >
-                  </div>
-                </mat-card>
-              </div>
-              <div class="col-6">
-                <mat-card style="min-height: 240px">
-                  <h4 style="text-align: center">Generate BenID</h4>
-                  <div
-                    class="col-12 row container-fluid"
-                    style="margin-top: 20px; padding-left: 60px">
-                    <div class="col-6">
-                      <mat-form-field style="width: 100%">
-                        <mat-label class="mat-label-text"
-                          >BenID Range</mat-label
-                        >
-                        <mat-select
-                          class=""
-                          [disabled]="!benID_Count"
-                          name="benID_Range"
-                          formControlName="benID_Range"
-                          required>
-                          <mat-option value="1000">1000</mat-option>
-                          <mat-option value="2000">2000</mat-option>
-                          <mat-option value="3000">3000</mat-option>
-                          <mat-option value="4000">4000</mat-option>
-                          <mat-option value="5000">5000</mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-                    <div class="col-6">
-                      <button
-                        mat-raised-button
-                        color="primary"
-                        style="float: left; margin-top: 10px; margin-left: 45px"
-                        [disabled]="!generateBenIDForm.valid"
-                        class="pull-right mat_blue"
-                        (click)="
-                          generateBenID(
-                            generateBenIDForm.controls['benID_Range'].value
-                          )
-                        ">
-                        Generate BenID
-                      </button>
-                    </div>
-                  </div>
-                </mat-card>
-              </div>
-            </section>
-          </div>
-        </mat-tab>
-        <!-- automatic Data Sync (StopTB laptops only; hidden when the feature is off) -->
-        <mat-tab label="Automatic Sync" *ngIf="autoSync">
-          <div class="m-t-20" style="padding: 0 20px" id="autoSyncStatus">
-            <div style="text-align: end">
+              </p>
               <button
-                mat-raised-button
-                color="primary"
-                class="mat_blue"
-                id="refreshAutoSync"
-                (click)="loadAutoSyncStatus()">
-                Refresh
+                z-button
+                type="button"
+                id="reconnectCentral"
+                (click)="reconnectToCentral()">
+                Reconnect to central
               </button>
             </div>
-            <h4>Automatic upload and master download</h4>
-            <p>
+            <p
+              *ngIf="
+                autoTopUp.poolCount >= 0 &&
+                autoTopUp.poolCount < autoTopUp.lowerLimit
+              "
+              id="lowBenIdWarning"
+              class="m-0 text-destructive">
+              BeneficiaryIDs are running low ({{ autoTopUp.poolCount }} left).
+              Keep this laptop connected to the internet so it can download
+              more.
+            </p>
+          </z-card-content>
+        </z-card>
+
+        <form
+          [formGroup]="generateBenIDForm"
+          class="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <z-card>
+            <z-card-header>
+              <z-card-title>Check BenID Availability</z-card-title>
+              <z-card-description>
+                Check how many Beneficiary IDs are available on this van.
+              </z-card-description>
+            </z-card-header>
+            <z-card-content class="flex flex-col items-center gap-4">
+              <button z-button type="button" (click)="checkBenIDAvailability()">
+                Check BenID
+              </button>
+              <p *ngIf="benID_Count" class="text-sm text-muted-foreground">
+                Available BeneficiaryID Count:
+                <span class="font-semibold text-foreground">{{
+                  benID_Count
+                }}</span>
+              </p>
+            </z-card-content>
+          </z-card>
+
+          <z-card>
+            <z-card-header>
+              <z-card-title>Generate BenID</z-card-title>
+              <z-card-description>
+                Select a range and generate new Beneficiary IDs.
+              </z-card-description>
+            </z-card-header>
+            <z-card-content class="flex flex-col gap-4">
+              <div class="flex flex-col gap-2">
+                <label
+                  class="text-sm font-medium text-foreground"
+                  for="benID_Range">
+                  BenID Range
+                </label>
+                <z-select
+                  id="benID_Range"
+                  class="w-full"
+                  formControlName="benID_Range"
+                  [zDisabled]="!benID_Count"
+                  zPlaceholder="Select range">
+                  <z-select-item [zValue]="'1000'">1000</z-select-item>
+                  <z-select-item [zValue]="'2000'">2000</z-select-item>
+                  <z-select-item [zValue]="'3000'">3000</z-select-item>
+                  <z-select-item [zValue]="'4000'">4000</z-select-item>
+                  <z-select-item [zValue]="'5000'">5000</z-select-item>
+                </z-select>
+              </div>
+              <div>
+                <button
+                  z-button
+                  type="button"
+                  [disabled]="!generateBenIDForm.valid"
+                  (click)="
+                    generateBenID(
+                      generateBenIDForm.controls['benID_Range'].value
+                    )
+                  ">
+                  Generate BenID
+                </button>
+              </div>
+            </z-card-content>
+          </z-card>
+        </form>
+      </div>
+    </z-tab>
+
+    <!-- Tab 4 — Automatic Sync (StopTB laptops only; hidden when the feature is off) -->
+    <z-tab *ngIf="autoSync" label="Automatic Sync">
+      <div class="space-y-6 pt-6" id="autoSyncStatus">
+        <z-card>
+          <z-card-header class="flex flex-row items-start justify-between">
+            <div class="flex flex-col gap-1.5">
+              <z-card-title>Automatic upload and master download</z-card-title>
+            </div>
+            <button
+              z-button
+              zType="outline"
+              type="button"
+              id="refreshAutoSync"
+              (click)="loadAutoSyncStatus()">
+              <ng-icon name="lucideRefreshCw"></ng-icon>
+              Refresh
+            </button>
+          </z-card-header>
+          <z-card-content class="space-y-2 text-sm">
+            <p class="m-0">
               Last upload:
-              <b>{{
+              <span class="font-semibold text-foreground">{{
                 autoSync.lastUploadAt
                   ? (autoSync.lastUploadAt | date: 'dd-MM-yyyy HH:mm')
                   : 'not yet'
-              }}</b>
-              <span *ngIf="autoSync.lastUploadResult">
+              }}</span>
+              <span
+                *ngIf="autoSync.lastUploadResult"
+                class="text-muted-foreground">
                 ({{ autoSync.lastUploadResult }})</span
               >
             </p>
-            <p>
+            <p class="m-0">
               Last master download:
-              <b>{{
+              <span class="font-semibold text-foreground">{{
                 autoSync.lastMasterDownloadAt
                   ? (autoSync.lastMasterDownloadAt | date: 'dd-MM-yyyy HH:mm')
                   : 'not yet'
-              }}</b>
+              }}</span>
             </p>
-            <p *ngIf="autoSync.lastError" style="color: #c62828">
+            <p *ngIf="autoSync.lastError" class="m-0 text-destructive">
               {{ autoSync.lastError }}
             </p>
+          </z-card-content>
+        </z-card>
 
-            <h4 class="m-t-20">Records central did not accept</h4>
-            <p *ngIf="!autoSync.failedRows">
+        <z-card>
+          <z-card-header>
+            <z-card-title>Records central did not accept</z-card-title>
+            <z-card-description *ngIf="!autoSync.failedRows">
               None. All uploaded records were accepted by central.
-            </p>
-            <div *ngIf="autoSync.failedRows">
-              <p>
-                {{ autoSync.failedRows }} record(s) are sent again on every upload
-                until central accepts them. Share this list with the administrator.
-              </p>
-              <table class="table table-bordered" id="syncFailures">
-                <thead>
-                  <tr>
-                    <th>Table</th>
-                    <th>Reason</th>
-                    <th>Records</th>
-                    <th>Last tried</th>
+            </z-card-description>
+            <z-card-description *ngIf="autoSync.failedRows">
+              {{ autoSync.failedRows }} record(s) are sent again on every upload
+              until central accepts them. Share this list with the
+              administrator.
+            </z-card-description>
+          </z-card-header>
+          <z-card-content *ngIf="autoSync.failedRows" class="p-2">
+            <div class="w-full overflow-x-auto">
+              <table
+                z-table
+                id="syncFailures"
+                aria-label="Records central did not accept">
+                <thead z-table-header>
+                  <tr z-table-row>
+                    <th z-table-head>Table</th>
+                    <th z-table-head>Reason</th>
+                    <th z-table-head>Records</th>
+                    <th z-table-head>Last tried</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr *ngFor="let f of autoSync.failures">
-                    <td>{{ f.tableName }}</td>
-                    <td>{{ f.reason }}</td>
-                    <td>{{ f.failedRows }}</td>
-                    <td>{{ f.lastTried }}</td>
+                <tbody z-table-body>
+                  <tr z-table-row *ngFor="let f of autoSync.failures">
+                    <td z-table-cell>{{ f.tableName }}</td>
+                    <td z-table-cell>{{ f.reason }}</td>
+                    <td z-table-cell>{{ f.failedRows }}</td>
+                    <td z-table-cell>{{ f.lastTried }}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-          </div>
-        </mat-tab>
-        <mat-tab label="Down Sync (Central to Local)">
-          <div class="col-12 down-sync-tab">
-            <section class="row down-sync-actions">
-              <div class="col-12 div-align">
-                <button
-                  type="button"
-                  mat-raised-button
-                  color="primary"
-                  class="btn-green mat_blue"
-                  (click)="startDownSync()"
-                  [disabled]="downSyncInProgress || showProgressBar">
-                  Start Down Sync
-                </button>
-              </div>
-            </section>
+          </z-card-content>
+        </z-card>
+      </div>
+    </z-tab>
 
-            <section
-              class="row"
-              *ngIf="downSyncGroups && downSyncGroups.length > 0">
-              <div class="col-12">
-                <div
-                  class="ds-conflict-note"
-                  *ngIf="downSyncStatus && downSyncStatus.conflictsPending">
-                  <span class="material-icons">compare_arrows</span>
-                  <span>
-                    <strong>{{ downSyncStatus.conflicts }}</strong>
-                    {{
-                      downSyncStatus.conflicts === 1
-                        ? 'record was'
-                        : 'records were'
-                    }}
-                    changed both here and at central. Nothing on this device was
-                    overwritten - review each one and save the version you want
-                    to keep.
-                  </span>
-                </div>
-                <section
-                  class="table-responsive"
-                  style="padding-bottom: 20px !important; border: unset">
-                  <table
-                    aria-describedby="downsyncresults"
-                    class="table table-striped">
-                    <thead>
-                      <tr>
-                        <th id="dsEmpty">&nbsp;</th>
-                        <th id="dsGroupName">Group</th>
-                        <th id="dsGroupTables">Tables</th>
-                        <th id="dsGroupRecords">Failed records</th>
-                        <th id="dsGroupConflicts">Conflicts</th>
-                        <th id="dsGroupStatus">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let g of downSyncGroups" class="table-hover">
-                        <td>
-                          <div
-                            [ngClass]="{
-                              visitStatus: true,
-                              'p-f-c': g.status === 'partial',
-                              'cf-d': g.status === 'conflict',
-                              'c-d': g.status === 'success',
-                              't-d': g.status === 'failed',
-                            }"></div>
-                        </td>
-                        <td>{{ g.groupName }}</td>
-                        <td>{{ g.succeeded }} / {{ g.total }}</td>
-                        <td>
-                          {{ g.failedRecords > 0 ? g.failedRecords : '-' }}
-                        </td>
-                        <td>
-                          <span
-                            class="ds-conflict-count"
-                            *ngIf="g.conflicts > 0"
-                            >{{ g.conflicts }}</span
-                          >
-                          <span *ngIf="!g.conflicts">-</span>
-                        </td>
-                        <td>
-                          <span
-                            class="material-icons"
-                            style="color: #eaaa26"
-                            *ngIf="g.status === 'partial'"
-                            >indeterminate_check_box</span
-                          >
-                          <span
-                            class="material-icons"
-                            style="color: #e07b00"
-                            *ngIf="g.status === 'conflict'"
-                            title="Delivered, but a record needs review"
-                            >compare_arrows</span
-                          >
-                          <span
-                            class="material-icons"
-                            style="color: #43760f"
-                            *ngIf="g.status === 'success'"
-                            >check_box</span
-                          >
-                          <span
-                            class="material-icons"
-                            style="color: #b22222"
-                            *ngIf="g.status === 'failed'"
-                            >indeterminate_check_box</span
-                          >
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </section>
-              </div>
-            </section>
+    <!-- Tab 5 — Down Sync (Central to Local) -->
+    <z-tab label="Down Sync (Central to Local)">
+      <div class="space-y-6 pt-6">
+        <div class="flex justify-center">
+          <button
+            z-button
+            type="button"
+            (click)="startDownSync()"
+            [disabled]="downSyncInProgress || showProgressBar">
+            <ng-icon name="lucideDownload"></ng-icon>
+            Start Down Sync
+          </button>
+        </div>
+
+        <ng-container *ngIf="downSyncGroups && downSyncGroups.length > 0">
+          <div
+            *ngIf="downSyncStatus && downSyncStatus.conflictsPending"
+            class="flex items-start gap-2 rounded-lg border border-warning bg-warning/10 px-4 py-3 text-sm text-foreground">
+            <ng-icon
+              name="lucideArrowLeftRight"
+              size="18"
+              class="mt-0.5 flex-none text-warning"></ng-icon>
+            <span>
+              <strong>{{ downSyncStatus.conflicts }}</strong>
+              {{
+                downSyncStatus.conflicts === 1 ? 'record was' : 'records were'
+              }}
+              changed both here and at central. Nothing on this device was
+              overwritten - review each one and save the version you want to
+              keep.
+            </span>
           </div>
-        </mat-tab>
-        <mat-tab label="Inventory Data Download">
-          <mat-drawer-container class="example-container m-t-10" autosize>
-            <div class="example-sidenav-content">
-              <button
-                type="button"
-                mat-raised-button
-                color="primary"
-                class="btn-green m-b-20 mat_blue"
-                (click)="inventorySyncDataDownload()"
-                [disabled]="showProgressBar">
-                Download
-              </button>
-            </div>
-          </mat-drawer-container>
-        </mat-tab>
-      </mat-tab-group>
-    </div>
-  </div>
+
+          <z-card>
+            <z-card-content class="p-2">
+              <div class="w-full overflow-x-auto">
+                <table z-table aria-label="Down sync results">
+                  <thead z-table-header>
+                    <tr z-table-row>
+                      <th z-table-head class="w-1" id="dsEmpty">
+                        <span class="sr-only">Status</span>
+                      </th>
+                      <th z-table-head id="dsGroupName">Group</th>
+                      <th z-table-head id="dsGroupTables">Tables</th>
+                      <th z-table-head id="dsGroupRecords">Failed records</th>
+                      <th z-table-head id="dsGroupConflicts">Conflicts</th>
+                      <th z-table-head id="dsGroupStatus">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody z-table-body>
+                    <tr z-table-row *ngFor="let g of downSyncGroups">
+                      <td
+                        z-table-cell
+                        class="border-l-[3px]"
+                        [class.border-l-warning]="
+                          g.status === 'partial' || g.status === 'conflict'
+                        "
+                        [class.border-l-success]="g.status === 'success'"
+                        [class.border-l-destructive]="g.status === 'failed'"
+                        [class.border-l-transparent]="!g.status">
+                        &nbsp;
+                      </td>
+                      <td z-table-cell>{{ g.groupName }}</td>
+                      <td z-table-cell>{{ g.succeeded }} / {{ g.total }}</td>
+                      <td z-table-cell>
+                        {{ g.failedRecords > 0 ? g.failedRecords : '-' }}
+                      </td>
+                      <td z-table-cell>
+                        <span
+                          *ngIf="g.conflicts > 0"
+                          class="font-semibold text-warning"
+                          >{{ g.conflicts }}</span
+                        >
+                        <span *ngIf="!g.conflicts">-</span>
+                      </td>
+                      <td z-table-cell>
+                        <ng-icon
+                          *ngIf="g.status === 'partial'"
+                          class="text-warning"
+                          name="lucideSquareMinus"
+                          size="20"
+                          aria-label="Partially synced"></ng-icon>
+                        <ng-icon
+                          *ngIf="g.status === 'conflict'"
+                          class="text-warning"
+                          name="lucideArrowLeftRight"
+                          size="20"
+                          title="Delivered, but a record needs review"
+                          aria-label="Delivered, but a record needs review"></ng-icon>
+                        <ng-icon
+                          *ngIf="g.status === 'success'"
+                          class="text-success"
+                          name="lucideCircleCheckBig"
+                          size="20"
+                          aria-label="Synced"></ng-icon>
+                        <ng-icon
+                          *ngIf="g.status === 'failed'"
+                          class="text-destructive"
+                          name="lucideCircleAlert"
+                          size="20"
+                          aria-label="Failed"></ng-icon>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </z-card-content>
+          </z-card>
+        </ng-container>
+      </div>
+    </z-tab>
+
+    <!-- Tab 6 — Inventory Data Download -->
+    <z-tab label="Inventory Data Download">
+      <div class="flex justify-center pt-6">
+        <button
+          z-button
+          type="button"
+          (click)="inventorySyncDataDownload()"
+          [disabled]="showProgressBar">
+          <ng-icon name="lucideDownload"></ng-icon>
+          Download
+        </button>
+      </div>
+    </z-tab>
+  </z-tab-group>
 </div>

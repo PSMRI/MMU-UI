@@ -24,20 +24,46 @@ import { Component, OnInit, Injector, DoCheck } from '@angular/core';
 import { Router } from '@angular/router';
 
 import * as CryptoJS from 'crypto-js';
-import { FormBuilder, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from '../set-language.component';
 import { ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
 import { DataSyncService } from '../../../data-sync/shared/service/data-sync.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideUser,
+  lucideLock,
+  lucideEye,
+  lucideEyeOff,
+  lucideX,
+} from '@ng-icons/lucide';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { StringValidatorDirective } from '../../directives/stringValidator.directive';
 import { CentralAuthService } from '../../services/central-auth.service';
 
 @Component({
   selector: 'app-data-sync-login',
   templateUrl: './data-sync-login.component.html',
-  styleUrls: ['./data-sync-login.component.css'],
   providers: [DataSyncService],
+  viewProviders: [
+    provideIcons({ lucideUser, lucideLock, lucideEye, lucideEyeOff, lucideX }),
+  ],
+  imports: [
+    NgIf,
+    NgIcon,
+    ReactiveFormsModule,
+    ...cardImports,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    StringValidatorDirective,
+  ],
 })
 export class DataSyncLoginComponent implements OnInit, DoCheck {
   dynamictype = 'password';
@@ -94,8 +120,12 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.dialogRef = this.injector.get(MatDialogRef, null);
-    this.data = this.injector.get(MAT_DIALOG_DATA, null);
+    this.dialogRef = this.injector.get(ZardDialogRef, null);
+    // Preserve the original MatDialog disableClose:true behaviour.
+    if (this.dialogRef) {
+      this.dialogRef.disableClose = true;
+    }
+    this.data = this.injector.get(Z_MODAL_DATA, null);
   }
 
   ngDoCheck() {
@@ -107,12 +137,8 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
 
-  showPWD() {
-    this.dynamictype = 'text';
-  }
-
-  hidePWD() {
-    this.dynamictype = 'password';
+  togglePWD() {
+    this.dynamictype = this.dynamictype === 'text' ? 'password' : 'text';
   }
 
   get keySize() {

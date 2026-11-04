@@ -26,6 +26,8 @@ import {
   FormArray,
   FormBuilder,
   FormGroup,
+  ReactiveFormsModule,
+  FormsModule,
 } from '@angular/forms';
 import { MasterdataService, DoctorService } from '../../../../shared/services';
 import { ActivatedRoute } from '@angular/router';
@@ -33,11 +35,31 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { GeneralUtils } from 'src/app/app-modules/nurse-doctor/shared/utility';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf, NgFor } from '@angular/common';
+import { StringValidatorDirective } from '../../../../../core/directives/stringValidator.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucidePlus, lucideX } from '@ng-icons/lucide';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 @Component({
   selector: 'app-ncd-care-diagnosis',
   templateUrl: './ncd-care-diagnosis.component.html',
-  styleUrls: ['./ncd-care-diagnosis.component.css'],
+  viewProviders: [provideIcons({ lucidePlus, lucideX })],
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    NgIf,
+    NgFor,
+    NgIcon,
+    StringValidatorDirective,
+    ...ZardSelectImports,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ZardButtonComponent,
+  ],
 })
 export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
   utils = new GeneralUtils(this.fb, this.sessionstorage);
@@ -66,6 +88,15 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
   wantMore: boolean[] = [];
   pageByIndex: number[] = [];
   lastQueryByIndex: string[] = [];
+
+  // Index of the diagnosis row whose suggestion panel is currently open.
+  openDiagnosisIndex: number | null = null;
+
+  // Per-row display text for the diagnosis autocomplete input. Decoupled from
+  // the FormArray control (which keeps its original object/string value) so the
+  // input shows the diagnosis term, mirroring the old mat-autocomplete
+  // [displayWith] behaviour without changing the stored value type.
+  diagnosisDisplay: string[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -173,6 +204,8 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
           term: savedDiagnosisData[i].term,
           conceptID: savedDiagnosisData[i].conceptID,
         });
+        // Seed the decoupled display text for view mode.
+        this.diagnosisDisplay[i] = savedDiagnosisData[i].term;
         (<FormGroup>diagnosisArrayList.at(i)).controls[
           'viewProvisionalDiagnosisProvided'
         ].disable();
@@ -211,18 +244,22 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
             ] as FormArray;
             if (diagnosisListForm.length > 1) {
               diagnosisListForm.removeAt(index);
+              this.diagnosisDisplay.splice(index, 1);
             } else {
               diagnosisListForm.removeAt(index);
               diagnosisListForm.push(this.utils.initProvisionalDiagnosisList());
+              this.diagnosisDisplay = [''];
             }
           }
         });
     } else {
       if (diagnosisListForm.length > 1) {
         diagnosisListForm.removeAt(index);
+        this.diagnosisDisplay.splice(index, 1);
       } else {
         diagnosisListForm.removeAt(index);
         diagnosisListForm.push(this.utils.initProvisionalDiagnosisList());
+        this.diagnosisDisplay = [''];
       }
     }
   }
@@ -255,6 +292,55 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
     this.generalDiagnosisForm.controls['ncdScreeningConditionArray'].patchValue(
       value
     );
+  }
+
+  // --- Zard control adapters. z-select is string-valued, but the reactive-form
+  // controls keep their original string-array / object values so the submission
+  // contract is unchanged. ---
+
+  // Multi-select of screening-condition strings. z-select emits the selected
+  // string[]; feed it into the original handler via the { value } shape it reads.
+  onNcdScreeningConditionChange(value: string | string[]): void {
+    let selected: string[];
+    if (Array.isArray(value)) {
+      selected = value;
+    } else if (value) {
+      selected = [value];
+    } else {
+      selected = [];
+    }
+    this.changeNcdScreeningCondition(selected, { value: selected });
+  }
+
+  // Type-of-NCD select is object-valued in the form; map the emitted string
+  // (ncdCareType label) back to the master object and keep it in the control.
+  onNcdCareTypeChange(value: string | string[]): void {
+    const label = Array.isArray(value) ? value[0] : value;
+    const match = (this.ncdCareTypes || []).find(
+      (item: any) => item.ncdCareType === label
+    );
+    this.generalDiagnosisForm.controls['ncdCareType'].setValue(match ?? null);
+    this.generalDiagnosisForm.controls['ncdCareType'].markAsDirty();
+  }
+
+  // Close the suggestion panel after a click on an option has had a chance to
+  // commit (mousedown fires before blur).
+  onDiagnosisBlur(index: number): void {
+    setTimeout(() => {
+      if (this.openDiagnosisIndex === index) {
+        this.openDiagnosisIndex = null;
+      }
+    });
+  }
+
+  // Native-scroll adapter replacing appAutocompleteScroller's (nearEnd): when
+  // the suggestion panel is scrolled near its bottom, fetch the next page.
+  onDiagnosisPanelScroll(index: number, panelEl: HTMLElement): void {
+    const nearEnd =
+      panelEl.scrollTop + panelEl.clientHeight >= panelEl.scrollHeight - 24;
+    if (nearEnd) {
+      this.onAutoNearEnd(index);
+    }
   }
 
   onDiagnosisInputKeyup(value: string, index: number) {
@@ -295,6 +381,10 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck {
       conceptID: selected?.conceptID || null,
       term: selected?.term || null,
     });
+
+    // Keep the visible input text in sync (mirrors old [displayWith]).
+    this.diagnosisDisplay[index] = this.displayDiagnosis(selected);
+    this.openDiagnosisIndex = null;
   }
 
   onPanelReady(index: number, panelEl: HTMLElement) {

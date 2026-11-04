@@ -44,7 +44,7 @@ export class CaptchaComponent implements AfterViewInit, OnDestroy {
         });
       }
     } catch (error) {
-
+      // Ignore Turnstile render errors; the widget retries on its own.
     }
   }
 

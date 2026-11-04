@@ -1,18 +1,16 @@
-<div class="row m-t-10 p-t-30" [formGroup]="diseaseFormsGroup">
-  <div class="col-xs-3 col-sm-3 col-md-12 col-lg-12">
-    <div class="checkbox-group" formArrayName="diseaseFormsArray">
-      <ng-container
-        *ngFor="let item of getDiseaseFormArray(); let i = index"
-        [formGroupName]="i">
-        <mat-checkbox
-          formControlName="selected"
-          class="checkbox"
-          color="primary"
-          (change)="checked($event, item)"
-          [disabled]="isDoctor">
-          {{ item.value.diseaseName }}
-        </mat-checkbox>
-      </ng-container>
-    </div>
+<div class="mt-2.5 pt-8" [formGroup]="diseaseFormsGroup">
+  <div
+    class="flex flex-wrap content-center items-center gap-x-5 gap-y-1.5"
+    formArrayName="diseaseFormsArray">
+    <ng-container
+      *ngFor="let item of getDiseaseFormArray(); let i = index"
+      [formGroupName]="i">
+      <z-checkbox
+        formControlName="selected"
+        (zCheckedChange)="checked($event, item)"
+        [disabled]="isDoctor">
+        {{ item.value.diseaseName }}
+      </z-checkbox>
+    </ng-container>
   </div>
 </div>

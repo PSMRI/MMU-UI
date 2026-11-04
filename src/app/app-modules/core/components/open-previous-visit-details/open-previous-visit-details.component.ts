@@ -20,16 +20,31 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { HttpServiceService } from '../../services/http-service.service';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { SetLanguageComponent } from '../set-language.component';
 import { DoctorService } from 'src/app/app-modules/nurse-doctor/shared/services';
+import { ZardDialogRef } from 'Common-UI/v2/ui/dialog';
+import { NgIf, NgFor, DatePipe } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
 
 @Component({
   selector: 'app-open-previous-visit-details',
+  standalone: true,
   templateUrl: './open-previous-visit-details.component.html',
-  styleUrls: ['./open-previous-visit-details.component.css'],
+  imports: [
+    NgIf,
+    NgFor,
+    DatePipe,
+    NgIcon,
+    ZardButtonComponent,
+    ...ZardTableImports,
+  ],
+  viewProviders: [provideIcons({ lucideX })],
 })
 export class OpenPreviousVisitDetailsComponent implements OnInit {
   currentLanguageSet: any;
@@ -41,8 +56,13 @@ export class OpenPreviousVisitDetailsComponent implements OnInit {
   constructor(
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
-    private confirmationService: ConfirmationService
-  ) {}
+    private readonly confirmationService: ConfirmationService,
+    private readonly cdr: ChangeDetectorRef,
+    public dialogRef: ZardDialogRef<OpenPreviousVisitDetailsComponent>
+  ) {
+    // Preserve the original MatDialog disableClose:true behaviour.
+    this.dialogRef.disableClose = true;
+  }
   ngOnInit(): void {
     this.assignSelectedLanguage();
     this.loadPreviousVisitDetails();
@@ -89,6 +109,7 @@ export class OpenPreviousVisitDetailsComponent implements OnInit {
           if (res.statusCode === 200 && res.data !== null) {
             this.previousVisitData[i]['benPreviousData'] = res.data;
             this.filteredHistory = res.data;
+            this.cdr.detectChanges();
           }
         });
       }
@@ -97,6 +118,9 @@ export class OpenPreviousVisitDetailsComponent implements OnInit {
       page: this.previousHistoryActivePage,
       itemsPerPage: this.previousHistoryRowsPerPage,
     });
+    // The dialog's projected view doesn't re-check on the async HTTP response,
+    // so it kept showing "No visit found" even after the data loaded. Force it.
+    this.cdr.detectChanges();
   }
 
   previousHistoryPagedList: any = [];

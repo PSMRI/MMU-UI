@@ -30,8 +30,14 @@ import {
   OnDestroy,
   DoCheck,
   OnChanges,
+  ViewContainerRef,
 } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  ReactiveFormsModule,
+  FormsModule,
+} from '@angular/forms';
 import { Observable, Subscription, mergeMap, of } from 'rxjs';
 import {
   NurseService,
@@ -45,17 +51,40 @@ import {
   BeneficiaryDetailsService,
   ConfirmationService,
 } from '../../core/services';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
-import { PreviousDetailsComponent } from '../../core/components/previous-details/previous-details.component';
-import { MatTableDataSource } from '@angular/material/table';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgFor, NgIf } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory } from '@ng-icons/lucide';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardBadgeComponent } from 'Common-UI/v2/ui/badge';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
 
 @Component({
   selector: 'app-idrs',
   templateUrl: './idrs.component.html',
-  styleUrls: ['./idrs.component.css'],
+  viewProviders: [provideIcons({ lucideHistory })],
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    NgFor,
+    NgIf,
+    NgIcon,
+    ZardButtonComponent,
+    ZardBadgeComponent,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
+    ...cardImports,
+    ...ZardTableImports,
+    ...tooltipImports,
+  ],
 })
 export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   @Input()
@@ -95,6 +124,7 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   chronicDisabled: boolean = false;
   chronicData: any;
   revisit: boolean = false;
+  previousDiabetesHistoryLoading = false;
   nurse!: string;
   rev: any = [];
   confirmed: any = [];
@@ -115,14 +145,11 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   IdrsScoreFlagSubscription!: Subscription;
   idrsWaistSubscription!: Subscription;
 
-  // displayedColumns: any = ['sno', 'question', 'answer'];
-
-  // dataSource = new MatTableDataSource<any>();
-
   constructor(
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private route: ActivatedRoute,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private confirmationService: ConfirmationService,
     private idrsScoreService: IdrsscoreService,
     private masterdataService: MasterdataService,
@@ -926,7 +953,9 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
     this.nurseMasterDataSubscription =
       this.masterdataService.nurseMasterData$.subscribe(data => {
         if (data) {
-          this.nurseMasterDataSubscription.unsubscribe();
+          // guard: BehaviorSubject may emit synchronously before the sub is assigned
+          if (this.nurseMasterDataSubscription)
+            this.nurseMasterDataSubscription.unsubscribe();
           this.questions = data.IDRSQuestions;
           if (this.questions !== undefined && this.questions.length > 0) {
             for (const question of this.questions) {
@@ -1031,6 +1060,26 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
       });
     console.log('checking', this.questions1);
   }
+  /**
+   * Maps the stored string answer ('yes'/'no'/null) to the boolean value the
+   * z-radio items carry, so the matching option renders selected. This is a
+   * read-only view mapping — it does not change the stored answer type.
+   */
+  idrsAnswer(q: any): boolean | null {
+    if (q?.answer === 'yes') return true;
+    if (q?.answer === 'no') return false;
+    return null;
+  }
+
+  /**
+   * Bridges the z-radio-group (zChange) output — which emits the selected
+   * boolean — to the original radioChange(question, 'yes'|'no', disease)
+   * handler so downstream logic is unchanged.
+   */
+  onIdrsAnswerChange(q: any, value: unknown, d: any) {
+    this.radioChange(q, value === true ? 'yes' : 'no', d);
+  }
+
   radioChange(q: any, value: any, d: any) {
     this.IDRSChanged.emit(false);
     for (const question of this.questions1) {
@@ -1372,11 +1421,18 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
         .subscribe((res: any) => {});
   }
   getPreviousDiabetesHistory() {
+    // Guard against rapid repeat clicks: each call opens a dialog/alert, so
+    // multiple clicks before the request resolves stacked several modal
+    // backdrops ("screen goes dark / popup disappears"). Ignore clicks while a
+    // request is already in flight; the button is also disabled meanwhile.
+    if (this.previousDiabetesHistoryLoading) return;
+    this.previousDiabetesHistoryLoading = true;
     const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousDiabetesHistory(benRegID, this.visitCategory)
       .subscribe(
         (res: any) => {
+          this.previousDiabetesHistoryLoading = false;
           if (res.statusCode === 200 && res.data !== null) {
             if (res.data.data.length > 0) {
               this.viewPreviousData(res.data);
@@ -1393,6 +1449,7 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
           }
         },
         err => {
+          this.previousDiabetesHistoryLoading = false;
           this.confirmationService.alert(
             this.currentLanguageSet.alerts.info.errorFetchingHistory,
             'error'
@@ -1402,11 +1459,9 @@ export class IdrsComponent implements OnInit, OnDestroy, DoCheck, OnChanges {
   }
 
   viewPreviousData(data: any) {
-    this.dialog.open(PreviousDetailsComponent, {
-      data: {
-        dataList: data,
-        title: this.currentLanguageSet.previousDiabetesHistoryDetails,
-      },
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title: this.currentLanguageSet.previousDiabetesHistoryDetails,
     });
   }
 }

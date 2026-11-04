@@ -27,8 +27,10 @@ import {
   DoCheck,
   OnChanges,
   OnDestroy,
+  AfterViewInit,
+  ViewChild,
 } from '@angular/core';
-import { FormGroup, FormArray } from '@angular/forms';
+import { FormGroup, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { DoctorService } from '../../shared/services/doctor.service';
 import {
   BeneficiaryDetailsService,
@@ -36,15 +38,40 @@ import {
 } from '../../../core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import {
+  ZardAccordionImports,
+  ZardAccordionComponent,
+} from 'Common-UI/v2/ui/accordion';
+import { SignsAndSymptomsComponent } from './signs-and-symptoms/signs-and-symptoms.component';
+import { OralExaminationComponent } from './oral-examination/oral-examination.component';
+import { NgIf } from '@angular/common';
+import { BreastExaminationComponent } from './breast-examination/breast-examination.component';
+import { AbdominalExaminationComponent } from './abdominal-examination/abdominal-examination.component';
+import { GynecologicalExaminationComponent } from './gynecological-examination/gynecological-examination.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { healthicons } from '../../../core/icons/healthicons';
 @Component({
   selector: 'app-cancer-examination',
   templateUrl: './cancer-examination.component.html',
-  styleUrls: ['./cancer-examination.component.css'],
+  viewProviders: [provideIcons(healthicons)],
+  imports: [
+    ReactiveFormsModule,
+    ...ZardAccordionImports,
+    SignsAndSymptomsComponent,
+    OralExaminationComponent,
+    NgIf,
+    BreastExaminationComponent,
+    AbdominalExaminationComponent,
+    GynecologicalExaminationComponent,
+    NgIcon,
+  ],
 })
 export class CancerExaminationComponent
-  implements OnInit, DoCheck, OnChanges, OnDestroy
+  implements OnInit, AfterViewInit, DoCheck, OnChanges, OnDestroy
 {
+  @ViewChild('cancerAccordion')
+  cancerAccordion!: ZardAccordionComponent;
   @Input()
   cancerForm!: FormGroup;
 
@@ -92,6 +119,12 @@ export class CancerExaminationComponent
     this.gynecologicalExaminationForm = this.cancerForm.get(
       'gynecologicalExaminationForm'
     ) as FormGroup;
+  }
+
+  ngAfterViewInit() {
+    // First panel (symptoms) is expanded by default.
+    if (this.cancerAccordion && !this.cancerAccordion.isOpen('symptoms'))
+      this.cancerAccordion.toggle('symptoms');
   }
 
   ngOnChanges() {

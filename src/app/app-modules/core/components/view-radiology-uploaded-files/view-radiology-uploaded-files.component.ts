@@ -22,21 +22,27 @@
 
 import { Component, OnInit, Inject, DoCheck } from '@angular/core';
 import { HttpServiceService } from '../../services/http-service.service';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from '../set-language.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { NgIf, NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-view-radiology-uploaded-files',
   templateUrl: './view-radiology-uploaded-files.component.html',
-  styleUrls: ['./view-radiology-uploaded-files.component.css'],
+  imports: [NgIf, NgFor, NgIcon, ZardButtonComponent, ...tooltipImports],
+  viewProviders: [provideIcons({ lucideX })],
 })
 export class ViewRadiologyUploadedFilesComponent implements OnInit, DoCheck {
   current_language_set: any;
   fileIds = [];
   constructor(
-    @Inject(MAT_DIALOG_DATA) public input: any,
+    @Inject(Z_MODAL_DATA) public input: any,
     public httpServiceService: HttpServiceService,
-    private dialogRef: MatDialogRef<ViewRadiologyUploadedFilesComponent>
+    public dialogRef: ZardDialogRef<ViewRadiologyUploadedFilesComponent>
   ) {}
 
   ngOnInit() {

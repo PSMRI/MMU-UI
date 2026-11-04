@@ -25,6 +25,10 @@ export class HttpServiceService {
   ) {
     const storedLang = localStorage.getItem('appLanguage');
     this.language = storedLang ? JSON.parse(storedLang) : null;
+    // Seed from the persisted language so a fresh (F5) instance has it immediately.
+    if (this.language) {
+      this.appCurrentLanguge.next(this.language);
+    }
   }
 
   fetchLanguageSet() {

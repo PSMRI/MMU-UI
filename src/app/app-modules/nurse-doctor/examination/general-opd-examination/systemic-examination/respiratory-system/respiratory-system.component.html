@@ -1,221 +1,248 @@
-<div class="col-12 m-t-20" [formGroup]="respiratorySystemDataForm">
-  <div class="row">
-    <div class="col-4 box">
-      <mat-form-field class="textarea-full-width">
-        <mat-label>{{
-          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-            ?.respiratoryANC_OPD_PNC?.trachea
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
+<div [formGroup]="respiratorySystemDataForm" class="flex flex-col gap-6">
+  <div class="grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-3">
+    <!-- Trachea -->
+    <z-form-field>
+      <label z-form-label for="trachea">{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+          ?.respiratoryANC_OPD_PNC?.trachea
+      }}</label>
+      <z-form-control>
+        <z-select
+          id="trachea"
+          class="w-full"
           name="trachea"
           formControlName="trachea"
-          (selectionChange)="trackFieldInteraction('Trachea Selection')">
-          <mat-option
+          (zSelectionChange)="trackFieldInteraction('Trachea Selection')">
+          <z-select-item
             *ngFor="let trachea of selectTrachea"
-            [value]="trachea.name">
+            [zValue]="trachea.name">
             {{ trachea.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="clearfix"></div>
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+  </div>
 
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <mat-form-field class="textarea-full-width">
-        <mat-label>{{
-          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-            ?.respiratoryANC_OPD_PNC?.inspection
-        }}</mat-label>
-        <textarea
-          matInput
-          allowText="textAreaValidator"
-          defaultNull
-          matTextareaAutosize
-          name="inspection"
-          formControlName="inspection"
-          maxlength="300"
-          (focus)="trackFieldInteraction('Inspection')"></textarea>
-      </mat-form-field>
-    </div>
-    <div class="clearfix"></div>
+  <!-- Inspection -->
+  <z-form-field>
+    <label z-form-label for="inspection">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+        ?.respiratoryANC_OPD_PNC?.inspection
+    }}</label>
+    <z-form-control>
+      <textarea
+        z-input
+        class="w-full"
+        rows="3"
+        allowText="textAreaValidator"
+        defaultNull
+        name="inspection"
+        id="inspection"
+        formControlName="inspection"
+        maxlength="300"
+        (focus)="trackFieldInteraction('Inspection')"></textarea>
+    </z-form-control>
+  </z-form-field>
 
-    <div class="col-4 box">
-      <label class="control-label" for="respiratorySystem">{{
+  <!-- Signs of respiratory distress -->
+  <div class="flex flex-col gap-2">
+    <label z-form-label for="signsOfRespiratoryDistress">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+        ?.respiratoryANC_OPD_PNC?.signsDistress
+    }}</label>
+    <z-radio-group
+      id="signsOfRespiratoryDistress"
+      name="signsOfRespiratoryDistress"
+      formControlName="signsOfRespiratoryDistress"
+      zOrientation="horizontal"
+      class="gap-6"
+      (zChange)="trackFieldInteraction('Signs Of Respiratory Distress')">
+      <z-radio [value]="'Present'">{{
+        currentLanguageSet?.common?.present
+      }}</z-radio>
+      <z-radio [value]="'Absent'">{{
+        currentLanguageSet?.common?.absent
+      }}</z-radio>
+    </z-radio-group>
+  </div>
+
+  <!-- Palpation -->
+  <z-form-field>
+    <label z-form-label for="palpation">{{
+      currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+        ?.respiratoryANC_OPD_PNC?.palpation
+    }}</label>
+    <z-form-control>
+      <textarea
+        z-input
+        class="w-full"
+        rows="3"
+        allowText="textAreaValidator"
+        defaultNull
+        name="palpation"
+        id="palpation"
+        formControlName="palpation"
+        maxlength="300"
+        (focus)="trackFieldInteraction('Palpation')"></textarea>
+    </z-form-control>
+  </z-form-field>
+
+  <!-- Auscultation: Breath sounds -->
+  <div class="grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-3">
+    <z-form-field>
+      <label z-form-label for="auscultation_BreathSounds">{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-          ?.respiratoryANC_OPD_PNC?.signsDistress
+          ?.respiratoryANC_OPD_PNC?.breathsounds
       }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
-        name="signsOfRespiratoryDistress"
-        formControlName="signsOfRespiratoryDistress"
-        (change)="trackFieldInteraction('Signs Of Respiratory Distress')">
-        <mat-radio-button color="primary" value="Present">{{
-          currentLanguageSet?.common?.present
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" value="Absent">{{
-          currentLanguageSet?.common?.absent
-        }}</mat-radio-button>
-      </mat-radio-group>
-    </div>
-
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <mat-form-field class="textarea-full-width">
-        <mat-label>{{
-          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-            ?.respiratoryANC_OPD_PNC?.palpation
-        }}</mat-label>
-        <textarea
-          matInput
-          allowText="textAreaValidator"
-          defaultNull
-          matTextareaAutosize
-          name="palpation"
-          formControlName="palpation"
-          maxlength="300"
-          (focus)="trackFieldInteraction('Palpation')"></textarea>
-      </mat-form-field>
-    </div>
-
-    <div class="col-4 box">
-      <mat-form-field class="textarea-full-width">
-        <mat-label>{{
-          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-            ?.respiratoryANC_OPD_PNC?.breathsounds
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
+      <z-form-control>
+        <z-select
+          id="auscultation_BreathSounds"
+          class="w-full"
           name="auscultation_BreathSounds"
           formControlName="auscultation_BreathSounds"
-          (selectionChange)="trackFieldInteraction('Breath Sounds Selection')">
-          <mat-option
+          (zSelectionChange)="trackFieldInteraction('Breath Sounds Selection')">
+          <z-select-item
             *ngFor="let breathSound of selectBreathSounds"
-            [value]="breathSound.name">
+            [zValue]="breathSound.name">
             {{ breathSound.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+  </div>
 
-    <div class="col-4 box">
-      <label class="control-label" for="respiratorySystem">{{
+  <!-- Auscultation: Present/Absent findings -->
+  <div class="grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-3">
+    <!-- Stridor -->
+    <div class="flex flex-col gap-2">
+      <label z-form-label for="auscultation_Stridor">{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.respiratoryANC_OPD_PNC?.stridor
       }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
+      <z-radio-group
+        id="auscultation_Stridor"
         name="auscultation_Stridor"
         formControlName="auscultation_Stridor"
-        (change)="trackFieldInteraction('Stridor')">
-        <mat-radio-button color="primary" value="Present">{{
+        zOrientation="horizontal"
+        class="gap-6"
+        (zChange)="trackFieldInteraction('Stridor')">
+        <z-radio [value]="'Present'">{{
           currentLanguageSet?.common?.present
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" value="Absent">{{
+        }}</z-radio>
+        <z-radio [value]="'Absent'">{{
           currentLanguageSet?.common.absent
-        }}</mat-radio-button>
-      </mat-radio-group>
+        }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-4 box">
-      <label class="control-label" for="respiratorySystem">{{
+    <!-- Crepitations -->
+    <div class="flex flex-col gap-2">
+      <label z-form-label for="auscultation_Crepitations">{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.respiratoryANC_OPD_PNC?.crepitations
       }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
+      <z-radio-group
+        id="auscultation_Crepitations"
         name="auscultation_Crepitations"
         formControlName="auscultation_Crepitations"
-        (change)="trackFieldInteraction('Crepitations')">
-        <mat-radio-button color="primary" value="Present">{{
+        zOrientation="horizontal"
+        class="gap-6"
+        (zChange)="trackFieldInteraction('Crepitations')">
+        <z-radio [value]="'Present'">{{
           currentLanguageSet?.common?.present
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" value="Absent">{{
+        }}</z-radio>
+        <z-radio [value]="'Absent'">{{
           currentLanguageSet?.common?.absent
-        }}</mat-radio-button>
-      </mat-radio-group>
+        }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-4 box">
-      <label class="control-label" for="respiratorySystem">{{
+    <!-- Wheezing -->
+    <div class="flex flex-col gap-2">
+      <label z-form-label for="auscultation_Wheezing">{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.respiratoryANC_OPD_PNC?.wheezing
       }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
+      <z-radio-group
+        id="auscultation_Wheezing"
         name="auscultation_Wheezing"
         formControlName="auscultation_Wheezing"
-        (change)="trackFieldInteraction('Wheezing')">
-        <mat-radio-button color="primary" value="Present">{{
+        zOrientation="horizontal"
+        class="gap-6"
+        (zChange)="trackFieldInteraction('Wheezing')">
+        <z-radio [value]="'Present'">{{
           currentLanguageSet?.common?.present
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" value="Absent">{{
+        }}</z-radio>
+        <z-radio [value]="'Absent'">{{
           currentLanguageSet?.common?.absent
-        }}</mat-radio-button>
-      </mat-radio-group>
+        }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-4 box">
-      <label class="control-label" for="respiratorySystem">{{
+    <!-- Pleural rub -->
+    <div class="flex flex-col gap-2">
+      <label z-form-label for="auscultation_PleuralRub">{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.respiratoryANC_OPD_PNC?.pleuralRub
       }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
+      <z-radio-group
+        id="auscultation_PleuralRub"
         name="auscultation_PleuralRub"
         formControlName="auscultation_PleuralRub"
-        (change)="trackFieldInteraction('Pleural Rub')">
-        <mat-radio-button color="primary" value="Present">{{
+        zOrientation="horizontal"
+        class="gap-6"
+        (zChange)="trackFieldInteraction('Pleural Rub')">
+        <z-radio [value]="'Present'">{{
           currentLanguageSet?.common?.present
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" value="Absent">{{
+        }}</z-radio>
+        <z-radio [value]="'Absent'">{{
           currentLanguageSet?.common?.absent
-        }}</mat-radio-button>
-      </mat-radio-group>
+        }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-4 box">
-      <label class="control-label" for="respiratorySystem">{{
+    <!-- Conducted sounds -->
+    <div class="flex flex-col gap-2">
+      <label z-form-label for="auscultation_ConductedSounds">{{
         currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
           ?.respiratoryANC_OPD_PNC?.conductedSounds
       }}</label>
-      <div class="clearfix"></div>
-      <mat-radio-group
-        style="margin-left: -9px"
+      <z-radio-group
+        id="auscultation_ConductedSounds"
         name="auscultation_ConductedSounds"
         formControlName="auscultation_ConductedSounds"
-        (change)="trackFieldInteraction('Conducted Sounds')">
-        <mat-radio-button color="primary" value="Present">{{
+        zOrientation="horizontal"
+        class="gap-6"
+        (zChange)="trackFieldInteraction('Conducted Sounds')">
+        <z-radio [value]="'Present'">{{
           currentLanguageSet?.common?.present
-        }}</mat-radio-button>
-        <mat-radio-button color="primary" value="Absent">{{
+        }}</z-radio>
+        <z-radio [value]="'Absent'">{{
           currentLanguageSet?.common?.absent
-        }}</mat-radio-button>
-      </mat-radio-group>
+        }}</z-radio>
+      </z-radio-group>
     </div>
 
-    <div class="col-4 box">
-      <mat-form-field class="textarea-full-width">
-        <mat-label>{{
-          currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
-            ?.respiratoryANC_OPD_PNC?.percussion
-        }}</mat-label>
-        <mat-select
-          class="select-full-width"
+    <!-- Percussion -->
+    <z-form-field>
+      <label z-form-label for="percussion">{{
+        currentLanguageSet?.ExaminationData?.ANC_OPD_PNCExamination?.systemic
+          ?.respiratoryANC_OPD_PNC?.percussion
+      }}</label>
+      <z-form-control>
+        <z-select
+          id="percussion"
+          class="w-full"
           name="percussion"
           formControlName="percussion"
-          (selectionChange)="trackFieldInteraction('Percussion Selection')">
-          <mat-option
+          (zSelectionChange)="trackFieldInteraction('Percussion Selection')">
+          <z-select-item
             *ngFor="let percussion of selectPercussion"
-            [value]="percussion.name">
+            [zValue]="percussion.name">
             {{ percussion.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
   </div>
 </div>

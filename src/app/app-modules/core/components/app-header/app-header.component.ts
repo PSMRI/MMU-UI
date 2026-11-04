@@ -20,21 +20,65 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, Input, ViewContainerRef } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { MatDialog } from '@angular/material/dialog';
+import packageJson from '../../../../../../package.json';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { AuthService, ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
 import { IotService } from '../../services/iot.service';
 import { IotBluetoothComponent } from '../iot-bluetooth/iot-bluetooth.component';
 import { ShowCommitAndVersionDetailsComponent } from '../show-commit-and-version-details/show-commit-and-version-details.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf, NgFor, NgClass, TitleCasePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideBluetooth,
+  lucideBluetoothConnected,
+  lucideCircleUser,
+  lucideMapPin,
+  lucideCircleHelp,
+  lucidePower,
+  lucideInfo,
+  lucideFileText,
+} from '@ng-icons/lucide';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { menuImports } from 'Common-UI/v2/ui/menu';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 
 @Component({
   selector: 'app-header',
   templateUrl: './app-header.component.html',
-  styleUrls: ['./app-header.component.css'],
+  host: { class: 'block' },
+  imports: [
+    NgIf,
+    NgFor,
+    NgClass,
+    FormsModule,
+    RouterLink,
+    RouterLinkActive,
+    TitleCasePipe,
+    NgIcon,
+    ...tooltipImports,
+    ...menuImports,
+    ZardButtonComponent,
+    ...ZardSelectImports,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideBluetooth,
+      lucideBluetoothConnected,
+      lucideCircleUser,
+      lucideMapPin,
+      lucideCircleHelp,
+      lucidePower,
+      lucideInfo,
+      lucideFileText,
+    }),
+  ],
 })
 export class AppHeaderComponent implements OnInit {
   navigation = [
@@ -85,7 +129,8 @@ export class AppHeaderComponent implements OnInit {
   isConnected = true;
   status!: any;
   constructor(
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private router: Router,
     private auth: AuthService,
     private confirmationService: ConfirmationService,
@@ -212,6 +257,19 @@ export class AppHeaderComponent implements OnInit {
       });
     });
   }
+  // Highlights the correct nav tab for the current screen. routerLinkActive alone
+  // fails inside the patient workarea, because that route
+  // (/nurse-doctor/attendant/<nurse|doctor>/patient/:id) is a sibling of the
+  // worklist route, not a prefix of it, so no tab matched.
+  isNavItemActive(item: any): boolean {
+    const url = (this.router.url || '').split('?')[0];
+    if (item?.link && url.startsWith(item.link)) return true;
+    const attendant = url.match(/\/attendant\/([^/]+)\//)?.[1];
+    if (attendant === 'nurse' && item?.role === 'Nurse') return true;
+    if (attendant === 'doctor' && item?.role === 'Doctor') return true;
+    return false;
+  }
+
   rolenavigation() {
     this.navigation = [
       {
@@ -277,13 +335,14 @@ export class AppHeaderComponent implements OnInit {
     }
   }
   commitDetailsUI: any;
-  versionUI: any;
+  // Displayed app version comes from package.json (single source of truth);
+  // git-version.json is still used for the commit hash in the details dialog.
+  versionUI = packageJson.version;
   getUIVersionAndCommitDetails() {
     const commitDetailsPath: any = 'assets/git-version.json';
     this.auth.getUIVersionAndCommitDetails(commitDetailsPath).subscribe(
       res => {
         this.commitDetailsUI = res;
-        this.versionUI = this.commitDetailsUI['version'];
       },
       err => {}
     );
@@ -301,8 +360,8 @@ export class AppHeaderComponent implements OnInit {
   constructAPIAndUIDetails(apiVersionAndCommitDetails: any) {
     const data = {
       commitDetailsUI: {
-        version: this.commitDetailsUI['version'],
-        commit: this.commitDetailsUI['commit'],
+        version: packageJson.version,
+        commit: this.commitDetailsUI?.['commit'],
       },
       commitDetailsAPI: {
         version: apiVersionAndCommitDetails['git.build.version'] || 'NA',
@@ -314,14 +373,22 @@ export class AppHeaderComponent implements OnInit {
     }
   }
   showData(versionData: any) {
-    this.dialog.open(ShowCommitAndVersionDetailsComponent, {
-      data: versionData,
+    this.dialog.create({
+      zContent: ShowCommitAndVersionDetailsComponent,
+      zData: versionData,
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
   }
 
   openIOT() {
-    this.dialog.open(IotBluetoothComponent, {
-      width: '600px',
+    this.dialog.create({
+      zContent: IotBluetoothComponent,
+      zWidth: '600px',
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
   }
 }

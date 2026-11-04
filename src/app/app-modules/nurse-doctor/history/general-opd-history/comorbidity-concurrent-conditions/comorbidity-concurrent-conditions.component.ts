@@ -20,15 +20,23 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnDestroy,
+  ViewContainerRef,
+} from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
   FormArray,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import {
   MasterdataService,
   NurseService,
@@ -37,15 +45,39 @@ import {
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import { ValidationUtils } from '../../../shared/utility/validation-utility';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgFor, NgClass, NgIf } from '@angular/common';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory, lucidePlus, lucideX } from '@ng-icons/lucide';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 
 @Component({
   selector: 'app-general-comorbidity-concurrent-conditions',
   templateUrl: './comorbidity-concurrent-conditions.component.html',
-  styleUrls: ['./comorbidity-concurrent-conditions.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    NgClass,
+    NgIf,
+    NgIcon,
+    ...tooltipImports,
+    ZardButtonComponent,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+  ],
+  viewProviders: [provideIcons({ lucideHistory, lucidePlus, lucideX })],
 })
 export class ComorbidityConcurrentConditionsComponent
   implements OnInit, DoCheck, OnDestroy
@@ -68,7 +100,8 @@ export class ComorbidityConcurrentConditionsComponent
   currentLanguageSet: any;
   constructor(
     private fb: FormBuilder,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private nurseService: NurseService,
     private doctorService: DoctorService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
@@ -134,7 +167,13 @@ export class ComorbidityConcurrentConditionsComponent
           this.comorbidityMasterData = masterData.comorbidConditions;
           this.comorbidityFilteredMasterData = masterData.comorbidConditions;
 
-          this.addComorbidityConcurrentConditions();
+          // Seed one row only when empty — this subscription can fire again and
+          // the FormArray persists in the parent form across step navigation, so
+          // an unconditional add piled up duplicate blank rows.
+          const comorbArr = this.comorbidityConcurrentConditionsForm.controls[
+            'comorbidityConcurrentConditionsList'
+          ] as FormArray;
+          if (comorbArr.length === 0) this.addComorbidityConcurrentConditions();
 
           if (String(this.mode) === 'view') {
             const visitID = this.sessionstorage.getItem('visitID');
@@ -295,6 +334,24 @@ export class ComorbidityConcurrentConditionsComponent
       });
   }
 
+  onComorbidConditionsChange(
+    selectedType: string | string[],
+    i: any,
+    comorbidityConcurrentConditionsForm: AbstractControl<any, any>
+  ) {
+    const matchedCondition = (this.comorbiditySelectList[i] || []).find(
+      (condition: any) => condition.comorbidCondition === selectedType
+    );
+    comorbidityConcurrentConditionsForm
+      .get('comorbidConditions')
+      ?.setValue(matchedCondition ?? null);
+    this.filterComorbidityConcurrentConditionsType(
+      matchedCondition,
+      i,
+      comorbidityConcurrentConditionsForm
+    );
+  }
+
   filterComorbidityConcurrentConditionsType(
     comorbidityConcurrentConditions: any,
     i: any,
@@ -406,13 +463,11 @@ export class ComorbidityConcurrentConditionsComponent
   }
 
   viewPreviousData(data: any) {
-    this.dialog.open(PreviousDetailsComponent, {
-      data: {
-        dataList: data,
-        title:
-          this.currentLanguageSet.historyData.comorbiditycondition
-            .previouscomorbidityhistory,
-      },
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title:
+        this.currentLanguageSet.historyData.comorbiditycondition
+          .previouscomorbidityhistory,
     });
   }
 

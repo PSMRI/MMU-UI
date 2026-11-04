@@ -20,8 +20,14 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, DoCheck, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import {
+  Component,
+  DoCheck,
+  Input,
+  OnInit,
+  ViewContainerRef,
+} from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import {
   ConfirmationService,
@@ -34,13 +40,33 @@ import {
   NurseService,
 } from '../../../shared/services';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
-import { MatDialog } from '@angular/material/dialog';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgFor } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory } from '@ng-icons/lucide';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
 @Component({
   selector: 'app-physical-activity-history',
   templateUrl: './physical-activity-history.component.html',
-  styleUrls: ['./physical-activity-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    NgIcon,
+    ...tooltipImports,
+    ZardButtonComponent,
+    ...ZardFormImports,
+    ...ZardSelectImports,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
+  ],
+  viewProviders: [provideIcons({ lucideHistory })],
 })
 export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
   @Input()
@@ -61,7 +87,8 @@ export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
 
   constructor(
     private idrsScoreService: IdrsscoreService,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
@@ -201,11 +228,9 @@ export class PhysicalActivityHistoryComponent implements OnInit, DoCheck {
   }
 
   viewPreviousData(data: any) {
-    this.dialog.open(PreviousDetailsComponent, {
-      data: {
-        dataList: data,
-        title: this.currentLanguageSet.previousPhyscialActivityHistoryDetails,
-      },
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title: this.currentLanguageSet.previousPhyscialActivityHistoryDetails,
     });
   }
   getBeneficiaryDetails() {

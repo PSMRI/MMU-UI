@@ -27,14 +27,16 @@ import {
   ChangeDetectorRef,
   DoCheck,
   OnDestroy,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   FormArray,
   FormGroup,
   FormBuilder,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import {
@@ -43,16 +45,40 @@ import {
   DoctorService,
 } from '../../../shared/services';
 import { ValidationUtils } from '../../../shared/utility/validation-utility';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/v2/tracking';
+import { NgFor, NgClass, NgIf } from '@angular/common';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory, lucidePlus, lucideX } from '@ng-icons/lucide';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-general-past-history',
   templateUrl: './past-history.component.html',
-  styleUrls: ['./past-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    NgClass,
+    NgIf,
+    NgIcon,
+    ...tooltipImports,
+    ZardButtonComponent,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+  ],
+  viewProviders: [provideIcons({ lucideHistory, lucidePlus, lucideX })],
 })
 export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
   @Input()
@@ -80,7 +106,8 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private fb: FormBuilder,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private confirmationService: ConfirmationService,
     private nurseService: NurseService,
@@ -173,8 +200,18 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
           }
 
           this.filteredSurgeryMasterData = this.surgeryMasterData.slice();
-          this.addPastIllness();
-          this.addPastSurgery();
+          // Seed one empty row only if the array is empty. This subscription can
+          // fire more than once (and the FormArray lives in the preserved parent
+          // form across step navigation), so adding unconditionally piled up
+          // duplicate blank rows. The + button still adds rows on demand.
+          const illnessArr = this.pastHistoryForm.controls[
+            'pastIllness'
+          ] as FormArray;
+          const surgeryArr = this.pastHistoryForm.controls[
+            'pastSurgery'
+          ] as FormArray;
+          if (illnessArr.length === 0) this.addPastIllness();
+          if (surgeryArr.length === 0) this.addPastSurgery();
 
           this.changeDetectorRef.detectChanges();
 
@@ -398,6 +435,26 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
     this.sortIllnessList(this.pastIllnessSelectList[0]);
   }
 
+  onIllnessTypeChange(
+    value: string | string[],
+    i: number,
+    pastIllnessForm: AbstractControl<any, any>
+  ) {
+    const selected = Array.isArray(value) ? value[0] : value;
+    const source =
+      this.pastIllnessSelectList?.[i] || this.illnessMasterData || [];
+    const matchedIllness =
+      source.find((item: any) => item.illnessType === selected) ?? null;
+
+    pastIllnessForm.get('illnessType')?.setValue(matchedIllness);
+    pastIllnessForm.get('illnessType')?.markAsDirty();
+    pastIllnessForm.markAsDirty();
+
+    if (matchedIllness) {
+      this.filterPastIllnessType(matchedIllness, i, pastIllnessForm);
+    }
+  }
+
   filterPastIllnessType(
     illness: any,
     i: any,
@@ -534,6 +591,26 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
+  onSurgeryTypeChange(
+    value: string | string[],
+    i: number,
+    pastSurgeryForm: AbstractControl<any, any>
+  ) {
+    const selected = Array.isArray(value) ? value[0] : value;
+    const source =
+      this.pastSurgerySelectList?.[i] || this.surgeryMasterData || [];
+    const matchedSurgery =
+      source.find((item: any) => item.surgeryType === selected) ?? null;
+
+    pastSurgeryForm.get('surgeryType')?.setValue(matchedSurgery);
+    pastSurgeryForm.get('surgeryType')?.markAsDirty();
+    pastSurgeryForm.markAsDirty();
+
+    if (matchedSurgery) {
+      this.filterPastSurgeryType(matchedSurgery, i, pastSurgeryForm);
+    }
+  }
+
   filterPastSurgeryType(
     surgery: any,
     i: any,
@@ -630,13 +707,10 @@ export class PastHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   viewPreviousData(data: any) {
-    this.dialog.open(PreviousDetailsComponent, {
-      data: {
-        dataList: data,
-        title:
-          this.currentLanguageSet.historyData.Previousillness
-            .previouspasthistory,
-      },
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title:
+        this.currentLanguageSet.historyData.Previousillness.previouspasthistory,
     });
   }
 

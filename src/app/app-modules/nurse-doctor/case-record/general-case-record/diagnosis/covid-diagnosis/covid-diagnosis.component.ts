@@ -21,18 +21,26 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { DoctorService } from '../../../../shared/services';
 
 import { GeneralUtils } from '../../../../shared/utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { StringValidatorDirective } from '../../../../../core/directives/stringValidator.directive';
 @Component({
   selector: 'app-covid-diagnosis',
   templateUrl: './covid-diagnosis.component.html',
-  styleUrls: ['./covid-diagnosis.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ...ZardFormImports,
+    ZardInputDirective,
+    StringValidatorDirective,
+  ],
 })
 export class CovidDiagnosisComponent implements OnInit, DoCheck, OnChanges {
   utils = new GeneralUtils(this.fb, this.sessionstorage);

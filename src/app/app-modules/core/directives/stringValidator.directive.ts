@@ -52,6 +52,7 @@ export class StringValidatorDirective {
 
   lastValue = null;
   result: boolean = false;
+  private syncing = false;
 
   constructor(private elementRef: ElementRef) {}
 
@@ -145,6 +146,13 @@ export class StringValidatorDirective {
     } else {
       this.validateEntry(val, lastVal, maxlength, event);
     }
+
+    if (!this.syncing && event.target.value !== val) {
+      this.syncing = true;
+      event.target.dispatchEvent(new Event('input', { bubbles: true }));
+      this.syncing = false;
+    }
+
     this.lastValue = event.target.value;
   }
   validateEntry(val: any, lastVal: any, maxlength: any, event: any) {

@@ -1,118 +1,106 @@
-<div class="title">
-  <h4>{{ placeHolderSearch }} {{ current_language_set?.selection }}</h4>
-  <button
-    mat-icon-button
-    matDialogClose
-    matTooltip="{{ current_language_set?.common?.close }}"
-    class="pull-right mat_icon_white">
-    <mat-icon>close</mat-icon>
-  </button>
-</div>
-<div class="container-fluid">
-  <div class="row no-gutters">
-    <div class="col-xs-12 col-sm-4">
-      <mat-form-field>
-        <mat-label>{{ placeHolderSearch }}</mat-label>
+<div class="flex flex-col gap-4 p-6">
+  <div class="flex items-center justify-between gap-2">
+    <p class="text-lg font-semibold text-foreground">
+      {{ placeHolderSearch }} {{ current_language_set?.selection }}
+    </p>
+    <button
+      z-button
+      zType="ghost"
+      zSize="icon"
+      class="p-0"
+      [zTooltip]="current_language_set?.common?.close"
+      zPosition="bottom"
+      aria-label="Close"
+      (click)="dialogRef.close()">
+      <ng-icon name="lucideX"></ng-icon>
+    </button>
+  </div>
+
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
+    <z-form-field class="w-full sm:max-w-xs">
+      <label z-form-label for="provisional-search-input">{{
+        placeHolderSearch
+      }}</label>
+      <z-form-control>
         <input
+          z-input
+          id="provisional-search-input"
+          class="w-full bg-background"
           autocomplete="off"
           #inputSearch="ngModel"
           minlength="3"
           maxlength="100"
-          matInput
+          name="searchTerm"
           [(ngModel)]="input.searchTerm"
           (keyup.enter)="search(input.searchTerm, 0)"
           (ngModelChange)="resetData()" />
-      </mat-form-field>
-    </div>
-    <div class="col-xs-12 col-sm-8">
-      <button
-        class="mat_green"
-        [disabled]="!inputSearch.valid"
-        mat-raised-button
-        color="accent"
-        type="button"
-        (click)="search(input.searchTerm, 0)">
-        {{ current_language_set?.common?.search }}
-      </button>
-    </div>
-  </div>
-  <div class="overlay" *ngIf="showProgressBar">
-    <div class="overlay-content">
-      <mat-spinner></mat-spinner>
-    </div>
+      </z-form-control>
+    </z-form-field>
+    <button
+      z-button
+      zType="default"
+      type="button"
+      [disabled]="!inputSearch.valid"
+      (click)="search(input.searchTerm, 0)">
+      <ng-icon name="lucideSearch"></ng-icon>
+      {{ current_language_set?.common?.search }}
+    </button>
   </div>
 
-  <mat-dialog-content>
-    <div class="table-responsive" style="overflow-x: hidden">
-      <table
-        mat-table
-        aria-describedby="provisionalDiagnosis"
-        class="table table-striped"
-        [dataSource]="diagnosis">
-        <ng-container matColumnDef="ConceptID">
-          <th
-            mat-header-cell
-            style="border-bottom: none"
-            *matHeaderCellDef
-            mat-sort-header>
-            {{ current_language_set?.common?.ConceptID }}
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element?.conceptID }}
+  <output
+    *ngIf="showProgressBar"
+    class="flex items-center justify-center py-6"
+    aria-live="polite">
+    <z-loader></z-loader>
+  </output>
+
+  <div class="w-full overflow-x-auto">
+    <table z-table>
+      <thead z-table-header>
+        <tr z-table-row>
+          <th z-table-head>{{ current_language_set?.common?.ConceptID }}</th>
+          <th z-table-head>{{ current_language_set?.common?.term }}</th>
+          <th z-table-head></th>
+        </tr>
+      </thead>
+      <tbody z-table-body>
+        <tr z-table-row *ngFor="let element of pagedItems">
+          <td z-table-cell>{{ element?.conceptID }}</td>
+          <td z-table-cell>{{ element?.term }}</td>
+          <td z-table-cell class="text-center">
+            <z-checkbox
+              [zChecked]="element.selected || selectedDiagnosis(element)"
+              [disabled]="disableSelection(element)"
+              aria-label="Select diagnosis"
+              (zCheckedChange)="
+                $event ? addDiagnosis(element) : removeDiagnosis(element)
+              "></z-checkbox>
           </td>
-        </ng-container>
-        <ng-container matColumnDef="term">
-          <th
-            mat-header-cell
-            style="border-bottom: none"
-            *matHeaderCellDef
-            mat-sort-header>
-            {{ current_language_set?.common?.term }}
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element?.term }}
+        </tr>
+        <tr z-table-row *ngIf="diagnosisData.length === 0">
+          <td
+            z-table-cell
+            [attr.colspan]="displayedColumns.length"
+            class="h-24 text-center text-muted-foreground">
+            {{ current_language_set?.noRecordsFound }}
           </td>
-        </ng-container>
-        <ng-container matColumnDef="empty">
-          <th
-            mat-header-cell
-            style="border-bottom: none"
-            *matHeaderCellDef
-            mat-sort-header></th>
-          <td mat-cell *matCellDef="let element" class="text-center">
-            <mat-checkbox
-              (change)="selectDiagnosis($event, element)"
-              [checked]="element.selected || selectedDiagnosis(element)"
-              [disabled]="disableSelection(element)"></mat-checkbox>
-          </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
-    </div>
-    <div
-      class="pull-center"
-      style="margin-top: 5px; text-align: center"
-      [hidden]="diagnosis.data.length > 0">
-      <strong>{{ current_language_set?.noRecordsFound }}</strong>
-    </div>
-    <mat-paginator
-      [hidden]="diagnosis.data.length === 0"
-      [pageSizeOptions]="[5, 10, 20]"
-      [pageSize]="5"
-      showFirstLastButtons>
-    </mat-paginator>
-    <div class="row m-b-20">
-      <div class="col-xs-12">
-        <button
-          mat-raised-button
-          class="pull-right mat_blue"
-          (click)="submitDiagnosisList()"
-          [disabled]="selectedDiagnosisList.length === 0"
-          color="primary">
-          {{ current_language_set?.common?.submit }}
-        </button>
-      </div>
-    </div>
-  </mat-dialog-content>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <z-paginator
+    [zData]="diagnosisData"
+    [zRowsPerPageLabel]="current_language_set?.rowsPerPage"
+    (zPagedChange)="pagedItems = $event"></z-paginator>
+
+  <div class="flex justify-end gap-2">
+    <button
+      z-button
+      zType="default"
+      (click)="submitDiagnosisList()"
+      [disabled]="selectedDiagnosisList.length === 0">
+      {{ current_language_set?.common?.submit }}
+    </button>
+  </div>
 </div>

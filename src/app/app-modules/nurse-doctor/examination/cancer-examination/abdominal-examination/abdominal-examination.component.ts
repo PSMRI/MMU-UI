@@ -29,14 +29,32 @@ import {
   DoCheck,
 } from '@angular/core';
 import { CameraService } from '../../../../core/services/camera.service';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { NgIf } from '@angular/common';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardToggleGroupImports } from 'Common-UI/v2/ui/toggle-group';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-doctor-abdominal-examination',
   templateUrl: './abdominal-examination.component.html',
-  styleUrls: ['./abdominal-examination.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
+    ...ZardToggleGroupImports,
+    ...ZardFormImports,
+    ...ZardSelectImports,
+    ZardInputDirective,
+    StringValidatorDirective,
+  ],
 })
 export class AbdominalExaminationComponent implements OnInit, DoCheck {
   @Input()

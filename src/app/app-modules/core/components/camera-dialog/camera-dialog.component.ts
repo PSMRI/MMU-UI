@@ -23,6 +23,7 @@
 import {
   Component,
   OnInit,
+  OnDestroy,
   Output,
   EventEmitter,
   ElementRef,
@@ -30,16 +31,24 @@ import {
   DoCheck,
   AfterViewInit,
 } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogRef } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
 import { ConfirmationService } from '../../services';
 import { SetLanguageComponent } from '../set-language.component';
 import { ChartData, ChartType } from 'chart.js';
 import html2canvas from 'html2canvas';
-import { WebcamImage, WebcamInitError } from 'ngx-webcam';
+import { WebcamImage, WebcamInitError, WebcamModule } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
 import { saveAs } from 'file-saver';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf, NgFor } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { BaseChartDirective } from 'ng2-charts';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
 
 interface Mark {
   xCord: any;
@@ -50,10 +59,29 @@ interface Mark {
 
 @Component({
   selector: 'app-camera-dialog',
+  standalone: true,
   templateUrl: './camera-dialog.component.html',
-  styleUrls: ['./camera-dialog.component.css'],
+  imports: [
+    NgIf,
+    NgFor,
+    WebcamModule,
+    ReactiveFormsModule,
+    FormsModule,
+    BaseChartDirective,
+    NgIcon,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideX,
+    }),
+  ],
 })
-export class CameraDialogComponent implements OnInit, DoCheck, AfterViewInit {
+export class CameraDialogComponent
+  implements OnInit, OnDestroy, DoCheck, AfterViewInit
+{
   @Output() cancelEvent = new EventEmitter();
 
   @ViewChild('myCanvas')
@@ -68,6 +96,7 @@ export class CameraDialogComponent implements OnInit, DoCheck, AfterViewInit {
   public title!: string;
   public capture = false;
   public captured: any = false;
+  public videoOptions: MediaTrackConstraints = { facingMode: 'user' };
   public webcam: any;
   public graph: any;
   base64: any;
@@ -93,10 +122,11 @@ export class CameraDialogComponent implements OnInit, DoCheck, AfterViewInit {
   };
 
   constructor(
-    public dialogRef: MatDialogRef<CameraDialogComponent>,
+    public dialogRef: ZardDialogRef<CameraDialogComponent>,
     public httpServiceService: HttpServiceService,
     readonly sessionstorage: SessionStorageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private host: ElementRef<HTMLElement>
   ) {
     this.options = {
       audio: false,
@@ -120,6 +150,26 @@ export class CameraDialogComponent implements OnInit, DoCheck, AfterViewInit {
     this.status = this.current_language_set.capture;
     if (this.availablePoints?.markers)
       this.pointsToWrite = this.availablePoints.markers;
+  }
+
+  ngOnDestroy() {
+    this.stopCameraStream();
+  }
+
+  private stopCameraStream(): void {
+    const video = this.host?.nativeElement?.querySelector(
+      'webcam video'
+    ) as HTMLVideoElement | null;
+    const stream = video?.srcObject as MediaStream | null;
+    stream?.getTracks()?.forEach(track => track.stop());
+    if (video) {
+      video.srcObject = null;
+    }
+  }
+
+  closeDialog(result?: any): void {
+    this.stopCameraStream();
+    this.dialogRef.close(result);
   }
 
   public captureImg(webcamImage: WebcamImage): void {
@@ -168,6 +218,21 @@ export class CameraDialogComponent implements OnInit, DoCheck, AfterViewInit {
 
   public getSnapshot(): void {
     this.trigger.next();
+  }
+
+  public onCaptureOrRetake(): void {
+    if (this.captured) {
+      this.captured = false;
+      this.webcamImage = undefined as unknown as WebcamImage;
+      this.sysImage = '';
+    } else {
+      this.getSnapshot();
+    }
+  }
+
+  public usePhoto(): void {
+    if (!this.captured) return;
+    this.closeDialog(this.sysImage);
   }
 
   public get triggerObservable(): Observable<void> {

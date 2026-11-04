@@ -20,214 +20,135 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  DoCheck,
-  ViewChild,
-} from '@angular/core';
+import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { NgClass, TitleCasePipe } from '@angular/common';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { BeneficiaryWorklistComponent } from '../../core/components/beneficiary-worklist/beneficiary-worklist.component';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../core/services/confirmation.service';
-import { DoctorService, MasterdataService } from '../shared/services';
-import { CameraService } from '../../core/services/camera.service';
-import * as moment from 'moment';
-import { SetLanguageComponent } from '../../core/components/set-language.component';
-import { MatDialog } from '@angular/material/dialog';
-import { HttpServiceService } from '../../core/services/http-service.service';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import {
+  DoctorService,
+  MasterdataService,
+  RoleWorklistService,
+} from '../shared/services';
+
 @Component({
   selector: 'app-doctor-worklist',
   templateUrl: './doctor-worklist.component.html',
-  styleUrls: ['./doctor-worklist.component.css'],
+  styleUrls: ['./doctor-worklist.component.scss'],
+  host: { class: 'block' },
+  imports: [
+    NgClass,
+    TitleCasePipe,
+    BeneficiaryWorklistComponent,
+    ...ZardTableImports,
+    ...tooltipImports,
+  ],
 })
 export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
-  rowsPerPage = 5;
-  activePage = 1;
-  pagedList = [];
-  rotate = true;
-  beneficiaryList: any;
-  filteredBeneficiaryList: any = [];
-  blankTable = [1, 2, 3, 4, 5];
-  filterTerm: any;
-  languageComponent!: SetLanguageComponent;
-  currentLanguageSet: any;
+  beneficiaryList: any[] = [];
+  loading = false;
   beneficiaryMetaData: any;
-  displayedColumns: any = [
-    'sno',
-    'beneficiaryID',
-    'beneficiaryName',
-    'gender',
-    'age',
-    'visitCategory',
-    'district',
-    'visitDate',
-    'image',
-  ];
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
+  currentLanguageSet: any;
 
   constructor(
-    private dialog: MatDialog,
-    private cameraService: CameraService,
-    private router: Router,
-    private masterdataService: MasterdataService,
-    private confirmationService: ConfirmationService,
-    private httpServiceService: HttpServiceService,
-    private beneficiaryDetailsService: BeneficiaryDetailsService,
-    readonly sessionstorage: SessionStorageService,
-    private doctorService: DoctorService
+    private readonly router: Router,
+    private readonly masterdataService: MasterdataService,
+    private readonly confirmationService: ConfirmationService,
+    private readonly beneficiaryDetailsService: BeneficiaryDetailsService,
+    private readonly doctorService: DoctorService,
+    private readonly roleWorklist: RoleWorklistService,
+    readonly sessionstorage: SessionStorageService
   ) {}
 
   ngOnInit() {
     this.sessionstorage.setItem('currentRole', 'Doctor');
-    this.fetchLanguageResponse();
-    this.removeBeneficiaryDataForDoctorVisit();
+    this.assignSelectedLanguage();
+    this.roleWorklist.clearVisitSession();
     this.loadWorklist();
     this.beneficiaryDetailsService.reset();
     this.masterdataService.reset();
+  }
+
+  ngDoCheck() {
+    this.assignSelectedLanguage();
+    if (this.currentLanguageSet && this.beneficiaryMetaData) {
+      this.beneficiaryMetaData.forEach((item: any) => {
+        const temp = this.getVisitStatus(item);
+        item.statusMessage = temp.statusMessage;
+        item.statusCode = temp.statusCode;
+      });
+    }
   }
 
   ngOnDestroy() {
     sessionStorage.removeItem('currentRole');
   }
 
-  removeBeneficiaryDataForDoctorVisit() {
-    sessionStorage.removeItem('visitCode');
-    sessionStorage.removeItem('beneficiaryGender');
-    sessionStorage.removeItem('benFlowID');
-    sessionStorage.removeItem('visitCategory');
-    sessionStorage.removeItem('beneficiaryRegID');
-    sessionStorage.removeItem('visitID');
-    sessionStorage.removeItem('beneficiaryID');
-    sessionStorage.removeItem('doctorFlag');
-    sessionStorage.removeItem('nurseFlag');
-    sessionStorage.removeItem('pharmacist_flag');
-    sessionStorage.removeItem('caseSheetTMFlag');
+  assignSelectedLanguage() {
+    this.currentLanguageSet = this.roleWorklist.getLanguageSet();
   }
 
-  pageChanged(event: any): void {
-    console.log('called', event);
-    const startItem = (event.page - 1) * event.itemsPerPage;
-    const endItem = event.page * event.itemsPerPage;
-    this.pagedList = this.filteredBeneficiaryList.slice(startItem, endItem);
-    console.log('list', this.pagedList);
+  /** Doctor columns: status + father's name omitted, no phone column. */
+  get headers(): string[] {
+    const b = this.currentLanguageSet?.bendetails;
+    const c = this.currentLanguageSet?.casesheet;
+    return [
+      c?.serialNo,
+      b?.beneficiaryID,
+      b?.beneficiaryName,
+      b?.gender,
+      b?.age,
+      b?.visitCategory,
+      b?.district,
+      b?.visitDate,
+      b?.image,
+    ];
   }
 
   loadWorklist() {
-    this.filterTerm = null;
     this.beneficiaryMetaData = [];
+    this.loading = true;
     this.doctorService.getDoctorWorklist().subscribe(
       (data: any) => {
+        this.loading = false;
         if (data && data.statusCode === 200 && data.data) {
-          console.log('doctor worklist', JSON.stringify(data.data, null, 4));
           this.beneficiaryMetaData = data.data;
-          data.data.map((item: any) => {
+          // Populate rows first; statuses decorate once the language set is ready.
+          this.beneficiaryList = this.loadDataToBenList(data.data);
+          data.data.forEach((item: any) => {
             const temp = this.getVisitStatus(item);
             item.statusMessage = temp.statusMessage;
             item.statusCode = temp.statusCode;
           });
-          const benlist = this.loadDataToBenList(data.data);
-          this.beneficiaryList = benlist;
-          this.filteredBeneficiaryList = benlist;
-          this.filterTerm = null;
-          this.dataSource.data = [];
-          this.dataSource.data = benlist;
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.data.forEach((sectionCount: any, index: number) => {
-            sectionCount.sno = index + 1;
-          });
-        } else this.confirmationService.alert(data.errorMessage, 'error');
+        } else {
+          this.confirmationService.alert(data.errorMessage, 'error');
+          this.beneficiaryList = [];
+        }
       },
       err => {
-        if (err?.handled) {
-          return;
-        }
+        this.loading = false;
+        if (err?.handled) return;
         this.confirmationService.alert(err, 'error');
+        this.beneficiaryList = [];
       }
     );
   }
 
   loadDataToBenList(data: any) {
-    data.forEach((element: any) => {
-      element.genderName = element.genderName || 'Not Available';
-      element.age = element.age || 'Not Available';
-      element.statusMessage = element.statusMessage || 'Not Available';
-      element.VisitCategory = element.VisitCategory || 'Not Available';
-      element.benVisitNo = element.benVisitNo || 'Not Available';
-      element.districtName = element.districtName || 'Not Available';
-      element.villageName = element.villageName || 'Not Available';
-      element.arrival = false;
-      element.preferredPhoneNum = element.preferredPhoneNum || 'Not Available';
-      element.visitDate =
-        moment(element.visitDate, 'DD-MM-YYYY HH:mm A') || 'Not Available';
-      element.benVisitDate =
-        moment(element.benVisitDate).format('DD-MM-YYYY HH:mm A ') ||
-        'Not Available';
-    });
-    return data;
+    const rows = this.roleWorklist.normalizeStandardRows(data);
+    rows.forEach((element: any) => (element.arrival = false));
+    return rows;
   }
 
-  filterBeneficiaryList(searchTerm: string) {
-    if (!searchTerm) this.filteredBeneficiaryList = this.beneficiaryList;
-    else {
-      this.filteredBeneficiaryList = [];
-      this.dataSource.data = [];
-      this.dataSource.paginator = this.paginator;
-      this.beneficiaryList.forEach((item: any) => {
-        console.log('item', JSON.stringify(item, null, 4));
-        for (const key in item) {
-          if (
-            key === 'beneficiaryID' ||
-            key === 'benName' ||
-            key === 'genderName' ||
-            key === 'age' ||
-            key === 'statusMessage' ||
-            key === 'VisitCategory' ||
-            key === 'benVisitNo' ||
-            key === 'districtName' ||
-            key === 'preferredPhoneNum' ||
-            key === 'villageName' ||
-            key === 'beneficiaryRegID' ||
-            key === 'visitDate'
-          ) {
-            const value: string = '' + item[key];
-            if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-              this.filteredBeneficiaryList.push(item);
-              this.dataSource.data.push(item);
-              this.dataSource.paginator = this.paginator;
-              this.dataSource.data.forEach(
-                (sectionCount: any, index: number) => {
-                  sectionCount.sno = index + 1;
-                }
-              );
-              break;
-            }
-          }
-        }
-      });
-    }
-  }
-
-  patientImageView(benregID: any) {
-    this.beneficiaryDetailsService
-      .getBeneficiaryImage(benregID)
-      .subscribe((data: any) => {
-        if (data?.benImage) this.cameraService.viewImage(data.benImage);
-        else
-          this.confirmationService.alert(
-            this.currentLanguageSet.alerts.info.imageNotFound
-          );
-      });
+  patientImageView(benRegID: any) {
+    this.roleWorklist.viewBeneficiaryImage(benRegID, this.currentLanguageSet);
   }
 
   loadDoctorExaminationPage(beneficiary: any) {
-    console.log('beneficiary', JSON.stringify(beneficiary, null, 4));
-
     this.sessionstorage.setItem('visitCode', beneficiary.visitCode);
     if (beneficiary.statusCode === 1) {
       this.routeToWorkArea(beneficiary);
@@ -276,9 +197,9 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
         }
       });
   }
+
   updateWorkArea(beneficiary: any) {
-    const dataSeted = this.setDataForWorkArea(beneficiary);
-    if (dataSeted) {
+    if (this.setDataForWorkArea(beneficiary)) {
       this.router.navigate([
         '/nurse-doctor/attendant/doctor/patient/',
         beneficiary.beneficiaryRegID,
@@ -300,20 +221,7 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
     this.sessionstorage.setItem('nurseFlag', beneficiary.nurseFlag);
     this.sessionstorage.setItem('pharmacist_flag', beneficiary.pharmacist_flag);
     this.sessionstorage.setItem('phnum', beneficiary.preferredPhoneNum);
-
     return true;
-  }
-
-  checkDoctorStatusAtTcCancelled(beneficiary: any) {
-    if (beneficiary.doctorFlag === 2 || beneficiary.nurseFlag === 2) {
-      this.confirmationService.alert(beneficiary.statusMessage);
-    } else if (beneficiary.doctorFlag === 1) {
-      this.routeToWorkArea(beneficiary);
-    } else if (beneficiary.doctorFlag === 3) {
-      this.routeToWorkArea(beneficiary);
-    } else if (beneficiary.doctorFlag === 9) {
-      this.viewAndPrintCaseSheet(beneficiary);
-    }
   }
 
   getVisitStatus(beneficiaryVisitDetials: any) {
@@ -326,39 +234,23 @@ export class DoctorWorklistComponent implements OnInit, OnDestroy, DoCheck {
       beneficiaryVisitDetials.nurseFlag === 2
     ) {
       status.statusCode = 2;
-      status.statusMessage = this.currentLanguageSet.alerts.info.pending;
+      status.statusMessage =
+        this.currentLanguageSet?.alerts?.info?.pending ?? '';
     } else if (beneficiaryVisitDetials.doctorFlag === 1) {
       status.statusCode = 1;
-      status.statusMessage = this.currentLanguageSet.alerts.info.pendingConsult;
+      status.statusMessage =
+        this.currentLanguageSet?.alerts?.info?.pendingConsult ?? '';
     } else if (beneficiaryVisitDetials.doctorFlag === 3) {
       status.statusCode = 3;
-      status.statusMessage = this.currentLanguageSet.alerts.info.labtestDone;
+      status.statusMessage =
+        this.currentLanguageSet?.alerts?.info?.labtestDone ?? '';
     } else if (beneficiaryVisitDetials.specialist_flag === 100) {
       status.statusCode = 10;
-      status.statusMessage = this.currentLanguageSet.common.tmReferred;
+      status.statusMessage = this.currentLanguageSet?.common?.tmReferred ?? '';
     } else if (beneficiaryVisitDetials.doctorFlag === 9) {
       status.statusCode = 9;
       status.statusMessage = 'Consultation Done';
     }
     return status;
   }
-
-  //BU40088124 12/10/2021 Integrating Multilingual Functionality --Start--
-  ngDoCheck() {
-    this.fetchLanguageResponse();
-    if (this.currentLanguageSet && this.beneficiaryMetaData) {
-      this.beneficiaryMetaData.map((item: any) => {
-        const temp = this.getVisitStatus(item);
-        item.statusMessage = temp.statusMessage;
-        item.statusCode = temp.statusCode;
-      });
-    }
-  }
-
-  fetchLanguageResponse() {
-    this.languageComponent = new SetLanguageComponent(this.httpServiceService);
-    this.languageComponent.setLanguage();
-    this.currentLanguageSet = this.languageComponent.currentLanguageObject;
-  }
-  //--End--
 }

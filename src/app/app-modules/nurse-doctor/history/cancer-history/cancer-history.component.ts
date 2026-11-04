@@ -27,24 +27,53 @@ import {
   OnChanges,
   OnDestroy,
   DoCheck,
+  AfterViewInit,
+  ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormArray,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { DoctorService } from '../../shared/services/doctor.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import {
+  ZardAccordionImports,
+  ZardAccordionComponent,
+} from 'Common-UI/v2/ui/accordion';
+import { FamilyDiseaseHistoryComponent } from './family-disease-history/family-disease-history.component';
+import { PersonalHistoryComponent } from './personal-history/personal-history.component';
+import { NgIf } from '@angular/common';
+import { ObstetricHistoryComponent } from './obstetric-history/obstetric-history.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { healthicons } from '../../../core/icons/healthicons';
 
 @Component({
   selector: 'app-nurse-cancer-history',
   templateUrl: './cancer-history.component.html',
-  styleUrls: ['./cancer-history.component.css'],
+  viewProviders: [provideIcons(healthicons)],
+  imports: [
+    ...ZardAccordionImports,
+    ReactiveFormsModule,
+    FamilyDiseaseHistoryComponent,
+    PersonalHistoryComponent,
+    NgIf,
+    ObstetricHistoryComponent,
+    NgIcon,
+  ],
 })
 export class CancerHistoryComponent
-  implements OnInit, OnChanges, OnDestroy, DoCheck
+  implements OnInit, OnChanges, OnDestroy, DoCheck, AfterViewInit
 {
+  @ViewChild(ZardAccordionComponent)
+  cancerAccordion?: ZardAccordionComponent;
+
   @Input()
   nurseCancerHistoryForm!: FormGroup;
 
@@ -72,21 +101,45 @@ export class CancerHistoryComponent
   ) {}
 
   ngOnInit() {
-    this.cancerPatientFamilyMedicalHistoryForm =
-      this.nurseCancerHistoryForm.get(
-        'cancerPatientFamilyMedicalHistoryForm'
-      ) as FormGroup;
-    this.cancerPatientPerosnalHistoryForm = this.nurseCancerHistoryForm.get(
-      'cancerPatientPerosnalHistoryForm'
-    ) as FormGroup;
-    this.cancerPatientObstetricHistoryForm = this.nurseCancerHistoryForm.get(
-      'cancerPatientObstetricHistoryForm'
-    ) as FormGroup;
+    this.deriveChildForms();
     this.getBenificiaryDetails();
     this.fetchLanguageResponse();
   }
 
+  // Derive the per-section child form groups from the parent history form.
+  // Runs on every nurseCancerHistoryForm change, not just ngOnInit: switching
+  // the visit category (e.g. NCD care -> Cancer Screening) makes the parent
+  // swap in a freshly built cancer history form. Deriving only once in ngOnInit
+  // could latch onto the stale (non-cancer) form — whose get() returns null —
+  // and leave the children permanently null, crashing their templates. Only
+  // overwrite a child when its control actually exists, so a transient stale
+  // form never nulls out an already-good reference.
+  private deriveChildForms() {
+    const form = this.nurseCancerHistoryForm;
+    if (!form) return;
+    const family = form.get('cancerPatientFamilyMedicalHistoryForm');
+    const personal = form.get('cancerPatientPerosnalHistoryForm');
+    const obstetric = form.get('cancerPatientObstetricHistoryForm');
+    if (family)
+      this.cancerPatientFamilyMedicalHistoryForm = family as FormGroup;
+    if (personal) this.cancerPatientPerosnalHistoryForm = personal as FormGroup;
+    if (obstetric)
+      this.cancerPatientObstetricHistoryForm = obstetric as FormGroup;
+  }
+
+  ngAfterViewInit() {
+    // The Zard accordion has no controlled-open input; expand the family
+    // medical history panel by default (was expanded="true" on Material).
+    if (this.cancerAccordion && !this.cancerAccordion.isOpen('family')) {
+      this.cancerAccordion.toggle('family');
+    }
+  }
+
   ngOnChanges(changes: any) {
+    if (changes['nurseCancerHistoryForm']) {
+      this.deriveChildForms();
+    }
+
     if (String(this.mode) === 'view') {
       const visitID = this.sessionstorage.getItem('visitID');
       const benRegID = this.sessionstorage.getItem('beneficiaryRegID');

@@ -24,12 +24,40 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
 import { AuthService, ConfirmationService } from '../core/services';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf, NgFor } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideShieldCheck,
+  lucideLock,
+  lucideEye,
+  lucideEyeOff,
+} from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { cardImports } from 'Common-UI/v2/ui/card';
 
 @Component({
   selector: 'app-set-security-questions',
   templateUrl: './set-security-questions.component.html',
-  styleUrls: ['./set-security-questions.component.css'],
+  host: { class: 'block' },
+  imports: [
+    NgIf,
+    NgFor,
+    FormsModule,
+    NgIcon,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ...ZardSelectImports,
+    ...cardImports,
+  ],
+  viewProviders: [
+    provideIcons({ lucideShieldCheck, lucideLock, lucideEye, lucideEyeOff }),
+  ],
 })
 export class SetSecurityQuestionsComponent implements OnInit {
   passwordPattern =
@@ -77,9 +105,7 @@ export class SetSecurityQuestionsComponent implements OnInit {
     this.Q_array_two = response.data;
   }
 
-
-  handleError(response: any) {
-  }
+  handleError(response: any) {}
 
   switch() {
     this.passwordSection = true;
@@ -94,6 +120,10 @@ export class SetSecurityQuestionsComponent implements OnInit {
 
   hidePWD() {
     this.dynamictype = 'password';
+  }
+
+  togglePWD() {
+    this.dynamictype = this.dynamictype === 'text' ? 'password' : 'text';
   }
 
   question1: any = '';
@@ -111,8 +141,45 @@ export class SetSecurityQuestionsComponent implements OnInit {
 
   selectedQuestions: any = [];
 
-  updateQuestions(selectedques: any, position: any) {
+  /**
+   * z-select-item values are strings (the component is string-typed), so the
+   * security-question IDs are rendered as strings. This converts a raw id to
+   * the string the dropdown expects.
+   */
+  asValue(id: any): string {
+    return id === null || id === undefined ? '' : String(id);
+  }
 
+  /**
+   * Resolve the string id emitted by z-select back to the original QuestionID
+   * (number from the API) so the saved payload keeps its original type.
+   */
+  private resolveQuestionId(value: any): any {
+    const match = this.replica_questions.find(
+      (q: any) => this.asValue(q.QuestionID) === this.asValue(value)
+    );
+    return match ? match.QuestionID : value;
+  }
+
+  /**
+   * A question is chosen from a z-select. Mirrors the original (change) +
+   * (blur) handlers: record the selection, then filter it out of the other
+   * dropdowns so a question can't be picked twice.
+   */
+  onSelectQuestion(value: any, position: number) {
+    // [(ngModel)] already syncs question1/2/3; value is the selected id.
+    const id = Array.isArray(value) ? value[0] : value;
+    if (position === 0) {
+      this.filterArrayOne(id);
+    } else if (position === 1) {
+      this.filterArrayTwo(id);
+    } else {
+      this.filterArrayThree(id);
+    }
+    this.updateQuestions(id, position);
+  }
+
+  updateQuestions(selectedques: any, position: any) {
     if (this.selectedQuestions.indexOf(selectedques) === -1) {
       this.selectedQuestions[position] = selectedques;
       if (position === 0) {
@@ -153,7 +220,7 @@ export class SetSecurityQuestionsComponent implements OnInit {
   filter_function(questionID: any, array: any) {
     const dummy_array = [];
     for (let i = 0; i < array.length; i++) {
-      if (array[i].QuestionID === questionID) {
+      if (this.asValue(array[i].QuestionID) === this.asValue(questionID)) {
         continue;
       } else {
         dummy_array.push(array[i]);
@@ -169,21 +236,21 @@ export class SetSecurityQuestionsComponent implements OnInit {
       this.dataArray = [
         {
           userID: this.uid,
-          questionID: this.question1,
+          questionID: this.resolveQuestionId(this.question1),
           answers: this.answer1,
           mobileNumber: '1234567890',
           createdBy: this.uname,
         },
         {
           userID: this.uid,
-          questionID: this.question2,
+          questionID: this.resolveQuestionId(this.question2),
           answers: this.answer2,
           mobileNumber: '1234567890',
           createdBy: this.uname,
         },
         {
           userID: this.uid,
-          questionID: this.question3,
+          questionID: this.resolveQuestionId(this.question3),
           answers: this.answer3,
           mobileNumber: '1234567890',
           createdBy: this.uname,

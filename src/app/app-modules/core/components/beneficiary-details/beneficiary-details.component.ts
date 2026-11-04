@@ -25,15 +25,27 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { BeneficiaryDetailsService } from '../../services/beneficiary-details.service';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf, NgFor, NgTemplateOutlet, DatePipe } from '@angular/common';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardSkeletonComponent } from 'Common-UI/v2/ui/skeleton';
 
 @Component({
   selector: 'app-beneficiary-details',
   templateUrl: './beneficiary-details.component.html',
-  styleUrls: ['./beneficiary-details.component.css'],
+  standalone: true,
+  imports: [
+    NgIf,
+    NgFor,
+    NgTemplateOutlet,
+    DatePipe,
+    ...cardImports,
+    ZardSkeletonComponent,
+  ],
 })
 export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
   beneficiary: any;
+  readonly skeletonRows = [0, 1, 2, 3, 4, 5, 6];
   today: any;
   beneficiaryDetailsSubscription: any;
   current_language_set: any;
@@ -68,8 +80,9 @@ export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
       this.beneficiaryDetailsService
         .getBeneficiaryImage(param['beneficiaryRegID'])
         .subscribe((data: any) => {
-          if (data?.benImage) {
-            this.beneficiary.benImage = data.benImage;
+          const benImage = data?.data?.benImage ?? data?.benImage;
+          if (benImage) {
+            this.beneficiary.benImage = benImage;
           }
         });
     });

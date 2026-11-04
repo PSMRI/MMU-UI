@@ -21,15 +21,27 @@
  */
 
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { AmritTrackingService } from 'Common-UI/v2/tracking';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { StringValidatorDirective } from '../../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-nurse-cardio-vascular-system',
   templateUrl: './cardio-vascular-system.component.html',
-  styleUrls: ['./cardio-vascular-system.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
+    ...ZardFormImports,
+    ZardInputDirective,
+    StringValidatorDirective,
+  ],
 })
 export class CardioVascularSystemComponent implements OnInit, DoCheck {
   @Input()

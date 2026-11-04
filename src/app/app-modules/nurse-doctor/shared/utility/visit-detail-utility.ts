@@ -21,7 +21,7 @@
  */
 
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 
 export class VisitDetailUtils {
   constructor(
@@ -113,7 +113,10 @@ export class VisitDetailUtils {
       providerServiceMapID: null,
       visitNo: null,
       visitCode: { value: null, disabled: true },
-      visitReason: { value: null, disabled: disableFlag },
+      visitReason: [
+        { value: null, disabled: disableFlag },
+        Validators.required,
+      ],
       visitCategory: { value: null, disabled: disableFlag },
       pregnancyStatus: { value: null, disabled: disableFlag },
       rCHID: { value: null, disabled: disableFlag },

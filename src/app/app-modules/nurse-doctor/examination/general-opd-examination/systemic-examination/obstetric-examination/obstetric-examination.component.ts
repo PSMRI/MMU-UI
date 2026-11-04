@@ -21,14 +21,33 @@
  */
 
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { NgFor, NgIf } from '@angular/common';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { StringValidatorDirective } from '../../../../../core/directives/stringValidator.directive';
+import { NumberValidatorDirective } from '../../../../../core/directives/numberValidator.directive';
 
 @Component({
   selector: 'app-nurse-anc-obstetric-examination',
   templateUrl: './obstetric-examination.component.html',
-  styleUrls: ['./obstetric-examination.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    NgIf,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
+    ZardRadioComponent,
+    ZardRadioGroupComponent,
+    StringValidatorDirective,
+    NumberValidatorDirective,
+  ],
 })
 export class ObstetricExaminationComponent implements OnInit, DoCheck {
   @Input()
@@ -172,8 +191,8 @@ export class ObstetricExaminationComponent implements OnInit, DoCheck {
     this.fetchLanguageResponse();
   }
 
-  resetFetalHeartRate(event: any) {
-    if (event.value === 'Not Audible')
+  resetFetalHeartRate(value: unknown) {
+    if (value === 'Not Audible')
       this.obstetricExaminationForANCDataForm.patchValue({
         fetalHeartRate_BeatsPerMinute: null,
       });

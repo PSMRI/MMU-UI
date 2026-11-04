@@ -21,16 +21,29 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { AmritTrackingService } from 'Common-UI/v2/tracking';
+import { NgFor, NgIf } from '@angular/common';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
 
 @Component({
   selector: 'app-nurse-general-examination',
   templateUrl: './general-examination.component.html',
-  styleUrls: ['./general-examination.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    NgIf,
+    ...ZardFormImports,
+    ...ZardSelectImports,
+    ZardRadioComponent,
+    ZardRadioGroupComponent,
+  ],
 })
 export class GeneralExaminationComponent implements OnInit, DoCheck, OnChanges {
   @Input()

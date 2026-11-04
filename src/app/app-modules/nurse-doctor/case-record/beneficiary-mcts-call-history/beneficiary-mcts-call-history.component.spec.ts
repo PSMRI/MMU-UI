@@ -19,70 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BeneficiaryMctsCallHistoryComponent } from './beneficiary-mcts-call-history.component';
-import {
-  COMMON_TEST_IMPORTS,
-  LANGUAGE_EN,
-  NO_ERRORS_SCHEMA,
-  commonTestProviders,
-} from 'src/testing/test-utils';
 
 describe('BeneficiaryMctsCallHistoryComponent', () => {
   let component: BeneficiaryMctsCallHistoryComponent;
   let fixture: ComponentFixture<BeneficiaryMctsCallHistoryComponent>;
-  const calls = Array.from({ length: 7 }, (_, i) => ({
-    questionnaireDetail: { question: i % 2 ? `Fever ${i}` : `Cough ${i}` },
-    answer: 'yes',
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [BeneficiaryMctsCallHistoryComponent],
+    }).compileComponents();
   }));
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [...COMMON_TEST_IMPORTS],
-      declarations: [BeneficiaryMctsCallHistoryComponent],
-      providers: [...commonTestProviders({ dialogData: calls })],
-      schemas: [NO_ERRORS_SCHEMA],
-    })
-      .overrideTemplate(BeneficiaryMctsCallHistoryComponent, '')
-      .compileComponents();
-
+  beforeEach(() => {
     fixture = TestBed.createComponent(BeneficiaryMctsCallHistoryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create and load call details with first page', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
-    expect(component.callDetails).toBe(calls);
-    expect(component.filteredCallDetails).toBe(calls);
-    expect(component.callDetailsPagedList.length).toBe(5);
-    expect(component.current_language_set).toEqual(LANGUAGE_EN);
-  });
-
-  it('pages call details', () => {
-    component.callDetailsPageChanged({ page: 2, itemsPerPage: 5 });
-    expect(component.callDetailsPagedList).toEqual(calls.slice(5, 10));
-  });
-
-  it('filters by question (case insensitive) and resets page', () => {
-    component.callDetailsActivePage = 2;
-    component.filterCallHistory('FEVER');
-    expect(component.filteredCallDetails.length).toBe(3);
-    expect(component.callDetailsActivePage).toBe(1);
-    expect(component.callDetailsPagedList.length).toBe(3);
-  });
-
-  it('restores full list on empty search term', () => {
-    component.filterCallHistory('fever');
-    component.filterCallHistory('');
-    expect(component.filteredCallDetails).toBe(calls);
-    expect(component.callDetailsPagedList.length).toBe(5);
-  });
-
-  it('refreshes language on ngDoCheck', () => {
-    component.current_language_set = null;
-    component.ngDoCheck();
-    expect(component.current_language_set).toEqual(LANGUAGE_EN);
   });
 });

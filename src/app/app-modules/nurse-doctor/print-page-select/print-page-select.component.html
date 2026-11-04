@@ -1,67 +1,58 @@
-<h3 class="title info">{{ currentLanguageSet?.common?.selectPrintPage }}</h3>
-<div class="message">
-  <div
-    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
-    *ngIf="visitCategory === 'ANC'">
-    <mat-checkbox
-      color="primary"
-      class=""
+<div class="flex flex-col gap-4 p-6">
+  <div class="flex items-center gap-2">
+    <ng-icon name="lucideInfo" size="20" class="text-info"></ng-icon>
+    <p class="m-0 text-base font-semibold text-info">
+      {{ currentLanguageSet?.common?.selectPrintPage }}
+    </p>
+  </div>
+
+  <div class="flex max-h-[381px] flex-col gap-3 overflow-y-auto">
+    <z-checkbox
+      *ngIf="visitCategory === 'ANC'"
+      name="caseSheetANC"
       [(ngModel)]="printPagePreviewSelect.caseSheetANC">
       {{ currentLanguageSet?.ancData?.anc }}
-    </mat-checkbox>
-  </div>
-  <div
-    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
-    *ngIf="visitCategory === 'PNC'">
-    <mat-checkbox
-      color="primary"
-      class=""
+    </z-checkbox>
+    <z-checkbox
+      *ngIf="visitCategory === 'PNC'"
+      name="caseSheetPNC"
       [(ngModel)]="printPagePreviewSelect.caseSheetPNC">
       {{ currentLanguageSet?.pncData?.pnc }}
-    </mat-checkbox>
-  </div>
-  <div
-    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
-    *ngIf="visitCategory !== 'General OPD (QC)'">
-    <mat-checkbox
-      color="primary"
-      class=""
+    </z-checkbox>
+    <z-checkbox
+      *ngIf="visitCategory !== 'General OPD (QC)'"
+      name="caseSheetHistory"
       [(ngModel)]="printPagePreviewSelect.caseSheetHistory">
       {{ currentLanguageSet?.historyData.history }}
-    </mat-checkbox>
-  </div>
-  <div
-    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
-    *ngIf="
-      visitCategory !== 'NCD care' &&
-      visitCategory !== 'General OPD (QC)' &&
-      visitCategory !== 'COVID-19 Screening'
-    ">
-    <mat-checkbox
-      color="primary"
-      class=""
+    </z-checkbox>
+    <z-checkbox
+      *ngIf="
+        visitCategory !== 'NCD care' &&
+        visitCategory !== 'General OPD (QC)' &&
+        visitCategory !== 'COVID-19 Screening'
+      "
+      name="caseSheetExamination"
       [(ngModel)]="printPagePreviewSelect.caseSheetExamination">
       {{ currentLanguageSet?.ExaminationData.examination }}
-    </mat-checkbox>
+    </z-checkbox>
+    <z-checkbox
+      *ngIf="isCovidVaccinationStatusVisible"
+      name="caseSheetCovidVaccinationDetails"
+      [(ngModel)]="printPagePreviewSelect.caseSheetCovidVaccinationDetails">
+      {{ currentLanguageSet?.covidVaccinationStatus }}
+    </z-checkbox>
   </div>
-  <div
-    class="col-xs-12 col-sm-6 col-md-6 m-t-15"
-    *ngIf="isCovidVaccinationStatusVisible">
-    <mat-checkbox
-      color="primary"
-      class=""
-      [(ngModel)]="printPagePreviewSelect.caseSheetCovidVaccinationDetails"
-      >{{ currentLanguageSet?.covidVaccinationStatus }}</mat-checkbox
-    >
+
+  <div class="flex justify-end gap-2">
+    <button z-button zType="outline" (click)="dialogRef.close(false)">
+      Cancel
+    </button>
+    <button
+      z-button
+      zType="default"
+      (click)="dialogRef.close(printPagePreviewSelect)"
+      cdkFocusInitial>
+      {{ currentLanguageSet?.previousvisit?.previewmmu }}
+    </button>
   </div>
-</div>
-<div class="action">
-  <button mat-raised-button (click)="dialogRef.close(false)">Cancel</button>
-  <button
-    mat-raised-button
-    (click)="dialogRef.close(printPagePreviewSelect)"
-    class="background-primary"
-    cdkFocusInitial>
-    {{ currentLanguageSet?.previousvisit?.previewmmu }}
-  </button>
 </div>

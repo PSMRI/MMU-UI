@@ -20,24 +20,47 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {
+  Component,
+  OnInit,
+  Input,
+  DoCheck,
+  OnDestroy,
+  ViewContainerRef,
+} from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   MasterdataService,
   NurseService,
   DoctorService,
 } from '../../../shared/services';
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgFor } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory } from '@ng-icons/lucide';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 
 @Component({
   selector: 'app-general-development-history',
   templateUrl: './development-history.component.html',
-  styleUrls: ['./development-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    NgIcon,
+    ...tooltipImports,
+    ZardButtonComponent,
+    ...ZardFormImports,
+    ...ZardSelectImports,
+  ],
+  viewProviders: [provideIcons({ lucideHistory })],
 })
 export class DevelopmentHistoryComponent implements OnInit, DoCheck, OnDestroy {
   @Input()
@@ -56,7 +79,8 @@ export class DevelopmentHistoryComponent implements OnInit, DoCheck, OnDestroy {
     private masterdataService: MasterdataService,
     private nurseService: NurseService,
     private doctorService: DoctorService,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
     readonly sessionstorage: SessionStorageService
@@ -156,13 +180,11 @@ export class DevelopmentHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   viewPreviousData(data: any) {
-    this.dialog.open(PreviousDetailsComponent, {
-      data: {
-        dataList: data,
-        title:
-          this.currentLanguageSet.historyData.Perinatalhistorydetails
-            .developmentalhistorydetails,
-      },
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title:
+        this.currentLanguageSet.historyData.Perinatalhistorydetails
+          .developmentalhistorydetails,
     });
   }
 }

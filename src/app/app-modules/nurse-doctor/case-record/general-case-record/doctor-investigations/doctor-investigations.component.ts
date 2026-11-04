@@ -21,7 +21,7 @@
  */
 
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import {
   MasterdataService,
@@ -33,12 +33,25 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf, NgFor } from '@angular/common';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 
 @Component({
   selector: 'app-doctor-investigations',
   templateUrl: './doctor-investigations.component.html',
-  styleUrls: ['./doctor-investigations.component.css'],
+  imports: [
+    NgIf,
+    NgFor,
+    ReactiveFormsModule,
+    StringValidatorDirective,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
+  ],
 })
 export class DoctorInvestigationsComponent
   implements OnInit, DoCheck, OnDestroy
@@ -364,6 +377,41 @@ export class DoctorInvestigationsComponent
       this.idrsScoreService.clearTMCSuggested();
     }
   }
+  // --- Zard control adapters. z-select is string-valued, but the reactive-form
+  // controls keep their original array-of-procedure-object values so the
+  // submission contract is unchanged. Each item's zValue is procedureName; the
+  // handlers map the emitted name(s) back to the master objects + setValue. ---
+  get selectedLabTestNames(): string[] {
+    const val = this.generalDoctorInvestigationForm.get('labTest')?.value;
+    return Array.isArray(val) ? val.map((t: any) => t?.procedureName) : [];
+  }
+
+  get selectedRadiologyTestNames(): string[] {
+    const val = this.generalDoctorInvestigationForm.get('radiologyTest')?.value;
+    return Array.isArray(val) ? val.map((t: any) => t?.procedureName) : [];
+  }
+
+  onLabTestChange(value: string | string[]) {
+    const names = Array.isArray(value) ? value : [value];
+    const selected = (this.nonRadiologyMaster || []).filter((t: any) =>
+      names.includes(t.procedureName)
+    );
+    this.generalDoctorInvestigationForm.controls['labTest'].setValue(selected);
+    this.generalDoctorInvestigationForm.controls['labTest'].markAsDirty();
+    this.checkTestName({ value: selected });
+  }
+
+  onRadiologyTestChange(value: string | string[]) {
+    const names = Array.isArray(value) ? value : [value];
+    const selected = (this.radiologyMaster || []).filter((t: any) =>
+      names.includes(t.procedureName)
+    );
+    this.generalDoctorInvestigationForm.controls['radiologyTest'].setValue(
+      selected
+    );
+    this.generalDoctorInvestigationForm.controls['radiologyTest'].markAsDirty();
+  }
+
   checkTestName(event: any) {
     console.log('testName', event);
     this.VisualAcuityTestDone = false;

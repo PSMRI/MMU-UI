@@ -25,25 +25,47 @@ import {
   OnInit,
   OnDestroy,
   DoCheck,
-  ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { ViewTestReportComponent } from './view-test-report/view-test-report.component';
 import { DoctorService } from '../../../shared/services';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { TestInVitalsService } from '../../../shared/services/test-in-vitals.service';
-import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/core/components/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
+import { openViewRadiologyDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import { LabService } from 'src/app/app-modules/lab/shared/services';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf, NgFor, DatePipe } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideSearch, lucideEye, lucideFileText } from '@ng-icons/lucide';
+import { ZardTabGroupComponent, ZardTabComponent } from 'Common-UI/v2/ui/tabs';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardPaginatorComponent } from 'Common-UI/v2/ui/paginator';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { cardImports } from 'Common-UI/v2/ui/card';
 @Component({
   selector: 'app-test-and-radiology',
   templateUrl: './test-and-radiology.component.html',
-  styleUrls: ['./test-and-radiology.component.css'],
+  viewProviders: [provideIcons({ lucideSearch, lucideEye, lucideFileText })],
+  imports: [
+    NgIf,
+    NgFor,
+    DatePipe,
+    NgIcon,
+    ZardTabGroupComponent,
+    ZardTabComponent,
+    ZardTableImports,
+    ZardPaginatorComponent,
+    ZardFormImports,
+    ZardInputDirective,
+    ZardButtonComponent,
+    cardImports,
+  ],
 })
 export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
   current_language_set: any;
@@ -55,12 +77,13 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
     'measurementUnit',
     'remarks',
   ];
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  filteredLabResults = new MatTableDataSource<any>();
+  filteredLabResults: { data: any[] } = { data: [] };
+  pagedLabResults: any[] = [];
 
   constructor(
     private doctorService: DoctorService,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private labService: LabService,
     private idrsScoreService: IdrsscoreService,
     private httpServiceService: HttpServiceService,
@@ -169,7 +192,6 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
       });
       this.labResults = [vitalsRBSResponse].concat(this.labResults);
       this.filteredLabResults.data = this.labResults;
-      this.filteredLabResults.paginator = this.paginator;
 
       this.currentLabPageChanged({
         page: this.currentLabActivePage,
@@ -185,7 +207,6 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
       });
 
       this.filteredLabResults.data = this.labResults;
-      this.filteredLabResults.paginator = this.paginator;
 
       this.currentLabPageChanged({
         page: this.currentLabActivePage,
@@ -209,7 +230,6 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
             return lab.procedureType === 'Laboratory';
           });
           this.filteredLabResults.data = this.labResults;
-          this.filteredLabResults.paginator = this.paginator;
 
           //coded added to check whether strips are available for RBS Test
           if (visitCategory === 'NCD screening') {
@@ -229,7 +249,6 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
           }
 
           this.filteredLabResults.data = this.labResults;
-          this.filteredLabResults.paginator = this.paginator;
 
           this.radiologyResults = res.data.LabReport.filter(
             (radiology: any) => {
@@ -249,10 +268,8 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
   filterProcedures(searchTerm?: string) {
     if (!searchTerm) {
       this.filteredLabResults.data = this.labResults;
-      this.filteredLabResults.paginator = this.paginator;
     } else {
       this.filteredLabResults.data = [];
-      this.filteredLabResults.paginator = this.paginator;
       this.labResults.forEach((item: any) => {
         const value: string = '' + item.procedureName;
         if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
@@ -280,15 +297,13 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   showTestResult(fileIDs: any) {
-    const ViewTestReport = this.dialog.open(
-      ViewRadiologyUploadedFilesComponent,
+    const ViewTestReport = openViewRadiologyDialog(
+      this.dialog,
+      this.viewContainerRef,
       {
-        width: '40%',
-        data: {
-          filesDetails: fileIDs,
-          panelClass: 'dialog-width',
-          disableClose: false,
-        },
+        filesDetails: fileIDs,
+        panelClass: 'dialog-width',
+        disableClose: false,
       }
     );
     ViewTestReport.afterClosed().subscribe(result => {
@@ -376,11 +391,14 @@ export class TestAndRadiologyComponent implements OnInit, OnDestroy, DoCheck {
 
   showArchivedRadiologyTestResult(radiologyReport: any) {
     console.log('reports', radiologyReport);
-    this.dialog.open(ViewTestReportComponent, {
-      data: radiologyReport,
-      width: 0.8 * window.innerWidth + 'px',
-      panelClass: 'dialog-width',
-      disableClose: false,
+    this.dialog.create<ViewTestReportComponent, unknown>({
+      zContent: ViewTestReportComponent,
+      zData: radiologyReport,
+      zWidth: 0.8 * window.innerWidth + 'px',
+      zMaskClosable: true,
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
   }
 

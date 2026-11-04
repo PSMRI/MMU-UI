@@ -29,10 +29,14 @@ export class MasterDataService {
   constructor(private http: HttpClient) {}
 
   getLabRequirements(beneficiaryRegID: any, visitID: any, visitCode: any) {
-    return this.http.post(environment.getprescribedTestDataUrl, {
-      beneficiaryRegID: beneficiaryRegID,
-      benVisitID: visitID,
-      visitCode: visitCode,
-    });
+    return this.http.post(
+      environment.getprescribedTestDataUrl,
+      {
+        beneficiaryRegID: beneficiaryRegID,
+        benVisitID: visitID,
+        visitCode: visitCode,
+      },
+      { headers: { 'X-Skip-Loader': 'true' } }
+    );
   }
 }

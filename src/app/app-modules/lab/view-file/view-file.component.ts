@@ -23,20 +23,33 @@
 import { Component, OnInit, Inject, DoCheck } from '@angular/core';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { NgIf, NgFor, NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-view-file',
   templateUrl: './view-file.component.html',
-  styleUrls: ['./view-file.component.css'],
+  imports: [
+    NgIf,
+    NgFor,
+    NgClass,
+    NgIcon,
+    ZardButtonComponent,
+    ...tooltipImports,
+  ],
+  viewProviders: [provideIcons({ lucideX })],
 })
 export class ViewFileComponent implements OnInit, DoCheck {
   fileObj: any;
   current_language_set: any;
   constructor(
-    @Inject(MAT_DIALOG_DATA) public input: any,
-    private dialogRef: MatDialogRef<ViewFileComponent>,
+    @Inject(Z_MODAL_DATA) public input: any,
+    private readonly dialogRef: ZardDialogRef<ViewFileComponent>,
     private confirmationService: ConfirmationService,
     private httpServiceService: HttpServiceService
   ) {

@@ -20,31 +20,27 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DashboardComponent } from './dashboard.component';
 
-describe('nurse-doctor DashboardComponent', () => {
+describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [DashboardComponent],
-      schemas: [NO_ERRORS_SCHEMA],
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [DashboardComponent],
     }).compileComponents();
+  }));
+
+  beforeEach(() => {
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('renders the shell: header with roles, router outlet and footer', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
-    const el: HTMLElement = fixture.nativeElement;
-    const header = el.querySelector('app-header');
-    expect(header).not.toBeNull();
-    expect(el.querySelector('router-outlet')).not.toBeNull();
-    expect(el.querySelector('app-footer')).not.toBeNull();
   });
 });

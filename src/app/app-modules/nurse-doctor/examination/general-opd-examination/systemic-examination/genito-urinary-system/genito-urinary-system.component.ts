@@ -21,15 +21,23 @@
  */
 
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { AmritTrackingService } from 'Common-UI/v2/tracking';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { StringValidatorDirective } from '../../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-nurse-genito-urinary-system',
   templateUrl: './genito-urinary-system.component.html',
-  styleUrls: ['./genito-urinary-system.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    ...ZardFormImports,
+    ZardInputDirective,
+    StringValidatorDirective,
+  ],
 })
 export class GenitoUrinarySystemComponent implements OnInit, DoCheck {
   @Input()

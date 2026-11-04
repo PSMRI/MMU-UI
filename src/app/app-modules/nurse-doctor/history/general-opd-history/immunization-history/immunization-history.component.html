@@ -1,22 +1,23 @@
-<div class="row m-t-20" [formGroup]="immunizationHistoryForm">
+<div class="mt-5" [formGroup]="immunizationHistoryForm">
   <table
-    class="table table-bordered"
+    z-table
+    class="border border-border"
     formArrayName="immunizationList"
     aria-describedby="immunizationList">
-    <thead>
-      <tr>
-        <th class="col-xs-2" id="age">
+    <thead z-table-header>
+      <tr z-table-row>
+        <th z-table-head class="w-1/6 border border-border" id="age">
           {{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.immunization?.age
           }}
         </th>
-        <th class="col-xs-2" id="Vaccines">
+        <th z-table-head class="w-1/6 border border-border" id="Vaccines">
           {{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.immunization
               ?.Vaccines
           }}
         </th>
-        <th class="col-xs-2" id="Status">
+        <th z-table-head class="w-1/6 border border-border" id="Status">
           {{
             currentLanguageSet?.historyData?.opdNCDPNCHistory?.immunization
               ?.Status
@@ -24,7 +25,7 @@
         </th>
       </tr>
     </thead>
-    <tbody>
+    <tbody z-table-body>
       <ng-template
         ngFor
         let-immunization
@@ -33,34 +34,40 @@
         "
         let-i="index">
         <ng-container [formGroupName]="i">
-          <tr>
-            <td [rowSpan]="immunization.value.vaccines.length + 1">
+          <tr z-table-row>
+            <td
+              z-table-cell
+              class="border border-border align-top"
+              [rowSpan]="immunization.value.vaccines.length + 1">
               {{ immunization.value.defaultReceivingAge }}
             </td>
-            <td colspan="4">
-              <span class="pull-right">
-                <mat-checkbox
-                  [checked]="checkSelectALL[i]"
-                  [id]="'selectAll' + i"
-                  (change)="selectAll($event, i)"
-                  color="primary"></mat-checkbox>
+            <td z-table-cell class="border border-border" colspan="4">
+              <span class="flex items-center justify-end gap-2">
                 {{ currentLanguageSet?.common?.selectAll }}
+                <z-checkbox
+                  [zChecked]="checkSelectALL[i]"
+                  [zId]="'selectAll' + i"
+                  [name]="'selectAll' + i"
+                  (zCheckedChange)="selectAll({ checked: $event }, i)">
+                </z-checkbox>
               </span>
             </td>
           </tr>
           <ng-container formArrayName="vaccines">
             <tr
+              z-table-row
               *ngFor="
                 let vaccines of immunization.controls['vaccines'].controls;
                 let j = index
               ">
               <ng-container [formGroupName]="j">
-                <td>{{ vaccines.value.vaccine }}</td>
-                <td>
-                  <mat-checkbox
-                    color="primary"
+                <td z-table-cell class="border border-border">
+                  {{ vaccines.value.vaccine }}
+                </td>
+                <td z-table-cell class="border border-border">
+                  <z-checkbox
                     name="status"
-                    formControlName="status"></mat-checkbox>
+                    formControlName="status"></z-checkbox>
                 </td>
               </ng-container>
             </tr>

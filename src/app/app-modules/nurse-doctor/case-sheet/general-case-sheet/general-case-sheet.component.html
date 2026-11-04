@@ -1,127 +1,87 @@
-<div *ngIf="!hideBack" class="container">
-  <div class="row">
-    <div class="col-12">
-      <button
-        *ngIf="enablePrescriptionButton === true"
-        mat-raised-button
-        color="primary"
-        class="pull-right"
-        style="margin-left: 10px"
-        (click)="prescribeTMMedicine()">
-        {{ currentLanguageSet?.casesheet?.PrescribeTmMedicine }}
-      </button>
-      <div>
-        <button
-          mat-raised-button
-          color="primary"
-          class="pull-left mat_blue"
-          (click)="goBack()">
-          {{ currentLanguageSet?.common?.back }}
-        </button>
-      </div>
-      <div>
-        <button
-          mat-raised-button
-          color="primary"
-          class="pull-right mat_blue"
-          (click)="downloadCasesheet()">
-          {{ currentLanguageSet?.casesheet?.print }}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="col-12 button_postion">
-  <div post>
+<div
+  *ngIf="!hideBack"
+  class="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-2 border-b border-border bg-background/95 py-3 backdrop-blur print:hidden">
+  <button z-button zType="ghost" (click)="goBack()">
+    <ng-icon name="lucideChevronLeft"></ng-icon>
+    {{ currentLanguageSet?.common?.back }}
+  </button>
+  <div class="flex flex-wrap items-center gap-2">
+    <button
+      *ngIf="enablePrescriptionButton === true"
+      z-button
+      zType="outline"
+      (click)="prescribeTMMedicine()">
+      {{ currentLanguageSet?.casesheet?.PrescribeTmMedicine }}
+    </button>
     <button
       *ngIf="!hideSelectQC"
-      mat-mini-fab
-      style="margin-bottom: 5px"
-      matTooltip="{{ currentLanguageSet?.casesheet?.caseComponent }}"
-      matTooltipPosition="left"
-      matTooltipClass="iemr-tooltip"
-      class="example-fab select non-printable mat_blue_circle"
-      color="primary"
+      z-button
+      zType="outline"
       (click)="selectPrintPage()">
-      <mat-icon>view_module</mat-icon>
+      <ng-icon name="lucideLayoutGrid"></ng-icon>
+      {{ currentLanguageSet?.casesheet?.caseComponent }}
     </button>
-  </div>
-  <div>
-    <button
-      mat-mini-fab
-      matTooltip="{{ currentLanguageSet?.casesheet?.goTop }}"
-      matTooltipPosition="left"
-      style="margin-bottom: 5px"
-      class="example-fab upward non-printable mat_blue_circle"
-      color="primary"
-      (click)="goToTop()"
-      *ngIf="!previous">
-      <mat-icon>arrow_upward</mat-icon>
-    </button>
-  </div>
-  <div>
-    <button
-      mat-mini-fab
-      matTooltip="{{ currentLanguageSet?.casesheet?.printCaseheet }}"
-      matTooltipPosition="left"
-      class="example-fab print non-printable mat_blue_circle"
-      color="primary"
-      style="margin-bottom: 5px"
-      (click)="downloadCasesheet()"
-      *ngIf="!previous">
-      <mat-icon>print</mat-icon>
-    </button>
-  </div>
-  <div>
-    <button
-      mat-mini-fab
-      matTooltip="{{ currentLanguageSet?.casesheet?.workList }}"
-      matTooltipPosition="left"
-      class="example-fab back non-printable mat_blue_circle"
-      style="margin-bottom: 5px"
-      color="primary"
-      (click)="goBack()"
-      *ngIf="!hideBack">
-      <mat-icon>chevron_left</mat-icon>
+    <button z-button zType="default" (click)="downloadCasesheet()">
+      <ng-icon name="lucidePrinter"></ng-icon>
+      {{ currentLanguageSet?.casesheet?.print }}
     </button>
   </div>
 </div>
-<div class="" style="margin-top: 20px">
+<button
+  *ngIf="!previous"
+  z-button
+  zType="default"
+  zShape="circle"
+  zSize="icon"
+  class="fixed bottom-8 right-5 z-30 shadow-lg print:hidden"
+  [zTooltip]="currentLanguageSet?.casesheet?.goTop"
+  zPosition="left"
+  aria-label="{{ currentLanguageSet?.casesheet?.goTop }}"
+  (click)="goToTop()">
+  <ng-icon name="lucideArrowUp"></ng-icon>
+</button>
+<div
+  *ngIf="!caseSheetData"
+  class="mx-auto mt-5 flex max-w-5xl flex-col gap-4 rounded-lg border border-border bg-card p-6">
+  <span z-skeleton class="mx-auto size-16 rounded-full"></span>
+  <span z-skeleton class="mx-auto h-5 w-48"></span>
+  <div class="mt-4 flex flex-col gap-3">
+    <span
+      z-skeleton
+      class="h-4 w-full"
+      *ngFor="let r of caseSheetSkeletonRows"></span>
+  </div>
+</div>
+
+<div class="mt-5 flex flex-col gap-8" *ngIf="caseSheetData">
+
   <app-doctor-diagnosis-case-sheet
     [printPagePreviewSelect]="printPagePreviewSelect"
     [caseSheetData]="caseSheetData"
     [previous]="previous"></app-doctor-diagnosis-case-sheet>
-  <div class="page-break" *ngIf="visitCategory !== 'General OPD (QC)'"></div>
-  <ng-container *ngIf="printPagePreviewSelect?.caseSheetANC">
-    <app-anc-case-sheet
-      *ngIf="visitCategory === 'ANC'"
-      [caseSheetData]="caseSheetData"
-      [previous]="previous"></app-anc-case-sheet>
-    <div class="page-break"></div>
-  </ng-container>
-  <ng-container *ngIf="printPagePreviewSelect?.caseSheetPNC">
-    <app-pnc-case-sheet
-      *ngIf="visitCategory === 'PNC'"
-      [caseSheetData]="caseSheetData"
-      [previous]="previous"></app-pnc-case-sheet>
-    <div class="page-break"></div>
-  </ng-container>
-  <ng-container *ngIf="printPagePreviewSelect?.caseSheetHistory">
-    <app-history-case-sheet
-      *ngIf="visitCategory !== 'General OPD (QC)'"
-      [caseSheetData]="caseSheetData"
-      [previous]="previous"></app-history-case-sheet>
-    <div class="page-break"></div>
-  </ng-container>
-  <ng-container *ngIf="printPagePreviewSelect?.caseSheetExamination">
-    <app-examination-case-sheet
-      *ngIf="
-        visitCategory !== 'NCD care' &&
-        visitCategory !== 'General OPD (QC)' &&
-        visitCategory !== 'NCD screening' &&
-        visitCategory !== 'COVID-19 Screening'
-      "
-      [caseSheetData]="caseSheetData"
-      [previous]="previous"></app-examination-case-sheet>
-  </ng-container>
+  <app-anc-case-sheet
+    *ngIf="printPagePreviewSelect?.caseSheetANC && visitCategory === 'ANC'"
+    [caseSheetData]="caseSheetData"
+    [previous]="previous"></app-anc-case-sheet>
+  <app-pnc-case-sheet
+    *ngIf="printPagePreviewSelect?.caseSheetPNC && visitCategory === 'PNC'"
+    [caseSheetData]="caseSheetData"
+    [previous]="previous"></app-pnc-case-sheet>
+  <app-history-case-sheet
+    *ngIf="
+      printPagePreviewSelect?.caseSheetHistory &&
+      visitCategory !== 'General OPD (QC)'
+    "
+    [caseSheetData]="caseSheetData"
+    [previous]="previous"></app-history-case-sheet>
+  <app-examination-case-sheet
+    *ngIf="
+      printPagePreviewSelect?.caseSheetExamination &&
+      visitCategory !== 'NCD care' &&
+      visitCategory !== 'General OPD (QC)' &&
+      visitCategory !== 'NCD screening' &&
+      visitCategory !== 'COVID-19 Screening'
+    "
+    [caseSheetData]="caseSheetData"
+    [previous]="previous"></app-examination-case-sheet>
 </div>

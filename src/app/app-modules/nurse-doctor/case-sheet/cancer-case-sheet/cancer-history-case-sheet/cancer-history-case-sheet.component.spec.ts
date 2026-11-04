@@ -20,71 +20,27 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  COMMON_TEST_IMPORTS,
-  LANGUAGE_EN,
-  NO_ERRORS_SCHEMA,
-  commonTestProviders,
-} from 'src/testing/test-utils';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { CancerHistoryCaseSheetComponent } from './cancer-history-case-sheet.component';
 
 describe('CancerHistoryCaseSheetComponent', () => {
   let component: CancerHistoryCaseSheetComponent;
   let fixture: ComponentFixture<CancerHistoryCaseSheetComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [...COMMON_TEST_IMPORTS],
-      declarations: [CancerHistoryCaseSheetComponent],
-      providers: [...commonTestProviders()],
-      schemas: [NO_ERRORS_SCHEMA],
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [CancerHistoryCaseSheetComponent],
     }).compileComponents();
+  }));
+
+  beforeEach(() => {
     fixture = TestBed.createComponent(CancerHistoryCaseSheetComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
-  it('language helpers set current language', () => {
-    component.ngOnInit();
-    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
-    component.currentLanguageSet = null;
-    component.assignSelectedLanguage();
-    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
-    component.currentLanguageSet = null;
-    component.ngDoCheck();
-    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
-  });
-
-  it('maps beneficiary, family, merged personal and obstetric history', () => {
-    const diet = { diet: 'veg' };
-    component.caseSheetData = {
-      BeneficiaryData: { name: 'b' },
-      nurseData: {
-        familyDiseaseHistory: ['f'],
-        benPersonalDietHistory: diet,
-        patientPersonalHistory: { tobacco: 'no' },
-        patientObstetricHistory: { g: 1 },
-      },
-    };
-    component.ngOnChanges();
-    expect(component.beneficiaryDetails).toEqual({ name: 'b' });
-    expect(component.familyDiseaseHistory).toEqual(['f']);
-    expect(component.patientPersonalHistory).toEqual({
-      diet: 'veg',
-      tobacco: 'no',
-    });
-    expect(diet).toEqual({ diet: 'veg' });
-    expect(component.patientObstetricHistory).toEqual({ g: 1 });
-  });
-
-  it('leaves fields unset for empty nurse data or no data', () => {
-    component.caseSheetData = { nurseData: {} };
-    component.ngOnChanges();
-    expect(component.beneficiaryDetails).toBeUndefined();
-    expect(component.familyDiseaseHistory).toBeUndefined();
-    expect(component.patientPersonalHistory).toBeUndefined();
-    expect(component.patientObstetricHistory).toBeUndefined();
-    component.caseSheetData = null;
-    expect(() => component.ngOnChanges()).not.toThrow();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });

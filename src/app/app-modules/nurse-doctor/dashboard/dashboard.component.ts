@@ -21,11 +21,14 @@
  */
 
 import { Component } from '@angular/core';
+import { AppHeaderComponent } from '../../core/components/app-header/app-header.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
+  imports: [AppHeaderComponent, RouterOutlet],
 })
 export class DashboardComponent {
   constructor() {}

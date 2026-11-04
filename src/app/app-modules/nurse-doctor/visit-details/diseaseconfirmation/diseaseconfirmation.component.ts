@@ -21,7 +21,12 @@
  */
 
 import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import {
   DoctorService,
@@ -30,12 +35,14 @@ import {
 } from '../../shared/services';
 import { IdrsscoreService } from '../../shared/services/idrsscore.service';
 import { VisitDetailUtils } from '../../shared/utility/visit-detail-utility';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgFor } from '@angular/common';
+import { ZardCheckboxComponent } from 'Common-UI/v2/ui/checkbox';
 
 @Component({
   selector: 'app-diseaseconfirmation',
   templateUrl: './diseaseconfirmation.component.html',
-  styleUrls: ['./diseaseconfirmation.component.css'],
+  imports: [ReactiveFormsModule, NgFor, ZardCheckboxComponent],
 })
 export class DiseaseconfirmationComponent implements OnInit {
   @Input()
@@ -52,7 +59,7 @@ export class DiseaseconfirmationComponent implements OnInit {
   revisit: any;
   diseaseArray: any = [];
   attendantType: any;
-  isDoctor: boolean = true;
+  isDoctor: boolean = false;
   currentLanguageSet: any;
   constructor(
     private fb: FormBuilder,
@@ -83,9 +90,12 @@ export class DiseaseconfirmationComponent implements OnInit {
     // }
     //}
     this.attendantType = this.route.snapshot.params['attendant'];
-    if (this.attendantType === 'doctor') {
-      this.isDoctor = true;
-    }
+    // Disease Confirmation is the nurse's to fill; doctors view it read-only.
+    // isDoctor defaulted to true and was only ever re-set to true, so a nurse's
+    // checkboxes stayed disabled. (Material's mat-checkbox masked this by
+    // re-enabling from the form control; z-checkbox honours [disabled] strictly.)
+    // Derive it from the role so the nurse can actually tick the boxes.
+    this.isDoctor = this.attendantType === 'doctor';
   }
 
   getDiseasesData(): any {
@@ -106,36 +116,48 @@ export class DiseaseconfirmationComponent implements OnInit {
     );
   }
 
-  checked(event: any, item: any) {
-    console.log(event.checked);
+  checked(checkedState: boolean, item: any) {
+    console.log(checkedState);
     console.log(this.diseaseFormsGroup.value);
     if (this.diseaseFormsGroup.value) {
       this.diseasearray =
         this.diseaseFormsGroup.get('diseaseFormsArray')?.value;
-      const ar: any = [];
-      this.diseasearray.forEach((value: any) => {
-        if (value.selected !== false) ar.push(value.diseaseName);
-      });
+      const ar = this.getSelectedDiseaseNames();
       console.log('diseasearray', ar);
-      if (!event.checked) {
-        if (item.value.diseaseName === 'Hypertension') {
-          this.idrsScoreService.clearHypertensionSelected();
-        }
-        if (item.value.diseaseName === 'Diabetes') {
-          this.idrsScoreService.clearConfirmedDiabeticSelected();
-        }
-        this.idrsScoreService.setUnchecked(item.value.diseaseName);
-      } else {
-        if (item.value.diseaseName === 'Hypertension') {
-          this.idrsScoreService.setHypertensionSelected();
-        }
-        if (item.value.diseaseName === 'Diabetes') {
-          this.idrsScoreService.setConfirmedDiabeticSelected();
-        }
-
+      if (checkedState) {
+        this.applyDiseaseSelected(item.value.diseaseName);
         this.idrsScoreService.setDiseasesSelected(ar);
+      } else {
+        this.applyDiseaseUnselected(item.value.diseaseName);
+        this.idrsScoreService.setUnchecked(item.value.diseaseName);
       }
     }
+  }
+
+  private applyDiseaseSelected(diseaseName: string) {
+    if (diseaseName === 'Hypertension') {
+      this.idrsScoreService.setHypertensionSelected();
+    }
+    if (diseaseName === 'Diabetes') {
+      this.idrsScoreService.setConfirmedDiabeticSelected();
+    }
+  }
+
+  private applyDiseaseUnselected(diseaseName: string) {
+    if (diseaseName === 'Hypertension') {
+      this.idrsScoreService.clearHypertensionSelected();
+    }
+    if (diseaseName === 'Diabetes') {
+      this.idrsScoreService.clearConfirmedDiabeticSelected();
+    }
+  }
+
+  private getSelectedDiseaseNames(): any[] {
+    const ar: any = [];
+    (this.diseasearray || []).forEach((value: any) => {
+      if (value.selected !== false) ar.push(value.diseaseName);
+    });
+    return ar;
   }
   nurseMasterDataSubscription: any;
   IDRSDetailsSubscription: any;
@@ -219,7 +241,10 @@ export class DiseaseconfirmationComponent implements OnInit {
                     this.questionArray = [];
                     let suspect1 = [];
                     // this.suspect = [];
-                    if (value.data.IDRSDetail.confirmedDisease !== null)
+                    if (
+                      value.data.IDRSDetail.confirmedDisease !== undefined &&
+                      value.data.IDRSDetail.confirmedDisease !== null
+                    )
                       suspect1 =
                         value.data.IDRSDetail.confirmedDisease.split(',');
                     if (

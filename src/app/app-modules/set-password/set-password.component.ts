@@ -22,17 +22,33 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import * as CryptoJS from 'crypto-js';
 import {
   AuthService,
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
+import { FormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideLock, lucideEye, lucideEyeOff } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { cardImports } from 'Common-UI/v2/ui/card';
 
 @Component({
   selector: 'app-set-password',
   templateUrl: './set-password.component.html',
-  styleUrls: ['./set-password.component.css'],
+  host: { class: 'block' },
+  imports: [
+    FormsModule,
+    NgIcon,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ...cardImports,
+  ],
+  viewProviders: [provideIcons({ lucideLock, lucideEye, lucideEyeOff })],
 })
 export class SetPasswordComponent implements OnInit {
   newpwd: any;
@@ -71,6 +87,10 @@ export class SetPasswordComponent implements OnInit {
 
   hidePWD() {
     this.dynamictype = 'password';
+  }
+
+  togglePWD() {
+    this.dynamictype = this.dynamictype === 'text' ? 'password' : 'text';
   }
 
   get keySize() {

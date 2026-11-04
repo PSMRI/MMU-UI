@@ -28,6 +28,7 @@ import { HttpServiceService } from '../services/http-service.service';
 
 @Component({
   template: '',
+  standalone: true,
 })
 export class SetLanguageComponent {
   currentLanguageObject: any;

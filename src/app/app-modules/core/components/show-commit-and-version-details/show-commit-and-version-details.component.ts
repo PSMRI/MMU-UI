@@ -21,22 +21,27 @@
  */
 
 import { Component, OnInit, Inject, DoCheck } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from '../../services/http-service.service';
 import { SetLanguageComponent } from '../set-language.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
 
 @Component({
   selector: 'app-show-commit-and-version-details',
   templateUrl: './show-commit-and-version-details.component.html',
-  styleUrls: ['./show-commit-and-version-details.component.css'],
+  imports: [NgIcon, ZardButtonComponent, ...ZardTableImports],
+  viewProviders: [provideIcons({ lucideX })],
 })
 export class ShowCommitAndVersionDetailsComponent implements OnInit, DoCheck {
   current_language_set: any;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public input: any,
+    @Inject(Z_MODAL_DATA) public input: any,
     public httpServiceService: HttpServiceService,
-    public dialogRef: MatDialogRef<ShowCommitAndVersionDetailsComponent>
+    public dialogRef: ZardDialogRef<ShowCommitAndVersionDetailsComponent>
   ) {}
 
   ngOnInit() {

@@ -20,19 +20,13 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import {
-  Component,
-  OnInit,
-  Input,
-  ViewChild,
-  DoCheck,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   FormArray,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 
 import {
@@ -49,15 +43,40 @@ import { GeneralUtils } from '../../../shared/utility/general-utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/v2/tracking';
+import { NgIf, NgFor } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucidePlus, lucideX } from '@ng-icons/lucide';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardPaginatorComponent } from 'Common-UI/v2/ui/paginator';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardCheckboxComponent } from 'Common-UI/v2/ui/checkbox';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-findings',
   templateUrl: './findings.component.html',
-  styleUrls: ['./findings.component.css'],
+  viewProviders: [provideIcons({ lucidePlus, lucideX })],
+  imports: [
+    NgIf,
+    NgFor,
+    ReactiveFormsModule,
+    NgIcon,
+    ZardFormImports,
+    ZardInputDirective,
+    ZardSelectImports,
+    ZardTableImports,
+    ZardPaginatorComponent,
+    ZardButtonComponent,
+    ZardCheckboxComponent,
+    cardImports,
+    StringValidatorDirective,
+  ],
 })
 export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
   @Input()
@@ -89,8 +108,8 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     'description',
   ];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
+  dataSource: { data: any[] } = { data: [] };
+  pagedComplaints: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -143,7 +162,6 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
           this.complaintList = findings.complaints.slice();
           this.dataSource.data = [];
           this.dataSource.data = findings.complaints.slice();
-          this.dataSource.paginator = this.paginator;
           this.complaintList.forEach((element: any, i: any) => {
             this.filterInitialComplaints(element);
           });
@@ -209,8 +227,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
         }
       });
   }
-  getSCTid(events: any, index: any) {
-    const event: any = events.option?.value;
+  getSCTid(event: any, index: any) {
     console.log('called', index, event);
     this.masterdataService.getSnomedCTRecord(event.chiefComplaint).subscribe(
       (res: any) => {
@@ -230,8 +247,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     });
   }
 
-  filterComplaints(event: any, i: any) {
-    const chiefComplaintValue: any = event.option.value;
+  filterComplaints(chiefComplaintValue: any, i: any) {
     this.suggestChiefComplaintList(
       this.fb.group({ chiefComplaint: chiefComplaintValue }),
       i
@@ -415,6 +431,14 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
 
   displayChiefComplaint(complaint: any) {
     return complaint?.chiefComplaint;
+  }
+
+  displayAndSelectChiefComplaint(complaint: any, i: number) {
+    const complaintFormArray = <FormArray>(
+      this.generalFindingsForm.controls['complaints']
+    );
+    complaintFormArray.at(i).patchValue({ chiefComplaint: complaint });
+    this.suggestedChiefComplaintList[i] = [];
   }
 
   suggestChiefComplaintList(complaintForm: AbstractControl<any, any>, i: any) {

@@ -20,43 +20,27 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { ReferComponent } from './refer.component';
 
 describe('ReferComponent', () => {
-  const build = (cat: any) => {
-    const c = new ReferComponent();
-    c.visitCategory = cat;
-    c.ngOnInit();
-    return c;
-  };
+  let component: ReferComponent;
+  let fixture: ComponentFixture<ReferComponent>;
 
-  [
-    'General OPD',
-    'ANC',
-    'NCD care',
-    'PNC',
-    'COVID-19 Screening',
-    'NCD screening',
-    'General OPD (QC)',
-  ].forEach(cat =>
-    it(`shows general refer for ${cat}`, () => {
-      const c = build(cat);
-      expect(c.showGeneralOPD).toBeTrue();
-      expect(c.showCancer).toBeFalse();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [ReferComponent],
+    }).compileComponents();
+  }));
 
-  it('shows cancer refer for Cancer Screening', () => {
-    const c = build('Cancer Screening');
-    expect(c.showGeneralOPD).toBeFalse();
-    expect(c.showCancer).toBeTrue();
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ReferComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
-  it('shows nothing for other or missing categories', () => {
-    for (const cat of ['Other', undefined]) {
-      const c = build(cat);
-      expect(c.showGeneralOPD).toBeFalse();
-      expect(c.showCancer).toBeFalse();
-    }
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });

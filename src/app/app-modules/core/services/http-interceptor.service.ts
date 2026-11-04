@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 import { SpinnerService } from './spinner.service';
 import { ConfirmationService } from './confirmation.service';
 import { environment } from 'src/environments/environment';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
@@ -56,7 +56,18 @@ export class HttpInterceptorService implements HttpInterceptor {
     const isLoginRequest =
       req.url && req.url.toLowerCase().includes('user/userAuthenticate');
 
-    this.pendingRequests++;
+    // Skip the spinner for skeleton opt-outs and background/device/polling requests.
+    const url = req.url;
+    const hasSkipLoaderHeader = req.headers.has('X-Skip-Loader');
+    const skipSpinner =
+      !url ||
+      hasSkipLoaderHeader ||
+      url.includes('cti/getAgentState') ||
+      this.donotShowSpinnerUrl.some(entry => !!entry && url.includes(entry));
+
+    if (!skipSpinner) {
+      this.pendingRequests++;
+    }
     const key: any = sessionStorage.getItem('key');
     const serverKey = this.sessionstorage.getItem('serverKey');
     let modifiedReq = req;
@@ -85,9 +96,15 @@ export class HttpInterceptorService implements HttpInterceptor {
       }
     }
 
+    if (hasSkipLoaderHeader) {
+      modifiedReq = modifiedReq.clone({
+        headers: modifiedReq.headers.delete('X-Skip-Loader'),
+      });
+    }
+
     return next.handle(modifiedReq).pipe(
       tap((event: HttpEvent<any>) => {
-        if (req.url !== undefined && !req.url.includes('cti/getAgentState')) {
+        if (!skipSpinner) {
           this.spinnerService.setLoading(true);
         }
         if (event instanceof HttpResponse) {
@@ -134,9 +151,11 @@ export class HttpInterceptorService implements HttpInterceptor {
       }),
 
       finalize(() => {
-        this.pendingRequests--;
-        if (this.pendingRequests === 0) {
-          this.spinnerService.setLoading(false);
+        if (!skipSpinner) {
+          this.pendingRequests = Math.max(0, this.pendingRequests - 1);
+          if (this.pendingRequests === 0) {
+            this.spinnerService.setLoading(false);
+          }
         }
       })
     );

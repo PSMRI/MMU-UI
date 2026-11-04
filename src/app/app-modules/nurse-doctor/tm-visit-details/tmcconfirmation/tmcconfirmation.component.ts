@@ -24,26 +24,43 @@ import {
   Component,
   Input,
   OnInit,
-  Injector,
   DoCheck,
   OnDestroy,
+  ViewContainerRef,
 } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NurseService, DoctorService } from '../../shared/services';
 import { MasterdataService } from '../../shared/services/masterdata.service';
 import { IdrsscoreService } from '../../shared/services/idrsscore.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogService, ZardDialogRef } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { DataSyncLoginComponent } from 'src/app/app-modules/core/components/data-sync-login/data-sync-login.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf, NgFor } from '@angular/common';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
 
 @Component({
   selector: 'app-tmcconfirmation',
   templateUrl: './tmcconfirmation.component.html',
-  styleUrls: ['./tmcconfirmation.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    NgFor,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
+    ...ZardSelectImports,
+    ...ZardFormImports,
+    ZardButtonComponent,
+    ...ZardTableImports,
+  ],
 })
 export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
   @Input()
@@ -81,6 +98,7 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
   showRadio: boolean = false;
   confirmedDisease: any;
   currentLanguageSet: any;
+  selectedInstituteLabel = '';
 
   constructor(
     private masterdataService: MasterdataService,
@@ -88,7 +106,8 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
     private router: Router,
     private nurseService: NurseService,
     private doctorService: DoctorService,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private idrsScoreService: IdrsscoreService,
     readonly sessionstorage: SessionStorageService,
     private httpServices: HttpServiceService
@@ -173,6 +192,7 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
                 res.data.Refer.referredToInstituteName,
             });
             this.defaultCentre = referedToInstitute[0].institutionName;
+            this.selectedInstituteLabel = referedToInstitute[0].institutionName;
             console.log('form', this.tmcConfirmationFormsGroup);
           }
         }
@@ -258,6 +278,22 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
     if (selected !== null && selected.institutionName) {
       this.selectValueService = true;
     }
+  }
+
+  // z-select is string-valued (keyed on institutionID); resolve the full
+  // institution object and store it on the control so the submitted payload
+  // stays identical to the original mat-select (object-valued) behaviour.
+  onReferInstituteChange(institutionID: string | string[]): void {
+    const selectedCenter = (this.higherHealthcareCenter || []).find(
+      (center: any) => center.institutionID.toString() === institutionID
+    );
+    this.selectedInstituteLabel = selectedCenter
+      ? selectedCenter.institutionName
+      : '';
+    this.tmcConfirmationFormsGroup.patchValue({
+      refrredToAdditionalServiceList: selectedCenter ?? null,
+    });
+    this.higherhealthcarecenter(selectedCenter ?? null);
   }
   dataSync: boolean = false;
   viewAndPrintCaseSheet() {
@@ -385,17 +421,17 @@ export class TmcconfirmationComponent implements OnInit, DoCheck, OnDestroy {
   routeToCaseSheet() {
     this.router.navigate(['/nurse-doctor/print/' + 'MMU' + '/' + 'current']);
   }
-  loginDialogRef!: MatDialogRef<DataSyncLoginComponent>;
+  loginDialogRef!: ZardDialogRef<DataSyncLoginComponent>;
   openDialog() {
-    this.loginDialogRef = this.dialog.open(DataSyncLoginComponent, {
-      hasBackdrop: true,
-      disableClose: true,
-      panelClass: 'fit-screen',
-      backdropClass: 'backdrop',
-      position: { top: '20px' },
-      data: {
+    this.loginDialogRef = this.dialog.create<DataSyncLoginComponent, unknown>({
+      zContent: DataSyncLoginComponent,
+      zMaskClosable: false,
+      zData: {
         provideAuthorizationToViewTmCS: true,
       },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
     });
     this.loginDialogRef.afterClosed().subscribe(result => {
       if (

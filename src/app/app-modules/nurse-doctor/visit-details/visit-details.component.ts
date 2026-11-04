@@ -21,18 +21,51 @@
  */
 
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { DoctorService } from '../shared/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { ZardAccordionImports } from 'Common-UI/v2/ui/accordion';
+import { PatientVisitDetailsComponent } from './visit-details/visit-details.component';
+import { NgIf } from '@angular/common';
+import { CovidVaccinationStatusComponent } from './covid-vaccination-status/covid-vaccination-status.component';
+import { ChiefComplaintsComponent } from './chief-complaints/chief-complaints.component';
+import { AdherenceComponent } from './adherence/adherence.component';
+import { InvestigationsComponent } from './investigations/investigations.component';
+import { SymptomsComponent } from './symptoms/symptoms.component';
+import { ContactHistoryComponent } from './contact-history/contact-history.component';
+import { TravelHistoryComponent } from './travel-history/travel-history.component';
+import { UploadFilesComponent } from './upload-files/upload-files.component';
+import { DiseaseconfirmationComponent } from './diseaseconfirmation/diseaseconfirmation.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideMapPin, lucidePaperclip } from '@ng-icons/lucide';
+import { healthicons } from '../../core/icons/healthicons';
 
 @Component({
   selector: 'app-visit-details',
   templateUrl: './visit-details.component.html',
-  styleUrls: ['./visit-details.component.css'],
+  viewProviders: [
+    provideIcons({ ...healthicons, lucideMapPin, lucidePaperclip }),
+  ],
+  imports: [
+    ZardAccordionImports,
+    ReactiveFormsModule,
+    PatientVisitDetailsComponent,
+    NgIf,
+    NgIcon,
+    CovidVaccinationStatusComponent,
+    ChiefComplaintsComponent,
+    AdherenceComponent,
+    InvestigationsComponent,
+    SymptomsComponent,
+    ContactHistoryComponent,
+    TravelHistoryComponent,
+    UploadFilesComponent,
+    DiseaseconfirmationComponent,
+  ],
 })
 export class VisitDetailsComponent implements OnInit, DoCheck {
   @Input()
@@ -96,9 +129,18 @@ export class VisitDetailsComponent implements OnInit, DoCheck {
   }
 
   getVisitCategory() {
-    (<FormGroup>(
+    const categoryControl = (<FormGroup>(
       this.patientVisitDataForm.controls['patientVisitDetailsForm']
-    )).controls['visitCategory'].valueChanges.subscribe(categoryValue => {
+    )).controls['visitCategory'];
+    // Returning to this step recreates the component (each step is *ngIf-gated)
+    // while the form value is preserved. valueChanges fires only on future
+    // changes, so seed from the already-selected value to recompute which
+    // sections (Chief Complaints, etc.) are visible — otherwise they vanish.
+    if (categoryControl.value) {
+      this.visitCategory = categoryControl.value;
+      this.conditionCheck();
+    }
+    categoryControl.valueChanges.subscribe(categoryValue => {
       if (categoryValue) {
         this.visitCategory = categoryValue;
         this.conditionCheck();

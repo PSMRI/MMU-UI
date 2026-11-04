@@ -27,7 +27,7 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
 } from '@angular/router';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 
 @Injectable()
 export class WorkareaCanActivate implements CanActivate {

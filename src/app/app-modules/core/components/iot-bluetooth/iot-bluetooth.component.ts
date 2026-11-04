@@ -25,11 +25,32 @@ import { HttpServiceService } from '../../services/http-service.service';
 import { IotService } from '../../services/iot.service';
 import { SetLanguageComponent } from '../set-language.component';
 import { ConfirmationService } from '../../services';
+import { NgClass, NgIf, NgFor } from '@angular/common';
+import { ZardDialogRef } from 'Common-UI/v2/ui/dialog';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX, lucideCheck, lucideBluetooth } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardLoaderComponent } from 'Common-UI/v2/ui/loader';
 
 @Component({
   selector: 'app-iot-bluetooth',
+  standalone: true,
   templateUrl: './iot-bluetooth.component.html',
-  styleUrls: ['./iot-bluetooth.component.css'],
+  imports: [
+    NgClass,
+    NgIf,
+    NgFor,
+    NgIcon,
+    ZardButtonComponent,
+    ZardLoaderComponent,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideX,
+      lucideCheck,
+      lucideBluetooth,
+    }),
+  ],
 })
 export class IotBluetoothComponent implements OnInit, DoCheck {
   current_language_set: any;
@@ -37,7 +58,8 @@ export class IotBluetoothComponent implements OnInit, DoCheck {
   constructor(
     public service: IotService,
     public httpServiceService: HttpServiceService,
-    private confirmationService: ConfirmationService
+    private readonly confirmationService: ConfirmationService,
+    public dialogRef: ZardDialogRef<IotBluetoothComponent>
   ) {}
 
   apiAvailable = false;

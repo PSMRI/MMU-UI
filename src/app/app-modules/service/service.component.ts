@@ -25,12 +25,17 @@ import { Router } from '@angular/router';
 import { SetLanguageComponent } from '../core/components/set-language.component';
 import { ConfirmationService } from '../core/services';
 import { HttpServiceService } from '../core/services/http-service.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { AppHeaderComponent } from '../core/components/app-header/app-header.component';
+import { NgFor } from '@angular/common';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
-  styleUrls: ['./service.component.css'],
+  host: { class: 'block' },
+  imports: [AppHeaderComponent, NgFor, ZardButtonComponent, ...cardImports],
 })
 export class ServiceComponent implements OnInit, DoCheck {
   servicesList: any;

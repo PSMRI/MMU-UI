@@ -42,17 +42,16 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+  Z_MODAL_DATA,
+  ZardDialogService,
+  ZardDialogRef,
+} from 'Common-UI/v2/ui/dialog';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services/confirmation.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/v2/tracking';
 import englishJson from 'src/assets/English.json';
 
 export { NO_ERRORS_SCHEMA };
@@ -165,7 +164,7 @@ export function createConfirmationMock(result: any = true) {
   return obj;
 }
 
-/** MatDialogRef mock whose afterClosed() emits `result`. */
+/** ZardDialogRef mock whose afterClosed() emits `result`. */
 export function createDialogRefMock(result: any = undefined) {
   return {
     close: jasmine.createSpy('close'),
@@ -185,11 +184,14 @@ export function createDialogRefMock(result: any = undefined) {
   };
 }
 
-/** MatDialog mock; open() returns a dialog ref whose afterClosed() emits `result`. */
-export function createMatDialogMock(result: any = undefined) {
+/** ZardDialogService mock; create()/open() return a dialog ref whose afterClosed() emits `result`. */
+export function createZardDialogMock(result: any = undefined) {
   return {
+    create: jasmine
+      .createSpy('ZardDialogService.create')
+      .and.callFake(() => createDialogRefMock(result)),
     open: jasmine
-      .createSpy('MatDialog.open')
+      .createSpy('ZardDialogService.open')
       .and.callFake(() => createDialogRefMock(result)),
     closeAll: jasmine.createSpy('closeAll'),
     openDialogs: [],
@@ -234,13 +236,15 @@ export function commonTestProviders(
     },
     { provide: ConfirmationService, useValue: createConfirmationMock() },
     { provide: AmritTrackingService, useValue: createTrackingMock() },
-    { provide: MatDialog, useValue: createMatDialogMock(opts.dialogResult) },
-    { provide: MatDialogRef, useValue: createDialogRefMock(opts.dialogResult) },
-    { provide: MAT_DIALOG_DATA, useValue: opts.dialogData ?? {} },
     {
-      provide: MatSnackBar,
-      useValue: { open: jasmine.createSpy('snackbar.open') },
+      provide: ZardDialogService,
+      useValue: createZardDialogMock(opts.dialogResult),
     },
+    {
+      provide: ZardDialogRef,
+      useValue: createDialogRefMock(opts.dialogResult),
+    },
+    { provide: Z_MODAL_DATA, useValue: opts.dialogData ?? {} },
   ];
 }
 

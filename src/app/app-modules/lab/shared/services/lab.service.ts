@@ -22,7 +22,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { environment } from 'src/environments/environment';
 @Injectable()
 export class LabService {
@@ -38,11 +38,15 @@ export class LabService {
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
       `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.labWorklist + fetchUrl);
+    return this.http.get(environment.labWorklist + fetchUrl, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
 
   getEcgAbnormalities() {
-    return this.http.get(environment.getEcgAbnormalitiesMasterUrl);
+    return this.http.get(environment.getEcgAbnormalitiesMasterUrl, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
 
   saveLabWork(techForm: any) {

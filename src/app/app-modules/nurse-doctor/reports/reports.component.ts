@@ -23,22 +23,26 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
 import { MasterdataService } from '../shared/services';
 import { ConfirmationService } from '../../core/services/confirmation.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import * as ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
-import {
-  MomentDateAdapter,
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-} from '@angular/material-moment-adapter';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/v2/tracking';
+import { NgFor } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideDownload } from '@ng-icons/lucide';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardDatePickerComponent } from 'Common-UI/v2/ui/date-picker';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 
 declare global {
   interface Navigator {
@@ -49,31 +53,17 @@ declare global {
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.css'],
-  providers: [
-    {
-      provide: MAT_DATE_LOCALE,
-      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
-    },
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    },
-    {
-      provide: MAT_DATE_FORMATS,
-      useValue: {
-        parse: {
-          dateInput: 'LL',
-        },
-        display: {
-          dateInput: 'DD/MM/YYYY', // Set the desired display format
-          monthYearLabel: 'MMM YYYY',
-          dateA11yLabel: 'LL',
-          monthYearA11yLabel: 'MMMM YYYY',
-        },
-      },
-    },
+  standalone: true,
+  viewProviders: [provideIcons({ lucideDownload })],
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    NgIcon,
+    ...cardImports,
+    ...ZardFormImports,
+    ...ZardSelectImports,
+    ZardDatePickerComponent,
+    ZardButtonComponent,
   ],
 })
 export class ReportsComponent implements OnInit, DoCheck {
@@ -111,10 +101,10 @@ export class ReportsComponent implements OnInit, DoCheck {
   // Ends
   createReportForm() {
     return this.formBuilder.group({
-      report: null,
-      fromDate: null,
-      toDate: null,
-      van: null,
+      report: [null, Validators.required],
+      fromDate: [null, Validators.required],
+      toDate: [null, Validators.required],
+      van: [null, Validators.required],
     });
   }
 
@@ -147,6 +137,22 @@ export class ReportsComponent implements OnInit, DoCheck {
 
   trackFieldInteraction(fieldName: string) {
     this.trackingService.trackFieldInteraction(fieldName, 'Reports');
+  }
+
+  onReportSelected(reportID: string | string[]) {
+    const selected = this.reportMaster.find(
+      (report: any) => report.reportID.toString() === reportID
+    );
+    this.reportForm.patchValue({ report: selected });
+    this.checkReport();
+  }
+
+  onVanSelected(vanID: string | string[]) {
+    const selected = this.vanMaster.find(
+      (van: any) => van.vanID.toString() === vanID
+    );
+    this.reportForm.patchValue({ van: selected });
+    this.trackFieldInteraction('Van Selection');
   }
 
   checkReport() {

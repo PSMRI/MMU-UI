@@ -20,19 +20,13 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import {
-  Component,
-  OnInit,
-  Input,
-  DoCheck,
-  ViewChild,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   FormArray,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import {
   MasterdataService,
@@ -47,15 +41,40 @@ import { VisitDetailUtils } from '../../shared/utility/visit-detail-utility';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/v2/tracking';
+import { NgIf, NgFor } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucidePlus, lucideX } from '@ng-icons/lucide';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardPaginatorComponent } from 'Common-UI/v2/ui/paginator';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { NullDefaultValueDirective } from '../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
 
 @Component({
   selector: 'app-patient-chief-complaints',
   templateUrl: './chief-complaints.component.html',
-  styleUrls: ['./chief-complaints.component.css'],
+  viewProviders: [provideIcons({ lucidePlus, lucideX })],
+  imports: [
+    NgIf,
+    ReactiveFormsModule,
+    NgFor,
+    NgIcon,
+    ZardFormImports,
+    ZardInputDirective,
+    ZardSelectImports,
+    ZardTableImports,
+    ZardPaginatorComponent,
+    ZardButtonComponent,
+    cardImports,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+  ],
 })
 export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
   @Input()
@@ -84,8 +103,8 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     'description',
   ];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
+  dataSource: { data: any[] } = { data: [] };
+  pagedComplaints: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -156,7 +175,6 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
             this.benChiefComplaints = visitComplaintDetail.BenChiefComplaints;
           this.dataSource.data = [];
           this.dataSource.data = visitComplaintDetail.BenChiefComplaints;
-          this.dataSource.paginator = this.paginator;
           let flag = false;
           this.enableLungAssessment = false;
           this.enableProvisionalDiag = false;
@@ -244,6 +262,28 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
       complaintForm.get('unitOfDuration')?.disable();
       complaintForm.get('unitOfDuration')?.reset();
     }
+  }
+
+  /**
+   * Show the full chief-complaint list when the field is focused/clicked (not
+   * just while typing). Uses the row's available list, falling back to the full
+   * master, so an empty field still opens the dropdown.
+   */
+  showChiefComplaintList(i: number) {
+    const list =
+      this.chiefComplaintTemporarayList?.[i] ?? this.chiefComplaintMaster ?? [];
+    this.suggestedChiefComplaintList[i] = [...list];
+  }
+
+  /**
+   * Hide the chief-complaint suggestion list when the input loses focus (e.g.
+   * the user clicks elsewhere). Deferred a tick so an option's (mousedown)
+   * selection — which fires before blur — completes first.
+   */
+  hideChiefComplaintList(i: number) {
+    setTimeout(() => {
+      this.suggestedChiefComplaintList[i] = [];
+    }, 200);
   }
 
   reEnterChiefComplaint(complaintForm: AbstractControl) {
@@ -478,6 +518,57 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
 
   displayChiefComplaint(complaint: any) {
     return complaint?.chiefComplaint;
+  }
+
+  displayAndSelectChiefComplaint(complaint: any, i: number) {
+    const complaintFormArray = <FormArray>(
+      this.patientChiefComplaintsForm.controls['complaints']
+    );
+    const selectedName = (complaint?.chiefComplaint ?? complaint)
+      ?.toString()
+      .trim()
+      .toLowerCase();
+    const alreadyAdded = complaintFormArray.controls.some(
+      (ctrl: AbstractControl, idx: number) => {
+        if (idx === i) return false;
+        const existing = ctrl.value?.chiefComplaint;
+        const existingName = (existing?.chiefComplaint ?? existing)
+          ?.toString()
+          .trim()
+          .toLowerCase();
+        return !!existingName && existingName === selectedName;
+      }
+    );
+    if (alreadyAdded) {
+      this.confirmationService.alert(
+        this.currentLanguageSet?.alerts?.info?.chiefComplaintAlreadyAdded ||
+          'This chief complaint is already added.',
+        'info'
+      );
+      complaintFormArray
+        .at(i)
+        .patchValue({ chiefComplaint: null, chiefComplaintID: null });
+      this.suggestedChiefComplaintList[i] = [];
+      return;
+    }
+    // `complaint` is the selected option object ({ chiefComplaint, chiefComplaintID, … }).
+    // The control backs a text input, so store the name string (not the object,
+    // which renders as "[object Object]") AND its id in the sibling
+    // chiefComplaintID control — otherwise the saved visit has a name with a
+    // null id and the doctor sees "No chief complaint captured". conceptID/SCT
+    // id are patched separately.
+    const row = complaintFormArray.at(i);
+    row.patchValue({
+      chiefComplaint: complaint?.chiefComplaint ?? complaint,
+      chiefComplaintID: complaint?.chiefComplaintID ?? null,
+    });
+    // Picking a complaint must enable the dependent fields immediately. The
+    // input's (blur) enabler doesn't fire reliably when an option is chosen via
+    // mousedown, so the Duration/Description (and, once Duration is typed, Unit)
+    // stayed disabled after selecting.
+    row.get('duration')?.enable();
+    row.get('description')?.enable();
+    this.suggestedChiefComplaintList[i] = [];
   }
 
   suggestChiefComplaintList(complaintForm: AbstractControl, i: number) {

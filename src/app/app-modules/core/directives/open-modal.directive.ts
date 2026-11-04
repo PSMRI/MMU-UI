@@ -27,6 +27,7 @@ import {
   ElementRef,
   OnInit,
   DoCheck,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   FormArray,
@@ -38,12 +39,10 @@ import { ProvisionalSearchComponent } from '../../core/components/provisional-se
 import { GeneralUtils } from '../../nurse-doctor/shared/utility/general-utility';
 import { SetLanguageComponent } from '../components/set-language.component';
 import { HttpServiceService } from '../services/http-service.service';
-import { MatDialog } from '@angular/material/dialog';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 
-@Directive({
-  selector: '[appOpenModal]',
-})
+@Directive({ selector: '[appOpenModal]' })
 export class OpenModalDirective implements OnInit, DoCheck {
   @Input()
   previousSelected: any;
@@ -65,7 +64,8 @@ export class OpenModalDirective implements OnInit, DoCheck {
   constructor(
     private fb: FormBuilder,
     private el: ElementRef,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     readonly sessionstorage: SessionStorageService,
     private httpServiceService: HttpServiceService
   ) {}
@@ -77,16 +77,22 @@ export class OpenModalDirective implements OnInit, DoCheck {
   openDialog(): void {
     const searchTerm = this.diagnosisListForm.value.provisionalDiagnosis;
     if (searchTerm.length > 2) {
-      const dialogRef = this.dialog.open(ProvisionalSearchComponent, {
-        width: '800px',
-        hasBackdrop: false,
-        data: {
-          searchTerm: searchTerm,
-          addedDiagnosis: this.previousSelected,
-          diagonasisType:
-            this.currentLanguageSet.DiagnosisDetails.provisionaldiagnosis,
-        },
-      });
+      const dialogRef = this.dialog.create<ProvisionalSearchComponent, unknown>(
+        {
+          zContent: ProvisionalSearchComponent,
+          zWidth: '800px',
+          zMaskClosable: false,
+          zData: {
+            searchTerm: searchTerm,
+            addedDiagnosis: this.previousSelected,
+            diagonasisType:
+              this.currentLanguageSet.DiagnosisDetails.provisionaldiagnosis,
+          },
+          zHideFooter: true,
+          zClosable: false,
+          zViewContainerRef: this.viewContainerRef,
+        }
+      );
 
       dialogRef.afterClosed().subscribe(result => {
         if (result) {

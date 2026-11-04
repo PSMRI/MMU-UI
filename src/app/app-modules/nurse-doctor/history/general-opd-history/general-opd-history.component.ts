@@ -27,6 +27,8 @@ import {
   DoCheck,
   OnChanges,
   OnDestroy,
+  AfterViewChecked,
+  ViewChild,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
@@ -34,16 +36,61 @@ import { ConfirmationService } from '../../../core/services/confirmation.service
 import { DoctorService } from '../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import {
+  ZardAccordionImports,
+  ZardAccordionComponent,
+} from 'Common-UI/v2/ui/accordion';
+import { NgIf } from '@angular/common';
+import { PastHistoryComponent } from './past-history/past-history.component';
+import { ComorbidityConcurrentConditionsComponent } from './comorbidity-concurrent-conditions/comorbidity-concurrent-conditions.component';
+import { MedicationHistoryComponent } from './medication-history/medication-history.component';
+import { GeneralPersonalHistoryComponent } from './personal-history/personal-history.component';
+import { FamilyHistoryComponent } from './family-history/family-history.component';
+import { MenstrualHistoryComponent } from './menstrual-history/menstrual-history.component';
+import { PerinatalHistoryComponent } from './perinatal-history/perinatal-history.component';
+import { PastObstericHistoryComponent } from './past-obsteric-history/past-obsteric-history.component';
+import { ImmunizationHistoryComponent } from './immunization-history/immunization-history.component';
+import { OtherVaccinesComponent } from './other-vaccines/other-vaccines.component';
+import { FeedingHistoryComponent } from './feeding-history/feeding-history.component';
+import { DevelopmentHistoryComponent } from './development-history/development-history.component';
+import { FamilyHistoryNcdscreeningComponent } from './family-history-ncdscreening/family-history-ncdscreening.component';
+import { PhysicalActivityHistoryComponent } from './physical-activity-history/physical-activity-history.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { healthicons } from '../../../core/icons/healthicons';
 
 @Component({
   selector: 'app-nurse-general-opd-history',
   templateUrl: './general-opd-history.component.html',
-  styleUrls: ['./general-opd-history.component.css'],
+  viewProviders: [provideIcons(healthicons)],
+  imports: [
+    ...ZardAccordionImports,
+    NgIf,
+    NgIcon,
+    PastHistoryComponent,
+    ComorbidityConcurrentConditionsComponent,
+    MedicationHistoryComponent,
+    GeneralPersonalHistoryComponent,
+    FamilyHistoryComponent,
+    MenstrualHistoryComponent,
+    PerinatalHistoryComponent,
+    PastObstericHistoryComponent,
+    ImmunizationHistoryComponent,
+    OtherVaccinesComponent,
+    FeedingHistoryComponent,
+    DevelopmentHistoryComponent,
+    FamilyHistoryNcdscreeningComponent,
+    PhysicalActivityHistoryComponent,
+  ],
 })
 export class GeneralOpdHistoryComponent
-  implements OnInit, DoCheck, OnChanges, OnDestroy
+  implements OnInit, DoCheck, OnChanges, OnDestroy, AfterViewChecked
 {
+  @ViewChild(ZardAccordionComponent)
+  historyAccordion?: ZardAccordionComponent;
+
+  private defaultPanelExpanded = false;
+
   @Input()
   nurseGeneralHistoryForm!: FormGroup;
 
@@ -96,6 +143,23 @@ export class GeneralOpdHistoryComponent
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
+
+  ngAfterViewChecked() {
+    // The Zard accordion has no controlled-open input, so the default panel
+    // (previously Material's expanded="true") is expanded imperatively once
+    // the accordion exists. Done once so the user can freely collapse it.
+    if (!this.defaultPanelExpanded && this.historyAccordion) {
+      const defaultPanel =
+        this.visitCategory === 'NCD screening'
+          ? 'ncdFamilyHistory'
+          : 'pastHistory';
+      if (!this.historyAccordion.isOpen(defaultPanel)) {
+        this.historyAccordion.toggle(defaultPanel);
+      }
+      this.defaultPanelExpanded = true;
+    }
+  }
+
   assignSelectedLanguage() {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
@@ -103,45 +167,31 @@ export class GeneralOpdHistoryComponent
   }
 
   loadFormData() {
-    this.pastHistory = this.nurseGeneralHistoryForm.get(
-      'pastHistory'
-    ) as FormGroup;
-    this.comorbidityHistory = this.nurseGeneralHistoryForm.get(
-      'comorbidityHistory'
-    ) as FormGroup;
-    this.medicationHistory = this.nurseGeneralHistoryForm.get(
-      'medicationHistory'
-    ) as FormGroup;
-    this.personalHistory = this.nurseGeneralHistoryForm.get(
-      'personalHistory'
-    ) as FormGroup;
-    this.familyHistory = this.nurseGeneralHistoryForm.get(
-      'familyHistory'
-    ) as FormGroup;
-    this.menstrualHistory = this.nurseGeneralHistoryForm.get(
-      'menstrualHistory'
-    ) as FormGroup;
-    this.perinatalHistory = this.nurseGeneralHistoryForm.get(
-      'perinatalHistory'
-    ) as FormGroup;
-    this.pastObstericHistory = this.nurseGeneralHistoryForm.get(
-      'pastObstericHistory'
-    ) as FormGroup;
-    this.immunizationHistory = this.nurseGeneralHistoryForm.get(
-      'immunizationHistory'
-    ) as FormGroup;
-    this.otherVaccines = this.nurseGeneralHistoryForm.get(
-      'otherVaccines'
-    ) as FormGroup;
-    this.feedingHistory = this.nurseGeneralHistoryForm.get(
-      'feedingHistory'
-    ) as FormGroup;
-    this.developmentHistory = this.nurseGeneralHistoryForm.get(
-      'developmentHistory'
-    ) as FormGroup;
-    this.physicalActivityHistory = this.nurseGeneralHistoryForm.get(
-      'physicalActivityHistory'
-    ) as FormGroup;
+    const form = this.nurseGeneralHistoryForm;
+    if (!form) return;
+    const pick = (name: string): FormGroup | undefined => {
+      const ctrl = form.get(name);
+      return ctrl ? (ctrl as FormGroup) : undefined;
+    };
+    this.pastHistory = pick('pastHistory') ?? this.pastHistory;
+    this.comorbidityHistory =
+      pick('comorbidityHistory') ?? this.comorbidityHistory;
+    this.medicationHistory =
+      pick('medicationHistory') ?? this.medicationHistory;
+    this.personalHistory = pick('personalHistory') ?? this.personalHistory;
+    this.familyHistory = pick('familyHistory') ?? this.familyHistory;
+    this.menstrualHistory = pick('menstrualHistory') ?? this.menstrualHistory;
+    this.perinatalHistory = pick('perinatalHistory') ?? this.perinatalHistory;
+    this.pastObstericHistory =
+      pick('pastObstericHistory') ?? this.pastObstericHistory;
+    this.immunizationHistory =
+      pick('immunizationHistory') ?? this.immunizationHistory;
+    this.otherVaccines = pick('otherVaccines') ?? this.otherVaccines;
+    this.feedingHistory = pick('feedingHistory') ?? this.feedingHistory;
+    this.developmentHistory =
+      pick('developmentHistory') ?? this.developmentHistory;
+    this.physicalActivityHistory =
+      pick('physicalActivityHistory') ?? this.physicalActivityHistory;
   }
 
   ngOnChanges(changes: any) {

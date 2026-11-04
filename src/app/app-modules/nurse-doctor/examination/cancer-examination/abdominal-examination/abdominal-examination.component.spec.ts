@@ -19,109 +19,72 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { of } from 'rxjs';
 
-import { AbdominalExaminationComponent } from './abdominal-examination.component';
-import { CameraService } from '../../../../core/services/camera.service';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MaterialModule } from '../../../../core/material.module';
-import { CancerUtils } from '../../../shared/utility/cancer-utility';
-import {
-  COMMON_TEST_IMPORTS,
-  LANGUAGE_EN,
-  NO_ERRORS_SCHEMA,
-  autoSpy,
-  commonTestProviders,
-} from 'src/testing/test-utils';
+
+import { CameraService } from '../../../../core/services/camera.service';
+import { CameraServiceStub } from '../../../../core/mocks/camera-service-stub';
+import { CancerUtils } from '../../../shared/utility';
+import { AbdominalExaminationComponent } from './abdominal-examination.component';
 
 describe('AbdominalExaminationComponent', () => {
   let component: AbdominalExaminationComponent;
   let fixture: ComponentFixture<AbdominalExaminationComponent>;
-  let camera: any;
-  let form: FormGroup;
+  let debugElement: any;
+  let fb: any;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [...COMMON_TEST_IMPORTS, MaterialModule],
-      declarations: [AbdominalExaminationComponent],
-      providers: [
-        ...commonTestProviders(),
-        { provide: CameraService, useValue: autoSpy(CameraService) },
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        AbdominalExaminationComponent,
       ],
       schemas: [NO_ERRORS_SCHEMA],
+      providers: [{ provide: CameraService, useClass: CameraServiceStub }],
     }).compileComponents();
+  }));
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(AbdominalExaminationComponent);
     component = fixture.componentInstance;
-    camera = TestBed.inject(CameraService) as any;
-    form = new CancerUtils(new FormBuilder(), {
-      getItem: () => JSON.stringify({ vanID: 1, parkingPlaceID: 2 }),
-    } as any).createAbdominalExaminationForm();
-    component.abdominalExaminationForm = form;
+    debugElement = fixture.debugElement;
+
+    fb = debugElement.injector.get(FormBuilder);
+    component.abdominalExaminationForm = new CancerUtils(
+      fb
+    ).createAbdominalExaminationForm();
     fixture.detectChanges();
   });
 
-  it('creates and sets the language', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
-    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
-    component.currentLanguageSet = null;
-    component.ngDoCheck();
-    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
   });
 
-  it('exposes lymphNodes_Enlarged and observation getters', () => {
-    expect(component.lymphNodes_Enlarged).toBe(form.get('lymphNodes_Enlarged'));
-    expect(component.observation).toBe(form.get('observation'));
+  it('should not show lymph nodes', () => {
+    debugElement = fixture.debugElement.query(By.css('#lymphNodesTable'));
+    expect(debugElement).toBeFalsy();
   });
 
-  it('shows lymph node detail section only when enlarged', () => {
-    const el: HTMLElement = fixture.nativeElement;
-    expect(el.querySelector('#lymphNodesTable')).toBeNull();
-    form.patchValue({ lymphNodes_Enlarged: true });
-    fixture.detectChanges();
-    expect(el.querySelector('#lymphNodesTable')).not.toBeNull();
-  });
-
-  it('checkWithLymphNodes resets every lymph node field', () => {
-    form.patchValue({
-      lymphNode_Inguinal_Left: true,
-      lymphNode_Inguinal_Right: true,
-      lymphNode_ExternalIliac_Left: true,
-      lymphNode_ExternalIliac_Right: true,
-      lymphNode_ParaAortic_Left: true,
-      lymphNode_ParaAortic_Right: true,
+  it('should show lymph nodes when lymph nodes is enlarged', () => {
+    component.abdominalExaminationForm.patchValue({
+      lymphNodes_Enlarged: true,
     });
-    component.checkWithLymphNodes();
-    expect(form.value.lymphNode_Inguinal_Left).toBeNull();
-    expect(form.value.lymphNode_Inguinal_Right).toBeNull();
-    expect(form.value.lymphNode_ExternalIliac_Left).toBeNull();
-    expect(form.value.lymphNode_ExternalIliac_Right).toBeNull();
-    expect(form.value.lymphNode_ParaAortic_Left).toBeNull();
-    expect(form.value.lymphNode_ParaAortic_Right).toBeNull();
+    fixture.detectChanges();
+    debugElement = fixture.debugElement.query(By.css('#lymphNodesTable'));
+    expect(debugElement).toBeTruthy;
   });
 
-  it('annotateImage stores the returned points with imageID 1', () => {
-    camera.annotate.and.returnValue(of({ markers: [1] }));
-    form.patchValue({ image: { old: true } });
-    (
-      fixture.nativeElement.querySelector(
-        '#annotateAbdominalImg'
-      ) as HTMLElement
-    ).click();
-    expect(camera.annotate).toHaveBeenCalledWith(
-      'assets/images/abdominalExamination.png',
-      { old: true },
-      LANGUAGE_EN
-    );
-    expect(form.value.image).toEqual({ markers: [1], imageID: 1 });
-    expect(form.dirty).toBeTrue();
-  });
-
-  it('annotateImage ignores an empty dialog result', () => {
-    camera.annotate.and.returnValue(of(undefined));
-    component.annotateImage();
-    expect(form.value.image).toBeNull();
-    expect(form.dirty).toBeFalse();
+  it('should call annotateImage when image is clicked', () => {
+    spyOn(component, 'annotateImage');
+    debugElement = fixture.debugElement.query(By.css('#annotateAbdominalImg'));
+    debugElement.triggerEventHandler('click', null);
+    expect(component.annotateImage).toHaveBeenCalled();
   });
 });

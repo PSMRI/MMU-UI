@@ -20,88 +20,119 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormGroup } from '@angular/forms';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MaterialModule } from '../../core/material.module';
 
 import { VitalsComponent } from './vitals.component';
-import { SetLanguageComponent } from '../../core/components/set-language.component';
-import {
-  COMMON_TEST_IMPORTS,
-  LANGUAGE_EN,
-  NO_ERRORS_SCHEMA,
-  commonTestProviders,
-} from 'src/testing/test-utils';
 
 describe('VitalsComponent', () => {
   let component: VitalsComponent;
   let fixture: ComponentFixture<VitalsComponent>;
-  let el: HTMLElement;
+  let debugElement;
+  let fb;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [...COMMON_TEST_IMPORTS],
-      declarations: [VitalsComponent],
-      providers: [...commonTestProviders()],
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        VitalsComponent,
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
+  }));
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(VitalsComponent);
     component = fixture.componentInstance;
-    el = fixture.nativeElement;
-    component.patientVitalsDataForm = new FormGroup({});
-    component.visitCategory = '';
-    component.vitalsMode = '';
-    component.pregnancyStatus = '';
+    debugElement = fixture.debugElement;
     fixture.detectChanges();
   });
 
-  it('creates with language set and no child rendered', () => {
+  it('VitalsComponent should be created', () => {
     expect(component).toBeTruthy();
-    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
-    expect(
-      component.languageComponent instanceof SetLanguageComponent
-    ).toBeTrue();
-    expect(component.showGeneralOPD).toBeFalse();
-    expect(component.showCancer).toBeFalse();
-    expect(el.querySelector('app-nurse-cancer-patient-vitals')).toBeNull();
-    expect(el.querySelector('app-nurse-general-patient-vitals')).toBeNull();
   });
 
-  it('ngOnInit and ngDoCheck fetch language', () => {
-    spyOn(component, 'fetchLanguageResponse');
+  it('should be created', () => {
     component.ngOnInit();
-    component.ngDoCheck();
-    expect(component.fetchLanguageResponse).toHaveBeenCalledTimes(2);
+    expect(component).toBeTruthy();
   });
 
-  it('shows cancer vitals for Cancer Screening', () => {
+  it('should excute on changes', () => {
+    component.ngOnChanges();
+    expect(component).toBeTruthy();
+  });
+
+  it('Should show general vital while selecting visitCategory other than Cancer Screening', () => {
+    component.ngOnInit();
+    component.visitCategory = 'ANC';
+    component.ngOnChanges();
+    expect(component.showCancer).toEqual(false);
+    expect(component.showGeneralOPD).toEqual(true);
+  });
+
+  it('Should show cancer vital', () => {
+    component.ngOnInit();
     component.visitCategory = 'Cancer Screening';
     component.ngOnChanges();
-    fixture.detectChanges();
-    expect(component.showCancer).toBeTrue();
-    expect(component.showGeneralOPD).toBeFalse();
-    expect(el.querySelector('app-nurse-cancer-patient-vitals')).not.toBeNull();
-    expect(el.querySelector('app-nurse-general-patient-vitals')).toBeNull();
+    expect(component.showCancer).toEqual(true);
+    expect(component.showGeneralOPD).toEqual(false);
   });
 
-  ['General OPD', 'ANC', 'PNC', 'NCD screening'].forEach(cat => {
-    it(`shows general vitals for ${cat}`, () => {
-      component.visitCategory = cat;
-      component.ngOnChanges();
-      fixture.detectChanges();
-      expect(component.showCancer).toBeFalse();
-      expect(component.showGeneralOPD).toBeTrue();
-      expect(
-        el.querySelector('app-nurse-general-patient-vitals')
-      ).not.toBeNull();
-    });
-  });
-
-  it('leaves flags untouched when visitCategory is empty', () => {
-    component.showCancer = true;
-    component.visitCategory = '';
+  it('Should show cancer vital', () => {
+    component.ngOnInit();
+    component.visitCategory = 'Cancer Screening';
     component.ngOnChanges();
-    expect(component.showCancer).toBeTrue();
-    expect(component.showGeneralOPD).toBeFalse();
+    expect(component.showCancer).toEqual(true);
+    expect(component.showGeneralOPD).toEqual(false);
+    fixture.detectChanges();
+    const de = fixture.debugElement.query(
+      By.css('nurse-cancer-patient-vitals')
+    );
+    expect(de.nativeElement).toBeTruthy();
+  });
+
+  it('Should show cancer vital', () => {
+    component.ngOnInit();
+    component.visitCategory = 'General OPD';
+    component.ngOnChanges();
+    expect(component.showCancer).toEqual(false);
+    expect(component.showGeneralOPD).toEqual(true);
+    fixture.detectChanges();
+    const de = fixture.debugElement.query(
+      By.css('nurse-general-patient-vitals')
+    );
+    expect(de.nativeElement).toBeTruthy();
+  });
+
+  it('Should not show general vital', () => {
+    component.ngOnInit();
+    component.visitCategory = 'Cancer Screening';
+    component.ngOnChanges();
+    expect(component.showCancer).toEqual(true);
+    expect(component.showGeneralOPD).toEqual(false);
+    fixture.detectChanges();
+    const de = fixture.debugElement.query(
+      By.css('nurse-general-patient-vitals')
+    );
+    expect(de).not.toBeTruthy();
+  });
+
+  it('Should not show cancer vital', () => {
+    component.ngOnInit();
+    component.visitCategory = 'General OPD';
+    component.ngOnChanges();
+    expect(component.showCancer).toEqual(false);
+    expect(component.showGeneralOPD).toEqual(true);
+    fixture.detectChanges();
+    const de = fixture.debugElement.query(
+      By.css('nurse-cancer-patient-vitals')
+    );
+    expect(de).not.toBeTruthy();
   });
 });

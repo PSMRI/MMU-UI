@@ -27,9 +27,10 @@ import {
   OnChanges,
   DoCheck,
   OnDestroy,
+  ViewContainerRef,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
 import {
@@ -39,50 +40,45 @@ import {
 } from '../shared/services';
 import { NCDScreeningUtils } from '../shared/utility';
 import { environment } from 'src/environments/environment';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { mergeMap, of } from 'rxjs';
-import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
-import {
-  MomentDateAdapter,
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-} from '@angular/material-moment-adapter';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { openIotDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgFor, NgIf } from '@angular/common';
+import { StringValidatorDirective } from '../../core/directives/stringValidator.directive';
+import { NumberValidatorDirective } from '../../core/directives/numberValidator.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideActivity } from '@ng-icons/lucide';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardDatePickerComponent } from 'Common-UI/v2/ui/date-picker';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-nurse-ncd-screening',
   templateUrl: './ncd-screening.component.html',
-  styleUrls: ['./ncd-screening.component.css'],
-  providers: [
-    {
-      provide: MAT_DATE_LOCALE,
-      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
-    },
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
-    },
-    {
-      provide: MAT_DATE_FORMATS,
-      useValue: {
-        parse: {
-          dateInput: 'LL',
-        },
-        display: {
-          dateInput: 'DD/MM/YYYY', // Set the desired display format
-          monthYearLabel: 'MMM YYYY',
-          dateA11yLabel: 'LL',
-          monthYearA11yLabel: 'MMMM YYYY',
-        },
-      },
-    },
+  viewProviders: [provideIcons({ lucideActivity })],
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    NgIf,
+    NgIcon,
+    StringValidatorDirective,
+    NumberValidatorDirective,
+    ...cardImports,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
+    ZardDatePickerComponent,
+    ZardRadioComponent,
+    ZardRadioGroupComponent,
+    ...tooltipImports,
   ],
 })
 export class NcdScreeningComponent
@@ -127,7 +123,8 @@ export class NcdScreeningComponent
 
   constructor(
     private fb: FormBuilder,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private confirmationService: ConfirmationService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private masterdataService: MasterdataService,
@@ -792,12 +789,123 @@ export class NcdScreeningComponent
   get bMI() {
     return this.NCDScreeningForm.controls['bMI'].value;
   }
+
+  // --- Zard select adapters. z-select is string-valued, but the reactive-form
+  // controls keep their original object / object-array values so the
+  // submission contract is unchanged (ids/names are only the trigger view). ---
+  get screeningConditionValues(): string[] {
+    const val =
+      this.NCDScreeningForm.controls['ncdScreeningConditionList'].value;
+    return Array.isArray(val)
+      ? val.map((c: any) => c?.ncdScreeningConditionID?.toString())
+      : [];
+  }
+
+  onScreeningConditionChange(value: string | string[]): void {
+    const ids = Array.isArray(value) ? value : [value];
+    const selected = (this.ncdScreeningConditions || []).filter((c: any) =>
+      ids.includes(c.ncdScreeningConditionID?.toString())
+    );
+    this.NCDScreeningForm.controls['ncdScreeningConditionList'].setValue(
+      selected
+    );
+    this.NCDScreeningForm.controls['ncdScreeningConditionList'].markAsDirty();
+  }
+
+  get reasonForScreeningValue(): string {
+    return (
+      this.NCDScreeningForm.controls[
+        'reasonForScreening'
+      ].value?.ncdScreeningReasonID?.toString() || ''
+    );
+  }
+
+  get reasonForScreeningLabel(): string {
+    return (
+      this.NCDScreeningForm.controls['reasonForScreening'].value
+        ?.ncdScreeningReason || ''
+    );
+  }
+
+  onReasonForScreeningChange(value: string | string[]): void {
+    const id = Array.isArray(value) ? value[0] : value;
+    const reason = (this.ncdScreeningReasons || []).find(
+      (r: any) => r.ncdScreeningReasonID?.toString() === id
+    );
+    this.NCDScreeningForm.controls['reasonForScreening'].setValue(
+      reason ?? null
+    );
+    this.NCDScreeningForm.controls['reasonForScreening'].markAsDirty();
+  }
+
+  get labTestOrderValues(): string[] {
+    const val = this.NCDScreeningForm.controls['labTestOrders'].value;
+    return Array.isArray(val) ? val.map((t: any) => t?.procedureName) : [];
+  }
+
+  onLabTestOrdersChange(value: string | string[]): void {
+    const names = Array.isArray(value) ? value : [value];
+    const selected = (this.laboratoryList || []).filter((t: any) =>
+      names.includes(t.procedureName)
+    );
+    this.NCDScreeningForm.controls['labTestOrders'].setValue(selected);
+    this.NCDScreeningForm.controls['labTestOrders'].markAsDirty();
+    this.checkScreeningTest();
+  }
+
+  get bloodPressureStatusValue(): string {
+    return (
+      this.NCDScreeningForm.controls[
+        'bloodPressureStatus'
+      ].value?.bpAndDiabeticStatusID?.toString() || ''
+    );
+  }
+
+  get bloodPressureStatusLabel(): string {
+    return (
+      this.NCDScreeningForm.controls['bloodPressureStatus'].value
+        ?.bpAndDiabeticStatus || ''
+    );
+  }
+
+  onBloodPressureStatusChange(value: string | string[]): void {
+    const id = Array.isArray(value) ? value[0] : value;
+    const status = (this.bloodPressureStatus || []).find(
+      (s: any) => s.bpAndDiabeticStatusID?.toString() === id
+    );
+    this.NCDScreeningForm.controls['bloodPressureStatus'].setValue(
+      status ?? null
+    );
+    this.NCDScreeningForm.controls['bloodPressureStatus'].markAsDirty();
+  }
+
+  get diabeticStatusValue(): string {
+    return (
+      this.NCDScreeningForm.controls[
+        'diabeticStatus'
+      ].value?.bpAndDiabeticStatusID?.toString() || ''
+    );
+  }
+
+  get diabeticStatusLabel(): string {
+    return (
+      this.NCDScreeningForm.controls['diabeticStatus'].value
+        ?.bpAndDiabeticStatus || ''
+    );
+  }
+
+  onDiabeticStatusChange(value: string | string[]): void {
+    const id = Array.isArray(value) ? value[0] : value;
+    const status = (this.diabeticStatus || []).find(
+      (s: any) => s.bpAndDiabeticStatusID?.toString() === id
+    );
+    this.NCDScreeningForm.controls['diabeticStatus'].setValue(status ?? null);
+    this.NCDScreeningForm.controls['diabeticStatus'].markAsDirty();
+  }
+
   openIOTWeightModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startWeightTest },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startWeightTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('he;;p', result, result['result']);
@@ -811,11 +919,8 @@ export class NcdScreeningComponent
     });
   }
   openIOTBGFastingModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBloodGlucose },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startBloodGlucose,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_glucose', result['sys'], result['dia']);
@@ -827,11 +932,8 @@ export class NcdScreeningComponent
     });
   }
   openIOTBGRandomModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBloodGlucose },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startBloodGlucose,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_glucose', result['sys'], result['dia']);
@@ -843,11 +945,8 @@ export class NcdScreeningComponent
     });
   }
   openIOTBGPostPrandialModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBloodGlucose },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startBloodGlucose,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_glucose', result['sys'], result['dia']);
@@ -859,11 +958,8 @@ export class NcdScreeningComponent
     });
   }
   openIOTBGNotSpecifiedModel() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBloodGlucose },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startBloodGlucose,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_glucose', result['sys'], result['dia']);
@@ -875,11 +971,8 @@ export class NcdScreeningComponent
     });
   }
   openIOTBP1Model() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBPTest },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startBPTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);
@@ -892,11 +985,8 @@ export class NcdScreeningComponent
     });
   }
   openIOTBP2Model() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBPTest },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startBPTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);
@@ -909,11 +999,8 @@ export class NcdScreeningComponent
     });
   }
   openIOTBP3Model() {
-    const dialogRef = this.dialog.open(IotcomponentComponent, {
-      width: '600px',
-      height: '180px',
-      disableClose: true,
-      data: { startAPI: this.startBPTest },
+    const dialogRef = openIotDialog(this.dialog, this.viewContainerRef, {
+      startAPI: this.startBPTest,
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('blood_pressure', result['sys'], result['dia']);

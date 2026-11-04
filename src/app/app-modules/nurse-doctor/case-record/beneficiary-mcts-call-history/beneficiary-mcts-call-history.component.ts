@@ -21,43 +21,66 @@
  */
 
 import { Component, OnInit, Inject, DoCheck } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogRef, Z_MODAL_DATA } from 'Common-UI/v2/ui/dialog';
+import { NgIf, NgFor } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX, lucideSearch } from '@ng-icons/lucide';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardTableImports } from 'Common-UI/v2/ui/table';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardPaginatorComponent } from 'Common-UI/v2/ui/paginator';
+
 @Component({
   selector: 'app-beneficiary-mcts-call-history',
   templateUrl: './beneficiary-mcts-call-history.component.html',
-  styleUrls: ['./beneficiary-mcts-call-history.component.css'],
+  standalone: true,
+  imports: [
+    NgIf,
+    NgFor,
+    FormsModule,
+    NgIcon,
+    ...cardImports,
+    ...ZardTableImports,
+    ZardInputDirective,
+    ZardButtonComponent,
+    ZardPaginatorComponent,
+  ],
+  viewProviders: [provideIcons({ lucideX, lucideSearch })],
 })
 export class BeneficiaryMctsCallHistoryComponent implements OnInit, DoCheck {
   current_language_set: any;
+  filterTerm = '';
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialogRef: MatDialogRef<BeneficiaryMctsCallHistoryComponent>,
+    @Inject(Z_MODAL_DATA) public data: any,
+    public dialogRef: ZardDialogRef<BeneficiaryMctsCallHistoryComponent>,
     private httpServiceService: HttpServiceService
   ) {}
 
   callDetails: any = [];
   filteredCallDetails: any = [];
   callDetailsRowsPerPage = 5;
-  callDetailsActivePage = 1;
+  callDetailsPagedList: any = [];
+
   ngOnInit() {
     this.callDetails = this.data;
     this.filteredCallDetails = this.data;
-    this.callDetailsPageChanged({
-      page: this.callDetailsActivePage,
-      itemsPerPage: this.callDetailsRowsPerPage,
-    });
   }
+
   ngDoCheck() {
     this.assignSelectedLanguage();
   }
+
   assignSelectedLanguage() {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
+
   filterCallHistory(searchTerm?: string) {
     if (!searchTerm) {
       this.filteredCallDetails = this.callDetails;
@@ -70,23 +93,5 @@ export class BeneficiaryMctsCallHistoryComponent implements OnInit, DoCheck {
         }
       });
     }
-
-    this.callDetailsActivePage = 1;
-    this.callDetailsPageChanged({
-      page: 1,
-      itemsPerPage: this.callDetailsRowsPerPage,
-    });
-  }
-
-  callDetailsPagedList: any = [];
-  callDetailsPageChanged(event: any): void {
-    console.log('called', event);
-    const startItem = (event.page - 1) * event.itemsPerPage;
-    const endItem = event.page * event.itemsPerPage;
-    this.callDetailsPagedList = this.filteredCallDetails.slice(
-      startItem,
-      endItem
-    );
-    console.log('list', this.callDetailsPagedList);
   }
 }

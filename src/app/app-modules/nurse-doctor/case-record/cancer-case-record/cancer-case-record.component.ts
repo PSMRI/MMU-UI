@@ -24,25 +24,45 @@ import {
   Component,
   OnInit,
   Input,
-  ViewChild,
   DoCheck,
   AfterViewInit,
   OnDestroy,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { DoctorService } from '../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { CameraService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { BeneficiaryPlatformHistoryComponent } from '../beneficiary-platform-history/beneficiary-platform-history.component';
+import { NgClass, NgIf } from '@angular/common';
+import { BaseChartDirective } from 'ng2-charts';
+import { StringValidatorDirective } from '../../../core/directives/stringValidator.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideFile } from '@ng-icons/lucide';
+import { ZardAccordionImports } from 'Common-UI/v2/ui/accordion';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
 @Component({
   selector: 'app-cancer-case-record',
   templateUrl: './cancer-case-record.component.html',
-  styleUrls: ['./cancer-case-record.component.css'],
+  viewProviders: [provideIcons({ lucideFile })],
+  imports: [
+    ReactiveFormsModule,
+    BeneficiaryPlatformHistoryComponent,
+    NgClass,
+    NgIf,
+    BaseChartDirective,
+    StringValidatorDirective,
+    NgIcon,
+    ...ZardAccordionImports,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ZardButtonComponent,
+  ],
 })
 export class CancerCaseRecordComponent
   implements OnInit, DoCheck, AfterViewInit, OnDestroy
@@ -155,20 +175,6 @@ export class CancerCaseRecordComponent
   mammogramLink: any;
   female: any;
   current_language_set: any;
-
-  displayedColumns = [
-    'visitnommu',
-    'date',
-    'visitreasonmmu',
-    'visitcategorymmu',
-    'visitdetailsmmu',
-    'visitcodemmu',
-    'medicationmmu',
-    'previewmmu',
-    'printpreviewmmu',
-  ];
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  dataSource = new MatTableDataSource<any>();
 
   constructor(
     private router: Router,

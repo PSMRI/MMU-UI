@@ -32,10 +32,35 @@ import { ConfirmationService } from '../../core/services/confirmation.service';
 import { DataSyncService } from './../shared/service/data-sync.service';
 import { DataSyncUtils } from '../shared/utility/data-sync-utility';
 import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf, NgFor, DatePipe } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideHourglass,
+  lucideSquareMinus,
+  lucideCircleCheckBig,
+  lucideCircleAlert,
+  lucideCheck,
+  lucideDownload,
+  lucideRefreshCw,
+  lucideUpload,
+  lucideArrowLeftRight,
+} from '@ng-icons/lucide';
+import { ZardTabComponent, ZardTabGroupComponent } from 'Common-UI/v2/ui/tabs';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import {
+  ZardTableComponent,
+  ZardTableHeaderComponent,
+  ZardTableBodyComponent,
+  ZardTableRowComponent,
+  ZardTableHeadComponent,
+  ZardTableCellComponent,
+} from 'Common-UI/v2/ui/table';
 import { environment } from 'src/environments/environment';
 import { CentralAuthService } from '../../core/services/central-auth.service';
 
@@ -47,9 +72,40 @@ interface DocumentSyncItem {
 }
 
 @Component({
+  standalone: true,
   selector: 'app-workarea',
   templateUrl: './workarea.component.html',
-  styleUrls: ['./workarea.component.css'],
+  imports: [
+    NgIf,
+    NgFor,
+    DatePipe,
+    ReactiveFormsModule,
+    NgIcon,
+    ZardTabComponent,
+    ZardTabGroupComponent,
+    ZardButtonComponent,
+    ...cardImports,
+    ...ZardSelectImports,
+    ZardTableComponent,
+    ZardTableHeaderComponent,
+    ZardTableBodyComponent,
+    ZardTableRowComponent,
+    ZardTableHeadComponent,
+    ZardTableCellComponent,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideHourglass,
+      lucideSquareMinus,
+      lucideCircleCheckBig,
+      lucideCircleAlert,
+      lucideCheck,
+      lucideDownload,
+      lucideRefreshCw,
+      lucideUpload,
+      lucideArrowLeftRight,
+    }),
+  ],
 })
 export class WorkareaComponent
   implements OnInit, CanComponentDeactivate, DoCheck, OnDestroy
@@ -164,83 +220,6 @@ export class WorkareaComponent
       });
   }
 
-  // syncGroups() {
-  //   this.dataSyncService.syncAllGroups().subscribe(
-  //     (res: any) => {
-  //       console.log(res);
-  //       if (res.statusCode === 200) {
-  //         // Update status for each group based on the response
-  //         this.updateGroupStatus(res.data.groupsProgress);
-  //         this.confirmationService.alert(res.data.response, 'success');
-  //       } else {
-  //         this.confirmationService.alert(res.errorMessage, 'error');
-  //       }
-  //     },
-  //     err => {
-  //       this.confirmationService.alert(err, 'error');
-  //     }
-  //   );
-  // }
-
-  // updateGroupStatus(groupsProgress: any[]) {
-  //   // Update status for each group based on the response
-  //   this.syncTableGroupList.forEach((group: any) => {
-  //     const progress = groupsProgress.find((item: any) => item.groupId === group.syncTableGroupID);
-  //     if (progress) {
-  //       if (progress.status === 'completed') {
-  //         group.status = 'success';
-  //       } else if (progress.status === 'failed') {
-  //         group.status = 'failed';
-  //       }
-  //     } else {
-  //       group.status = 'pending';
-  //     }
-  //   });
-  // }
-  // syncGroups() {
-  //   this.dataSyncService.syncAllGroups().subscribe(
-  //     (res: any) => {
-  //       console.log(res);
-  //       if (res.statusCode === 200) {
-  //         if (res.data.groupsProgress) {
-  //           this.updateGroupStatus(res.data.groupsProgress);
-  //         }
-  //         this.confirmationService.alert(res.data.response, 'success');
-  //       } else {
-  //         this.confirmationService.alert(res.data.response, 'error');
-  //         if (res.data.groupsProgress) {
-  //           this.updateGroupStatus(res.data.groupsProgress);
-  //         }
-  //       }
-  //       this.showTable = true;
-  //     },
-  //     err => {
-  //       this.confirmationService.alert(
-  //         err.message || 'An error occurred',
-  //         'error'
-  //       );
-  //     }
-  //   );
-  // }
-
-  // updateGroupStatus(groupsProgress: any[]) {
-  //   this.syncTableGroupList.forEach((group: any) => {
-  //     const progress = groupsProgress.find(
-  //       (item: any) => item.groupId === group.syncTableGroupID
-  //     );
-  //     if (progress) {
-  //       if (progress.status === 'completed') {
-  //         group.status = 'success';
-  //       } else if (progress.status === 'failed') {
-  //         group.status = 'failed';
-  //       } else {
-  //         group.status = 'pending';
-  //       }
-  //     } else {
-  //       group.status = 'pending';
-  //     }
-  //   });
-  // }
   syncGroups() {
     this.dataSyncService.syncAllGroups().subscribe(
       (res: any) => {
@@ -640,9 +619,10 @@ export class WorkareaComponent
     });
   }
 
-  onTabChange(event: any) {
+  onTabChange(event: { label?: string } | any) {
     // the panel is loaded once on open; refresh it each time its tab is shown
-    if (this.autoTopUp && event?.tab?.textLabel === 'Generate BeneficiaryID') {
+    const label = event?.label ?? event?.tab?.textLabel;
+    if (this.autoTopUp && label === 'Generate BeneficiaryID') {
       this.loadAutoTopUpStatus();
     }
   }

@@ -27,15 +27,17 @@ import {
   OnDestroy,
   DoCheck,
   ChangeDetectorRef,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
   FormArray,
   AbstractControl,
+  ReactiveFormsModule,
 } from '@angular/forms';
 
-import { PreviousDetailsComponent } from '../../../../core/components/previous-details/previous-details.component';
+import { openPreviousDetailsDialog } from 'src/app/app-modules/nurse-doctor/shared/utility/dialog-helpers';
 import {
   MasterdataService,
   NurseService,
@@ -44,15 +46,39 @@ import {
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import { ValidationUtils } from '../../../shared/utility/validation-utility';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
-import { MatDialog } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgFor, NgClass, NgIf } from '@angular/common';
+import { NullDefaultValueDirective } from '../../../../core/directives/null-default-value.directive';
+import { StringValidatorDirective } from '../../../../core/directives/stringValidator.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHistory, lucidePlus, lucideX } from '@ng-icons/lucide';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 
 @Component({
   selector: 'app-general-medication-history',
   templateUrl: './medication-history.component.html',
-  styleUrls: ['./medication-history.component.css'],
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    NgClass,
+    NgIf,
+    NgIcon,
+    ...tooltipImports,
+    ZardButtonComponent,
+    ...ZardFormImports,
+    ZardInputDirective,
+    ...ZardSelectImports,
+    NullDefaultValueDirective,
+    StringValidatorDirective,
+  ],
+  viewProviders: [provideIcons({ lucideHistory, lucidePlus, lucideX })],
 })
 export class MedicationHistoryComponent implements OnInit, OnDestroy, DoCheck {
   @Input()
@@ -69,7 +95,8 @@ export class MedicationHistoryComponent implements OnInit, OnDestroy, DoCheck {
 
   constructor(
     private fb: FormBuilder,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     private nurseService: NurseService,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
@@ -84,7 +111,13 @@ export class MedicationHistoryComponent implements OnInit, OnDestroy, DoCheck {
     this.assignSelectedLanguage();
     this.getMasterData();
     this.getBeneficiaryDetails();
-    this.addMedicationHistory();
+    // Seed one row only when empty — ngOnInit runs again when the step is
+    // revisited (component recreated) but the FormArray persists in the parent
+    // form, so an unconditional add piled up duplicate blank rows.
+    const medArr = this.medicationHistoryForm.controls[
+      'medicationHistoryList'
+    ] as FormArray;
+    if (medArr.length === 0) this.addMedicationHistory();
   }
 
   ngDoCheck() {
@@ -259,13 +292,11 @@ export class MedicationHistoryComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   viewPreviousData(data: any) {
-    this.dialog.open(PreviousDetailsComponent, {
-      data: {
-        dataList: data,
-        title:
-          this.currentLanguageSet.historyData.Medicationhistorydetails
-            .previousmedicationhistorydetails,
-      },
+    openPreviousDetailsDialog(this.dialog, this.viewContainerRef, {
+      dataList: data,
+      title:
+        this.currentLanguageSet.historyData.Medicationhistorydetails
+          .previousmedicationhistorydetails,
     });
   }
 

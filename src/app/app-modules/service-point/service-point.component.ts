@@ -26,15 +26,37 @@ import { SetLanguageComponent } from '../core/components/set-language.component'
 import { ConfirmationService } from '../core/services';
 import { HttpServiceService } from '../core/services/http-service.service';
 import { ServicePointService } from './service-point.service';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { RegistrarService } from '../registrar/shared/services/registrar.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/v2/tracking';
+import { AppHeaderComponent } from '../core/components/app-header/app-header.component';
+import { AppFooterComponent } from '../core/components/app-footer/app-footer.component';
+import { NgFor } from '@angular/common';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
+import { ZardRadioGroupComponent } from 'Common-UI/v2/ui/radio-group';
+import { ZardRadioComponent } from 'Common-UI/v2/ui/radio';
+import { ZardComboboxComponent } from 'Common-UI/v2/ui/combobox';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
 
 @Component({
   selector: 'app-service-point',
   templateUrl: './service-point.component.html',
-  styleUrls: ['./service-point.component.css'],
+  imports: [
+    AppHeaderComponent,
+    AppFooterComponent,
+    ReactiveFormsModule,
+    NgFor,
+    ...cardImports,
+    ZardButtonComponent,
+    ...ZardSelectImports,
+    ZardRadioGroupComponent,
+    ZardRadioComponent,
+    ZardComboboxComponent,
+    ...ZardFormImports,
+  ],
 })
 export class ServicePointComponent implements OnInit, DoCheck {
   designation: any;
@@ -104,6 +126,27 @@ export class ServicePointComponent implements OnInit, DoCheck {
     this.serviceProviderId = this.sessionstorage.getItem('providerServiceID');
     this.userId = this.sessionstorage.getItem('userID');
     this.getServicePoint();
+
+    // The service-point combobox commits the selected name to the form
+    // control; resolve its demographics whenever that value changes (replaces
+    // the old matInput (input)/(ngModelChange)="getDemographics()" hooks).
+    this.servicePointForm.controls.servicePointName.valueChanges.subscribe(() =>
+      this.getDemographics()
+    );
+  }
+
+  /**
+   * The z-select CVA writes its option value as a string, but the cascading
+   * filter/fetch logic compares against the numeric IDs in the data arrays
+   * (vanID, districtID, …). Coerce the just-selected control back to a number
+   * so the existing strict-equality comparisons keep working unchanged.
+   */
+  coerceNumber(controlName: string, value: string | string[]) {
+    const raw = Array.isArray(value) ? value[0] : value;
+    const control = this.servicePointForm.get(controlName);
+    if (control && raw !== null && raw !== undefined && raw !== '') {
+      control.setValue(Number(raw) as never, { emitEvent: false });
+    }
   }
 
   // resetLocalStorage() {
@@ -200,7 +243,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
     if (this.vanServicepointDetails)
       this.servicePointsList = this.vanServicepointDetails.filter(
         (item: any) => {
-          if (item.vanSession === '3') {
+          if (item.vanSession === 3) {
             return item.vanID === this.servicePointForm.controls.vanID.value;
           } else {
             return (

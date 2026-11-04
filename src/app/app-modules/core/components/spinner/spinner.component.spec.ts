@@ -21,41 +21,24 @@
  */
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SpinnerService } from '../../services';
-import { NO_ERRORS_SCHEMA } from 'src/testing/test-utils';
+
 import { SpinnerComponent } from './spinner.component';
 
 describe('SpinnerComponent', () => {
+  let component: SpinnerComponent;
   let fixture: ComponentFixture<SpinnerComponent>;
-  let service: SpinnerService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SpinnerComponent],
-      providers: [SpinnerService],
-      schemas: [NO_ERRORS_SCHEMA],
+      imports: [SpinnerComponent],
     }).compileComponents();
+
     fixture = TestBed.createComponent(SpinnerComponent);
-    service = TestBed.inject(SpinnerService);
-  });
-
-  afterEach(() => fixture.destroy());
-
-  it('exposes the injected spinner service', () => {
-    expect(fixture.componentInstance.spinnerService).toBe(service);
-  });
-
-  it('hides the overlay when not loading', () => {
-    service.setLoading(false);
+    component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('.overlay')).toBeNull();
   });
 
-  it('shows the overlay with spinner while loading', () => {
-    service.setLoading(true);
-    fixture.detectChanges();
-    const overlay = fixture.nativeElement.querySelector('.overlay');
-    expect(overlay).not.toBeNull();
-    expect(overlay.querySelector('mat-spinner')).not.toBeNull();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });

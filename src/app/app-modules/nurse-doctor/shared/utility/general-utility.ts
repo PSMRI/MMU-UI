@@ -21,7 +21,7 @@
  */
 
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 
 export class GeneralUtils {
   constructor(
@@ -309,8 +309,8 @@ export class GeneralUtils {
       benVisitID: null,
       providerServiceMapID: null,
       createdBy: null,
-      primiGravida: null,
-      lmpDate: null,
+      primiGravida: [null, Validators.required],
+      lmpDate: [null, Validators.required],
       gestationalAgeOrPeriodofAmenorrhea_POA: null,
       expDelDt: null,
       duration: null,

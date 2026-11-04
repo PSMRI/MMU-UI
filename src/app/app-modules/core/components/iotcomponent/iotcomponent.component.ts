@@ -20,23 +20,48 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Inject, DoCheck } from '@angular/core';
 import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+  Component,
+  OnInit,
+  Inject,
+  DoCheck,
+  ViewContainerRef,
+} from '@angular/core';
+import {
+  Z_MODAL_DATA,
+  ZardDialogService,
+  ZardDialogRef,
+} from 'Common-UI/v2/ui/dialog';
 import { ConfirmationService } from '../../services';
 import { HttpServiceService } from '../../services/http-service.service';
 import { IotService } from '../../services/iot.service';
 import { SetLanguageComponent } from '../set-language.component';
 import { CalibrationComponent } from '../calibration/calibration.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgClass, NgIf } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardLoaderComponent } from 'Common-UI/v2/ui/loader';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
 
 @Component({
   selector: 'app-iotcomponent',
+  standalone: true,
   templateUrl: './iotcomponent.component.html',
-  styleUrls: ['./iotcomponent.component.css'],
+  imports: [
+    NgClass,
+    NgIf,
+    NgIcon,
+    ZardButtonComponent,
+    ZardLoaderComponent,
+    ...tooltipImports,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideX,
+    }),
+  ],
 })
 export class IotcomponentComponent implements OnInit, DoCheck {
   errorMsg: any;
@@ -54,14 +79,19 @@ export class IotcomponentComponent implements OnInit, DoCheck {
   stripShowMsg = false;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public input: any,
+    @Inject(Z_MODAL_DATA) public input: any,
     public httpServiceService: HttpServiceService,
-    public dialogRef: MatDialogRef<IotcomponentComponent>,
+    public dialogRef: ZardDialogRef<IotcomponentComponent>,
     public service: IotService,
     private confirmationService: ConfirmationService,
     readonly sessionstorage: SessionStorageService,
-    private dialog: MatDialog
-  ) {}
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef
+  ) {
+    // Preserve the original MatDialog disableClose:true behaviour (this dialog
+    // is opened non-dismissibly from vitals / ncd-screening / quick-consult).
+    this.dialogRef.disableClose = true;
+  }
 
   ngOnInit() {
     this.assignSelectedLanguage();
@@ -83,10 +113,14 @@ export class IotcomponentComponent implements OnInit, DoCheck {
       this.procedure.value.calibrationStartAPI !== undefined &&
       this.procedure.value.calibrationStartAPI !== null
     ) {
-      const dialogRef = this.dialog.open(CalibrationComponent, {
-        width: '600px',
-        disableClose: true,
-        data: { providerServiceMapID: providerServiceMapID },
+      const dialogRef = this.dialog.create<CalibrationComponent, unknown>({
+        zContent: CalibrationComponent,
+        zWidth: '600px',
+        zMaskClosable: false,
+        zData: { providerServiceMapID: providerServiceMapID },
+        zHideFooter: true,
+        zClosable: false,
+        zViewContainerRef: this.viewContainerRef,
       });
 
       dialogRef.afterClosed().subscribe(result => {

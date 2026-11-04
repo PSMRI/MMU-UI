@@ -30,7 +30,7 @@ import {
   DoCheck,
   OnDestroy,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import {
@@ -38,12 +38,22 @@ import {
   MasterdataService,
   NurseService,
 } from '../../shared/services';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { NgIf, NgFor } from '@angular/common';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { ZardSelectImports } from 'Common-UI/v2/ui/select';
 
 @Component({
   selector: 'app-contact-history',
   templateUrl: './contact-history.component.html',
-  styleUrls: ['./contact-history.component.css'],
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    NgFor,
+    ...ZardFormImports,
+    ...ZardSelectImports,
+  ],
 })
 export class ContactHistoryComponent
   implements OnInit, DoCheck, OnChanges, OnDestroy

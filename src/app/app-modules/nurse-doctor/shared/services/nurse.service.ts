@@ -27,7 +27,7 @@ import { shareReplay } from 'rxjs/operators';
 import { BehaviorSubject, Observable, Subject, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 
 @Injectable()
 export class NurseService {
@@ -91,7 +91,9 @@ export class NurseService {
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
       `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.nurseWorklist + fetchUrl);
+    return this.http.get(environment.nurseWorklist + fetchUrl, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
   getPreviousDiabetesHistory(benRegID: string, visitCategory: any) {
     return this.http.post(environment.previousDiabetesHistoryUrl, {
@@ -112,7 +114,9 @@ export class NurseService {
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
       `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
-    return this.http.get(environment.nurseWorklistTMreferred + fetchUrl);
+    return this.http.get(environment.nurseWorklistTMreferred + fetchUrl, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
   postNurseCancerVisitForm(
     medicalForm: any,
@@ -628,7 +632,15 @@ export class NurseService {
       JSON.stringify(patientChiefComplaintsForm)
     );
     for (const complaint of patientChiefComplaintsFormValue) {
-      if (complaint.chiefComplaint !== null) {
+      // The current form stores the name string in `chiefComplaint` and the id
+      // in the sibling `chiefComplaintID`; only the legacy form stored the whole
+      // option object here. Unwrap ONLY the object form — unwrapping a string
+      // would set both fields to undefined and the doctor would see no chief
+      // complaint captured.
+      if (
+        complaint.chiefComplaint &&
+        typeof complaint.chiefComplaint === 'object'
+      ) {
         complaint.chiefComplaintID = complaint.chiefComplaint.chiefComplaintID;
         complaint.chiefComplaint = complaint.chiefComplaint.chiefComplaint;
       }
@@ -2115,7 +2127,9 @@ export class NurseService {
     this.ncdTemp.next(false);
   }
   getTMReferredCasesheetData(reqObj: any) {
-    return this.http.post(environment.getTMCasesheetData, reqObj);
+    return this.http.post(environment.getTMCasesheetData, reqObj, {
+      headers: { 'X-Skip-Loader': 'true' },
+    });
   }
 
   calculateBmiStatus(obj: any) {

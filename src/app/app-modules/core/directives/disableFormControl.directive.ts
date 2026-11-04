@@ -23,9 +23,7 @@
 import { Directive, Input } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
-@Directive({
-  selector: '[appDisableFormControl]',
-})
+@Directive({ selector: '[appDisableFormControl]' })
 export class DisableFormControlDirective {
   @Input()
   set disableFormControl(condition: boolean) {

@@ -20,23 +20,65 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { Component, OnInit, Input, OnDestroy, DoCheck } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnDestroy,
+  DoCheck,
+  ViewContainerRef,
+} from '@angular/core';
 import { DoctorService } from '../../shared/services/doctor.service';
-import { Location } from '@angular/common';
+import { Location, NgIf, NgFor } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { PrescribeTmMedicineComponent } from '../prescribe-tm-medicine/prescribe-tm-medicine.component';
 import { NurseService } from '../../shared/services';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { PrintPageSelectComponent } from '../../print-page-select/print-page-select.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardSkeletonComponent } from 'Common-UI/v2/ui/skeleton';
+import { tooltipImports } from 'Common-UI/v2/ui/tooltip';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideLayoutGrid,
+  lucideArrowUp,
+  lucidePrinter,
+  lucideChevronLeft,
+} from '@ng-icons/lucide';
+import { DoctorDiagnosisCaseSheetComponent } from './doctor-diagnosis-case-sheet/doctor-diagnosis-case-sheet.component';
+import { AncCaseSheetComponent } from './anc-case-sheet/anc-case-sheet.component';
+import { PncCaseSheetComponent } from './pnc-case-sheet/pnc-case-sheet.component';
+import { HistoryCaseSheetComponent } from './history-case-sheet/history-case-sheet.component';
+import { ExaminationCaseSheetComponent } from './examination-case-sheet/examination-case-sheet.component';
 
 @Component({
   selector: 'app-general-case-sheet',
   templateUrl: './general-case-sheet.component.html',
-  styleUrls: ['./general-case-sheet.component.css'],
+  viewProviders: [
+    provideIcons({
+      lucideLayoutGrid,
+      lucideArrowUp,
+      lucidePrinter,
+      lucideChevronLeft,
+    }),
+  ],
+  imports: [
+    NgIf,
+    NgFor,
+    ZardButtonComponent,
+    ZardSkeletonComponent,
+    NgIcon,
+    ...tooltipImports,
+    DoctorDiagnosisCaseSheetComponent,
+    AncCaseSheetComponent,
+    PncCaseSheetComponent,
+    HistoryCaseSheetComponent,
+    ExaminationCaseSheetComponent,
+  ],
 })
 export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
   @Input()
@@ -46,6 +88,7 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
   serviceType: any;
 
   caseSheetData: any;
+  readonly caseSheetSkeletonRows = [0, 1, 2, 3, 4, 5, 6, 7];
   visitCategory: any;
   hideBack: boolean = false;
 
@@ -62,7 +105,8 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
 
   constructor(
     private location: Location,
-    private dialog: MatDialog,
+    private readonly dialog: ZardDialogService,
+    private readonly viewContainerRef: ViewContainerRef,
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
     private route: ActivatedRoute,
@@ -208,15 +252,18 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   selectPrintPage() {
-    const matDialogRef: MatDialogRef<PrintPageSelectComponent> =
-      this.dialog.open(PrintPageSelectComponent, {
-        width: '420px',
-        disableClose: false,
-        data: {
-          printPagePreviewSelect: this.printPagePreviewSelect,
-          visitCategory: this.visitCategory,
-        },
-      });
+    const matDialogRef = this.dialog.create<PrintPageSelectComponent, unknown>({
+      zContent: PrintPageSelectComponent,
+      zWidth: '420px',
+      zMaskClosable: true,
+      zData: {
+        printPagePreviewSelect: this.printPagePreviewSelect,
+        visitCategory: this.visitCategory,
+      },
+      zHideFooter: true,
+      zClosable: false,
+      zViewContainerRef: this.viewContainerRef,
+    });
 
     matDialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
@@ -253,13 +300,20 @@ export class GeneralCaseSheetComponent implements OnInit, OnDestroy, DoCheck {
       this.caseSheetData !== null &&
       this.caseSheetData.doctorData.prescription.length > 0
     ) {
-      const dialogRef = this.dialog.open(PrescribeTmMedicineComponent, {
-        data: {
+      const dialogRef = this.dialog.create<
+        PrescribeTmMedicineComponent,
+        unknown
+      >({
+        zContent: PrescribeTmMedicineComponent,
+        zData: {
           height: '560px',
           weight: '680px',
           disableClose: true,
           tmPrescribedDrugs: this.caseSheetData.doctorData.prescription,
         },
+        zHideFooter: true,
+        zClosable: false,
+        zViewContainerRef: this.viewContainerRef,
       });
       dialogRef.afterClosed().subscribe(result => {
         if (result) {

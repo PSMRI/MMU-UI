@@ -1,11 +1,11 @@
-<div class="container-fluid">
-  <mat-tab-group class="tabs_css">
-    <mat-tab [label]="currentLanguageSet?.nurse_tabs?.visit">
+<div class="px-6 pt-3">
+  <z-tab-group>
+    <z-tab [label]="currentLanguageSet?.nurse_tabs?.visit || 'Visit'">
       <app-nurse-worklist></app-nurse-worklist>
-    </mat-tab>
+    </z-tab>
 
-    <mat-tab [label]="currentLanguageSet?.referredToTC">
+    <z-tab [label]="currentLanguageSet?.referredToTC || 'Referred to TC'">
       <app-nurse-reffered-worklist></app-nurse-reffered-worklist>
-    </mat-tab>
-  </mat-tab-group>
+    </z-tab>
+  </z-tab-group>
 </div>

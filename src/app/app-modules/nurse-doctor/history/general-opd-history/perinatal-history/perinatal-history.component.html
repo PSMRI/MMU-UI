@@ -1,152 +1,165 @@
-<div class="" [formGroup]="perinatalHistoryForm">
-  <div class="col-12" style="text-align: end">
-    <span class="font-history-label">{{
+<div class="flex flex-col gap-4" [formGroup]="perinatalHistoryForm">
+  <div class="flex items-center justify-end gap-2">
+    <span class="text-sm font-semibold text-foreground">{{
       currentLanguageSet?.historyData?.Perinatalhistorydetails
         ?.previousperinatalhistory
     }}</span>
     <button
+      z-button
+      zType="ghost"
+      zSize="icon-sm"
       type="button"
-      mat-icon-button
-      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
       id="previousPerinatalHistory"
-      class="mat_icon_blue"
-      color="primary"
+      class="text-primary"
+      [zTooltip]="currentLanguageSet?.DurationData?.previousDetails"
+      [attr.aria-label]="currentLanguageSet?.DurationData?.previousDetails"
       (click)="getPreviousPerinatalHistory()">
-      <mat-icon class="md-18">history</mat-icon>
+      <ng-icon name="lucideHistory"></ng-icon>
     </button>
   </div>
-  <div>
-    <div class="col-12 row">
-      <div class="col-4 box">
-        <mat-form-field>
-          <mat-label class="mat-label-text">{{
-            currentLanguageSet?.pncData?.placeofDelivery
-          }}</mat-label>
-          <mat-select
-            class="select-full-width"
-            name="placeOfDelivery"
-            formControlName="placeOfDelivery"
-            (selectionChange)="resetOtherPlaceOfDelivery()">
-            <mat-option
-              *ngFor="let place of masterData?.deliveryPlaces"
-              [value]="place"
-              >{{ place.deliveryPlace }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-      </div>
 
-      <div class="col-4 box" *ngIf="placeOfDelivery?.deliveryPlace === 'Other'">
-        <mat-form-field>
-          <mat-label class="mat-label-text">{{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric?.others
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            maxlength="50"
-            allowText="alphabet"
-            formControlName="otherPlaceOfDelivery"
-            name="otherPlaceOfDelivery" />
-        </mat-form-field>
-      </div>
+  <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="placeOfDelivery">{{
+        currentLanguageSet?.pncData?.placeofDelivery
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full bg-background"
+          id="placeOfDelivery"
+          name="placeOfDelivery"
+          [zValue]="placeOfDelivery?.deliveryPlace ?? ''"
+          (zSelectionChange)="onPlaceOfDeliveryChange($event)">
+          <z-select-item
+            *ngFor="let place of masterData?.deliveryPlaces"
+            [zValue]="place.deliveryPlace">
+            {{ place.deliveryPlace }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
 
-      <div class="col-4 box">
-        <mat-form-field>
-          <mat-label class="mat-label-text">{{
-            currentLanguageSet?.pncData?.typeofDelivery
-          }}</mat-label>
-          <mat-select
-            class="select-full-width"
-            name="typeOfDelivery"
-            formControlName="typeOfDelivery">
-            <mat-option
-              *ngFor="let deliveryType of selectDeliveryTypes"
-              [value]="deliveryType"
-              >{{ deliveryType.deliveryType }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-      </div>
+    <z-form-field
+      class="gap-1.5"
+      *ngIf="placeOfDelivery?.deliveryPlace === 'Other'">
+      <label z-form-label for="otherPlaceOfDelivery">{{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric?.others
+      }}</label>
+      <z-form-control>
+        <input
+          z-input
+          class="w-full"
+          id="otherPlaceOfDelivery"
+          autocomplete="off"
+          appDefaultNull
+          maxlength="50"
+          allowText="alphabet"
+          formControlName="otherPlaceOfDelivery"
+          name="otherPlaceOfDelivery" />
+      </z-form-control>
+    </z-form-field>
 
-      <div class="col-4 box">
-        <mat-form-field>
-          <mat-label class="mat-label-text">{{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
-              ?.complicationatBirth
-          }}</mat-label>
-          <mat-select
-            class="select-full-width"
-            name="complicationAtBirth"
-            formControlName="complicationAtBirth"
-            (selectionChange)="resetOtherComplicationAtBirth()">
-            <mat-option
-              *ngFor="let birthComplication of masterData?.birthComplications"
-              [value]="birthComplication"
-              >{{ birthComplication.complicationValue }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="typeOfDelivery">{{
+        currentLanguageSet?.pncData?.typeofDelivery
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full bg-background"
+          id="typeOfDelivery"
+          name="typeOfDelivery"
+          [zDisabled]="perinatalHistoryForm.get('typeOfDelivery')?.disabled"
+          [zValue]="typeOfDelivery?.deliveryType ?? ''"
+          (zSelectionChange)="onTypeOfDeliveryChange($event)">
+          <z-select-item
+            *ngFor="let deliveryType of selectDeliveryTypes"
+            [zValue]="deliveryType.deliveryType">
+            {{ deliveryType.deliveryType }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
 
-    <div class="col-12 row">
-      <div
-        class="col-4 box"
-        *ngIf="complicationAtBirth?.complicationValue === 'Other'">
-        <mat-form-field>
-          <mat-label class="mat-label-text">{{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric?.others
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            maxlength="50"
-            allowText="alphaspace"
-            name="otherComplicationAtBirth"
-            formControlName="otherComplicationAtBirth" />
-        </mat-form-field>
-      </div>
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="complicationAtBirth">{{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
+          ?.complicationatBirth
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full bg-background"
+          id="complicationAtBirth"
+          name="complicationAtBirth"
+          [zValue]="complicationAtBirth?.complicationValue ?? ''"
+          (zSelectionChange)="onComplicationAtBirthChange($event)">
+          <z-select-item
+            *ngFor="let birthComplication of masterData?.birthComplications"
+            [zValue]="birthComplication.complicationValue">
+            {{ birthComplication.complicationValue }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
 
-      <div class="col-4 box">
-        <mat-form-field>
-          <mat-label class="mat-label-text">{{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
-              ?.gestation
-          }}</mat-label>
-          <mat-select
-            class="select-full-width"
-            name="gestation"
-            formControlName="gestation">
-            <mat-option
-              *ngFor="let gestation of masterData?.gestation"
-              [value]="gestation.name"
-              >{{ gestation.name }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-      </div>
+    <z-form-field
+      class="gap-1.5"
+      *ngIf="complicationAtBirth?.complicationValue === 'Other'">
+      <label z-form-label for="otherComplicationAtBirth">{{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.obstetric?.others
+      }}</label>
+      <z-form-control>
+        <input
+          z-input
+          class="w-full"
+          id="otherComplicationAtBirth"
+          autocomplete="off"
+          appDefaultNull
+          maxlength="50"
+          allowText="alphaspace"
+          name="otherComplicationAtBirth"
+          formControlName="otherComplicationAtBirth" />
+      </z-form-control>
+    </z-form-field>
 
-      <div class="col-4 box">
-        <mat-form-field>
-          <mat-label class="mat-label-text">{{
-            currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
-              ?.birthWeight
-          }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            appDefaultNull
-            maxlength="4"
-            allowText="decimal"
-            name="birthWeight_kg"
-            formControlName="birthWeight_kg"
-            allowMax="6"
-            (keypress)="checkWeight(birthWeight_kg)" />
-        </mat-form-field>
-      </div>
-    </div>
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="gestation">{{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
+          ?.gestation
+      }}</label>
+      <z-form-control>
+        <z-select
+          class="w-full bg-background"
+          id="gestation"
+          name="gestation"
+          formControlName="gestation">
+          <z-select-item
+            *ngFor="let gestation of masterData?.gestation"
+            [zValue]="gestation.name">
+            {{ gestation.name }}
+          </z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field class="gap-1.5">
+      <label z-form-label for="birthWeight_kg">{{
+        currentLanguageSet?.historyData?.opdNCDPNCHistory?.perinatal_OPD
+          ?.birthWeight
+      }}</label>
+      <z-form-control>
+        <input
+          z-input
+          class="w-full"
+          id="birthWeight_kg"
+          autocomplete="off"
+          appDefaultNull
+          maxlength="4"
+          allowText="decimal"
+          name="birthWeight_kg"
+          formControlName="birthWeight_kg"
+          allowMax="6"
+          (keypress)="checkWeight(birthWeight_kg)" />
+      </z-form-control>
+    </z-form-field>
   </div>
 </div>

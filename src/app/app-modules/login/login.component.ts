@@ -27,27 +27,58 @@ import {
   ViewChild,
   ElementRef,
 } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
 import {
   AuthService,
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
-import { FormBuilder, Validators } from '@angular/forms';
-import { DataSyncLoginComponent } from '../core/components/data-sync-login/data-sync-login.component';
-import { MasterDownloadComponent } from '../data-sync/master-download/master-download.component';
-import { CampHubQrCodeComponent } from '../data-sync/camp-hub-qr-code/camp-hub-qr-code.component';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
 import { environment } from 'src/environments/environment';
 import { CaptchaComponent } from '../captcha/captcha.component';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { AmritTrackingService } from 'Common-UI/v2/tracking';
+import { NgIf } from '@angular/common';
+import { ZardButtonComponent } from 'Common-UI/v2/ui/button';
+import { ZardInputDirective } from 'Common-UI/v2/ui/input';
+import { ZardFormImports } from 'Common-UI/v2/ui/form';
+import { cardImports } from 'Common-UI/v2/ui/card';
+import { ZardDialogService } from 'Common-UI/v2/ui/dialog';
+import { CampHubQrCodeComponent } from '../data-sync/camp-hub-qr-code/camp-hub-qr-code.component';
 import { CentralAuthService } from '../core/services/central-auth.service';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideUser,
+  lucideLock,
+  lucideEye,
+  lucideEyeOff,
+  lucideQrCode,
+} from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-login-cmp',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  host: { class: 'block min-h-screen' },
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    CaptchaComponent,
+    RouterLink,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ...ZardFormImports,
+    ...cardImports,
+    NgIcon,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideUser,
+      lucideLock,
+      lucideEye,
+      lucideEyeOff,
+      lucideQrCode,
+    }),
+  ],
 })
 export class LoginComponent implements OnInit, AfterViewInit {
   @ViewChild('captchaCmp') captchaCmp: CaptchaComponent | undefined;
@@ -69,14 +100,14 @@ export class LoginComponent implements OnInit, AfterViewInit {
   isMMUOfflineQRCode = environment.isMMUOfflineQRCode;
 
   constructor(
-    private router: Router,
-    private dialog: MatDialog,
-    private authService: AuthService,
-    private confirmationService: ConfirmationService,
-    private fb: FormBuilder,
+    private readonly router: Router,
+    private readonly authService: AuthService,
+    private readonly confirmationService: ConfirmationService,
+    private readonly fb: FormBuilder,
     readonly sessionstorage: SessionStorageService,
-    private trackingService: AmritTrackingService,
-    private centralAuthService: CentralAuthService
+    private readonly trackingService: AmritTrackingService,
+    private readonly dialogService: ZardDialogService,
+    private readonly centralAuthService: CentralAuthService
   ) {
     this._keySize = 256;
     this._ivSize = 128;
@@ -334,41 +365,16 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.dynamictype = 'password';
   }
 
-  openQrDialog(): void {
-    this.dialog.open(CampHubQrCodeComponent, {
-      width: '500px',
-      disableClose: false,
-    });
+  togglePWD() {
+    this.dynamictype = this.dynamictype === 'text' ? 'password' : 'text';
   }
 
-  loginDialogRef!: MatDialogRef<DataSyncLoginComponent>;
-  openDialog() {
-    this.loginDialogRef = this.dialog.open(DataSyncLoginComponent, {
-      hasBackdrop: true,
-      disableClose: true,
-      panelClass: 'fit-screen',
-      backdropClass: 'backdrop',
-      position: { top: '20px' },
-      data: {
-        masterDowloadFirstTime: true,
-      },
-    });
-    this.loginDialogRef.afterClosed().subscribe(flag => {
-      if (flag) {
-        this.dialog
-          .open(MasterDownloadComponent, {
-            hasBackdrop: true,
-            disableClose: true,
-            panelClass: 'fit-screen',
-            backdropClass: 'backdrop',
-            position: { top: '20px' },
-          })
-          .afterClosed()
-          .subscribe(() => {
-            sessionStorage.clear();
-            // this.sessionstorage.clear();
-          });
-      }
+  openQrDialog(): void {
+    this.dialogService.create({
+      zTitle: 'Camp Hub QR Code',
+      zContent: CampHubQrCodeComponent,
+      zWidth: '460px',
+      zHideFooter: true,
     });
   }
 
