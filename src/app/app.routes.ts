@@ -109,6 +109,14 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'nikshay-sync',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./app-modules/nikshay-sync/nikshay-sync.routes').then(
+        m => m.NIKSHAY_SYNC_ROUTES
+      ),
+  },
+  {
     path: 'feedback',
     loadChildren: () =>
       import('Common-UI/v2/feedback/feedback.module').then(
