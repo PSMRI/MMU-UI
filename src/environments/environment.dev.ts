@@ -377,6 +377,7 @@ export const environment = {
   getDataSYNCGroupUrl: `${MMU_API}dataSyncActivity/getSyncGroupDetails`,
   syncDataUploadUrl: `${MMU_API}dataSyncActivity/van-to-server`,
   syncDiagnosticDocumentsUrl: `${MMU_API}dataSyncActivity/diagnostic-documents-to-server`,
+  syncNikshayFailedUrl: `${MMU_API}nikshay/syncStatus/syncFailed`,
   syncDataDownloadUrl: `${MMU_API}dataSyncActivity/startMasterDownload`,
   syncDownloadProgressUrl: `${MMU_API}dataSyncActivity/checkMastersDownloadProgress`,
   // down-sync : central -> local

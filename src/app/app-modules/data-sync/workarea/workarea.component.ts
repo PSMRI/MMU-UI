@@ -227,9 +227,12 @@ export class WorkareaComponent
           if (res.data.groupsProgress) {
             this.updateGroupStatus(res.data.groupsProgress);
           }
-          this.confirmationService.alert(res.data.response, 'success');
+          this.syncNikshayFailedRecords(res.data.response);
         } else {
-          this.confirmationService.alert(res.data.response, 'error');
+          this.confirmationService.alert(
+            res?.data?.response ?? 'Something went wrong',
+            'error'
+          );
           if (res.data.groupsProgress) {
             this.updateGroupStatus(res.data.groupsProgress);
           }
@@ -240,6 +243,29 @@ export class WorkareaComponent
       err => {
         this.confirmationService.alert(
           err.message || 'An error occurred',
+          'error'
+        );
+      }
+    );
+  }
+  /** Syncs failed Nikshay records after the data sync; shows its success message once done. */
+  syncNikshayFailedRecords(groupsSyncMessage: string) {
+    this.dataSyncService.syncNikshayFailedRecords().subscribe(
+      (res: any) => {
+        if (res?.statusCode === 200) {
+          this.confirmationService.alert(groupsSyncMessage, 'success');
+        } else {
+          this.confirmationService.alert(
+            res?.errorMessage ||
+              'Data synced, but the failed Nikshay records could not be synced.',
+            'error'
+          );
+        }
+      },
+      err => {
+        this.confirmationService.alert(
+          err.message ||
+            'Data synced, but the failed Nikshay records could not be synced.',
           'error'
         );
       }

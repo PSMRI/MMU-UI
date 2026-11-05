@@ -83,6 +83,10 @@ export class DataSyncService {
   syncDiagnosticDocuments() {
     return this.http.post(environment.syncDiagnosticDocumentsUrl, null);
   }
+  /** Syncs the failed Nikshay records; runs after syncAllGroups succeeds. */
+  syncNikshayFailedRecords() {
+    return this.http.post(environment.syncNikshayFailedUrl, null);
+  }
   syncDownloadData(reqObj: any) {
     return this.http.post(environment.syncDataDownloadUrl, reqObj);
   }
