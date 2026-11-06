@@ -58,10 +58,10 @@ export const environment = {
     siteId: parseInt('<%= SITE_ID %>'),
     trackerUrl: '<%= TRACKER_URL %>',
     trackingPlatform: '<%= TRACKING_PLATFORM %>',
-    enabled: '<%= TRACKING_ENABLED %>' === 'true'
+    enabled: String('<%= TRACKING_ENABLED %>') === 'true'
   },
   consentManagement: {
-    enabled: '<%= CONSENT_ENABLED %>' === 'true',
+    enabled: String('<%= CONSENT_ENABLED %>') === 'true',
     apiBase: '<%= CONSENT_API_BASE %>',
   },
 
