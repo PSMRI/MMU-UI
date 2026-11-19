@@ -21,16 +21,45 @@
  */
 
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ActivatedRoute, Router } from '@angular/router';
+import { BehaviorSubject, of } from 'rxjs';
+import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-storage.service';
+import { BeneficiaryDetailsService } from '../../services/beneficiary-details.service';
+import { HttpServiceService } from '../../services/http-service.service';
 import { BeneficiaryDetailsComponent } from './beneficiary-details.component';
 
 describe('BeneficiaryDetailsComponent', () => {
   let component: BeneficiaryDetailsComponent;
   let fixture: ComponentFixture<BeneficiaryDetailsComponent>;
+  let details$: BehaviorSubject<any>;
 
   beforeEach(waitForAsync(() => {
+    details$ = new BehaviorSubject<any>(null);
     TestBed.configureTestingModule({
       imports: [BeneficiaryDetailsComponent],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: { params: of({ beneficiaryRegID: '42' }) },
+        },
+        {
+          provide: Router,
+          useValue: jasmine.createSpyObj('Router', ['navigate']),
+        },
+        {
+          provide: HttpServiceService,
+          useValue: { currentLangugae$: of({ bendetails: {}, consent: {} }) },
+        },
+        { provide: SessionStorageService, useValue: { getItem: () => null } },
+        {
+          provide: BeneficiaryDetailsService,
+          useValue: {
+            beneficiaryDetails$: details$,
+            getBeneficiaryDetails: jasmine.createSpy('getBeneficiaryDetails'),
+            getBeneficiaryImage: () => of({}),
+          },
+        },
+      ],
     }).compileComponents();
   }));
 
@@ -42,5 +71,13 @@ describe('BeneficiaryDetailsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('passes the patient and their phone to the Consent button', () => {
+    details$.next({ beneficiaryName: 'Asha', preferredPhoneNum: '9876543212' });
+    fixture.detectChanges();
+    expect(component.beneficiaryRegID).toBe('42');
+    const button = fixture.nativeElement.querySelector('app-consent-button');
+    expect(button).not.toBeNull();
   });
 });

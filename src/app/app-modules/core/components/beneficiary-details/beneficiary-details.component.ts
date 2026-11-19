@@ -29,6 +29,7 @@ import { SessionStorageService } from 'Common-UI/v2/registrar/services/session-s
 import { NgIf, NgFor, NgTemplateOutlet, DatePipe } from '@angular/common';
 import { cardImports } from 'Common-UI/v2/ui/card';
 import { ZardSkeletonComponent } from 'Common-UI/v2/ui/skeleton';
+import { ConsentButtonComponent } from 'Common-UI/v2/consent/public-api';
 
 @Component({
   selector: 'app-beneficiary-details',
@@ -41,10 +42,12 @@ import { ZardSkeletonComponent } from 'Common-UI/v2/ui/skeleton';
     DatePipe,
     ...cardImports,
     ZardSkeletonComponent,
+    ConsentButtonComponent,
   ],
 })
 export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
   beneficiary: any;
+  beneficiaryRegID: any = null;
   readonly skeletonRows = [0, 1, 2, 3, 4, 5, 6];
   today: any;
   beneficiaryDetailsSubscription: any;
@@ -63,6 +66,7 @@ export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
     this.assignSelectedLanguage();
     this.today = new Date();
     this.route.params.subscribe(param => {
+      this.beneficiaryRegID = param['beneficiaryRegID'];
       this.beneficiaryDetailsService.getBeneficiaryDetails(
         param['beneficiaryRegID'],
         benFlowID

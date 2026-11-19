@@ -58,7 +58,11 @@ export const environment = {
     siteId: parseInt('<%= SITE_ID %>'),
     trackerUrl: '<%= TRACKER_URL %>',
     trackingPlatform: '<%= TRACKING_PLATFORM %>',
-    enabled: '<%= TRACKING_ENABLED %>' === 'true'
+    enabled: String('<%= TRACKING_ENABLED %>') === 'true'
+  },
+  consentManagement: {
+    enabled: String('<%= CONSENT_ENABLED %>') === 'true',
+    apiBase: '<%= CONSENT_API_BASE %>',
   },
 
   app: `MMU`,
@@ -501,6 +505,7 @@ export const environment = {
 
   // Customization APIs
   getAllRegistrationData: `${COMMON_API}customization/fetchAllData`,
+  getConsentConfigUrl: `${COMMON_API}customization/consent/fetchConsentConfig`,
 
   getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`,
 
