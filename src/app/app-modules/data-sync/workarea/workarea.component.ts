@@ -117,6 +117,7 @@ export class WorkareaComponent
   displaySyncBool = true;
   isMMUOfflineQRCode = environment.isMMUOfflineQRCode;
   documentSyncInProgress = false;
+  nikshaySyncInProgress = false;
   documentSyncResult: {
     status: string;
     totalRecords: number;
@@ -227,7 +228,7 @@ export class WorkareaComponent
           if (res.data.groupsProgress) {
             this.updateGroupStatus(res.data.groupsProgress);
           }
-          this.syncNikshayFailedRecords(res.data.response);
+          this.confirmationService.alert(res.data.response, 'success');
         } else {
           this.confirmationService.alert(
             res?.data?.response ?? 'Something went wrong',
@@ -248,24 +249,32 @@ export class WorkareaComponent
       }
     );
   }
-  /** Syncs failed Nikshay records after the data sync; shows its success message once done. */
-  syncNikshayFailedRecords(groupsSyncMessage: string) {
+  /** "Sync Failed Nikshay Beneficiary" button: independent of the data sync. */
+  syncFailedNikshayBeneficiaries() {
+    this.nikshaySyncInProgress = true;
     this.dataSyncService.syncNikshayFailedRecords().subscribe(
       (res: any) => {
+        this.nikshaySyncInProgress = false;
         if (res?.statusCode === 200) {
-          this.confirmationService.alert(groupsSyncMessage, 'success');
+          this.confirmationService.alert(
+            res?.data?.response ||
+              'Failed Nikshay beneficiaries synced successfully',
+            'success'
+          );
         } else {
           this.confirmationService.alert(
             res?.errorMessage ||
-              'Data synced, but the failed Nikshay records could not be synced.',
+              'Failed Nikshay beneficiaries could not be synced.',
             'error'
           );
         }
       },
-      err => {
+      (err: any) => {
+        this.nikshaySyncInProgress = false;
         this.confirmationService.alert(
-          err.message ||
-            'Data synced, but the failed Nikshay records could not be synced.',
+          err?.errorMessage ||
+            err?.message ||
+            'Failed Nikshay beneficiaries could not be synced.',
           'error'
         );
       }

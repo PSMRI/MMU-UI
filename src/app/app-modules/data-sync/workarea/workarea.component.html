@@ -16,15 +16,25 @@
                 current_language_set?.dataSyncCardDescription
               }}</z-card-description>
             </z-card-header>
-            <z-card-content class="flex justify-center">
+            <z-card-content
+              class="flex flex-nowrap items-center justify-center gap-3">
               <button
                 z-button
                 type="button"
-                class="w-56"
+                class="whitespace-nowrap"
                 [disabled]="showProgressBar"
                 (click)="syncGroups()">
                 <ng-icon name="lucideRefreshCw"></ng-icon>
                 {{ current_language_set?.startDataSync }}
+              </button>
+              <button
+                z-button
+                type="button"
+                class="whitespace-nowrap"
+                (click)="syncFailedNikshayBeneficiaries()"
+                [disabled]="nikshaySyncInProgress">
+                <ng-icon name="lucideRefreshCw"></ng-icon>
+                Sync Failed Nikshay Beneficiary
               </button>
             </z-card-content>
           </z-card>
