@@ -1885,6 +1885,8 @@
       "validUntil": "Valid until",
       "withdraw": "Withdraw",
       "withdrawAll": "Withdraw all",
+      "withdrawContactTitle": "সন্মতি প্ৰত্যাহাৰ কৰক",
+      "withdrawContactOfficer": "সন্মতি প্ৰত্যাহাৰ কৰিবলৈ ৰোগীয়ে তলত দিয়া অভিযোগ বিষয়াৰ সৈতে যোগাযোগ কৰিব লাগিব।",
       "withdrawImplications": "Reminders, sharing and doctor access for these purposes stop at once.",
       "notWithdrawable": "This purpose is required by law and cannot be withdrawn.",
       "history": "History",
