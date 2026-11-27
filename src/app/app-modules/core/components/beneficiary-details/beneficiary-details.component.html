@@ -41,6 +41,9 @@
     <z-card-title class="text-base">
       {{ beneficiary?.beneficiaryName }}
     </z-card-title>
+    <app-consent-button
+      [beneficiaryRegID]="beneficiaryRegID"
+      [patientPhone]="beneficiary?.preferredPhoneNum"></app-consent-button>
   </z-card-header>
 
   <z-card-content>
